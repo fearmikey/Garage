@@ -179,6 +179,19 @@ class BackupRepository @Inject constructor(
         zip.closeEntry()
     }
 
+    /** Wipes all database records and stored images. */
+    suspend fun clearAllData(): BackupResult = withContext(Dispatchers.IO) {
+        try {
+            database.clearAllTables()
+            imageStorageManager.imagesDir.listFiles()?.forEach { file ->
+                file.delete()
+            }
+            BackupResult.Success
+        } catch (e: Exception) {
+            BackupResult.Failure(e.localizedMessage ?: "Failed to clear data.")
+        }
+    }
+
     private fun addDirectoryToZip(zip: ZipOutputStream, directory: File, entryPrefix: String) {
         val files = directory.listFiles() ?: return
         for (file in files) {

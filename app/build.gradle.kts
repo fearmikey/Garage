@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.oss.licenses.plugin)
 }
 
 android {
@@ -39,6 +40,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -96,8 +98,17 @@ dependencies {
     // WorkManager
     implementation(libs.androidx.work.runtime.ktx)
 
+    // WorkManager
+    implementation(libs.androidx.work.runtime.ktx)
+
     // Image loading (internal file storage)
     implementation(libs.coil.compose)
+
+    // DataStore
+    implementation(libs.androidx.datastore)
+
+    // OSS Licenses
+    implementation(libs.oss.licenses)
     implementation(libs.coil.network.okhttp)
 
     // CameraX (VIN scanning)
