@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
+import java.io.OutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
@@ -39,29 +40,48 @@ class BackupRepository @Inject constructor(
     /** Exports the current database + images into a zip written to [destinationUri] (from SAF `CreateDocument`). */
     suspend fun exportBackup(destinationUri: Uri): BackupResult = withContext(Dispatchers.IO) {
         try {
-            // Room defaults to WAL journal mode, meaning recent writes may
-            // only exist in the "-wal" side file rather than the main ".db"
-            // file. Running a FULL checkpoint flushes all committed WAL
-            // content back into the main database file, so even if we didn't
-            // include the (now largely empty) -wal/-shm files, the exported
-            // .db file alone would still be a consistent, complete snapshot.
-            // We don't need to close the connection to do this.
-            database.openHelper.writableDatabase.query("PRAGMA wal_checkpoint(FULL);").close()
-
             val outputStream = context.contentResolver.openOutputStream(destinationUri)
                 ?: return@withContext BackupResult.Failure("Could not open destination for writing.")
 
-            ZipOutputStream(outputStream.buffered()).use { zip ->
-                for (dbFile in databaseFiles()) {
-                    if (dbFile.exists()) {
-                        addFileToZip(zip, dbFile, dbFile.name)
-                    }
-                }
-                addDirectoryToZip(zip, imageStorageManager.imagesDir, IMAGES_ZIP_PREFIX)
-            }
+            writeBackupZip(outputStream)
             BackupResult.Success
         } catch (e: Exception) {
             BackupResult.Failure(e.message ?: "Unknown error while exporting backup.")
+        }
+    }
+
+    /** Exports the current database + images into a zip written to the local [destination] file (e.g. for cloud upload). */
+    suspend fun exportBackupToFile(destination: File): BackupResult = withContext(Dispatchers.IO) {
+        try {
+            FileOutputStream(destination).use { writeBackupZip(it) }
+            BackupResult.Success
+        } catch (e: Exception) {
+            BackupResult.Failure(e.message ?: "Unknown error while exporting backup.")
+        }
+    }
+
+    /**
+     * Checkpoints the Room WAL and zips the database + images into
+     * [outputStream]. Shared by [exportBackup] and [exportBackupToFile] so
+     * the zip layout never drifts between the two entry points.
+     */
+    private fun writeBackupZip(outputStream: OutputStream) {
+        // Room defaults to WAL journal mode, meaning recent writes may
+        // only exist in the "-wal" side file rather than the main ".db"
+        // file. Running a FULL checkpoint flushes all committed WAL
+        // content back into the main database file, so even if we didn't
+        // include the (now largely empty) -wal/-shm files, the exported
+        // .db file alone would still be a consistent, complete snapshot.
+        // We don't need to close the connection to do this.
+        database.openHelper.writableDatabase.query("PRAGMA wal_checkpoint(FULL);").close()
+
+        ZipOutputStream(outputStream.buffered()).use { zip ->
+            for (dbFile in databaseFiles()) {
+                if (dbFile.exists()) {
+                    addFileToZip(zip, dbFile, dbFile.name)
+                }
+            }
+            addDirectoryToZip(zip, imageStorageManager.imagesDir, IMAGES_ZIP_PREFIX)
         }
     }
 

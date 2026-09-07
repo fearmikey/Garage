@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.material)
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
 
@@ -66,6 +67,7 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation.compose)
@@ -108,7 +110,20 @@ dependencies {
     implementation(libs.androidx.datastore)
 
     // OSS Licenses
-    implementation(libs.oss.licenses)
+    //
+    // play-services-oss-licenses transitively pulls in an alpha build of
+    // androidx.compose.material3:material3 (for its newer, unused "v2" Compose
+    // licenses UI). That alpha version is binary-incompatible with the stable
+    // androidx.compose.foundation version pinned by our Compose BOM (it was
+    // compiled against an older, pre-stabilization shape of Foundation's
+    // Styles API), which crashes ANY OutlinedTextField in the app with an
+    // AbstractMethodError. We only use the legacy, plain-View
+    // OssLicensesMenuActivity (which never touches Compose), so it's safe to
+    // drop this transitive dependency and let our Compose BOM's stable
+    // material3 version win instead.
+    implementation(libs.oss.licenses) {
+        exclude(group = "androidx.compose.material3", module = "material3")
+    }
     implementation(libs.coil.network.okhttp)
 
     // CameraX (VIN scanning)
@@ -120,4 +135,12 @@ dependencies {
     // ML Kit (VIN barcode/text scanning)
     implementation(libs.mlkit.barcode.scanning)
     implementation(libs.mlkit.text.recognition)
+
+    // Glance app widget
+    implementation(libs.androidx.glance.appwidget)
+    implementation(libs.androidx.glance.material3)
+
+    // Cloud backup (WebDAV)
+    implementation(libs.okhttp)
+    implementation(libs.androidx.security.crypto)
 }

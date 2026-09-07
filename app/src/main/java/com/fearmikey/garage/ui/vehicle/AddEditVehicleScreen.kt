@@ -6,24 +6,30 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AddAPhoto
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.QrCodeScanner
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
@@ -32,8 +38,10 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -44,7 +52,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
@@ -67,8 +78,8 @@ fun AddEditVehicleScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(uiState.saveComplete) {
-        if (uiState.saveComplete) onDone()
+    LaunchedEffect(uiState.saveComplete, uiState.deleteComplete) {
+        if (uiState.saveComplete || uiState.deleteComplete) onDone()
     }
 
     LaunchedEffect(scannedVin) {
@@ -90,7 +101,9 @@ fun AddEditVehicleScreen(
         onTrimChanged = viewModel::onTrimChanged,
         onDrivetrainChanged = viewModel::onDrivetrainChanged,
         onImagePicked = viewModel::onImagePicked,
+        onImageOffsetYChanged = viewModel::onImageOffsetYChanged,
         onSave = viewModel::onSave,
+        onDelete = viewModel::onDeleteVehicle,
     )
 }
 
@@ -108,11 +121,15 @@ private fun AddEditVehicleContent(
     onTrimChanged: (String) -> Unit,
     onDrivetrainChanged: (Drivetrain) -> Unit = {},
     onImagePicked: (Uri) -> Unit,
+    onImageOffsetYChanged: (Float) -> Unit = {},
     onSave: () -> Unit,
+    onDelete: () -> Unit = {},
 ) {
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
     ) { uri -> uri?.let(onImagePicked) }
+
+    var showDeleteDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -121,6 +138,17 @@ private fun AddEditVehicleContent(
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                actions = {
+                    if (uiState.isEditing) {
+                        IconButton(onClick = { showDeleteDialog = true }) {
+                            Icon(
+                                Icons.Filled.Delete,
+                                contentDescription = "Delete vehicle",
+                                tint = MaterialTheme.colorScheme.error,
+                            )
+                        }
                     }
                 },
             )
@@ -133,26 +161,77 @@ private fun AddEditVehicleContent(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(16f / 9f)
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .clickable {
-                        photoPickerLauncher.launch(
-                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+            if ((uiState.imageFile != null) && uiState.imageFile.exists()) {
+                Column {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(21f / 9f)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                            .pointerInput(Unit) {
+                                detectVerticalDragGestures { _, dragAmount ->
+                                    onImageOffsetYChanged(uiState.imageOffsetY + dragAmount * 0.008f)
+                                }
+                            }
+                            .clickable {
+                                photoPickerLauncher.launch(
+                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+                                )
+                            },
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        AsyncImage(
+                            model = uiState.imageFile,
+                            contentDescription = "Vehicle photo",
+                            contentScale = ContentScale.Crop,
+                            alignment = BiasAlignment(0f, uiState.imageOffsetY),
+                            modifier = Modifier.fillMaxSize(),
                         )
-                    },
-                contentAlignment = Alignment.Center,
-            ) {
-                if ((uiState.imageFile != null) && uiState.imageFile.exists()) {
-                    AsyncImage(
-                        model = uiState.imageFile,
-                        contentDescription = "Vehicle photo",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize(),
-                    )
-                } else {
+                    }
+                    Column(modifier = Modifier.fillMaxWidth().padding(top = 4.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                "Drag photo up/down to adjust position",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                            TextButton(
+                                onClick = {
+                                    photoPickerLauncher.launch(
+                                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+                                    )
+                                },
+                            ) {
+                                Text("Change photo")
+                            }
+                        }
+                        Slider(
+                            value = uiState.imageOffsetY,
+                            onValueChange = onImageOffsetYChanged,
+                            valueRange = -1f..1f,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    }
+                }
+            } else {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(21f / 9f)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .clickable {
+                            photoPickerLauncher.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+                            )
+                        },
+                    contentAlignment = Alignment.Center,
+                ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(Icons.Filled.AddAPhoto, contentDescription = null, modifier = Modifier.size(32.dp))
                         Text("Add photo", style = MaterialTheme.typography.bodyMedium)
@@ -193,6 +272,7 @@ private fun AddEditVehicleContent(
                 onValueChange = onYearChanged,
                 label = { Text("Year") },
                 singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth(),
             )
             OutlinedTextField(
@@ -232,7 +312,7 @@ private fun AddEditVehicleContent(
                         .fillMaxWidth()
                         .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
                 )
-                DropdownMenu(
+                ExposedDropdownMenu(
                     expanded = drivetrainMenuExpanded,
                     onDismissRequest = { drivetrainMenuExpanded = false },
                 ) {
@@ -255,7 +335,44 @@ private fun AddEditVehicleContent(
             ) {
                 Text(if (uiState.isSaving) "Saving..." else "Save")
             }
+
+            if (uiState.isEditing) {
+                OutlinedButton(
+                    onClick = { showDeleteDialog = true },
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error),
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Icon(Icons.Filled.Delete, contentDescription = null, modifier = Modifier.padding(end = 8.dp))
+                    Text("Delete vehicle")
+                }
+            }
         }
+    }
+
+    if (showDeleteDialog) {
+        val vehicleTitle = listOfNotNull(uiState.year.ifBlank { null }, uiState.make.ifBlank { null }, uiState.model.ifBlank { null })
+            .joinToString(" ").ifBlank { "this vehicle" }
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text("Delete Vehicle?") },
+            text = { Text("Are you sure you want to delete $vehicleTitle? This will remove this vehicle and all its maintenance records, fuel logs, and reminders from the app.") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showDeleteDialog = false
+                        onDelete()
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
+                ) {
+                    Text("Delete")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text("Cancel")
+                }
+            },
+        )
     }
 }
 
@@ -270,6 +387,7 @@ private fun AddEditVehicleScreenPreview() {
                 make = "Toyota",
                 model = "Tacoma",
                 trim = "TRD Off-Road",
+                isEditing = true,
             ),
             onBack = {},
             onVinChanged = {},
@@ -279,6 +397,8 @@ private fun AddEditVehicleScreenPreview() {
             onModelChanged = {},
             onTrimChanged = {},
             onImagePicked = {},
-        ) { }
+            onSave = {},
+            onDelete = {},
+        )
     }
 }

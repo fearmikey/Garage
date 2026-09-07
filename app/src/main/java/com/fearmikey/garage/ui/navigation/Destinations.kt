@@ -5,6 +5,7 @@ import androidx.navigation.navArgument
 
 /** Route constants + helpers for the app's single-activity Nav Host. */
 object Destinations {
+    const val STARTUP = "startup"
     const val DASHBOARD = "dashboard"
     const val SETTINGS = "settings"
     const val SCAN_VIN = "vehicle/scan-vin"
@@ -25,7 +26,27 @@ object Destinations {
         },
     )
 
-    const val VEHICLE_DETAIL_ROUTE = "vehicle/{$VEHICLE_ID_ARG}"
-    fun vehicleDetailRoute(vehicleId: Long) = "vehicle/$vehicleId"
-    val vehicleDetailArgs = listOf(navArgument(VEHICLE_ID_ARG) { type = NavType.LongType })
+    const val VEHICLE_DETAIL_TAB_ARG = "tab"
+    const val VEHICLE_DETAIL_OPEN_ADD_ARG = "openAdd"
+    const val VEHICLE_DETAIL_ROUTE =
+        "vehicle/{$VEHICLE_ID_ARG}?$VEHICLE_DETAIL_TAB_ARG={$VEHICLE_DETAIL_TAB_ARG}&$VEHICLE_DETAIL_OPEN_ADD_ARG={$VEHICLE_DETAIL_OPEN_ADD_ARG}"
+    fun vehicleDetailRoute(vehicleId: Long, tab: Int = 0, openAdd: Boolean = false) =
+        "vehicle/$vehicleId?$VEHICLE_DETAIL_TAB_ARG=$tab&$VEHICLE_DETAIL_OPEN_ADD_ARG=$openAdd"
+    val vehicleDetailArgs = listOf(
+        navArgument(VEHICLE_ID_ARG) { type = NavType.LongType },
+        navArgument(VEHICLE_DETAIL_TAB_ARG) {
+            type = NavType.IntType
+            defaultValue = 0
+        },
+        navArgument(VEHICLE_DETAIL_OPEN_ADD_ARG) {
+            type = NavType.BoolType
+            defaultValue = false
+        },
+    )
+
+    const val EDIT_PARTS_ROUTE = "vehicle/parts/edit?$VEHICLE_ID_ARG={$VEHICLE_ID_ARG}"
+    fun editPartsRoute(vehicleId: Long) = "vehicle/parts/edit?$VEHICLE_ID_ARG=$vehicleId"
+    val editPartsArgs = listOf(
+        navArgument(VEHICLE_ID_ARG) { type = NavType.LongType },
+    )
 }

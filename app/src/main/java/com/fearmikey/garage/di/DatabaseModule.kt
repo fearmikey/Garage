@@ -4,9 +4,12 @@ import android.content.Context
 import androidx.room.Room
 import com.fearmikey.garage.data.local.GARAGE_DATABASE_NAME
 import com.fearmikey.garage.data.local.GarageDatabase
+import com.fearmikey.garage.data.local.dao.CustomMaintenanceRuleDao
+import com.fearmikey.garage.data.local.dao.FuelDao
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
 import com.fearmikey.garage.data.local.dao.ReminderDao
 import com.fearmikey.garage.data.local.dao.VehicleDao
+import com.fearmikey.garage.data.local.dao.VehiclePartsDao
 import com.fearmikey.garage.data.local.dao.VehicleSpecsDao
 import dagger.Module
 import dagger.Provides
@@ -36,4 +39,14 @@ object DatabaseModule {
 
     @Provides
     fun provideVehicleSpecsDao(database: GarageDatabase): VehicleSpecsDao = database.vehicleSpecsDao()
+
+    @Provides
+    fun provideFuelDao(database: GarageDatabase): FuelDao = database.fuelDao()
+
+    @Provides
+    fun provideVehiclePartsDao(database: GarageDatabase): VehiclePartsDao = database.vehiclePartsDao()
+
+    @Provides
+    fun provideCustomMaintenanceRuleDao(database: GarageDatabase): CustomMaintenanceRuleDao =
+        database.customMaintenanceRuleDao()
 }

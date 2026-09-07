@@ -2,6 +2,7 @@ package com.fearmikey.garage.ui.settings
 
 import android.content.Intent
 import android.net.Uri
+import android.text.format.DateUtils
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -35,10 +36,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -52,6 +55,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -65,6 +69,7 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 @Composable
 fun SettingsScreen(
     onBack: () -> Unit,
+    onOpenStartup: () -> Unit = {},
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -76,6 +81,7 @@ fun SettingsScreen(
     var showThemeDialog by remember { mutableStateOf(false) }
     var showClearDataDialog by remember { mutableStateOf(false) }
     var showAboutDialog by remember { mutableStateOf(false) }
+    var showCloudBackupDialog by remember { mutableStateOf(false) }
 
     val exportLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.CreateDocument("application/zip"),
@@ -160,9 +166,27 @@ fun SettingsScreen(
             item {
                 ListItem(
                     headlineContent = { Text("Auto-Backup Configuration") },
-                    supportingContent = { Text("Disabled (Cloud sync coming soon)") },
+                    supportingContent = { Text(cloudBackupStatusText(uiState)) },
                     leadingContent = { Icon(Icons.Filled.CloudSync, contentDescription = null) },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { showCloudBackupDialog = true },
+                )
+            }
+            item {
+                val cloudSyncReady = uiState.cloudSyncEnabled &&
+                    uiState.webdavUrl.isNotBlank() &&
+                    uiState.webdavUsername.isNotBlank() &&
+                    uiState.webdavPasswordSet
+                ListItem(
+                    headlineContent = { Text("Sync now") },
+                    supportingContent = { Text("Manually upload a backup to your WebDAV server.") },
+                    leadingContent = { Icon(Icons.Filled.CloudSync, contentDescription = null) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(enabled = cloudSyncReady && !uiState.isBusy && !uiState.isSyncing) {
+                            viewModel.syncNow()
+                        },
                 )
             }
             item {
@@ -269,12 +293,12 @@ fun SettingsScreen(
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Re-run Tutorial") },
-                    supportingContent = { Text("Restart the onboarding tutorial (coming soon)") },
+                    headlineContent = { Text("Re-run Setup") },
+                    supportingContent = { Text("Re-configure app permissions and measurement units") },
                     leadingContent = { Icon(Icons.Filled.School, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { /* Reserved for future tutorial */ },
+                        .clickable { onOpenStartup() },
                 )
             }
 
@@ -367,6 +391,32 @@ fun SettingsScreen(
             },
         )
     }
+
+    if (showCloudBackupDialog) {
+        CloudBackupConfigDialog(
+            uiState = uiState,
+            onSave = { enabled, url, username, password ->
+                viewModel.setCloudSyncEnabled(enabled)
+                viewModel.setWebdavCredentials(url, username, password)
+                showCloudBackupDialog = false
+            },
+            onTestConnection = { url, username, password -> viewModel.testConnection(url, username, password) },
+            onDismissRequest = { showCloudBackupDialog = false },
+        )
+    }
+}
+
+private fun cloudBackupStatusText(uiState: SettingsUiState): String {
+    if (!uiState.cloudSyncEnabled) return "Disabled"
+    val error = uiState.lastSyncError
+    if (error != null) return "Enabled — sync failed: $error"
+    val lastSync = uiState.lastSyncTimestamp
+    return if (lastSync != null) {
+        val relative = DateUtils.getRelativeTimeSpanString(lastSync, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS)
+        "Enabled — last synced $relative"
+    } else {
+        "Enabled — not yet synced"
+    }
 }
 
 @Composable
@@ -421,6 +471,81 @@ private fun SingleChoiceDialog(
                 Text("Cancel")
             }
         }
+    )
+}
+
+@Composable
+private fun CloudBackupConfigDialog(
+    uiState: SettingsUiState,
+    onSave: (enabled: Boolean, url: String, username: String, password: String) -> Unit,
+    onTestConnection: (url: String, username: String, password: String) -> Unit,
+    onDismissRequest: () -> Unit,
+) {
+    var enabled by remember { mutableStateOf(uiState.cloudSyncEnabled) }
+    var url by remember { mutableStateOf(uiState.webdavUrl) }
+    var username by remember { mutableStateOf(uiState.webdavUsername) }
+    var password by remember { mutableStateOf("") }
+
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = { Text("Auto-Backup Configuration") },
+        text = {
+            Column {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text("Enable cloud sync", modifier = Modifier.weight(1f))
+                    Switch(checked = enabled, onCheckedChange = { enabled = it })
+                }
+                Spacer(modifier = Modifier.padding(top = 8.dp))
+                OutlinedTextField(
+                    value = url,
+                    onValueChange = { url = it },
+                    label = { Text("Server URL") },
+                    placeholder = { Text("https://cloud.example.com/remote.php/dav/files/user/") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                Spacer(modifier = Modifier.padding(top = 8.dp))
+                OutlinedTextField(
+                    value = username,
+                    onValueChange = { username = it },
+                    label = { Text("Username") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                Spacer(modifier = Modifier.padding(top = 8.dp))
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = { password = it },
+                    label = { Text(if (uiState.webdavPasswordSet) "Password (unchanged)" else "Password") },
+                    singleLine = true,
+                    visualTransformation = PasswordVisualTransformation(),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                Spacer(modifier = Modifier.padding(top = 8.dp))
+                TextButton(
+                    onClick = { onTestConnection(url, username, password) },
+                    enabled = url.isNotBlank() && username.isNotBlank(),
+                ) {
+                    Text("Test connection")
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = { onSave(enabled, url, username, password) },
+                enabled = url.isNotBlank() && username.isNotBlank(),
+            ) {
+                Text("Save")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismissRequest) {
+                Text("Cancel")
+            }
+        },
     )
 }
 

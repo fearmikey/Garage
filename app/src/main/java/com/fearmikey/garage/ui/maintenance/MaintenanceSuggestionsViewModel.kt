@@ -3,14 +3,19 @@ package com.fearmikey.garage.ui.maintenance
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.Reminder
+import com.fearmikey.garage.data.repository.CustomMaintenanceRuleRepository
 import com.fearmikey.garage.data.repository.MaintenanceRepository
+import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.data.repository.ReminderRepository
 import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.data.schedule.MaintenanceScheduleEngine
 import com.fearmikey.garage.data.schedule.MaintenanceSuggestion
+import com.fearmikey.garage.data.schedule.toMaintenanceRule
 import com.fearmikey.garage.ui.navigation.Destinations
+import com.fearmikey.garage.ui.util.UnitSystem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -25,19 +30,34 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
     vehicleRepository: VehicleRepository,
     private val maintenanceRepository: MaintenanceRepository,
     private val reminderRepository: ReminderRepository,
+    private val customMaintenanceRuleRepository: CustomMaintenanceRuleRepository,
+    preferencesRepository: PreferencesRepository,
 ) : ViewModel() {
 
     private val vehicleId: Long = checkNotNull(savedStateHandle[Destinations.VEHICLE_ID_ARG])
+
+    val unitSystem: StateFlow<UnitSystem> = preferencesRepository.unitSystem
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), UnitSystem.IMPERIAL)
+
+    val customRules: StateFlow<List<CustomMaintenanceRule>> =
+        customMaintenanceRuleRepository.getRulesForVehicle(vehicleId)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     val suggestions: StateFlow<List<MaintenanceSuggestion>> = combine(
         vehicleRepository.getVehicleById(vehicleId),
         maintenanceRepository.getRecordsForVehicle(vehicleId),
         maintenanceRepository.getLatestMileageForVehicle(vehicleId),
-    ) { vehicle, records, latestMileage ->
+        customMaintenanceRuleRepository.getRulesForVehicle(vehicleId),
+    ) { vehicle, records, latestMileage, customRules ->
         if (vehicle == null) {
             emptyList()
         } else {
-            MaintenanceScheduleEngine.suggestionsFor(vehicle, latestMileage, records)
+            MaintenanceScheduleEngine.suggestionsFor(
+                vehicle,
+                latestMileage,
+                records,
+                customRules.map { it.toMaintenanceRule() },
+            )
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
@@ -48,6 +68,7 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
                 Reminder(
                     vehicleId = vehicleId,
                     taskName = suggestion.rule.taskName,
+                    dueDate = suggestion.nextDueDate,
                     dueMileage = suggestion.nextDueMileage,
                 )
             )
@@ -63,6 +84,18 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
     fun logMaintenance(record: MaintenanceRecord) {
         viewModelScope.launch {
             maintenanceRepository.saveRecord(record.copy(vehicleId = vehicleId))
+        }
+    }
+
+    fun saveCustomRule(rule: CustomMaintenanceRule) {
+        viewModelScope.launch {
+            customMaintenanceRuleRepository.saveRule(rule.copy(vehicleId = vehicleId))
+        }
+    }
+
+    fun deleteCustomRule(rule: CustomMaintenanceRule) {
+        viewModelScope.launch {
+            customMaintenanceRuleRepository.deleteRule(rule)
         }
     }
 }

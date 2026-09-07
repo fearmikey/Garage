@@ -2,10 +2,9 @@ package com.fearmikey.garage.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import kotlinx.coroutines.flow.Flow
 
@@ -21,7 +20,7 @@ interface MaintenanceDao {
     @Query("SELECT MAX(mileage) FROM maintenance_records WHERE vehicleId = :vehicleId")
     fun getLatestMileageForVehicle(vehicleId: Long): Flow<Int?>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun upsert(record: MaintenanceRecord): Long
 
     @Update

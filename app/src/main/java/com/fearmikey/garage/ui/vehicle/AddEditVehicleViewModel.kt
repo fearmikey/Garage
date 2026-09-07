@@ -29,11 +29,13 @@ data class AddEditVehicleUiState(
     val drivetrain: Drivetrain = Drivetrain.UNKNOWN,
     val imageFilename: String? = null,
     val imageFile: File? = null,
+    val imageOffsetY: Float = 0f,
     val isDecodingVin: Boolean = false,
     val vinDecodeError: String? = null,
     val isSaving: Boolean = false,
     val isEditing: Boolean = false,
     val saveComplete: Boolean = false,
+    val deleteComplete: Boolean = false,
     /** Specs decoded alongside the last successful VIN decode; persisted once the vehicle is saved. */
     val pendingSpecs: VehicleSpecs? = null,
 )
@@ -65,6 +67,7 @@ class AddEditVehicleViewModel @Inject constructor(
                             drivetrain = vehicle.drivetrain,
                             imageFilename = vehicle.imageUri,
                             imageFile = vehicle.imageUri?.let(imageStorageManager::imageFile),
+                            imageOffsetY = vehicle.imageOffsetY,
                         )
                     }
                 }
@@ -112,6 +115,7 @@ class AddEditVehicleViewModel @Inject constructor(
     fun onModelChanged(model: String) = _uiState.update { it.copy(model = model) }
     fun onTrimChanged(trim: String) = _uiState.update { it.copy(trim = trim) }
     fun onDrivetrainChanged(drivetrain: Drivetrain) = _uiState.update { it.copy(drivetrain = drivetrain) }
+    fun onImageOffsetYChanged(offsetY: Float) = _uiState.update { it.copy(imageOffsetY = offsetY.coerceIn(-1f, 1f)) }
 
     fun onImagePicked(uri: Uri) {
         viewModelScope.launch {
@@ -119,7 +123,7 @@ class AddEditVehicleViewModel @Inject constructor(
             // Best-effort cleanup of a previously picked (but since-replaced) image.
             _uiState.value.imageFilename?.let(imageStorageManager::deleteImage)
             _uiState.update {
-                it.copy(imageFilename = filename, imageFile = imageStorageManager.imageFile(filename))
+                it.copy(imageFilename = filename, imageFile = imageStorageManager.imageFile(filename), imageOffsetY = 0f)
             }
         }
     }
@@ -138,6 +142,7 @@ class AddEditVehicleViewModel @Inject constructor(
                     trim = state.trim,
                     drivetrain = state.drivetrain,
                     imageUri = state.imageFilename,
+                    imageOffsetY = state.imageOffsetY,
                 ),
             )
             // Only persist specs when this session actually decoded a VIN; otherwise leave
@@ -146,6 +151,17 @@ class AddEditVehicleViewModel @Inject constructor(
                 vehicleRepository.saveVehicleSpecs(savedVehicleId, specs)
             }
             _uiState.update { it.copy(isSaving = false, saveComplete = true) }
+        }
+    }
+
+    fun onDeleteVehicle() {
+        if (!isEditing) return
+        viewModelScope.launch {
+            _uiState.value.imageFilename?.let(imageStorageManager::deleteImage)
+            vehicleRepository.getVehicleByIdOnce(vehicleId)?.let { vehicle ->
+                vehicleRepository.deleteVehicle(vehicle)
+            }
+            _uiState.update { it.copy(deleteComplete = true) }
         }
     }
 }

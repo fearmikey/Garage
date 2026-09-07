@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -75,7 +76,7 @@ private fun VehicleSpecs.toGroups(): List<SpecGroup> = listOf(
 private fun VehicleSpecsContent(specs: VehicleSpecs?) {
     val groups = specs?.takeUnless { it.isEmpty() }?.toGroups().orEmpty()
 
-    Scaffold { innerPadding ->
+    Scaffold(contentWindowInsets = WindowInsets(0, 0, 0, 0)) { innerPadding ->
         if (groups.isEmpty()) {
             EmptyState(
                 message = "No specs yet.\nDecode this vehicle's VIN on the Edit screen to see full specs.",
@@ -84,8 +85,8 @@ private fun VehicleSpecsContent(specs: VehicleSpecs?) {
         } else {
             LazyColumn(
                 modifier = Modifier.padding(innerPadding),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 items(groups, key = { it.title }) { group ->
                     SpecGroupCard(group)
@@ -98,7 +99,7 @@ private fun VehicleSpecsContent(specs: VehicleSpecs?) {
 @Composable
 private fun SpecGroupCard(group: SpecGroup) {
     Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(12.dp)) {
             Text(
                 group.title,
                 style = MaterialTheme.typography.labelLarge,
@@ -108,7 +109,7 @@ private fun SpecGroupCard(group: SpecGroup) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 8.dp),
+                        .padding(top = 6.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(

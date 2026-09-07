@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fearmikey.garage.data.local.entity.Reminder
 import com.fearmikey.garage.data.repository.MaintenanceRepository
+import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.data.repository.ReminderRepository
 import com.fearmikey.garage.data.repository.ReminderStatus
 import com.fearmikey.garage.ui.navigation.Destinations
+import com.fearmikey.garage.ui.util.UnitSystem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -26,9 +28,13 @@ class RemindersViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val reminderRepository: ReminderRepository,
     maintenanceRepository: MaintenanceRepository,
+    preferencesRepository: PreferencesRepository,
 ) : ViewModel() {
 
     val vehicleId: Long = checkNotNull(savedStateHandle[Destinations.VEHICLE_ID_ARG])
+
+    val unitSystem: StateFlow<UnitSystem> = preferencesRepository.unitSystem
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), UnitSystem.IMPERIAL)
 
     val reminders: StateFlow<List<ReminderListItem>> = combine(
         reminderRepository.getRemindersForVehicle(vehicleId),

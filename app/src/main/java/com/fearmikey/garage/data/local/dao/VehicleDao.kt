@@ -2,10 +2,9 @@ package com.fearmikey.garage.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import com.fearmikey.garage.data.local.entity.Vehicle
 import kotlinx.coroutines.flow.Flow
 
@@ -20,7 +19,7 @@ interface VehicleDao {
     @Query("SELECT * FROM vehicles WHERE id = :vehicleId")
     suspend fun getVehicleByIdOnce(vehicleId: Long): Vehicle?
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun upsert(vehicle: Vehicle): Long
 
     @Update

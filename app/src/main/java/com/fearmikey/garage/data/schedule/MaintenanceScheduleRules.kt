@@ -4,13 +4,18 @@ import com.fearmikey.garage.data.local.entity.Drivetrain
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 
 /**
- * A small, hand-curated starter set of mileage-based maintenance intervals.
+ * A small, hand-curated starter set of mileage- and time-based maintenance intervals.
  *
  * This is intentionally not exhaustive (there's no free, comprehensive "OEM
  * maintenance schedule" database) — it covers generic intervals that apply to
  * almost any vehicle, plus a handful of illustrative make/model/drivetrain
  * overrides. It's meant to be easy to extend over time rather than complete
  * on day one.
+ *
+ * Where a rule sets both [MaintenanceRule.intervalMiles] and
+ * [MaintenanceRule.intervalMonths], the two combine as "whichever comes
+ * first" (see [MaintenanceScheduleEngine]) -- this matters most for
+ * low-mileage vehicles that would otherwise never trigger a mileage-only rule.
  */
 object MaintenanceScheduleRules {
     val rules: List<MaintenanceRule> = listOf(
@@ -19,46 +24,55 @@ object MaintenanceScheduleRules {
             taskName = "Oil & filter change",
             category = MaintenanceCategory.OIL_CHANGE,
             intervalMiles = 5_000,
+            intervalMonths = 6,
         ),
         MaintenanceRule(
             taskName = "Tire rotation",
             category = MaintenanceCategory.TIRE_ROTATION,
             intervalMiles = 6_000,
+            intervalMonths = 6,
         ),
         MaintenanceRule(
             taskName = "Brake fluid flush",
             category = MaintenanceCategory.FLUIDS,
             intervalMiles = 30_000,
+            intervalMonths = 24,
         ),
         MaintenanceRule(
             taskName = "Cabin air filter replacement",
             category = MaintenanceCategory.OTHER,
             intervalMiles = 15_000,
+            intervalMonths = 12,
         ),
         MaintenanceRule(
             taskName = "Engine air filter replacement",
             category = MaintenanceCategory.OTHER,
             intervalMiles = 15_000,
+            intervalMonths = 12,
         ),
         MaintenanceRule(
             taskName = "Automatic transmission fluid service",
             category = MaintenanceCategory.FLUIDS,
             intervalMiles = 30_000,
+            intervalMonths = 36,
         ),
         MaintenanceRule(
             taskName = "Coolant flush",
             category = MaintenanceCategory.FLUIDS,
             intervalMiles = 60_000,
+            intervalMonths = 60,
         ),
         MaintenanceRule(
             taskName = "Spark plug replacement",
             category = MaintenanceCategory.OTHER,
             intervalMiles = 60_000,
+            intervalMonths = 60,
         ),
         MaintenanceRule(
             taskName = "Battery load test / replacement",
             category = MaintenanceCategory.BATTERY,
             intervalMiles = 50_000,
+            intervalMonths = 48,
         ),
 
         // Drivetrain-specific: applies to any 4WD/AWD vehicle unless a more

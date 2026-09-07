@@ -1,8 +1,11 @@
 package com.fearmikey.garage.ui.dashboard
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -31,31 +34,41 @@ import com.fearmikey.garage.ui.components.EmptyState
 import com.fearmikey.garage.ui.components.VehicleCard
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.SampleData
+import com.fearmikey.garage.ui.util.UnitSystem
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun DashboardScreen(
     onAddVehicle: () -> Unit,
     onOpenVehicle: (Long) -> Unit,
     onOpenSettings: () -> Unit,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedContentScope,
     viewModel: DashboardViewModel = hiltViewModel(),
 ) {
     val vehicles by viewModel.vehicles.collectAsStateWithLifecycle()
+    val unitSystem by viewModel.unitSystem.collectAsStateWithLifecycle()
     DashboardContent(
         vehicles = vehicles,
+        unitSystem = unitSystem,
         onAddVehicle = onAddVehicle,
         onOpenVehicle = onOpenVehicle,
         onOpenSettings = onOpenSettings,
+        sharedTransitionScope = sharedTransitionScope,
+        animatedVisibilityScope = animatedVisibilityScope,
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 private fun DashboardContent(
     vehicles: List<VehicleListItem>,
+    unitSystem: UnitSystem,
     onAddVehicle: () -> Unit,
     onOpenVehicle: (Long) -> Unit,
     onOpenSettings: () -> Unit,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedContentScope,
 ) {
     Scaffold(
         topBar = {
@@ -82,15 +95,18 @@ private fun DashboardContent(
         } else {
             LazyColumn(
                 modifier = Modifier.padding(innerPadding),
-                contentPadding = PaddingValues(16.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 items(vehicles, key = { it.vehicle.id }) { item ->
                     VehicleCard(
                         vehicle = item.vehicle,
                         latestMileage = item.latestMileage,
                         imageFile = item.imageFile,
+                        unitSystem = unitSystem,
+                        sharedTransitionScope = sharedTransitionScope,
+                        animatedVisibilityScope = animatedVisibilityScope,
                         onClick = { onOpenVehicle(item.vehicle.id) },
-                        modifier = Modifier.padding(bottom = 16.dp),
                     )
                 }
             }
@@ -98,34 +114,49 @@ private fun DashboardContent(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun DashboardScreenPreview() {
     GarageTheme {
-        DashboardContent(
-            vehicles = listOf(
-                VehicleListItem(SampleData.tacoma, SampleData.TACOMA_LATEST_MILEAGE, null),
-                VehicleListItem(SampleData.civic, 42000, null),
-            ),
-            onAddVehicle = {},
-            onOpenVehicle = {},
-            onOpenSettings = {},
-        )
+        SharedTransitionLayout {
+            AnimatedContent(targetState = Unit, label = "DashboardScreenPreview") { _ ->
+                DashboardContent(
+                    vehicles = listOf(
+                        VehicleListItem(SampleData.tacoma, SampleData.TACOMA_LATEST_MILEAGE, null),
+                        VehicleListItem(SampleData.civic, 42000, null),
+                    ),
+                    unitSystem = UnitSystem.IMPERIAL,
+                    onAddVehicle = {},
+                    onOpenVehicle = {},
+                    onOpenSettings = {},
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    animatedVisibilityScope = this@AnimatedContent,
+                )
+            }
+        }
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun DashboardScreenEmptyPreview() {
     GarageTheme {
-        DashboardContent(
-            vehicles = emptyList(),
-            onAddVehicle = {},
-            onOpenVehicle = {},
-            onOpenSettings = {},
-        )
+        SharedTransitionLayout {
+            AnimatedContent(targetState = Unit, label = "DashboardScreenEmptyPreview") { _ ->
+                DashboardContent(
+                    vehicles = emptyList(),
+                    unitSystem = UnitSystem.IMPERIAL,
+                    onAddVehicle = {},
+                    onOpenVehicle = {},
+                    onOpenSettings = {},
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    animatedVisibilityScope = this@AnimatedContent,
+                )
+            }
+        }
     }
 }
-
 
 

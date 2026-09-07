@@ -2,10 +2,9 @@ package com.fearmikey.garage.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import com.fearmikey.garage.data.local.entity.Reminder
 import kotlinx.coroutines.flow.Flow
 
@@ -18,7 +17,7 @@ interface ReminderDao {
     @Query("SELECT * FROM reminders WHERE isCompleted = 0")
     suspend fun getIncompleteReminders(): List<Reminder>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun upsert(reminder: Reminder): Long
 
     @Update

@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.repository.ImageStorageManager
 import com.fearmikey.garage.data.repository.MaintenanceRepository
+import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.data.repository.VehicleRepository
+import com.fearmikey.garage.ui.util.UnitSystem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
@@ -30,7 +32,11 @@ class DashboardViewModel @Inject constructor(
     vehicleRepository: VehicleRepository,
     maintenanceRepository: MaintenanceRepository,
     imageStorageManager: ImageStorageManager,
+    preferencesRepository: PreferencesRepository,
 ) : ViewModel() {
+
+    val unitSystem: StateFlow<UnitSystem> = preferencesRepository.unitSystem
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), UnitSystem.IMPERIAL)
 
     val vehicles: StateFlow<List<VehicleListItem>> = vehicleRepository.getAllVehicles()
         .flatMapLatest { vehicles ->

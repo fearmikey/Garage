@@ -25,6 +25,8 @@ data class Vehicle(
     val imageUri: String? = null,
     @ColumnInfo(defaultValue = "UNKNOWN")
     val drivetrain: Drivetrain = Drivetrain.UNKNOWN,
+    @ColumnInfo(defaultValue = "0.0")
+    val imageOffsetY: Float = 0f,
 )
 
 /**
