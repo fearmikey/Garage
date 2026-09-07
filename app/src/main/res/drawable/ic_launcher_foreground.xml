@@ -1,30 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <path android:pathData="M31,63.928c0,0 6.4,-11 12.1,-13.1c7.2,-2.6 26,-1.4 26,-1.4l38.1,38.1L107,108.928l-32,-1L31,63.928z">
-        <aapt:attr name="android:fillColor">
+
+    <!-- 1. GARAGE SHELTER FRAME / ARCH -->
+    <!-- Outer Shield Glow -->
+    <path
+        android:pathData="M54,19 L85,35.5 L85,65 C85,77 69,84 54,84 C39,84 23,77 23,65 L23,35.5 Z"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeColor="#2000E5FF"
+        android:fillColor="#1200E5FF" />
+
+    <!-- Main Shield Frame -->
+    <path
+        android:pathData="M54,20 L84,36 L84,65 C84,76 69,83 54,83 C39,83 24,76 24,65 L24,36 Z"
+        android:strokeWidth="3.2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="#00000000">
+        <aapt:attr name="android:strokeColor">
             <gradient
-                android:endX="85.84757"
-                android:endY="92.4963"
-                android:startX="42.9492"
-                android:startY="49.59793"
+                android:startX="24"
+                android:startY="20"
+                android:endX="84"
+                android:endY="83"
                 android:type="linear">
-                <item
-                    android:color="#44000000"
-                    android:offset="0.0" />
-                <item
-                    android:color="#00000000"
-                    android:offset="1.0" />
+                <item android:color="#FF00E5FF" android:offset="0.0" />
+                <item android:color="#FF3D5AFE" android:offset="0.5" />
+                <item android:color="#FF7C4DFF" android:offset="1.0" />
             </gradient>
         </aapt:attr>
     </path>
+
+    <!-- 2. ROLL-UP GARAGE DOOR SLATS (Roof Interior) -->
     <path
-        android:fillColor="#FFFFFF"
-        android:fillType="nonZero"
-        android:pathData="M65.3,45.828l3.8,-6.6c0.2,-0.4 0.1,-0.9 -0.3,-1.1c-0.4,-0.2 -0.9,-0.1 -1.1,0.3l-3.9,6.7c-6.3,-2.8 -13.4,-2.8 -19.7,0l-3.9,-6.7c-0.2,-0.4 -0.7,-0.5 -1.1,-0.3C38.8,38.328 38.7,38.828 38.9,39.228l3.8,6.6C36.2,49.428 31.7,56.028 31,63.928h46C76.3,56.028 71.8,49.428 65.3,45.828zM43.4,57.328c-0.8,0 -1.5,-0.5 -1.8,-1.2c-0.3,-0.7 -0.1,-1.5 0.4,-2.1c0.5,-0.5 1.4,-0.7 2.1,-0.4c0.7,0.3 1.2,1 1.2,1.8C45.3,56.528 44.5,57.328 43.4,57.328L43.4,57.328zM64.6,57.328c-0.8,0 -1.5,-0.5 -1.8,-1.2s-0.1,-1.5 0.4,-2.1c0.5,-0.5 1.4,-0.7 2.1,-0.4c0.7,0.3 1.2,1 1.2,1.8C66.5,56.528 65.6,57.328 64.6,57.328L64.6,57.328z"
-        android:strokeWidth="1"
-        android:strokeColor="#00000000" />
+        android:pathData="M45,28.5 L63,28.5"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeColor="#D0F8FF" />
+    <path
+        android:pathData="M39,32.5 L69,32.5"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeColor="#D0F8FF" />
+    <path
+        android:pathData="M33,36.5 L75,36.5"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeColor="#D0F8FF" />
+
+    <!-- 3. HEADLIGHT BEAM GLOWS -->
+    <path android:pathData="M24,58 L38,58 L38,70 L22,70 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="35"
+                android:startY="58"
+                android:endX="25"
+                android:endY="70"
+                android:type="linear">
+                <item android:color="#4000E5FF" android:offset="0.0" />
+                <item android:color="#0000E5FF" android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <path android:pathData="M84,58 L70,58 L70,70 L86,70 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="73"
+                android:startY="58"
+                android:endX="83"
+                android:endY="70"
+                android:type="linear">
+                <item android:color="#4000E5FF" android:offset="0.0" />
+                <item android:color="#0000E5FF" android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- 4. SLEEK SPORTS CAR SILHOUETTE -->
+    <!-- Side Mirrors -->
+    <path
+        android:pathData="M26,53.5 C24.5,53.5 24,54.5 24.5,55.5 L27,56.5 Z"
+        android:fillColor="#FFE2E8F0" />
+    <path
+        android:pathData="M82,53.5 C83.5,53.5 84,54.5 83.5,55.5 L81,56.5 Z"
+        android:fillColor="#FFE2E8F0" />
+
+    <!-- Windshield Glass -->
+    <path
+        android:pathData="M44.5,49.5 C47,44.5 50.5,43 54,43 C57.5,43 61,44.5 63.5,49.5 Z"
+        android:strokeWidth="0.8"
+        android:strokeColor="#8000E5FF">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="54"
+                android:startY="43"
+                android:endX="54"
+                android:endY="49.5"
+                android:type="linear">
+                <item android:color="#FF00E5FF" android:offset="0.0" />
+                <item android:color="#FF0F172A" android:offset="0.6" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Bonnet / Hood Crease Lines -->
+    <path
+        android:pathData="M48,49 L50,56"
+        android:strokeWidth="0.8"
+        android:strokeColor="#30000000" />
+    <path
+        android:pathData="M60,49 L58,56"
+        android:strokeWidth="0.8"
+        android:strokeColor="#30000000" />
+
+    <!-- Car Body Hood & Fenders -->
+    <path android:pathData="M43,49 C39,52 32,54.5 28,56.5 L28,63.5 C28,65.5 29.5,67 31.5,67 L76.5,67 C78.5,67 80,65.5 80,63.5 L80,56.5 C76,54.5 69,52 65,49 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="54"
+                android:startY="43"
+                android:endX="54"
+                android:endY="67"
+                android:type="linear">
+                <item android:color="#FFFFFFFF" android:offset="0.0" />
+                <item android:color="#FFE2E8F0" android:offset="0.5" />
+                <item android:color="#FF94A3B8" android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Front Air Grille Intake -->
+    <path
+        android:pathData="M45,61 L63,61 L61,65 L47,65 Z"
+        android:fillColor="#FF0F172A" />
+
+    <!-- Dual LED Headlights -->
+    <!-- Left Headlight -->
+    <path
+        android:pathData="M31,58.5 L39,58.5 L37.5,62 L31,61.5 Z"
+        android:fillColor="#FF00E5FF" />
+    <path
+        android:pathData="M32,59 L37.5,59 L36.5,61 L32,60.6 Z"
+        android:fillColor="#FFFFFFFF" />
+
+    <!-- Right Headlight -->
+    <path
+        android:pathData="M77,58.5 L69,58.5 L70.5,62 L77,61.5 Z"
+        android:fillColor="#FF00E5FF" />
+    <path
+        android:pathData="M76,59 L70.5,59 L71.5,61 L76,60.6 Z"
+        android:fillColor="#FFFFFFFF" />
+
+    <!-- 5. PRECISION WRENCH (Maintenance Base Foundation) -->
+    <!-- Wrench Shaft -->
+    <path
+        android:pathData="M32,73 L76,73"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:strokeColor="#FFCFD8DC" />
+
+    <!-- Left Open Jaw Head -->
+    <path
+        android:pathData="M32,68.5 C29.5,68.5 27.5,70.5 27.5,73 C27.5,75.5 29.5,77.5 32,77.5 L30,75 L32.5,73 L30,71 Z"
+        android:fillColor="#FFE0E0E0" />
+
+    <!-- Right Ring Box Head -->
+    <path
+        android:pathData="M76,68.5 C78.5,68.5 80.5,70.5 80.5,73 C80.5,75.5 78.5,77.5 76,77.5 C73.5,77.5 71.5,75.5 76,68.5 Z"
+        android:fillColor="#FFE0E0E0" />
+    <path
+        android:pathData="M76,71 C77.1,71 78,71.9 78,73 C78,74.1 77.1,75 76,75 C74.9,75 74,74.1 74,73 C74,71.9 74.9,71 76,71 Z"
+        android:fillColor="#FF101828" />
+
+    <!-- 6. VEHICLE HEALTH & SERVICE STATUS BADGE -->
+    <!-- Outer Glow Ring -->
+    <path
+        android:pathData="M54,73m-8,0a8,8 0 1,0 16,0a8,8 0 1,0 -16,0"
+        android:fillColor="#40FFB300" />
+
+    <!-- Outer Gold Body -->
+    <path
+        android:pathData="M54,73m-6.8,0a6.8,6.8 0 1,0 13.6,0a6.8,6.8 0 1,0 -13.6,0"
+        android:fillColor="#FFFFB300" />
+
+    <!-- Inner Cream Badge Shield -->
+    <path
+        android:pathData="M54,73m-5.2,0a5.2,5.2 0 1,0 10.4,0a5.2,5.2 0 1,0 -10.4,0"
+        android:fillColor="#FFFDF6E2" />
+
+    <!-- Checkmark Icon -->
+    <path
+        android:pathData="M51,73 L53.2,75.2 L57,70.8"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeColor="#FFE65100"
+        android:fillColor="#00000000" />
+
 </vector>
