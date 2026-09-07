@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Garage</string>
+
+    <!-- Notifications -->
+    <string name="reminder_notification_channel_name">Maintenance reminders</string>
+    <string name="reminder_notification_channel_description">Alerts for upcoming and overdue vehicle maintenance</string>
+    <string name="reminder_overdue_title">Overdue: %1$s</string>
+    <string name="reminder_upcoming_title">Upcoming: %1$s</string>
+</resources>
