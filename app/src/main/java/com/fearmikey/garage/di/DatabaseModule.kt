@@ -7,6 +7,7 @@ import com.fearmikey.garage.data.local.GarageDatabase
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
 import com.fearmikey.garage.data.local.dao.ReminderDao
 import com.fearmikey.garage.data.local.dao.VehicleDao
+import com.fearmikey.garage.data.local.dao.VehicleSpecsDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,4 +33,7 @@ object DatabaseModule {
 
     @Provides
     fun provideReminderDao(database: GarageDatabase): ReminderDao = database.reminderDao()
+
+    @Provides
+    fun provideVehicleSpecsDao(database: GarageDatabase): VehicleSpecsDao = database.vehicleSpecsDao()
 }

@@ -1,8 +1,11 @@
 package com.fearmikey.garage.data.repository
 
 import android.content.Context
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteException
 import android.net.Uri
 import com.fearmikey.garage.data.local.GARAGE_DATABASE_NAME
+import com.fearmikey.garage.data.local.GARAGE_DATABASE_VERSION
 import com.fearmikey.garage.data.local.GarageDatabase
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -102,6 +105,27 @@ class BackupRepository @Inject constructor(
                 return@withContext BackupResult.Failure("This file doesn't look like a Garage backup (missing database).")
             }
 
+            // Guard against restoring a backup that was taken with a newer
+            // app build (higher schema version) than what's currently
+            // installed. Room only ever ships forward migrations, so opening
+            // a newer-schema database file with an older app build crashes
+            // immediately on every launch with no way to recover other than
+            // clearing app data again -- we'd rather fail loudly here, before
+            // any live files are touched, than leave the app unusable.
+            val backupVersion = try {
+                readSchemaVersion(stagedDb)
+            } catch (_: SQLiteException) {
+                return@withContext BackupResult.Failure(
+                    "This file doesn't look like a valid Garage backup (unreadable database)."
+                )
+            }
+            if (backupVersion > GARAGE_DATABASE_VERSION) {
+                return@withContext BackupResult.Failure(
+                    "This backup was created by a newer version of Garage and can't be restored " +
+                        "here. Update the app, then try restoring this backup again."
+                )
+            }
+
             // Close the live connection before we start overwriting the files
             // backing it. The app process will be restarted by the caller
             // right after this, so we never attempt to reopen/reuse `database`.
@@ -138,6 +162,16 @@ class BackupRepository @Inject constructor(
         val main = context.getDatabasePath(GARAGE_DATABASE_NAME)
         return listOf(main, File(main.path + "-wal"), File(main.path + "-shm"))
     }
+
+    /**
+     * Reads the SQLite `user_version` pragma (i.e. the Room schema version)
+     * out of a staged, not-yet-restored database file, without touching the
+     * live [database] connection. `exportBackup` always checkpoints the WAL
+     * before zipping, so the main `.db` file's header alone is a reliable
+     * source for this -- we don't need the `-wal`/`-shm` side files here.
+     */
+    private fun readSchemaVersion(dbFile: File): Int =
+        SQLiteDatabase.openDatabase(dbFile.path, null, SQLiteDatabase.OPEN_READONLY).use { it.version }
 
     private fun addFileToZip(zip: ZipOutputStream, file: File, entryName: String) {
         zip.putNextEntry(ZipEntry(entryName))

@@ -25,7 +25,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,6 +34,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fearmikey.garage.data.local.entity.Reminder
 import com.fearmikey.garage.data.repository.ReminderRepository
 import com.fearmikey.garage.ui.components.EmptyState
@@ -42,13 +42,14 @@ import com.fearmikey.garage.ui.components.StatusChip
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.SampleData
 import com.fearmikey.garage.ui.util.toDisplayDate
+import com.fearmikey.garage.ui.util.toDisplayMileage
 import java.util.concurrent.TimeUnit
 
 @Composable
 fun RemindersScreen(
     viewModel: RemindersViewModel = hiltViewModel(),
 ) {
-    val reminders by viewModel.reminders.collectAsState()
+    val reminders by viewModel.reminders.collectAsStateWithLifecycle()
     var showAddSheet by remember { mutableStateOf(false) }
 
     RemindersContent(
@@ -128,7 +129,7 @@ private fun ReminderRow(
                     )
                     val details = listOfNotNull(
                         item.reminder.dueDate?.let { "by ${it.toDisplayDate()}" },
-                        item.reminder.dueMileage?.let { "at $it mi" },
+                        item.reminder.dueMileage?.let { "at ${it.toDisplayMileage()} mi" },
                     ).joinToString(" · ")
                     if (details.isNotBlank()) {
                         Text(details, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)

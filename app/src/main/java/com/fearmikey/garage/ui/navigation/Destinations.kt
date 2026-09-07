@@ -7,6 +7,10 @@ import androidx.navigation.navArgument
 object Destinations {
     const val DASHBOARD = "dashboard"
     const val SETTINGS = "settings"
+    const val SCAN_VIN = "vehicle/scan-vin"
+
+    /** Key used to return a scanned VIN from [SCAN_VIN] to the previous back stack entry. */
+    const val SCANNED_VIN_RESULT = "scanned_vin"
 
     const val VEHICLE_ID_ARG = "vehicleId"
     const val NO_VEHICLE_ID = -1L
@@ -18,7 +22,7 @@ object Destinations {
         navArgument(VEHICLE_ID_ARG) {
             type = NavType.LongType
             defaultValue = NO_VEHICLE_ID
-        }
+        },
     )
 
     const val VEHICLE_DETAIL_ROUTE = "vehicle/{$VEHICLE_ID_ARG}"

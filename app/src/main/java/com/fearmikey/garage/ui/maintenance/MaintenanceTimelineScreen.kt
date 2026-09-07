@@ -30,7 +30,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,20 +38,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.repository.MaintenanceSortOrder
+import com.fearmikey.garage.data.schedule.MaintenanceScheduleRules
 import com.fearmikey.garage.ui.components.EmptyState
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.SampleData
 import com.fearmikey.garage.ui.util.toDisplayDate
+import com.fearmikey.garage.ui.util.toDisplayMileage
 
 @Composable
 fun MaintenanceTimelineScreen(
     viewModel: MaintenanceTimelineViewModel = hiltViewModel(),
 ) {
-    val records by viewModel.records.collectAsState()
-    val sortOrder by viewModel.sortOrder.collectAsState()
+    val records by viewModel.records.collectAsStateWithLifecycle()
+    val sortOrder by viewModel.sortOrder.collectAsStateWithLifecycle()
     var showAddSheet by remember { mutableStateOf(false) }
 
     MaintenanceTimelineContent(
@@ -140,7 +142,7 @@ private fun MaintenanceRecordRow(
                 Text(record.category.displayName, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                 Text(record.description, style = MaterialTheme.typography.titleMedium)
                 Text(
-                    "${record.date.toDisplayDate()} · ${record.mileage} mi · $${"%.2f".format(record.cost)}",
+                    "${record.date.toDisplayDate()} · ${record.mileage.toDisplayMileage()} mi · $${"%.2f".format(record.cost)}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -154,7 +156,7 @@ private fun MaintenanceRecordRow(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AddEditMaintenanceRecordSheet(
+internal fun AddEditMaintenanceRecordSheet(
     onDismiss: () -> Unit,
     onSave: (MaintenanceRecord) -> Unit,
     initial: MaintenanceRecord? = null,
@@ -165,7 +167,21 @@ private fun AddEditMaintenanceRecordSheet(
     var cost by remember { mutableStateOf(initial?.cost?.toString().orEmpty()) }
     var category by remember { mutableStateOf(initial?.category ?: MaintenanceCategory.OTHER) }
     var categoryMenuExpanded by remember { mutableStateOf(false) }
+    var taskName by remember { mutableStateOf(initial?.taskName) }
+    var taskMenuExpanded by remember { mutableStateOf(false) }
     val date = remember { mutableStateOf(initial?.date ?: System.currentTimeMillis()) }
+
+    // The known task names for the selected category, e.g. "Brake fluid flush" vs.
+    // "Coolant flush" both under Fluids. Picking one of these (rather than "Other / custom")
+    // is what lets MaintenanceScheduleEngine track each task's due date independently instead
+    // of conflating every task in the same category.
+    val taskOptions = remember(category) {
+        MaintenanceScheduleRules.rules
+            .filter { it.category == category }
+            .map { it.taskName }
+            .distinctBy { it.lowercase() }
+            .sorted()
+    }
 
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
         Column(
@@ -203,9 +219,50 @@ private fun AddEditMaintenanceRecordSheet(
                             text = { Text(entry.displayName) },
                             onClick = {
                                 category = entry
+                                taskName = null
                                 categoryMenuExpanded = false
                             },
                         )
+                    }
+                }
+            }
+
+            if (taskOptions.isNotEmpty()) {
+                ExposedDropdownMenuBox(
+                    expanded = taskMenuExpanded,
+                    onExpandedChange = { taskMenuExpanded = it },
+                ) {
+                    OutlinedTextField(
+                        value = taskName ?: "Other / custom",
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text("Specific task") },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = taskMenuExpanded) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+                    )
+                    DropdownMenu(
+                        expanded = taskMenuExpanded,
+                        onDismissRequest = { taskMenuExpanded = false },
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("Other / custom") },
+                            onClick = {
+                                taskName = null
+                                taskMenuExpanded = false
+                            },
+                        )
+                        taskOptions.forEach { option ->
+                            DropdownMenuItem(
+                                text = { Text(option) },
+                                onClick = {
+                                    taskName = option
+                                    if (description.isBlank()) description = option
+                                    taskMenuExpanded = false
+                                },
+                            )
+                        }
                     }
                 }
             }
@@ -240,6 +297,7 @@ private fun AddEditMaintenanceRecordSheet(
                             description = description,
                             cost = cost.toDoubleOrNull() ?: 0.0,
                             category = category,
+                            taskName = taskName,
                         )
                     )
                 },

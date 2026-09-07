@@ -20,9 +20,15 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AddAPhoto
+import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -33,8 +39,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -42,7 +50,9 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
+import com.fearmikey.garage.data.local.entity.Drivetrain
 import com.fearmikey.garage.ui.theme.GarageTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,12 +60,22 @@ import com.fearmikey.garage.ui.theme.GarageTheme
 fun AddEditVehicleScreen(
     onDone: () -> Unit,
     onBack: () -> Unit,
+    onScanVinClicked: () -> Unit = {},
+    scannedVin: String? = null,
+    onScannedVinConsumed: () -> Unit = {},
     viewModel: AddEditVehicleViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(uiState.saveComplete) {
         if (uiState.saveComplete) onDone()
+    }
+
+    LaunchedEffect(scannedVin) {
+        if (!scannedVin.isNullOrBlank()) {
+            viewModel.onVinChanged(scannedVin)
+            onScannedVinConsumed()
+        }
     }
 
     AddEditVehicleContent(
@@ -63,10 +83,12 @@ fun AddEditVehicleScreen(
         onBack = onBack,
         onVinChanged = viewModel::onVinChanged,
         onDecodeVinClicked = viewModel::onDecodeVinClicked,
+        onScanVinClicked = onScanVinClicked,
         onYearChanged = viewModel::onYearChanged,
         onMakeChanged = viewModel::onMakeChanged,
         onModelChanged = viewModel::onModelChanged,
         onTrimChanged = viewModel::onTrimChanged,
+        onDrivetrainChanged = viewModel::onDrivetrainChanged,
         onImagePicked = viewModel::onImagePicked,
         onSave = viewModel::onSave,
     )
@@ -79,10 +101,12 @@ private fun AddEditVehicleContent(
     onBack: () -> Unit,
     onVinChanged: (String) -> Unit,
     onDecodeVinClicked: () -> Unit,
+    onScanVinClicked: () -> Unit = {},
     onYearChanged: (String) -> Unit,
     onMakeChanged: (String) -> Unit,
     onModelChanged: (String) -> Unit,
     onTrimChanged: (String) -> Unit,
+    onDrivetrainChanged: (Drivetrain) -> Unit = {},
     onImagePicked: (Uri) -> Unit,
     onSave: () -> Unit,
 ) {
@@ -116,12 +140,12 @@ private fun AddEditVehicleContent(
                     .background(MaterialTheme.colorScheme.surfaceVariant)
                     .clickable {
                         photoPickerLauncher.launch(
-                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
                         )
                     },
                 contentAlignment = Alignment.Center,
             ) {
-                if (uiState.imageFile != null && uiState.imageFile.exists()) {
+                if ((uiState.imageFile != null) && uiState.imageFile.exists()) {
                     AsyncImage(
                         model = uiState.imageFile,
                         contentDescription = "Vehicle photo",
@@ -144,6 +168,11 @@ private fun AddEditVehicleContent(
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Characters,
                 ),
+                leadingIcon = {
+                    IconButton(onClick = onScanVinClicked) {
+                        Icon(Icons.Filled.QrCodeScanner, contentDescription = "Scan VIN")
+                    }
+                },
                 trailingIcon = {
                     if (uiState.isDecodingVin) {
                         CircularProgressIndicator(modifier = Modifier.size(20.dp))
@@ -188,6 +217,37 @@ private fun AddEditVehicleContent(
                 modifier = Modifier.fillMaxWidth(),
             )
 
+            var drivetrainMenuExpanded by remember { mutableStateOf(value = false) }
+            ExposedDropdownMenuBox(
+                expanded = drivetrainMenuExpanded,
+                onExpandedChange = { drivetrainMenuExpanded = it },
+            ) {
+                OutlinedTextField(
+                    value = uiState.drivetrain.displayName,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text("Drivetrain") },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = drivetrainMenuExpanded) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+                )
+                DropdownMenu(
+                    expanded = drivetrainMenuExpanded,
+                    onDismissRequest = { drivetrainMenuExpanded = false },
+                ) {
+                    Drivetrain.entries.forEach { entry ->
+                        DropdownMenuItem(
+                            text = { Text(entry.displayName) },
+                            onClick = {
+                                onDrivetrainChanged(entry)
+                                drivetrainMenuExpanded = false
+                            },
+                        )
+                    }
+                }
+            }
+
             Button(
                 onClick = onSave,
                 enabled = !uiState.isSaving && uiState.make.isNotBlank(),
@@ -219,7 +279,6 @@ private fun AddEditVehicleScreenPreview() {
             onModelChanged = {},
             onTrimChanged = {},
             onImagePicked = {},
-            onSave = {},
-        )
+        ) { }
     }
 }

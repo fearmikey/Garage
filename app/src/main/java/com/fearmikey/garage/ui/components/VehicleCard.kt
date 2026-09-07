@@ -23,6 +23,7 @@ import coil3.compose.AsyncImage
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.SampleData
+import com.fearmikey.garage.ui.util.toDisplayMileage
 import java.io.File
 
 /** Summary card for a [Vehicle], used in the Dashboard grid/list. */
@@ -73,7 +74,7 @@ fun VehicleCard(
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
-                val mileageText = latestMileage?.let { "$it mi" } ?: "No mileage logged yet"
+                val mileageText = latestMileage?.let { "${it.toDisplayMileage()} mi" } ?: "No mileage logged yet"
                 Text(
                     text = mileageText,
                     style = MaterialTheme.typography.labelLarge,

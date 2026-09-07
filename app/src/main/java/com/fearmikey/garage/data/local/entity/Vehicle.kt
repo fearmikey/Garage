@@ -1,5 +1,6 @@
 package com.fearmikey.garage.data.local.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -22,4 +23,19 @@ data class Vehicle(
     val model: String = "",
     val trim: String = "",
     val imageUri: String? = null,
+    @ColumnInfo(defaultValue = "UNKNOWN")
+    val drivetrain: Drivetrain = Drivetrain.UNKNOWN,
 )
+
+/**
+ * A vehicle's drivetrain layout. Used to match make/model-specific maintenance
+ * rules that only apply to certain configurations (e.g. transfer case fluid
+ * only applies to 4WD/AWD vehicles).
+ */
+enum class Drivetrain(val displayName: String) {
+    UNKNOWN("Unknown"),
+    FWD("FWD"),
+    RWD("RWD"),
+    AWD("AWD"),
+    FOUR_WD("4WD"),
+}

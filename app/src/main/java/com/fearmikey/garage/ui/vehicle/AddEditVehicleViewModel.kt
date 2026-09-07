@@ -4,7 +4,9 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fearmikey.garage.data.local.entity.Drivetrain
 import com.fearmikey.garage.data.local.entity.Vehicle
+import com.fearmikey.garage.data.local.entity.VehicleSpecs
 import com.fearmikey.garage.data.repository.ImageStorageManager
 import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.data.repository.VinLookupResult
@@ -24,6 +26,7 @@ data class AddEditVehicleUiState(
     val make: String = "",
     val model: String = "",
     val trim: String = "",
+    val drivetrain: Drivetrain = Drivetrain.UNKNOWN,
     val imageFilename: String? = null,
     val imageFile: File? = null,
     val isDecodingVin: Boolean = false,
@@ -31,10 +34,9 @@ data class AddEditVehicleUiState(
     val isSaving: Boolean = false,
     val isEditing: Boolean = false,
     val saveComplete: Boolean = false,
-) {
-    /** A VIN is only worth auto-decoding once it looks like a real (17-char) VIN. */
-    val isVinCompleteLength: Boolean get() = vin.length == 17
-}
+    /** Specs decoded alongside the last successful VIN decode; persisted once the vehicle is saved. */
+    val pendingSpecs: VehicleSpecs? = null,
+)
 
 @HiltViewModel
 class AddEditVehicleViewModel @Inject constructor(
@@ -60,6 +62,7 @@ class AddEditVehicleViewModel @Inject constructor(
                             make = vehicle.make,
                             model = vehicle.model,
                             trim = vehicle.trim,
+                            drivetrain = vehicle.drivetrain,
                             imageFilename = vehicle.imageUri,
                             imageFile = vehicle.imageUri?.let(imageStorageManager::imageFile),
                         )
@@ -93,6 +96,8 @@ class AddEditVehicleViewModel @Inject constructor(
                         make = result.info.make.ifBlank { it.make },
                         model = result.info.model.ifBlank { it.model },
                         trim = result.info.trim.ifBlank { it.trim },
+                        drivetrain = result.info.drivetrain ?: it.drivetrain,
+                        pendingSpecs = result.info.specs,
                     )
                 }
                 is VinLookupResult.Error -> _uiState.update {
@@ -106,6 +111,7 @@ class AddEditVehicleViewModel @Inject constructor(
     fun onMakeChanged(make: String) = _uiState.update { it.copy(make = make) }
     fun onModelChanged(model: String) = _uiState.update { it.copy(model = model) }
     fun onTrimChanged(trim: String) = _uiState.update { it.copy(trim = trim) }
+    fun onDrivetrainChanged(drivetrain: Drivetrain) = _uiState.update { it.copy(drivetrain = drivetrain) }
 
     fun onImagePicked(uri: Uri) {
         viewModelScope.launch {
@@ -122,7 +128,7 @@ class AddEditVehicleViewModel @Inject constructor(
         val state = _uiState.value
         viewModelScope.launch {
             _uiState.update { it.copy(isSaving = true) }
-            vehicleRepository.saveVehicle(
+            val savedVehicleId = vehicleRepository.saveVehicle(
                 Vehicle(
                     id = if (isEditing) vehicleId else 0,
                     vin = state.vin,
@@ -130,9 +136,15 @@ class AddEditVehicleViewModel @Inject constructor(
                     make = state.make,
                     model = state.model,
                     trim = state.trim,
+                    drivetrain = state.drivetrain,
                     imageUri = state.imageFilename,
-                )
+                ),
             )
+            // Only persist specs when this session actually decoded a VIN; otherwise leave
+            // whatever specs (if any) are already stored for this vehicle untouched.
+            state.pendingSpecs?.let { specs ->
+                vehicleRepository.saveVehicleSpecs(savedVehicleId, specs)
+            }
             _uiState.update { it.copy(isSaving = false, saveComplete = true) }
         }
     }

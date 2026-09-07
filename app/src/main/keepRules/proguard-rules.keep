@@ -1,0 +1,25 @@
+# Project-specific R8 keep rules.
+#
+# AGP combines every keep rule file placed under src/main/keepRules
+# (see rules.keep) and passes them to R8 automatically -- no proguardFiles()
+# wiring is needed in build.gradle.kts. Note: AGP 9 requires these files to
+# use the .keep extension (not .pro) when placed in this directory.
+#
+# Most of this app's third-party dependencies (Retrofit, Gson 2.11+, Room,
+# Hilt, Coil, CameraX, ML Kit) ship their own consumer keep rules inside
+# their AARs, so they don't need entries here. See
+#   https://d.android.com/r/tools/r8/keep-rules
+
+# --- Gson (NHTSA VIN decoder network responses) ---
+# Gson's bundled consumer rules already protect @SerializedName fields, but
+# these DTOs cross a network boundary, so we pin them down explicitly as a
+# defense-in-depth measure against silent (de)serialization breakage.
+-keepclassmembers class com.fearmikey.garage.data.remote.dto.** {
+    <fields>;
+    <init>(...);
+}
+
+# --- Readable stack traces ---
+# Keep source file + line number info so obfuscated stack traces captured in
+# Logcat/bug reports can still be mapped back to real source locations.
+-keepattributes SourceFile, LineNumberTable

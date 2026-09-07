@@ -34,4 +34,16 @@ data class MaintenanceRecord(
     val description: String,
     val cost: Double,
     val category: MaintenanceCategory,
+    /**
+     * The specific [com.fearmikey.garage.data.schedule.MaintenanceRule.taskName] this record
+     * fulfills, e.g. "Coolant flush" vs. "Brake fluid flush" (both under [MaintenanceCategory.FLUIDS]).
+     *
+     * [category] alone is too coarse to know which task was actually performed whenever a
+     * category has more than one rule (fluids, filters, etc.) -- without this, logging one
+     * fluid service would incorrectly mark every other fluid task as "just done" too. Null
+     * means either a pre-migration record or a free-form/custom entry that doesn't correspond
+     * to one of the built-in MaintenanceScheduleRules; those records fall back to
+     * category-only matching in MaintenanceScheduleEngine.
+     */
+    val taskName: String? = null,
 )
