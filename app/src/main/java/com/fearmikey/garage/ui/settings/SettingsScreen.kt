@@ -1,7 +1,6 @@
 package com.fearmikey.garage.ui.settings
 
 import android.content.Intent
-import android.net.Uri
 import android.text.format.DateUtils
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -10,10 +9,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Comment
 import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.CloudSync
@@ -36,6 +37,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
@@ -82,6 +84,7 @@ fun SettingsScreen(
     var showClearDataDialog by remember { mutableStateOf(false) }
     var showAboutDialog by remember { mutableStateOf(false) }
     var showCloudBackupDialog by remember { mutableStateOf(false) }
+    var showBugReportFeedbackDialog by remember { mutableStateOf(false) }
 
     val exportLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.CreateDocument("application/zip"),
@@ -238,22 +241,11 @@ fun SettingsScreen(
             item {
                 ListItem(
                     headlineContent = { Text("Report a Bug / Feedback") },
-                    supportingContent = { Text("Send feedback or bug reports to the developer.") },
+                    supportingContent = { Text("Report issues or share feedback on GitHub.") },
                     leadingContent = { Icon(Icons.Filled.BugReport, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable {
-                            val intent = Intent(Intent.ACTION_SENDTO).apply {
-                                data = Uri.parse("mailto:")
-                                putExtra(Intent.EXTRA_EMAIL, arrayOf("support@garageapp.com"))
-                                putExtra(Intent.EXTRA_SUBJECT, "Garage App Feedback (v${BuildConfig.VERSION_NAME})")
-                            }
-                            if (intent.resolveActivity(context.packageManager) != null) {
-                                context.startActivity(intent)
-                            } else {
-                                context.startActivity(Intent.createChooser(intent, "Send Email"))
-                            }
-                        },
+                        .clickable { showBugReportFeedbackDialog = true },
                 )
             }
 
@@ -402,6 +394,53 @@ fun SettingsScreen(
             },
             onTestConnection = { url, username, password -> viewModel.testConnection(url, username, password) },
             onDismissRequest = { showCloudBackupDialog = false },
+        )
+    }
+
+    if (showBugReportFeedbackDialog) {
+        AlertDialog(
+            onDismissRequest = { showBugReportFeedbackDialog = false },
+            title = { Text("Report a Bug / Feedback") },
+            text = {
+                Column {
+                    Text("Select an option below to open GitHub in your browser:")
+                    Spacer(modifier = Modifier.height(16.dp))
+                    OutlinedButton(
+                        onClick = {
+                            showBugReportFeedbackDialog = false
+                            uriHandler.openUri("https://github.com/fearmikey/Garage/issues")
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.BugReport,
+                            contentDescription = null,
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                        Text("Report an Issue")
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedButton(
+                        onClick = {
+                            showBugReportFeedbackDialog = false
+                            uriHandler.openUri("https://github.com/fearmikey/Garage/discussions")
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.Comment,
+                            contentDescription = null,
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                        Text("Share Feedback")
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showBugReportFeedbackDialog = false }) {
+                    Text("Cancel")
+                }
+            }
         )
     }
 }

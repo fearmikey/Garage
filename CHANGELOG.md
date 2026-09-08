@@ -1,3 +1,13 @@
+## [1.1.1] - 2026-09-08
+
+### Added
+* **Report a Bug & Feedback Popup:** Updated Settings menu option with an interactive popup dialog linking directly to GitHub Issues and GitHub Discussions.
+* **Benchmark Build Variant:** Added a `benchmark` build configuration with R8 optimizations enabled for realistic performance evaluation.
+
+### Changed
+* **Image Processing & Performance:** Integrated `androidx.exifinterface` to downsample vehicle photos on ingest while preserving EXIF orientation, eliminating scroll and navigation jank.
+* **Photo Deletion Safety:** Deferred deletion of replaced vehicle photos until changes are explicitly saved, preventing accidental photo loss if editing is canceled.
+
 ## [1.1.0] - 2026-09-08
 
 ### Added

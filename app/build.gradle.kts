@@ -20,8 +20,8 @@ android {
         applicationId = "com.fearmikey.garage"
         minSdk = 34
         targetSdk = 37
-        versionCode = 3
-        versionName = "1.1.0"
+        versionCode = 4
+        versionName = "1.1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -32,6 +32,20 @@ android {
                 enable = true
             }
             isShrinkResources = true
+        }
+        // A release-like build type -- R8 optimization/shrinking enabled,
+        // non-debuggable -- but signed with the debug keystore so it can be
+        // installed straight from Studio/adb without a production signing
+        // config. Use this (`installBenchmark`/`assembleBenchmark`) instead of
+        // `debug` when evaluating real-world performance: `debuggable=true`
+        // (the default on `debug`) disables several ART runtime
+        // optimizations independent of R8, so a merely R8-minified debug
+        // build still won't feel like what a real user experiences.
+        create("benchmark") {
+            initWith(getByName("release"))
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks += listOf("release")
+            isDebuggable = false
         }
     }
     compileOptions {
@@ -143,4 +157,7 @@ dependencies {
     // Cloud backup (WebDAV)
     implementation(libs.okhttp)
     implementation(libs.androidx.security.crypto)
+
+    // EXIF orientation handling for vehicle photo downsampling
+    implementation(libs.androidx.exifinterface)
 }

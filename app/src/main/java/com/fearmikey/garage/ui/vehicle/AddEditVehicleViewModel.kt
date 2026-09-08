@@ -53,10 +53,17 @@ class AddEditVehicleViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(AddEditVehicleUiState(isEditing = isEditing))
     val uiState: StateFlow<AddEditVehicleUiState> = _uiState.asStateFlow()
 
+    // The filename the vehicle already had on disk when this editing session started (if
+    // any). Deleting the *old* photo is deferred until a new one is actually persisted via
+    // onSave() -- if we deleted it as soon as the user picked a replacement, backing out
+    // without saving would silently and permanently destroy their original photo.
+    private var originalImageFilename: String? = null
+
     init {
         if (isEditing) {
             viewModelScope.launch {
                 vehicleRepository.getVehicleByIdOnce(vehicleId)?.let { vehicle ->
+                    originalImageFilename = vehicle.imageUri
                     _uiState.update {
                         it.copy(
                             vin = vehicle.vin,
@@ -120,8 +127,13 @@ class AddEditVehicleViewModel @Inject constructor(
     fun onImagePicked(uri: Uri) {
         viewModelScope.launch {
             val filename = imageStorageManager.copyPickedImageToInternalStorage(uri)
-            // Best-effort cleanup of a previously picked (but since-replaced) image.
-            _uiState.value.imageFilename?.let(imageStorageManager::deleteImage)
+            // Clean up a previously *picked-but-not-yet-saved* replacement from earlier in
+            // this same session (if the user changed their mind and picked again) -- but
+            // never touch originalImageFilename here; that's only deleted once onSave()
+            // has actually persisted its replacement.
+            _uiState.value.imageFilename
+                ?.takeIf { it != originalImageFilename }
+                ?.let(imageStorageManager::deleteImage)
             _uiState.update {
                 it.copy(imageFilename = filename, imageFile = imageStorageManager.imageFile(filename), imageOffsetY = 0f)
             }
@@ -150,6 +162,11 @@ class AddEditVehicleViewModel @Inject constructor(
             state.pendingSpecs?.let { specs ->
                 vehicleRepository.saveVehicleSpecs(savedVehicleId, specs)
             }
+            // Now that the new photo (if any) is safely referenced by the saved vehicle,
+            // it's safe to clean up the old one it replaced.
+            originalImageFilename
+                ?.takeIf { it != state.imageFilename }
+                ?.let(imageStorageManager::deleteImage)
             _uiState.update { it.copy(isSaving = false, saveComplete = true) }
         }
     }
