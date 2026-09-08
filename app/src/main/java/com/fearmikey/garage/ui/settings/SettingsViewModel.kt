@@ -1,7 +1,10 @@
 package com.fearmikey.garage.ui.settings
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.net.Uri
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fearmikey.garage.data.local.CloudBackupPreferencesManager
@@ -10,6 +13,7 @@ import com.fearmikey.garage.data.repository.BackupResult
 import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.data.repository.WebDavBackupRepository
 import com.fearmikey.garage.notification.CloudBackupScheduler
+import com.fearmikey.garage.notification.ReminderNotifier
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,6 +37,7 @@ data class SettingsUiState(
     val isSyncing: Boolean = false,
     val lastSyncTimestamp: Long? = null,
     val lastSyncError: String? = null,
+    val notificationPermissionGranted: Boolean = false,
 )
 
 @HiltViewModel
@@ -42,6 +47,7 @@ class SettingsViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository,
     private val webDavBackupRepository: WebDavBackupRepository,
     private val cloudBackupPreferencesManager: CloudBackupPreferencesManager,
+    private val reminderNotifier: ReminderNotifier,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SettingsUiState())
@@ -84,6 +90,29 @@ class SettingsViewModel @Inject constructor(
             }
         }
         _uiState.update { it.copy(webdavPasswordSet = !cloudBackupPreferencesManager.getWebdavPassword().isNullOrBlank()) }
+        refreshNotificationPermissionState()
+    }
+
+    fun refreshNotificationPermissionState() {
+        val granted = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.POST_NOTIFICATIONS,
+        ) == PackageManager.PERMISSION_GRANTED
+        _uiState.update { it.copy(notificationPermissionGranted = granted) }
+    }
+
+    fun sendTestNotification() {
+        refreshNotificationPermissionState()
+        val sent = reminderNotifier.notifyTest()
+        _uiState.update {
+            it.copy(
+                message = if (sent) {
+                    "Test notification sent."
+                } else {
+                    "Notifications are disabled for Garage. Enable them to receive test notifications and reminders."
+                },
+            )
+        }
     }
 
     fun setUnits(units: String) {

@@ -65,7 +65,29 @@ class ReminderNotifier @Inject constructor(
         notificationManager.cancel(reminderId.toInt())
     }
 
+    fun notifyTest(): Boolean {
+        val hasPermission = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.POST_NOTIFICATIONS,
+        ) == PackageManager.PERMISSION_GRANTED
+        if (!hasPermission) return false
+
+        ensureChannel()
+
+        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_notification_reminder)
+            .setContentTitle(context.getString(R.string.test_notification_title))
+            .setContentText(context.getString(R.string.test_notification_text))
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true)
+            .build()
+
+        notificationManager.notify(TEST_NOTIFICATION_ID, notification)
+        return true
+    }
+
     companion object {
         const val CHANNEL_ID = "reminders"
+        private const val TEST_NOTIFICATION_ID = 9999
     }
 }

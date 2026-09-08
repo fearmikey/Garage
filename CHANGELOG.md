@@ -1,3 +1,12 @@
+## [1.1.2] - 2026-09-08
+
+### Added
+* **Notification Permission Management:** Added notification permission status indicators and direct system settings launcher in the Settings screen.
+* **Send Test Notification:** Added a "Send Test Notification" feature in Settings to verify push notification delivery and channel setup.
+
+### Changed
+* **Lifecycle State Sync:** Automatically refreshes notification permission status when returning to the Settings screen.
+
 ## [1.1.1] - 2026-09-08
 
 ### Added

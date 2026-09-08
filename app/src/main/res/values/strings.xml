@@ -10,6 +10,8 @@
     <string name="pdf_export_notification_channel_description">Notifications when maintenance report PDFs are generated</string>
     <string name="pdf_export_notification_title">Maintenance Report Exported</string>
     <string name="pdf_export_notification_text">Tap to open %1$s</string>
+    <string name="test_notification_title">Test Notification</string>
+    <string name="test_notification_text">If you can see this, push notifications are working correctly.</string>
 
     <!-- App widget -->
     <string name="garage_widget_description">Shows upcoming/overdue maintenance reminders and quick-logs service or fuel</string>
