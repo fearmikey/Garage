@@ -11,7 +11,10 @@ class Converters {
 
     @TypeConverter
     fun toMaintenanceCategory(value: String): MaintenanceCategory =
-        MaintenanceCategory.entries.firstOrNull { it.name == value } ?: MaintenanceCategory.OTHER
+        when (value) {
+            "TIRE_ROTATION" -> MaintenanceCategory.TIRES
+            else -> MaintenanceCategory.entries.firstOrNull { it.name == value } ?: MaintenanceCategory.OTHER
+        }
 
     @TypeConverter
     fun fromDrivetrain(drivetrain: Drivetrain): String = drivetrain.name

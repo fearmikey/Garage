@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.PictureAsPdf
 import androidx.compose.material.icons.outlined.DirectionsCar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -35,13 +36,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
+import com.fearmikey.garage.ui.cost.CostOfOwnershipScreen
 import com.fearmikey.garage.ui.fuel.FuelScreen
 import com.fearmikey.garage.ui.maintenance.MaintenanceSuggestionsScreen
 import com.fearmikey.garage.ui.maintenance.MaintenanceTimelineScreen
 import com.fearmikey.garage.ui.recall.RecallsScreen
 import com.fearmikey.garage.ui.reminder.RemindersScreen
 
-private val TAB_TITLES = listOf("Timeline", "Suggested", "Reminders", "Fuel", "Recalls", "Specs", "Parts")
+private val TAB_TITLES = listOf("Timeline", "Suggested", "Reminders", "Fuel", "Cost of Ownership", "Recalls", "Specs", "Parts")
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
@@ -49,6 +51,7 @@ fun VehicleDetailScreen(
     onBack: () -> Unit,
     onEditVehicle: (Long) -> Unit,
     onEditParts: (Long) -> Unit = {},
+    onExportMaintenance: (Long) -> Unit = {},
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedContentScope,
     viewModel: VehicleDetailViewModel = hiltViewModel(),
@@ -70,6 +73,9 @@ fun VehicleDetailScreen(
                 },
                 actions = {
                     vehicle?.let {
+                        IconButton(onClick = { onExportMaintenance(it.id) }) {
+                            Icon(Icons.Filled.PictureAsPdf, contentDescription = "Export Maintenance Log")
+                        }
                         IconButton(onClick = { onEditVehicle(it.id) }) {
                             Icon(Icons.Filled.Edit, contentDescription = "Edit vehicle")
                         }
@@ -92,7 +98,7 @@ fun VehicleDetailScreen(
                     contentAlignment = Alignment.Center,
                 ) {
                     val currentImageFile = imageFile
-                    if (currentImageFile != null && currentImageFile.exists()) {
+                    if ((currentImageFile != null) && currentImageFile.exists()) {
                         AsyncImage(
                             model = currentImageFile,
                             contentDescription = vehicle?.let { "${it.year ?: ""} ${it.make} ${it.model}".trim() },
@@ -125,9 +131,10 @@ fun VehicleDetailScreen(
                 1 -> MaintenanceSuggestionsScreen()
                 2 -> RemindersScreen()
                 3 -> FuelScreen(autoOpenAddSheet = viewModel.initialOpenAdd)
-                4 -> RecallsScreen()
-                5 -> VehicleSpecsScreen()
-                6 -> PartsScreen(onEditParts = { onEditParts(viewModel.vehicleId) })
+                4 -> CostOfOwnershipScreen()
+                5 -> RecallsScreen()
+                6 -> VehicleSpecsScreen()
+                7 -> PartsScreen(onEditParts = { onEditParts(viewModel.vehicleId) })
             }
         }
     }

@@ -39,6 +39,9 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
     val unitSystem: StateFlow<UnitSystem> = preferencesRepository.unitSystem
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), UnitSystem.IMPERIAL)
 
+    val latestMileage: StateFlow<Int?> = maintenanceRepository.getLatestMileageForVehicle(vehicleId)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
     val customRules: StateFlow<List<CustomMaintenanceRule>> =
         customMaintenanceRuleRepository.getRulesForVehicle(vehicleId)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
@@ -48,16 +51,25 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
         maintenanceRepository.getRecordsForVehicle(vehicleId),
         maintenanceRepository.getLatestMileageForVehicle(vehicleId),
         customMaintenanceRuleRepository.getRulesForVehicle(vehicleId),
-    ) { vehicle, records, latestMileage, customRules ->
+        reminderRepository.getRemindersForVehicle(vehicleId),
+    ) { vehicle, records, latestMileage, customRules, reminders ->
         if (vehicle == null) {
             emptyList()
         } else {
+            val activeReminderTasks = reminders
+                .asSequence()
+                .filter { !it.isCompleted }
+                .map { it.taskName.lowercase() }
+                .toSet()
+
             MaintenanceScheduleEngine.suggestionsFor(
                 vehicle,
                 latestMileage,
                 records,
                 customRules.map { it.toMaintenanceRule() },
-            )
+            ).filter { suggestion ->
+                suggestion.rule.taskName.lowercase() !in activeReminderTasks
+            }
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 

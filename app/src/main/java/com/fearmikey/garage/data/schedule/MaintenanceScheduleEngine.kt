@@ -130,16 +130,95 @@ object MaintenanceScheduleEngine {
      * task name exactly -- this is what lets e.g. a "Brake fluid flush" record leave the
      * separate "Coolant flush" rule alone, even though both share [MaintenanceCategory.FLUIDS].
      *
-     * Records with no task name (pre-migration history, or a free-form/custom entry) fall
-     * back to matching by [category] alone, same as before this
-     * distinction existed. This is intentionally imprecise for any category with more than
-     * one rule -- there's no reliable way to guess which specific task an untagged record
-     * refers to -- but it avoids silently dropping old service history from the schedule.
+     * Records with no explicit task name (e.g. an "Other / custom" entry like "Daytime running lights")
+     * fall back to matching by [category] AND checking if the record's description matches the rule's
+     * task name or keywords. This prevents custom/other records (such as replacing lights or wipers) from
+     * incorrectly fulfilling unrelated rules in the same category (like "Spark plug replacement").
      */
-    private fun MaintenanceRecord.satisfies(rule: MaintenanceRule): Boolean =
+    private fun MaintenanceRecord.satisfies(rule: MaintenanceRule): Boolean {
         if (taskName != null) {
-            taskName.equals(rule.taskName, ignoreCase = true)
-        } else {
-            category == rule.category
+            if (taskName.equals(rule.taskName, ignoreCase = true)) {
+                return true
+            }
+            val ruleNameLower = rule.taskName.lowercase()
+            val recordTaskLower = taskName.lowercase()
+
+            // Any tire rotation service (Rotation, Rotation & Balance, etc.) satisfies a tire rotation rule
+            return ruleNameLower.contains("rotat") && recordTaskLower.contains("rotat")
         }
+        if (category != rule.category) {
+            return false
+        }
+        return descriptionMatchesTask(description, rule.taskName)
+    }
+
+    private fun descriptionMatchesTask(description: String, taskName: String): Boolean {
+        val cleanDesc = description.trim().lowercase()
+        val cleanTask = taskName.trim().lowercase()
+        if (cleanDesc.isEmpty()) return false
+
+        if (cleanDesc.contains(cleanTask) || cleanTask.contains(cleanDesc)) {
+            return true
+        }
+
+        val requiredKeywords = getRequiredKeywords(cleanTask)
+        if (requiredKeywords.isNotEmpty()) {
+            return requiredKeywords.all { cleanDesc.contains(it) }
+        }
+
+        val taskKeywords = extractKeywords(cleanTask)
+        if (taskKeywords.isEmpty()) return false
+
+        return taskKeywords.any { keyword -> cleanDesc.contains(keyword) }
+    }
+
+    private fun getRequiredKeywords(taskNameLower: String): List<String> {
+        return when {
+            taskNameLower.contains("spark plug") -> listOf("spark")
+            taskNameLower.contains("cabin") -> listOf("cabin")
+            taskNameLower.contains("engine air") -> listOf("engine")
+            taskNameLower.contains("front diff") || taskNameLower.contains("front differential") -> listOf("front")
+            taskNameLower.contains("rear diff") || taskNameLower.contains("rear differential") -> listOf("rear")
+            taskNameLower.contains("power steering") -> listOf("steering")
+            taskNameLower.contains("transfer case") -> listOf("transfer")
+            taskNameLower.contains("brake fluid") -> listOf("brake")
+            taskNameLower.contains("coolant") || taskNameLower.contains("antifreeze") -> listOf("coolant")
+            taskNameLower.contains("transmission") || taskNameLower.contains("atf") -> listOf("transmission")
+            taskNameLower.contains("rotation and balance") -> listOf("rotat", "balanc")
+            taskNameLower.contains("rotation") -> listOf("rotat")
+            taskNameLower.contains("tire replacement") -> listOf("tire")
+            else -> emptyList()
+        }
+    }
+
+    private fun extractKeywords(taskNameLower: String): List<String> {
+        val keywords = mutableListOf<String>()
+
+        when {
+            taskNameLower.contains("oil") -> keywords.add("oil")
+            taskNameLower.contains("rotation") || taskNameLower.contains("rotate") -> keywords.add("rotat")
+            taskNameLower.contains("balance") -> keywords.add("balanc")
+            taskNameLower.contains("battery") -> keywords.add("battery")
+        }
+
+        val words = taskNameLower.split(Regex("[\\s/\\-,_]+"))
+            .filter { it.length >= 3 && it !in STOP_WORDS }
+
+        for (word in words) {
+            if (word !in keywords) {
+                keywords.add(word)
+            }
+        }
+
+        return keywords
+    }
+
+    private val STOP_WORDS = setOf(
+        "replacement", "replace", "replaced", "replacing",
+        "change", "changed", "changing",
+        "flush", "flushed", "flushing",
+        "service", "serviced", "servicing",
+        "test", "testing", "check", "checking", "checked",
+        "load", "fluid", "and", "for", "with", "other", "custom", "filter", "air",
+    )
 }

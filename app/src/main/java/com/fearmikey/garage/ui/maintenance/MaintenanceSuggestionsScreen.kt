@@ -68,6 +68,7 @@ fun MaintenanceSuggestionsScreen(
 ) {
     val suggestions by viewModel.suggestions.collectAsStateWithLifecycle()
     val customRules by viewModel.customRules.collectAsStateWithLifecycle()
+    val latestMileage by viewModel.latestMileage.collectAsStateWithLifecycle()
     val unitSystem by viewModel.unitSystem.collectAsStateWithLifecycle()
     var logSheetSuggestion by remember { mutableStateOf<MaintenanceSuggestion?>(null) }
     var showAddRuleSheet by remember { mutableStateOf(value = false) }
@@ -85,6 +86,7 @@ fun MaintenanceSuggestionsScreen(
     logSheetSuggestion?.let { suggestion ->
         AddEditMaintenanceRecordSheet(
             unitSystem = unitSystem,
+            latestMileage = latestMileage,
             onDismiss = { logSheetSuggestion = null },
             onSave = { record ->
                 viewModel.logMaintenance(record)
@@ -95,7 +97,7 @@ fun MaintenanceSuggestionsScreen(
             initial = MaintenanceRecord(
                 vehicleId = 0,
                 date = System.currentTimeMillis(),
-                mileage = 0,
+                mileage = latestMileage ?: 0,
                 description = suggestion.rule.taskName,
                 cost = 0.0,
                 category = suggestion.rule.category,

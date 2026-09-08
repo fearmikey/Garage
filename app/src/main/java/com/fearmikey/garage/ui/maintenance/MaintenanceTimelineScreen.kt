@@ -25,6 +25,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DatePicker
@@ -34,7 +36,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -60,7 +61,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
-import com.fearmikey.garage.data.repository.MaintenanceSortOrder
 import com.fearmikey.garage.data.schedule.MaintenanceScheduleRules
 import com.fearmikey.garage.ui.components.EmptyState
 import com.fearmikey.garage.ui.theme.GarageTheme
@@ -78,9 +78,10 @@ fun MaintenanceTimelineScreen(
     viewModel: MaintenanceTimelineViewModel = hiltViewModel(),
 ) {
     val records by viewModel.records.collectAsStateWithLifecycle()
-    val sortOrder by viewModel.sortOrder.collectAsStateWithLifecycle()
+    val latestMileage by viewModel.latestMileage.collectAsStateWithLifecycle()
     val unitSystem by viewModel.unitSystem.collectAsStateWithLifecycle()
-    var showAddSheet by remember { mutableStateOf(false) }
+    var showAddSheet by remember { mutableStateOf(value = false) }
+    var editingRecord by remember { mutableStateOf<MaintenanceRecord?>(null) }
 
     LaunchedEffect(Unit) {
         if (autoOpenAddSheet) showAddSheet = true
@@ -88,20 +89,22 @@ fun MaintenanceTimelineScreen(
 
     MaintenanceTimelineContent(
         records = records,
-        sortOrder = sortOrder,
         unitSystem = unitSystem,
-        onSortOrderChanged = viewModel::setSortOrder,
-        onAddClicked = { showAddSheet = true },
+        onAddClicked = { editingRecord = null; showAddSheet = true },
+        onEditRecord = { record -> editingRecord = record; showAddSheet = true },
         onDeleteRecord = viewModel::deleteRecord,
     )
 
     if (showAddSheet) {
         AddEditMaintenanceRecordSheet(
             unitSystem = unitSystem,
-            onDismiss = { showAddSheet = false },
+            latestMileage = latestMileage,
+            initial = editingRecord,
+            onDismiss = { showAddSheet = false; editingRecord = null },
             onSave = { record ->
                 viewModel.saveRecord(record)
                 showAddSheet = false
+                editingRecord = null
             },
         )
     }
@@ -110,10 +113,9 @@ fun MaintenanceTimelineScreen(
 @Composable
 private fun MaintenanceTimelineContent(
     records: List<MaintenanceRecord>,
-    sortOrder: MaintenanceSortOrder,
     unitSystem: UnitSystem,
-    onSortOrderChanged: (MaintenanceSortOrder) -> Unit,
     onAddClicked: () -> Unit,
+    onEditRecord: (MaintenanceRecord) -> Unit,
     onDeleteRecord: (MaintenanceRecord) -> Unit,
 ) {
     Scaffold(
@@ -125,24 +127,6 @@ private fun MaintenanceTimelineContent(
         },
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 4.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                FilterChip(
-                    selected = sortOrder == MaintenanceSortOrder.DATE,
-                    onClick = { onSortOrderChanged(MaintenanceSortOrder.DATE) },
-                    label = { Text("By date") },
-                )
-                FilterChip(
-                    selected = sortOrder == MaintenanceSortOrder.MILEAGE,
-                    onClick = { onSortOrderChanged(MaintenanceSortOrder.MILEAGE) },
-                    label = { Text("By mileage") },
-                )
-            }
-
             if (records.isEmpty()) {
                 EmptyState(message = "No maintenance logged yet.\nTap + to add your first record.")
             } else {
@@ -154,6 +138,7 @@ private fun MaintenanceTimelineContent(
                         MaintenanceRecordRow(
                             record = record,
                             unitSystem = unitSystem,
+                            onEdit = { onEditRecord(record) },
                             onDelete = { onDeleteRecord(record) },
                         )
                     }
@@ -167,9 +152,37 @@ private fun MaintenanceTimelineContent(
 private fun MaintenanceRecordRow(
     record: MaintenanceRecord,
     unitSystem: UnitSystem,
+    onEdit: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var showDeleteDialog by remember { mutableStateOf(value = false) }
+
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text("Delete Record") },
+            text = { Text("Are you sure you want to delete this entry?") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showDeleteDialog = false
+                        onDelete()
+                    },
+                ) {
+                    Text("Delete")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { showDeleteDialog = false },
+                ) {
+                    Text("Cancel")
+                }
+            },
+        )
+    }
+
     Card(modifier = modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier.padding(12.dp),
@@ -184,8 +197,13 @@ private fun MaintenanceRecordRow(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            IconButton(onClick = onDelete) {
-                Icon(Icons.Filled.Delete, contentDescription = "Delete record")
+            Row {
+                IconButton(onClick = onEdit) {
+                    Icon(Icons.Filled.Edit, contentDescription = "Edit record")
+                }
+                IconButton(onClick = { showDeleteDialog = true }) {
+                    Icon(Icons.Filled.Delete, contentDescription = "Delete record")
+                }
             }
         }
     }
@@ -197,22 +215,30 @@ internal fun AddEditMaintenanceRecordSheet(
     onDismiss: () -> Unit,
     onSave: (MaintenanceRecord) -> Unit,
     initial: MaintenanceRecord? = null,
+    latestMileage: Int? = null,
     unitSystem: UnitSystem = UnitSystem.IMPERIAL,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var description by remember { mutableStateOf(initial?.description.orEmpty()) }
     var mileage by remember {
         mutableStateOf(
-            initial?.let { UnitConverter.displayDistanceValue(it.mileage, unitSystem).toString() }.orEmpty()
+            if (initial != null && initial.id != 0L) {
+                if (initial.mileage > 0) {
+                    UnitConverter.displayDistanceValue(initial.mileage, unitSystem).toString()
+                } else ""
+            } else {
+                val defaultMileage = initial?.mileage?.takeIf { it > 0 } ?: latestMileage?.takeIf { it > 0 }
+                defaultMileage?.let { UnitConverter.displayDistanceValue(it, unitSystem).toString() }.orEmpty()
+            }
         )
     }
     var cost by remember { mutableStateOf(initial?.cost?.toString().orEmpty()) }
     var category by remember { mutableStateOf(initial?.category ?: MaintenanceCategory.OTHER) }
-    var categoryMenuExpanded by remember { mutableStateOf(false) }
+    var categoryMenuExpanded by remember { mutableStateOf(value = false) }
     var taskName by remember { mutableStateOf(initial?.taskName) }
-    var taskMenuExpanded by remember { mutableStateOf(false) }
+    var taskMenuExpanded by remember { mutableStateOf(value = false) }
     var date by remember { mutableLongStateOf(initial?.date ?: System.currentTimeMillis()) }
-    var showDatePicker by remember { mutableStateOf(false) }
+    var showDatePicker by remember { mutableStateOf(value = false) }
 
     // The known task names for the selected category, e.g. "Brake fluid flush" vs.
     // "Coolant flush" both under Fluids. Picking one of these (rather than "Other / custom")
@@ -220,10 +246,12 @@ internal fun AddEditMaintenanceRecordSheet(
     // of conflating every task in the same category.
     val taskOptions = remember(category) {
         MaintenanceScheduleRules.rules
+            .asSequence()
             .filter { it.category == category }
             .map { it.taskName }
             .distinctBy { it.lowercase() }
             .sorted()
+            .toList()
     }
 
     if (showDatePicker) {
@@ -232,7 +260,7 @@ internal fun AddEditMaintenanceRecordSheet(
             localDate.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
         }
         val datePickerState = rememberDatePickerState(
-            initialSelectedDateMillis = initialUtcMillis
+            initialSelectedDateMillis = initialUtcMillis,
         )
 
         DatePickerDialog(
@@ -254,7 +282,7 @@ internal fun AddEditMaintenanceRecordSheet(
                 TextButton(onClick = { showDatePicker = false }) {
                     Text("Cancel")
                 }
-            }
+            },
         ) {
             DatePicker(state = datePickerState)
         }
@@ -295,7 +323,7 @@ internal fun AddEditMaintenanceRecordSheet(
                 Box(
                     modifier = Modifier
                         .matchParentSize()
-                        .clickable { showDatePicker = true }
+                        .clickable { showDatePicker = true },
                 )
             }
 
@@ -401,7 +429,7 @@ internal fun AddEditMaintenanceRecordSheet(
             )
             OutlinedTextField(
                 value = cost,
-                onValueChange = { cost = it.filter { c -> c.isDigit() || c == '.' } },
+                onValueChange = { cost = it.filter { c -> c.isDigit() || (c == '.') } },
                 label = { Text("Cost") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
@@ -428,7 +456,7 @@ internal fun AddEditMaintenanceRecordSheet(
                             cost = cost.toDoubleOrNull() ?: 0.0,
                             category = category,
                             taskName = taskName,
-                        )
+                        ),
                     )
                 },
                 enabled = description.isNotBlank(),
@@ -446,10 +474,9 @@ private fun MaintenanceTimelineScreenPreview() {
     GarageTheme {
         MaintenanceTimelineContent(
             records = SampleData.tacomaMaintenanceRecords,
-            sortOrder = MaintenanceSortOrder.DATE,
             unitSystem = UnitSystem.IMPERIAL,
-            onSortOrderChanged = {},
             onAddClicked = {},
+            onEditRecord = {},
             onDeleteRecord = {},
         )
     }

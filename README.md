@@ -1,12 +1,12 @@
 # 🚗 Garage
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.0.1-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-1.1.0-blue.svg)](CHANGELOG.md)
 [![Android Min SDK](https://img.shields.io/badge/Min%20SDK-34-brightgreen.svg)](https://developer.android.com/about/versions/14)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4-purple.svg?logo=kotlin)](https://kotlinlang.org/)
 [![Compose](https://img.shields.io/badge/Jetpack%20Compose-Material3-4285F4.svg?logo=android)](https://developer.android.com/jetpack/compose)
 
-**Garage** is a modern, comprehensive vehicle management application for Android designed to help owners track maintenance schedules, monitor vehicle health, and maintain accurate service records. The application provides a centralized platform for managing multiple vehicles, ensuring that important maintenance tasks are never overlooked.
+**Garage** is a modern, privacy-focused, comprehensive vehicle management application for Android. Built using Clean Architecture and Jetpack Compose, Garage enables vehicle owners to track maintenance schedules, monitor fuel efficiency, analyze cost of ownership, check safety recalls, and maintain detailed service records for all their vehicles in one centralized hub.
 
 ---
 
@@ -25,40 +25,65 @@
 
 ## ✨ Features
 
-### 🚘 Vehicle Management
-* **Comprehensive Profiles:** Maintain detailed information for each vehicle, including specifications, fuel type, mileage, and unique identifiers.
-* **VIN Scanning:** Utilize integrated camera capabilities powered by **CameraX** and **ML Kit** to scan Vehicle Identification Numbers (VIN) and automatically retrieve vehicle specs.
-* **Vehicle Catalog:** A structured dashboard for quick access to all vehicles in your garage.
+### 🚘 Vehicle Management & VIN Scanning
+* **Comprehensive Garage Profiles:** Maintain complete specs for every vehicle in your fleet—including make, model, year, trim, mileage, license plate, VIN, fuel type, and custom vehicle images.
+* **CameraX & ML Kit VIN Scanner:** Scan Vehicle Identification Numbers directly using your device's camera via optical character recognition (OCR) powered by **ML Kit** and **CameraX**.
+* **NHTSA VIN Decoder:** Automatically populate vehicle specifications and metadata using official NHTSA web service integrations.
 
-### 🛠️ Maintenance Tracking
-* **Service Records:** Log and track all maintenance activities, including dates, mileage, cost, category, and service details.
-* **Maintenance Timeline:** A visual representation of historical and upcoming maintenance tasks for each vehicle.
-* **Smart Suggestions:** Intelligent recommendations based on vehicle mileage, age, and historical usage patterns.
-* **Automated Reminders:** Background notifications via **WorkManager** to keep you informed of upcoming maintenance intervals.
+### 🛠️ Service & Maintenance Tracking
+* **Detailed Service Logs:** Log maintenance activities with date, mileage, service cost, category, service provider, and notes.
+* **Maintenance Timeline:** Visual chronological history of all past and scheduled service events per vehicle.
+* **Intelligent Maintenance Engine:** Smart recommendations based on current mileage, vehicle age, and custom usage rules.
+* **Custom Maintenance Rules:** Create personalized service rules and interval thresholds tailored to specific vehicle requirements.
+* **Automated Notifications:** Background workers powered by **WorkManager** deliver timely reminders for upcoming and overdue maintenance.
 
-### 🔒 Data Management & Security
-* **Local Persistence:** Secure offline data storage using a local **Room** database with migrations and schema versioning.
-* **Backup and Restore:** Robust JSON import/export mechanisms to transfer vehicle data across devices safely.
+### ⛽ Fuel Economy & Logging
+* **Fuel Fill-Up Logs:** Record odometer readings, fuel amounts, price per unit, and total cost during fill-ups.
+* **Multi-Unit Efficiency Calculations:** Automatically computes fuel economy in **MPG (US/UK)**, **L/100km**, or **km/L**.
+* **Fuel Consumption History:** Monitor fuel expense patterns and fuel efficiency over time.
+
+### 📊 Cost of Ownership Analytics
+* **Total Expense Breakdown:** In-depth visual breakdown comparing maintenance, fuel, and part expenses.
+* **Cost Metrics:** Calculate precise cost-per-mile / cost-per-kilometer metrics and operational cost trends over time.
+
+### ⚠️ NHTSA Safety Recalls
+* **Recall Lookup:** Query the official **NHTSA Recall API** to receive real-time alerts regarding open safety recalls for your specific vehicle make, model, year, and VIN.
+
+### ⚙️ Vehicle Parts Directory & Estimator
+* **Parts Cheat Sheet:** Track exact part numbers and specifications for essential components—such as oil filters, air filters, cabin filters, spark plugs, wiper blades, tire sizes, battery types, and fluid capacities.
+* **Cost Estimator:** Estimate parts costs and plan upcoming routine replacement budgets accurately.
+
+### 📄 PDF Report Export
+* **Exportable Maintenance Histories:** Generate professional, formatted PDF service records ready for personal archiving, insurance, or vehicle resale value verification.
+
+### 📲 Home Screen App Widget
+* **Android Glance Widget:** View upcoming and overdue maintenance status directly on your home screen with quick-action shortcuts for logging fuel fill-ups or service records.
+
+### 🔒 Privacy & Data Backup
+* **Local-First Storage:** Fully functional offline data storage backed by **Room Persistence Library**.
+* **JSON Import & Export:** Transfer your entire garage dataset across devices using simple JSON backup files.
+* **Secure WebDAV Cloud Backup:** Schedule or run automated cloud backups via WebDAV, backed by **AndroidX Security Crypto** for credential protection.
 
 ---
 
 ## 🛠️ Technical Stack & Architecture
 
-Built with modern Android development standards following Clean Architecture and MVVM design patterns:
+Garage is engineered according to modern Android development standards following Clean Architecture and MVVM patterns:
 
-| Layer / Library | Technology |
-| :--- | :--- |
-| **Language** | [Kotlin 2.4](https://kotlinlang.org/) |
-| **UI Framework** | [Jetpack Compose](https://developer.android.com/jetpack/compose) + [Material 3](https://m3.material.io/) |
-| **Architecture** | MVVM + Clean Architecture |
-| **Dependency Injection** | [Hilt](https://developer.android.com/training/dependency-injection/hilt-android) |
-| **Database** | [Room Persistence Library](https://developer.android.com/training/data-storage/room) |
-| **Preferences** | [DataStore](https://developer.android.com/topic/libraries/architecture/datastore) |
-| **Asynchronous & Flows** | [Kotlin Coroutines & Flow](https://kotlinlang.org/docs/coroutines-overview.html) |
-| **Background Scheduling** | [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) |
-| **Camera & Vision** | [CameraX](https://developer.android.com/training/camerax) + [ML Kit](https://developers.google.com/ml-kit) |
-| **Networking** | [Retrofit](https://square.github.io/retrofit/) + [Gson](https://github.com/google/gson) |
-| **Image Loading** | [Coil 3](https://coil-kt.github.io/coil/) |
+| Layer / Library | Technology | Description |
+| :--- | :--- | :--- |
+| **Language** | [Kotlin 2.4](https://kotlinlang.org/) | Modern concise language for Android development |
+| **UI Framework** | [Jetpack Compose](https://developer.android.com/jetpack/compose) + [Material 3](https://m3.material.io/) | Declarative UI toolkit with dynamic color support |
+| **Architecture** | MVVM + Clean Architecture | Unidirectional data flow and clear separation of concerns |
+| **Dependency Injection** | [Hilt](https://developer.android.com/training/dependency-injection/hilt-android) | Standardized compile-time dependency injection framework |
+| **Database** | [Room](https://developer.android.com/training/data-storage/room) | Local SQLite persistence library with schema migrations |
+| **Preferences & Crypto** | [DataStore](https://developer.android.com/topic/libraries/architecture/datastore) + [Security Crypto](https://developer.android.com/topic/security/data) | Reactive settings storage and encrypted credentials |
+| **Asynchronous Programming** | [Kotlin Coroutines & Flow](https://kotlinlang.org/docs/coroutines-overview.html) | Asynchronous stream processing and state management |
+| **Background Tasks** | [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) | Reliable periodic background task scheduling |
+| **Camera & Vision** | [CameraX](https://developer.android.com/training/camerax) + [ML Kit](https://developers.google.com/ml-kit) | Live camera feed and on-device text recognition for VIN scanning |
+| **App Widgets** | [Android Glance](https://developer.android.com/jetpack/compose/glance) | Declarative Compose-based home screen app widgets |
+| **Networking** | [Retrofit](https://square.github.io/retrofit/) + [OkHttp](https://square.github.io/okhttp/) + [Gson](https://github.com/google/gson) | Type-safe HTTP client for NHTSA API & WebDAV communication |
+| **Image Loading** | [Coil 3](https://coil-kt.github.io/coil/) | Kotlin-first image loading library for Compose |
 
 ---
 
@@ -67,18 +92,36 @@ Built with modern Android development standards following Clean Architecture and
 ```text
 Garage/
 ├── app/
-│   ├── src/main/java/com/fearmikey/garage/
-│   │   ├── data/             # Local database, entities, DAOs, repositories & network DTOs
-│   │   ├── di/               # Hilt Dependency Injection modules
-│   │   ├── notification/     # WorkManager background reminder workers & notifications
-│   │   ├── ui/               # Jetpack Compose UI screens, components, theme & ViewModels
-│   │   └── util/             # Utility classes and validators (e.g. VIN validator)
-│   └── src/test/             # Unit tests for repositories, viewmodels & rules engine
-├── gradle/                   # Gradle wrapper & Version Catalog (libs.versions.toml)
-├── CHANGELOG.md              # Version release history
-├── LICENSE                   # MIT License
-├── README.md                 # Project documentation
-└── TERMS.md                  # Terms of Service
+│   ├── src/main/
+│   │   ├── java/com/fearmikey/garage/
+│   │   │   ├── data/             # Local Room DB, Entities, DAOs, Repositories, DTOs & Fuel Engine
+│   │   │   │   ├── fuel/         # Fuel economy calculator & logs
+│   │   │   │   ├── local/        # Room database, converters & preferences
+│   │   │   │   ├── remote/       # Retrofit APIs (NHTSA VIN Decoder & Recalls)
+│   │   │   │   ├── repository/   # Data repositories & WebDAV cloud sync
+│   │   │   │   └── schedule/     # Maintenance schedule rules engine
+│   │   │   ├── di/               # Hilt Dependency Injection modules
+│   │   │   ├── notification/     # WorkManager background workers & notifications
+│   │   │   ├── ui/               # Jetpack Compose UI screens, ViewModels & Material 3 theme
+│   │   │   │   ├── components/   # Reusable UI components
+│   │   │   │   ├── cost/         # Cost of ownership screen & analytics
+│   │   │   │   ├── dashboard/    # Fleet overview dashboard
+│   │   │   │   ├── fuel/         # Fuel economy & logging UI
+│   │   │   │   ├── maintenance/  # Timeline, suggestions & PDF export
+│   │   │   │   ├── recall/       # NHTSA safety recall screen
+│   │   │   │   ├── reminder/     # Maintenance reminders UI
+│   │   │   │   ├── settings/     # App settings & cloud backup options
+│   │   │   │   ├── vehicle/      # Vehicle detail, specs, parts & VIN scanner
+│   │   │   │   └── theme/        # Material Design 3 colors, typography & theme
+│   │   │   ├── util/             # Helpers (VIN validator, formatters, unit converters)
+│   │   │   └── widget/           # Android Glance home screen widget & receiver
+│   │   └── res/                  # Android resources (Strings, Drawables, XML)
+│   └── src/test/                 # Unit tests for repositories, viewmodels & rules engine
+├── gradle/                       # Gradle wrapper & Version Catalog (libs.versions.toml)
+├── CHANGELOG.md                  # Version release history
+├── LICENSE                       # MIT License
+├── README.md                     # Project documentation
+└── TERMS.md                      # Terms of Service
 ```
 
 ---
@@ -99,11 +142,11 @@ Garage/
    cd Garage
    ```
 2. **Open in Android Studio**
-   Open the `Garage` project folder in Android Studio.
+   Open the `Garage` project directory in Android Studio.
 3. **Sync Gradle**
-   Allow Gradle to download dependencies and sync the project.
+   Allow Gradle to download dependencies and sync project files.
 4. **Run the Application**
-   Select a supported Android device or emulator running Android 14+ and click **Run** (`Shift + F10`).
+   Select a connected device or emulator running Android 14+ (API 34+) and click **Run** (`Shift + F10`).
 
 ---
 

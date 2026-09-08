@@ -49,4 +49,10 @@ object Destinations {
     val editPartsArgs = listOf(
         navArgument(VEHICLE_ID_ARG) { type = NavType.LongType },
     )
+
+    const val EXPORT_MAINTENANCE_ROUTE = "vehicle/export?$VEHICLE_ID_ARG={$VEHICLE_ID_ARG}"
+    fun exportMaintenanceRoute(vehicleId: Long) = "vehicle/export?$VEHICLE_ID_ARG=$vehicleId"
+    val exportMaintenanceArgs = listOf(
+        navArgument(VEHICLE_ID_ARG) { type = NavType.LongType },
+    )
 }

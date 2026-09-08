@@ -88,10 +88,10 @@ object SampleData {
             vehicleId = tacoma.id,
             date = now - (10 * day),
             mileage = 15230,
-            description = "Full synthetic oil change + filter",
+            description = "Full synthetic engine oil change + filter",
             cost = 89.99,
-            category = MaintenanceCategory.OIL_CHANGE,
-            taskName = "Oil & filter change",
+            category = MaintenanceCategory.FLUIDS,
+            taskName = "Engine oil change",
         ),
         MaintenanceRecord(
             id = 2,
@@ -100,8 +100,8 @@ object SampleData {
             mileage = 12100,
             description = "Rotated tires, checked tread depth",
             cost = 40.0,
-            category = MaintenanceCategory.TIRE_ROTATION,
-            taskName = "Tire rotation",
+            category = MaintenanceCategory.TIRES,
+            taskName = "Rotation and Balance",
         ),
         MaintenanceRecord(
             id = 3,
@@ -118,7 +118,7 @@ object SampleData {
         Reminder(
             id = 1,
             vehicleId = tacoma.id,
-            taskName = "Oil change",
+            taskName = "Engine oil change",
             dueDate = now + (20 * day),
             dueMileage = 18000,
             isCompleted = false,

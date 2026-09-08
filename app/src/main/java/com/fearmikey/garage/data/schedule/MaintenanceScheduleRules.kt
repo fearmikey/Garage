@@ -21,14 +21,26 @@ object MaintenanceScheduleRules {
     val rules: List<MaintenanceRule> = listOf(
         // Generic rules: apply to any vehicle regardless of make/model/drivetrain.
         MaintenanceRule(
-            taskName = "Oil & filter change",
-            category = MaintenanceCategory.OIL_CHANGE,
+            taskName = "Engine oil change",
+            category = MaintenanceCategory.FLUIDS,
             intervalMiles = 5_000,
             intervalMonths = 6,
         ),
         MaintenanceRule(
-            taskName = "Tire rotation",
-            category = MaintenanceCategory.TIRE_ROTATION,
+            taskName = "Power steering fluid",
+            category = MaintenanceCategory.FLUIDS,
+            intervalMiles = 50_000,
+            intervalMonths = 60,
+        ),
+        MaintenanceRule(
+            taskName = "Tire Replacement",
+            category = MaintenanceCategory.TIRES,
+            intervalMiles = 50_000,
+            intervalMonths = 48,
+        ),
+        MaintenanceRule(
+            taskName = "Rotation and Balance",
+            category = MaintenanceCategory.TIRES,
             intervalMiles = 6_000,
             intervalMonths = 6,
         ),

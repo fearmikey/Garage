@@ -6,6 +6,10 @@
     <string name="reminder_notification_channel_description">Alerts for upcoming and overdue vehicle maintenance</string>
     <string name="reminder_overdue_title">Overdue: %1$s</string>
     <string name="reminder_upcoming_title">Upcoming: %1$s</string>
+    <string name="pdf_export_notification_channel_name">PDF exports</string>
+    <string name="pdf_export_notification_channel_description">Notifications when maintenance report PDFs are generated</string>
+    <string name="pdf_export_notification_title">Maintenance Report Exported</string>
+    <string name="pdf_export_notification_text">Tap to open %1$s</string>
 
     <!-- App widget -->
     <string name="garage_widget_description">Shows upcoming/overdue maintenance reminders and quick-logs service or fuel</string>

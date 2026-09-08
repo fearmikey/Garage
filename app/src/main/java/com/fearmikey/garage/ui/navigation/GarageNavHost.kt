@@ -21,6 +21,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fearmikey.garage.PendingDeepLink
 import com.fearmikey.garage.ui.dashboard.DashboardScreen
+import com.fearmikey.garage.ui.maintenance.export.MaintenanceExportScreen
 import com.fearmikey.garage.ui.settings.SettingsScreen
 import com.fearmikey.garage.ui.startup.StartupScreen
 import com.fearmikey.garage.ui.vehicle.AddEditVehicleScreen
@@ -90,7 +91,7 @@ fun GarageNavHost(
                     .getStateFlow<String?>(Destinations.SCANNED_VIN_RESULT, null)
                     .collectAsStateWithLifecycle()
                 AddEditVehicleScreen(
-                    onDone = { navController.popBackStack(Destinations.DASHBOARD, false) },
+                    onDone = { navController.popBackStack(Destinations.DASHBOARD, inclusive = false) },
                     onBack = { navController.popBackStack() },
                     onScanVinClicked = { navController.navigate(Destinations.SCAN_VIN) },
                     scannedVin = scannedVin.value,
@@ -117,8 +118,17 @@ fun GarageNavHost(
                     onBack = { navController.popBackStack() },
                     onEditVehicle = { vehicleId -> navController.navigate(Destinations.editVehicleRoute(vehicleId)) },
                     onEditParts = { vehicleId -> navController.navigate(Destinations.editPartsRoute(vehicleId)) },
+                    onExportMaintenance = { vehicleId -> navController.navigate(Destinations.exportMaintenanceRoute(vehicleId)) },
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedVisibilityScope = this@composable,
+                )
+            }
+            composable(
+                route = Destinations.EXPORT_MAINTENANCE_ROUTE,
+                arguments = Destinations.exportMaintenanceArgs,
+            ) {
+                MaintenanceExportScreen(
+                    onBack = { navController.popBackStack() },
                 )
             }
             composable(
