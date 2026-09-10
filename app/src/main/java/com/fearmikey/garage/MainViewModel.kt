@@ -24,7 +24,7 @@ data class PendingDeepLink(val vehicleId: Long, val tab: Int, val openAdd: Boole
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    preferencesRepository: PreferencesRepository,
+    private val preferencesRepository: PreferencesRepository,
     private val vehicleRepository: VehicleRepository,
 ) : ViewModel() {
 
@@ -58,8 +58,11 @@ class MainViewModel @Inject constructor(
             else -> return
         }
         viewModelScope.launch {
-            val vehicleId = vehicleIdExtra.takeIf { it != MainActivity.NO_VEHICLE_ID_EXTRA }
-                ?: vehicleRepository.getAllVehicles().first().firstOrNull()?.id
+            val vehicles = vehicleRepository.getAllVehicles().first()
+            val defaultId = preferencesRepository.defaultVehicleId.first()
+            val vehicleId = vehicleIdExtra.takeIf { it != MainActivity.NO_VEHICLE_ID_EXTRA && vehicles.any { v -> v.id == it } }
+                ?: defaultId.takeIf { id -> vehicles.any { v -> v.id == id } }
+                ?: vehicles.firstOrNull()?.id
                 ?: return@launch
             _pendingDeepLink.value = PendingDeepLink(vehicleId, tab, openAdd = true)
         }

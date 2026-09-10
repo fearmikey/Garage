@@ -36,7 +36,7 @@ import javax.inject.Singleton
  * verbatim.
  */
 @Singleton
-class ImageStorageManager @Inject constructor(
+open class ImageStorageManager @Inject constructor(
     @ApplicationContext private val context: Context,
 ) {
     /** Directory holding all vehicle images; created on first access. */
@@ -131,7 +131,7 @@ class ImageStorageManager @Inject constructor(
     }
 
     /** Resolves a stored [filename] (as saved on [com.fearmikey.garage.data.local.entity.Vehicle.imageUri]) to its [File]. */
-    fun imageFile(filename: String): File = File(imagesDir, filename)
+    open fun imageFile(filename: String): File = File(imagesDir, filename)
 
     fun deleteImage(filename: String) {
         imageFile(filename).delete()

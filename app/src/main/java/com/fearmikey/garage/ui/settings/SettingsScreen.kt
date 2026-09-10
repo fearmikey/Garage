@@ -1,7 +1,11 @@
+@file:Suppress("DEPRECATION")
+
 package com.fearmikey.garage.ui.settings
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.provider.Settings
 import android.text.format.DateUtils
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -22,10 +26,11 @@ import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.CloudSync
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.DeleteForever
+import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.filled.FileUpload
+import androidx.compose.material.icons.filled.FolderZip
 import androidx.compose.material.icons.filled.Gavel
-import androidx.compose.material.icons.filled.Help
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.Notifications
@@ -33,6 +38,7 @@ import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.PrivacyTip
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Straighten
+import androidx.documentfile.provider.DocumentFile
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -71,6 +77,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fearmikey.garage.BuildConfig
+import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.AppRestarter
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
@@ -89,9 +96,11 @@ fun SettingsScreen(
 
     var showUnitsDialog by remember { mutableStateOf(false) }
     var showThemeDialog by remember { mutableStateOf(false) }
+    var showDefaultVehicleDialog by remember { mutableStateOf(false) }
     var showClearDataDialog by remember { mutableStateOf(false) }
     var showAboutDialog by remember { mutableStateOf(false) }
     var showCloudBackupDialog by remember { mutableStateOf(false) }
+    var showLocalBackupDialog by remember { mutableStateOf(false) }
     var showBugReportFeedbackDialog by remember { mutableStateOf(false) }
 
     val exportLauncher = rememberLauncherForActivityResult(
@@ -101,6 +110,10 @@ fun SettingsScreen(
     val importLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument(),
     ) { uri -> uri?.let(viewModel::importBackup) }
+
+    val localBackupFolderLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocumentTree(),
+    ) { uri -> uri?.let(viewModel::setLocalBackupFolderUri) }
 
     val notificationPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
@@ -162,6 +175,22 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable { showThemeDialog = true },
+                )
+            }
+            item {
+                val selectedVehicleName = uiState.vehicles.find { it.id == uiState.defaultVehicleId }?.let { vehicle ->
+                    listOfNotNull(vehicle.year?.toString(), vehicle.make, vehicle.model)
+                        .joinToString(" ")
+                        .ifBlank { vehicle.vin }
+                } ?: "First vehicle added (default)"
+
+                ListItem(
+                    headlineContent = { Text("Default Vehicle") },
+                    supportingContent = { Text("Used for widget shortcuts ($selectedVehicleName)") },
+                    leadingContent = { Icon(Icons.Filled.DirectionsCar, contentDescription = null) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { showDefaultVehicleDialog = true },
                 )
             }
 
@@ -237,7 +266,17 @@ fun SettingsScreen(
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Auto-Backup Configuration") },
+                    headlineContent = { Text("Local Folder Auto-Backup") },
+                    supportingContent = { Text(localBackupStatusText(uiState, context)) },
+                    leadingContent = { Icon(Icons.Filled.FolderZip, contentDescription = null) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { showLocalBackupDialog = true },
+                )
+            }
+            item {
+                ListItem(
+                    headlineContent = { Text("WebDAV Cloud Sync") },
                     supportingContent = { Text(cloudBackupStatusText(uiState)) },
                     leadingContent = { Icon(Icons.Filled.CloudSync, contentDescription = null) },
                     modifier = Modifier
@@ -394,6 +433,18 @@ fun SettingsScreen(
         )
     }
 
+    if (showDefaultVehicleDialog) {
+        DefaultVehicleDialog(
+            vehicles = uiState.vehicles,
+            selectedVehicleId = uiState.defaultVehicleId,
+            onVehicleSelected = { vehicleId ->
+                viewModel.setDefaultVehicleId(vehicleId)
+                showDefaultVehicleDialog = false
+            },
+            onDismissRequest = { showDefaultVehicleDialog = false },
+        )
+    }
+
     if (showClearDataDialog) {
         AlertDialog(
             onDismissRequest = { showClearDataDialog = false },
@@ -466,6 +517,16 @@ fun SettingsScreen(
         )
     }
 
+    if (showLocalBackupDialog) {
+        LocalBackupConfigDialog(
+            uiState = uiState,
+            onSetEnabled = viewModel::setLocalBackupEnabled,
+            onSelectFolder = { localBackupFolderLauncher.launch(null) },
+            onBackupNow = viewModel::triggerLocalBackupNow,
+            onDismissRequest = { showLocalBackupDialog = false },
+        )
+    }
+
     if (showBugReportFeedbackDialog) {
         AlertDialog(
             onDismissRequest = { showBugReportFeedbackDialog = false },
@@ -527,6 +588,47 @@ private fun cloudBackupStatusText(uiState: SettingsUiState): String {
     }
 }
 
+private fun localBackupStatusText(uiState: SettingsUiState, context: Context): String {
+    if (!uiState.localBackupEnabled) return "Disabled"
+    if (uiState.localBackupFolderUri.isBlank()) return "Enabled — no folder selected"
+    val folderName = formatFolderUriForDisplay(context, uiState.localBackupFolderUri)
+    val error = uiState.lastLocalBackupError
+    if (error != null) return "Folder: $folderName — Failed: $error"
+    val lastBackup = uiState.lastLocalBackupTimestamp
+    return if (lastBackup != null) {
+        val relative = DateUtils.getRelativeTimeSpanString(
+            lastBackup,
+            System.currentTimeMillis(),
+            DateUtils.MINUTE_IN_MILLIS
+        )
+        "Folder: $folderName — Last saved $relative"
+    } else {
+        "Folder: $folderName — Not yet backed up"
+    }
+}
+
+fun formatFolderUriForDisplay(context: Context, uriString: String): String {
+    if (uriString.isBlank()) return "No folder selected"
+    return try {
+        val uri = Uri.parse(uriString)
+        val docFile = DocumentFile.fromTreeUri(context, uri)
+        val name = docFile?.name
+        if (!name.isNullOrBlank()) {
+            name
+        } else {
+            val decoded = Uri.decode(uriString)
+            val treePart = decoded.substringAfter("/tree/").substringAfter(":")
+            if (treePart.isNotBlank() && treePart != uriString) {
+                treePart
+            } else {
+                "Selected Folder"
+            }
+        }
+    } catch (_: Exception) {
+        "Selected Folder"
+    }
+}
+
 @Composable
 private fun SettingsCategoryHeader(title: String) {
     Text(
@@ -534,6 +636,63 @@ private fun SettingsCategoryHeader(title: String) {
         style = MaterialTheme.typography.labelLarge,
         color = MaterialTheme.colorScheme.primary,
         modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 8.dp)
+    )
+}
+
+@Composable
+private fun DefaultVehicleDialog(
+    vehicles: List<Vehicle>,
+    selectedVehicleId: Long?,
+    onVehicleSelected: (Long?) -> Unit,
+    onDismissRequest: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = { Text("Default Vehicle") },
+        text = {
+            Column {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onVehicleSelected(null) }
+                        .padding(vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    RadioButton(
+                        selected = selectedVehicleId == null,
+                        onClick = { onVehicleSelected(null) },
+                    )
+                    Spacer(modifier = Modifier.padding(start = 8.dp))
+                    Text(text = "First vehicle added (default)")
+                }
+
+                vehicles.forEach { vehicle ->
+                    val vehicleName = listOfNotNull(vehicle.year?.toString(), vehicle.make, vehicle.model)
+                        .joinToString(" ")
+                        .ifBlank { vehicle.vin }
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onVehicleSelected(vehicle.id) }
+                            .padding(vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        RadioButton(
+                            selected = vehicle.id == selectedVehicleId,
+                            onClick = { onVehicleSelected(vehicle.id) },
+                        )
+                        Spacer(modifier = Modifier.padding(start = 8.dp))
+                        Text(text = vehicleName)
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismissRequest) {
+                Text("Cancel")
+            }
+        },
     )
 }
 
@@ -652,6 +811,95 @@ private fun CloudBackupConfigDialog(
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
                 Text("Cancel")
+            }
+        },
+    )
+}
+
+@Composable
+private fun LocalBackupConfigDialog(
+    uiState: SettingsUiState,
+    onSetEnabled: (Boolean) -> Unit,
+    onSelectFolder: () -> Unit,
+    onBackupNow: () -> Unit,
+    onDismissRequest: () -> Unit,
+) {
+    val context = LocalContext.current
+    var enabled by remember { mutableStateOf(uiState.localBackupEnabled) }
+
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = { Text("Local Folder Auto-Backup") },
+        text = {
+            Column {
+                Text(
+                    text = "Automatically saves a backup zip (garage-backup.zip) to a folder on your phone whenever changes are made in Garage. You can sync this folder with custom or 3rd-party cloud storage apps.",
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text("Enable auto-backup", modifier = Modifier.weight(1f))
+                    Switch(
+                        checked = enabled,
+                        onCheckedChange = {
+                            enabled = it
+                            onSetEnabled(it)
+                        },
+                    )
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = "Backup Folder:",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = formatFolderUriForDisplay(context, uiState.localBackupFolderUri),
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedButton(
+                    onClick = onSelectFolder,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(if (uiState.localBackupFolderUri.isBlank()) "Select Folder" else "Change Folder")
+                }
+                if (uiState.localBackupEnabled && uiState.localBackupFolderUri.isNotBlank()) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedButton(
+                        onClick = onBackupNow,
+                        enabled = !uiState.isBusy,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text("Backup to Folder Now")
+                    }
+                }
+                val status = uiState.lastLocalBackupError?.let { "Status: $it" }
+                    ?: uiState.lastLocalBackupTimestamp?.let {
+                        val relative = DateUtils.getRelativeTimeSpanString(
+                            it,
+                            System.currentTimeMillis(),
+                            DateUtils.MINUTE_IN_MILLIS
+                        )
+                        "Last saved: $relative"
+                    }
+                if (status != null) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = status,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = if (uiState.lastLocalBackupError != null) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismissRequest) {
+                Text("Close")
             }
         },
     )

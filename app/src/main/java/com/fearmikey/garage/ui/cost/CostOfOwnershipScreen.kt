@@ -6,9 +6,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -152,7 +154,9 @@ private fun TotalCostCard(
             Spacer(modifier = Modifier.height(16.dp))
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Max),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 CostSubStat(
@@ -160,7 +164,9 @@ private fun TotalCostCard(
                     amount = uiState.maintenanceCost,
                     countText = "${uiState.maintenanceRecordCount} records",
                     icon = Icons.Default.Handyman,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
                 )
 
                 Spacer(modifier = Modifier.width(16.dp))
@@ -170,7 +176,9 @@ private fun TotalCostCard(
                     amount = uiState.fuelCost,
                     countText = "${uiState.fuelRecordCount} fill-ups",
                     icon = Icons.Default.LocalGasStation,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
                 )
             }
         }
@@ -191,7 +199,9 @@ private fun CostSubStat(
         color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
     ) {
         Row(
-            modifier = Modifier.padding(12.dp),
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
@@ -214,6 +224,8 @@ private fun CostSubStat(
                     text = title,
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    minLines = 2,
+                    maxLines = 2,
                 )
                 Text(
                     text = "$%.2f".format(amount),

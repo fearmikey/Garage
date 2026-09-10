@@ -1,3 +1,14 @@
+## [1.1.3] - 2026-09-08
+
+### Added
+* **Automated Local Backups:** Scheduled automatic local database and media backups with configurable retention policies and automatic cleanup.
+* **WebDAV Backup Schedules:** Configurable auto-backup intervals (daily, weekly, monthly) for WebDAV cloud sync in Settings.
+* **Widget Auto-Refresher:** Real-time home screen Glance widget updates whenever vehicles, service records, or fuel logs change.
+* **Expanded Test Suite:** Added unit tests for DashboardViewModel, SettingsViewModel, CostOfOwnershipViewModel, and StartupViewModel.
+
+### Changed
+* **Backup Repository Improvements:** Enhanced backup ZIP archiving and restore validation logic for local and cloud operations.
+
 ## [1.1.2] - 2026-09-08
 
 ### Added

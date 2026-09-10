@@ -20,8 +20,8 @@ android {
         applicationId = "com.fearmikey.garage"
         minSdk = 34
         targetSdk = 37
-        versionCode = 5
-        versionName = "1.1.2"
+        versionCode = 6
+        versionName = "1.1.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -122,6 +122,9 @@ dependencies {
 
     // DataStore
     implementation(libs.androidx.datastore)
+
+    // DocumentFile
+    implementation(libs.androidx.documentfile)
 
     // OSS Licenses
     //

@@ -4,6 +4,8 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.net.Uri
+import androidx.documentfile.provider.DocumentFile
+import com.fearmikey.garage.data.local.CloudBackupPreferencesManager
 import com.fearmikey.garage.data.local.GARAGE_DATABASE_NAME
 import com.fearmikey.garage.data.local.GARAGE_DATABASE_VERSION
 import com.fearmikey.garage.data.local.GarageDatabase
@@ -35,6 +37,7 @@ class BackupRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val database: GarageDatabase,
     private val imageStorageManager: ImageStorageManager,
+    private val cloudBackupPreferencesManager: CloudBackupPreferencesManager,
 ) {
 
     /** Exports the current database + images into a zip written to [destinationUri] (from SAF `CreateDocument`). */
@@ -57,6 +60,67 @@ class BackupRepository @Inject constructor(
             BackupResult.Success
         } catch (e: Exception) {
             BackupResult.Failure(e.message ?: "Unknown error while exporting backup.")
+        }
+    }
+
+    /** Exports the current database + images into a zip file inside the selected local folder SAF tree URI. */
+    suspend fun exportBackupToLocalFolder(folderUriString: String): BackupResult = withContext(Dispatchers.IO) {
+        if (folderUriString.isBlank()) {
+            val failure = BackupResult.Failure("No local backup folder configured.")
+            cloudBackupPreferencesManager.setLastLocalBackupError(failure.message)
+            return@withContext failure
+        }
+        try {
+            val folderUri = Uri.parse(folderUriString)
+            val directory = DocumentFile.fromTreeUri(context, folderUri)
+                ?: run {
+                    val failure = BackupResult.Failure("Could not access the selected backup folder.")
+                    cloudBackupPreferencesManager.setLastLocalBackupError(failure.message)
+                    return@withContext failure
+                }
+
+            if (!directory.exists() || !directory.canWrite()) {
+                val failure = BackupResult.Failure("Backup folder does not exist or is not writable.")
+                cloudBackupPreferencesManager.setLastLocalBackupError(failure.message)
+                return@withContext failure
+            }
+
+            val backupFileName = "garage-backup.zip"
+            var targetFile = directory.findFile(backupFileName)
+            if (targetFile == null) {
+                targetFile = directory.createFile("application/zip", backupFileName)
+            }
+
+            if (targetFile == null) {
+                val failure = BackupResult.Failure("Could not create $backupFileName in selected folder.")
+                cloudBackupPreferencesManager.setLastLocalBackupError(failure.message)
+                return@withContext failure
+            }
+
+            val outputStream = try {
+                context.contentResolver.openOutputStream(targetFile.uri, "wt")
+            } catch (_: Exception) {
+                context.contentResolver.openOutputStream(targetFile.uri, "w")
+            } ?: run {
+                val failure = BackupResult.Failure("Could not open output stream for backup file.")
+                cloudBackupPreferencesManager.setLastLocalBackupError(failure.message)
+                return@withContext failure
+            }
+
+            outputStream.use { writeBackupZip(it) }
+
+            cloudBackupPreferencesManager.setLastLocalBackupTimestamp(System.currentTimeMillis())
+            cloudBackupPreferencesManager.setLastLocalBackupError(null)
+
+            BackupResult.Success
+        } catch (e: SecurityException) {
+            val msg = "Permission denied to access folder. Please re-select the backup folder."
+            cloudBackupPreferencesManager.setLastLocalBackupError(msg)
+            BackupResult.Failure(msg)
+        } catch (e: Exception) {
+            val msg = e.message ?: "Unknown error writing backup to local folder."
+            cloudBackupPreferencesManager.setLastLocalBackupError(msg)
+            BackupResult.Failure(msg)
         }
     }
 

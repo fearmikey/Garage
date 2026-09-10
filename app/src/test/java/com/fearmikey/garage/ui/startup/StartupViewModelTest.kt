@@ -36,6 +36,7 @@ class StartupViewModelTest {
         val unitsTypeFlow = MutableStateFlow("metric")
         val themeTypeFlow = MutableStateFlow("system")
         val onboardingCompletedFlow = MutableStateFlow(false)
+        val defaultVehicleIdFlow = MutableStateFlow<Long?>(null)
 
         var savedUnits: String? = null
         var isCompleted: Boolean = false
@@ -44,6 +45,7 @@ class StartupViewModelTest {
         override val unitSystem: Flow<UnitSystem> = MutableStateFlow(UnitSystem.METRIC)
         override val themeType: Flow<String> = themeTypeFlow
         override val onboardingCompleted: Flow<Boolean> = onboardingCompletedFlow
+        override val defaultVehicleId: Flow<Long?> = defaultVehicleIdFlow
 
         override suspend fun setUnitsType(units: String) {
             savedUnits = units
@@ -57,6 +59,10 @@ class StartupViewModelTest {
         override suspend fun setOnboardingCompleted(completed: Boolean) {
             isCompleted = completed
             onboardingCompletedFlow.value = completed
+        }
+
+        override suspend fun setDefaultVehicleId(vehicleId: Long?) {
+            defaultVehicleIdFlow.value = vehicleId
         }
     }
 

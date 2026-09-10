@@ -3,6 +3,7 @@ package com.fearmikey.garage.data.local
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.fearmikey.garage.ui.util.UnitSystem
@@ -17,6 +18,7 @@ class PreferencesManager(private val context: Context) {
         val UNITS_KEY = stringPreferencesKey("units_type")
         val THEME_KEY = stringPreferencesKey("theme_type")
         val ONBOARDING_COMPLETED_KEY = booleanPreferencesKey("onboarding_completed")
+        val DEFAULT_VEHICLE_ID_KEY = longPreferencesKey("default_vehicle_id")
     }
 
     val unitsType: Flow<String> = context.dataStore.data
@@ -36,6 +38,17 @@ class PreferencesManager(private val context: Context) {
             preferences[ONBOARDING_COMPLETED_KEY] ?: false
         }
 
+    /**
+     * The vehicle the user has explicitly chosen as their "default" (e.g. for the
+     * home screen widget's Log Service/Log Fuel shortcuts). `null` means no explicit
+     * choice has been made, and callers should fall back to some other default
+     * (such as the first vehicle added).
+     */
+    val defaultVehicleId: Flow<Long?> = context.dataStore.data
+        .map { preferences ->
+            preferences[DEFAULT_VEHICLE_ID_KEY]
+        }
+
     suspend fun setUnitsType(units: String) {
         context.dataStore.edit { preferences ->
             preferences[UNITS_KEY] = units
@@ -51,6 +64,16 @@ class PreferencesManager(private val context: Context) {
     suspend fun setOnboardingCompleted(completed: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[ONBOARDING_COMPLETED_KEY] = completed
+        }
+    }
+
+    suspend fun setDefaultVehicleId(vehicleId: Long?) {
+        context.dataStore.edit { preferences ->
+            if (vehicleId != null) {
+                preferences[DEFAULT_VEHICLE_ID_KEY] = vehicleId
+            } else {
+                preferences.remove(DEFAULT_VEHICLE_ID_KEY)
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.fearmikey.garage.data.local.CloudBackupPreferencesManager
+import com.fearmikey.garage.data.repository.AutoBackupManager
 import com.fearmikey.garage.notification.CloudBackupScheduler
 import com.fearmikey.garage.notification.WorkScheduler
 import dagger.hilt.android.HiltAndroidApp
@@ -19,6 +20,9 @@ class GarageApplication : Application(), Configuration.Provider {
 
     @Inject
     lateinit var cloudBackupPreferencesManager: CloudBackupPreferencesManager
+
+    @Inject
+    lateinit var autoBackupManager: AutoBackupManager
 
     override val workManagerConfiguration: Configuration
         get() = Configuration.Builder()

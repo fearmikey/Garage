@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.fearmikey.garage.data.local
 
 import android.content.Context
@@ -27,7 +29,7 @@ private val Context.cloudBackupDataStore by preferencesDataStore(name = "cloud_b
  * [EncryptedSharedPreferences].
  */
 @Singleton
-class CloudBackupPreferencesManager @Inject constructor(
+open class CloudBackupPreferencesManager @Inject constructor(
     @ApplicationContext private val context: Context,
 ) {
 
@@ -38,38 +40,55 @@ class CloudBackupPreferencesManager @Inject constructor(
         val LAST_SYNC_TIMESTAMP_KEY = longPreferencesKey("last_sync_timestamp")
         val LAST_SYNC_ERROR_KEY = stringPreferencesKey("last_sync_error")
 
+        val LOCAL_BACKUP_ENABLED_KEY = booleanPreferencesKey("local_backup_enabled")
+        val LOCAL_BACKUP_FOLDER_URI_KEY = stringPreferencesKey("local_backup_folder_uri")
+        val LAST_LOCAL_BACKUP_TIMESTAMP_KEY = longPreferencesKey("last_local_backup_timestamp")
+        val LAST_LOCAL_BACKUP_ERROR_KEY = stringPreferencesKey("last_local_backup_error")
+
         private const val ENCRYPTED_PREFS_NAME = "cloud_backup_secure_prefs"
         private const val WEBDAV_PASSWORD_KEY = "webdav_password"
     }
 
-    val cloudSyncEnabled: Flow<Boolean> = context.cloudBackupDataStore.data
+    open val cloudSyncEnabled: Flow<Boolean> = context.cloudBackupDataStore.data
         .map { preferences -> preferences[CLOUD_SYNC_ENABLED_KEY] ?: false }
 
-    val webdavUrl: Flow<String> = context.cloudBackupDataStore.data
+    open val webdavUrl: Flow<String> = context.cloudBackupDataStore.data
         .map { preferences -> preferences[WEBDAV_URL_KEY] ?: "" }
 
-    val webdavUsername: Flow<String> = context.cloudBackupDataStore.data
+    open val webdavUsername: Flow<String> = context.cloudBackupDataStore.data
         .map { preferences -> preferences[WEBDAV_USERNAME_KEY] ?: "" }
 
-    val lastSyncTimestamp: Flow<Long?> = context.cloudBackupDataStore.data
+    open val lastSyncTimestamp: Flow<Long?> = context.cloudBackupDataStore.data
         .map { preferences -> preferences[LAST_SYNC_TIMESTAMP_KEY] }
 
-    val lastSyncError: Flow<String?> = context.cloudBackupDataStore.data
+    open val lastSyncError: Flow<String?> = context.cloudBackupDataStore.data
         .map { preferences -> preferences[LAST_SYNC_ERROR_KEY] }
 
-    suspend fun setCloudSyncEnabled(enabled: Boolean) {
+    open val localBackupEnabled: Flow<Boolean> = context.cloudBackupDataStore.data
+        .map { preferences -> preferences[LOCAL_BACKUP_ENABLED_KEY] ?: false }
+
+    open val localBackupFolderUri: Flow<String> = context.cloudBackupDataStore.data
+        .map { preferences -> preferences[LOCAL_BACKUP_FOLDER_URI_KEY] ?: "" }
+
+    open val lastLocalBackupTimestamp: Flow<Long?> = context.cloudBackupDataStore.data
+        .map { preferences -> preferences[LAST_LOCAL_BACKUP_TIMESTAMP_KEY] }
+
+    open val lastLocalBackupError: Flow<String?> = context.cloudBackupDataStore.data
+        .map { preferences -> preferences[LAST_LOCAL_BACKUP_ERROR_KEY] }
+
+    open suspend fun setCloudSyncEnabled(enabled: Boolean) {
         context.cloudBackupDataStore.edit { preferences -> preferences[CLOUD_SYNC_ENABLED_KEY] = enabled }
     }
 
-    suspend fun setWebdavUrl(url: String) {
+    open suspend fun setWebdavUrl(url: String) {
         context.cloudBackupDataStore.edit { preferences -> preferences[WEBDAV_URL_KEY] = url }
     }
 
-    suspend fun setWebdavUsername(username: String) {
+    open suspend fun setWebdavUsername(username: String) {
         context.cloudBackupDataStore.edit { preferences -> preferences[WEBDAV_USERNAME_KEY] = username }
     }
 
-    suspend fun setLastSyncTimestamp(timestamp: Long?) {
+    open suspend fun setLastSyncTimestamp(timestamp: Long?) {
         context.cloudBackupDataStore.edit { preferences ->
             if (timestamp == null) {
                 preferences.remove(LAST_SYNC_TIMESTAMP_KEY)
@@ -79,12 +98,40 @@ class CloudBackupPreferencesManager @Inject constructor(
         }
     }
 
-    suspend fun setLastSyncError(message: String?) {
+    open suspend fun setLastSyncError(message: String?) {
         context.cloudBackupDataStore.edit { preferences ->
             if (message == null) {
                 preferences.remove(LAST_SYNC_ERROR_KEY)
             } else {
                 preferences[LAST_SYNC_ERROR_KEY] = message
+            }
+        }
+    }
+
+    open suspend fun setLocalBackupEnabled(enabled: Boolean) {
+        context.cloudBackupDataStore.edit { preferences -> preferences[LOCAL_BACKUP_ENABLED_KEY] = enabled }
+    }
+
+    open suspend fun setLocalBackupFolderUri(uri: String) {
+        context.cloudBackupDataStore.edit { preferences -> preferences[LOCAL_BACKUP_FOLDER_URI_KEY] = uri }
+    }
+
+    open suspend fun setLastLocalBackupTimestamp(timestamp: Long?) {
+        context.cloudBackupDataStore.edit { preferences ->
+            if (timestamp == null) {
+                preferences.remove(LAST_LOCAL_BACKUP_TIMESTAMP_KEY)
+            } else {
+                preferences[LAST_LOCAL_BACKUP_TIMESTAMP_KEY] = timestamp
+            }
+        }
+    }
+
+    open suspend fun setLastLocalBackupError(message: String?) {
+        context.cloudBackupDataStore.edit { preferences ->
+            if (message == null) {
+                preferences.remove(LAST_LOCAL_BACKUP_ERROR_KEY)
+            } else {
+                preferences[LAST_LOCAL_BACKUP_ERROR_KEY] = message
             }
         }
     }
@@ -98,7 +145,7 @@ class CloudBackupPreferencesManager @Inject constructor(
         encryptedPrefs().edit().putString(WEBDAV_PASSWORD_KEY, password).apply()
     }
 
-    fun getWebdavPassword(): String? = encryptedPrefs().getString(WEBDAV_PASSWORD_KEY, null)
+    open fun getWebdavPassword(): String? = encryptedPrefs().getString(WEBDAV_PASSWORD_KEY, null)
 
     private fun encryptedPrefs(): SharedPreferences {
         val masterKey = MasterKey.Builder(context)

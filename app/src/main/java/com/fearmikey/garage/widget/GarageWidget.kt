@@ -97,11 +97,13 @@ class GarageWidget : GlanceAppWidget() {
             .sortedBy { if (it.status == ReminderStatus.OVERDUE) 0 else 1 }
             .take(MAX_ROWS)
 
-        val firstVehicleId = vehicles.firstOrNull()?.id
+        val defaultVehicleId = preferencesRepository.defaultVehicleId.first()
+        val targetVehicle = vehicles.find { it.id == defaultVehicleId } ?: vehicles.firstOrNull()
+        val targetVehicleId = targetVehicle?.id
 
         provideContent {
             GlanceTheme {
-                GarageWidgetContent(context = context, rows = rows, firstVehicleId = firstVehicleId)
+                GarageWidgetContent(context = context, rows = rows, targetVehicleId = targetVehicleId)
             }
         }
     }
@@ -114,7 +116,7 @@ private fun Vehicle.widgetLabel(): String =
 private fun GarageWidgetContent(
     context: Context,
     rows: List<WidgetReminderRow>,
-    firstVehicleId: Long?,
+    targetVehicleId: Long?,
 ) {
     Column(
         modifier = GlanceModifier
@@ -147,7 +149,7 @@ private fun GarageWidgetContent(
             Button(
                 text = "Log Service",
                 onClick = actionStartActivity(
-                    logServiceIntent(context, MainActivity.ACTION_LOG_SERVICE, firstVehicleId),
+                    logServiceIntent(context, MainActivity.ACTION_LOG_SERVICE, targetVehicleId),
                 ),
                 modifier = GlanceModifier.defaultWeight(),
             )
@@ -155,7 +157,7 @@ private fun GarageWidgetContent(
             Button(
                 text = "Log Fuel",
                 onClick = actionStartActivity(
-                    logServiceIntent(context, MainActivity.ACTION_LOG_FUEL, firstVehicleId),
+                    logServiceIntent(context, MainActivity.ACTION_LOG_FUEL, targetVehicleId),
                 ),
                 modifier = GlanceModifier.defaultWeight(),
             )
