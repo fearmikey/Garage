@@ -77,10 +77,10 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fearmikey.garage.BuildConfig
+import com.fearmikey.garage.config.FlavorConfig
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.AppRestarter
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -341,8 +341,7 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            val intent = Intent(context, OssLicensesMenuActivity::class.java)
-                            context.startActivity(intent)
+                            FlavorConfig.launchOssLicenses(context)
                         },
                 )
             }

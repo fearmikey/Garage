@@ -1,0 +1,9 @@
+Garage is a modern, privacy-focused, comprehensive vehicle management application for Android. Garage enables vehicle owners to track maintenance schedules, monitor fuel efficiency, analyze cost of ownership, check safety recalls, and maintain detailed service records for all their vehicles in one centralized hub.
+
+Features:
+- Track service history
+- VIN scanning & decoding
+- Track fuel efficiency
+- Privacy focused and works offline
+- Cost of ownership calculation
+- Safety recall alerts

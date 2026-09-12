@@ -248,8 +248,10 @@ private fun AddEditVehicleContent(
                     capitalization = KeyboardCapitalization.Characters,
                 ),
                 leadingIcon = {
-                    IconButton(onClick = onScanVinClicked) {
-                        Icon(Icons.Filled.QrCodeScanner, contentDescription = "Scan VIN")
+                    if (com.fearmikey.garage.config.FlavorConfig.isVinScannerSupported) {
+                        IconButton(onClick = onScanVinClicked) {
+                            Icon(Icons.Filled.QrCodeScanner, contentDescription = "Scan VIN")
+                        }
                     }
                 },
                 trailingIcon = {

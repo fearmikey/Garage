@@ -20,10 +20,20 @@ android {
         applicationId = "com.fearmikey.garage"
         minSdk = 34
         targetSdk = 37
-        versionCode = 6
-        versionName = "1.1.3"
+        versionCode = 7
+        versionName = "1.1.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    flavorDimensions += "distribution"
+    productFlavors {
+        create("foss") {
+            dimension = "distribution"
+        }
+        create("play") {
+            dimension = "distribution"
+        }
     }
 
     buildTypes {
@@ -127,18 +137,7 @@ dependencies {
     implementation(libs.androidx.documentfile)
 
     // OSS Licenses
-    //
-    // play-services-oss-licenses transitively pulls in an alpha build of
-    // androidx.compose.material3:material3 (for its newer, unused "v2" Compose
-    // licenses UI). That alpha version is binary-incompatible with the stable
-    // androidx.compose.foundation version pinned by our Compose BOM (it was
-    // compiled against an older, pre-stabilization shape of Foundation's
-    // Styles API), which crashes ANY OutlinedTextField in the app with an
-    // AbstractMethodError. We only use the legacy, plain-View
-    // OssLicensesMenuActivity (which never touches Compose), so it's safe to
-    // drop this transitive dependency and let our Compose BOM's stable
-    // material3 version win instead.
-    implementation(libs.oss.licenses) {
+    "playImplementation"(libs.oss.licenses) {
         exclude(group = "androidx.compose.material3", module = "material3")
     }
     implementation(libs.coil.network.okhttp)
@@ -150,8 +149,8 @@ dependencies {
     implementation(libs.androidx.camera.view)
 
     // ML Kit (VIN barcode/text scanning)
-    implementation(libs.mlkit.barcode.scanning)
-    implementation(libs.mlkit.text.recognition)
+    "playImplementation"(libs.mlkit.barcode.scanning)
+    "playImplementation"(libs.mlkit.text.recognition)
 
     // Glance app widget
     implementation(libs.androidx.glance.appwidget)

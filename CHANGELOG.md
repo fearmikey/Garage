@@ -1,3 +1,13 @@
+## [1.1.4] - 2026-09-11
+
+### Added
+* **Product Flavor Dimensions (`foss` & `play`):** Introduced build flavors to support both open-source F-Droid builds and Google Play builds.
+* **Fastlane Automation:** Added Fastlane configuration for automated app deployments and release management.
+* **Fuel Economy Tests:** Added comprehensive unit test coverage for fuel economy calculations and widget UI updates.
+
+### Changed
+* **Modularized VIN Scanning:** Separated CameraX and ML Kit VIN scanning into the Play distribution flavor.
+
 ## [1.1.3] - 2026-09-08
 
 ### Added
