@@ -1,6 +1,6 @@
 # Terms of Service
 
-**Last Updated: May 22, 2024**
+**Last Updated: September 11, 2026**
 
 ## 1. Acceptance of Terms
 By accessing or using the Garage application, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing this application.
