@@ -78,10 +78,10 @@ object UnitConverter {
         return "%.3f %s".format(value, unitSystem.volumeUnit)
     }
 
-    /** Formats price per unit volume, given pricePerGallon. E.g. "$3.500/gal" or "$0.925/L". */
-    fun formatPricePerVolume(pricePerGallon: Double, unitSystem: UnitSystem): String = when (unitSystem) {
-        UnitSystem.IMPERIAL -> "$%.3f/gal".format(pricePerGallon)
-        UnitSystem.METRIC -> "$%.3f/L".format(pricePerGallon / LITERS_PER_GALLON)
+    /** Formats price per unit volume, given pricePerGallon. E.g. "$3.500/gal" or "€0.925/L". */
+    fun formatPricePerVolume(pricePerGallon: Double, unitSystem: UnitSystem, currencySymbol: String = "$"): String = when (unitSystem) {
+        UnitSystem.IMPERIAL -> "%s%.3f/gal".format(currencySymbol, pricePerGallon)
+        UnitSystem.METRIC -> "%s%.3f/L".format(currencySymbol, pricePerGallon / LITERS_PER_GALLON)
     }
 
     // Fuel economy conversions

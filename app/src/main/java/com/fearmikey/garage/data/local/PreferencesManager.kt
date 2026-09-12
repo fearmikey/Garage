@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.fearmikey.garage.ui.util.AppCurrency
 import com.fearmikey.garage.ui.util.UnitSystem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -16,8 +17,10 @@ class PreferencesManager(private val context: Context) {
 
     companion object {
         val UNITS_KEY = stringPreferencesKey("units_type")
+        val CURRENCY_KEY = stringPreferencesKey("currency_code")
         val THEME_KEY = stringPreferencesKey("theme_type")
         val ONBOARDING_COMPLETED_KEY = booleanPreferencesKey("onboarding_completed")
+        val TERMS_ACCEPTED_KEY = booleanPreferencesKey("terms_accepted")
         val DEFAULT_VEHICLE_ID_KEY = longPreferencesKey("default_vehicle_id")
     }
 
@@ -28,6 +31,13 @@ class PreferencesManager(private val context: Context) {
 
     val unitSystem: Flow<UnitSystem> = unitsType.map { UnitSystem.fromString(it) }
 
+    val currencyCode: Flow<String> = context.dataStore.data
+        .map { preferences ->
+            preferences[CURRENCY_KEY] ?: "USD"
+        }
+
+    val appCurrency: Flow<AppCurrency> = currencyCode.map { AppCurrency.fromCode(it) }
+
     val themeType: Flow<String> = context.dataStore.data
         .map { preferences ->
             preferences[THEME_KEY] ?: "system"
@@ -36,6 +46,11 @@ class PreferencesManager(private val context: Context) {
     val onboardingCompleted: Flow<Boolean> = context.dataStore.data
         .map { preferences ->
             preferences[ONBOARDING_COMPLETED_KEY] ?: false
+        }
+
+    val termsAccepted: Flow<Boolean> = context.dataStore.data
+        .map { preferences ->
+            preferences[TERMS_ACCEPTED_KEY] ?: false
         }
 
     /**
@@ -55,6 +70,12 @@ class PreferencesManager(private val context: Context) {
         }
     }
 
+    suspend fun setCurrencyCode(currencyCode: String) {
+        context.dataStore.edit { preferences ->
+            preferences[CURRENCY_KEY] = currencyCode
+        }
+    }
+
     suspend fun setThemeType(theme: String) {
         context.dataStore.edit { preferences ->
             preferences[THEME_KEY] = theme
@@ -64,6 +85,12 @@ class PreferencesManager(private val context: Context) {
     suspend fun setOnboardingCompleted(completed: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[ONBOARDING_COMPLETED_KEY] = completed
+        }
+    }
+
+    suspend fun setTermsAccepted(accepted: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[TERMS_ACCEPTED_KEY] = accepted
         }
     }
 

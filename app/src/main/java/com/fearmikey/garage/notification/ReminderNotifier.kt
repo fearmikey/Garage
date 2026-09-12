@@ -37,7 +37,12 @@ class ReminderNotifier @Inject constructor(
         notificationManager.createNotificationChannel(channel)
     }
 
-    fun notifyDue(reminder: Reminder, vehicleLabel: String, status: ReminderStatus) {
+    fun notifyDue(
+        notificationId: Int,
+        taskName: String,
+        vehicleLabel: String,
+        status: ReminderStatus,
+    ) {
         val hasPermission = ContextCompat.checkSelfPermission(
             context,
             Manifest.permission.POST_NOTIFICATIONS,
@@ -45,9 +50,9 @@ class ReminderNotifier @Inject constructor(
         if (!hasPermission) return
 
         val title = if (status == ReminderStatus.OVERDUE) {
-            context.getString(R.string.reminder_overdue_title, reminder.taskName)
+            context.getString(R.string.reminder_overdue_title, taskName)
         } else {
-            context.getString(R.string.reminder_upcoming_title, reminder.taskName)
+            context.getString(R.string.reminder_upcoming_title, taskName)
         }
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
@@ -58,7 +63,16 @@ class ReminderNotifier @Inject constructor(
             .setAutoCancel(true)
             .build()
 
-        notificationManager.notify(reminder.id.toInt(), notification)
+        notificationManager.notify(notificationId, notification)
+    }
+
+    fun notifyDue(reminder: Reminder, vehicleLabel: String, status: ReminderStatus) {
+        notifyDue(
+            notificationId = reminder.id.toInt(),
+            taskName = reminder.taskName,
+            vehicleLabel = vehicleLabel,
+            status = status,
+        )
     }
 
     fun cancel(reminderId: Long) {

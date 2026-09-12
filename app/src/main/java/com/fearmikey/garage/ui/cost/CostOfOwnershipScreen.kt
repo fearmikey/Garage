@@ -115,6 +115,7 @@ private fun CostOfOwnershipContent(
                 CategoryCostCard(
                     category = category,
                     unitSystem = uiState.unitSystem,
+                    currencySymbol = uiState.currencySymbol,
                 )
             }
         }
@@ -143,7 +144,7 @@ private fun TotalCostCard(
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "$%.2f".format(uiState.totalCost),
+                text = "%s%.2f".format(uiState.currencySymbol, uiState.totalCost),
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary,
@@ -164,6 +165,7 @@ private fun TotalCostCard(
                     amount = uiState.maintenanceCost,
                     countText = "${uiState.maintenanceRecordCount} records",
                     icon = Icons.Default.Handyman,
+                    currencySymbol = uiState.currencySymbol,
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight(),
@@ -176,6 +178,7 @@ private fun TotalCostCard(
                     amount = uiState.fuelCost,
                     countText = "${uiState.fuelRecordCount} fill-ups",
                     icon = Icons.Default.LocalGasStation,
+                    currencySymbol = uiState.currencySymbol,
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight(),
@@ -191,6 +194,7 @@ private fun CostSubStat(
     amount: Double,
     countText: String,
     icon: ImageVector,
+    currencySymbol: String = "$",
     modifier: Modifier = Modifier,
 ) {
     Surface(
@@ -228,7 +232,7 @@ private fun CostSubStat(
                     maxLines = 2,
                 )
                 Text(
-                    text = "$%.2f".format(amount),
+                    text = "%s%.2f".format(currencySymbol, amount),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
                 )
@@ -267,6 +271,7 @@ private fun TimeFilterRow(
 private fun CategoryCostCard(
     category: CategoryCostItem,
     unitSystem: UnitSystem,
+    currencySymbol: String = "$",
 ) {
     var isExpanded by remember { mutableStateOf(false) }
     val icon = getCategoryIcon(category.key, category.category)
@@ -318,7 +323,7 @@ private fun CategoryCostCard(
                 }
 
                 Text(
-                    text = "$%.2f".format(category.totalCost),
+                    text = "%s%.2f".format(currencySymbol, category.totalCost),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface,
@@ -354,7 +359,7 @@ private fun CategoryCostCard(
                 ) {
                     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                     category.entries.forEach { entry ->
-                        CostEntryRow(entry = entry, unitSystem = unitSystem)
+                        CostEntryRow(entry = entry, unitSystem = unitSystem, currencySymbol = currencySymbol)
                     }
                 }
             }
@@ -366,6 +371,7 @@ private fun CategoryCostCard(
 private fun CostEntryRow(
     entry: CostEntry,
     unitSystem: UnitSystem,
+    currencySymbol: String = "$",
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -395,7 +401,7 @@ private fun CostEntryRow(
         }
 
         Text(
-            text = "$%.2f".format(entry.cost),
+            text = "%s%.2f".format(currencySymbol, entry.cost),
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.SemiBold,
         )

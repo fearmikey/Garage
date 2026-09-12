@@ -15,4 +15,7 @@
         <item name="android:windowLightStatusBar">true</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <!-- Theme for OSS Licenses activities which require an ActionBar. -->
+    <style name="Theme.Garage.OssLicenses" parent="Theme.Material3.DayNight" />
 </resources>

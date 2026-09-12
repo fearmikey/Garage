@@ -1,5 +1,6 @@
 package com.fearmikey.garage.ui.reminder
 
+import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,8 +9,10 @@ import com.fearmikey.garage.data.repository.MaintenanceRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.data.repository.ReminderRepository
 import com.fearmikey.garage.data.repository.ReminderStatus
+import com.fearmikey.garage.notification.WorkScheduler
 import com.fearmikey.garage.ui.navigation.Destinations
 import com.fearmikey.garage.ui.util.UnitSystem
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -29,6 +32,7 @@ class RemindersViewModel @Inject constructor(
     private val reminderRepository: ReminderRepository,
     maintenanceRepository: MaintenanceRepository,
     preferencesRepository: PreferencesRepository,
+    @ApplicationContext private val context: Context? = null,
 ) : ViewModel() {
 
     val vehicleId: Long = checkNotNull(savedStateHandle[Destinations.VEHICLE_ID_ARG])
@@ -48,14 +52,21 @@ class RemindersViewModel @Inject constructor(
     fun saveReminder(reminder: Reminder) {
         viewModelScope.launch {
             reminderRepository.saveReminder(reminder.copy(vehicleId = vehicleId))
+            context?.let { WorkScheduler.triggerImmediateReminderCheck(it) }
         }
     }
 
     fun setCompleted(reminder: Reminder, isCompleted: Boolean) {
-        viewModelScope.launch { reminderRepository.setCompleted(reminder, isCompleted) }
+        viewModelScope.launch {
+            reminderRepository.setCompleted(reminder, isCompleted)
+            context?.let { WorkScheduler.triggerImmediateReminderCheck(it) }
+        }
     }
 
     fun deleteReminder(reminder: Reminder) {
-        viewModelScope.launch { reminderRepository.deleteReminder(reminder) }
+        viewModelScope.launch {
+            reminderRepository.deleteReminder(reminder)
+            context?.let { WorkScheduler.triggerImmediateReminderCheck(it) }
+        }
     }
 }

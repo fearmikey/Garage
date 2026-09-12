@@ -1,7 +1,7 @@
 # 🚗 Garage
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.1.4-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-1.1.5-blue.svg)](CHANGELOG.md)
 [![Android Min SDK](https://img.shields.io/badge/Min%20SDK-34-brightgreen.svg)](https://developer.android.com/about/versions/14)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4-purple.svg?logo=kotlin)](https://kotlinlang.org/)
 [![Compose](https://img.shields.io/badge/Jetpack%20Compose-Material3-4285F4.svg?logo=android)](https://developer.android.com/jetpack/compose)
@@ -13,6 +13,7 @@
 ## 📋 Table of Contents
 
 - [Features](#-features)
+- [100% FOSS & F-Droid First](#-100-foss--f-droid-first)
 - [Tech Stack & Architecture](#-tech-stack--architecture)
 - [Project Structure](#-project-structure)
 - [Getting Started](#-getting-started)
@@ -23,11 +24,19 @@
 
 ---
 
+## 🛡️ 100% FOSS & F-Droid First
+
+Garage is strictly **Free and Open Source Software (FOSS)** built for distribution on F-Droid and open-source app repositories:
+* **Zero Google Play Services:** No `com.google.android.gms` dependencies.
+* **Zero Ads or Analytics:** No AdMob, tracking, or proprietary telemetry.
+* **100% Open Source:** Built exclusively with Android Jetpack, Kotlin, and permissively licensed open-source libraries.
+
+---
+
 ## ✨ Features
 
-### 🚘 Vehicle Management & VIN Scanning
+### 🚘 Vehicle Management & VIN Lookup
 * **Comprehensive Garage Profiles:** Maintain complete specs for every vehicle in your fleet—including make, model, year, trim, mileage, license plate, VIN, fuel type, and custom vehicle images.
-* **CameraX & ML Kit VIN Scanner:** Scan Vehicle Identification Numbers directly using your device's camera via optical character recognition (OCR) powered by **ML Kit** and **CameraX**.
 * **NHTSA VIN Decoder:** Automatically populate vehicle specifications and metadata using official NHTSA web service integrations.
 
 ### 🛠️ Service & Maintenance Tracking

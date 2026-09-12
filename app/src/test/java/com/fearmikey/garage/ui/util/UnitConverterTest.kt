@@ -52,6 +52,28 @@ class UnitConverterTest {
         val pricePerGallon = 3.785411784
         assertEquals("$3.785/gal", UnitConverter.formatPricePerVolume(pricePerGallon, UnitSystem.IMPERIAL))
         assertEquals("$1.000/L", UnitConverter.formatPricePerVolume(pricePerGallon, UnitSystem.METRIC))
+
+        assertEquals("€3.785/gal", UnitConverter.formatPricePerVolume(pricePerGallon, UnitSystem.IMPERIAL, "€"))
+        assertEquals("£1.000/L", UnitConverter.formatPricePerVolume(pricePerGallon, UnitSystem.METRIC, "£"))
+    }
+
+    @Test
+    fun `AppCurrency resolution and display names`() {
+        val usd = AppCurrency.fromCode("USD")
+        assertEquals("USD", usd.code)
+        assertEquals("$", usd.symbol)
+
+        val eur = AppCurrency.fromCode("eur")
+        assertEquals("EUR", eur.code)
+        assertEquals("€", eur.symbol)
+
+        val gbp = AppCurrency.fromCode("GBP")
+        assertEquals("GBP", gbp.code)
+        assertEquals("£", gbp.symbol)
+
+        val unknown = AppCurrency.fromCode("INVALID_CODE")
+        assertEquals("USD", unknown.code)
+        assertEquals("$", unknown.symbol)
     }
 
     @Test

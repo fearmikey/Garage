@@ -59,6 +59,7 @@ fun MaintenanceExportScreen(
 ) {
     val vehicle by viewModel.vehicle.collectAsStateWithLifecycle()
     val records by viewModel.records.collectAsStateWithLifecycle()
+    val currencySymbol by viewModel.currencySymbol.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -70,7 +71,7 @@ fun MaintenanceExportScreen(
         if (uri != null) {
             scope.launch {
                 val v = vehicle ?: return@launch
-                val success = generatePdf(context, uri, v, records)
+                val success = generatePdf(context, uri, v, records, currencySymbol)
                 if (success) {
                     viewModel.pdfExportNotifier.notifyPdfExported(uri, pendingFileName)
                 }
@@ -142,6 +143,7 @@ suspend fun generatePdf(
     uri: Uri,
     vehicle: Vehicle,
     records: List<MaintenanceRecord>,
+    currencySymbol: String = "$",
 ): Boolean {
     return withContext(Dispatchers.IO) {
         val document = PdfDocument()
@@ -262,7 +264,7 @@ suspend fun generatePdf(
             canvas.drawText(record.date.toDisplayDate(), colDate, yPos, textPaint)
             canvas.drawText(record.category.displayName, colCategory, yPos, textPaint)
             canvas.drawText("%,d".format(record.mileage), colMileage, yPos, textPaint)
-            canvas.drawText("$%.2f".format(record.cost), colCost, yPos, textPaint)
+            canvas.drawText("%s%.2f".format(currencySymbol, record.cost), colCost, yPos, textPaint)
 
             canvas.withTranslation(colTask, yPos - 9f) {
                 staticLayout.draw(this)

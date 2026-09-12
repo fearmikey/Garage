@@ -12,6 +12,13 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
+/**
+ * Main [Application] class for Garage.
+ *
+ * NOTE: Garage is strictly a 100% Free and Open Source (FOSS) application built for
+ * F-Droid and open-source distribution. It contains zero Google Play Services, zero ads,
+ * zero analytics, and zero proprietary binary dependencies.
+ */
 @HiltAndroidApp
 class GarageApplication : Application(), Configuration.Provider {
 

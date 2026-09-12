@@ -19,8 +19,10 @@ import javax.inject.Inject
 
 data class StartupUiState(
     val selectedUnits: String = "metric",
+    val selectedCurrency: String = "USD",
     val notificationPermissionGranted: Boolean = false,
     val cameraPermissionGranted: Boolean = false,
+    val termsAccepted: Boolean = false,
 )
 
 @HiltViewModel
@@ -35,7 +37,15 @@ class StartupViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             val currentUnits = preferencesRepository.unitsType.first()
-            _uiState.update { it.copy(selectedUnits = currentUnits) }
+            val currentCurrency = preferencesRepository.currencyCode.first()
+            val initialTermsAccepted = preferencesRepository.termsAccepted.first()
+            _uiState.update {
+                it.copy(
+                    selectedUnits = currentUnits,
+                    selectedCurrency = currentCurrency,
+                    termsAccepted = initialTermsAccepted,
+                )
+            }
         }
         refreshPermissionStates()
     }
@@ -71,9 +81,19 @@ class StartupViewModel @Inject constructor(
         _uiState.update { it.copy(selectedUnits = units) }
     }
 
+    fun selectCurrency(currency: String) {
+        _uiState.update { it.copy(selectedCurrency = currency) }
+    }
+
+    fun setTermsAccepted(accepted: Boolean) {
+        _uiState.update { it.copy(termsAccepted = accepted) }
+    }
+
     fun completeStartup(onFinished: () -> Unit) {
         viewModelScope.launch {
             preferencesRepository.setUnitsType(_uiState.value.selectedUnits)
+            preferencesRepository.setCurrencyCode(_uiState.value.selectedCurrency)
+            preferencesRepository.setTermsAccepted(_uiState.value.termsAccepted)
             preferencesRepository.setOnboardingCompleted(completed = true)
             onFinished()
         }

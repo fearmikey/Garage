@@ -22,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Comment
 import androidx.compose.material.icons.automirrored.filled.Help
+import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.CloudSync
 import androidx.compose.material.icons.filled.Code
@@ -38,6 +39,8 @@ import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.PrivacyTip
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Straighten
+import com.fearmikey.garage.ui.components.CurrencySelectionDialog
+import com.fearmikey.garage.ui.util.AppCurrency
 import androidx.documentfile.provider.DocumentFile
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
@@ -95,6 +98,7 @@ fun SettingsScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     var showUnitsDialog by remember { mutableStateOf(false) }
+    var showCurrencyDialog by remember { mutableStateOf(false) }
     var showThemeDialog by remember { mutableStateOf(false) }
     var showDefaultVehicleDialog by remember { mutableStateOf(false) }
     var showClearDataDialog by remember { mutableStateOf(false) }
@@ -165,6 +169,17 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable { showUnitsDialog = true },
+                )
+            }
+            item {
+                val selectedCurrencyObj = AppCurrency.fromCode(uiState.currency)
+                ListItem(
+                    headlineContent = { Text("Currency") },
+                    supportingContent = { Text(selectedCurrencyObj.displayName) },
+                    leadingContent = { Icon(Icons.Filled.AttachMoney, contentDescription = null) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { showCurrencyDialog = true },
                 )
             }
             item {
@@ -384,6 +399,7 @@ fun SettingsScreen(
             item {
                 ListItem(
                     headlineContent = { Text("Terms of Service") },
+                    supportingContent = { Text("Read terms and conditions on GitHub") },
                     leadingContent = { Icon(Icons.Filled.Gavel, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -393,7 +409,7 @@ fun SettingsScreen(
             item {
                 ListItem(
                     headlineContent = { Text("Re-run Setup") },
-                    supportingContent = { Text("Re-configure app permissions and measurement units") },
+                    supportingContent = { Text("Re-configure app permissions, terms, and measurement units") },
                     leadingContent = { Icon(Icons.Filled.School, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -419,6 +435,14 @@ fun SettingsScreen(
             selectedOption = uiState.units,
             onOptionSelected = { viewModel.setUnits(it) },
             onDismissRequest = { showUnitsDialog = false }
+        )
+    }
+
+    if (showCurrencyDialog) {
+        CurrencySelectionDialog(
+            selectedCurrencyCode = uiState.currency,
+            onCurrencySelected = { viewModel.setCurrency(it) },
+            onDismissRequest = { showCurrencyDialog = false },
         )
     }
 

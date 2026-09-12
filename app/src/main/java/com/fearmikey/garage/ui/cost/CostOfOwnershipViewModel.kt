@@ -19,6 +19,8 @@ import java.util.Calendar
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+import com.fearmikey.garage.ui.util.UnitConverter
+
 enum class TimeFilter(val displayName: String) {
     ALL_TIME("All Time"),
     THIS_YEAR("This Year"),
@@ -54,6 +56,7 @@ data class CostOfOwnershipUiState(
     val categories: List<CategoryCostItem> = emptyList(),
     val selectedTimeFilter: TimeFilter = TimeFilter.ALL_TIME,
     val unitSystem: UnitSystem = UnitSystem.IMPERIAL,
+    val currencySymbol: String = "$",
 )
 
 @HiltViewModel
@@ -72,8 +75,9 @@ class CostOfOwnershipViewModel @Inject constructor(
         maintenanceRepository.getRecordsForVehicle(vehicleId),
         fuelRepository.getRecordsForVehicle(vehicleId),
         preferencesRepository.unitSystem,
+        preferencesRepository.appCurrency,
         _timeFilter,
-    ) { maintenanceRecords, fuelRecords, unitSystem, filter ->
+    ) { maintenanceRecords, fuelRecords, unitSystem, currency, filter ->
         val cutoff = computeCutoffTimestamp(filter)
 
         val filteredMaintenance = if (cutoff == null) {
@@ -128,13 +132,16 @@ class CostOfOwnershipViewModel @Inject constructor(
         if (filteredFuel.isNotEmpty()) {
             val pct = if (grandTotal > 0.0) ((fuelTotal / grandTotal) * 100).toFloat() else 0f
             val entries = filteredFuel.sortedByDescending { it.date }.map { record ->
+                val displayVolume = UnitConverter.displayVolumeValue(record.gallons, unitSystem)
+                val volumeUnit = if (unitSystem == UnitSystem.METRIC) "L" else "gal"
+                val displayPrice = if (unitSystem == UnitSystem.METRIC) record.pricePerGallon / UnitConverter.LITERS_PER_GALLON else record.pricePerGallon
                 CostEntry(
                     id = record.id,
                     date = record.date,
                     title = "Fuel Fill-Up",
                     cost = record.totalCost,
                     mileage = record.mileage,
-                    detail = "%.1f gal @ $%.2f/gal".format(record.gallons, record.pricePerGallon),
+                    detail = "%.1f %s @ %s%.2f/%s".format(displayVolume, volumeUnit, currency.symbol, displayPrice, volumeUnit),
                 )
             }
             categoryItems.add(
@@ -161,6 +168,7 @@ class CostOfOwnershipViewModel @Inject constructor(
             categories = categoryItems,
             selectedTimeFilter = filter,
             unitSystem = unitSystem,
+            currencySymbol = currency.symbol,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), CostOfOwnershipUiState())
 

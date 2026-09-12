@@ -80,6 +80,7 @@ fun MaintenanceTimelineScreen(
     val records by viewModel.records.collectAsStateWithLifecycle()
     val latestMileage by viewModel.latestMileage.collectAsStateWithLifecycle()
     val unitSystem by viewModel.unitSystem.collectAsStateWithLifecycle()
+    val currencySymbol by viewModel.currencySymbol.collectAsStateWithLifecycle()
     var showAddSheet by remember { mutableStateOf(value = false) }
     var editingRecord by remember { mutableStateOf<MaintenanceRecord?>(null) }
 
@@ -90,6 +91,7 @@ fun MaintenanceTimelineScreen(
     MaintenanceTimelineContent(
         records = records,
         unitSystem = unitSystem,
+        currencySymbol = currencySymbol,
         onAddClicked = { editingRecord = null; showAddSheet = true },
         onEditRecord = { record -> editingRecord = record; showAddSheet = true },
         onDeleteRecord = viewModel::deleteRecord,
@@ -98,6 +100,7 @@ fun MaintenanceTimelineScreen(
     if (showAddSheet) {
         AddEditMaintenanceRecordSheet(
             unitSystem = unitSystem,
+            currencySymbol = currencySymbol,
             latestMileage = latestMileage,
             initial = editingRecord,
             onDismiss = { showAddSheet = false; editingRecord = null },
@@ -114,6 +117,7 @@ fun MaintenanceTimelineScreen(
 private fun MaintenanceTimelineContent(
     records: List<MaintenanceRecord>,
     unitSystem: UnitSystem,
+    currencySymbol: String = "$",
     onAddClicked: () -> Unit,
     onEditRecord: (MaintenanceRecord) -> Unit,
     onDeleteRecord: (MaintenanceRecord) -> Unit,
@@ -138,6 +142,7 @@ private fun MaintenanceTimelineContent(
                         MaintenanceRecordRow(
                             record = record,
                             unitSystem = unitSystem,
+                            currencySymbol = currencySymbol,
                             onEdit = { onEditRecord(record) },
                             onDelete = { onDeleteRecord(record) },
                         )
@@ -152,6 +157,7 @@ private fun MaintenanceTimelineContent(
 private fun MaintenanceRecordRow(
     record: MaintenanceRecord,
     unitSystem: UnitSystem,
+    currencySymbol: String = "$",
     onEdit: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
@@ -192,7 +198,7 @@ private fun MaintenanceRecordRow(
                 Text(record.category.displayName, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                 Text(record.description, style = MaterialTheme.typography.titleMedium)
                 Text(
-                    "${record.date.toDisplayDate()} · ${UnitConverter.formatDistance(record.mileage, unitSystem)} · $${"%.2f".format(record.cost)}",
+                    "${record.date.toDisplayDate()} · ${UnitConverter.formatDistance(record.mileage, unitSystem)} · %s%s".format(currencySymbol, "%.2f".format(record.cost)),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -217,6 +223,7 @@ internal fun AddEditMaintenanceRecordSheet(
     initial: MaintenanceRecord? = null,
     latestMileage: Int? = null,
     unitSystem: UnitSystem = UnitSystem.IMPERIAL,
+    currencySymbol: String = "$",
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var description by remember { mutableStateOf(initial?.description.orEmpty()) }
@@ -430,7 +437,7 @@ internal fun AddEditMaintenanceRecordSheet(
             OutlinedTextField(
                 value = cost,
                 onValueChange = { cost = it.filter { c -> c.isDigit() || (c == '.') } },
-                label = { Text("Cost") },
+                label = { Text("Cost ($currencySymbol)") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Decimal,

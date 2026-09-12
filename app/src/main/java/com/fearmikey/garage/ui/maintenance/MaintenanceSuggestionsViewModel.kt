@@ -1,5 +1,6 @@
 package com.fearmikey.garage.ui.maintenance
 
+import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,8 +15,10 @@ import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.data.schedule.MaintenanceScheduleEngine
 import com.fearmikey.garage.data.schedule.MaintenanceSuggestion
 import com.fearmikey.garage.data.schedule.toMaintenanceRule
+import com.fearmikey.garage.notification.WorkScheduler
 import com.fearmikey.garage.ui.navigation.Destinations
 import com.fearmikey.garage.ui.util.UnitSystem
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -32,6 +35,7 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
     private val reminderRepository: ReminderRepository,
     private val customMaintenanceRuleRepository: CustomMaintenanceRuleRepository,
     preferencesRepository: PreferencesRepository,
+    @ApplicationContext private val context: Context? = null,
 ) : ViewModel() {
 
     private val vehicleId: Long = checkNotNull(savedStateHandle[Destinations.VEHICLE_ID_ARG])
@@ -84,6 +88,7 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
                     dueMileage = suggestion.nextDueMileage,
                 )
             )
+            context?.let { WorkScheduler.triggerImmediateReminderCheck(it) }
         }
     }
 
@@ -96,18 +101,21 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
     fun logMaintenance(record: MaintenanceRecord) {
         viewModelScope.launch {
             maintenanceRepository.saveRecord(record.copy(vehicleId = vehicleId))
+            context?.let { WorkScheduler.triggerImmediateReminderCheck(it) }
         }
     }
 
     fun saveCustomRule(rule: CustomMaintenanceRule) {
         viewModelScope.launch {
             customMaintenanceRuleRepository.saveRule(rule.copy(vehicleId = vehicleId))
+            context?.let { WorkScheduler.triggerImmediateReminderCheck(it) }
         }
     }
 
     fun deleteCustomRule(rule: CustomMaintenanceRule) {
         viewModelScope.launch {
             customMaintenanceRuleRepository.deleteRule(rule)
+            context?.let { WorkScheduler.triggerImmediateReminderCheck(it) }
         }
     }
 }

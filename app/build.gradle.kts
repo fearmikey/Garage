@@ -1,3 +1,18 @@
+/*
+ * ============================================================================
+ * GARAGE - STRICT 100% FOSS & F-DROID COMPLIANCE POLICY
+ * ============================================================================
+ * This application is strictly Free and Open Source Software (FOSS) built for F-Droid.
+ *
+ * DO NOT ADD:
+ *  - Google Play Services (com.google.android.gms:*)
+ *  - Google Mobile Ads / AdMob
+ *  - ML Kit or proprietary Google SDKs
+ *  - Firebase or non-free binary dependencies
+ *  - Closed-source analytics, tracking, or ads
+ * ============================================================================
+ */
+
 plugins {
     // AGP 9's built-in Kotlin support means we do NOT apply
     // org.jetbrains.kotlin.android here; Kotlin compilation is handled by AGP
@@ -7,7 +22,6 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.oss.licenses.plugin)
 }
 
 android {
@@ -20,20 +34,10 @@ android {
         applicationId = "com.fearmikey.garage"
         minSdk = 34
         targetSdk = 37
-        versionCode = 7
-        versionName = "1.1.4"
+        versionCode = 8
+        versionName = "1.1.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    flavorDimensions += "distribution"
-    productFlavors {
-        create("foss") {
-            dimension = "distribution"
-        }
-        create("play") {
-            dimension = "distribution"
-        }
     }
 
     buildTypes {
@@ -136,21 +140,7 @@ dependencies {
     // DocumentFile
     implementation(libs.androidx.documentfile)
 
-    // OSS Licenses
-    "playImplementation"(libs.oss.licenses) {
-        exclude(group = "androidx.compose.material3", module = "material3")
-    }
     implementation(libs.coil.network.okhttp)
-
-    // CameraX (VIN scanning)
-    implementation(libs.androidx.camera.core)
-    implementation(libs.androidx.camera.camera2)
-    implementation(libs.androidx.camera.lifecycle)
-    implementation(libs.androidx.camera.view)
-
-    // ML Kit (VIN barcode/text scanning)
-    "playImplementation"(libs.mlkit.barcode.scanning)
-    "playImplementation"(libs.mlkit.text.recognition)
 
     // Glance app widget
     implementation(libs.androidx.glance.appwidget)

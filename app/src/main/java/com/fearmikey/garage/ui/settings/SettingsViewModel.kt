@@ -32,6 +32,7 @@ data class SettingsUiState(
     val isBusy: Boolean = false,
     val message: String? = null,
     val units: String = "metric",
+    val currency: String = "USD",
     val theme: String = "system",
     val defaultVehicleId: Long? = null,
     val vehicles: List<Vehicle> = emptyList(),
@@ -70,6 +71,11 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             preferencesRepository.unitsType.collect { units ->
                 _uiState.update { it.copy(units = units) }
+            }
+        }
+        viewModelScope.launch {
+            preferencesRepository.currencyCode.collect { currency ->
+                _uiState.update { it.copy(currency = currency) }
             }
         }
         viewModelScope.launch {
@@ -165,6 +171,12 @@ class SettingsViewModel @Inject constructor(
     fun setUnits(units: String) {
         viewModelScope.launch {
             preferencesRepository.setUnitsType(units)
+        }
+    }
+
+    fun setCurrency(currency: String) {
+        viewModelScope.launch {
+            preferencesRepository.setCurrencyCode(currency)
         }
     }
 

@@ -7,11 +7,13 @@ import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.repository.MaintenanceRepository
 import com.fearmikey.garage.data.repository.VehicleRepository
+import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.notification.PdfExportNotifier
 import com.fearmikey.garage.ui.navigation.Destinations
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
@@ -20,6 +22,7 @@ class MaintenanceExportViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     vehicleRepository: VehicleRepository,
     maintenanceRepository: MaintenanceRepository,
+    preferencesRepository: PreferencesRepository,
     val pdfExportNotifier: PdfExportNotifier,
 ) : ViewModel() {
 
@@ -30,4 +33,8 @@ class MaintenanceExportViewModel @Inject constructor(
 
     val records: StateFlow<List<MaintenanceRecord>> = maintenanceRepository.getRecordsForVehicle(vehicleId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    val currencySymbol: StateFlow<String> = preferencesRepository.appCurrency
+        .map { it.symbol }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), "$")
 }

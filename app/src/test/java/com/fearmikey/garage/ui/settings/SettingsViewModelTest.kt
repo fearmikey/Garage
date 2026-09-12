@@ -30,6 +30,7 @@ import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.data.repository.WebDavBackupRepository
 import com.fearmikey.garage.notification.ReminderNotifier
+import com.fearmikey.garage.ui.util.AppCurrency
 import com.fearmikey.garage.ui.util.UnitSystem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -55,15 +56,23 @@ class SettingsViewModelTest {
     }
 
     private class FakePreferencesRepository : PreferencesRepository {
+        val currencyCodeFlow = MutableStateFlow("USD")
         override val unitsType: Flow<String> = MutableStateFlow("metric")
         override val unitSystem: Flow<UnitSystem> = MutableStateFlow(UnitSystem.METRIC)
+        override val currencyCode: Flow<String> = currencyCodeFlow
+        override val appCurrency: Flow<AppCurrency> = MutableStateFlow(AppCurrency.USD)
         override val themeType: Flow<String> = MutableStateFlow("system")
         override val onboardingCompleted: Flow<Boolean> = MutableStateFlow(true)
+        override val termsAccepted: Flow<Boolean> = MutableStateFlow(true)
         override val defaultVehicleId: Flow<Long?> = MutableStateFlow(null)
 
         override suspend fun setUnitsType(units: String) {}
+        override suspend fun setCurrencyCode(currencyCode: String) {
+            currencyCodeFlow.value = currencyCode
+        }
         override suspend fun setThemeType(theme: String) {}
         override suspend fun setOnboardingCompleted(completed: Boolean) {}
+        override suspend fun setTermsAccepted(accepted: Boolean) {}
         override suspend fun setDefaultVehicleId(vehicleId: Long?) {}
     }
 

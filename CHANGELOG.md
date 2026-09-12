@@ -1,3 +1,13 @@
+## [1.1.5] - 2026-09-12
+
+### Added
+* **Multi-Currency Support:** Added currency selector dialog allowing users to choose their preferred currency (USD, EUR, GBP, CAD, AUD, JPY, etc.) across financial screens and cost tracking metrics.
+* **100% FOSS Distribution:** Consolidated application structure to be strictly open-source (FOSS) for stores like F-Droid, removing proprietary Google Play dependencies and ad SDKs.
+* **Expanded Unit Tests:** Added unit test coverage for unit converters, cost calculation ViewModels, and notification scheduling.
+
+### Changed
+* **Unit Converter:** Refactored unit conversions and formatting utilities for enhanced accuracy across distance and volume metrics.
+
 ## [1.1.4] - 2026-09-11
 
 ### Added

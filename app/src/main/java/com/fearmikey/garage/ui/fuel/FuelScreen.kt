@@ -91,6 +91,7 @@ fun FuelScreen(
     if (showAddSheet) {
         AddEditFuelRecordSheet(
             unitSystem = uiState.unitSystem,
+            currencySymbol = uiState.currencySymbol,
             onDismiss = { showAddSheet = false },
             onSave = { record ->
                 viewModel.saveRecord(record)
@@ -130,6 +131,7 @@ private fun FuelContent(
                         averageMpg = uiState.averageMpg,
                         totalSpent = uiState.totalSpent,
                         unitSystem = uiState.unitSystem,
+                        currencySymbol = uiState.currencySymbol,
                     )
                 }
                 items(uiState.records, key = { it.id }) { record ->
@@ -137,6 +139,7 @@ private fun FuelContent(
                         record = record,
                         segmentMpg = uiState.mpgByRecordId[record.id],
                         unitSystem = uiState.unitSystem,
+                        currencySymbol = uiState.currencySymbol,
                         onDelete = { onDeleteRecord(record) },
                     )
                 }
@@ -150,6 +153,7 @@ private fun FuelSummaryCard(
     averageMpg: Double?,
     totalSpent: Double,
     unitSystem: UnitSystem,
+    currencySymbol: String = "$",
     modifier: Modifier = Modifier,
 ) {
     Card(modifier = modifier.fillMaxWidth()) {
@@ -164,7 +168,7 @@ private fun FuelSummaryCard(
             )
             SummaryStat(
                 label = "Total spent",
-                value = "$%.2f".format(totalSpent),
+                value = "%s%.2f".format(currencySymbol, totalSpent),
                 modifier = Modifier.weight(1f),
             )
         }
@@ -184,6 +188,7 @@ private fun FuelRecordRow(
     record: FuelRecord,
     segmentMpg: Double?,
     unitSystem: UnitSystem,
+    currencySymbol: String = "$",
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -208,7 +213,7 @@ private fun FuelRecordRow(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(
-                    "$%.2f total · %s".format(record.totalCost, UnitConverter.formatPricePerVolume(record.pricePerGallon, unitSystem)),
+                    "%s%.2f total · %s".format(currencySymbol, record.totalCost, UnitConverter.formatPricePerVolume(record.pricePerGallon, unitSystem, currencySymbol)),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -234,6 +239,7 @@ internal fun AddEditFuelRecordSheet(
     onSave: (FuelRecord) -> Unit,
     initial: FuelRecord? = null,
     unitSystem: UnitSystem = UnitSystem.IMPERIAL,
+    currencySymbol: String = "$",
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var mileage by remember {
@@ -373,7 +379,7 @@ internal fun AddEditFuelRecordSheet(
                 supportingText = {
                     if ((gallonsValue != null) && (gallonsValue > 0.0) && (totalCostValue != null)) {
                         val unitLabel = if (unitSystem == UnitSystem.METRIC) "L" else "gal"
-                        Text("$%.3f / %s".format(totalCostValue / gallonsValue, unitLabel))
+                        Text("%s%.3f / %s".format(currencySymbol, totalCostValue / gallonsValue, unitLabel))
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),

@@ -1,3 +1,10 @@
+# ============================================================================
+# GARAGE VERSION CATALOG - STRICT FOSS & F-DROID COMPLIANCE POLICY
+# ============================================================================
+# Only fully open-source libraries (Apache 2.0, MIT, BSD, MPL, GPL) are allowed.
+# DO NOT add com.google.android.gms (Play Services), AdMob, ML Kit, or closed SDKs.
+# ============================================================================
+
 [versions]
 agp = "9.4.0"
 coreKtx = "1.10.1"
@@ -23,12 +30,7 @@ coroutines = "1.11.0"
 workManager = "2.11.2"
 coilCompose = "3.6.2"
 coreSplashscreen = "1.2.0"
-cameraX = "1.6.2"
-mlkitBarcodeScanning = "17.3.0"
-mlkitTextRecognition = "16.0.1"
 datastore = "1.1.1"
-ossLicensesPlugin = "0.13.0"
-ossLicenses = "17.5.1"
 glance = "1.2.0"
 okhttp = "4.12.0"
 securityCrypto = "1.1.0"
@@ -85,13 +87,6 @@ androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx"
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coilCompose" }
 coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coilCompose" }
 
-androidx-camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraX" }
-androidx-camera-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "cameraX" }
-androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraX" }
-androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraX" }
-mlkit-barcode-scanning = { group = "com.google.mlkit", name = "barcode-scanning", version.ref = "mlkitBarcodeScanning" }
-mlkit-text-recognition = { group = "com.google.mlkit", name = "text-recognition", version.ref = "mlkitTextRecognition" }
-oss-licenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "ossLicenses" }
 androidx-glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glance" }
 androidx-glance-material3 = { group = "androidx.glance", name = "glance-material3", version.ref = "glance" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
@@ -103,4 +98,3 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
-oss-licenses-plugin = { id = "com.google.android.gms.oss-licenses-plugin", version.ref = "ossLicensesPlugin" }

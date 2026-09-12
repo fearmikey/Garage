@@ -8,6 +8,7 @@ import com.fearmikey.garage.data.fuel.FuelEconomyCalculator
 import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.data.repository.FuelRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
+import com.fearmikey.garage.notification.WorkScheduler
 import com.fearmikey.garage.ui.navigation.Destinations
 import com.fearmikey.garage.ui.util.UnitSystem
 import com.fearmikey.garage.widget.WidgetRefresher
@@ -27,6 +28,7 @@ data class FuelUiState(
     val averageMpg: Double? = null,
     val totalSpent: Double = 0.0,
     val unitSystem: UnitSystem = UnitSystem.IMPERIAL,
+    val currencySymbol: String = "$",
 )
 
 @HiltViewModel
@@ -42,7 +44,8 @@ class FuelViewModel @Inject constructor(
     val uiState: StateFlow<FuelUiState> = combine(
         fuelRepository.getRecordsForVehicle(vehicleId),
         preferencesRepository.unitSystem,
-    ) { records, unitSystem ->
+        preferencesRepository.appCurrency,
+    ) { records, unitSystem, currency ->
         val entries = FuelEconomyCalculator.entriesFor(records)
         FuelUiState(
             records = records,
@@ -50,6 +53,7 @@ class FuelViewModel @Inject constructor(
             averageMpg = FuelEconomyCalculator.averageMpg(entries),
             totalSpent = records.sumOf { it.totalCost },
             unitSystem = unitSystem,
+            currencySymbol = currency.symbol,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), FuelUiState())
 
@@ -57,6 +61,7 @@ class FuelViewModel @Inject constructor(
         viewModelScope.launch {
             fuelRepository.saveRecord(record.copy(vehicleId = vehicleId))
             WidgetRefresher.refresh(context)
+            WorkScheduler.triggerImmediateReminderCheck(context)
         }
     }
 
@@ -64,6 +69,7 @@ class FuelViewModel @Inject constructor(
         viewModelScope.launch {
             fuelRepository.deleteRecord(record)
             WidgetRefresher.refresh(context)
+            WorkScheduler.triggerImmediateReminderCheck(context)
         }
     }
 }
