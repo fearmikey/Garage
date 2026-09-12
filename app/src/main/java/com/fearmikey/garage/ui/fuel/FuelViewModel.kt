@@ -1,5 +1,6 @@
 package com.fearmikey.garage.ui.fuel
 
+import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,11 +10,12 @@ import com.fearmikey.garage.data.repository.FuelRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.ui.navigation.Destinations
 import com.fearmikey.garage.ui.util.UnitSystem
+import com.fearmikey.garage.widget.WidgetRefresher
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,6 +34,7 @@ class FuelViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val fuelRepository: FuelRepository,
     preferencesRepository: PreferencesRepository,
+    @ApplicationContext private val context: Context,
 ) : ViewModel() {
 
     val vehicleId: Long = checkNotNull(savedStateHandle[Destinations.VEHICLE_ID_ARG])
@@ -53,10 +56,14 @@ class FuelViewModel @Inject constructor(
     fun saveRecord(record: FuelRecord) {
         viewModelScope.launch {
             fuelRepository.saveRecord(record.copy(vehicleId = vehicleId))
+            WidgetRefresher.refresh(context)
         }
     }
 
     fun deleteRecord(record: FuelRecord) {
-        viewModelScope.launch { fuelRepository.deleteRecord(record) }
+        viewModelScope.launch {
+            fuelRepository.deleteRecord(record)
+            WidgetRefresher.refresh(context)
+        }
     }
 }

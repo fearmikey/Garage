@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.glance.Button
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -13,6 +14,7 @@ import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
+import androidx.glance.layout.Alignment
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
@@ -25,7 +27,9 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.fearmikey.garage.MainActivity
+import com.fearmikey.garage.data.fuel.FuelEconomyCalculator
 import com.fearmikey.garage.data.local.entity.Vehicle
+import com.fearmikey.garage.data.repository.FuelRepository
 import com.fearmikey.garage.data.repository.MaintenanceRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.data.repository.ReminderRepository
@@ -51,6 +55,7 @@ interface GarageWidgetEntryPoint {
     fun maintenanceRepository(): MaintenanceRepository
     fun reminderRepository(): ReminderRepository
     fun preferencesRepository(): PreferencesRepository
+    fun fuelRepository(): FuelRepository
 }
 
 private data class WidgetReminderRow(
@@ -70,6 +75,7 @@ class GarageWidget : GlanceAppWidget() {
         val maintenanceRepository = entryPoint.maintenanceRepository()
         val reminderRepository = entryPoint.reminderRepository()
         val preferencesRepository = entryPoint.preferencesRepository()
+        val fuelRepository = entryPoint.fuelRepository()
 
         val vehicles = vehicleRepository.getAllVehicles().first()
         val incompleteReminders = reminderRepository.getIncompleteReminders()
@@ -101,9 +107,23 @@ class GarageWidget : GlanceAppWidget() {
         val targetVehicle = vehicles.find { it.id == defaultVehicleId } ?: vehicles.firstOrNull()
         val targetVehicleId = targetVehicle?.id
 
+        val recentTankMpgText = if (targetVehicle != null) {
+            val fuelRecords = fuelRepository.getRecordsForVehicle(targetVehicle.id).first()
+            val entries = FuelEconomyCalculator.entriesFor(fuelRecords)
+            val recentTankMpg = entries.lastOrNull()?.mpg
+            recentTankMpg?.let { UnitConverter.formatFuelEconomy(it, unitSystem) }
+        } else {
+            null
+        }
+
         provideContent {
             GlanceTheme {
-                GarageWidgetContent(context = context, rows = rows, targetVehicleId = targetVehicleId)
+                GarageWidgetContent(
+                    context = context,
+                    rows = rows,
+                    targetVehicleId = targetVehicleId,
+                    recentTankMpgText = recentTankMpgText,
+                )
             }
         }
     }
@@ -117,6 +137,7 @@ private fun GarageWidgetContent(
     context: Context,
     rows: List<WidgetReminderRow>,
     targetVehicleId: Long?,
+    recentTankMpgText: String?,
 ) {
     Column(
         modifier = GlanceModifier
@@ -125,10 +146,26 @@ private fun GarageWidgetContent(
             .appWidgetBackground()
             .padding(12.dp),
     ) {
-        Text(
-            text = "Garage",
-            style = TextStyle(fontWeight = FontWeight.Bold, color = GlanceTheme.colors.onBackground),
-        )
+        Row(
+            modifier = GlanceModifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = "Garage",
+                style = TextStyle(fontWeight = FontWeight.Bold, color = GlanceTheme.colors.onBackground),
+                modifier = GlanceModifier.defaultWeight(),
+            )
+            if (recentTankMpgText != null) {
+                Text(
+                    text = "Recent Tank: $recentTankMpgText",
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = GlanceTheme.colors.onSurfaceVariant,
+                    ),
+                )
+            }
+        }
         Spacer(modifier = GlanceModifier.height(8.dp))
 
         if (rows.isEmpty()) {
