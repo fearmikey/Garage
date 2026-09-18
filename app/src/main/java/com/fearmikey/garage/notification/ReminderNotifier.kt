@@ -3,10 +3,13 @@ package com.fearmikey.garage.notification
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import com.fearmikey.garage.MainActivity
 import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.entity.Reminder
 import com.fearmikey.garage.data.repository.ReminderStatus
@@ -42,6 +45,7 @@ class ReminderNotifier @Inject constructor(
         taskName: String,
         vehicleLabel: String,
         status: ReminderStatus,
+        vehicleId: Long = MainActivity.NO_VEHICLE_ID_EXTRA,
     ) {
         val hasPermission = ContextCompat.checkSelfPermission(
             context,
@@ -55,15 +59,32 @@ class ReminderNotifier @Inject constructor(
             context.getString(R.string.reminder_upcoming_title, taskName)
         }
 
-        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+        val pendingIntent = if (vehicleId != MainActivity.NO_VEHICLE_ID_EXTRA) {
+            val intent = Intent(context, MainActivity::class.java).apply {
+                action = MainActivity.ACTION_OPEN_REMINDERS
+                putExtra(MainActivity.EXTRA_VEHICLE_ID, vehicleId)
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            }
+            PendingIntent.getActivity(
+                context,
+                notificationId,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+            )
+        } else null
+
+        val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification_reminder)
             .setContentTitle(title)
             .setContentText(vehicleLabel)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
-            .build()
 
-        notificationManager.notify(notificationId, notification)
+        if (pendingIntent != null) {
+            notificationBuilder.setContentIntent(pendingIntent)
+        }
+
+        notificationManager.notify(notificationId, notificationBuilder.build())
     }
 
     fun notifyDue(reminder: Reminder, vehicleLabel: String, status: ReminderStatus) {
@@ -72,6 +93,7 @@ class ReminderNotifier @Inject constructor(
             taskName = reminder.taskName,
             vehicleLabel = vehicleLabel,
             status = status,
+            vehicleId = reminder.vehicleId,
         )
     }
 

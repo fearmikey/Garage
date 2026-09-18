@@ -433,20 +433,6 @@ internal fun AddEditFuelRecordSheet(
             }
 
             OutlinedTextField(
-                value = mileage,
-                onValueChange = { mileage = it.filter(Char::isDigit) },
-                label = { Text("Odometer reading (${unitSystem.distanceUnit})") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next,
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) },
-                ),
-                modifier = Modifier.fillMaxWidth(),
-            )
-            OutlinedTextField(
                 value = gallons,
                 onValueChange = { gallons = it.filter { c -> c.isDigit() || c == '.' } },
                 label = { Text(if (unitSystem == UnitSystem.METRIC) "Liters" else "Gallons") },
@@ -467,10 +453,10 @@ internal fun AddEditFuelRecordSheet(
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Decimal,
-                    imeAction = ImeAction.Done,
+                    imeAction = ImeAction.Next,
                 ),
                 keyboardActions = KeyboardActions(
-                    onDone = { focusManager.clearFocus() },
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) },
                 ),
                 supportingText = {
                     if ((gallonsValue != null) && (gallonsValue > 0.0) && (totalCostValue != null)) {
@@ -478,6 +464,20 @@ internal fun AddEditFuelRecordSheet(
                         Text("%s%.3f / %s".format(currencySymbol, totalCostValue / gallonsValue, unitLabel))
                     }
                 },
+                modifier = Modifier.fillMaxWidth(),
+            )
+            OutlinedTextField(
+                value = mileage,
+                onValueChange = { mileage = it.filter(Char::isDigit) },
+                label = { Text("Odometer reading (${unitSystem.distanceUnit})") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done,
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = { focusManager.clearFocus() },
+                ),
                 modifier = Modifier.fillMaxWidth(),
             )
 

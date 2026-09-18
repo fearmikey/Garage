@@ -1,21 +1,27 @@
 package com.fearmikey.garage.ui.dashboard
 
 import android.content.ContextWrapper
+import com.fearmikey.garage.data.local.dao.FuelDao
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
+import com.fearmikey.garage.data.local.dao.ReminderDao
 import com.fearmikey.garage.data.local.dao.VehicleDao
 import com.fearmikey.garage.data.local.dao.VehiclePartsDao
 import com.fearmikey.garage.data.local.dao.VehicleRegistrationDao
 import com.fearmikey.garage.data.local.dao.VehicleSpecsDao
+import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
+import com.fearmikey.garage.data.local.entity.Reminder
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.local.entity.VehiclePartsInfo
 import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
 import com.fearmikey.garage.data.local.entity.VehicleSpecs
 import com.fearmikey.garage.data.remote.VinDecoderApi
 import com.fearmikey.garage.data.remote.dto.VinDecodeResponse
+import com.fearmikey.garage.data.repository.FuelRepository
 import com.fearmikey.garage.data.repository.ImageStorageManager
 import com.fearmikey.garage.data.repository.MaintenanceRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
+import com.fearmikey.garage.data.repository.ReminderRepository
 import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.ui.util.AppCurrency
 import com.fearmikey.garage.ui.util.UnitSystem
@@ -79,6 +85,21 @@ class DashboardViewModelTest {
         override suspend fun decodeVin(vin: String, format: String): VinDecodeResponse = VinDecodeResponse(emptyList())
     }
 
+    private class FakeFuelDao : FuelDao {
+        override fun getRecordsForVehicle(vehicleId: Long): Flow<List<FuelRecord>> = MutableStateFlow(emptyList())
+        override suspend fun upsert(record: FuelRecord): Long = 1L
+        override suspend fun update(record: FuelRecord) {}
+        override suspend fun delete(record: FuelRecord) {}
+    }
+
+    private class FakeReminderDao : ReminderDao {
+        override fun getRemindersForVehicle(vehicleId: Long): Flow<List<Reminder>> = MutableStateFlow(emptyList())
+        override suspend fun getIncompleteReminders(): List<Reminder> = emptyList()
+        override suspend fun upsert(reminder: Reminder): Long = 1L
+        override suspend fun update(reminder: Reminder) {}
+        override suspend fun delete(reminder: Reminder) {}
+    }
+
     private class FakeMaintenanceDao : MaintenanceDao {
         val latestMileageFlow = MutableStateFlow<Int?>(null)
         override fun getRecordsForVehicleByDate(vehicleId: Long): Flow<List<MaintenanceRecord>> = MutableStateFlow(emptyList())
@@ -136,6 +157,8 @@ class DashboardViewModelTest {
     fun `dashboard vehicles exposes latest mileage from maintenance repository`() = runTest {
         val vehicleDao = FakeVehicleDao()
         val maintenanceDao = FakeMaintenanceDao()
+        val fuelDao = FakeFuelDao()
+        val reminderDao = FakeReminderDao()
 
         val vehicleRepository = VehicleRepository(
             vehicleDao = vehicleDao,
@@ -145,11 +168,15 @@ class DashboardViewModelTest {
             vinDecoderApi = FakeVinDecoderApi(),
         )
         val maintenanceRepository = MaintenanceRepository(maintenanceDao)
+        val fuelRepository = FuelRepository(fuelDao)
+        val reminderRepository = ReminderRepository(reminderDao)
         val preferencesRepository = FakePreferencesRepository()
 
         val viewModel = DashboardViewModel(
             vehicleRepository = vehicleRepository,
             maintenanceRepository = maintenanceRepository,
+            fuelRepository = fuelRepository,
+            reminderRepository = reminderRepository,
             imageStorageManager = FakeImageStorageManager(),
             preferencesRepository = preferencesRepository,
         )

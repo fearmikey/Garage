@@ -1,3 +1,14 @@
+## [1.1.8] - 2026-09-12
+
+### Added
+* **Fleet Summary Header:** Added an aggregate fleet overview header on the Dashboard screen displaying total vehicles, active reminder alerts, overall fuel efficiency, and fleet health metrics.
+* **Maintenance Schedule Templates:** Added preset maintenance schedule templates (Standard, Severe Service, High Mileage) with a 1-click apply bottom sheet.
+* **FileProvider Support for Media Sharing:** Added `file_paths.xml` FileProvider configuration for secure cross-app photo and document sharing.
+* **Database Migration Schema 12:** Room database migration supporting template metadata and service record attachments.
+
+### Changed
+* **Dashboard & Timeline UI:** Refined vehicle cards, service logging flow, and timeline rendering.
+
 ## [1.1.7] - 2026-09-12
 
 ### Added

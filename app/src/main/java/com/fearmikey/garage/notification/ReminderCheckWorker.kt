@@ -96,6 +96,7 @@ class ReminderCheckWorker @AssistedInject constructor(
                         taskName = suggestion.rule.taskName,
                         vehicleLabel = vehicleLabel,
                         status = suggestion.status,
+                        vehicleId = vehicle.id,
                     )
                 } else {
                     notifier.cancel(notificationId.toLong())

@@ -80,6 +80,7 @@ class MainActivity : ComponentActivity() {
     companion object {
         const val ACTION_LOG_SERVICE = "com.fearmikey.garage.action.LOG_SERVICE"
         const val ACTION_LOG_FUEL = "com.fearmikey.garage.action.LOG_FUEL"
+        const val ACTION_OPEN_REMINDERS = "com.fearmikey.garage.action.OPEN_REMINDERS"
         const val EXTRA_VEHICLE_ID = "vehicleId"
         const val NO_VEHICLE_ID_EXTRA = -1L
     }

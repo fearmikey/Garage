@@ -69,6 +69,30 @@ open class ImageStorageManager @Inject constructor(
     }
 
     /**
+     * Copies a picked file (either an Image or a PDF document) into internal
+     * storage under [imagesDir]. PDFs are copied verbatim with a `.pdf` extension;
+     * images are downsampled and saved as a `.jpg`.
+     */
+    suspend fun copyPickedFileToInternalStorage(pickedUri: Uri): String = withContext(Dispatchers.IO) {
+        val mimeType = context.contentResolver.getType(pickedUri)
+        val isPdf = mimeType == "application/pdf" || (pickedUri.toString().endsWith(".pdf", ignoreCase = true))
+
+        if (isPdf) {
+            val filename = "${UUID.randomUUID()}.pdf"
+            val destination = File(imagesDir, filename)
+            context.contentResolver.openInputStream(pickedUri).use { input ->
+                requireNotNull(input) { "Could not open input stream for $pickedUri" }
+                destination.outputStream().use { output -> input.copyTo(output) }
+            }
+            filename
+        } else {
+            copyPickedImageToInternalStorage(pickedUri)
+        }
+    }
+
+    fun isPdfFile(filename: String): Boolean = filename.endsWith(".pdf", ignoreCase = true)
+
+    /**
      * Decodes [source] at a reduced sample size (capped to [MAX_DIMENSION_PX]
      * on the longest side), applies any EXIF rotation/flip so the re-encoded
      * copy renders upright without relying on EXIF metadata, and writes the

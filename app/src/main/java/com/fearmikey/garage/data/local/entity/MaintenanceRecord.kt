@@ -46,4 +46,10 @@ data class MaintenanceRecord(
      * category-only matching in MaintenanceScheduleEngine.
      */
     val taskName: String? = null,
+    /**
+     * An optional attached receipt/invoice filename stored under
+     * [com.fearmikey.garage.data.repository.ImageStorageManager.imagesDir]
+     * (e.g. "3f1c...jpg" or "3f1c...pdf").
+     */
+    val receiptUri: String? = null,
 )

@@ -1,6 +1,7 @@
 package com.fearmikey.garage.ui.maintenance
 
 import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -44,9 +46,19 @@ class MaintenanceTimelineViewModel @Inject constructor(
     val latestMileage: StateFlow<Int?> = maintenanceRepository.getLatestMileageForVehicle(vehicleId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
-    fun saveRecord(record: MaintenanceRecord) {
+    fun receiptFileFor(filename: String): File? = maintenanceRepository.imageFileFor(filename)
+
+    fun saveRecord(
+        record: MaintenanceRecord,
+        newPickedReceiptUri: Uri? = null,
+        deleteExistingReceipt: Boolean = false,
+    ) {
         viewModelScope.launch {
-            maintenanceRepository.saveRecord(record.copy(vehicleId = vehicleId))
+            maintenanceRepository.saveRecord(
+                record = record.copy(vehicleId = vehicleId),
+                newPickedReceiptUri = newPickedReceiptUri,
+                deleteExistingReceipt = deleteExistingReceipt,
+            )
             WorkScheduler.triggerImmediateReminderCheck(context)
         }
     }

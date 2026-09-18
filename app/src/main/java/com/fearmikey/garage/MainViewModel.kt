@@ -99,9 +99,10 @@ class MainViewModel @Inject constructor(
      * are no vehicles at all, this is a no-op (the Dashboard opens as normal).
      */
     fun handleDeepLinkIntent(action: String?, vehicleIdExtra: Long) {
-        val tab = when (action) {
-            MainActivity.ACTION_LOG_SERVICE -> VehicleTab.TIMELINE.ordinal
-            MainActivity.ACTION_LOG_FUEL -> VehicleTab.FUEL.ordinal
+        val (tab, openAdd) = when (action) {
+            MainActivity.ACTION_LOG_SERVICE -> VehicleTab.TIMELINE.ordinal to true
+            MainActivity.ACTION_LOG_FUEL -> VehicleTab.FUEL.ordinal to true
+            MainActivity.ACTION_OPEN_REMINDERS -> VehicleTab.REMINDERS.ordinal to false
             else -> return
         }
         viewModelScope.launch {
@@ -111,7 +112,7 @@ class MainViewModel @Inject constructor(
                 ?: defaultId.takeIf { id -> vehicles.any { v -> v.id == id } }
                 ?: vehicles.firstOrNull()?.id
                 ?: return@launch
-            _pendingDeepLink.value = PendingDeepLink(vehicleId, tab, openAdd = true)
+            _pendingDeepLink.value = PendingDeepLink(vehicleId, tab, openAdd = openAdd)
         }
     }
 

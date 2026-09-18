@@ -6,23 +6,39 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DirectionsCar
+import androidx.compose.material.icons.outlined.LocalGasStation
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Speed
+import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -34,17 +50,21 @@ import com.fearmikey.garage.ui.util.UnitSystem
 import java.io.File
 
 /** Summary card for a [Vehicle], used in the Dashboard grid/list. */
-@OptIn(ExperimentalSharedTransitionApi::class)
+@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun VehicleCard(
     vehicle: Vehicle,
     latestMileage: Int?,
     imageFile: File?,
     unitSystem: UnitSystem = UnitSystem.IMPERIAL,
+    avgMpg: Double? = null,
+    overdueReminderCount: Int = 0,
+    upcomingReminderCount: Int = 0,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedContentScope,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onOpenReminders: (() -> Unit)? = null,
 ) {
     Card(
         onClick = onClick,
@@ -92,14 +112,90 @@ fun VehicleCard(
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
-                val mileageText = latestMileage?.let { UnitConverter.formatDistance(it, unitSystem) } ?: "No mileage logged yet"
-                Text(
-                    text = mileageText,
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(top = 4.dp),
-                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    val mileageText = latestMileage?.let { UnitConverter.formatDistance(it, unitSystem) } ?: "No mileage"
+                    StatChip(
+                        text = mileageText,
+                        icon = Icons.Outlined.Speed,
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    )
+
+                    if (avgMpg != null && avgMpg > 0.0) {
+                        StatChip(
+                            text = UnitConverter.formatFuelEconomy(avgMpg, unitSystem),
+                            icon = Icons.Outlined.LocalGasStation,
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        )
+                    }
+
+                    if (overdueReminderCount > 0) {
+                        StatChip(
+                            text = "$overdueReminderCount Overdue",
+                            icon = Icons.Outlined.WarningAmber,
+                            containerColor = MaterialTheme.colorScheme.errorContainer,
+                            contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                            onClick = onOpenReminders,
+                        )
+                    } else if (upcomingReminderCount > 0) {
+                        StatChip(
+                            text = "$upcomingReminderCount Due Soon",
+                            icon = Icons.Outlined.Notifications,
+                            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                            onClick = onOpenReminders,
+                        )
+                    }
+                }
             }
+        }
+    }
+}
+
+@Composable
+private fun StatChip(
+    text: String,
+    icon: ImageVector,
+    containerColor: Color,
+    contentColor: Color,
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
+) {
+    val chipModifier = if (onClick != null) {
+        modifier.clickable { onClick() }
+    } else {
+        modifier
+    }
+    Surface(
+        color = containerColor,
+        contentColor = contentColor,
+        shape = MaterialTheme.shapes.extraSmall,
+        modifier = chipModifier,
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.size(14.dp),
+                tint = contentColor,
+            )
+            Text(
+                text = text,
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.Medium,
+            )
         }
     }
 }
@@ -115,15 +211,20 @@ private fun vehicleLabel(vehicle: Vehicle): String =
 private fun VehicleCardPreview() {
     GarageTheme {
         SharedTransitionLayout {
-            AnimatedContent(targetState = Unit, label = "VehicleCardPreview") { _ ->
-                VehicleCard(
-                    vehicle = SampleData.tacoma,
-                    latestMileage = SampleData.TACOMA_LATEST_MILEAGE,
-                    imageFile = null,
-                    sharedTransitionScope = this@SharedTransitionLayout,
-                    animatedVisibilityScope = this@AnimatedContent,
-                    onClick = {},
-                )
+            AnimatedContent(targetState = Unit, label = "VehicleCardPreview") { target ->
+                if (target == Unit) {
+                    VehicleCard(
+                        vehicle = SampleData.tacoma,
+                        latestMileage = SampleData.TACOMA_LATEST_MILEAGE,
+                        imageFile = null,
+                        avgMpg = 21.5,
+                        overdueReminderCount = 1,
+                        upcomingReminderCount = 2,
+                        sharedTransitionScope = this@SharedTransitionLayout,
+                        animatedVisibilityScope = this@AnimatedContent,
+                        onClick = {},
+                    )
+                }
             }
         }
     }

@@ -77,7 +77,7 @@ fun GarageNavHost(
             composable(Destinations.DASHBOARD) {
                 DashboardScreen(
                     onAddVehicle = { navController.navigate(Destinations.addVehicleRoute()) },
-                    onOpenVehicle = { vehicleId -> navController.navigate(Destinations.vehicleDetailRoute(vehicleId)) },
+                    onOpenVehicle = { vehicleId, tab -> navController.navigate(Destinations.vehicleDetailRoute(vehicleId, tab)) },
                     onOpenSettings = { navController.navigate(Destinations.SETTINGS) },
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedVisibilityScope = this@composable,

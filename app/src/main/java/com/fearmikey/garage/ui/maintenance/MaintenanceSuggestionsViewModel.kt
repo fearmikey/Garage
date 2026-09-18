@@ -1,6 +1,7 @@
 package com.fearmikey.garage.ui.maintenance
 
 import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,6 +16,7 @@ import com.fearmikey.garage.data.repository.ReminderRepository
 import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.data.schedule.MaintenanceScheduleEngine
 import com.fearmikey.garage.data.schedule.MaintenanceSuggestion
+import com.fearmikey.garage.data.schedule.MaintenanceTemplate
 import com.fearmikey.garage.data.schedule.toMaintenanceRule
 import com.fearmikey.garage.notification.WorkScheduler
 import com.fearmikey.garage.ui.navigation.Destinations
@@ -24,8 +26,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -102,15 +106,25 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
         }
     }
 
+    fun receiptFileFor(filename: String): File? = maintenanceRepository.imageFileFor(filename)
+
     /**
      * Saves a [MaintenanceRecord] logged directly from a suggestion (the "Log now" action).
      * The record already carries the suggestion's [MaintenanceRecord.category] and
      * [MaintenanceRecord.taskName] (see [AddEditMaintenanceRecordSheet]),
      * so it's tracked precisely rather than lumped in with other tasks in the same category.
      */
-    fun logMaintenance(record: MaintenanceRecord) {
+    fun logMaintenance(
+        record: MaintenanceRecord,
+        pickedReceiptUri: Uri? = null,
+        deleteExistingReceipt: Boolean = false,
+    ) {
         viewModelScope.launch {
-            maintenanceRepository.saveRecord(record.copy(vehicleId = vehicleId))
+            maintenanceRepository.saveRecord(
+                record = record.copy(vehicleId = vehicleId),
+                newPickedReceiptUri = pickedReceiptUri,
+                deleteExistingReceipt = deleteExistingReceipt,
+            )
             context?.let { WorkScheduler.triggerImmediateReminderCheck(it) }
         }
     }
@@ -118,6 +132,29 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
     fun saveCustomRule(rule: CustomMaintenanceRule) {
         viewModelScope.launch {
             customMaintenanceRuleRepository.saveRule(rule.copy(vehicleId = vehicleId))
+            context?.let { WorkScheduler.triggerImmediateReminderCheck(it) }
+        }
+    }
+
+    fun applyTemplate(template: MaintenanceTemplate) {
+        viewModelScope.launch {
+            val existing = customMaintenanceRuleRepository.getRulesForVehicle(vehicleId).first()
+            val existingTaskNames = existing.map { it.taskName.lowercase() }.toSet()
+
+            for (rule in template.rules) {
+                if (rule.taskName.lowercase() !in existingTaskNames) {
+                    customMaintenanceRuleRepository.saveRule(
+                        CustomMaintenanceRule(
+                            vehicleId = vehicleId,
+                            taskName = rule.taskName,
+                            category = rule.category,
+                            intervalMiles = rule.intervalMiles,
+                            intervalMonths = rule.intervalMonths,
+                            notes = rule.notes,
+                        )
+                    )
+                }
+            }
             context?.let { WorkScheduler.triggerImmediateReminderCheck(it) }
         }
     }

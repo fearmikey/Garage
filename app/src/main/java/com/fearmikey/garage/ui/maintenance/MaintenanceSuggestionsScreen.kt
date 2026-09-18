@@ -1,29 +1,28 @@
 package com.fearmikey.garage.ui.maintenance
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.focusProperties
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.ui.Alignment
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.outlined.AutoAwesome
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
@@ -38,14 +37,20 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.Button
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -54,6 +59,7 @@ import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.schedule.MaintenanceSuggestion
+import com.fearmikey.garage.data.schedule.MaintenanceTemplate
 import com.fearmikey.garage.ui.components.EmptyState
 import com.fearmikey.garage.ui.components.StatusChip
 import com.fearmikey.garage.ui.theme.GarageTheme
@@ -71,7 +77,8 @@ fun MaintenanceSuggestionsScreen(
     val latestMileage by viewModel.latestMileage.collectAsStateWithLifecycle()
     val unitSystem by viewModel.unitSystem.collectAsStateWithLifecycle()
     var logSheetSuggestion by remember { mutableStateOf<MaintenanceSuggestion?>(null) }
-    var showAddRuleSheet by remember { mutableStateOf(value = false) }
+    var showAddRuleSheet by remember { mutableStateOf(false) }
+    var showApplyTemplateSheet by remember { mutableStateOf(false) }
 
     MaintenanceSuggestionsContent(
         suggestions = suggestions,
@@ -81,19 +88,19 @@ fun MaintenanceSuggestionsScreen(
         onLogNow = { logSheetSuggestion = it },
         onAddCustomRule = { showAddRuleSheet = true },
         onDeleteCustomRule = viewModel::deleteCustomRule,
+        onOpenApplyTemplate = { showApplyTemplateSheet = true },
     )
 
     logSheetSuggestion?.let { suggestion ->
         AddEditMaintenanceRecordSheet(
             unitSystem = unitSystem,
             latestMileage = latestMileage,
+            receiptFileProvider = viewModel::receiptFileFor,
             onDismiss = { logSheetSuggestion = null },
-            onSave = { record ->
-                viewModel.logMaintenance(record)
+            onSave = { record, pickedUri, deleteExisting ->
+                viewModel.logMaintenance(record, pickedUri, deleteExisting)
                 logSheetSuggestion = null
             },
-            // Pre-fills category + task name so this record is tracked as fulfilling this
-            // exact suggestion, not just "something in this category".
             initial = MaintenanceRecord(
                 vehicleId = 0,
                 date = System.currentTimeMillis(),
@@ -115,6 +122,17 @@ fun MaintenanceSuggestionsScreen(
             showAddRuleSheet = false
         }
     }
+
+    if (showApplyTemplateSheet) {
+        ApplyTemplateSheet(
+            unitSystem = unitSystem,
+            onDismiss = { showApplyTemplateSheet = false },
+            onApplyTemplate = { template ->
+                viewModel.applyTemplate(template)
+                showApplyTemplateSheet = false
+            },
+        )
+    }
 }
 
 @Composable
@@ -126,6 +144,7 @@ private fun MaintenanceSuggestionsContent(
     onLogNow: (MaintenanceSuggestion) -> Unit,
     onAddCustomRule: () -> Unit,
     onDeleteCustomRule: (CustomMaintenanceRule) -> Unit,
+    onOpenApplyTemplate: () -> Unit,
 ) {
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -146,12 +165,51 @@ private fun MaintenanceSuggestionsContent(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
+                item(key = "apply_preset_banner") {
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        ),
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = "Schedule Presets",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontWeight = FontWeight.SemiBold,
+                                )
+                                Text(
+                                    text = "Apply tailored maintenance templates (Towing, EV, Commuter, Classic).",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Button(onClick = onOpenApplyTemplate) {
+                                Icon(
+                                    imageVector = Icons.Outlined.AutoAwesome,
+                                    contentDescription = null,
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text("Presets")
+                            }
+                        }
+                    }
+                }
+
                 if (customRules.isNotEmpty()) {
                     item(key = "custom_rules_header") {
                         Text(
-                            "Your custom rules",
+                            text = "Your custom rules",
                             style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier.padding(bottom = 4.dp),
+                            modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
                         )
                     }
                     items(customRules, key = { "custom_${it.id}" }) { rule ->
@@ -162,6 +220,7 @@ private fun MaintenanceSuggestionsContent(
                         )
                     }
                 }
+
                 items(suggestions, key = { it.rule.taskName }) { suggestion ->
                     MaintenanceSuggestionRow(
                         suggestion = suggestion,
@@ -410,6 +469,7 @@ private fun MaintenanceSuggestionsScreenPreview() {
             onLogNow = {},
             onAddCustomRule = {},
             onDeleteCustomRule = {},
+            onOpenApplyTemplate = {},
         )
     }
 }
