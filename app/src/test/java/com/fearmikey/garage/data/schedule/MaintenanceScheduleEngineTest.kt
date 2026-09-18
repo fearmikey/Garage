@@ -39,6 +39,8 @@ class MaintenanceScheduleEngineTest {
 
         assertTrue(suggestions.any { it.rule.taskName == "Engine oil change" })
         assertTrue(suggestions.any { it.rule.taskName == "Rotation and Balance" })
+        assertTrue(suggestions.any { it.rule.taskName == "Rust prevention" })
+        assertTrue(suggestions.any { it.rule.taskName == "Paint protection" })
     }
 
     @Test
@@ -291,5 +293,35 @@ class MaintenanceScheduleEngineTest {
         )
         val oilChangeUpcoming = suggestionsUpcoming.first { it.rule.taskName == "Engine oil change" }
         assertEquals(ReminderStatus.UPCOMING, oilChangeUpcoming.status)
+    }
+
+    @Test
+    fun `logging rust proofing or paint protection satisfies respective rule`() {
+        val records = listOf(
+            MaintenanceRecord(
+                vehicleId = fwdCivic.id,
+                date = 0,
+                mileage = 10_000,
+                description = "Applied rust proofing undercoat",
+                cost = 120.0,
+                category = MaintenanceCategory.OTHER,
+            ),
+            MaintenanceRecord(
+                vehicleId = fwdCivic.id,
+                date = 0,
+                mileage = 12_000,
+                description = "Paint protection ceramic coat",
+                cost = 200.0,
+                category = MaintenanceCategory.OTHER,
+            )
+        )
+
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 13_000, records = records)
+
+        val rustPrevention = suggestions.first { it.rule.taskName == "Rust prevention" }
+        assertEquals(10_000, rustPrevention.lastServiceMileage)
+
+        val paintProtection = suggestions.first { it.rule.taskName == "Paint protection" }
+        assertEquals(12_000, paintProtection.lastServiceMileage)
     }
 }

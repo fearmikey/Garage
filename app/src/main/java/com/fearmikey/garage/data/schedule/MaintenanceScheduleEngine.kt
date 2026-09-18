@@ -189,6 +189,8 @@ object MaintenanceScheduleEngine {
             taskNameLower.contains("rotation and balance") -> listOf("rotat", "balanc")
             taskNameLower.contains("rotation") -> listOf("rotat")
             taskNameLower.contains("tire replacement") -> listOf("tire")
+            taskNameLower.contains("rust") -> listOf("rust")
+            taskNameLower.contains("paint") -> listOf("paint")
             else -> emptyList()
         }
     }
@@ -201,6 +203,8 @@ object MaintenanceScheduleEngine {
             taskNameLower.contains("rotation") || taskNameLower.contains("rotate") -> keywords.add("rotat")
             taskNameLower.contains("balance") -> keywords.add("balanc")
             taskNameLower.contains("battery") -> keywords.add("battery")
+            taskNameLower.contains("rust") -> keywords.add("rust")
+            taskNameLower.contains("paint") -> keywords.add("paint")
         }
 
         val words = taskNameLower.split(Regex("[\\s/\\-,_]+"))

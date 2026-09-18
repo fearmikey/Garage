@@ -33,6 +33,7 @@ import androidx.compose.material.icons.filled.FileUpload
 import androidx.compose.material.icons.filled.FolderZip
 import androidx.compose.material.icons.filled.Gavel
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.LocalCafe
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Palette
@@ -392,6 +393,16 @@ fun SettingsScreen(
             // Support & Onboarding Section
             item {
                 SettingsCategoryHeader("Support & Legal")
+            }
+            item {
+                ListItem(
+                    headlineContent = { Text("Buy Me a Coffee") },
+                    supportingContent = { Text("Support development: buymeacoffee.com/XimW7nXI1j") },
+                    leadingContent = { Icon(Icons.Filled.LocalCafe, contentDescription = null) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { uriHandler.openUri("https://buymeacoffee.com/XimW7nXI1j") },
+                )
             }
             item {
                 ListItem(

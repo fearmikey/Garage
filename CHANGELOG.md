@@ -1,3 +1,16 @@
+## [1.1.7] - 2026-09-12
+
+### Added
+* **Vehicle Modifications & Upgrades Tracking:** Track aftermarket parts, performance modifications, tuning, installation dates, costs, and categorizations.
+* **Vehicle Registration & Insurance Management:** Manage registration renewal dates, insurance policy details, provider information, policy expiration reminders, and premium costs.
+* **Tabbed Vehicle Interface:** Re-architected vehicle detail view with intuitive tabs for Specs, Maintenance, Fuel, Mods, and Registration/Insurance.
+* **Support Open Source Dialog:** Added "Buy Me a Coffee" support dialog in Settings for optional developer appreciation.
+* **Database Migration Schemas (9, 10, 11):** Room database updates supporting modification logs, registration details, and policy tracking.
+* **Expanded Test Suite:** Added unit test coverage for `ModsViewModelTest`, `RegistrationInsuranceViewModelTest`, `DateFormattingTest`, and `MainViewModelTest`.
+
+### Changed
+* **Cost Analytics Integration:** Integrated modification and insurance expense metrics into the overall cost of ownership calculations.
+
 ## [1.1.6] - 2026-09-12
 
 ### Added

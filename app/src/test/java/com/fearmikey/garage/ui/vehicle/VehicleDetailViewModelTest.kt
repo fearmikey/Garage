@@ -4,9 +4,11 @@ import android.content.ContextWrapper
 import androidx.lifecycle.SavedStateHandle
 import com.fearmikey.garage.data.local.dao.VehicleDao
 import com.fearmikey.garage.data.local.dao.VehiclePartsDao
+import com.fearmikey.garage.data.local.dao.VehicleRegistrationDao
 import com.fearmikey.garage.data.local.dao.VehicleSpecsDao
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.local.entity.VehiclePartsInfo
+import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
 import com.fearmikey.garage.data.local.entity.VehicleSpecs
 import com.fearmikey.garage.data.remote.VinDecoderApi
 import com.fearmikey.garage.data.remote.dto.VinDecodeResponse
@@ -63,6 +65,12 @@ class VehicleDetailViewModelTest {
         override suspend fun upsert(info: VehiclePartsInfo) {}
     }
 
+    private class FakeVehicleRegistrationDao : VehicleRegistrationDao {
+        override fun getByVehicleId(vehicleId: Long) = MutableStateFlow(null)
+        override suspend fun upsert(registrationInsurance: VehicleRegistrationInsurance) {}
+        override suspend fun deleteByVehicleId(vehicleId: Long) {}
+    }
+
     private class FakeVinDecoderApi : VinDecoderApi {
         override suspend fun decodeVin(vin: String, format: String): VinDecodeResponse = VinDecodeResponse(emptyList())
     }
@@ -82,7 +90,7 @@ class VehicleDetailViewModelTest {
         val savedStateHandle = SavedStateHandle(
             mapOf(
                 Destinations.VEHICLE_ID_ARG to 1L,
-                Destinations.VEHICLE_DETAIL_TAB_ARG to 3,
+                Destinations.VEHICLE_DETAIL_TAB_ARG to VehicleTab.FUEL.ordinal,
                 Destinations.VEHICLE_DETAIL_OPEN_ADD_ARG to true,
             )
         )
@@ -91,6 +99,7 @@ class VehicleDetailViewModelTest {
             vehicleDao = FakeVehicleDao(),
             vehicleSpecsDao = FakeVehicleSpecsDao(),
             vehiclePartsDao = FakeVehiclePartsDao(),
+            vehicleRegistrationDao = FakeVehicleRegistrationDao(),
             vinDecoderApi = FakeVinDecoderApi(),
         )
 
@@ -100,7 +109,7 @@ class VehicleDetailViewModelTest {
             imageStorageManager = ImageStorageManager(context = ContextWrapper(null)),
         )
 
-        assertEquals(3, viewModel.initialTab)
+        assertEquals(VehicleTab.FUEL.ordinal, viewModel.initialTab)
         assertTrue(viewModel.shouldOpenAddSheet.value)
 
         viewModel.consumeAddSheet()

@@ -7,16 +7,20 @@ import androidx.room.TypeConverters
 import com.fearmikey.garage.data.local.dao.CustomMaintenanceRuleDao
 import com.fearmikey.garage.data.local.dao.FuelDao
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
+import com.fearmikey.garage.data.local.dao.ModificationDao
 import com.fearmikey.garage.data.local.dao.ReminderDao
 import com.fearmikey.garage.data.local.dao.VehicleDao
 import com.fearmikey.garage.data.local.dao.VehiclePartsDao
+import com.fearmikey.garage.data.local.dao.VehicleRegistrationDao
 import com.fearmikey.garage.data.local.dao.VehicleSpecsDao
 import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
 import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
+import com.fearmikey.garage.data.local.entity.ModificationRecord
 import com.fearmikey.garage.data.local.entity.Reminder
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.local.entity.VehiclePartsInfo
+import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
 import com.fearmikey.garage.data.local.entity.VehicleSpecs
 
 /** The filename used on disk; referenced by BackupRepository during export/import. */
@@ -32,12 +36,12 @@ const val GARAGE_DATABASE_NAME = "garage.db"
  * crashing the app on every launch with no way to recover other than
  * clearing app data again.
  */
-const val GARAGE_DATABASE_VERSION = 8
+const val GARAGE_DATABASE_VERSION = 11
 
 @Database(
     entities = [
         Vehicle::class, MaintenanceRecord::class, Reminder::class, VehicleSpecs::class, FuelRecord::class,
-        VehiclePartsInfo::class, CustomMaintenanceRule::class,
+        VehiclePartsInfo::class, CustomMaintenanceRule::class, ModificationRecord::class, VehicleRegistrationInsurance::class,
     ],
     version = GARAGE_DATABASE_VERSION,
     exportSchema = true,
@@ -53,6 +57,12 @@ const val GARAGE_DATABASE_VERSION = 8
         AutoMigration(from = 6, to = 7),
         // Additive: towing capacity and weight fields added to vehicle_specs table.
         AutoMigration(from = 7, to = 8),
+        // Additive: modification_records table added.
+        AutoMigration(from = 8, to = 9),
+        // Additive: vehicle_registration_insurance table added.
+        AutoMigration(from = 9, to = 10),
+        // Additive: inspection fields added to vehicle_registration_insurance table.
+        AutoMigration(from = 10, to = 11),
     ],
 )
 @TypeConverters(Converters::class)
@@ -64,4 +74,6 @@ abstract class GarageDatabase : RoomDatabase() {
     abstract fun fuelDao(): FuelDao
     abstract fun vehiclePartsDao(): VehiclePartsDao
     abstract fun customMaintenanceRuleDao(): CustomMaintenanceRuleDao
+    abstract fun modificationDao(): ModificationDao
+    abstract fun vehicleRegistrationDao(): VehicleRegistrationDao
 }

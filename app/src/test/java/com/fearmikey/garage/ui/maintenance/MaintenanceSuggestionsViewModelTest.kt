@@ -6,6 +6,7 @@ import com.fearmikey.garage.data.local.dao.MaintenanceDao
 import com.fearmikey.garage.data.local.dao.ReminderDao
 import com.fearmikey.garage.data.local.dao.VehicleDao
 import com.fearmikey.garage.data.local.dao.VehiclePartsDao
+import com.fearmikey.garage.data.local.dao.VehicleRegistrationDao
 import com.fearmikey.garage.data.local.dao.VehicleSpecsDao
 import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
 import com.fearmikey.garage.data.local.entity.Drivetrain
@@ -14,6 +15,7 @@ import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.Reminder
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.local.entity.VehiclePartsInfo
+import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
 import com.fearmikey.garage.data.local.entity.VehicleSpecs
 import com.fearmikey.garage.data.remote.VinDecoderApi
 import com.fearmikey.garage.data.remote.dto.VinDecodeResponse
@@ -75,6 +77,12 @@ class MaintenanceSuggestionsViewModelTest {
         override suspend fun upsert(info: VehiclePartsInfo) {}
     }
 
+    private class FakeVehicleRegistrationDao : VehicleRegistrationDao {
+        override fun getByVehicleId(vehicleId: Long) = MutableStateFlow(null)
+        override suspend fun upsert(registrationInsurance: VehicleRegistrationInsurance) {}
+        override suspend fun deleteByVehicleId(vehicleId: Long) {}
+    }
+
     private class FakeVinDecoderApi : VinDecoderApi {
         override suspend fun decodeVin(vin: String, format: String): VinDecodeResponse = VinDecodeResponse(emptyList())
     }
@@ -127,6 +135,9 @@ class MaintenanceSuggestionsViewModelTest {
         override val termsAccepted: Flow<Boolean> = MutableStateFlow(true)
         override val defaultVehicleId: Flow<Long?> = MutableStateFlow(null)
         override val maintenanceMileageWindow: Flow<Int> = mileageWindowFlow
+        override val appOpenCount: Flow<Int> = MutableStateFlow(1)
+        override val buyMeACoffeeDontAskAgain: Flow<Boolean> = MutableStateFlow(false)
+        override val buyMeACoffeeNextPromptOpenCount: Flow<Int> = MutableStateFlow(2)
         override suspend fun setUnitsType(units: String) {}
         override suspend fun setCurrencyCode(currencyCode: String) {}
         override suspend fun setThemeType(theme: String) {}
@@ -136,6 +147,9 @@ class MaintenanceSuggestionsViewModelTest {
         override suspend fun setMaintenanceMileageWindow(miles: Int) {
             mileageWindowFlow.value = miles
         }
+        override suspend fun incrementAppOpenCount(): Int = 1
+        override suspend fun setBuyMeACoffeeDontAskAgain(dontAskAgain: Boolean) {}
+        override suspend fun setBuyMeACoffeeNextPromptOpenCount(openCount: Int) {}
     }
 
     @Before
@@ -157,6 +171,7 @@ class MaintenanceSuggestionsViewModelTest {
             vehicleDao = FakeVehicleDao(),
             vehicleSpecsDao = FakeVehicleSpecsDao(),
             vehiclePartsDao = FakeVehiclePartsDao(),
+            vehicleRegistrationDao = FakeVehicleRegistrationDao(),
             vinDecoderApi = FakeVinDecoderApi(),
         )
         val maintenanceDao = FakeMaintenanceDao()
@@ -197,6 +212,7 @@ class MaintenanceSuggestionsViewModelTest {
             vehicleDao = FakeVehicleDao(),
             vehicleSpecsDao = FakeVehicleSpecsDao(),
             vehiclePartsDao = FakeVehiclePartsDao(),
+            vehicleRegistrationDao = FakeVehicleRegistrationDao(),
             vinDecoderApi = FakeVinDecoderApi(),
         )
         val maintenanceDao = FakeMaintenanceDao()

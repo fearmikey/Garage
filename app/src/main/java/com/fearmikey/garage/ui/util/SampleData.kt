@@ -6,6 +6,8 @@ import com.fearmikey.garage.data.local.entity.Drivetrain
 import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
+import com.fearmikey.garage.data.local.entity.ModificationCategory
+import com.fearmikey.garage.data.local.entity.ModificationRecord
 import com.fearmikey.garage.data.local.entity.Reminder
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.local.entity.VehiclePartsInfo
@@ -244,4 +246,29 @@ object SampleData {
     val tacomaFuelMpgByRecordId = tacomaFuelEconomyEntries.associate { it.record.id to it.mpg }
 
     val tacomaAverageMpg = FuelEconomyCalculator.averageMpg(tacomaFuelEconomyEntries)
+
+    val tacomaBestMpg = FuelEconomyCalculator.bestMpg(tacomaFuelEconomyEntries)
+
+    val tacomaWorstMpg = FuelEconomyCalculator.worstMpg(tacomaFuelEconomyEntries)
+
+    val tacomaMods = listOf(
+        ModificationRecord(
+            id = 1,
+            vehicleId = tacoma.id,
+            title = "TRD Performance Air Intake",
+            category = ModificationCategory.PERFORMANCE,
+            description = "Replaced stock airbox with TRD cold air intake kit. Noticeable throttle response improvement.",
+            cost = 425.00,
+            date = now - (60 * day),
+        ),
+        ModificationRecord(
+            id = 2,
+            vehicleId = tacoma.id,
+            title = "2-Inch Suspension Lift",
+            category = ModificationCategory.SUSPENSION,
+            description = "Installed Fox 2.0 coilovers up front and rear leaf pack.",
+            cost = 1450.00,
+            date = now - (120 * day),
+        ),
+    )
 }

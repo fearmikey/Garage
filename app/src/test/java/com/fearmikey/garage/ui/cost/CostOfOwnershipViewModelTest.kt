@@ -26,6 +26,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
+import java.util.Calendar
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class CostOfOwnershipViewModelTest {
@@ -60,6 +61,9 @@ class CostOfOwnershipViewModelTest {
         override val termsAccepted: Flow<Boolean> = MutableStateFlow(true)
         override val defaultVehicleId: Flow<Long?> = MutableStateFlow(null)
         override val maintenanceMileageWindow: Flow<Int> = MutableStateFlow(500)
+        override val appOpenCount: Flow<Int> = MutableStateFlow(1)
+        override val buyMeACoffeeDontAskAgain: Flow<Boolean> = MutableStateFlow(false)
+        override val buyMeACoffeeNextPromptOpenCount: Flow<Int> = MutableStateFlow(2)
         override suspend fun setUnitsType(units: String) {}
         override suspend fun setCurrencyCode(currencyCode: String) {}
         override suspend fun setThemeType(theme: String) {}
@@ -67,6 +71,9 @@ class CostOfOwnershipViewModelTest {
         override suspend fun setTermsAccepted(accepted: Boolean) {}
         override suspend fun setDefaultVehicleId(vehicleId: Long?) {}
         override suspend fun setMaintenanceMileageWindow(miles: Int) {}
+        override suspend fun incrementAppOpenCount(): Int = 1
+        override suspend fun setBuyMeACoffeeDontAskAgain(dontAskAgain: Boolean) {}
+        override suspend fun setBuyMeACoffeeNextPromptOpenCount(openCount: Int) {}
     }
 
     @Before
@@ -154,5 +161,76 @@ class CostOfOwnershipViewModelTest {
         val fuelCategory = categories.find { it.key == "FUEL" }
         assertNotNull(fuelCategory)
         assertEquals(50.00, fuelCategory!!.totalCost, 0.001)
+    }
+
+    @Test
+    fun `time filters filter records correctly`() = runTest {
+        val vehicleId = 1L
+        val savedStateHandle = SavedStateHandle(mapOf(Destinations.VEHICLE_ID_ARG to vehicleId))
+
+        val maintenanceDao = FakeMaintenanceDao()
+        val fuelDao = FakeFuelDao()
+
+        val maintenanceRepo = MaintenanceRepository(maintenanceDao)
+        val fuelRepo = FuelRepository(fuelDao)
+        val prefsRepo = FakePreferencesRepository()
+
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.DAY_OF_YEAR, 1)
+        cal.set(Calendar.HOUR_OF_DAY, 0)
+        cal.set(Calendar.MINUTE, 0)
+        cal.set(Calendar.SECOND, 0)
+        cal.set(Calendar.MILLISECOND, 0)
+        val startOfThisYear = cal.timeInMillis
+
+        cal.add(Calendar.YEAR, -1)
+        val startOfLastYear = cal.timeInMillis
+
+        val lastYearRecordDate = startOfLastYear + 86400000L
+        val thisYearRecordDate = startOfThisYear + 86400000L
+
+        maintenanceDao.recordsFlow.value = listOf(
+            MaintenanceRecord(
+                id = 1,
+                vehicleId = vehicleId,
+                date = thisYearRecordDate,
+                mileage = 15000,
+                description = "Oil Change",
+                cost = 100.00,
+                category = MaintenanceCategory.FLUIDS,
+            ),
+            MaintenanceRecord(
+                id = 2,
+                vehicleId = vehicleId,
+                date = lastYearRecordDate,
+                mileage = 10000,
+                description = "Brakes",
+                cost = 200.00,
+                category = MaintenanceCategory.BRAKES,
+            ),
+        )
+
+        val viewModel = CostOfOwnershipViewModel(
+            savedStateHandle = savedStateHandle,
+            maintenanceRepository = maintenanceRepo,
+            fuelRepository = fuelRepo,
+            preferencesRepository = prefsRepo,
+        )
+
+        val collectJob = backgroundScope.launch { viewModel.uiState.collect {} }
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        // Default ALL_TIME includes both records
+        assertEquals(300.00, viewModel.uiState.value.totalCost, 0.001)
+
+        // THIS_YEAR includes only this year's record
+        viewModel.setTimeFilter(TimeFilter.THIS_YEAR)
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertEquals(100.00, viewModel.uiState.value.totalCost, 0.001)
+
+        // LAST_YEAR includes only last year's record
+        viewModel.setTimeFilter(TimeFilter.LAST_YEAR)
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertEquals(200.00, viewModel.uiState.value.totalCost, 0.001)
     }
 }

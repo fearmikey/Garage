@@ -16,6 +16,10 @@ interface PreferencesRepository {
     /** The user's explicitly chosen default vehicle, or `null` if none has been chosen. */
     val defaultVehicleId: Flow<Long?>
     val maintenanceMileageWindow: Flow<Int>
+    val appOpenCount: Flow<Int>
+    val buyMeACoffeeDontAskAgain: Flow<Boolean>
+    val buyMeACoffeeNextPromptOpenCount: Flow<Int>
+
     suspend fun setUnitsType(units: String)
     suspend fun setCurrencyCode(currencyCode: String)
     suspend fun setThemeType(theme: String)
@@ -23,6 +27,9 @@ interface PreferencesRepository {
     suspend fun setTermsAccepted(accepted: Boolean)
     suspend fun setDefaultVehicleId(vehicleId: Long?)
     suspend fun setMaintenanceMileageWindow(miles: Int)
+    suspend fun incrementAppOpenCount(): Int
+    suspend fun setBuyMeACoffeeDontAskAgain(dontAskAgain: Boolean)
+    suspend fun setBuyMeACoffeeNextPromptOpenCount(openCount: Int)
 }
 
 class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManager) : PreferencesRepository {
@@ -35,6 +42,9 @@ class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManag
     override val termsAccepted: Flow<Boolean> = preferencesManager.termsAccepted
     override val defaultVehicleId: Flow<Long?> = preferencesManager.defaultVehicleId
     override val maintenanceMileageWindow: Flow<Int> = preferencesManager.maintenanceMileageWindow
+    override val appOpenCount: Flow<Int> = preferencesManager.appOpenCount
+    override val buyMeACoffeeDontAskAgain: Flow<Boolean> = preferencesManager.buyMeACoffeeDontAskAgain
+    override val buyMeACoffeeNextPromptOpenCount: Flow<Int> = preferencesManager.buyMeACoffeeNextPromptOpenCount
 
     override suspend fun setUnitsType(units: String) {
         preferencesManager.setUnitsType(units)
@@ -62,5 +72,17 @@ class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManag
 
     override suspend fun setMaintenanceMileageWindow(miles: Int) {
         preferencesManager.setMaintenanceMileageWindow(miles)
+    }
+
+    override suspend fun incrementAppOpenCount(): Int {
+        return preferencesManager.incrementAppOpenCount()
+    }
+
+    override suspend fun setBuyMeACoffeeDontAskAgain(dontAskAgain: Boolean) {
+        preferencesManager.setBuyMeACoffeeDontAskAgain(dontAskAgain)
+    }
+
+    override suspend fun setBuyMeACoffeeNextPromptOpenCount(openCount: Int) {
+        preferencesManager.setBuyMeACoffeeNextPromptOpenCount(openCount)
     }
 }

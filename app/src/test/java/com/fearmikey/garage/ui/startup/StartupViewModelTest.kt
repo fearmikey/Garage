@@ -56,6 +56,9 @@ class StartupViewModelTest {
         override val termsAccepted: Flow<Boolean> = termsAcceptedFlow
         override val defaultVehicleId: Flow<Long?> = defaultVehicleIdFlow
         override val maintenanceMileageWindow: Flow<Int> = MutableStateFlow(500)
+        override val appOpenCount: Flow<Int> = MutableStateFlow(1)
+        override val buyMeACoffeeDontAskAgain: Flow<Boolean> = MutableStateFlow(false)
+        override val buyMeACoffeeNextPromptOpenCount: Flow<Int> = MutableStateFlow(2)
 
         override suspend fun setUnitsType(units: String) {
             savedUnits = units
@@ -86,6 +89,9 @@ class StartupViewModelTest {
         }
 
         override suspend fun setMaintenanceMileageWindow(miles: Int) {}
+        override suspend fun incrementAppOpenCount(): Int = 1
+        override suspend fun setBuyMeACoffeeDontAskAgain(dontAskAgain: Boolean) {}
+        override suspend fun setBuyMeACoffeeNextPromptOpenCount(openCount: Int) {}
     }
 
     @Before

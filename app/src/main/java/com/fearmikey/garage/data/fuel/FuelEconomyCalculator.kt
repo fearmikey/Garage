@@ -61,4 +61,10 @@ object FuelEconomyCalculator {
         val totalGallons = entries.sumOf { it.gallonsUsed }
         return totalGallons.takeIf { it > 0.0 }?.let { totalMiles / it }
     }
+
+    /** Best (highest) MPG achieved across all computed segments. */
+    fun bestMpg(entries: List<FuelEconomyEntry>): Double? = entries.maxOfOrNull { it.mpg }
+
+    /** Worst (lowest) MPG achieved across all computed segments. */
+    fun worstMpg(entries: List<FuelEconomyEntry>): Double? = entries.minOfOrNull { it.mpg }
 }

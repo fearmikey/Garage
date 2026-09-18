@@ -86,6 +86,18 @@ object MaintenanceScheduleRules {
             intervalMiles = 50_000,
             intervalMonths = 48,
         ),
+        MaintenanceRule(
+            taskName = "Rust prevention",
+            category = MaintenanceCategory.OTHER,
+            intervalMiles = 15_000,
+            intervalMonths = 12,
+        ),
+        MaintenanceRule(
+            taskName = "Paint protection",
+            category = MaintenanceCategory.OTHER,
+            intervalMiles = 15_000,
+            intervalMonths = 12,
+        ),
 
         // Drivetrain-specific: applies to any 4WD/AWD vehicle unless a more
         // specific make/model rule below overrides it (see MaintenanceScheduleEngine

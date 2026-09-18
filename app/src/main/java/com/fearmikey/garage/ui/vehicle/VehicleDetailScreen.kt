@@ -40,10 +40,9 @@ import com.fearmikey.garage.ui.cost.CostOfOwnershipScreen
 import com.fearmikey.garage.ui.fuel.FuelScreen
 import com.fearmikey.garage.ui.maintenance.MaintenanceSuggestionsScreen
 import com.fearmikey.garage.ui.maintenance.MaintenanceTimelineScreen
+import com.fearmikey.garage.ui.mod.ModsScreen
 import com.fearmikey.garage.ui.recall.RecallsScreen
 import com.fearmikey.garage.ui.reminder.RemindersScreen
-
-private val TAB_TITLES = listOf("Timeline", "Suggested", "Reminders", "Fuel", "Cost of Ownership", "Recalls", "Specs", "Parts")
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
@@ -116,32 +115,32 @@ fun VehicleDetailScreen(
                     }
                 }
             }
-            // Scrollable (rather than fixed-width) since there are enough tabs now
-            // that a fixed row would squeeze/wrap labels like "Suggested" or "Reminders".
             SecondaryScrollableTabRow(selectedTabIndex = selectedTab) {
-                TAB_TITLES.forEachIndexed { index, title ->
+                VehicleTab.entries.forEachIndexed { index, tab ->
                     Tab(
                         selected = selectedTab == index,
                         onClick = { selectedTab = index },
-                        text = { Text(title, style = MaterialTheme.typography.labelLarge) },
+                        text = { Text(tab.title, style = MaterialTheme.typography.labelLarge) },
                     )
                 }
             }
             when (selectedTab) {
-                0 -> MaintenanceTimelineScreen(
-                    autoOpenAddSheet = shouldOpenAddSheet && (viewModel.initialTab == 0),
+                VehicleTab.TIMELINE.ordinal -> MaintenanceTimelineScreen(
+                    autoOpenAddSheet = shouldOpenAddSheet && (viewModel.initialTab == VehicleTab.TIMELINE.ordinal),
                     onAddSheetConsumed = viewModel::consumeAddSheet,
                 )
-                1 -> MaintenanceSuggestionsScreen()
-                2 -> RemindersScreen()
-                3 -> FuelScreen(
-                    autoOpenAddSheet = shouldOpenAddSheet && (viewModel.initialTab == 3),
+                VehicleTab.FUEL.ordinal -> FuelScreen(
+                    autoOpenAddSheet = shouldOpenAddSheet && (viewModel.initialTab == VehicleTab.FUEL.ordinal),
                     onAddSheetConsumed = viewModel::consumeAddSheet,
                 )
-                4 -> CostOfOwnershipScreen()
-                5 -> RecallsScreen()
-                6 -> VehicleSpecsScreen()
-                7 -> PartsScreen(onEditParts = { onEditParts(viewModel.vehicleId) })
+                VehicleTab.REMINDERS.ordinal -> RemindersScreen()
+                VehicleTab.SCHEDULE.ordinal -> MaintenanceSuggestionsScreen()
+                VehicleTab.EXPENSES.ordinal -> CostOfOwnershipScreen()
+                VehicleTab.SPECS.ordinal -> VehicleSpecsScreen()
+                VehicleTab.PARTS.ordinal -> PartsScreen(onEditParts = { onEditParts(viewModel.vehicleId) })
+                VehicleTab.MODS.ordinal -> ModsScreen()
+                VehicleTab.DOCUMENTS.ordinal -> RegistrationInsuranceScreen()
+                VehicleTab.RECALLS.ordinal -> RecallsScreen()
             }
         }
     }

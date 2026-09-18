@@ -24,6 +24,9 @@ class PreferencesManager(private val context: Context) {
         val TERMS_ACCEPTED_KEY = booleanPreferencesKey("terms_accepted")
         val DEFAULT_VEHICLE_ID_KEY = longPreferencesKey("default_vehicle_id")
         val MAINTENANCE_MILEAGE_WINDOW_KEY = intPreferencesKey("maintenance_mileage_window")
+        val APP_OPEN_COUNT_KEY = intPreferencesKey("app_open_count")
+        val BUY_ME_A_COFFEE_DONT_ASK_AGAIN_KEY = booleanPreferencesKey("buy_me_a_coffee_dont_ask_again")
+        val BUY_ME_A_COFFEE_NEXT_PROMPT_OPEN_COUNT_KEY = intPreferencesKey("buy_me_a_coffee_next_prompt_open_count")
 
         const val DEFAULT_MAINTENANCE_MILEAGE_WINDOW = 500
     }
@@ -57,6 +60,21 @@ class PreferencesManager(private val context: Context) {
             preferences[TERMS_ACCEPTED_KEY] ?: false
         }
 
+    val appOpenCount: Flow<Int> = context.dataStore.data
+        .map { preferences ->
+            preferences[APP_OPEN_COUNT_KEY] ?: 0
+        }
+
+    val buyMeACoffeeDontAskAgain: Flow<Boolean> = context.dataStore.data
+        .map { preferences ->
+            preferences[BUY_ME_A_COFFEE_DONT_ASK_AGAIN_KEY] ?: false
+        }
+
+    val buyMeACoffeeNextPromptOpenCount: Flow<Int> = context.dataStore.data
+        .map { preferences ->
+            preferences[BUY_ME_A_COFFEE_NEXT_PROMPT_OPEN_COUNT_KEY] ?: 2
+        }
+
     /**
      * The vehicle the user has explicitly chosen as their "default" (e.g. for the
      * home screen widget's Log Service/Log Fuel shortcuts). `null` means no explicit
@@ -72,6 +90,28 @@ class PreferencesManager(private val context: Context) {
         .map { preferences ->
             preferences[MAINTENANCE_MILEAGE_WINDOW_KEY] ?: DEFAULT_MAINTENANCE_MILEAGE_WINDOW
         }
+
+    suspend fun incrementAppOpenCount(): Int {
+        var newCount = 1
+        context.dataStore.edit { preferences ->
+            val current = preferences[APP_OPEN_COUNT_KEY] ?: 0
+            newCount = current + 1
+            preferences[APP_OPEN_COUNT_KEY] = newCount
+        }
+        return newCount
+    }
+
+    suspend fun setBuyMeACoffeeDontAskAgain(dontAskAgain: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[BUY_ME_A_COFFEE_DONT_ASK_AGAIN_KEY] = dontAskAgain
+        }
+    }
+
+    suspend fun setBuyMeACoffeeNextPromptOpenCount(openCount: Int) {
+        context.dataStore.edit { preferences ->
+            preferences[BUY_ME_A_COFFEE_NEXT_PROMPT_OPEN_COUNT_KEY] = openCount
+        }
+    }
 
     suspend fun setUnitsType(units: String) {
         context.dataStore.edit { preferences ->

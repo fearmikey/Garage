@@ -13,20 +13,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.focusProperties
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -41,6 +36,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -55,6 +51,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -65,10 +67,9 @@ import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.SampleData
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
+import com.fearmikey.garage.ui.util.fromUtcDatePickerMillis
 import com.fearmikey.garage.ui.util.toDisplayDate
-import java.time.Instant
-import java.time.ZoneId
-import java.time.ZoneOffset
+import com.fearmikey.garage.ui.util.toUtcDatePickerMillis
 
 @Composable
 fun FuelScreen(
@@ -133,6 +134,8 @@ private fun FuelContent(
                 item {
                     FuelSummaryCard(
                         averageMpg = uiState.averageMpg,
+                        bestMpg = uiState.bestMpg,
+                        worstMpg = uiState.worstMpg,
                         totalSpent = uiState.totalSpent,
                         unitSystem = uiState.unitSystem,
                         currencySymbol = uiState.currencySymbol,
@@ -155,35 +158,94 @@ private fun FuelContent(
 @Composable
 private fun FuelSummaryCard(
     averageMpg: Double?,
+    bestMpg: Double?,
+    worstMpg: Double?,
     totalSpent: Double,
     unitSystem: UnitSystem,
     currencySymbol: String = "$",
     modifier: Modifier = Modifier,
 ) {
     Card(modifier = modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier.padding(12.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-        ) {
-            SummaryStat(
-                label = "Avg. economy",
-                value = UnitConverter.formatFuelEconomy(averageMpg, unitSystem),
-                modifier = Modifier.weight(1f),
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = "Fuel Economy",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(bottom = 12.dp),
             )
-            SummaryStat(
-                label = "Total spent",
-                value = "%s%.2f".format(currencySymbol, totalSpent),
-                modifier = Modifier.weight(1f),
-            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+            ) {
+                MpgStatBox(
+                    label = "Best",
+                    value = UnitConverter.formatFuelEconomy(bestMpg, unitSystem),
+                    modifier = Modifier.weight(1f),
+                )
+                MpgStatBox(
+                    label = "Average",
+                    value = UnitConverter.formatFuelEconomy(averageMpg, unitSystem),
+                    modifier = Modifier.weight(1f),
+                )
+                MpgStatBox(
+                    label = "Worst",
+                    value = UnitConverter.formatFuelEconomy(worstMpg, unitSystem),
+                    modifier = Modifier.weight(1f),
+                )
+            }
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "Total Spent",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Text(
+                    text = "%s%.2f".format(currencySymbol, totalSpent),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun SummaryStat(label: String, value: String, modifier: Modifier = Modifier) {
-    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(value, style = MaterialTheme.typography.titleLarge)
-        Text(label, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+private fun MpgStatBox(
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier.padding(horizontal = 4.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Surface(
+            color = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier.padding(top = 4.dp),
+        ) {
+            Text(
+                text = value,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+            )
+        }
     }
 }
 
@@ -196,6 +258,33 @@ private fun FuelRecordRow(
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text("Delete Fill-Up") },
+            text = { Text("Are you sure you want to delete this fuel record?") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showDeleteDialog = false
+                        onDelete()
+                    },
+                ) {
+                    Text("Delete")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { showDeleteDialog = false },
+                ) {
+                    Text("Cancel")
+                }
+            },
+        )
+    }
+
     Card(modifier = modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier.padding(12.dp),
@@ -222,14 +311,22 @@ private fun FuelRecordRow(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 segmentMpg?.let {
-                    Text(
-                        UnitConverter.formatSegmentFuelEconomy(it, unitSystem),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
+                    Surface(
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        shape = RoundedCornerShape(6.dp),
+                        modifier = Modifier.padding(top = 6.dp),
+                    ) {
+                        Text(
+                            text = UnitConverter.formatSegmentFuelEconomy(it, unitSystem),
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                        )
+                    }
                 }
             }
-            IconButton(onClick = onDelete) {
+            IconButton(onClick = { showDeleteDialog = true }) {
                 Icon(Icons.Filled.Delete, contentDescription = "Delete fill-up")
             }
         }
@@ -268,12 +365,8 @@ internal fun AddEditFuelRecordSheet(
         (totalCostValue != null) && (totalCostValue > 0.0)
 
     if (showDatePicker) {
-        val initialUtcMillis = remember(date) {
-            val localDate = Instant.ofEpochMilli(date).atZone(ZoneId.systemDefault()).toLocalDate()
-            localDate.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
-        }
         val datePickerState = rememberDatePickerState(
-            initialSelectedDateMillis = initialUtcMillis
+            initialSelectedDateMillis = date.toUtcDatePickerMillis()
         )
 
         DatePickerDialog(
@@ -282,8 +375,7 @@ internal fun AddEditFuelRecordSheet(
                 TextButton(
                     onClick = {
                         datePickerState.selectedDateMillis?.let { utcMillis ->
-                            val selectedUtcDate = Instant.ofEpochMilli(utcMillis).atZone(ZoneOffset.UTC).toLocalDate()
-                            date = selectedUtcDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+                            date = utcMillis.fromUtcDatePickerMillis()
                         }
                         showDatePicker = false
                     }
@@ -447,6 +539,8 @@ private fun FuelScreenPreview() {
                 records = SampleData.tacomaFuelRecords,
                 mpgByRecordId = SampleData.tacomaFuelMpgByRecordId,
                 averageMpg = SampleData.tacomaAverageMpg,
+                bestMpg = SampleData.tacomaBestMpg,
+                worstMpg = SampleData.tacomaWorstMpg,
                 totalSpent = SampleData.tacomaFuelRecords.sumOf { it.totalCost },
             ),
             onAddClicked = {},

@@ -2,6 +2,7 @@ package com.fearmikey.garage.data.fuel
 
 import com.fearmikey.garage.data.local.entity.FuelRecord
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -11,6 +12,8 @@ class FuelEconomyCalculatorTest {
     fun `entriesFor returns empty list when no records`() {
         val entries = FuelEconomyCalculator.entriesFor(emptyList())
         assertTrue(entries.isEmpty())
+        assertNull(FuelEconomyCalculator.bestMpg(entries))
+        assertNull(FuelEconomyCalculator.worstMpg(entries))
     }
 
     @Test
@@ -21,6 +24,8 @@ class FuelEconomyCalculatorTest {
         )
         val entries = FuelEconomyCalculator.entriesFor(records)
         assertTrue(entries.isEmpty())
+        assertNull(FuelEconomyCalculator.bestMpg(entries))
+        assertNull(FuelEconomyCalculator.worstMpg(entries))
     }
 
     @Test
@@ -55,7 +60,7 @@ class FuelEconomyCalculatorTest {
     }
 
     @Test
-    fun `averageMpg computes overall weighted average`() {
+    fun `averageMpg computes overall weighted average and best worst Mpg`() {
         val records = listOf(
             FuelRecord(id = 1, vehicleId = 1, date = 1000L, mileage = 10000, gallons = 12.0, totalCost = 42.0, pricePerGallon = 3.5, isFullTank = true),
             FuelRecord(id = 2, vehicleId = 1, date = 2000L, mileage = 10300, gallons = 10.0, totalCost = 35.0, pricePerGallon = 3.5, isFullTank = true), // 300 / 10 = 30
@@ -66,5 +71,7 @@ class FuelEconomyCalculatorTest {
         // Total miles = 500, total gallons = 20 -> weighted average = 25.0
         val avg = FuelEconomyCalculator.averageMpg(entries)
         assertEquals(25.0, avg!!, 0.001)
+        assertEquals(30.0, FuelEconomyCalculator.bestMpg(entries)!!, 0.001)
+        assertEquals(20.0, FuelEconomyCalculator.worstMpg(entries)!!, 0.001)
     }
 }

@@ -67,10 +67,9 @@ import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.SampleData
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
+import com.fearmikey.garage.ui.util.fromUtcDatePickerMillis
 import com.fearmikey.garage.ui.util.toDisplayDate
-import java.time.Instant
-import java.time.ZoneId
-import java.time.ZoneOffset
+import com.fearmikey.garage.ui.util.toUtcDatePickerMillis
 
 @Composable
 fun MaintenanceTimelineScreen(
@@ -266,12 +265,8 @@ internal fun AddEditMaintenanceRecordSheet(
     }
 
     if (showDatePicker) {
-        val initialUtcMillis = remember(date) {
-            val localDate = Instant.ofEpochMilli(date).atZone(ZoneId.systemDefault()).toLocalDate()
-            localDate.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
-        }
         val datePickerState = rememberDatePickerState(
-            initialSelectedDateMillis = initialUtcMillis,
+            initialSelectedDateMillis = date.toUtcDatePickerMillis(),
         )
 
         DatePickerDialog(
@@ -280,8 +275,7 @@ internal fun AddEditMaintenanceRecordSheet(
                 TextButton(
                     onClick = {
                         datePickerState.selectedDateMillis?.let { utcMillis ->
-                            val selectedUtcDate = Instant.ofEpochMilli(utcMillis).atZone(ZoneOffset.UTC).toLocalDate()
-                            date = selectedUtcDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+                            date = utcMillis.fromUtcDatePickerMillis()
                         }
                         showDatePicker = false
                     }

@@ -9,11 +9,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+import com.fearmikey.garage.ui.vehicle.VehicleTab
 
 /**
  * A vehicle detail navigation request triggered from outside normal in-app
@@ -27,6 +30,8 @@ class MainViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository,
     private val vehicleRepository: VehicleRepository,
 ) : ViewModel() {
+
+    private val _dismissedBuyMeACoffeeForSession = MutableStateFlow(false)
 
     val isOnboardingCompleted: StateFlow<Boolean?> = preferencesRepository.onboardingCompleted
         .map<Boolean, Boolean?> { it }
@@ -42,8 +47,50 @@ class MainViewModel @Inject constructor(
         initialValue = "system"
     )
 
+    val showBuyMeACoffeePrompt: StateFlow<Boolean> = combine(
+        preferencesRepository.appOpenCount,
+        preferencesRepository.buyMeACoffeeDontAskAgain,
+        preferencesRepository.buyMeACoffeeNextPromptOpenCount,
+        preferencesRepository.onboardingCompleted,
+        _dismissedBuyMeACoffeeForSession,
+    ) { openCount, dontAskAgain, nextPromptOpenCount, onboardingCompleted, dismissedForSession ->
+        openCount >= nextPromptOpenCount && !dontAskAgain && onboardingCompleted && !dismissedForSession
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = false,
+    )
+
     private val _pendingDeepLink = MutableStateFlow<PendingDeepLink?>(null)
     val pendingDeepLink: StateFlow<PendingDeepLink?> = _pendingDeepLink.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            preferencesRepository.incrementAppOpenCount()
+        }
+    }
+
+    fun onBuyMeACoffeeClicked() {
+        _dismissedBuyMeACoffeeForSession.value = true
+        viewModelScope.launch {
+            preferencesRepository.setBuyMeACoffeeDontAskAgain(true)
+        }
+    }
+
+    fun onBuyMeACoffeeDontAskAgain() {
+        _dismissedBuyMeACoffeeForSession.value = true
+        viewModelScope.launch {
+            preferencesRepository.setBuyMeACoffeeDontAskAgain(true)
+        }
+    }
+
+    fun onBuyMeACoffeeMaybeLater() {
+        _dismissedBuyMeACoffeeForSession.value = true
+        viewModelScope.launch {
+            val currentOpenCount = preferencesRepository.appOpenCount.first()
+            preferencesRepository.setBuyMeACoffeeNextPromptOpenCount(currentOpenCount + 4)
+        }
+    }
 
     /**
      * Resolves a widget-launched [action]/[vehicleIdExtra] (see [MainActivity]'s
@@ -53,8 +100,8 @@ class MainViewModel @Inject constructor(
      */
     fun handleDeepLinkIntent(action: String?, vehicleIdExtra: Long) {
         val tab = when (action) {
-            MainActivity.ACTION_LOG_SERVICE -> 0
-            MainActivity.ACTION_LOG_FUEL -> 3
+            MainActivity.ACTION_LOG_SERVICE -> VehicleTab.TIMELINE.ordinal
+            MainActivity.ACTION_LOG_FUEL -> VehicleTab.FUEL.ordinal
             else -> return
         }
         viewModelScope.launch {

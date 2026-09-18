@@ -1,20 +1,16 @@
 package com.fearmikey.garage
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.core.content.ContextCompat
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.fearmikey.garage.ui.components.BuyMeACoffeeDialog
 import com.fearmikey.garage.ui.navigation.GarageNavHost
 import com.fearmikey.garage.ui.theme.GarageTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,6 +28,8 @@ class MainActivity : ComponentActivity() {
             val themeType by mainViewModel.themeType.collectAsStateWithLifecycle()
             val pendingDeepLink by mainViewModel.pendingDeepLink.collectAsStateWithLifecycle()
             val isOnboardingCompleted by mainViewModel.isOnboardingCompleted.collectAsStateWithLifecycle()
+            val showBuyMeACoffeePrompt by mainViewModel.showBuyMeACoffeePrompt.collectAsStateWithLifecycle()
+            val uriHandler = LocalUriHandler.current
 
             val isDarkTheme = when (themeType) {
                 "light" -> false
@@ -45,6 +43,21 @@ class MainActivity : ComponentActivity() {
                     onDeepLinkHandled = mainViewModel::clearPendingDeepLink,
                     isOnboardingCompleted = isOnboardingCompleted,
                 )
+
+                if (showBuyMeACoffeePrompt) {
+                    BuyMeACoffeeDialog(
+                        onSupportClicked = {
+                            mainViewModel.onBuyMeACoffeeClicked()
+                            uriHandler.openUri("https://buymeacoffee.com/XimW7nXI1j")
+                        },
+                        onDontAskAgainClicked = {
+                            mainViewModel.onBuyMeACoffeeDontAskAgain()
+                        },
+                        onMaybeLaterClicked = {
+                            mainViewModel.onBuyMeACoffeeMaybeLater()
+                        },
+                    )
+                }
             }
         }
     }

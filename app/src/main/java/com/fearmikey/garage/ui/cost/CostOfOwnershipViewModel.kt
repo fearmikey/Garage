@@ -24,7 +24,8 @@ import com.fearmikey.garage.ui.util.UnitConverter
 enum class TimeFilter(val displayName: String) {
     ALL_TIME("All Time"),
     THIS_YEAR("This Year"),
-    PAST_YEAR("Past Year"),
+    LAST_YEAR("Last Year"),
+    PAST_12_MONTHS("12 Months"),
     PAST_6_MONTHS("6 Months"),
 }
 
@@ -78,18 +79,16 @@ class CostOfOwnershipViewModel @Inject constructor(
         preferencesRepository.appCurrency,
         _timeFilter,
     ) { maintenanceRecords, fuelRecords, unitSystem, currency, filter ->
-        val cutoff = computeCutoffTimestamp(filter)
+        val timeRange = computeTimeRange(filter)
 
-        val filteredMaintenance = if (cutoff == null) {
-            maintenanceRecords
-        } else {
-            maintenanceRecords.filter { it.date >= cutoff }
+        val filteredMaintenance = maintenanceRecords.filter { record ->
+            (timeRange.start == null || record.date >= timeRange.start) &&
+            (timeRange.end == null || record.date <= timeRange.end)
         }
 
-        val filteredFuel = if (cutoff == null) {
-            fuelRecords
-        } else {
-            fuelRecords.filter { it.date >= cutoff }
+        val filteredFuel = fuelRecords.filter { record ->
+            (timeRange.start == null || record.date >= timeRange.start) &&
+            (timeRange.end == null || record.date <= timeRange.end)
         }
 
         val maintTotal = filteredMaintenance.sumOf { it.cost }
@@ -176,10 +175,12 @@ class CostOfOwnershipViewModel @Inject constructor(
         _timeFilter.value = filter
     }
 
-    private fun computeCutoffTimestamp(filter: TimeFilter): Long? {
+    private data class TimeRange(val start: Long? = null, val end: Long? = null)
+
+    private fun computeTimeRange(filter: TimeFilter): TimeRange {
         val now = System.currentTimeMillis()
         return when (filter) {
-            TimeFilter.ALL_TIME -> null
+            TimeFilter.ALL_TIME -> TimeRange()
             TimeFilter.THIS_YEAR -> {
                 val cal = Calendar.getInstance()
                 cal.set(Calendar.DAY_OF_YEAR, 1)
@@ -187,10 +188,24 @@ class CostOfOwnershipViewModel @Inject constructor(
                 cal.set(Calendar.MINUTE, 0)
                 cal.set(Calendar.SECOND, 0)
                 cal.set(Calendar.MILLISECOND, 0)
-                cal.timeInMillis
+                TimeRange(start = cal.timeInMillis)
             }
-            TimeFilter.PAST_YEAR -> now - TimeUnit.DAYS.toMillis(365)
-            TimeFilter.PAST_6_MONTHS -> now - TimeUnit.DAYS.toMillis(180)
+            TimeFilter.LAST_YEAR -> {
+                val cal = Calendar.getInstance()
+                cal.set(Calendar.DAY_OF_YEAR, 1)
+                cal.set(Calendar.HOUR_OF_DAY, 0)
+                cal.set(Calendar.MINUTE, 0)
+                cal.set(Calendar.SECOND, 0)
+                cal.set(Calendar.MILLISECOND, 0)
+                val startOfThisYear = cal.timeInMillis
+
+                cal.add(Calendar.YEAR, -1)
+                val startOfLastYear = cal.timeInMillis
+
+                TimeRange(start = startOfLastYear, end = startOfThisYear - 1)
+            }
+            TimeFilter.PAST_12_MONTHS -> TimeRange(start = now - TimeUnit.DAYS.toMillis(365))
+            TimeFilter.PAST_6_MONTHS -> TimeRange(start = now - TimeUnit.DAYS.toMillis(180))
         }
     }
 }

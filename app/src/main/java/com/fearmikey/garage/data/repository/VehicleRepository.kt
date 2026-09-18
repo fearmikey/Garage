@@ -2,10 +2,12 @@ package com.fearmikey.garage.data.repository
 
 import com.fearmikey.garage.data.local.dao.VehicleDao
 import com.fearmikey.garage.data.local.dao.VehiclePartsDao
+import com.fearmikey.garage.data.local.dao.VehicleRegistrationDao
 import com.fearmikey.garage.data.local.dao.VehicleSpecsDao
 import com.fearmikey.garage.data.local.entity.Drivetrain
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.local.entity.VehiclePartsInfo
+import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
 import com.fearmikey.garage.data.local.entity.VehicleSpecs
 import com.fearmikey.garage.data.remote.VinDecoderApi
 import com.fearmikey.garage.data.remote.dto.VinDecodeResult
@@ -35,6 +37,7 @@ class VehicleRepository @Inject constructor(
     private val vehicleDao: VehicleDao,
     private val vehicleSpecsDao: VehicleSpecsDao,
     private val vehiclePartsDao: VehiclePartsDao,
+    private val vehicleRegistrationDao: VehicleRegistrationDao,
     private val vinDecoderApi: VinDecoderApi,
 ) {
     fun getAllVehicles(): Flow<List<Vehicle>> = vehicleDao.getAllVehicles()
@@ -56,6 +59,15 @@ class VehicleRepository @Inject constructor(
     fun getVehicleParts(vehicleId: Long): Flow<VehiclePartsInfo?> = vehiclePartsDao.getByVehicleId(vehicleId)
 
     suspend fun saveVehicleParts(info: VehiclePartsInfo) = vehiclePartsDao.upsert(info)
+
+    fun getRegistrationInsurance(vehicleId: Long): Flow<VehicleRegistrationInsurance?> =
+        vehicleRegistrationDao.getByVehicleId(vehicleId)
+
+    suspend fun saveRegistrationInsurance(info: VehicleRegistrationInsurance) =
+        vehicleRegistrationDao.upsert(info)
+
+    suspend fun deleteRegistrationInsurance(vehicleId: Long) =
+        vehicleRegistrationDao.deleteByVehicleId(vehicleId)
 
     /** Calls the NHTSA vPIC API and maps its quirky "HTTP 200 + error code" contract into a typed result. */
     suspend fun decodeVin(vin: String): VinLookupResult {

@@ -26,6 +26,8 @@ data class FuelUiState(
     /** Segment MPG for the fill-up that *completed* it, keyed by [FuelRecord.id]. */
     val mpgByRecordId: Map<Long, Double> = emptyMap(),
     val averageMpg: Double? = null,
+    val bestMpg: Double? = null,
+    val worstMpg: Double? = null,
     val totalSpent: Double = 0.0,
     val unitSystem: UnitSystem = UnitSystem.IMPERIAL,
     val currencySymbol: String = "$",
@@ -51,6 +53,8 @@ class FuelViewModel @Inject constructor(
             records = records,
             mpgByRecordId = entries.associate { it.record.id to it.mpg },
             averageMpg = FuelEconomyCalculator.averageMpg(entries),
+            bestMpg = FuelEconomyCalculator.bestMpg(entries),
+            worstMpg = FuelEconomyCalculator.worstMpg(entries),
             totalSpent = records.sumOf { it.totalCost },
             unitSystem = unitSystem,
             currencySymbol = currency.symbol,
