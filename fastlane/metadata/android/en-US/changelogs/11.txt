@@ -1,0 +1,4 @@
+Fleet Summary Header on Dashboard
+Maintenance Schedule Templates (Standard, Severe Service, High Mileage)
+ room database schema migration 12
+ Refined vehicle cards & timeline rendering
