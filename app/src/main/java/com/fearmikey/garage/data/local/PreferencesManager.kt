@@ -3,6 +3,7 @@ package com.fearmikey.garage.data.local
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -22,6 +23,9 @@ class PreferencesManager(private val context: Context) {
         val ONBOARDING_COMPLETED_KEY = booleanPreferencesKey("onboarding_completed")
         val TERMS_ACCEPTED_KEY = booleanPreferencesKey("terms_accepted")
         val DEFAULT_VEHICLE_ID_KEY = longPreferencesKey("default_vehicle_id")
+        val MAINTENANCE_MILEAGE_WINDOW_KEY = intPreferencesKey("maintenance_mileage_window")
+
+        const val DEFAULT_MAINTENANCE_MILEAGE_WINDOW = 500
     }
 
     val unitsType: Flow<String> = context.dataStore.data
@@ -64,6 +68,11 @@ class PreferencesManager(private val context: Context) {
             preferences[DEFAULT_VEHICLE_ID_KEY]
         }
 
+    val maintenanceMileageWindow: Flow<Int> = context.dataStore.data
+        .map { preferences ->
+            preferences[MAINTENANCE_MILEAGE_WINDOW_KEY] ?: DEFAULT_MAINTENANCE_MILEAGE_WINDOW
+        }
+
     suspend fun setUnitsType(units: String) {
         context.dataStore.edit { preferences ->
             preferences[UNITS_KEY] = units
@@ -101,6 +110,12 @@ class PreferencesManager(private val context: Context) {
             } else {
                 preferences.remove(DEFAULT_VEHICLE_ID_KEY)
             }
+        }
+    }
+
+    suspend fun setMaintenanceMileageWindow(miles: Int) {
+        context.dataStore.edit { preferences ->
+            preferences[MAINTENANCE_MILEAGE_WINDOW_KEY] = miles
         }
     }
 }

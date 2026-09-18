@@ -1,3 +1,13 @@
+## [1.1.6] - 2026-09-12
+
+### Added
+* **Expanded Vehicle Specifications (Database Schema 8):** Added support for extended technical specs including engine displacement, cylinder count, drive type, transmission type, fuel type details, GVWR, and manufacturer info.
+* **Enhanced NHTSA VIN Decoding:** Improved automated specs extraction from NHTSA API responses.
+* **Comprehensive Test Suite Expansion:** Added unit test coverage for `VehicleRepositoryTest`, `VehicleDetailViewModelTest`, `ReminderCheckWorkerTest`, and `MaintenanceScheduleEngineTest`.
+
+### Changed
+* **Maintenance Schedule & Reminders Engine:** Refined reminder check worker algorithms and notification dispatch logic.
+
 ## [1.1.5] - 2026-09-12
 
 ### Added

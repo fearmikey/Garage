@@ -257,4 +257,39 @@ class MaintenanceScheduleEngineTest {
         assertEquals(18_000, rotationAndBalance.nextDueMileage)
         assertEquals(ReminderStatus.OK, rotationAndBalance.status)
     }
+
+    @Test
+    fun `suggestionsFor respects custom upcoming window miles`() {
+        val records = listOf(
+            MaintenanceRecord(
+                vehicleId = fwdCivic.id,
+                date = 0,
+                mileage = 20_000,
+                description = "Engine oil change",
+                cost = 50.0,
+                category = MaintenanceCategory.FLUIDS,
+            )
+        )
+
+        // Next due mileage is 25_000. Current mileage is 24_700 (300 miles away).
+        // With window = 250 miles: 300 > 250 -> OK
+        val suggestionsOk = MaintenanceScheduleEngine.suggestionsFor(
+            vehicle = fwdCivic,
+            latestMileage = 24_700,
+            records = records,
+            upcomingWindowMiles = 250,
+        )
+        val oilChangeOk = suggestionsOk.first { it.rule.taskName == "Engine oil change" }
+        assertEquals(ReminderStatus.OK, oilChangeOk.status)
+
+        // With window = 500 miles: 300 <= 500 -> UPCOMING
+        val suggestionsUpcoming = MaintenanceScheduleEngine.suggestionsFor(
+            vehicle = fwdCivic,
+            latestMileage = 24_700,
+            records = records,
+            upcomingWindowMiles = 500,
+        )
+        val oilChangeUpcoming = suggestionsUpcoming.first { it.rule.taskName == "Engine oil change" }
+        assertEquals(ReminderStatus.UPCOMING, oilChangeUpcoming.status)
+    }
 }

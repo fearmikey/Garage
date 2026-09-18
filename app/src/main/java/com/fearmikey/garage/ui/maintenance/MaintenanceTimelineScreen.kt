@@ -75,6 +75,7 @@ import java.time.ZoneOffset
 @Composable
 fun MaintenanceTimelineScreen(
     autoOpenAddSheet: Boolean = false,
+    onAddSheetConsumed: () -> Unit = {},
     viewModel: MaintenanceTimelineViewModel = hiltViewModel(),
 ) {
     val records by viewModel.records.collectAsStateWithLifecycle()
@@ -84,8 +85,11 @@ fun MaintenanceTimelineScreen(
     var showAddSheet by remember { mutableStateOf(value = false) }
     var editingRecord by remember { mutableStateOf<MaintenanceRecord?>(null) }
 
-    LaunchedEffect(Unit) {
-        if (autoOpenAddSheet) showAddSheet = true
+    LaunchedEffect(autoOpenAddSheet) {
+        if (autoOpenAddSheet) {
+            showAddSheet = true
+            onAddSheetConsumed()
+        }
     }
 
     MaintenanceTimelineContent(

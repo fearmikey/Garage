@@ -32,7 +32,7 @@ const val GARAGE_DATABASE_NAME = "garage.db"
  * crashing the app on every launch with no way to recover other than
  * clearing app data again.
  */
-const val GARAGE_DATABASE_VERSION = 7
+const val GARAGE_DATABASE_VERSION = 8
 
 @Database(
     entities = [
@@ -51,6 +51,8 @@ const val GARAGE_DATABASE_VERSION = 7
         AutoMigration(from = 5, to = 6),
         // Additive: imageOffsetY added to vehicles table.
         AutoMigration(from = 6, to = 7),
+        // Additive: towing capacity and weight fields added to vehicle_specs table.
+        AutoMigration(from = 7, to = 8),
     ],
 )
 @TypeConverters(Converters::class)

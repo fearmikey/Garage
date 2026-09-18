@@ -55,6 +55,7 @@ class StartupViewModelTest {
         override val onboardingCompleted: Flow<Boolean> = onboardingCompletedFlow
         override val termsAccepted: Flow<Boolean> = termsAcceptedFlow
         override val defaultVehicleId: Flow<Long?> = defaultVehicleIdFlow
+        override val maintenanceMileageWindow: Flow<Int> = MutableStateFlow(500)
 
         override suspend fun setUnitsType(units: String) {
             savedUnits = units
@@ -83,6 +84,8 @@ class StartupViewModelTest {
         override suspend fun setDefaultVehicleId(vehicleId: Long?) {
             defaultVehicleIdFlow.value = vehicleId
         }
+
+        override suspend fun setMaintenanceMileageWindow(miles: Int) {}
     }
 
     @Before

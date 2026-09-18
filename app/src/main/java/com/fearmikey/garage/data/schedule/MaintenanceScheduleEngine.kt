@@ -23,13 +23,14 @@ object MaintenanceScheduleEngine {
         records: List<MaintenanceRecord>,
         customRules: List<MaintenanceRule> = emptyList(),
         now: Long = System.currentTimeMillis(),
+        upcomingWindowMiles: Int = ReminderRepository.DEFAULT_UPCOMING_WINDOW_MILES,
     ): List<MaintenanceSuggestion> {
         val builtInMatching = MaintenanceScheduleRules.rules.filter { it.matches(vehicle) }
         val applicableRules = (builtInMatching + customRules).mostSpecificPerTask()
 
         return applicableRules
             .asSequence()
-            .map { rule -> toSuggestion(rule, latestMileage, records, now) }
+            .map { rule -> toSuggestion(rule, latestMileage, records, now, upcomingWindowMiles) }
             .sortedBy { it.nextDueMileage ?: Int.MAX_VALUE }
             .toList()
     }
@@ -52,6 +53,7 @@ object MaintenanceScheduleEngine {
         latestMileage: Int?,
         records: List<MaintenanceRecord>,
         now: Long,
+        upcomingWindowMiles: Int,
     ): MaintenanceSuggestion {
         // Both the mileage- and date-based baselines come from the same "last
         // service" record so the two dimensions always agree on which real
@@ -90,7 +92,7 @@ object MaintenanceScheduleEngine {
         // "whichever comes first" semantics for user-set Reminders.
         val mileageStatus = if (nextDueMileage == null || latestMileage == null) {
             null
-        } else if ((nextDueMileage - latestMileage) <= ReminderRepository.UPCOMING_WINDOW_MILES) {
+        } else if ((nextDueMileage - latestMileage) <= upcomingWindowMiles) {
             ReminderStatus.UPCOMING
         } else {
             ReminderStatus.OK

@@ -15,12 +15,14 @@ interface PreferencesRepository {
     val termsAccepted: Flow<Boolean>
     /** The user's explicitly chosen default vehicle, or `null` if none has been chosen. */
     val defaultVehicleId: Flow<Long?>
+    val maintenanceMileageWindow: Flow<Int>
     suspend fun setUnitsType(units: String)
     suspend fun setCurrencyCode(currencyCode: String)
     suspend fun setThemeType(theme: String)
     suspend fun setOnboardingCompleted(completed: Boolean)
     suspend fun setTermsAccepted(accepted: Boolean)
     suspend fun setDefaultVehicleId(vehicleId: Long?)
+    suspend fun setMaintenanceMileageWindow(miles: Int)
 }
 
 class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManager) : PreferencesRepository {
@@ -32,6 +34,7 @@ class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManag
     override val onboardingCompleted: Flow<Boolean> = preferencesManager.onboardingCompleted
     override val termsAccepted: Flow<Boolean> = preferencesManager.termsAccepted
     override val defaultVehicleId: Flow<Long?> = preferencesManager.defaultVehicleId
+    override val maintenanceMileageWindow: Flow<Int> = preferencesManager.maintenanceMileageWindow
 
     override suspend fun setUnitsType(units: String) {
         preferencesManager.setUnitsType(units)
@@ -55,5 +58,9 @@ class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManag
 
     override suspend fun setDefaultVehicleId(vehicleId: Long?) {
         preferencesManager.setDefaultVehicleId(vehicleId)
+    }
+
+    override suspend fun setMaintenanceMileageWindow(miles: Int) {
+        preferencesManager.setMaintenanceMileageWindow(miles)
     }
 }

@@ -41,6 +41,8 @@ import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Straighten
 import com.fearmikey.garage.ui.components.CurrencySelectionDialog
 import com.fearmikey.garage.ui.util.AppCurrency
+import com.fearmikey.garage.ui.util.UnitConverter
+import com.fearmikey.garage.ui.util.UnitSystem
 import androidx.documentfile.provider.DocumentFile
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
@@ -84,6 +86,7 @@ import com.fearmikey.garage.config.FlavorConfig
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.AppRestarter
+import kotlin.math.abs
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -101,6 +104,7 @@ fun SettingsScreen(
     var showCurrencyDialog by remember { mutableStateOf(false) }
     var showThemeDialog by remember { mutableStateOf(false) }
     var showDefaultVehicleDialog by remember { mutableStateOf(false) }
+    var showMaintenanceMileageDialog by remember { mutableStateOf(false) }
     var showClearDataDialog by remember { mutableStateOf(false) }
     var showAboutDialog by remember { mutableStateOf(false) }
     var showCloudBackupDialog by remember { mutableStateOf(false) }
@@ -250,6 +254,18 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable { viewModel.sendTestNotification() },
+                )
+            }
+            item {
+                val unitSystem = UnitSystem.fromString(uiState.units)
+                val distanceText = UnitConverter.formatDistance(uiState.maintenanceMileageWindow, unitSystem)
+                ListItem(
+                    headlineContent = { Text("Maintenance Mileage Notification") },
+                    supportingContent = { Text("Notify when service is due within $distanceText") },
+                    leadingContent = { Icon(Icons.Filled.Straighten, contentDescription = null) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { showMaintenanceMileageDialog = true },
                 )
             }
 
@@ -465,6 +481,15 @@ fun SettingsScreen(
                 showDefaultVehicleDialog = false
             },
             onDismissRequest = { showDefaultVehicleDialog = false },
+        )
+    }
+
+    if (showMaintenanceMileageDialog) {
+        MaintenanceMileageDialog(
+            currentMilesWindow = uiState.maintenanceMileageWindow,
+            unitSystem = UnitSystem.fromString(uiState.units),
+            onOptionSelected = { viewModel.setMaintenanceMileageWindow(it) },
+            onDismissRequest = { showMaintenanceMileageDialog = false },
         )
     }
 
@@ -923,6 +948,73 @@ private fun LocalBackupConfigDialog(
         confirmButton = {
             TextButton(onClick = onDismissRequest) {
                 Text("Close")
+            }
+        },
+    )
+}
+
+@Composable
+private fun MaintenanceMileageDialog(
+    currentMilesWindow: Int,
+    unitSystem: UnitSystem,
+    onOptionSelected: (miles: Int) -> Unit,
+    onDismissRequest: () -> Unit,
+) {
+    val options = if (unitSystem == UnitSystem.IMPERIAL) {
+        listOf(
+            250 to "250 mi",
+            500 to "500 mi",
+            1000 to "1,000 mi",
+        )
+    } else {
+        listOf(
+            UnitConverter.kmToMiles(250) to "250 km",
+            UnitConverter.kmToMiles(500) to "500 km",
+            UnitConverter.kmToMiles(800) to "800 km (~500 mi equivalent)",
+            UnitConverter.kmToMiles(1000) to "1,000 km",
+            UnitConverter.kmToMiles(1600) to "1,600 km (~1,000 mi equivalent)",
+        )
+    }
+
+    val selectedOptionMiles = options.minByOrNull { abs(it.first - currentMilesWindow) }?.first ?: 500
+
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = { Text("Maintenance Mileage Notification") },
+        text = {
+            Column {
+                Text(
+                    text = "Notify when maintenance is due within:",
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                options.forEach { (miles, label) ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                onOptionSelected(miles)
+                                onDismissRequest()
+                            }
+                            .padding(vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        RadioButton(
+                            selected = miles == selectedOptionMiles,
+                            onClick = {
+                                onOptionSelected(miles)
+                                onDismissRequest()
+                            },
+                        )
+                        Spacer(modifier = Modifier.padding(start = 8.dp))
+                        Text(text = label)
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismissRequest) {
+                Text("Cancel")
             }
         },
     )

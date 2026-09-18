@@ -61,6 +61,9 @@ object SampleData {
         plantState = "Texas",
         plantCountry = "United States",
         manufacturer = "Toyota Motor Manufacturing, Texas, Inc.",
+        trailerBrakedCapacity = "6400",
+        gcwr = "11300 lbs",
+        curbWeight = "4480 lbs",
     )
 
     val tacomaPartsInfo = VehiclePartsInfo(

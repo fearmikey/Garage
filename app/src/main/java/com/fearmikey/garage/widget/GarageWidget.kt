@@ -80,12 +80,17 @@ class GarageWidget : GlanceAppWidget() {
         val vehicles = vehicleRepository.getAllVehicles().first()
         val incompleteReminders = reminderRepository.getIncompleteReminders()
         val unitSystem = preferencesRepository.unitSystem.first()
+        val upcomingWindowMiles = preferencesRepository.maintenanceMileageWindow.first()
 
         val rows = incompleteReminders
             .mapNotNull { reminder ->
                 val vehicle = vehicles.find { it.id == reminder.vehicleId } ?: return@mapNotNull null
                 val latestMileage = maintenanceRepository.getLatestMileageForVehicle(reminder.vehicleId).first()
-                val status = ReminderRepository.computeStatus(reminder, latestMileage)
+                val status = ReminderRepository.computeStatus(
+                    reminder = reminder,
+                    latestMileage = latestMileage,
+                    upcomingWindowMiles = upcomingWindowMiles,
+                )
                 if (status != ReminderStatus.OVERDUE && status != ReminderStatus.UPCOMING) return@mapNotNull null
 
                 val dueInfo = listOfNotNull(

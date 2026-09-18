@@ -18,6 +18,7 @@ import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.data.repository.WebDavBackupRepository
 import com.fearmikey.garage.notification.CloudBackupScheduler
 import com.fearmikey.garage.notification.ReminderNotifier
+import com.fearmikey.garage.notification.WorkScheduler
 import com.fearmikey.garage.widget.WidgetRefresher
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,6 +36,7 @@ data class SettingsUiState(
     val currency: String = "USD",
     val theme: String = "system",
     val defaultVehicleId: Long? = null,
+    val maintenanceMileageWindow: Int = 500,
     val vehicles: List<Vehicle> = emptyList(),
     /** True once an import has completed; the UI should prompt the user to restart the app. */
     val importSucceeded: Boolean = false,
@@ -86,6 +88,11 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             preferencesRepository.defaultVehicleId.collect { id ->
                 _uiState.update { it.copy(defaultVehicleId = id) }
+            }
+        }
+        viewModelScope.launch {
+            preferencesRepository.maintenanceMileageWindow.collect { miles ->
+                _uiState.update { it.copy(maintenanceMileageWindow = miles) }
             }
         }
         viewModelScope.launch {
@@ -190,6 +197,13 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             preferencesRepository.setDefaultVehicleId(vehicleId)
             WidgetRefresher.refresh(context)
+        }
+    }
+
+    fun setMaintenanceMileageWindow(miles: Int) {
+        viewModelScope.launch {
+            preferencesRepository.setMaintenanceMileageWindow(miles)
+            WorkScheduler.triggerImmediateReminderCheck(context)
         }
     }
 

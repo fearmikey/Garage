@@ -117,6 +117,7 @@ class MaintenanceSuggestionsViewModelTest {
     }
 
     private class FakePreferencesRepository : PreferencesRepository {
+        val mileageWindowFlow = MutableStateFlow(500)
         override val unitsType: Flow<String> = MutableStateFlow("imperial")
         override val unitSystem: Flow<UnitSystem> = MutableStateFlow(UnitSystem.IMPERIAL)
         override val currencyCode: Flow<String> = MutableStateFlow("USD")
@@ -125,12 +126,16 @@ class MaintenanceSuggestionsViewModelTest {
         override val onboardingCompleted: Flow<Boolean> = MutableStateFlow(true)
         override val termsAccepted: Flow<Boolean> = MutableStateFlow(true)
         override val defaultVehicleId: Flow<Long?> = MutableStateFlow(null)
+        override val maintenanceMileageWindow: Flow<Int> = mileageWindowFlow
         override suspend fun setUnitsType(units: String) {}
         override suspend fun setCurrencyCode(currencyCode: String) {}
         override suspend fun setThemeType(theme: String) {}
         override suspend fun setOnboardingCompleted(completed: Boolean) {}
         override suspend fun setTermsAccepted(accepted: Boolean) {}
         override suspend fun setDefaultVehicleId(vehicleId: Long?) {}
+        override suspend fun setMaintenanceMileageWindow(miles: Int) {
+            mileageWindowFlow.value = miles
+        }
     }
 
     @Before

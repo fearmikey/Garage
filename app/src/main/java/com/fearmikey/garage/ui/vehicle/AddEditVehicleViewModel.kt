@@ -144,30 +144,38 @@ class AddEditVehicleViewModel @Inject constructor(
         val state = _uiState.value
         viewModelScope.launch {
             _uiState.update { it.copy(isSaving = true) }
-            val savedVehicleId = vehicleRepository.saveVehicle(
-                Vehicle(
-                    id = if (isEditing) vehicleId else 0,
-                    vin = state.vin,
-                    year = state.year.toIntOrNull(),
-                    make = state.make,
-                    model = state.model,
-                    trim = state.trim,
-                    drivetrain = state.drivetrain,
-                    imageUri = state.imageFilename,
-                    imageOffsetY = state.imageOffsetY,
-                ),
-            )
-            // Only persist specs when this session actually decoded a VIN; otherwise leave
-            // whatever specs (if any) are already stored for this vehicle untouched.
-            state.pendingSpecs?.let { specs ->
-                vehicleRepository.saveVehicleSpecs(savedVehicleId, specs)
+            try {
+                val newOrUpdatedId = vehicleRepository.saveVehicle(
+                    Vehicle(
+                        id = if (isEditing) vehicleId else 0,
+                        vin = state.vin,
+                        year = state.year.toIntOrNull(),
+                        make = state.make,
+                        model = state.model,
+                        trim = state.trim,
+                        drivetrain = state.drivetrain,
+                        imageUri = state.imageFilename,
+                        imageOffsetY = state.imageOffsetY,
+                    ),
+                )
+                val targetVehicleId = if (isEditing) vehicleId else newOrUpdatedId
+
+                // Only persist specs when this session actually decoded a VIN; otherwise leave
+                // whatever specs (if any) are already stored for this vehicle untouched.
+                state.pendingSpecs?.let { specs ->
+                    vehicleRepository.saveVehicleSpecs(targetVehicleId, specs)
+                }
+                // Now that the new photo (if any) is safely referenced by the saved vehicle,
+                // it's safe to clean up the old one it replaced.
+                originalImageFilename
+                    ?.takeIf { it != state.imageFilename }
+                    ?.let(imageStorageManager::deleteImage)
+                _uiState.update { it.copy(isSaving = false, saveComplete = true) }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(isSaving = false, vinDecodeError = e.message ?: "An error occurred while saving the vehicle.")
+                }
             }
-            // Now that the new photo (if any) is safely referenced by the saved vehicle,
-            // it's safe to clean up the old one it replaced.
-            originalImageFilename
-                ?.takeIf { it != state.imageFilename }
-                ?.let(imageStorageManager::deleteImage)
-            _uiState.update { it.copy(isSaving = false, saveComplete = true) }
         }
     }
 

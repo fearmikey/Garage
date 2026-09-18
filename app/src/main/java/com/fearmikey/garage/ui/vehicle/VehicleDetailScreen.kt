@@ -58,6 +58,7 @@ fun VehicleDetailScreen(
 ) {
     val vehicle by viewModel.vehicle.collectAsStateWithLifecycle()
     val imageFile by viewModel.imageFile.collectAsStateWithLifecycle()
+    val shouldOpenAddSheet by viewModel.shouldOpenAddSheet.collectAsStateWithLifecycle()
     var selectedTab by remember { mutableIntStateOf(viewModel.initialTab) }
 
     Scaffold(
@@ -127,10 +128,16 @@ fun VehicleDetailScreen(
                 }
             }
             when (selectedTab) {
-                0 -> MaintenanceTimelineScreen(autoOpenAddSheet = viewModel.initialOpenAdd)
+                0 -> MaintenanceTimelineScreen(
+                    autoOpenAddSheet = shouldOpenAddSheet && (viewModel.initialTab == 0),
+                    onAddSheetConsumed = viewModel::consumeAddSheet,
+                )
                 1 -> MaintenanceSuggestionsScreen()
                 2 -> RemindersScreen()
-                3 -> FuelScreen(autoOpenAddSheet = viewModel.initialOpenAdd)
+                3 -> FuelScreen(
+                    autoOpenAddSheet = shouldOpenAddSheet && (viewModel.initialTab == 3),
+                    onAddSheetConsumed = viewModel::consumeAddSheet,
+                )
                 4 -> CostOfOwnershipScreen()
                 5 -> RecallsScreen()
                 6 -> VehicleSpecsScreen()

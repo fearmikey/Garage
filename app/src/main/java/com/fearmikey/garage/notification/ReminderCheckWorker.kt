@@ -6,6 +6,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.fearmikey.garage.data.repository.CustomMaintenanceRuleRepository
 import com.fearmikey.garage.data.repository.MaintenanceRepository
+import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.data.repository.ReminderRepository
 import com.fearmikey.garage.data.repository.ReminderStatus
 import com.fearmikey.garage.data.repository.VehicleRepository
@@ -29,11 +30,15 @@ class ReminderCheckWorker @AssistedInject constructor(
     private val vehicleRepository: VehicleRepository,
     private val maintenanceRepository: MaintenanceRepository,
     private val customMaintenanceRuleRepository: CustomMaintenanceRuleRepository,
+    private val preferencesRepository: PreferencesRepository,
     private val notifier: ReminderNotifier,
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result {
         notifier.ensureChannel()
+
+        val upcomingWindowMiles = preferencesRepository.maintenanceMileageWindow.firstOrNull()
+            ?: ReminderRepository.DEFAULT_UPCOMING_WINDOW_MILES
 
         val incompleteReminders = reminderRepository.getIncompleteReminders()
         val processedTasksByVehicle = mutableMapOf<Long, MutableSet<String>>()
@@ -41,7 +46,11 @@ class ReminderCheckWorker @AssistedInject constructor(
         for (reminder in incompleteReminders) {
             val vehicle = vehicleRepository.getVehicleByIdOnce(reminder.vehicleId) ?: continue
             val latestMileage = maintenanceRepository.getLatestMileageForVehicle(reminder.vehicleId).firstOrNull()
-            val status = ReminderRepository.computeStatus(reminder, latestMileage)
+            val status = ReminderRepository.computeStatus(
+                reminder = reminder,
+                latestMileage = latestMileage,
+                upcomingWindowMiles = upcomingWindowMiles,
+            )
 
             processedTasksByVehicle
                 .getOrPut(reminder.vehicleId) { mutableSetOf() }
@@ -68,6 +77,7 @@ class ReminderCheckWorker @AssistedInject constructor(
                 latestMileage = latestMileage,
                 records = records,
                 customRules = customRules.map { it.toMaintenanceRule() },
+                upcomingWindowMiles = upcomingWindowMiles,
             )
 
             val existingTasks = processedTasksByVehicle[vehicle.id] ?: emptySet()

@@ -108,6 +108,10 @@ class VehicleRepository @Inject constructor(
         plantState = cleanSpec(plantState),
         plantCountry = cleanSpec(plantCountry),
         manufacturer = cleanSpec(manufacturer),
+        trailerBrakedCapacity = cleanSpec(trailerBrakedCapacity),
+        trailerUnbrakedCapacity = cleanSpec(trailerUnbrakedCapacity),
+        gcwr = cleanSpec(gcwr),
+        curbWeight = cleanSpec(curbWeight),
     )
 
     /**

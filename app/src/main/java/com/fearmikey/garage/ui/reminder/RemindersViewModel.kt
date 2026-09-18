@@ -43,9 +43,17 @@ class RemindersViewModel @Inject constructor(
     val reminders: StateFlow<List<ReminderListItem>> = combine(
         reminderRepository.getRemindersForVehicle(vehicleId),
         maintenanceRepository.getLatestMileageForVehicle(vehicleId),
-    ) { reminders, latestMileage ->
+        preferencesRepository.maintenanceMileageWindow,
+    ) { reminders, latestMileage, mileageWindow ->
         reminders.map { reminder ->
-            ReminderListItem(reminder, ReminderRepository.computeStatus(reminder, latestMileage))
+            ReminderListItem(
+                reminder,
+                ReminderRepository.computeStatus(
+                    reminder = reminder,
+                    latestMileage = latestMileage,
+                    upcomingWindowMiles = mileageWindow,
+                )
+            )
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 

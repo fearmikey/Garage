@@ -40,37 +40,65 @@ private data class SpecGroup(
     val rows: List<Pair<String, String>>,
 )
 
-private fun VehicleSpecs.toGroups(): List<SpecGroup> = listOf(
-    SpecGroup(
-        title = "Engine & Drivetrain",
-        rows = listOfNotNull(
-            engineCylinders?.let { "Cylinders" to it },
-            displacementL?.let { "Displacement" to "$it L" },
-            engineHp?.let { "Horsepower" to "$it hp" },
-            fuelType?.let { "Fuel type" to it },
-            transmissionStyle?.let { "Transmission" to it },
-            transmissionSpeeds?.let { "Transmission speeds" to it },
+private fun formatWeight(value: String): String {
+    val trimmed = value.trim()
+    if (trimmed.isEmpty()) return value
+    if (trimmed.contains("lb", ignoreCase = true) || trimmed.contains("kg", ignoreCase = true)) {
+        return trimmed
+    }
+    return if (trimmed.toDoubleOrNull() != null) "$trimmed lbs" else trimmed
+}
+
+private fun VehicleSpecs.toGroups(): List<SpecGroup> {
+    val hasTowingOrWeightSpecs = listOf(trailerBrakedCapacity, trailerUnbrakedCapacity, gcwr, curbWeight)
+        .any { !it.isNullOrBlank() }
+
+    return listOf(
+        SpecGroup(
+            title = "Engine & Drivetrain",
+            rows = listOfNotNull(
+                engineCylinders?.let { "Cylinders" to it },
+                displacementL?.let { "Displacement" to "$it L" },
+                engineHp?.let { "Horsepower" to "$it hp" },
+                fuelType?.let { "Fuel type" to it },
+                transmissionStyle?.let { "Transmission" to it },
+                transmissionSpeeds?.let { "Transmission speeds" to it },
+            ),
         ),
-    ),
-    SpecGroup(
-        title = "Body",
-        rows = listOfNotNull(
-            vehicleType?.let { "Vehicle type" to it },
-            bodyClass?.let { "Body class" to it },
-            doors?.let { "Doors" to it },
-            series?.let { "Series" to it },
-            gvwr?.let { "GVWR" to it },
+        SpecGroup(
+            title = "Weights & Towing",
+            rows = if (hasTowingOrWeightSpecs) {
+                listOfNotNull(
+                    trailerBrakedCapacity?.let { "Towing capacity (braked)" to formatWeight(it) },
+                    trailerUnbrakedCapacity?.let { "Towing capacity (unbraked)" to formatWeight(it) },
+                    gcwr?.let { "GCWR" to formatWeight(it) },
+                    gvwr?.let { "GVWR" to it },
+                    curbWeight?.let { "Curb weight" to formatWeight(it) },
+                )
+            } else {
+                emptyList()
+            },
         ),
-    ),
-    SpecGroup(
-        title = "Manufacturing",
-        rows = listOfNotNull(
-            manufacturer?.let { "Manufacturer" to it },
-            listOfNotNull(plantCity, plantState, plantCountry).joinToString(", ").takeIf { it.isNotBlank() }
-                ?.let { "Plant" to it },
+        SpecGroup(
+            title = "Body",
+            rows = listOfNotNull(
+                vehicleType?.let { "Vehicle type" to it },
+                bodyClass?.let { "Body class" to it },
+                doors?.let { "Doors" to it },
+                series?.let { "Series" to it },
+                if (!hasTowingOrWeightSpecs) gvwr?.let { "GVWR" to it } else null,
+            ),
         ),
-    ),
-).filter { it.rows.isNotEmpty() }
+        SpecGroup(
+            title = "Manufacturing",
+            rows = listOfNotNull(
+                manufacturer?.let { "Manufacturer" to it },
+                listOfNotNull(plantCity, plantState, plantCountry).joinToString(", ").takeIf { it.isNotBlank() }
+                    ?.let { "Plant" to it },
+            ),
+        ),
+    ).filter { it.rows.isNotEmpty() }
+}
 
 @Composable
 private fun VehicleSpecsContent(specs: VehicleSpecs?) {

@@ -73,13 +73,17 @@ import java.time.ZoneOffset
 @Composable
 fun FuelScreen(
     autoOpenAddSheet: Boolean = false,
+    onAddSheetConsumed: () -> Unit = {},
     viewModel: FuelViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showAddSheet by remember { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) {
-        if (autoOpenAddSheet) showAddSheet = true
+    LaunchedEffect(autoOpenAddSheet) {
+        if (autoOpenAddSheet) {
+            showAddSheet = true
+            onAddSheetConsumed()
+        }
     }
 
     FuelContent(

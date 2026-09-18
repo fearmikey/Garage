@@ -42,10 +42,15 @@ data class VehicleSpecs(
     val plantState: String? = null,
     val plantCountry: String? = null,
     val manufacturer: String? = null,
+    val trailerBrakedCapacity: String? = null,
+    val trailerUnbrakedCapacity: String? = null,
+    val gcwr: String? = null,
+    val curbWeight: String? = null,
 ) {
     /** True when every field is null/blank, i.e. nothing worth showing on the Specs tab. */
     fun isEmpty(): Boolean = listOf(
         engineCylinders, displacementL, engineHp, fuelType, transmissionStyle, transmissionSpeeds,
         bodyClass, doors, gvwr, series, vehicleType, plantCity, plantState, plantCountry, manufacturer,
+        trailerBrakedCapacity, trailerUnbrakedCapacity, gcwr, curbWeight,
     ).all { it.isNullOrBlank() }
 }

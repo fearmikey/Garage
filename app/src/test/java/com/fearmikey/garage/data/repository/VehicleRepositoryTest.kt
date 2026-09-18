@@ -27,4 +27,11 @@ class VehicleRepositoryTest {
         assertNull(VehicleRepository.cleanSpec(""))
         assertNull(VehicleRepository.cleanSpec("   "))
     }
+
+    @Test
+    fun `cleanSpec handles towing capacity strings`() {
+        assertEquals("6400", VehicleRepository.cleanSpec("6400"))
+        assertEquals("6400 lbs", VehicleRepository.cleanSpec(" 6400 lbs "))
+        assertNull(VehicleRepository.cleanSpec("Not Applicable"))
+    }
 }

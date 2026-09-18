@@ -37,4 +37,8 @@ data class VinDecodeResult(
     @SerializedName("PlantState") val plantState: String? = null,
     @SerializedName("PlantCountry") val plantCountry: String? = null,
     @SerializedName("Manufacturer") val manufacturer: String? = null,
+    @SerializedName("TrailerBrakedCapacity") val trailerBrakedCapacity: String? = null,
+    @SerializedName("TrailerUnbrakedCapacity") val trailerUnbrakedCapacity: String? = null,
+    @SerializedName("GCWR") val gcwr: String? = null,
+    @SerializedName("CurbWeight") val curbWeight: String? = null,
 )

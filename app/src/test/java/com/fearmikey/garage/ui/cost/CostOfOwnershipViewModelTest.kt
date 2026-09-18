@@ -59,12 +59,14 @@ class CostOfOwnershipViewModelTest {
         override val onboardingCompleted: Flow<Boolean> = MutableStateFlow(true)
         override val termsAccepted: Flow<Boolean> = MutableStateFlow(true)
         override val defaultVehicleId: Flow<Long?> = MutableStateFlow(null)
+        override val maintenanceMileageWindow: Flow<Int> = MutableStateFlow(500)
         override suspend fun setUnitsType(units: String) {}
         override suspend fun setCurrencyCode(currencyCode: String) {}
         override suspend fun setThemeType(theme: String) {}
         override suspend fun setOnboardingCompleted(completed: Boolean) {}
         override suspend fun setTermsAccepted(accepted: Boolean) {}
         override suspend fun setDefaultVehicleId(vehicleId: Long?) {}
+        override suspend fun setMaintenanceMileageWindow(miles: Int) {}
     }
 
     @Before

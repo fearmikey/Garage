@@ -57,6 +57,7 @@ class SettingsViewModelTest {
 
     private class FakePreferencesRepository : PreferencesRepository {
         val currencyCodeFlow = MutableStateFlow("USD")
+        val maintenanceMileageWindowFlow = MutableStateFlow(500)
         override val unitsType: Flow<String> = MutableStateFlow("metric")
         override val unitSystem: Flow<UnitSystem> = MutableStateFlow(UnitSystem.METRIC)
         override val currencyCode: Flow<String> = currencyCodeFlow
@@ -65,6 +66,7 @@ class SettingsViewModelTest {
         override val onboardingCompleted: Flow<Boolean> = MutableStateFlow(true)
         override val termsAccepted: Flow<Boolean> = MutableStateFlow(true)
         override val defaultVehicleId: Flow<Long?> = MutableStateFlow(null)
+        override val maintenanceMileageWindow: Flow<Int> = maintenanceMileageWindowFlow
 
         override suspend fun setUnitsType(units: String) {}
         override suspend fun setCurrencyCode(currencyCode: String) {
@@ -74,6 +76,9 @@ class SettingsViewModelTest {
         override suspend fun setOnboardingCompleted(completed: Boolean) {}
         override suspend fun setTermsAccepted(accepted: Boolean) {}
         override suspend fun setDefaultVehicleId(vehicleId: Long?) {}
+        override suspend fun setMaintenanceMileageWindow(miles: Int) {
+            maintenanceMileageWindowFlow.value = miles
+        }
     }
 
     private class FakeVehicleDao : VehicleDao {
@@ -217,5 +222,81 @@ class SettingsViewModelTest {
 
         assertEquals(true, viewModel.uiState.value.localBackupEnabled)
         assertEquals("content://com.android.externalstorage.documents/tree/primary%3ABackups", viewModel.uiState.value.localBackupFolderUri)
+    }
+
+    @Test
+    fun `maintenance mileage window preference updates uiState and repository`() = runTest {
+        val context = TestContext()
+        val prefsRepo = FakePreferencesRepository()
+        val vehicleRepo = VehicleRepository(
+            vehicleDao = FakeVehicleDao(),
+            vehicleSpecsDao = FakeVehicleSpecsDao(),
+            vehiclePartsDao = FakeVehiclePartsDao(),
+            vinDecoderApi = FakeVinDecoderApi(),
+        )
+        val cloudPrefs = TestCloudBackupPreferencesManager(context)
+        @Suppress("DEPRECATION")
+        val dummyDb = object : GarageDatabase() {
+            override fun vehicleDao(): VehicleDao = FakeVehicleDao()
+            override fun maintenanceDao(): MaintenanceDao = object : MaintenanceDao {
+                override fun getRecordsForVehicleByDate(vehicleId: Long) = MutableStateFlow(emptyList<MaintenanceRecord>())
+                override fun getRecordsForVehicleByMileage(vehicleId: Long) = MutableStateFlow(emptyList<MaintenanceRecord>())
+                override fun getLatestMileageForVehicle(vehicleId: Long) = MutableStateFlow(null)
+                override suspend fun upsert(record: MaintenanceRecord) = 1L
+                override suspend fun update(record: MaintenanceRecord) {}
+                override suspend fun delete(record: MaintenanceRecord) {}
+            }
+            override fun reminderDao(): ReminderDao = object : ReminderDao {
+                override fun getRemindersForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<Reminder>())
+                override suspend fun getIncompleteReminders() = emptyList<Reminder>()
+                override suspend fun upsert(reminder: Reminder) = 1L
+                override suspend fun update(reminder: Reminder) {}
+                override suspend fun delete(reminder: Reminder) {}
+            }
+            override fun vehicleSpecsDao(): VehicleSpecsDao = FakeVehicleSpecsDao()
+            override fun fuelDao(): FuelDao = object : FuelDao {
+                override fun getRecordsForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<FuelRecord>())
+                override suspend fun upsert(record: FuelRecord) = 1L
+                override suspend fun update(record: FuelRecord) {}
+                override suspend fun delete(record: FuelRecord) {}
+            }
+            override fun vehiclePartsDao(): VehiclePartsDao = FakeVehiclePartsDao()
+            override fun customMaintenanceRuleDao(): CustomMaintenanceRuleDao = object : CustomMaintenanceRuleDao {
+                override fun getForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<CustomMaintenanceRule>())
+                override suspend fun upsert(rule: CustomMaintenanceRule) = 1L
+                override suspend fun delete(rule: CustomMaintenanceRule) {}
+            }
+            override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper {
+                throw UnsupportedOperationException()
+            }
+            override fun createInvalidationTracker(): InvalidationTracker {
+                return InvalidationTracker(this, emptyMap(), emptyMap(), "vehicles")
+            }
+            override fun clearAllTables() {}
+        }
+        val backupRepo = BackupRepository(context, dummyDb, ImageStorageManager(context), cloudPrefs)
+        val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs)
+        val autoBackupManager = AutoBackupManager(dummyDb, backupRepo, cloudPrefs)
+        val notifier = ReminderNotifier(context)
+
+        val viewModel = SettingsViewModel(
+            context = context,
+            backupRepository = backupRepo,
+            preferencesRepository = prefsRepo,
+            vehicleRepository = vehicleRepo,
+            webDavBackupRepository = webDavRepo,
+            cloudBackupPreferencesManager = cloudPrefs,
+            autoBackupManager = autoBackupManager,
+            reminderNotifier = notifier,
+        )
+
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertEquals(500, viewModel.uiState.value.maintenanceMileageWindow)
+
+        viewModel.setMaintenanceMileageWindow(250)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(250, prefsRepo.maintenanceMileageWindowFlow.value)
+        assertEquals(250, viewModel.uiState.value.maintenanceMileageWindow)
     }
 }

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.Reminder
+import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.repository.CustomMaintenanceRuleRepository
 import com.fearmikey.garage.data.repository.MaintenanceRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
@@ -56,7 +57,15 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
         maintenanceRepository.getLatestMileageForVehicle(vehicleId),
         customMaintenanceRuleRepository.getRulesForVehicle(vehicleId),
         reminderRepository.getRemindersForVehicle(vehicleId),
-    ) { vehicle, records, latestMileage, customRules, reminders ->
+        preferencesRepository.maintenanceMileageWindow,
+    ) { flows: Array<Any?> ->
+        val vehicle = flows[0] as? Vehicle
+        val records = (flows[1] as? List<*>)?.filterIsInstance<MaintenanceRecord>() ?: emptyList()
+        val latestMileage = flows[2] as? Int
+        val customRules = (flows[3] as? List<*>)?.filterIsInstance<CustomMaintenanceRule>() ?: emptyList()
+        val reminders = (flows[4] as? List<*>)?.filterIsInstance<Reminder>() ?: emptyList()
+        val mileageWindow = flows[5] as? Int ?: ReminderRepository.DEFAULT_UPCOMING_WINDOW_MILES
+
         if (vehicle == null) {
             emptyList()
         } else {
@@ -67,10 +76,11 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
                 .toSet()
 
             MaintenanceScheduleEngine.suggestionsFor(
-                vehicle,
-                latestMileage,
-                records,
-                customRules.map { it.toMaintenanceRule() },
+                vehicle = vehicle,
+                latestMileage = latestMileage,
+                records = records,
+                customRules = customRules.map { it.toMaintenanceRule() },
+                upcomingWindowMiles = mileageWindow,
             ).filter { suggestion ->
                 suggestion.rule.taskName.lowercase() !in activeReminderTasks
             }

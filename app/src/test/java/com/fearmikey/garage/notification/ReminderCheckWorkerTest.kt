@@ -118,4 +118,33 @@ class ReminderCheckWorkerTest {
         assertEquals("reminder-check", ReminderCheckWorker.UNIQUE_WORK_NAME)
         assertEquals("reminder-check-immediate", ReminderCheckWorker.IMMEDIATE_WORK_NAME)
     }
+
+    @Test
+    fun `computeStatus respects custom upcoming window miles`() {
+        val reminder = Reminder(
+            id = 1,
+            vehicleId = 1,
+            taskName = "Tire Rotation",
+            dueMileage = 10000,
+        )
+
+        // Latest mileage is 9600 (400 miles away from due mileage)
+        // With default 500 window, 400 <= 500 -> UPCOMING
+        assertEquals(
+            ReminderStatus.UPCOMING,
+            ReminderRepository.computeStatus(reminder, latestMileage = 9600, upcomingWindowMiles = 500)
+        )
+
+        // With smaller 250 window, 400 > 250 -> OK
+        assertEquals(
+            ReminderStatus.OK,
+            ReminderRepository.computeStatus(reminder, latestMileage = 9600, upcomingWindowMiles = 250)
+        )
+
+        // With larger 1000 window, 400 <= 1000 -> UPCOMING
+        assertEquals(
+            ReminderStatus.UPCOMING,
+            ReminderRepository.computeStatus(reminder, latestMileage = 9600, upcomingWindowMiles = 1000)
+        )
+    }
 }

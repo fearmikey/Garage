@@ -28,7 +28,8 @@ class ReminderRepository @Inject constructor(
 
     companion object {
         const val UPCOMING_WINDOW_DAYS = 7L
-        const val UPCOMING_WINDOW_MILES = 500
+        const val DEFAULT_UPCOMING_WINDOW_MILES = 500
+        const val UPCOMING_WINDOW_MILES = DEFAULT_UPCOMING_WINDOW_MILES
 
         /**
          * Shared status logic used by both the Reminders UI and
@@ -39,6 +40,7 @@ class ReminderRepository @Inject constructor(
             reminder: Reminder,
             latestMileage: Int?,
             now: Long = System.currentTimeMillis(),
+            upcomingWindowMiles: Int = DEFAULT_UPCOMING_WINDOW_MILES,
         ): ReminderStatus {
             if (reminder.isCompleted) return ReminderStatus.COMPLETED
 
@@ -56,7 +58,7 @@ class ReminderRepository @Inject constructor(
             val mileageStatus = if (dueMileage != null && latestMileage != null) {
                 when {
                     latestMileage >= dueMileage -> ReminderStatus.OVERDUE
-                    dueMileage - latestMileage <= UPCOMING_WINDOW_MILES -> ReminderStatus.UPCOMING
+                    dueMileage - latestMileage <= upcomingWindowMiles -> ReminderStatus.UPCOMING
                     else -> ReminderStatus.OK
                 }
             } else null
