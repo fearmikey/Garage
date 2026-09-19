@@ -1,45 +1,22 @@
 Categories:
-  - Navigation
-  - System
+  - Transport
+  - Productivity
 License: MIT
-AuthorName: Mike
-WebSite: https://github.com/fearmikey/Garage
 SourceCode: https://github.com/fearmikey/Garage
 IssueTracker: https://github.com/fearmikey/Garage/issues
-Changelog: https://github.com/fearmikey/Garage/blob/main/CHANGELOG.md
-
-AutoUpdateMode: Version
-UpdateCheckMode: Tags
-CurrentVersion: 1.1.8
-CurrentVersionCode: 11
-
-Name: Garage
-Summary: Modern, privacy-focused vehicle management app
-Description: |-
-  Garage is a modern, privacy-focused, comprehensive vehicle management application
-  for Android. Garage enables vehicle owners to track maintenance schedules, monitor fuel
-  efficiency, analyze cost of ownership, check safety recalls, and maintain detailed
-  service records for all their vehicles in one centralized hub.
-
-  Features:
-  - Track service history & maintenance schedule
-  - VIN decoding & specifications lookup
-  - Fuel economy & fill-up tracking
-  - Privacy focused & 100% offline-first functionality
-  - Detailed cost of ownership analytics
-  - Safety recall alerts & reminders
-  - WebDAV cloud backup support
+Changelog: https://github.com/fearmikey/Garage/releases
 
 RepoType: git
 Repo: https://github.com/fearmikey/Garage.git
 
 Builds:
-  - versionName: 1.1.8
+  - versionName: '1.1.8'
     versionCode: 11
     commit: v1.1.8
     subdir: app
-    sudo:
-      - apt-get update
-      - apt-get install -y openjdk-17-jdk
     gradle:
       - yes
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+UpdateCheckData: v.*
