@@ -68,7 +68,6 @@ class SettingsViewModelTest {
         override val appCurrency: Flow<AppCurrency> = MutableStateFlow(AppCurrency.USD)
         override val themeType: Flow<String> = MutableStateFlow("system")
         override val onboardingCompleted: Flow<Boolean> = MutableStateFlow(true)
-        override val termsAccepted: Flow<Boolean> = MutableStateFlow(true)
         override val defaultVehicleId: Flow<Long?> = MutableStateFlow(null)
         override val maintenanceMileageWindow: Flow<Int> = maintenanceMileageWindowFlow
         override val appOpenCount: Flow<Int> = MutableStateFlow(1)
@@ -81,7 +80,6 @@ class SettingsViewModelTest {
         }
         override suspend fun setThemeType(theme: String) {}
         override suspend fun setOnboardingCompleted(completed: Boolean) {}
-        override suspend fun setTermsAccepted(accepted: Boolean) {}
         override suspend fun setDefaultVehicleId(vehicleId: Long?) {}
         override suspend fun setMaintenanceMileageWindow(miles: Int) {
             maintenanceMileageWindowFlow.value = miles

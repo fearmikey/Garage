@@ -12,7 +12,6 @@ interface PreferencesRepository {
     val appCurrency: Flow<AppCurrency>
     val themeType: Flow<String>
     val onboardingCompleted: Flow<Boolean>
-    val termsAccepted: Flow<Boolean>
     /** The user's explicitly chosen default vehicle, or `null` if none has been chosen. */
     val defaultVehicleId: Flow<Long?>
     val maintenanceMileageWindow: Flow<Int>
@@ -24,7 +23,6 @@ interface PreferencesRepository {
     suspend fun setCurrencyCode(currencyCode: String)
     suspend fun setThemeType(theme: String)
     suspend fun setOnboardingCompleted(completed: Boolean)
-    suspend fun setTermsAccepted(accepted: Boolean)
     suspend fun setDefaultVehicleId(vehicleId: Long?)
     suspend fun setMaintenanceMileageWindow(miles: Int)
     suspend fun incrementAppOpenCount(): Int
@@ -39,7 +37,6 @@ class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManag
     override val appCurrency: Flow<AppCurrency> = preferencesManager.appCurrency
     override val themeType: Flow<String> = preferencesManager.themeType
     override val onboardingCompleted: Flow<Boolean> = preferencesManager.onboardingCompleted
-    override val termsAccepted: Flow<Boolean> = preferencesManager.termsAccepted
     override val defaultVehicleId: Flow<Long?> = preferencesManager.defaultVehicleId
     override val maintenanceMileageWindow: Flow<Int> = preferencesManager.maintenanceMileageWindow
     override val appOpenCount: Flow<Int> = preferencesManager.appOpenCount
@@ -60,10 +57,6 @@ class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManag
 
     override suspend fun setOnboardingCompleted(completed: Boolean) {
         preferencesManager.setOnboardingCompleted(completed)
-    }
-
-    override suspend fun setTermsAccepted(accepted: Boolean) {
-        preferencesManager.setTermsAccepted(accepted)
     }
 
     override suspend fun setDefaultVehicleId(vehicleId: Long?) {

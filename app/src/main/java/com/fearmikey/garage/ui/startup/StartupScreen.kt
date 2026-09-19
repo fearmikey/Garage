@@ -109,7 +109,6 @@ fun StartupScreen(
         uiState = uiState,
         onSelectUnits = viewModel::selectUnits,
         onSelectCurrency = viewModel::selectCurrency,
-        onSetTermsAccepted = viewModel::setTermsAccepted,
         onRequestNotificationPermission = {
             notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         },
@@ -126,7 +125,6 @@ private fun StartupContent(
     uiState: StartupUiState,
     onSelectUnits: (String) -> Unit,
     onSelectCurrency: (String) -> Unit,
-    onSetTermsAccepted: (Boolean) -> Unit,
     onRequestNotificationPermission: () -> Unit,
     onRequestCameraPermission: () -> Unit,
     onGetStarted: () -> Unit,
@@ -146,7 +144,6 @@ private fun StartupContent(
                 ) {
                     Button(
                         onClick = onGetStarted,
-                        enabled = uiState.termsAccepted,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(52.dp),
@@ -349,104 +346,6 @@ private fun StartupContent(
                         description = "Scan vehicle VIN barcodes with your camera to quickly import vehicle details.",
                         isGranted = uiState.cameraPermissionGranted,
                         onRequestPermission = onRequestCameraPermission,
-                    )
-                }
-            }
-
-            HorizontalDivider()
-
-            // Section 3: Terms of Service
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text(
-                    text = "Terms of Service",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
-
-                Text(
-                    text = "Please review and accept our Terms of Service before using Garage.",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                OutlinedCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.outlinedCardColors(containerColor = MaterialTheme.colorScheme.surface),
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .clip(CircleShape)
-                                    .background(MaterialTheme.colorScheme.primaryContainer),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Gavel,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    modifier = Modifier.size(22.dp),
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.width(16.dp))
-
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text(
-                                    text = "Garage Terms of Service",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                )
-                                Spacer(modifier = Modifier.height(2.dp))
-                                Text(
-                                    text = "By using Garage, you agree to the software license, disclaimers, and terms.",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                )
-                            }
-                        }
-
-                        OutlinedButton(
-                            onClick = { uriHandler.openUri("https://github.com/fearmikey/Garage/blob/main/TERMS.md") },
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(12.dp),
-                        ) {
-                            Text("View Terms of Service on GitHub")
-                        }
-                    }
-                }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .clickable { onSetTermsAccepted(!uiState.termsAccepted) }
-                        .padding(vertical = 4.dp, horizontal = 4.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Checkbox(
-                        checked = uiState.termsAccepted,
-                        onCheckedChange = { onSetTermsAccepted(it) },
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "I have read and agree to the Terms of Service",
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colorScheme.onBackground,
                     )
                 }
             }
@@ -712,11 +611,9 @@ private fun StartupContentPreview() {
                 selectedCurrency = "USD",
                 notificationPermissionGranted = false,
                 cameraPermissionGranted = true,
-                termsAccepted = true,
             ),
             onSelectUnits = {},
             onSelectCurrency = {},
-            onSetTermsAccepted = {},
             onRequestNotificationPermission = {},
             onRequestCameraPermission = {},
             onGetStarted = {},

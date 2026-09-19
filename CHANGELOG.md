@@ -1,3 +1,13 @@
+## [1.1.9] - 2026-09-12
+
+### Added
+* **Privacy Policy (`PRIVACY.md`):** Added a dedicated offline-first Privacy Policy document outlining local-only data storage and zero-telemetry practices.
+* **F-Droid Release Assets:** Added high-resolution store screenshots and F-Droid compliant metadata.
+
+### Changed
+* **Help & FAQ Link:** Updated Settings screen Help/FAQ entry to point directly to GitHub Discussions for community support.
+* **Repository Cleanups:** Updated `.gitignore` rules to exclude release APK outputs and temporary build artifacts.
+
 ## [1.1.8] - 2026-09-12
 
 ### Added
@@ -93,7 +103,7 @@
 * **Home Screen App Widget:** Android Glance home screen widget displaying vehicle status and maintenance reminders with quick-log shortcuts.
 * **WebDAV Cloud Backup & Sync:** Automated and manual cloud backups via WebDAV with encrypted credential storage.
 * **Custom Maintenance Rules:** Personalized maintenance interval rules and thresholds per vehicle.
-* **Terms of Service & License:** Added formal Terms of Service documentation and MIT License.
+* **License:** Added formal MIT License.
 
 ### Changed
 * **App Icon:** Added dedicated launcher icon branding.

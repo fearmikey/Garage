@@ -411,7 +411,7 @@ fun SettingsScreen(
                     leadingContent = { Icon(Icons.AutoMirrored.Filled.Help, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { uriHandler.openUri("https://github.com/fearmikey/Garage") },
+                        .clickable { uriHandler.openUri("https://github.com/fearmikey/Garage/discussions") },
                 )
             }
             item {
@@ -420,17 +420,7 @@ fun SettingsScreen(
                     leadingContent = { Icon(Icons.Filled.PrivacyTip, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { uriHandler.openUri("https://github.com/fearmikey/Garage") },
-                )
-            }
-            item {
-                ListItem(
-                    headlineContent = { Text("Terms of Service") },
-                    supportingContent = { Text("Read terms and conditions on GitHub") },
-                    leadingContent = { Icon(Icons.Filled.Gavel, contentDescription = null) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { uriHandler.openUri("https://github.com/fearmikey/Garage/blob/main/TERMS.md") },
+                        .clickable { uriHandler.openUri("https://github.com/fearmikey/Garage/blob/main/PRIVACY.md") },
                 )
             }
             item {

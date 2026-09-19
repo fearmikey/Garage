@@ -39,13 +39,11 @@ class StartupViewModelTest {
         val currencyCodeFlow = MutableStateFlow("USD")
         val themeTypeFlow = MutableStateFlow("system")
         val onboardingCompletedFlow = MutableStateFlow(false)
-        val termsAcceptedFlow = MutableStateFlow(false)
         val defaultVehicleIdFlow = MutableStateFlow<Long?>(null)
 
         var savedUnits: String? = null
         var savedCurrency: String? = null
         var isCompleted: Boolean = false
-        var isTermsAccepted: Boolean = false
 
         override val unitsType: Flow<String> = unitsTypeFlow
         override val unitSystem: Flow<UnitSystem> = MutableStateFlow(UnitSystem.METRIC)
@@ -53,7 +51,6 @@ class StartupViewModelTest {
         override val appCurrency: Flow<AppCurrency> = MutableStateFlow(AppCurrency.USD)
         override val themeType: Flow<String> = themeTypeFlow
         override val onboardingCompleted: Flow<Boolean> = onboardingCompletedFlow
-        override val termsAccepted: Flow<Boolean> = termsAcceptedFlow
         override val defaultVehicleId: Flow<Long?> = defaultVehicleIdFlow
         override val maintenanceMileageWindow: Flow<Int> = MutableStateFlow(500)
         override val appOpenCount: Flow<Int> = MutableStateFlow(1)
@@ -77,11 +74,6 @@ class StartupViewModelTest {
         override suspend fun setOnboardingCompleted(completed: Boolean) {
             isCompleted = completed
             onboardingCompletedFlow.value = completed
-        }
-
-        override suspend fun setTermsAccepted(accepted: Boolean) {
-            isTermsAccepted = accepted
-            termsAcceptedFlow.value = accepted
         }
 
         override suspend fun setDefaultVehicleId(vehicleId: Long?) {
@@ -130,20 +122,7 @@ class StartupViewModelTest {
     }
 
     @Test
-    fun `setTermsAccepted updates uiState`() = runTest {
-        val context = TestContext()
-        val fakeRepo = FakePreferencesRepository()
-        val viewModel = StartupViewModel(context, fakeRepo)
-
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        assertEquals(false, viewModel.uiState.value.termsAccepted)
-        viewModel.setTermsAccepted(true)
-        assertEquals(true, viewModel.uiState.value.termsAccepted)
-    }
-
-    @Test
-    fun `completeStartup saves units, currency, terms accepted, and marks onboarding as completed`() = runTest {
+    fun `completeStartup saves units, currency, and marks onboarding as completed`() = runTest {
         val context = TestContext()
         val fakeRepo = FakePreferencesRepository()
         val viewModel = StartupViewModel(context, fakeRepo)
@@ -152,7 +131,6 @@ class StartupViewModelTest {
 
         viewModel.selectUnits("imperial")
         viewModel.selectCurrency("GBP")
-        viewModel.setTermsAccepted(true)
 
         var finishedCalled = false
         viewModel.completeStartup {
@@ -163,7 +141,6 @@ class StartupViewModelTest {
 
         assertEquals("imperial", fakeRepo.savedUnits)
         assertEquals("GBP", fakeRepo.savedCurrency)
-        assertTrue(fakeRepo.isTermsAccepted)
         assertTrue(fakeRepo.isCompleted)
         assertTrue(finishedCalled)
     }

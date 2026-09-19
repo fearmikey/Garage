@@ -1,7 +1,7 @@
 # 🚗 Garage
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.1.8-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-1.1.9-blue.svg)](CHANGELOG.md)
 [![Android Min SDK](https://img.shields.io/badge/Min%20SDK-34-brightgreen.svg)](https://developer.android.com/about/versions/14)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4-purple.svg?logo=kotlin)](https://kotlinlang.org/)
 [![Compose](https://img.shields.io/badge/Jetpack%20Compose-Material3-4285F4.svg?logo=android)](https://developer.android.com/jetpack/compose)
@@ -20,7 +20,6 @@
 - [Building & Testing](#-building--testing)
 - [Changelog](#-changelog)
 - [License](#-license)
-- [Terms of Service](#-terms-of-service)
 
 ---
 
@@ -130,7 +129,6 @@ Garage/
 ├── CHANGELOG.md                  # Version release history
 ├── LICENSE                       # MIT License
 ├── README.md                     # Project documentation
-└── TERMS.md                      # Terms of Service
 ```
 
 ---
@@ -182,9 +180,3 @@ See the [CHANGELOG.md](CHANGELOG.md) file for details on version updates and rel
 ## ⚖️ License
 
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for full details.
-
----
-
-## 📄 Terms of Service
-
-Please review our [Terms of Service](TERMS.md) before using the application.

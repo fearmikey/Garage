@@ -21,7 +21,6 @@ class PreferencesManager(private val context: Context) {
         val CURRENCY_KEY = stringPreferencesKey("currency_code")
         val THEME_KEY = stringPreferencesKey("theme_type")
         val ONBOARDING_COMPLETED_KEY = booleanPreferencesKey("onboarding_completed")
-        val TERMS_ACCEPTED_KEY = booleanPreferencesKey("terms_accepted")
         val DEFAULT_VEHICLE_ID_KEY = longPreferencesKey("default_vehicle_id")
         val MAINTENANCE_MILEAGE_WINDOW_KEY = intPreferencesKey("maintenance_mileage_window")
         val APP_OPEN_COUNT_KEY = intPreferencesKey("app_open_count")
@@ -53,11 +52,6 @@ class PreferencesManager(private val context: Context) {
     val onboardingCompleted: Flow<Boolean> = context.dataStore.data
         .map { preferences ->
             preferences[ONBOARDING_COMPLETED_KEY] ?: false
-        }
-
-    val termsAccepted: Flow<Boolean> = context.dataStore.data
-        .map { preferences ->
-            preferences[TERMS_ACCEPTED_KEY] ?: false
         }
 
     val appOpenCount: Flow<Int> = context.dataStore.data
@@ -134,12 +128,6 @@ class PreferencesManager(private val context: Context) {
     suspend fun setOnboardingCompleted(completed: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[ONBOARDING_COMPLETED_KEY] = completed
-        }
-    }
-
-    suspend fun setTermsAccepted(accepted: Boolean) {
-        context.dataStore.edit { preferences ->
-            preferences[TERMS_ACCEPTED_KEY] = accepted
         }
     }
 
