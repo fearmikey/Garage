@@ -73,8 +73,8 @@ object PartsEstimator {
         if (viscosity == null) {
             viscosity = when {
                 fuelType.contains("diesel") -> "5W-40"
-                (make.contains("toyota") || make.contains("lexus") || make.contains("honda") ||
-                    make.contains("acura") || make.contains("mazda") || make.contains("subaru")) && year >= 2018 -> "0W-16"
+                ((make.contains("toyota") || make.contains("lexus") || make.contains("honda") ||
+                    make.contains("acura") || make.contains("mazda") || make.contains("subaru")) && (year >= 2018)) -> "0W-16"
                 year >= 2010 -> "0W-20"
                 year >= 2000 -> "5W-30"
                 else -> "10W-30"
@@ -83,8 +83,8 @@ object PartsEstimator {
 
         if (capacity == null) {
             capacity = when {
-                cylinders >= 8 || displacement >= 5.0 -> "8.0 qts"
-                cylinders >= 6 || displacement >= 3.0 -> "6.0 qts"
+                (cylinders >= 8) || (displacement >= 5.0) -> "8.0 qts"
+                (cylinders >= 6) || (displacement >= 3.0) -> "6.0 qts"
                 displacement >= 2.4 -> "5.2 qts"
                 cylinders <= 3 -> "3.7 qts"
                 else -> "4.4 qts"
@@ -172,8 +172,8 @@ object PartsEstimator {
     ): EngineSpec {
         if (model.contains("tacoma")) {
             return when {
-                (year in 2016..2023) -> {
-                    if (cylinders >= 6 || displacement >= 3.0) {
+                year in (2016..2023) -> {
+                    if ((cylinders >= 6) || (displacement >= 3.0)) {
                         EngineSpec(
                             capacity = "6.2 qts",
                             viscosity = "0W-20",
@@ -197,8 +197,8 @@ object PartsEstimator {
                         )
                     }
                 }
-                (year in 2005..2015) -> {
-                    if (cylinders >= 6 || displacement >= 3.8) {
+                year in (2005..2015) -> {
+                    if ((cylinders >= 6) || (displacement >= 3.8)) {
                         EngineSpec(
                             capacity = "5.5 qts",
                             viscosity = "5W-30",
@@ -224,7 +224,7 @@ object PartsEstimator {
             }
         }
         if (model.contains("tundra")) {
-            return if (year >= 2022 || displacement in 3.3..3.6) {
+            return if ((year >= 2022) || (displacement in (3.3..3.6))) {
                 EngineSpec(
                     capacity = "7.7 qts",
                     viscosity = "0W-20",
@@ -245,7 +245,7 @@ object PartsEstimator {
             }
         }
         if (model.contains("4runner") || model.contains("gx")) {
-            return if (year >= 2010 || displacement in 3.8..4.2) {
+            return if ((year >= 2010) || (displacement in (3.8..4.2))) {
                 EngineSpec(
                     capacity = "6.6 qts",
                     viscosity = "0W-20",
@@ -270,7 +270,7 @@ object PartsEstimator {
         if (model.contains("rav4") || model.contains("camry") || model.contains("corolla") || model.contains("es")) {
             val isRav4 = model.contains("rav4")
             return EngineSpec(
-                capacity = if (cylinders >= 6 || displacement >= 3.0) "6.4 qts" else "4.8 qts",
+                capacity = if ((cylinders >= 6) || (displacement >= 3.0)) "6.4 qts" else "4.8 qts",
                 viscosity = if (year >= 2018) "0W-16" else "0W-20",
                 oilFilterPartNumber = "04152-YZZA6",
                 tireSizeFront = if (isRav4) "225/65R17" else "215/55R17",
@@ -280,7 +280,7 @@ object PartsEstimator {
             )
         }
         return EngineSpec(
-            capacity = if (cylinders >= 6 || displacement >= 3.0) "6.4 qts" else "4.8 qts",
+            capacity = if ((cylinders >= 6) || (displacement >= 3.0)) "6.4 qts" else "4.8 qts",
             viscosity = if (year >= 2018) "0W-16" else "0W-20",
             oilFilterPartNumber = "04152-YZZA6",
         )
@@ -295,8 +295,8 @@ object PartsEstimator {
     ): EngineSpec {
         if (model.contains("tlx")) {
             return when {
-                (year in 2015..2020) -> {
-                    if (cylinders >= 6 || displacement >= 3.0) {
+                year in (2015..2020) -> {
+                    if ((cylinders >= 6) || (displacement >= 3.0)) {
                         EngineSpec(
                             capacity = "4.5 qts",
                             viscosity = "0W-20",
@@ -321,7 +321,7 @@ object PartsEstimator {
                     }
                 }
                 year >= 2021 -> {
-                    if (cylinders >= 6 || displacement >= 2.8 || trim.contains("type s")) {
+                    if ((cylinders >= 6) || (displacement >= 2.8) || trim.contains("type s")) {
                         EngineSpec(
                             capacity = "5.3 qts",
                             viscosity = "0W-20",
@@ -348,9 +348,9 @@ object PartsEstimator {
         }
         if (model.contains("mdx") || model.contains("rdx") || model.contains("pilot") ||
             model.contains("passport") || model.contains("odyssey") || model.contains("ridgeline")) {
-            return if (cylinders >= 6 || displacement >= 3.0) {
+            return if ((cylinders >= 6) || (displacement >= 3.0)) {
                 EngineSpec(
-                    capacity = if (year >= 2022 && trim.contains("type s")) "5.3 qts" else "4.5 qts",
+                    capacity = if ((year >= 2022) && trim.contains("type s")) "5.3 qts" else "4.5 qts",
                     viscosity = "0W-20",
                     oilFilterPartNumber = "15400-PLM-A02",
                     sparkPlugPartNumber = "NGK DILZKR7A11G",
@@ -375,9 +375,9 @@ object PartsEstimator {
         if (model.contains("civic") || model.contains("accord") || model.contains("cr-v") || model.contains("ilx")) {
             val isAccord = model.contains("accord")
             val isCrv = model.contains("cr-v")
-            return if (displacement >= 2.0 && cylinders == 4) {
+            return if ((displacement >= 2.0) && (cylinders == 4)) {
                 EngineSpec(
-                    capacity = if (year >= 2018 && displacement <= 2.1) "5.0 qts" else "4.4 qts",
+                    capacity = if ((year >= 2018) && (displacement <= 2.1)) "5.0 qts" else "4.4 qts",
                     viscosity = "0W-20",
                     oilFilterPartNumber = "15400-PLM-A02",
                     sparkPlugPartNumber = "NGK DILKAR8A8",
@@ -387,7 +387,7 @@ object PartsEstimator {
                     wiperBladeSizePassenger = if (isAccord) "19 in" else "18 in",
                     wiperBladeSizeRear = if (isCrv) "12 in" else null,
                 )
-            } else if (cylinders >= 6 || displacement >= 3.0) {
+            } else if ((cylinders >= 6) || (displacement >= 3.0)) {
                 EngineSpec(
                     capacity = "4.5 qts",
                     viscosity = "0W-20",
@@ -410,7 +410,7 @@ object PartsEstimator {
             }
         }
         return EngineSpec(
-            capacity = if (cylinders >= 6 || displacement >= 3.0) "4.5 qts" else "4.4 qts",
+            capacity = if ((cylinders >= 6) || (displacement >= 3.0)) "4.5 qts" else "4.4 qts",
             viscosity = "0W-20",
             oilFilterPartNumber = "15400-PLM-A02",
         )
@@ -423,7 +423,7 @@ object PartsEstimator {
         displacement: Double,
         fuelType: String,
     ): EngineSpec {
-        if (fuelType.contains("diesel") || displacement >= 6.5) {
+        if (fuelType.contains("diesel") || (displacement >= 6.5)) {
             return EngineSpec(
                 capacity = "13.0 qts",
                 viscosity = "10W-30",
@@ -434,7 +434,7 @@ object PartsEstimator {
             )
         }
         if (model.contains("f-150") || model.contains("f150") || model.contains("expedition") || model.contains("navigator")) {
-            return if (cylinders >= 8 || displacement >= 4.8) {
+            return if ((cylinders >= 8) || (displacement >= 4.8)) {
                 EngineSpec(
                     capacity = "7.7 qts",
                     viscosity = if (year >= 2021) "0W-20" else "5W-20",
@@ -459,7 +459,7 @@ object PartsEstimator {
             }
         }
         if (model.contains("mustang")) {
-            return if (cylinders >= 8 || displacement >= 4.8) {
+            return if ((cylinders >= 8) || (displacement >= 4.8)) {
                 EngineSpec(
                     capacity = "8.0 qts",
                     viscosity = "5W-20",
@@ -483,7 +483,7 @@ object PartsEstimator {
                 )
             }
         }
-        return if (cylinders >= 6 || displacement >= 2.7) {
+        return if ((cylinders >= 6) || (displacement >= 2.7)) {
             EngineSpec(capacity = "6.0 qts", viscosity = "5W-30", oilFilterPartNumber = "Motorcraft FL-500S")
         } else {
             EngineSpec(capacity = "5.7 qts", viscosity = "5W-30", oilFilterPartNumber = "Motorcraft FL-910S")
@@ -519,7 +519,7 @@ object PartsEstimator {
         }
         if (model.contains("silverado") || model.contains("sierra") || model.contains("tahoe") ||
             model.contains("yukon") || model.contains("suburban") || model.contains("escalade")) {
-            return if (cylinders >= 8 || displacement >= 4.8) {
+            return if ((cylinders >= 8) || (displacement >= 4.8)) {
                 EngineSpec(
                     capacity = "8.0 qts",
                     viscosity = "0W-20",
@@ -541,9 +541,9 @@ object PartsEstimator {
                 )
             }
         }
-        return if (cylinders >= 8 || displacement >= 5.0) {
+        return if ((cylinders >= 8) || (displacement >= 5.0)) {
             EngineSpec(capacity = "8.0 qts", viscosity = "0W-20", oilFilterPartNumber = "ACDelco PF63")
-        } else if (cylinders >= 6 || displacement >= 3.0) {
+        } else if ((cylinders >= 6) || (displacement >= 3.0)) {
             EngineSpec(capacity = "6.0 qts", viscosity = "5W-30", oilFilterPartNumber = "ACDelco PF63")
         } else {
             EngineSpec(capacity = "5.0 qts", viscosity = "0W-20", oilFilterPartNumber = "ACDelco PF64")
@@ -556,7 +556,7 @@ object PartsEstimator {
         displacement: Double,
     ): EngineSpec {
         if (model.contains("ram") || model.contains("wrangler") || model.contains("cherokee")) {
-            return if (cylinders >= 8 || displacement >= 5.0) {
+            return if ((cylinders >= 8) || (displacement >= 5.0)) {
                 EngineSpec(
                     capacity = "7.0 qts",
                     viscosity = "5W-20",
@@ -567,7 +567,7 @@ object PartsEstimator {
                     wiperBladeSizeDriver = "22 in",
                     wiperBladeSizePassenger = "22 in",
                 )
-            } else if (displacement in 2.9..3.1) {
+            } else if (displacement in (2.9..3.1)) {
                 EngineSpec(
                     capacity = "7.5 qts",
                     viscosity = "0W-20",
@@ -588,7 +588,7 @@ object PartsEstimator {
                 )
             }
         }
-        return if (cylinders >= 8 || displacement >= 5.0) {
+        return if ((cylinders >= 8) || (displacement >= 5.0)) {
             EngineSpec(capacity = "7.0 qts", viscosity = "5W-20", oilFilterPartNumber = "Mopar MO-349")
         } else {
             EngineSpec(capacity = "5.0 qts", viscosity = "0W-20", oilFilterPartNumber = "Mopar MO-349")
@@ -600,11 +600,11 @@ object PartsEstimator {
         cylinders: Int,
         displacement: Double,
     ): EngineSpec {
-        return if (cylinders >= 8 || displacement >= 5.0) {
+        return if ((cylinders >= 8) || (displacement >= 5.0)) {
             EngineSpec(capacity = "6.8 qts", viscosity = "0W-20", oilFilterPartNumber = "15208-9E01A")
-        } else if (cylinders >= 6 || displacement >= 3.0) {
+        } else if ((cylinders >= 6) || (displacement >= 3.0)) {
             EngineSpec(
-                capacity = if (displacement in 2.9..3.1) "5.7 qts" else "5.1 qts",
+                capacity = if (displacement in (2.9..3.1)) "5.7 qts" else "5.1 qts",
                 viscosity = if (year >= 2020) "0W-20" else "5W-30",
                 oilFilterPartNumber = "15208-65F0E",
             )
@@ -619,7 +619,7 @@ object PartsEstimator {
         cylinders: Int,
         displacement: Double,
     ): EngineSpec {
-        return if (cylinders >= 6 || displacement >= 3.5) {
+        return if ((cylinders >= 6) || (displacement >= 3.5)) {
             EngineSpec(
                 capacity = "6.9 qts",
                 viscosity = "5W-30",
@@ -629,7 +629,7 @@ object PartsEstimator {
                 wiperBladeSizePassenger = "18 in",
                 wiperBladeSizeRear = "14 in",
             )
-        } else if (displacement in 2.3..2.4 && (trim.contains("xt") || model.contains("wrx"))) {
+        } else if ((displacement in (2.3..2.4)) && (trim.contains("xt") || model.contains("wrx"))) {
             EngineSpec(
                 capacity = "4.8 qts",
                 viscosity = "0W-20",
@@ -660,7 +660,7 @@ object PartsEstimator {
         cylinders: Int,
         displacement: Double,
     ): EngineSpec {
-        return if (cylinders >= 6 || displacement >= 3.0) {
+        return if ((cylinders >= 6) || (displacement >= 3.0)) {
             EngineSpec(capacity = if (displacement >= 3.4) "6.9 qts" else "6.0 qts", viscosity = "0W-20", oilFilterPartNumber = "26320-3CKB0")
         } else if (displacement >= 2.4) {
             EngineSpec(capacity = "5.3 qts", viscosity = "0W-20", oilFilterPartNumber = "26350-2S000")
@@ -673,9 +673,9 @@ object PartsEstimator {
         model: String,
         displacement: Double,
     ): EngineSpec {
-        return if (model.contains("cx-90") || displacement >= 3.0) {
+        return if (model.contains("cx-90") || (displacement >= 3.0)) {
             EngineSpec(capacity = "6.3 qts", viscosity = "0W-20")
-        } else if (displacement in 2.4..2.6) {
+        } else if (displacement in (2.4..2.6)) {
             EngineSpec(
                 capacity = "4.8 qts",
                 viscosity = "0W-20",
@@ -695,9 +695,9 @@ object PartsEstimator {
         cylinders: Int,
         displacement: Double,
     ): EngineSpec {
-        return if (cylinders >= 8 || displacement >= 4.0) {
+        return if ((cylinders >= 8) || (displacement >= 4.0)) {
             EngineSpec(capacity = "9.0 qts", viscosity = "0W-30")
-        } else if (cylinders >= 6 || displacement >= 2.8) {
+        } else if ((cylinders >= 6) || (displacement >= 2.8)) {
             EngineSpec(capacity = "6.9 qts", viscosity = if (year >= 2017) "0W-20" else "5W-30", oilFilterPartNumber = "11-42-8-583-898")
         } else {
             EngineSpec(capacity = if (year >= 2017) "5.6 qts" else "5.3 qts", viscosity = if (year >= 2017) "0W-20" else "5W-30", oilFilterPartNumber = "11-42-8-575-211")
@@ -708,7 +708,7 @@ object PartsEstimator {
         cylinders: Int,
         displacement: Double,
     ): EngineSpec {
-        return if (cylinders >= 6 || displacement >= 2.8) {
+        return if ((cylinders >= 6) || (displacement >= 2.8)) {
             EngineSpec(capacity = "7.2 qts", viscosity = "0W-20", oilFilterPartNumber = "06M-198-405-P")
         } else {
             EngineSpec(capacity = "6.0 qts", viscosity = "0W-20", oilFilterPartNumber = "06L-115-562-B")
@@ -719,7 +719,7 @@ object PartsEstimator {
         cylinders: Int,
         displacement: Double,
     ): EngineSpec {
-        return if (cylinders >= 6 || displacement >= 2.8) {
+        return if ((cylinders >= 6) || (displacement >= 2.8)) {
             EngineSpec(capacity = "8.5 qts", viscosity = "0W-20")
         } else {
             EngineSpec(capacity = "6.3 qts", viscosity = "0W-20", oilFilterPartNumber = "270-180-01-09")

@@ -31,7 +31,7 @@ class MainViewModel @Inject constructor(
     private val vehicleRepository: VehicleRepository,
 ) : ViewModel() {
 
-    private val _dismissedBuyMeACoffeeForSession = MutableStateFlow(false)
+    private val _dismissedBuyMeACoffeeForSession = MutableStateFlow(value = false)
 
     val isOnboardingCompleted: StateFlow<Boolean?> = preferencesRepository.onboardingCompleted
         .map<Boolean, Boolean?> { it }
@@ -54,7 +54,7 @@ class MainViewModel @Inject constructor(
         preferencesRepository.onboardingCompleted,
         _dismissedBuyMeACoffeeForSession,
     ) { openCount, dontAskAgain, nextPromptOpenCount, onboardingCompleted, dismissedForSession ->
-        openCount >= nextPromptOpenCount && !dontAskAgain && onboardingCompleted && !dismissedForSession
+        (openCount >= nextPromptOpenCount) && !dontAskAgain && onboardingCompleted && !dismissedForSession
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
@@ -108,7 +108,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             val vehicles = vehicleRepository.getAllVehicles().first()
             val defaultId = preferencesRepository.defaultVehicleId.first()
-            val vehicleId = vehicleIdExtra.takeIf { it != MainActivity.NO_VEHICLE_ID_EXTRA && vehicles.any { v -> v.id == it } }
+            val vehicleId = vehicleIdExtra.takeIf { (it != MainActivity.NO_VEHICLE_ID_EXTRA) && vehicles.any { v -> v.id == it } }
                 ?: defaultId.takeIf { id -> vehicles.any { v -> v.id == id } }
                 ?: vehicles.firstOrNull()?.id
                 ?: return@launch

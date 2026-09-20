@@ -1,3 +1,13 @@
+## [1.2.1] - 2026-09-19
+
+### Added
+* **Cost of Ownership Analytics:** Overhauled cost analytics screen with detailed expense breakdown charts and category filtering.
+* **Expanded Test Coverage:** Added comprehensive unit tests for `CostOfOwnershipViewModelTest` and `MaintenanceScheduleEngineTest`.
+
+### Changed
+* **Maintenance Schedule Engine:** Refined suggestion logic and interval calculation thresholds.
+* **Parts Estimator UI:** Improved parts estimation layout and calculations.
+
 ## [1.2.0] - 2026-09-19
 
 ### Added

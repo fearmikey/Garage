@@ -198,11 +198,11 @@ private fun MaintenanceTimelineContent(
 private fun MaintenanceRecordRow(
     record: MaintenanceRecord,
     unitSystem: UnitSystem,
+    modifier: Modifier = Modifier,
     currencySymbol: String = "$",
     receiptFileProvider: (String) -> File? = { null },
     onEdit: () -> Unit,
     onDelete: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     var showDeleteDialog by remember { mutableStateOf(value = false) }
     var showImagePreviewDialog by remember { mutableStateOf(value = false) }
@@ -292,7 +292,7 @@ private fun MaintenanceRecordRow(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
 
-                if (hasReceipt && receiptFile != null) {
+                if (hasReceipt) {
                     Spacer(modifier = Modifier.height(6.dp))
                     AssistChip(
                         onClick = {
@@ -341,7 +341,7 @@ internal fun AddEditMaintenanceRecordSheet(
     var description by remember { mutableStateOf(initial?.description.orEmpty()) }
     var mileage by remember {
         mutableStateOf(
-            if (initial != null && initial.id != 0L) {
+            if ((initial != null) && (initial.id != 0L)) {
                 if (initial.mileage > 0) {
                     formatMileageInput(UnitConverter.displayDistanceValue(initial.mileage, unitSystem).toString())
                 } else ""
@@ -360,7 +360,7 @@ internal fun AddEditMaintenanceRecordSheet(
     var showDatePicker by remember { mutableStateOf(value = false) }
 
     var pickedReceiptUri by remember { mutableStateOf<Uri?>(null) }
-    var isReceiptRemoved by remember { mutableStateOf(false) }
+    var isReceiptRemoved by remember { mutableStateOf(value = false) }
 
     val documentPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument(),
@@ -376,11 +376,11 @@ internal fun AddEditMaintenanceRecordSheet(
         currentReceiptFilename?.let(receiptFileProvider)
     }
 
-    val hasReceipt = (pickedReceiptUri != null || (receiptFile?.exists() == true)) && !isReceiptRemoved
+    val hasReceipt = ((pickedReceiptUri != null) || (receiptFile?.exists() == true)) && !isReceiptRemoved
     val isPdf = when {
         pickedReceiptUri != null -> {
             val type = context.contentResolver.getType(pickedReceiptUri!!)
-            type == "application/pdf" || pickedReceiptUri.toString().endsWith(".pdf", ignoreCase = true)
+            (type == "application/pdf") || pickedReceiptUri.toString().endsWith(".pdf", ignoreCase = true)
         }
         receiptFile != null -> receiptFile.name.endsWith(".pdf", ignoreCase = true)
         else -> false

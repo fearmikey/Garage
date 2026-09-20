@@ -146,13 +146,13 @@ private fun AddEditVehicleContent(
         contract = ActivityResultContracts.PickVisualMedia(),
     ) { uri ->
         val index = replacingIndex
-        if (uri != null && index != null) {
+        if ((uri != null) && (index != null)) {
             onReplaceImagePicked(index, uri)
         }
         replacingIndex = null
     }
 
-    var showDeleteDialog by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember { mutableStateOf(value = false) }
 
     Scaffold(
         topBar = {
@@ -202,7 +202,7 @@ private fun AddEditVehicleContent(
                                 detectVerticalDragGestures { _, dragAmount ->
                                     if (currentPage in uiState.photos.indices) {
                                         val currentOffsetY = uiState.photos[currentPage].offsetY
-                                        onImageOffsetYChanged(currentPage, currentOffsetY + dragAmount * 0.008f)
+                                        onImageOffsetYChanged(currentPage, currentOffsetY + (dragAmount * 0.008f))
                                     }
                                 }
                             },

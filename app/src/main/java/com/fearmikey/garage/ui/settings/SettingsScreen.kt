@@ -33,7 +33,6 @@ import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.filled.FileUpload
 import androidx.compose.material.icons.filled.FolderZip
-import androidx.compose.material.icons.filled.Gavel
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LocalCafe
 import androidx.compose.material.icons.filled.NotificationsActive

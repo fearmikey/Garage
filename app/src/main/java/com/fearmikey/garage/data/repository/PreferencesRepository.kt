@@ -21,6 +21,8 @@ interface PreferencesRepository {
     val buyMeACoffeeNextPromptOpenCount: Flow<Int>
     val isModsGridView: Flow<Boolean>
         get() = flowOf(false)
+    val includeModsInCost: Flow<Boolean>
+        get() = flowOf(false)
 
     suspend fun setUnitsType(units: String)
     suspend fun setCurrencyCode(currencyCode: String)
@@ -32,6 +34,7 @@ interface PreferencesRepository {
     suspend fun setBuyMeACoffeeDontAskAgain(dontAskAgain: Boolean)
     suspend fun setBuyMeACoffeeNextPromptOpenCount(openCount: Int)
     suspend fun setModsGridView(isGrid: Boolean) {}
+    suspend fun setIncludeModsInCost(includeMods: Boolean) {}
 }
 
 class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManager) : PreferencesRepository {
@@ -47,6 +50,7 @@ class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManag
     override val buyMeACoffeeDontAskAgain: Flow<Boolean> = preferencesManager.buyMeACoffeeDontAskAgain
     override val buyMeACoffeeNextPromptOpenCount: Flow<Int> = preferencesManager.buyMeACoffeeNextPromptOpenCount
     override val isModsGridView: Flow<Boolean> = preferencesManager.isModsGridView
+    override val includeModsInCost: Flow<Boolean> = preferencesManager.includeModsInCost
 
     override suspend fun setUnitsType(units: String) {
         preferencesManager.setUnitsType(units)
@@ -86,5 +90,9 @@ class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManag
 
     override suspend fun setModsGridView(isGrid: Boolean) {
         preferencesManager.setModsGridView(isGrid)
+    }
+
+    override suspend fun setIncludeModsInCost(includeMods: Boolean) {
+        preferencesManager.setIncludeModsInCost(includeMods)
     }
 }

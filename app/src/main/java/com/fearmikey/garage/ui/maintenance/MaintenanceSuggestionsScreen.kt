@@ -61,7 +61,6 @@ import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.schedule.MaintenanceSuggestion
-import com.fearmikey.garage.data.schedule.MaintenanceTemplate
 import com.fearmikey.garage.ui.components.EmptyState
 import com.fearmikey.garage.ui.components.StatusChip
 import com.fearmikey.garage.ui.theme.GarageTheme

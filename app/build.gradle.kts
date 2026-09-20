@@ -34,8 +34,8 @@ android {
         applicationId = "com.fearmikey.garage"
         minSdk = 34
         targetSdk = 37
-        versionCode = 13
-        versionName = "1.2.0"
+        versionCode = 14
+        versionName = "1.2.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -124,9 +124,6 @@ dependencies {
 
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
-
-    // WorkManager
-    implementation(libs.androidx.work.runtime.ktx)
 
     // WorkManager
     implementation(libs.androidx.work.runtime.ktx)

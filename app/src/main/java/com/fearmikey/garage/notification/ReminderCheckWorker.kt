@@ -56,7 +56,7 @@ class ReminderCheckWorker @AssistedInject constructor(
                 val taskNameLower = suggestion.rule.taskName.lowercase()
 
                 val notificationId = taskNameLower.hashCode() xor vehicle.id.toInt()
-                if (suggestion.status == ReminderStatus.OVERDUE || suggestion.status == ReminderStatus.UPCOMING) {
+                if ((suggestion.status == ReminderStatus.OVERDUE) || (suggestion.status == ReminderStatus.UPCOMING)) {
                     val vehicleLabel = listOfNotNull(vehicle.year?.toString(), vehicle.make, vehicle.model)
                         .joinToString(" ")
                         .ifBlank { vehicle.vin }

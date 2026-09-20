@@ -2,6 +2,7 @@ package com.fearmikey.garage.ui.mod
 
 import android.content.Intent
 import android.net.Uri
+import androidx.core.net.toUri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -255,9 +256,9 @@ private fun ModsContent(
         }
     }
 
-    if (uiState.viewingMod != null) {
+    uiState.viewingMod?.let { viewingMod ->
         ViewModSheet(
-            mod = uiState.viewingMod,
+            mod = viewingMod,
             currencySymbol = uiState.currencySymbol,
             imageFileProvider = imageFileProvider,
             onDismiss = onDismissViewSheet,
@@ -1071,6 +1072,7 @@ private fun ViewModSheet(
     onDelete: (ModificationRecord) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    @Suppress("DEPRECATION")
     val clipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
 
@@ -1251,7 +1253,7 @@ private fun ViewModSheet(
                             .weight(1f)
                             .clickable {
                                 try {
-                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(formattedUrl))
+                                    val intent = Intent(Intent.ACTION_VIEW, formattedUrl.toUri())
                                     context.startActivity(intent)
                                 } catch (_: Exception) {
                                     Toast.makeText(context, "Could not open link", Toast.LENGTH_SHORT).show()

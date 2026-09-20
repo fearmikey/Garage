@@ -92,7 +92,7 @@ fun FuelScreen(
     viewModel: FuelViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    var showAddSheet by remember { mutableStateOf(false) }
+    var showAddSheet by remember { mutableStateOf(value = false) }
 
     LaunchedEffect(autoOpenAddSheet) {
         if (autoOpenAddSheet) {
@@ -500,7 +500,7 @@ internal fun AddEditFuelRecordSheet(
 
             OutlinedTextField(
                 value = gallons,
-                onValueChange = { gallons = it.filter { c -> c.isDigit() || c == '.' } },
+                onValueChange = { gallons = it.filter { c -> (c.isDigit()) || (c == '.') } },
                 label = { Text(if (unitSystem == UnitSystem.METRIC) "Liters" else "Gallons") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
@@ -514,7 +514,7 @@ internal fun AddEditFuelRecordSheet(
             )
             OutlinedTextField(
                 value = totalCost,
-                onValueChange = { totalCost = it.filter { c -> c.isDigit() || c == '.' } },
+                onValueChange = { totalCost = it.filter { c -> (c.isDigit()) || (c == '.') } },
                 label = { Text("Total cost") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(

@@ -3,11 +3,18 @@ package com.fearmikey.garage.ui.cost
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
+import com.fearmikey.garage.data.local.entity.MaintenanceRecord
+import com.fearmikey.garage.data.local.entity.ModificationCategory
+import com.fearmikey.garage.data.local.entity.ModificationRecord
 import com.fearmikey.garage.data.repository.FuelRepository
 import com.fearmikey.garage.data.repository.MaintenanceRepository
+import com.fearmikey.garage.data.repository.ModificationRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.ui.navigation.Destinations
+import com.fearmikey.garage.ui.util.AppCurrency
+import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,11 +22,10 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-
-import com.fearmikey.garage.ui.util.UnitConverter
 
 enum class TimeFilter(val displayName: String) {
     ALL_TIME("All Time"),
@@ -46,14 +52,18 @@ data class CategoryCostItem(
     val recordCount: Int,
     val entries: List<CostEntry>,
     val category: MaintenanceCategory? = null,
+    val modificationCategory: ModificationCategory? = null,
 )
 
 data class CostOfOwnershipUiState(
     val totalCost: Double = 0.0,
     val maintenanceCost: Double = 0.0,
     val fuelCost: Double = 0.0,
+    val modCost: Double = 0.0,
     val maintenanceRecordCount: Int = 0,
     val fuelRecordCount: Int = 0,
+    val modRecordCount: Int = 0,
+    val includeModsInCost: Boolean = false,
     val categories: List<CategoryCostItem> = emptyList(),
     val selectedTimeFilter: TimeFilter = TimeFilter.ALL_TIME,
     val unitSystem: UnitSystem = UnitSystem.IMPERIAL,
@@ -65,7 +75,8 @@ class CostOfOwnershipViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     maintenanceRepository: MaintenanceRepository,
     fuelRepository: FuelRepository,
-    preferencesRepository: PreferencesRepository,
+    modificationRepository: ModificationRepository,
+    private val preferencesRepository: PreferencesRepository,
 ) : ViewModel() {
 
     val vehicleId: Long = checkNotNull(savedStateHandle[Destinations.VEHICLE_ID_ARG])
@@ -75,43 +86,63 @@ class CostOfOwnershipViewModel @Inject constructor(
     val uiState: StateFlow<CostOfOwnershipUiState> = combine(
         maintenanceRepository.getRecordsForVehicle(vehicleId),
         fuelRepository.getRecordsForVehicle(vehicleId),
+        modificationRepository.getModsForVehicle(vehicleId),
         preferencesRepository.unitSystem,
         preferencesRepository.appCurrency,
+        preferencesRepository.includeModsInCost,
         _timeFilter,
-    ) { maintenanceRecords, fuelRecords, unitSystem, currency, filter ->
+    ) { array ->
+        @Suppress("UNCHECKED_CAST")
+        val maintenanceRecords = array[0] as List<MaintenanceRecord>
+        @Suppress("UNCHECKED_CAST")
+        val fuelRecords = array[1] as List<FuelRecord>
+        @Suppress("UNCHECKED_CAST")
+        val modRecords = array[2] as List<ModificationRecord>
+        val unitSystem = array[3] as UnitSystem
+        val currency = array[4] as AppCurrency
+        val includeMods = array[5] as Boolean
+        val filter = array[6] as TimeFilter
+
         val timeRange = computeTimeRange(filter)
 
         val filteredMaintenance = maintenanceRecords.filter { record ->
-            (timeRange.start == null || record.date >= timeRange.start) &&
-            (timeRange.end == null || record.date <= timeRange.end)
+            ((timeRange.start == null) || (record.date >= timeRange.start)) &&
+            ((timeRange.end == null) || (record.date <= timeRange.end))
         }
 
         val filteredFuel = fuelRecords.filter { record ->
-            (timeRange.start == null || record.date >= timeRange.start) &&
-            (timeRange.end == null || record.date <= timeRange.end)
+            ((timeRange.start == null) || (record.date >= timeRange.start)) &&
+            ((timeRange.end == null) || (record.date <= timeRange.end))
+        }
+
+        val filteredMods = modRecords.filter { record ->
+            ((timeRange.start == null) || (record.date >= timeRange.start)) &&
+            ((timeRange.end == null) || (record.date <= timeRange.end))
         }
 
         val maintTotal = filteredMaintenance.sumOf { it.cost }
         val fuelTotal = filteredFuel.sumOf { it.totalCost }
-        val grandTotal = maintTotal + fuelTotal
+        val modTotal = filteredMods.sumOf { it.cost }
 
-        val maintenanceByCategory = filteredMaintenance.groupBy { it.category }
+        val grandTotal = maintTotal + fuelTotal + if (includeMods) modTotal else 0.0
 
         val categoryItems = mutableListOf<CategoryCostItem>()
+
+        val maintenanceByCategory = filteredMaintenance.groupBy { it.category }
 
         MaintenanceCategory.entries.forEach { category ->
             val records = maintenanceByCategory[category].orEmpty()
             val categoryTotal = records.sumOf { it.cost }
             if (records.isNotEmpty() || (categoryTotal > 0.0)) {
                 val pct = if (grandTotal > 0.0) ((categoryTotal / grandTotal) * 100).toFloat() else 0f
-                val entries = records.sortedByDescending { it.date }.map { record ->
+                val entries = records.asSequence().sortedByDescending { it.date }.map { record ->
                     CostEntry(
                         id = record.id,
                         date = record.date,
                         title = record.taskName?.ifBlank { null } ?: record.description.ifBlank { category.displayName },
                         cost = record.cost,
                         mileage = record.mileage,
-                        detail = record.description.takeIf { it.isNotBlank() && it != record.taskName },
+                        detail = record.description.takeIf { (it.isNotBlank()) && (it != record.taskName) },
                     )
                 }
                 categoryItems.add(
@@ -121,7 +152,7 @@ class CostOfOwnershipViewModel @Inject constructor(
                         totalCost = categoryTotal,
                         percentage = pct,
                         recordCount = records.size,
-                        entries = entries,
+                        entries = entries.toList(),
                         category = category,
                     ),
                 )
@@ -130,7 +161,7 @@ class CostOfOwnershipViewModel @Inject constructor(
 
         if (filteredFuel.isNotEmpty()) {
             val pct = if (grandTotal > 0.0) ((fuelTotal / grandTotal) * 100).toFloat() else 0f
-            val entries = filteredFuel.sortedByDescending { it.date }.map { record ->
+            val entries = filteredFuel.asSequence().sortedByDescending { it.date }.map { record ->
                 val displayVolume = UnitConverter.displayVolumeValue(record.gallons, unitSystem)
                 val volumeUnit = if (unitSystem == UnitSystem.METRIC) "L" else "gal"
                 val displayPrice = if (unitSystem == UnitSystem.METRIC) record.pricePerGallon / UnitConverter.LITERS_PER_GALLON else record.pricePerGallon
@@ -142,7 +173,7 @@ class CostOfOwnershipViewModel @Inject constructor(
                     mileage = record.mileage,
                     detail = "%.1f %s @ %s%.2f/%s".format(displayVolume, volumeUnit, currency.symbol, displayPrice, volumeUnit),
                 )
-            }
+            }.toList()
             categoryItems.add(
                 CategoryCostItem(
                     key = "FUEL",
@@ -152,8 +183,41 @@ class CostOfOwnershipViewModel @Inject constructor(
                     recordCount = filteredFuel.size,
                     entries = entries,
                     category = null,
-                )
+                ),
             )
+        }
+
+        if (includeMods && filteredMods.isNotEmpty()) {
+            val modsByCategory = filteredMods.groupBy { it.category }
+            ModificationCategory.entries.forEach { modCategory ->
+                val records = modsByCategory[modCategory].orEmpty()
+                val categoryTotal = records.sumOf { it.cost }
+                if (records.isNotEmpty() || (categoryTotal > 0.0)) {
+                    val pct = if (grandTotal > 0.0) ((categoryTotal / grandTotal) * 100).toFloat() else 0f
+                    val entries = records.asSequence().sortedByDescending { it.date }.map { record ->
+                        CostEntry(
+                            id = record.id,
+                            date = record.date,
+                            title = record.title.ifBlank { modCategory.displayName },
+                            cost = record.cost,
+                            mileage = 0,
+                            detail = record.description.takeIf { it.isNotBlank() },
+                        )
+                    }.toList()
+                    categoryItems.add(
+                        CategoryCostItem(
+                            key = "MOD_${modCategory.name}",
+                            title = "Mod: ${modCategory.displayName}",
+                            totalCost = categoryTotal,
+                            percentage = pct,
+                            recordCount = records.size,
+                            entries = entries,
+                            category = null,
+                            modificationCategory = modCategory,
+                        ),
+                    )
+                }
+            }
         }
 
         categoryItems.sortByDescending { it.totalCost }
@@ -162,8 +226,11 @@ class CostOfOwnershipViewModel @Inject constructor(
             totalCost = grandTotal,
             maintenanceCost = maintTotal,
             fuelCost = fuelTotal,
+            modCost = modTotal,
             maintenanceRecordCount = filteredMaintenance.size,
             fuelRecordCount = filteredFuel.size,
+            modRecordCount = filteredMods.size,
+            includeModsInCost = includeMods,
             categories = categoryItems,
             selectedTimeFilter = filter,
             unitSystem = unitSystem,
@@ -175,6 +242,12 @@ class CostOfOwnershipViewModel @Inject constructor(
         _timeFilter.value = filter
     }
 
+    fun toggleIncludeMods(include: Boolean) {
+        viewModelScope.launch {
+            preferencesRepository.setIncludeModsInCost(include)
+        }
+    }
+
     private data class TimeRange(val start: Long? = null, val end: Long? = null)
 
     private fun computeTimeRange(filter: TimeFilter): TimeRange {
@@ -183,20 +256,20 @@ class CostOfOwnershipViewModel @Inject constructor(
             TimeFilter.ALL_TIME -> TimeRange()
             TimeFilter.THIS_YEAR -> {
                 val cal = Calendar.getInstance()
-                cal.set(Calendar.DAY_OF_YEAR, 1)
-                cal.set(Calendar.HOUR_OF_DAY, 0)
-                cal.set(Calendar.MINUTE, 0)
-                cal.set(Calendar.SECOND, 0)
-                cal.set(Calendar.MILLISECOND, 0)
+                cal[Calendar.DAY_OF_YEAR] = 1
+                cal[Calendar.HOUR_OF_DAY] = 0
+                cal[Calendar.MINUTE] = 0
+                cal[Calendar.SECOND] = 0
+                cal[Calendar.MILLISECOND] = 0
                 TimeRange(start = cal.timeInMillis)
             }
             TimeFilter.LAST_YEAR -> {
                 val cal = Calendar.getInstance()
-                cal.set(Calendar.DAY_OF_YEAR, 1)
-                cal.set(Calendar.HOUR_OF_DAY, 0)
-                cal.set(Calendar.MINUTE, 0)
-                cal.set(Calendar.SECOND, 0)
-                cal.set(Calendar.MILLISECOND, 0)
+                cal[Calendar.DAY_OF_YEAR] = 1
+                cal[Calendar.HOUR_OF_DAY] = 0
+                cal[Calendar.MINUTE] = 0
+                cal[Calendar.SECOND] = 0
+                cal[Calendar.MILLISECOND] = 0
                 val startOfThisYear = cal.timeInMillis
 
                 cal.add(Calendar.YEAR, -1)

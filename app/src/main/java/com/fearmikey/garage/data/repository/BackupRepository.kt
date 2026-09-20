@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.net.Uri
+import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import com.fearmikey.garage.data.local.CloudBackupPreferencesManager
 import com.fearmikey.garage.data.local.GARAGE_DATABASE_NAME
@@ -71,7 +72,7 @@ class BackupRepository @Inject constructor(
             return@withContext failure
         }
         try {
-            val folderUri = Uri.parse(folderUriString)
+            val folderUri = folderUriString.toUri()
             val directory = DocumentFile.fromTreeUri(context, folderUri)
                 ?: run {
                     val failure = BackupResult.Failure("Could not access the selected backup folder.")
@@ -113,7 +114,7 @@ class BackupRepository @Inject constructor(
             cloudBackupPreferencesManager.setLastLocalBackupError(null)
 
             BackupResult.Success
-        } catch (e: SecurityException) {
+        } catch (_: SecurityException) {
             val msg = "Permission denied to access folder. Please re-select the backup folder."
             cloudBackupPreferencesManager.setLastLocalBackupError(msg)
             BackupResult.Failure(msg)
@@ -297,8 +298,8 @@ class BackupRepository @Inject constructor(
         val target = File(stagingDir, entryName)
         val stagingCanonicalPath = stagingDir.canonicalPath
         val targetCanonicalPath = target.canonicalPath
-        return if (targetCanonicalPath.startsWith(stagingCanonicalPath + File.separator) ||
-            targetCanonicalPath == stagingCanonicalPath
+        return if ((targetCanonicalPath.startsWith(stagingCanonicalPath + File.separator)) ||
+            (targetCanonicalPath == stagingCanonicalPath)
         ) {
             target
         } else {

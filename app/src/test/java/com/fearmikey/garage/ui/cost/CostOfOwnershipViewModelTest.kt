@@ -1,13 +1,19 @@
 package com.fearmikey.garage.ui.cost
 
+import android.content.ContextWrapper
 import androidx.lifecycle.SavedStateHandle
 import com.fearmikey.garage.data.local.dao.FuelDao
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
+import com.fearmikey.garage.data.local.dao.ModificationDao
 import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
+import com.fearmikey.garage.data.local.entity.ModificationCategory
+import com.fearmikey.garage.data.local.entity.ModificationRecord
 import com.fearmikey.garage.data.repository.FuelRepository
+import com.fearmikey.garage.data.repository.ImageStorageManager
 import com.fearmikey.garage.data.repository.MaintenanceRepository
+import com.fearmikey.garage.data.repository.ModificationRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.ui.navigation.Destinations
 import com.fearmikey.garage.ui.util.AppCurrency
@@ -23,7 +29,9 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import java.util.Calendar
@@ -51,7 +59,17 @@ class CostOfOwnershipViewModelTest {
         override suspend fun delete(record: FuelRecord) {}
     }
 
+    private class FakeModificationDao : ModificationDao {
+        val recordsFlow = MutableStateFlow<List<ModificationRecord>>(emptyList())
+        override fun getModsForVehicle(vehicleId: Long): Flow<List<ModificationRecord>> = recordsFlow
+        override suspend fun getModById(id: Long): ModificationRecord? = recordsFlow.value.find { it.id == id }
+        override suspend fun upsert(mod: ModificationRecord): Long = 1L
+        override suspend fun update(mod: ModificationRecord) {}
+        override suspend fun delete(mod: ModificationRecord) {}
+    }
+
     private class FakePreferencesRepository : PreferencesRepository {
+        val includeModsFlow = MutableStateFlow(false)
         override val unitsType: Flow<String> = MutableStateFlow("imperial")
         override val unitSystem: Flow<UnitSystem> = MutableStateFlow(UnitSystem.IMPERIAL)
         override val currencyCode: Flow<String> = MutableStateFlow("USD")
@@ -63,6 +81,8 @@ class CostOfOwnershipViewModelTest {
         override val appOpenCount: Flow<Int> = MutableStateFlow(1)
         override val buyMeACoffeeDontAskAgain: Flow<Boolean> = MutableStateFlow(false)
         override val buyMeACoffeeNextPromptOpenCount: Flow<Int> = MutableStateFlow(2)
+        override val includeModsInCost: Flow<Boolean> = includeModsFlow
+
         override suspend fun setUnitsType(units: String) {}
         override suspend fun setCurrencyCode(currencyCode: String) {}
         override suspend fun setThemeType(theme: String) {}
@@ -72,7 +92,12 @@ class CostOfOwnershipViewModelTest {
         override suspend fun incrementAppOpenCount(): Int = 1
         override suspend fun setBuyMeACoffeeDontAskAgain(dontAskAgain: Boolean) {}
         override suspend fun setBuyMeACoffeeNextPromptOpenCount(openCount: Int) {}
+        override suspend fun setIncludeModsInCost(includeMods: Boolean) {
+            includeModsFlow.value = includeMods
+        }
     }
+
+    private class FakeImageStorageManager : ImageStorageManager(ContextWrapper(null))
 
     @Before
     fun setUp() {
@@ -91,9 +116,11 @@ class CostOfOwnershipViewModelTest {
 
         val maintenanceDao = FakeMaintenanceDao()
         val fuelDao = FakeFuelDao()
+        val modDao = FakeModificationDao()
 
         val maintenanceRepo = MaintenanceRepository(maintenanceDao)
         val fuelRepo = FuelRepository(fuelDao)
+        val modRepo = ModificationRepository(modDao, FakeImageStorageManager())
         val prefsRepo = FakePreferencesRepository()
 
         val now = System.currentTimeMillis()
@@ -135,6 +162,7 @@ class CostOfOwnershipViewModelTest {
             savedStateHandle = savedStateHandle,
             maintenanceRepository = maintenanceRepo,
             fuelRepository = fuelRepo,
+            modificationRepository = modRepo,
             preferencesRepository = prefsRepo,
         )
 
@@ -168,9 +196,11 @@ class CostOfOwnershipViewModelTest {
 
         val maintenanceDao = FakeMaintenanceDao()
         val fuelDao = FakeFuelDao()
+        val modDao = FakeModificationDao()
 
         val maintenanceRepo = MaintenanceRepository(maintenanceDao)
         val fuelRepo = FuelRepository(fuelDao)
+        val modRepo = ModificationRepository(modDao, FakeImageStorageManager())
         val prefsRepo = FakePreferencesRepository()
 
         val cal = Calendar.getInstance()
@@ -212,6 +242,7 @@ class CostOfOwnershipViewModelTest {
             savedStateHandle = savedStateHandle,
             maintenanceRepository = maintenanceRepo,
             fuelRepository = fuelRepo,
+            modificationRepository = modRepo,
             preferencesRepository = prefsRepo,
         )
 
@@ -230,5 +261,73 @@ class CostOfOwnershipViewModelTest {
         viewModel.setTimeFilter(TimeFilter.LAST_YEAR)
         testDispatcher.scheduler.advanceUntilIdle()
         assertEquals(200.00, viewModel.uiState.value.totalCost, 0.001)
+    }
+
+    @Test
+    fun `including mods updates total cost and category breakdown`() = runTest {
+        val vehicleId = 1L
+        val savedStateHandle = SavedStateHandle(mapOf(Destinations.VEHICLE_ID_ARG to vehicleId))
+
+        val maintenanceDao = FakeMaintenanceDao()
+        val fuelDao = FakeFuelDao()
+        val modDao = FakeModificationDao()
+
+        val maintenanceRepo = MaintenanceRepository(maintenanceDao)
+        val fuelRepo = FuelRepository(fuelDao)
+        val modRepo = ModificationRepository(modDao, FakeImageStorageManager())
+        val prefsRepo = FakePreferencesRepository()
+
+        val now = System.currentTimeMillis()
+
+        maintenanceDao.recordsFlow.value = listOf(
+            MaintenanceRecord(
+                id = 1,
+                vehicleId = vehicleId,
+                date = now,
+                mileage = 10000,
+                description = "Oil Change",
+                cost = 100.00,
+                category = MaintenanceCategory.FLUIDS,
+            )
+        )
+
+        modDao.recordsFlow.value = listOf(
+            ModificationRecord(
+                id = 1,
+                vehicleId = vehicleId,
+                title = "Exhaust System",
+                category = ModificationCategory.EXHAUST,
+                description = "Cat-back exhaust",
+                date = now,
+                cost = 500.00,
+            )
+        )
+
+        val viewModel = CostOfOwnershipViewModel(
+            savedStateHandle = savedStateHandle,
+            maintenanceRepository = maintenanceRepo,
+            fuelRepository = fuelRepo,
+            modificationRepository = modRepo,
+            preferencesRepository = prefsRepo,
+        )
+
+        val collectJob = backgroundScope.launch { viewModel.uiState.collect {} }
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        // By default includeModsInCost is false
+        assertFalse(viewModel.uiState.value.includeModsInCost)
+        assertEquals(100.00, viewModel.uiState.value.totalCost, 0.001)
+        assertEquals(500.00, viewModel.uiState.value.modCost, 0.001)
+
+        // Toggle include mods on
+        viewModel.toggleIncludeMods(true)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertTrue(viewModel.uiState.value.includeModsInCost)
+        assertEquals(600.00, viewModel.uiState.value.totalCost, 0.001)
+
+        val modCategoryItem = viewModel.uiState.value.categories.find { it.key == "MOD_${ModificationCategory.EXHAUST.name}" }
+        assertNotNull(modCategoryItem)
+        assertEquals(500.00, modCategoryItem!!.totalCost, 0.001)
     }
 }

@@ -33,7 +33,18 @@ object MaintenanceScheduleEngine {
         return applicableRules
             .asSequence()
             .map { rule -> toSuggestion(rule, latestMileage, records, now, upcomingWindowMiles) }
-            .sortedBy { it.nextDueMileage ?: Int.MAX_VALUE }
+            .sortedWith(
+                compareBy(
+                    { when (it.status) {
+                        ReminderStatus.OVERDUE -> 0
+                        ReminderStatus.UPCOMING -> 1
+                        ReminderStatus.OK -> 2
+                        ReminderStatus.COMPLETED -> 3
+                    }},
+                    { it.nextDueMileage ?: Int.MAX_VALUE },
+                    { it.nextDueDate ?: Long.MAX_VALUE },
+                ),
+            )
             .toList()
     }
 
@@ -60,54 +71,28 @@ object MaintenanceScheduleEngine {
         // Both the mileage- and date-based baselines come from the same "last
         // service" record so the two dimensions always agree on which real
         // event they're projecting forward from.
-        val lastService = records.filter { it.satisfies(rule) }.maxByOrNull { it.mileage }
+        val lastService = records.asSequence().filter { it.satisfies(rule) }.maxByOrNull { it.mileage }
         val lastServiceMileage = lastService?.mileage
         val lastServiceDate = lastService?.date
 
-        val nextDueMileage = rule.intervalMiles?.let { interval ->
-            var next = (lastServiceMileage ?: 0) + interval
-            // Handles being overdue by more than one interval (e.g. a
-            // never-serviced task on a high-mileage vehicle).
-            while ((latestMileage != null) && (next <= latestMileage)) {
-                next += interval
-            }
-            next
-        }
+        val (nextDueMileage, mileageStatus) = calculateMileageDueAndStatus(
+            rule = rule,
+            lastServiceMileage = lastServiceMileage,
+            latestMileage = latestMileage,
+            upcomingWindowMiles = upcomingWindowMiles,
+        )
 
-        val nextDueDate = rule.intervalMonths?.let { months ->
-            // When never serviced, project forward from today rather than
-            // the epoch -- there's no reliable "vehicle age" baseline to use
-            // instead, and this avoids claiming an untracked task is already
-            // wildly overdue purely because it's never been logged.
-            var next = addMonths(lastServiceDate ?: now, months)
-            while (next <= now) {
-                next = addMonths(next, months)
-            }
-            next
-        }
+        val (nextDueDate, dateStatus) = calculateDateDueAndStatus(
+            rule = rule,
+            lastServiceDate = lastServiceDate,
+            now = now,
+        )
 
-        // The loops above guarantee both projections land strictly after
-        // "now" (mileage- and date-wise) once settled on, so there's no
-        // separate "overdue" case here -- being overdue just means a larger
-        // interval multiple was due. Whichever dimension is closer/more
-        // urgent (mileage or time) wins, matching ReminderRepository's
-        // "whichever comes first" semantics for user-set Reminders.
-        val mileageStatus = if (nextDueMileage == null || latestMileage == null) {
-            null
-        } else if ((nextDueMileage - latestMileage) <= upcomingWindowMiles) {
-            ReminderStatus.UPCOMING
-        } else {
-            ReminderStatus.OK
+        val status = when {
+            (mileageStatus == ReminderStatus.OVERDUE) || (dateStatus == ReminderStatus.OVERDUE) -> ReminderStatus.OVERDUE
+            (mileageStatus == ReminderStatus.UPCOMING) || (dateStatus == ReminderStatus.UPCOMING) -> ReminderStatus.UPCOMING
+            else -> ReminderStatus.OK
         }
-
-        val dateStatus = nextDueDate?.let {
-            val upcomingWindowMillis = TimeUnit.DAYS.toMillis(UPCOMING_WINDOW_DAYS)
-            if ((it - now) <= upcomingWindowMillis) ReminderStatus.UPCOMING else ReminderStatus.OK
-        }
-
-        val status = listOfNotNull(mileageStatus, dateStatus)
-            .minByOrNull { if (it == ReminderStatus.UPCOMING) 0 else 1 }
-            ?: ReminderStatus.OK
 
         return MaintenanceSuggestion(
             rule = rule,
@@ -117,6 +102,60 @@ object MaintenanceScheduleEngine {
             nextDueDate = nextDueDate,
             status = status,
         )
+    }
+
+    private fun calculateMileageDueAndStatus(
+        rule: MaintenanceRule,
+        lastServiceMileage: Int?,
+        latestMileage: Int?,
+        upcomingWindowMiles: Int,
+    ): Pair<Int?, ReminderStatus?> {
+        val interval = rule.intervalMiles ?: return Pair(null, null)
+
+        val nextDueMileage = if (lastServiceMileage != null) {
+            lastServiceMileage + interval
+        } else if (latestMileage == null) {
+            interval
+        } else {
+            var next = interval
+            while (next < latestMileage) {
+                next += interval
+            }
+            next
+        }
+
+        val status = if (latestMileage == null) {
+            ReminderStatus.OK
+        } else if (latestMileage >= nextDueMileage) {
+            ReminderStatus.OVERDUE
+        } else if ((nextDueMileage - latestMileage) <= upcomingWindowMiles) {
+            ReminderStatus.UPCOMING
+        } else {
+            ReminderStatus.OK
+        }
+
+        return Pair(nextDueMileage, status)
+    }
+
+    private fun calculateDateDueAndStatus(
+        rule: MaintenanceRule,
+        lastServiceDate: Long?,
+        now: Long,
+    ): Pair<Long?, ReminderStatus?> {
+        val months = rule.intervalMonths ?: return Pair(null, null)
+
+        val nextDueDate = lastServiceDate?.let { addMonths(it, months) } ?: addMonths(now, months)
+
+        val upcomingWindowMillis = TimeUnit.DAYS.toMillis(UPCOMING_WINDOW_DAYS)
+        val status = if (now >= nextDueDate) {
+            ReminderStatus.OVERDUE
+        } else if ((nextDueDate - now) <= upcomingWindowMillis) {
+            ReminderStatus.UPCOMING
+        } else {
+            ReminderStatus.OK
+        }
+
+        return Pair(nextDueDate, status)
     }
 
     private fun addMonths(epochMillis: Long, months: Int): Long =
@@ -210,7 +249,7 @@ object MaintenanceScheduleEngine {
         }
 
         val words = taskNameLower.split(Regex("[\\s/\\-,_]+"))
-            .filter { it.length >= 3 && it !in STOP_WORDS }
+            .filter { (it.length >= 3) && (it !in STOP_WORDS) }
 
         for (word in words) {
             if (word !in keywords) {

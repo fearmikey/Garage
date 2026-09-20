@@ -103,10 +103,11 @@ class MaintenanceScheduleEngineTest {
 
     @Test
     fun `suggestion is upcoming when within the upcoming mileage window`() {
+        val testNow = System.currentTimeMillis()
         val records = listOf(
             MaintenanceRecord(
                 vehicleId = fwdCivic.id,
-                date = 0,
+                date = testNow,
                 mileage = 20_000,
                 description = "Engine oil change",
                 cost = 50.0,
@@ -114,11 +115,42 @@ class MaintenanceScheduleEngineTest {
             )
         )
 
-        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 24_700, records = records)
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(
+            fwdCivic,
+            latestMileage = 24_700,
+            records = records,
+            now = testNow,
+        )
         val oilChange = suggestions.first { it.rule.taskName == "Engine oil change" }
 
         assertEquals(25_000, oilChange.nextDueMileage)
         assertEquals(ReminderStatus.UPCOMING, oilChange.status)
+    }
+
+    @Test
+    fun `suggestion is overdue when latest mileage reaches or passes next due mileage`() {
+        val testNow = System.currentTimeMillis()
+        val records = listOf(
+            MaintenanceRecord(
+                vehicleId = fwdCivic.id,
+                date = testNow,
+                mileage = 20_000,
+                description = "Engine oil change",
+                cost = 50.0,
+                category = MaintenanceCategory.FLUIDS,
+            )
+        )
+
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(
+            fwdCivic,
+            latestMileage = 25_100,
+            records = records,
+            now = testNow,
+        )
+        val oilChange = suggestions.first { it.rule.taskName == "Engine oil change" }
+
+        assertEquals(25_000, oilChange.nextDueMileage)
+        assertEquals(ReminderStatus.OVERDUE, oilChange.status)
     }
 
     @Test
@@ -239,10 +271,11 @@ class MaintenanceScheduleEngineTest {
 
     @Test
     fun `logging rotation satisfies rotation and balance rule`() {
+        val testNow = System.currentTimeMillis()
         val records = listOf(
             MaintenanceRecord(
                 vehicleId = fwdCivic.id,
-                date = 0,
+                date = testNow,
                 mileage = 12_000,
                 description = "Tire rotation",
                 cost = 40.0,
@@ -251,7 +284,12 @@ class MaintenanceScheduleEngineTest {
             )
         )
 
-        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 12_100, records = records)
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(
+            fwdCivic,
+            latestMileage = 12_100,
+            records = records,
+            now = testNow,
+        )
 
         val rotationAndBalance = suggestions.first { it.rule.taskName == "Rotation and Balance" }
 
@@ -262,10 +300,11 @@ class MaintenanceScheduleEngineTest {
 
     @Test
     fun `suggestionsFor respects custom upcoming window miles`() {
+        val testNow = System.currentTimeMillis()
         val records = listOf(
             MaintenanceRecord(
                 vehicleId = fwdCivic.id,
-                date = 0,
+                date = testNow,
                 mileage = 20_000,
                 description = "Engine oil change",
                 cost = 50.0,
@@ -279,6 +318,7 @@ class MaintenanceScheduleEngineTest {
             vehicle = fwdCivic,
             latestMileage = 24_700,
             records = records,
+            now = testNow,
             upcomingWindowMiles = 250,
         )
         val oilChangeOk = suggestionsOk.first { it.rule.taskName == "Engine oil change" }
@@ -289,6 +329,7 @@ class MaintenanceScheduleEngineTest {
             vehicle = fwdCivic,
             latestMileage = 24_700,
             records = records,
+            now = testNow,
             upcomingWindowMiles = 500,
         )
         val oilChangeUpcoming = suggestionsUpcoming.first { it.rule.taskName == "Engine oil change" }

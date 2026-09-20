@@ -51,7 +51,7 @@ class FuelViewModel @Inject constructor(
         val entries = FuelEconomyCalculator.entriesFor(records)
         FuelUiState(
             records = records,
-            mpgByRecordId = entries.associate { it.record.id to it.mpg },
+            mpgByRecordId = entries.associateBy({ it.record.id }) { it.mpg },
             averageMpg = FuelEconomyCalculator.averageMpg(entries),
             bestMpg = FuelEconomyCalculator.bestMpg(entries),
             worstMpg = FuelEconomyCalculator.worstMpg(entries),

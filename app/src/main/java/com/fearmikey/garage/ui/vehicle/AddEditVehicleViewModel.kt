@@ -1,5 +1,6 @@
 package com.fearmikey.garage.ui.vehicle
 
+import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -10,8 +11,10 @@ import com.fearmikey.garage.data.local.entity.VehicleSpecs
 import com.fearmikey.garage.data.repository.ImageStorageManager
 import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.data.repository.VinLookupResult
+import com.fearmikey.garage.notification.WorkScheduler
 import com.fearmikey.garage.ui.navigation.Destinations
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -53,6 +56,7 @@ class AddEditVehicleViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val vehicleRepository: VehicleRepository,
     private val imageStorageManager: ImageStorageManager,
+    @ApplicationContext private val context: Context? = null,
 ) : ViewModel() {
 
     private val vehicleId: Long = savedStateHandle.get<Long>(Destinations.VEHICLE_ID_ARG) ?: Destinations.NO_VEHICLE_ID
@@ -231,6 +235,7 @@ class AddEditVehicleViewModel @Inject constructor(
                     imageStorageManager.deleteImage(oldFilename)
                 }
 
+                context?.let { WorkScheduler.triggerImmediateReminderCheck(it) }
                 _uiState.update { it.copy(isSaving = false, saveComplete = true) }
             } catch (e: Exception) {
                 _uiState.update {
@@ -249,6 +254,7 @@ class AddEditVehicleViewModel @Inject constructor(
             vehicleRepository.getVehicleByIdOnce(vehicleId)?.let { vehicle ->
                 vehicleRepository.deleteVehicle(vehicle)
             }
+            context?.let { WorkScheduler.triggerImmediateReminderCheck(it) }
             _uiState.update { it.copy(deleteComplete = true) }
         }
     }

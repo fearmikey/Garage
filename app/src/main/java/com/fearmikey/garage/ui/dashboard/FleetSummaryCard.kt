@@ -85,8 +85,8 @@ fun FleetSummaryCard(
                     }
                 }
 
-                val hasAlerts = summary.totalOverdueReminders > 0 || summary.totalUpcomingReminders > 0
-                val statusModifier = if (onOpenOverdueReminders != null && hasAlerts) {
+                val hasAlerts = (summary.totalOverdueReminders > 0) || (summary.totalUpcomingReminders > 0)
+                val statusModifier = if ((onOpenOverdueReminders != null) && hasAlerts) {
                     Modifier
                         .weight(1f)
                         .clickable { onOpenOverdueReminders() }

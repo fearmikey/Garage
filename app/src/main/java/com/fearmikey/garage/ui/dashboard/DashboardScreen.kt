@@ -111,7 +111,7 @@ private fun DashboardContent(
                         summary = fleetSummary,
                         unitSystem = unitSystem,
                         onOpenOverdueReminders = {
-                            vehicles.firstOrNull { it.overdueReminderCount > 0 || it.upcomingReminderCount > 0 }
+                            vehicles.firstOrNull { (it.overdueReminderCount > 0) || (it.upcomingReminderCount > 0) }
                                 ?.let { onOpenVehicle(it.vehicle.id, VehicleTab.SCHEDULE.ordinal) }
                         },
                     )

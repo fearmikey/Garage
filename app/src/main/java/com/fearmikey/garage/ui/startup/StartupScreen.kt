@@ -24,7 +24,6 @@ import androidx.compose.foundation.verticalScroll
 import com.fearmikey.garage.ui.components.verticalScrollbar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DirectionsCar

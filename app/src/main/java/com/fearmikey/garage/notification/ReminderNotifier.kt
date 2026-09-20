@@ -79,9 +79,7 @@ class ReminderNotifier @Inject constructor(
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
 
-        if (pendingIntent != null) {
-            notificationBuilder.setContentIntent(pendingIntent)
-        }
+        pendingIntent?.let { notificationBuilder.setContentIntent(it) }
 
         notificationManager.notify(notificationId, notificationBuilder.build())
     }

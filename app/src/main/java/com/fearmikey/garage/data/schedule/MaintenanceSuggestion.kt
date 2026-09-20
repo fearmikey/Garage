@@ -21,10 +21,8 @@ data class MaintenanceSuggestion(
     val nextDueDate: Long?,
     /**
      * Reuses [ReminderStatus] so the UI can share [com.fearmikey.garage.ui.components.StatusChip].
-     * Only [ReminderStatus.UPCOMING] and [ReminderStatus.OK] are ever produced here: both
-     * [nextDueMileage] and [nextDueDate] are always projected forward past the vehicle's current
-     * mileage/today's date, so there's no fixed "overdue" target the way there is for a
-     * user-set [com.fearmikey.garage.data.local.entity.Reminder].
+     * Can be [ReminderStatus.OVERDUE], [ReminderStatus.UPCOMING], or [ReminderStatus.OK] based on
+     * vehicle mileage and time intervals evaluated against recorded service history.
      */
     val status: ReminderStatus,
 )

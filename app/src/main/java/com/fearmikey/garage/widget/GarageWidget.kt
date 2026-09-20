@@ -98,7 +98,8 @@ class GarageWidget : GlanceAppWidget() {
                 )
 
                 suggestions
-                    .filter { it.status == ReminderStatus.OVERDUE || it.status == ReminderStatus.UPCOMING }
+                    .asSequence()
+                    .filter { (it.status == ReminderStatus.OVERDUE) || (it.status == ReminderStatus.UPCOMING) }
                     .map { suggestion ->
                         val dueInfo = listOfNotNull(
                             suggestion.nextDueDate?.toDisplayDate(),
@@ -112,6 +113,7 @@ class GarageWidget : GlanceAppWidget() {
                             dueInfo = dueInfo,
                         )
                     }
+                    .toList()
             }
             .sortedBy { if (it.status == ReminderStatus.OVERDUE) 0 else 1 }
             .take(MAX_ROWS)
@@ -168,9 +170,9 @@ private fun GarageWidgetContent(
                 style = TextStyle(fontWeight = FontWeight.Bold, color = GlanceTheme.colors.onBackground),
                 modifier = GlanceModifier.defaultWeight(),
             )
-            if (recentTankMpgText != null) {
+            recentTankMpgText?.let { text ->
                 Text(
-                    text = "Recent Tank: $recentTankMpgText",
+                    text = "Recent Tank: $text",
                     style = TextStyle(
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,

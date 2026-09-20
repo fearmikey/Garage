@@ -27,6 +27,7 @@ class PreferencesManager(private val context: Context) {
         val BUY_ME_A_COFFEE_DONT_ASK_AGAIN_KEY = booleanPreferencesKey("buy_me_a_coffee_dont_ask_again")
         val BUY_ME_A_COFFEE_NEXT_PROMPT_OPEN_COUNT_KEY = intPreferencesKey("buy_me_a_coffee_next_prompt_open_count")
         val MODS_GRID_VIEW_KEY = booleanPreferencesKey("is_mods_grid_view")
+        val INCLUDE_MODS_IN_COST_KEY = booleanPreferencesKey("include_mods_in_cost")
 
         const val DEFAULT_MAINTENANCE_MILEAGE_WINDOW = 500
     }
@@ -89,6 +90,11 @@ class PreferencesManager(private val context: Context) {
     val isModsGridView: Flow<Boolean> = context.dataStore.data
         .map { preferences ->
             preferences[MODS_GRID_VIEW_KEY] ?: true
+        }
+
+    val includeModsInCost: Flow<Boolean> = context.dataStore.data
+        .map { preferences ->
+            preferences[INCLUDE_MODS_IN_COST_KEY] ?: false
         }
 
     suspend fun incrementAppOpenCount(): Int {
@@ -156,6 +162,12 @@ class PreferencesManager(private val context: Context) {
     suspend fun setModsGridView(isGrid: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[MODS_GRID_VIEW_KEY] = isGrid
+        }
+    }
+
+    suspend fun setIncludeModsInCost(includeMods: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[INCLUDE_MODS_IN_COST_KEY] = includeMods
         }
     }
 }

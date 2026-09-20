@@ -26,6 +26,9 @@ import com.fearmikey.garage.ui.components.verticalScrollbar
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Air
+import androidx.compose.material.icons.filled.AirlineSeatReclineNormal
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.BuildCircle
@@ -33,10 +36,15 @@ import androidx.compose.material.icons.filled.ElectricalServices
 import androidx.compose.material.icons.filled.Handyman
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.LocalGasStation
+import androidx.compose.material.icons.filled.Radio
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Speed
+import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material.icons.outlined.Calculate
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
@@ -60,6 +68,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
+import com.fearmikey.garage.data.local.entity.ModificationCategory
 import com.fearmikey.garage.ui.components.EmptyState
 import com.fearmikey.garage.ui.components.SectionHeader
 import com.fearmikey.garage.ui.theme.GarageTheme
@@ -75,6 +84,7 @@ fun CostOfOwnershipScreen(
     CostOfOwnershipContent(
         uiState = uiState,
         onTimeFilterSelected = viewModel::setTimeFilter,
+        onIncludeModsToggled = viewModel::toggleIncludeMods,
     )
 }
 
@@ -82,6 +92,7 @@ fun CostOfOwnershipScreen(
 private fun CostOfOwnershipContent(
     uiState: CostOfOwnershipUiState,
     onTimeFilterSelected: (TimeFilter) -> Unit,
+    onIncludeModsToggled: (Boolean) -> Unit,
 ) {
     if (uiState.categories.isEmpty()) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -105,7 +116,10 @@ private fun CostOfOwnershipContent(
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             item {
-                TotalCostCard(uiState = uiState)
+                TotalCostCard(
+                    uiState = uiState,
+                    onIncludeModsToggled = onIncludeModsToggled,
+                )
             }
 
             item {
@@ -133,6 +147,7 @@ private fun CostOfOwnershipContent(
 @Composable
 private fun TotalCostCard(
     uiState: CostOfOwnershipUiState,
+    onIncludeModsToggled: (Boolean) -> Unit,
 ) {
     ElevatedCard(
         modifier = Modifier
@@ -145,52 +160,114 @@ private fun TotalCostCard(
                 .fillMaxWidth()
                 .padding(20.dp),
         ) {
-            Text(
-                text = "Total Cost of Ownership",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "%s%.2f".format(uiState.currencySymbol, uiState.totalCost),
-                style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary,
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column {
+                    Text(
+                        text = "Total Cost of Ownership",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = "%s%.2f".format(uiState.currencySymbol, uiState.totalCost),
+                        style = MaterialTheme.typography.headlineLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .clickable { onIncludeModsToggled(!uiState.includeModsInCost) }
+                        .padding(start = 4.dp, end = 4.dp, top = 4.dp, bottom = 4.dp),
+                ) {
+                    Checkbox(
+                        checked = uiState.includeModsInCost,
+                        onCheckedChange = null,
+                    )
+                    Text(
+                        text = "Include mods",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
             Spacer(modifier = Modifier.height(16.dp))
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(IntrinsicSize.Max),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                CostSubStat(
-                    title = "Maintenance & Repairs",
-                    amount = uiState.maintenanceCost,
-                    countText = "${uiState.maintenanceRecordCount} records",
-                    icon = Icons.Default.Handyman,
-                    currencySymbol = uiState.currencySymbol,
+            if (uiState.includeModsInCost) {
+                Row(
                     modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(),
-                )
+                        .fillMaxWidth()
+                        .horizontalScroll(rememberScrollState()),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    CostSubStat(
+                        title = "Maintenance",
+                        amount = uiState.maintenanceCost,
+                        countText = "${uiState.maintenanceRecordCount} records",
+                        icon = Icons.Default.Handyman,
+                        currencySymbol = uiState.currencySymbol,
+                        modifier = Modifier.width(145.dp),
+                    )
 
-                Spacer(modifier = Modifier.width(16.dp))
+                    CostSubStat(
+                        title = "Fuel Spent",
+                        amount = uiState.fuelCost,
+                        countText = "${uiState.fuelRecordCount} fill-ups",
+                        icon = Icons.Default.LocalGasStation,
+                        currencySymbol = uiState.currencySymbol,
+                        modifier = Modifier.width(145.dp),
+                    )
 
-                CostSubStat(
-                    title = "Fuel Spent",
-                    amount = uiState.fuelCost,
-                    countText = "${uiState.fuelRecordCount} fill-ups",
-                    icon = Icons.Default.LocalGasStation,
-                    currencySymbol = uiState.currencySymbol,
+                    CostSubStat(
+                        title = "Modifications",
+                        amount = uiState.modCost,
+                        countText = "${uiState.modRecordCount} mods",
+                        icon = Icons.Default.Build,
+                        currencySymbol = uiState.currencySymbol,
+                        modifier = Modifier.width(145.dp),
+                    )
+                }
+            } else {
+                Row(
                     modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(),
-                )
+                        .fillMaxWidth()
+                        .height(IntrinsicSize.Max),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    CostSubStat(
+                        title = "Maintenance & Repairs",
+                        amount = uiState.maintenanceCost,
+                        countText = "${uiState.maintenanceRecordCount} records",
+                        icon = Icons.Default.Handyman,
+                        currencySymbol = uiState.currencySymbol,
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight(),
+                    )
+
+                    Spacer(modifier = Modifier.width(16.dp))
+
+                    CostSubStat(
+                        title = "Fuel Spent",
+                        amount = uiState.fuelCost,
+                        countText = "${uiState.fuelRecordCount} fill-ups",
+                        icon = Icons.Default.LocalGasStation,
+                        currencySymbol = uiState.currencySymbol,
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight(),
+                    )
+                }
             }
         }
     }
@@ -283,7 +360,7 @@ private fun CategoryCostCard(
     currencySymbol: String = "$",
 ) {
     var isExpanded by remember { mutableStateOf(false) }
-    val icon = getCategoryIcon(category.key, category.category)
+    val icon = getCategoryIcon(category.key, category.category, category.modificationCategory)
 
     ElevatedCard(
         modifier = Modifier
@@ -394,8 +471,13 @@ private fun CostEntryRow(
                 fontWeight = FontWeight.Medium,
             )
             Row {
+                val subtitleText = if (entry.mileage > 0) {
+                    "${entry.date.toDisplayDate()} · ${UnitConverter.formatDistance(entry.mileage, unitSystem)}"
+                } else {
+                    entry.date.toDisplayDate()
+                }
                 Text(
-                    text = "${entry.date.toDisplayDate()} · ${UnitConverter.formatDistance(entry.mileage, unitSystem)}",
+                    text = subtitleText,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.outline,
                 )
@@ -417,8 +499,25 @@ private fun CostEntryRow(
     }
 }
 
-private fun getCategoryIcon(key: String, category: MaintenanceCategory?): ImageVector {
+private fun getCategoryIcon(
+    key: String,
+    category: MaintenanceCategory?,
+    modificationCategory: ModificationCategory? = null,
+): ImageVector {
     if (key == "FUEL") return Icons.Default.LocalGasStation
+    if (modificationCategory != null) {
+        return when (modificationCategory) {
+            ModificationCategory.PERFORMANCE -> Icons.Default.Speed
+            ModificationCategory.SUSPENSION -> Icons.Default.Tune
+            ModificationCategory.EXTERIOR -> Icons.Default.AutoAwesome
+            ModificationCategory.INTERIOR -> Icons.Default.AirlineSeatReclineNormal
+            ModificationCategory.LIGHTING -> Icons.Default.LightMode
+            ModificationCategory.WHEELS_TIRES -> Icons.Default.Autorenew
+            ModificationCategory.AUDIO_ELECTRICAL -> Icons.Default.Radio
+            ModificationCategory.EXHAUST -> Icons.Default.Air
+            ModificationCategory.OTHER -> Icons.Default.Build
+        }
+    }
     return when (category) {
         MaintenanceCategory.TIRES -> Icons.Default.Autorenew
         MaintenanceCategory.BRAKES -> Icons.Default.Handyman
@@ -491,6 +590,7 @@ private fun CostOfOwnershipPreview() {
         CostOfOwnershipContent(
             uiState = sampleUiState,
             onTimeFilterSelected = {},
+            onIncludeModsToggled = {},
         )
     }
 }
