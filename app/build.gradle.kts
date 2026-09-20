@@ -66,6 +66,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
     buildFeatures {
         compose = true
         buildConfig = true
