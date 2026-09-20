@@ -27,6 +27,26 @@ data class Vehicle(
     val drivetrain: Drivetrain = Drivetrain.UNKNOWN,
     @ColumnInfo(defaultValue = "0.0")
     val imageOffsetY: Float = 0f,
+    val imageUri2: String? = null,
+    @ColumnInfo(defaultValue = "0.0")
+    val imageOffsetY2: Float = 0f,
+    val imageUri3: String? = null,
+    @ColumnInfo(defaultValue = "0.0")
+    val imageOffsetY3: Float = 0f,
+) {
+    /** Helper list of all attached photos (up to 3) with their respective vertical offsets. */
+    val photos: List<VehiclePhoto>
+        get() = buildList {
+            imageUri?.let { add(VehiclePhoto(it, imageOffsetY)) }
+            imageUri2?.let { add(VehiclePhoto(it, imageOffsetY2)) }
+            imageUri3?.let { add(VehiclePhoto(it, imageOffsetY3)) }
+        }
+}
+
+/** Represents a single photo URI (filename) and its vertical offset. */
+data class VehiclePhoto(
+    val uri: String,
+    val offsetY: Float = 0f,
 )
 
 /**

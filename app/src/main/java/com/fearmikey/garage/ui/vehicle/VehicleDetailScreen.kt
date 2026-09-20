@@ -4,12 +4,19 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
@@ -42,7 +49,6 @@ import com.fearmikey.garage.ui.maintenance.MaintenanceSuggestionsScreen
 import com.fearmikey.garage.ui.maintenance.MaintenanceTimelineScreen
 import com.fearmikey.garage.ui.mod.ModsScreen
 import com.fearmikey.garage.ui.recall.RecallsScreen
-import com.fearmikey.garage.ui.reminder.RemindersScreen
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
@@ -56,7 +62,7 @@ fun VehicleDetailScreen(
     viewModel: VehicleDetailViewModel = hiltViewModel(),
 ) {
     val vehicle by viewModel.vehicle.collectAsStateWithLifecycle()
-    val imageFile by viewModel.imageFile.collectAsStateWithLifecycle()
+    val imageFiles by viewModel.imageFiles.collectAsStateWithLifecycle()
     val shouldOpenAddSheet by viewModel.shouldOpenAddSheet.collectAsStateWithLifecycle()
     var selectedTab by remember { mutableIntStateOf(viewModel.initialTab) }
 
@@ -97,15 +103,57 @@ fun VehicleDetailScreen(
                         ),
                     contentAlignment = Alignment.Center,
                 ) {
-                    val currentImageFile = imageFile
-                    if ((currentImageFile != null) && currentImageFile.exists()) {
-                        AsyncImage(
-                            model = currentImageFile,
-                            contentDescription = vehicle?.let { "${it.year ?: ""} ${it.make} ${it.model}".trim() },
-                            contentScale = ContentScale.Crop,
-                            alignment = BiasAlignment(0f, vehicle?.imageOffsetY ?: 0f),
-                            modifier = Modifier.fillMaxSize(),
-                        )
+                    if (imageFiles.isNotEmpty()) {
+                        if (imageFiles.size == 1) {
+                            val singlePhoto = imageFiles.first()
+                            AsyncImage(
+                                model = singlePhoto.first,
+                                contentDescription = vehicle?.let { "${it.year ?: ""} ${it.make} ${it.model}".trim() },
+                                contentScale = ContentScale.Crop,
+                                alignment = BiasAlignment(0f, singlePhoto.second),
+                                modifier = Modifier.fillMaxSize(),
+                            )
+                        } else {
+                            val pagerState = rememberPagerState(pageCount = { imageFiles.size })
+                            HorizontalPager(
+                                state = pagerState,
+                                modifier = Modifier.fillMaxSize(),
+                            ) { page ->
+                                val photo = imageFiles[page]
+                                AsyncImage(
+                                    model = photo.first,
+                                    contentDescription = vehicle?.let { "${it.year ?: ""} ${it.make} ${it.model}".trim() },
+                                    contentScale = ContentScale.Crop,
+                                    alignment = BiasAlignment(0f, photo.second),
+                                    modifier = Modifier.fillMaxSize(),
+                                )
+                            }
+                            Row(
+                                modifier = Modifier
+                                    .align(Alignment.BottomCenter)
+                                    .padding(bottom = 8.dp)
+                                    .background(
+                                        color = MaterialTheme.colorScheme.scrim.copy(alpha = 0.4f),
+                                        shape = CircleShape,
+                                    )
+                                    .padding(horizontal = 8.dp, vertical = 4.dp),
+                                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                repeat(imageFiles.size) { iteration ->
+                                    val color = if (pagerState.currentPage == iteration) {
+                                        MaterialTheme.colorScheme.primary
+                                    } else {
+                                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                                    }
+                                    Box(
+                                        modifier = Modifier
+                                            .size(6.dp)
+                                            .background(color, shape = CircleShape)
+                                    )
+                                }
+                            }
+                        }
                     } else {
                         Icon(
                             imageVector = Icons.Outlined.DirectionsCar,
@@ -129,12 +177,11 @@ fun VehicleDetailScreen(
                     autoOpenAddSheet = shouldOpenAddSheet && (viewModel.initialTab == VehicleTab.TIMELINE.ordinal),
                     onAddSheetConsumed = viewModel::consumeAddSheet,
                 )
+                VehicleTab.SCHEDULE.ordinal -> MaintenanceSuggestionsScreen()
                 VehicleTab.FUEL.ordinal -> FuelScreen(
                     autoOpenAddSheet = shouldOpenAddSheet && (viewModel.initialTab == VehicleTab.FUEL.ordinal),
                     onAddSheetConsumed = viewModel::consumeAddSheet,
                 )
-                VehicleTab.REMINDERS.ordinal -> RemindersScreen()
-                VehicleTab.SCHEDULE.ordinal -> MaintenanceSuggestionsScreen()
                 VehicleTab.EXPENSES.ordinal -> CostOfOwnershipScreen()
                 VehicleTab.SPECS.ordinal -> VehicleSpecsScreen()
                 VehicleTab.PARTS.ordinal -> PartsScreen(onEditParts = { onEditParts(viewModel.vehicleId) })

@@ -1,0 +1,4 @@
+Expanded vehicle modifications & upgrades tracking with custom categories
+Streamlined maintenance reminder system integrated into schedule engine
+Custom custom-styled scrollbars and UI refinements across screens
+Database schema migrations 13-16 and expanded unit test suite

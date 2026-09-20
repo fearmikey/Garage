@@ -7,12 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
-import com.fearmikey.garage.data.local.entity.Reminder
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.repository.CustomMaintenanceRuleRepository
 import com.fearmikey.garage.data.repository.MaintenanceRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
-import com.fearmikey.garage.data.repository.ReminderRepository
 import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.data.schedule.MaintenanceScheduleEngine
 import com.fearmikey.garage.data.schedule.MaintenanceSuggestion
@@ -37,7 +35,6 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     vehicleRepository: VehicleRepository,
     private val maintenanceRepository: MaintenanceRepository,
-    private val reminderRepository: ReminderRepository,
     private val customMaintenanceRuleRepository: CustomMaintenanceRuleRepository,
     preferencesRepository: PreferencesRepository,
     @ApplicationContext private val context: Context? = null,
@@ -60,51 +57,26 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
         maintenanceRepository.getRecordsForVehicle(vehicleId),
         maintenanceRepository.getLatestMileageForVehicle(vehicleId),
         customMaintenanceRuleRepository.getRulesForVehicle(vehicleId),
-        reminderRepository.getRemindersForVehicle(vehicleId),
         preferencesRepository.maintenanceMileageWindow,
     ) { flows: Array<Any?> ->
         val vehicle = flows[0] as? Vehicle
         val records = (flows[1] as? List<*>)?.filterIsInstance<MaintenanceRecord>() ?: emptyList()
         val latestMileage = flows[2] as? Int
         val customRules = (flows[3] as? List<*>)?.filterIsInstance<CustomMaintenanceRule>() ?: emptyList()
-        val reminders = (flows[4] as? List<*>)?.filterIsInstance<Reminder>() ?: emptyList()
-        val mileageWindow = flows[5] as? Int ?: ReminderRepository.DEFAULT_UPCOMING_WINDOW_MILES
+        val mileageWindow = flows[4] as? Int ?: 500
 
         if (vehicle == null) {
             emptyList()
         } else {
-            val activeReminderTasks = reminders
-                .asSequence()
-                .filter { !it.isCompleted }
-                .map { it.taskName.lowercase() }
-                .toSet()
-
             MaintenanceScheduleEngine.suggestionsFor(
                 vehicle = vehicle,
                 latestMileage = latestMileage,
                 records = records,
                 customRules = customRules.map { it.toMaintenanceRule() },
                 upcomingWindowMiles = mileageWindow,
-            ).filter { suggestion ->
-                suggestion.rule.taskName.lowercase() !in activeReminderTasks
-            }
+            )
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
-
-    /** Creates a [Reminder] pre-filled from a suggestion, so it shows up in the Reminders tab. */
-    fun addAsReminder(suggestion: MaintenanceSuggestion) {
-        viewModelScope.launch {
-            reminderRepository.saveReminder(
-                Reminder(
-                    vehicleId = vehicleId,
-                    taskName = suggestion.rule.taskName,
-                    dueDate = suggestion.nextDueDate,
-                    dueMileage = suggestion.nextDueMileage,
-                )
-            )
-            context?.let { WorkScheduler.triggerImmediateReminderCheck(it) }
-        }
-    }
 
     fun receiptFileFor(filename: String): File? = maintenanceRepository.imageFileFor(filename)
 

@@ -11,7 +11,6 @@ import com.fearmikey.garage.data.local.dao.CustomMaintenanceRuleDao
 import com.fearmikey.garage.data.local.dao.FuelDao
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
 import com.fearmikey.garage.data.local.dao.ModificationDao
-import com.fearmikey.garage.data.local.dao.ReminderDao
 import com.fearmikey.garage.data.local.dao.VehicleDao
 import com.fearmikey.garage.data.local.dao.VehiclePartsDao
 import com.fearmikey.garage.data.local.dao.VehicleRegistrationDao
@@ -20,7 +19,6 @@ import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
 import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.ModificationRecord
-import com.fearmikey.garage.data.local.entity.Reminder
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.local.entity.VehiclePartsInfo
 import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
@@ -181,13 +179,6 @@ class SettingsViewModelTest {
                 override suspend fun update(record: MaintenanceRecord) {}
                 override suspend fun delete(record: MaintenanceRecord) {}
             }
-            override fun reminderDao(): ReminderDao = object : ReminderDao {
-                override fun getRemindersForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<Reminder>())
-                override suspend fun getIncompleteReminders() = emptyList<Reminder>()
-                override suspend fun upsert(reminder: Reminder) = 1L
-                override suspend fun update(reminder: Reminder) {}
-                override suspend fun delete(reminder: Reminder) {}
-            }
             override fun vehicleSpecsDao(): VehicleSpecsDao = FakeVehicleSpecsDao()
             override fun fuelDao(): FuelDao = object : FuelDao {
                 override fun getRecordsForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<FuelRecord>())
@@ -269,13 +260,6 @@ class SettingsViewModelTest {
                 override suspend fun upsert(record: MaintenanceRecord) = 1L
                 override suspend fun update(record: MaintenanceRecord) {}
                 override suspend fun delete(record: MaintenanceRecord) {}
-            }
-            override fun reminderDao(): ReminderDao = object : ReminderDao {
-                override fun getRemindersForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<Reminder>())
-                override suspend fun getIncompleteReminders() = emptyList<Reminder>()
-                override suspend fun upsert(reminder: Reminder) = 1L
-                override suspend fun update(reminder: Reminder) {}
-                override suspend fun delete(reminder: Reminder) {}
             }
             override fun vehicleSpecsDao(): VehicleSpecsDao = FakeVehicleSpecsDao()
             override fun fuelDao(): FuelDao = object : FuelDao {

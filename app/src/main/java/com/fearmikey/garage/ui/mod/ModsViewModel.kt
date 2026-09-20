@@ -21,9 +21,16 @@ import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
 
+data class ModPhotoItem(
+    val filename: String? = null,
+    val file: File? = null,
+)
+
 data class ModsUiState(
     val mods: List<ModificationRecord> = emptyList(),
     val totalCost: Double = 0.0,
+    val isGridView: Boolean = true,
+    val viewingMod: ModificationRecord? = null,
     val isSheetOpen: Boolean = false,
     val editingModId: Long? = null,
     val title: String = "",
@@ -31,42 +38,44 @@ data class ModsUiState(
     val description: String = "",
     val date: Long = System.currentTimeMillis(),
     val cost: String = "",
-    val pickedImageUri: Uri? = null,
-    val currentImageFilename: String? = null,
-    val imageFile: File? = null,
-    val isImageRemoved: Boolean = false,
+    val productUrl: String = "",
+    val photos: List<ModPhotoItem> = emptyList(),
     val isSaving: Boolean = false,
     val currencySymbol: String = "$",
-)
+) {
+    val pickedImageUri: Uri? get() = null
+    val currentImageFilename: String? get() = photos.firstOrNull()?.filename
+    val imageFile: File? get() = photos.firstOrNull()?.file
+    val isImageRemoved: Boolean get() = false
+}
 
 @HiltViewModel
 class ModsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val modificationRepository: ModificationRepository,
     private val imageStorageManager: ImageStorageManager,
-    preferencesRepository: PreferencesRepository,
+    private val preferencesRepository: PreferencesRepository,
 ) : ViewModel() {
 
     val vehicleId: Long = checkNotNull(savedStateHandle[Destinations.VEHICLE_ID_ARG])
 
     private val _sheetState = MutableStateFlow(SheetState())
+    private val _viewingMod = MutableStateFlow<ModificationRecord?>(null)
 
     val uiState: StateFlow<ModsUiState> = combine(
         modificationRepository.getModsForVehicle(vehicleId),
         preferencesRepository.appCurrency,
+        preferencesRepository.isModsGridView,
         _sheetState,
-    ) { modsList, currency, sheet ->
+        _viewingMod,
+    ) { modsList, currency, isGrid, sheet, viewing ->
         val total = modsList.sumOf { it.cost }
-        val activeImageFile = when {
-            sheet.isImageRemoved -> null
-            sheet.pickedImageUri != null -> null // Picked URI handled separately in UI / AsyncImage
-            sheet.currentImageFilename != null -> imageStorageManager.imageFile(sheet.currentImageFilename)
-            else -> null
-        }
 
         ModsUiState(
             mods = modsList,
             totalCost = total,
+            isGridView = isGrid,
+            viewingMod = viewing,
             isSheetOpen = sheet.isOpen,
             editingModId = sheet.editingModId,
             title = sheet.title,
@@ -74,10 +83,8 @@ class ModsViewModel @Inject constructor(
             description = sheet.description,
             date = sheet.date,
             cost = sheet.cost,
-            pickedImageUri = sheet.pickedImageUri,
-            currentImageFilename = sheet.currentImageFilename,
-            imageFile = activeImageFile,
-            isImageRemoved = sheet.isImageRemoved,
+            productUrl = sheet.productUrl,
+            photos = sheet.photos,
             isSaving = sheet.isSaving,
             currencySymbol = currency.symbol,
         )
@@ -85,11 +92,30 @@ class ModsViewModel @Inject constructor(
 
     fun imageFileFor(filename: String): File = imageStorageManager.imageFile(filename)
 
+    fun onToggleViewMode(isGrid: Boolean) {
+        viewModelScope.launch {
+            preferencesRepository.setModsGridView(isGrid)
+        }
+    }
+
+    fun onModClicked(mod: ModificationRecord) {
+        _viewingMod.value = mod
+    }
+
+    fun onDismissViewSheet() {
+        _viewingMod.value = null
+    }
+
     fun onAddModClicked() {
+        _viewingMod.value = null
         _sheetState.value = SheetState(isOpen = true)
     }
 
     fun onEditModClicked(mod: ModificationRecord) {
+        _viewingMod.value = null
+        val loadedPhotos = mod.imageUris.map { filename ->
+            ModPhotoItem(filename = filename, file = imageStorageManager.imageFile(filename))
+        }
         _sheetState.value = SheetState(
             isOpen = true,
             editingModId = mod.id,
@@ -98,7 +124,9 @@ class ModsViewModel @Inject constructor(
             description = mod.description,
             date = mod.date,
             cost = if (mod.cost > 0) "%.2f".format(mod.cost) else "",
-            currentImageFilename = mod.imageUri,
+            productUrl = mod.productUrl,
+            photos = loadedPhotos,
+            originalImageFilenames = mod.imageUris,
         )
     }
 
@@ -126,13 +154,60 @@ class ModsViewModel @Inject constructor(
         _sheetState.update { it.copy(cost = cost) }
     }
 
-    fun onImagePicked(uri: Uri) {
-        _sheetState.update { it.copy(pickedImageUri = uri, isImageRemoved = false) }
+    fun onProductUrlChanged(productUrl: String) {
+        _sheetState.update { it.copy(productUrl = productUrl) }
     }
 
-    fun onRemoveImage() {
-        _sheetState.update { it.copy(pickedImageUri = null, isImageRemoved = true) }
+    fun onImagesPicked(uris: List<Uri>) {
+        if (uris.isEmpty()) return
+        viewModelScope.launch {
+            val currentPhotos = _sheetState.value.photos.toMutableList()
+            val availableSlots = (6 - currentPhotos.size).coerceAtLeast(0)
+            for (uri in uris.take(availableSlots)) {
+                val filename = imageStorageManager.copyPickedImageToInternalStorage(uri)
+                val file = imageStorageManager.imageFile(filename)
+                currentPhotos.add(ModPhotoItem(filename = filename, file = file))
+            }
+            _sheetState.update { it.copy(photos = currentPhotos) }
+        }
     }
+
+    fun onImagePicked(uri: Uri) = onImagesPicked(listOf(uri))
+
+    fun onReplaceImagePicked(index: Int, uri: Uri) {
+        viewModelScope.launch {
+            val currentPhotos = _sheetState.value.photos.toMutableList()
+            if (index in currentPhotos.indices) {
+                val oldItem = currentPhotos[index]
+                val newFilename = imageStorageManager.copyPickedImageToInternalStorage(uri)
+                val newFile = imageStorageManager.imageFile(newFilename)
+
+                oldItem.filename?.let { name ->
+                    if (name !in _sheetState.value.originalImageFilenames) {
+                        imageStorageManager.deleteImage(name)
+                    }
+                }
+
+                currentPhotos[index] = ModPhotoItem(filename = newFilename, file = newFile)
+                _sheetState.update { it.copy(photos = currentPhotos) }
+            }
+        }
+    }
+
+    fun onRemovePhoto(index: Int) {
+        val currentPhotos = _sheetState.value.photos.toMutableList()
+        if (index in currentPhotos.indices) {
+            val removedItem = currentPhotos.removeAt(index)
+            removedItem.filename?.let { name ->
+                if (name !in _sheetState.value.originalImageFilenames) {
+                    imageStorageManager.deleteImage(name)
+                }
+            }
+            _sheetState.update { it.copy(photos = currentPhotos) }
+        }
+    }
+
+    fun onRemoveImage() = onRemovePhoto(0)
 
     fun onSaveMod() {
         val sheet = _sheetState.value
@@ -140,22 +215,36 @@ class ModsViewModel @Inject constructor(
 
         viewModelScope.launch {
             _sheetState.update { it.copy(isSaving = true) }
+            val p1 = sheet.photos.getOrNull(0)?.filename
+            val p2 = sheet.photos.getOrNull(1)?.filename
+            val p3 = sheet.photos.getOrNull(2)?.filename
+            val p4 = sheet.photos.getOrNull(3)?.filename
+            val p5 = sheet.photos.getOrNull(4)?.filename
+            val p6 = sheet.photos.getOrNull(5)?.filename
+
             val record = ModificationRecord(
                 id = sheet.editingModId ?: 0,
                 vehicleId = vehicleId,
                 title = sheet.title.trim(),
                 category = sheet.category,
                 description = sheet.description.trim(),
-                imageUri = sheet.currentImageFilename,
+                imageUri = p1,
+                imageUri2 = p2,
+                imageUri3 = p3,
+                imageUri4 = p4,
+                imageUri5 = p5,
+                imageUri6 = p6,
                 date = sheet.date,
                 cost = sheet.cost.toDoubleOrNull() ?: 0.0,
+                productUrl = sheet.productUrl.trim(),
             )
 
-            modificationRepository.saveMod(
-                mod = record,
-                newPickedUri = sheet.pickedImageUri,
-                deleteExistingImage = sheet.isImageRemoved,
-            )
+            modificationRepository.saveMod(record)
+
+            val savedFilenames = sheet.photos.mapNotNull { it.filename }.toSet()
+            sheet.originalImageFilenames.filter { it !in savedFilenames }.forEach { oldFilename ->
+                imageStorageManager.deleteImage(oldFilename)
+            }
 
             _sheetState.value = SheetState(isOpen = false)
         }
@@ -164,6 +253,9 @@ class ModsViewModel @Inject constructor(
     fun onDeleteMod(mod: ModificationRecord) {
         viewModelScope.launch {
             modificationRepository.deleteMod(mod)
+            if (_viewingMod.value?.id == mod.id) {
+                _viewingMod.value = null
+            }
             if (_sheetState.value.editingModId == mod.id) {
                 _sheetState.value = SheetState(isOpen = false)
             }
@@ -178,9 +270,9 @@ class ModsViewModel @Inject constructor(
         val description: String = "",
         val date: Long = System.currentTimeMillis(),
         val cost: String = "",
-        val pickedImageUri: Uri? = null,
-        val currentImageFilename: String? = null,
-        val isImageRemoved: Boolean = false,
+        val productUrl: String = "",
+        val photos: List<ModPhotoItem> = emptyList(),
+        val originalImageFilenames: List<String> = emptyList(),
         val isSaving: Boolean = false,
     )
 }

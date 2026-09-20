@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import com.fearmikey.garage.ui.components.verticalScrollbar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Settings
@@ -95,8 +97,12 @@ private fun DashboardContent(
                 modifier = Modifier.padding(innerPadding),
             )
         } else {
+            val listState = rememberLazyListState()
             LazyColumn(
-                modifier = Modifier.padding(innerPadding),
+                state = listState,
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .verticalScrollbar(listState),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
@@ -106,7 +112,7 @@ private fun DashboardContent(
                         unitSystem = unitSystem,
                         onOpenOverdueReminders = {
                             vehicles.firstOrNull { it.overdueReminderCount > 0 || it.upcomingReminderCount > 0 }
-                                ?.let { onOpenVehicle(it.vehicle.id, VehicleTab.REMINDERS.ordinal) }
+                                ?.let { onOpenVehicle(it.vehicle.id, VehicleTab.SCHEDULE.ordinal) }
                         },
                     )
                 }
@@ -123,7 +129,7 @@ private fun DashboardContent(
                         sharedTransitionScope = sharedTransitionScope,
                         animatedVisibilityScope = animatedVisibilityScope,
                         onClick = { onOpenVehicle(item.vehicle.id, 0) },
-                        onOpenReminders = { onOpenVehicle(item.vehicle.id, VehicleTab.REMINDERS.ordinal) },
+                        onOpenReminders = { onOpenVehicle(item.vehicle.id, VehicleTab.SCHEDULE.ordinal) },
                     )
                 }
             }

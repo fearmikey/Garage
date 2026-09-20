@@ -1,6 +1,7 @@
 package com.fearmikey.garage.ui.fuel
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +13,9 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import com.fearmikey.garage.ui.components.verticalScrollbar
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -53,6 +56,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -63,13 +67,23 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.ui.components.EmptyState
+import com.fearmikey.garage.ui.theme.FuelBestContainerDark
+import com.fearmikey.garage.ui.theme.FuelBestContainerLight
+import com.fearmikey.garage.ui.theme.FuelBestOnContainerDark
+import com.fearmikey.garage.ui.theme.FuelBestOnContainerLight
+import com.fearmikey.garage.ui.theme.FuelWorstContainerDark
+import com.fearmikey.garage.ui.theme.FuelWorstContainerLight
+import com.fearmikey.garage.ui.theme.FuelWorstOnContainerDark
+import com.fearmikey.garage.ui.theme.FuelWorstOnContainerLight
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.SampleData
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
+import com.fearmikey.garage.ui.util.formatMileageInput
 import com.fearmikey.garage.ui.util.fromUtcDatePickerMillis
 import com.fearmikey.garage.ui.util.toDisplayDate
 import com.fearmikey.garage.ui.util.toUtcDatePickerMillis
+import kotlin.math.abs
 
 @Composable
 fun FuelScreen(
@@ -126,8 +140,12 @@ private fun FuelContent(
                 modifier = Modifier.padding(innerPadding),
             )
         } else {
+            val listState = rememberLazyListState()
             LazyColumn(
-                modifier = Modifier.padding(innerPadding),
+                state = listState,
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .verticalScrollbar(listState),
                 contentPadding = PaddingValues(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 88.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
@@ -147,6 +165,8 @@ private fun FuelContent(
                         segmentMpg = uiState.mpgByRecordId[record.id],
                         unitSystem = uiState.unitSystem,
                         currencySymbol = uiState.currencySymbol,
+                        bestMpg = uiState.bestMpg,
+                        worstMpg = uiState.worstMpg,
                         onDelete = { onDeleteRecord(record) },
                     )
                 }
@@ -156,14 +176,37 @@ private fun FuelContent(
 }
 
 @Composable
+private fun bestMpgColors(): Pair<Color, Color> {
+    return if (isSystemInDarkTheme()) {
+        FuelBestContainerDark to FuelBestOnContainerDark
+    } else {
+        FuelBestContainerLight to FuelBestOnContainerLight
+    }
+}
+
+@Composable
+private fun worstMpgColors(): Pair<Color, Color> {
+    return if (isSystemInDarkTheme()) {
+        FuelWorstContainerDark to FuelWorstOnContainerDark
+    } else {
+        FuelWorstContainerLight to FuelWorstOnContainerLight
+    }
+}
+
+@Composable
+private fun averageMpgColors(): Pair<Color, Color> {
+    return MaterialTheme.colorScheme.primaryContainer to MaterialTheme.colorScheme.onPrimaryContainer
+}
+
+@Composable
 private fun FuelSummaryCard(
     averageMpg: Double?,
     bestMpg: Double?,
     worstMpg: Double?,
     totalSpent: Double,
     unitSystem: UnitSystem,
-    currencySymbol: String = "$",
     modifier: Modifier = Modifier,
+    currencySymbol: String = "$",
 ) {
     Card(modifier = modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -179,19 +222,29 @@ private fun FuelSummaryCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
+                val (bestBg, bestFg) = bestMpgColors()
+                val (avgBg, avgFg) = averageMpgColors()
+                val (worstBg, worstFg) = worstMpgColors()
+
                 MpgStatBox(
                     label = "Best",
                     value = UnitConverter.formatFuelEconomy(bestMpg, unitSystem),
+                    containerColor = bestBg,
+                    contentColor = bestFg,
                     modifier = Modifier.weight(1f),
                 )
                 MpgStatBox(
                     label = "Average",
                     value = UnitConverter.formatFuelEconomy(averageMpg, unitSystem),
+                    containerColor = avgBg,
+                    contentColor = avgFg,
                     modifier = Modifier.weight(1f),
                 )
                 MpgStatBox(
                     label = "Worst",
                     value = UnitConverter.formatFuelEconomy(worstMpg, unitSystem),
+                    containerColor = worstBg,
+                    contentColor = worstFg,
                     modifier = Modifier.weight(1f),
                 )
             }
@@ -223,6 +276,8 @@ private fun MpgStatBox(
     label: String,
     value: String,
     modifier: Modifier = Modifier,
+    containerColor: Color = MaterialTheme.colorScheme.primaryContainer,
+    contentColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
 ) {
     Column(
         modifier = modifier.padding(horizontal = 4.dp),
@@ -234,8 +289,8 @@ private fun MpgStatBox(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Surface(
-            color = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            color = containerColor,
+            contentColor = contentColor,
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier.padding(top = 4.dp),
         ) {
@@ -254,9 +309,11 @@ private fun FuelRecordRow(
     record: FuelRecord,
     segmentMpg: Double?,
     unitSystem: UnitSystem,
-    currencySymbol: String = "$",
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
+    currencySymbol: String = "$",
+    bestMpg: Double? = null,
+    worstMpg: Double? = null,
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
 
@@ -310,15 +367,22 @@ private fun FuelRecordRow(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                segmentMpg?.let {
+                segmentMpg?.let { mpg ->
+                    val isBest = (bestMpg != null) && (worstMpg != null) && (bestMpg != worstMpg) && (abs(mpg - bestMpg) < 0.001)
+                    val isWorst = (bestMpg != null) && (worstMpg != null) && (bestMpg != worstMpg) && (abs(mpg - worstMpg) < 0.001)
+                    val (segmentBg, segmentFg) = when {
+                        isBest -> bestMpgColors()
+                        isWorst -> worstMpgColors()
+                        else -> averageMpgColors()
+                    }
                     Surface(
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        color = segmentBg,
+                        contentColor = segmentFg,
                         shape = RoundedCornerShape(6.dp),
                         modifier = Modifier.padding(top = 6.dp),
                     ) {
                         Text(
-                            text = UnitConverter.formatSegmentFuelEconomy(it, unitSystem),
+                            text = UnitConverter.formatSegmentFuelEconomy(mpg, unitSystem),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
@@ -345,7 +409,7 @@ internal fun AddEditFuelRecordSheet(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var mileage by remember {
         mutableStateOf(
-            initial?.let { UnitConverter.displayDistanceValue(it.mileage, unitSystem).toString() }.orEmpty()
+            initial?.let { formatMileageInput(UnitConverter.displayDistanceValue(it.mileage, unitSystem).toString()) }.orEmpty()
         )
     }
     var gallons by remember {
@@ -360,7 +424,7 @@ internal fun AddEditFuelRecordSheet(
 
     val gallonsValue = gallons.toDoubleOrNull()
     val totalCostValue = totalCost.toDoubleOrNull()
-    val canSave = (mileage.toIntOrNull() != null) &&
+    val canSave = (mileage.filter(Char::isDigit).toIntOrNull() != null) &&
         (gallonsValue != null) && (gallonsValue > 0.0) &&
         (totalCostValue != null) && (totalCostValue > 0.0)
 
@@ -400,11 +464,13 @@ internal fun AddEditFuelRecordSheet(
         sheetState = sheetState,
         contentWindowInsets = { WindowInsets(0, 0, 0, 0) },
     ) {
+        val sheetScrollState = rememberScrollState()
         Column(
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp)
                 .imePadding()
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(sheetScrollState)
+                .verticalScrollbar(sheetScrollState),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Text("Log Fuel Fill-Up", style = MaterialTheme.typography.titleLarge)
@@ -468,7 +534,7 @@ internal fun AddEditFuelRecordSheet(
             )
             OutlinedTextField(
                 value = mileage,
-                onValueChange = { mileage = it.filter(Char::isDigit) },
+                onValueChange = { mileage = formatMileageInput(it) },
                 label = { Text("Odometer reading (${unitSystem.distanceUnit})") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
@@ -503,7 +569,7 @@ internal fun AddEditFuelRecordSheet(
 
             Button(
                 onClick = {
-                    val inputMileage = mileage.toIntOrNull() ?: 0
+                    val inputMileage = mileage.filter(Char::isDigit).toIntOrNull() ?: 0
                     val canonicalMileage = UnitConverter.canonicalMilesFromInput(inputMileage, unitSystem)
                     val inputGallons = gallonsValue ?: 0.0
                     val canonicalGallons = UnitConverter.canonicalGallonsFromInput(inputGallons, unitSystem)

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
@@ -66,10 +67,13 @@ fun CurrencySelectionDialog(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
+                val listState = rememberLazyListState()
                 LazyColumn(
+                    state = listState,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(max = 300.dp),
+                        .heightIn(max = 300.dp)
+                        .verticalScrollbar(listState),
                 ) {
                     if (filteredCurrencies.isEmpty()) {
                         item {

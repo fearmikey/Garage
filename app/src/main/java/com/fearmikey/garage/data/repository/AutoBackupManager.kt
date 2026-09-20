@@ -39,7 +39,6 @@ class AutoBackupManager @Inject constructor(
             val tables = arrayOf(
                 "vehicles",
                 "maintenance_records",
-                "reminders",
                 "vehicle_specs",
                 "fuel_records",
                 "vehicle_parts_info",

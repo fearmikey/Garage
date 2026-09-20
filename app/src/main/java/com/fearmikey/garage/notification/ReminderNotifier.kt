@@ -11,7 +11,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.fearmikey.garage.MainActivity
 import com.fearmikey.garage.R
-import com.fearmikey.garage.data.local.entity.Reminder
 import com.fearmikey.garage.data.repository.ReminderStatus
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -85,16 +84,6 @@ class ReminderNotifier @Inject constructor(
         }
 
         notificationManager.notify(notificationId, notificationBuilder.build())
-    }
-
-    fun notifyDue(reminder: Reminder, vehicleLabel: String, status: ReminderStatus) {
-        notifyDue(
-            notificationId = reminder.id.toInt(),
-            taskName = reminder.taskName,
-            vehicleLabel = vehicleLabel,
-            status = status,
-            vehicleId = reminder.vehicleId,
-        )
     }
 
     fun cancel(reminderId: Long) {

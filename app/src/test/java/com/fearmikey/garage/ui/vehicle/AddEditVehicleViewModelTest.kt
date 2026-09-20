@@ -26,17 +26,18 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
+import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class VehicleDetailViewModelTest {
+class AddEditVehicleViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
 
     private class FakeVehicleDao : VehicleDao {
+        var savedVehicle: Vehicle? = null
         val vehicleFlow = MutableStateFlow<List<Vehicle>>(
             listOf(
                 Vehicle(
@@ -44,14 +45,21 @@ class VehicleDetailViewModelTest {
                     make = "Toyota",
                     model = "Tacoma",
                     year = 2020,
+                    imageUri = "img1.jpg",
+                    imageOffsetY = 0.1f,
+                    imageUri2 = "img2.jpg",
+                    imageOffsetY2 = 0.2f,
                 )
             )
         )
         override fun getAllVehicles(): Flow<List<Vehicle>> = vehicleFlow
         override fun getVehicleById(vehicleId: Long): Flow<Vehicle?> = vehicleFlow.map { list -> list.find { it.id == vehicleId } }
         override suspend fun getVehicleByIdOnce(vehicleId: Long): Vehicle? = vehicleFlow.value.find { it.id == vehicleId }
-        override suspend fun upsert(vehicle: Vehicle): Long = 1L
-        override suspend fun update(vehicle: Vehicle) {}
+        override suspend fun upsert(vehicle: Vehicle): Long {
+            savedVehicle = vehicle
+            return vehicle.id
+        }
+        override suspend fun update(vehicle: Vehicle) { savedVehicle = vehicle }
         override suspend fun delete(vehicle: Vehicle) {}
     }
 
@@ -75,6 +83,10 @@ class VehicleDetailViewModelTest {
         override suspend fun decodeVin(vin: String, format: String): VinDecodeResponse = VinDecodeResponse(emptyList())
     }
 
+    private class FakeImageStorageManager : ImageStorageManager(ContextWrapper(null)) {
+        override fun imageFile(filename: String): File = File(filename)
+    }
+
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
@@ -86,59 +98,63 @@ class VehicleDetailViewModelTest {
     }
 
     @Test
-    fun `shouldOpenAddSheet is true initially when openAdd arg is set and false after consumeAddSheet`() = runTest {
-        val savedStateHandle = SavedStateHandle(
-            mapOf(
-                Destinations.VEHICLE_ID_ARG to 1L,
-                Destinations.VEHICLE_DETAIL_TAB_ARG to VehicleTab.FUEL.ordinal,
-                Destinations.VEHICLE_DETAIL_OPEN_ADD_ARG to true,
-            )
-        )
-
+    fun `editing vehicle loads existing photos up to 3`() = runTest {
+        val fakeDao = FakeVehicleDao()
         val vehicleRepository = VehicleRepository(
-            vehicleDao = FakeVehicleDao(),
+            vehicleDao = fakeDao,
             vehicleSpecsDao = FakeVehicleSpecsDao(),
             vehiclePartsDao = FakeVehiclePartsDao(),
             vehicleRegistrationDao = FakeVehicleRegistrationDao(),
             vinDecoderApi = FakeVinDecoderApi(),
         )
 
-        val viewModel = VehicleDetailViewModel(
-            savedStateHandle = savedStateHandle,
+        val viewModel = AddEditVehicleViewModel(
+            savedStateHandle = SavedStateHandle(mapOf(Destinations.VEHICLE_ID_ARG to 1L)),
             vehicleRepository = vehicleRepository,
-            imageStorageManager = ImageStorageManager(context = ContextWrapper(null)),
+            imageStorageManager = FakeImageStorageManager(),
         )
 
-        assertEquals(VehicleTab.FUEL.ordinal, viewModel.initialTab)
-        assertTrue(viewModel.shouldOpenAddSheet.value)
+        testDispatcher.scheduler.advanceUntilIdle()
 
-        viewModel.consumeAddSheet()
-
-        assertFalse(viewModel.shouldOpenAddSheet.value)
-        assertEquals(false, savedStateHandle.get<Boolean>(Destinations.VEHICLE_DETAIL_OPEN_ADD_ARG))
+        val photos = viewModel.uiState.value.photos
+        assertEquals(2, photos.size)
+        assertEquals("img1.jpg", photos[0].filename)
+        assertEquals(0.1f, photos[0].offsetY)
+        assertEquals("img2.jpg", photos[1].filename)
+        assertEquals(0.2f, photos[1].offsetY)
     }
 
     @Test
-    fun `vehicle photos property returns up to 3 photos with correct offsets`() {
-        val vehicle = Vehicle(
-            id = 1L,
-            make = "Ford",
-            model = "Mustang",
-            imageUri = "photo1.jpg",
-            imageOffsetY = 0.1f,
-            imageUri2 = "photo2.jpg",
-            imageOffsetY2 = 0.2f,
-            imageUri3 = "photo3.jpg",
-            imageOffsetY3 = 0.3f,
+    fun `removing a photo updates state and save persists correct fields`() = runTest {
+        val fakeDao = FakeVehicleDao()
+        val vehicleRepository = VehicleRepository(
+            vehicleDao = fakeDao,
+            vehicleSpecsDao = FakeVehicleSpecsDao(),
+            vehiclePartsDao = FakeVehiclePartsDao(),
+            vehicleRegistrationDao = FakeVehicleRegistrationDao(),
+            vinDecoderApi = FakeVinDecoderApi(),
         )
 
-        val photos = vehicle.photos
-        assertEquals(3, photos.size)
-        assertEquals("photo1.jpg", photos[0].uri)
-        assertEquals(0.1f, photos[0].offsetY)
-        assertEquals("photo2.jpg", photos[1].uri)
-        assertEquals(0.2f, photos[1].offsetY)
-        assertEquals("photo3.jpg", photos[2].uri)
-        assertEquals(0.3f, photos[2].offsetY)
+        val viewModel = AddEditVehicleViewModel(
+            savedStateHandle = SavedStateHandle(mapOf(Destinations.VEHICLE_ID_ARG to 1L)),
+            vehicleRepository = vehicleRepository,
+            imageStorageManager = FakeImageStorageManager(),
+        )
+
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        viewModel.onRemovePhoto(0)
+
+        assertEquals(1, viewModel.uiState.value.photos.size)
+        assertEquals("img2.jpg", viewModel.uiState.value.photos[0].filename)
+
+        viewModel.onSave()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val saved = fakeDao.savedVehicle
+        assertEquals("img2.jpg", saved?.imageUri)
+        assertEquals(0.2f, saved?.imageOffsetY)
+        assertNull(saved?.imageUri2)
+        assertNull(saved?.imageUri3)
     }
 }

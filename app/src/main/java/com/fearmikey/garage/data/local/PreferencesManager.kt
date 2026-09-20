@@ -26,6 +26,7 @@ class PreferencesManager(private val context: Context) {
         val APP_OPEN_COUNT_KEY = intPreferencesKey("app_open_count")
         val BUY_ME_A_COFFEE_DONT_ASK_AGAIN_KEY = booleanPreferencesKey("buy_me_a_coffee_dont_ask_again")
         val BUY_ME_A_COFFEE_NEXT_PROMPT_OPEN_COUNT_KEY = intPreferencesKey("buy_me_a_coffee_next_prompt_open_count")
+        val MODS_GRID_VIEW_KEY = booleanPreferencesKey("is_mods_grid_view")
 
         const val DEFAULT_MAINTENANCE_MILEAGE_WINDOW = 500
     }
@@ -83,6 +84,11 @@ class PreferencesManager(private val context: Context) {
     val maintenanceMileageWindow: Flow<Int> = context.dataStore.data
         .map { preferences ->
             preferences[MAINTENANCE_MILEAGE_WINDOW_KEY] ?: DEFAULT_MAINTENANCE_MILEAGE_WINDOW
+        }
+
+    val isModsGridView: Flow<Boolean> = context.dataStore.data
+        .map { preferences ->
+            preferences[MODS_GRID_VIEW_KEY] ?: true
         }
 
     suspend fun incrementAppOpenCount(): Int {
@@ -144,6 +150,12 @@ class PreferencesManager(private val context: Context) {
     suspend fun setMaintenanceMileageWindow(miles: Int) {
         context.dataStore.edit { preferences ->
             preferences[MAINTENANCE_MILEAGE_WINDOW_KEY] = miles
+        }
+    }
+
+    suspend fun setModsGridView(isGrid: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[MODS_GRID_VIEW_KEY] = isGrid
         }
     }
 }

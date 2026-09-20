@@ -33,3 +33,14 @@ val GarageOnSurface = Color(0xFF1B1B1F)
 val StatusOverdue = Color(0xFFBA1A1A)
 val StatusUpcoming = Color(0xFFB8860B)
 val StatusOk = Color(0xFF2E7D32)
+
+// Fuel economy stat box colors (Best / Worst).
+val FuelBestContainerLight = Color(0xFFDCF0DD)
+val FuelBestOnContainerLight = Color(0xFF0F4015)
+val FuelBestContainerDark = Color(0xFF1E4D21)
+val FuelBestOnContainerDark = Color(0xFFA5F0A9)
+
+val FuelWorstContainerLight = Color(0xFFFFDAD6)
+val FuelWorstOnContainerLight = Color(0xFF410002)
+val FuelWorstContainerDark = Color(0xFF93000A)
+val FuelWorstOnContainerDark = Color(0xFFFFDAD6)

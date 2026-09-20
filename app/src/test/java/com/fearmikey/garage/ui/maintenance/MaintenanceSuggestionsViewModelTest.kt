@@ -3,7 +3,6 @@ package com.fearmikey.garage.ui.maintenance
 import androidx.lifecycle.SavedStateHandle
 import com.fearmikey.garage.data.local.dao.CustomMaintenanceRuleDao
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
-import com.fearmikey.garage.data.local.dao.ReminderDao
 import com.fearmikey.garage.data.local.dao.VehicleDao
 import com.fearmikey.garage.data.local.dao.VehiclePartsDao
 import com.fearmikey.garage.data.local.dao.VehicleRegistrationDao
@@ -12,7 +11,6 @@ import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
 import com.fearmikey.garage.data.local.entity.Drivetrain
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
-import com.fearmikey.garage.data.local.entity.Reminder
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.local.entity.VehiclePartsInfo
 import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
@@ -22,7 +20,6 @@ import com.fearmikey.garage.data.remote.dto.VinDecodeResponse
 import com.fearmikey.garage.data.repository.CustomMaintenanceRuleRepository
 import com.fearmikey.garage.data.repository.MaintenanceRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
-import com.fearmikey.garage.data.repository.ReminderRepository
 import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.ui.navigation.Destinations
 import com.fearmikey.garage.ui.util.AppCurrency
@@ -103,20 +100,6 @@ class MaintenanceSuggestionsViewModelTest {
         override suspend fun delete(record: MaintenanceRecord) {}
     }
 
-    private class FakeReminderDao : ReminderDao {
-        val remindersFlow = MutableStateFlow<List<Reminder>>(emptyList())
-        override fun getRemindersForVehicle(vehicleId: Long): Flow<List<Reminder>> = remindersFlow
-        override suspend fun getIncompleteReminders(): List<Reminder> = remindersFlow.value.filter { !it.isCompleted }
-        override suspend fun upsert(reminder: Reminder): Long {
-            val current = remindersFlow.value.toMutableList()
-            current.add(reminder)
-            remindersFlow.value = current
-            return 1L
-        }
-        override suspend fun update(reminder: Reminder) {}
-        override suspend fun delete(reminder: Reminder) {}
-    }
-
     private class FakeCustomRuleDao : CustomMaintenanceRuleDao {
         val rulesFlow = MutableStateFlow<List<CustomMaintenanceRule>>(emptyList())
         override fun getForVehicle(vehicleId: Long): Flow<List<CustomMaintenanceRule>> = rulesFlow
@@ -161,47 +144,6 @@ class MaintenanceSuggestionsViewModelTest {
     }
 
     @Test
-    fun `adding reminder removes suggestion from suggestions list`() = runTest {
-        val vehicleId = 1L
-        val savedStateHandle = SavedStateHandle(mapOf(Destinations.VEHICLE_ID_ARG to vehicleId))
-
-        val vehicleRepo = VehicleRepository(
-            vehicleDao = FakeVehicleDao(),
-            vehicleSpecsDao = FakeVehicleSpecsDao(),
-            vehiclePartsDao = FakeVehiclePartsDao(),
-            vehicleRegistrationDao = FakeVehicleRegistrationDao(),
-            vinDecoderApi = FakeVinDecoderApi(),
-        )
-        val maintenanceDao = FakeMaintenanceDao()
-        val reminderDao = FakeReminderDao()
-        val customRuleDao = FakeCustomRuleDao()
-
-        val viewModel = MaintenanceSuggestionsViewModel(
-            savedStateHandle = savedStateHandle,
-            vehicleRepository = vehicleRepo,
-            maintenanceRepository = MaintenanceRepository(maintenanceDao),
-            reminderRepository = ReminderRepository(reminderDao),
-            customMaintenanceRuleRepository = CustomMaintenanceRuleRepository(customRuleDao),
-            preferencesRepository = FakePreferencesRepository(),
-        )
-
-        val collectJob = backgroundScope.launch { viewModel.suggestions.collect {} }
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        val initialSuggestions = viewModel.suggestions.value
-        val oilChangeSuggestion = initialSuggestions.find { it.rule.taskName == "Engine oil change" }
-        assertTrue(oilChangeSuggestion != null)
-
-        viewModel.addAsReminder(oilChangeSuggestion!!)
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        val updatedSuggestions = viewModel.suggestions.value
-        assertFalse(updatedSuggestions.any { it.rule.taskName == "Engine oil change" })
-
-        collectJob.cancel()
-    }
-
-    @Test
     fun `latestMileage is exposed and reflects max record mileage`() = runTest {
         val vehicleId = 1L
         val savedStateHandle = SavedStateHandle(mapOf(Destinations.VEHICLE_ID_ARG to vehicleId))
@@ -214,14 +156,12 @@ class MaintenanceSuggestionsViewModelTest {
             vinDecoderApi = FakeVinDecoderApi(),
         )
         val maintenanceDao = FakeMaintenanceDao()
-        val reminderDao = FakeReminderDao()
         val customRuleDao = FakeCustomRuleDao()
 
         val viewModel = MaintenanceSuggestionsViewModel(
             savedStateHandle = savedStateHandle,
             vehicleRepository = vehicleRepo,
             maintenanceRepository = MaintenanceRepository(maintenanceDao),
-            reminderRepository = ReminderRepository(reminderDao),
             customMaintenanceRuleRepository = CustomMaintenanceRuleRepository(customRuleDao),
             preferencesRepository = FakePreferencesRepository(),
         )

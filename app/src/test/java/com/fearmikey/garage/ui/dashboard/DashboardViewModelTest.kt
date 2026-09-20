@@ -1,27 +1,27 @@
 package com.fearmikey.garage.ui.dashboard
 
 import android.content.ContextWrapper
+import com.fearmikey.garage.data.local.dao.CustomMaintenanceRuleDao
 import com.fearmikey.garage.data.local.dao.FuelDao
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
-import com.fearmikey.garage.data.local.dao.ReminderDao
 import com.fearmikey.garage.data.local.dao.VehicleDao
 import com.fearmikey.garage.data.local.dao.VehiclePartsDao
 import com.fearmikey.garage.data.local.dao.VehicleRegistrationDao
 import com.fearmikey.garage.data.local.dao.VehicleSpecsDao
+import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
 import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
-import com.fearmikey.garage.data.local.entity.Reminder
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.local.entity.VehiclePartsInfo
 import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
 import com.fearmikey.garage.data.local.entity.VehicleSpecs
 import com.fearmikey.garage.data.remote.VinDecoderApi
 import com.fearmikey.garage.data.remote.dto.VinDecodeResponse
+import com.fearmikey.garage.data.repository.CustomMaintenanceRuleRepository
 import com.fearmikey.garage.data.repository.FuelRepository
 import com.fearmikey.garage.data.repository.ImageStorageManager
 import com.fearmikey.garage.data.repository.MaintenanceRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
-import com.fearmikey.garage.data.repository.ReminderRepository
 import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.ui.util.AppCurrency
 import com.fearmikey.garage.ui.util.UnitSystem
@@ -92,12 +92,10 @@ class DashboardViewModelTest {
         override suspend fun delete(record: FuelRecord) {}
     }
 
-    private class FakeReminderDao : ReminderDao {
-        override fun getRemindersForVehicle(vehicleId: Long): Flow<List<Reminder>> = MutableStateFlow(emptyList())
-        override suspend fun getIncompleteReminders(): List<Reminder> = emptyList()
-        override suspend fun upsert(reminder: Reminder): Long = 1L
-        override suspend fun update(reminder: Reminder) {}
-        override suspend fun delete(reminder: Reminder) {}
+    private class FakeCustomRuleDao : CustomMaintenanceRuleDao {
+        override fun getForVehicle(vehicleId: Long): Flow<List<CustomMaintenanceRule>> = MutableStateFlow(emptyList())
+        override suspend fun upsert(rule: CustomMaintenanceRule): Long = 1L
+        override suspend fun delete(rule: CustomMaintenanceRule) {}
     }
 
     private class FakeMaintenanceDao : MaintenanceDao {
@@ -156,7 +154,7 @@ class DashboardViewModelTest {
         val vehicleDao = FakeVehicleDao()
         val maintenanceDao = FakeMaintenanceDao()
         val fuelDao = FakeFuelDao()
-        val reminderDao = FakeReminderDao()
+        val customRuleDao = FakeCustomRuleDao()
 
         val vehicleRepository = VehicleRepository(
             vehicleDao = vehicleDao,
@@ -167,14 +165,14 @@ class DashboardViewModelTest {
         )
         val maintenanceRepository = MaintenanceRepository(maintenanceDao)
         val fuelRepository = FuelRepository(fuelDao)
-        val reminderRepository = ReminderRepository(reminderDao)
+        val customMaintenanceRuleRepository = CustomMaintenanceRuleRepository(customRuleDao)
         val preferencesRepository = FakePreferencesRepository()
 
         val viewModel = DashboardViewModel(
             vehicleRepository = vehicleRepository,
             maintenanceRepository = maintenanceRepository,
             fuelRepository = fuelRepository,
-            reminderRepository = reminderRepository,
+            customMaintenanceRuleRepository = customMaintenanceRuleRepository,
             imageStorageManager = FakeImageStorageManager(),
             preferencesRepository = preferencesRepository,
         )

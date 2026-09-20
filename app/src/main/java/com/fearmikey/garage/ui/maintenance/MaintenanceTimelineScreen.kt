@@ -25,11 +25,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import com.fearmikey.garage.ui.components.verticalScrollbar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ReceiptLong
 import androidx.compose.material.icons.filled.Add
@@ -94,6 +96,7 @@ import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.SampleData
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
+import com.fearmikey.garage.ui.util.formatMileageInput
 import com.fearmikey.garage.ui.util.fromUtcDatePickerMillis
 import com.fearmikey.garage.ui.util.toDisplayDate
 import com.fearmikey.garage.ui.util.toUtcDatePickerMillis
@@ -168,7 +171,10 @@ private fun MaintenanceTimelineContent(
             if (records.isEmpty()) {
                 EmptyState(message = "No maintenance logged yet.\nTap + to add your first record.")
             } else {
+                val listState = rememberLazyListState()
                 LazyColumn(
+                    state = listState,
+                    modifier = Modifier.verticalScrollbar(listState),
                     contentPadding = PaddingValues(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 88.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
@@ -337,11 +343,11 @@ internal fun AddEditMaintenanceRecordSheet(
         mutableStateOf(
             if (initial != null && initial.id != 0L) {
                 if (initial.mileage > 0) {
-                    UnitConverter.displayDistanceValue(initial.mileage, unitSystem).toString()
+                    formatMileageInput(UnitConverter.displayDistanceValue(initial.mileage, unitSystem).toString())
                 } else ""
             } else {
                 val defaultMileage = initial?.mileage?.takeIf { it > 0 } ?: latestMileage?.takeIf { it > 0 }
-                defaultMileage?.let { UnitConverter.displayDistanceValue(it, unitSystem).toString() }.orEmpty()
+                defaultMileage?.let { formatMileageInput(UnitConverter.displayDistanceValue(it, unitSystem).toString()) }.orEmpty()
             }
         )
     }
@@ -430,11 +436,13 @@ internal fun AddEditMaintenanceRecordSheet(
         sheetState = sheetState,
         contentWindowInsets = { WindowInsets(0, 0, 0, 0) },
     ) {
+        val sheetScrollState = rememberScrollState()
         Column(
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp)
                 .imePadding()
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(sheetScrollState)
+                .verticalScrollbar(sheetScrollState),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Text("Add Maintenance Record", style = MaterialTheme.typography.titleLarge)
@@ -550,7 +558,7 @@ internal fun AddEditMaintenanceRecordSheet(
             )
             OutlinedTextField(
                 value = mileage,
-                onValueChange = { mileage = it.filter(Char::isDigit) },
+                onValueChange = { mileage = formatMileageInput(it) },
                 label = { Text("Mileage (${unitSystem.distanceUnit})") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
@@ -696,7 +704,7 @@ internal fun AddEditMaintenanceRecordSheet(
 
             Button(
                 onClick = {
-                    val inputMileage = mileage.toIntOrNull() ?: 0
+                    val inputMileage = mileage.filter(Char::isDigit).toIntOrNull() ?: 0
                     val canonicalMileage = UnitConverter.canonicalMilesFromInput(inputMileage, unitSystem)
                     onSave(
                         MaintenanceRecord(

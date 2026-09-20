@@ -12,10 +12,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import com.fearmikey.garage.ui.components.verticalScrollbar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -66,6 +68,7 @@ import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.SampleData
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
+import com.fearmikey.garage.ui.util.formatMileageInput
 import com.fearmikey.garage.ui.util.toDisplayDate
 
 @Composable
@@ -84,11 +87,9 @@ fun MaintenanceSuggestionsScreen(
         suggestions = suggestions,
         customRules = customRules,
         unitSystem = unitSystem,
-        onAddReminder = viewModel::addAsReminder,
         onLogNow = { logSheetSuggestion = it },
         onAddCustomRule = { showAddRuleSheet = true },
         onDeleteCustomRule = viewModel::deleteCustomRule,
-        onOpenApplyTemplate = { showApplyTemplateSheet = true },
     )
 
     logSheetSuggestion?.let { suggestion ->
@@ -117,10 +118,15 @@ fun MaintenanceSuggestionsScreen(
         AddCustomMaintenanceRuleSheet(
             unitSystem = unitSystem,
             onDismiss = { showAddRuleSheet = false },
-        ) { rule ->
-            viewModel.saveCustomRule(rule)
-            showAddRuleSheet = false
-        }
+            onOpenApplyTemplate = {
+                showAddRuleSheet = false
+                showApplyTemplateSheet = true
+            },
+            onSave = { rule ->
+                viewModel.saveCustomRule(rule)
+                showAddRuleSheet = false
+            },
+        )
     }
 
     if (showApplyTemplateSheet) {
@@ -140,11 +146,9 @@ private fun MaintenanceSuggestionsContent(
     suggestions: List<MaintenanceSuggestion>,
     customRules: List<CustomMaintenanceRule>,
     unitSystem: UnitSystem,
-    onAddReminder: (MaintenanceSuggestion) -> Unit,
     onLogNow: (MaintenanceSuggestion) -> Unit,
     onAddCustomRule: () -> Unit,
     onDeleteCustomRule: (CustomMaintenanceRule) -> Unit,
-    onOpenApplyTemplate: () -> Unit,
 ) {
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -160,50 +164,15 @@ private fun MaintenanceSuggestionsContent(
                 modifier = Modifier.padding(innerPadding),
             )
         } else {
+            val listState = rememberLazyListState()
             LazyColumn(
-                modifier = Modifier.padding(innerPadding),
+                state = listState,
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .verticalScrollbar(listState),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                item(key = "apply_preset_banner") {
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                        ),
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(12.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text(
-                                    text = "Schedule Presets",
-                                    style = MaterialTheme.typography.titleSmall,
-                                    fontWeight = FontWeight.SemiBold,
-                                )
-                                Text(
-                                    text = "Apply tailored maintenance templates (Towing, EV, Commuter, Classic).",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                )
-                            }
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Button(onClick = onOpenApplyTemplate) {
-                                Icon(
-                                    imageVector = Icons.Outlined.AutoAwesome,
-                                    contentDescription = null,
-                                )
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Text("Presets")
-                            }
-                        }
-                    }
-                }
-
                 if (customRules.isNotEmpty()) {
                     item(key = "custom_rules_header") {
                         Text(
@@ -225,7 +194,6 @@ private fun MaintenanceSuggestionsContent(
                     MaintenanceSuggestionRow(
                         suggestion = suggestion,
                         unitSystem = unitSystem,
-                        onAddReminder = { onAddReminder(suggestion) },
                         onLogNow = { onLogNow(suggestion) },
                     )
                 }
@@ -271,7 +239,6 @@ private fun CustomMaintenanceRuleRow(
 private fun MaintenanceSuggestionRow(
     suggestion: MaintenanceSuggestion,
     unitSystem: UnitSystem,
-    onAddReminder: () -> Unit,
     onLogNow: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -303,13 +270,8 @@ private fun MaintenanceSuggestionRow(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 StatusChip(status = suggestion.status)
-                Row {
-                    TextButton(onClick = onAddReminder) {
-                        Text("Add reminder")
-                    }
-                    TextButton(onClick = onLogNow) {
-                        Text("Log now")
-                    }
+                TextButton(onClick = onLogNow) {
+                    Text("Log now")
                 }
             }
         }
@@ -321,6 +283,7 @@ private fun MaintenanceSuggestionRow(
 private fun AddCustomMaintenanceRuleSheet(
     onDismiss: () -> Unit,
     unitSystem: UnitSystem = UnitSystem.IMPERIAL,
+    onOpenApplyTemplate: () -> Unit = {},
     onSave: (CustomMaintenanceRule) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -340,14 +303,51 @@ private fun AddCustomMaintenanceRuleSheet(
         sheetState = sheetState,
         contentWindowInsets = { WindowInsets(0, 0, 0, 0) },
     ) {
+        val sheetScrollState = rememberScrollState()
         Column(
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp)
                 .imePadding()
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(sheetScrollState)
+                .verticalScrollbar(sheetScrollState),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Text("Add Custom Rule", style = MaterialTheme.typography.titleLarge)
+
+            Card(
+                onClick = onOpenApplyTemplate,
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                ),
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "Schedule Presets",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                        Text(
+                            text = "Apply pre-built maintenance templates (Towing, EV, Commuter, Classic).",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Icon(
+                        imageVector = Icons.Outlined.AutoAwesome,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                    )
+                }
+            }
 
             OutlinedTextField(
                 value = taskName,
@@ -395,7 +395,7 @@ private fun AddCustomMaintenanceRuleSheet(
 
             OutlinedTextField(
                 value = intervalMiles,
-                onValueChange = { intervalMiles = it.filter(Char::isDigit) },
+                onValueChange = { intervalMiles = formatMileageInput(it) },
                 label = { Text("Interval (${unitSystem.distanceUnit})") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
@@ -435,7 +435,7 @@ private fun AddCustomMaintenanceRuleSheet(
 
             Button(
                 onClick = {
-                    val inputMiles = intervalMiles.toIntOrNull()
+                    val inputMiles = intervalMiles.filter(Char::isDigit).toIntOrNull()
                     val canonicalIntervalMiles = inputMiles?.let { UnitConverter.canonicalMilesFromInput(it, unitSystem) }
                     onSave(
                         CustomMaintenanceRule(
@@ -465,11 +465,9 @@ private fun MaintenanceSuggestionsScreenPreview() {
             suggestions = SampleData.tacomaMaintenanceSuggestions,
             customRules = SampleData.tacomaCustomRules,
             unitSystem = UnitSystem.IMPERIAL,
-            onAddReminder = {},
             onLogNow = {},
             onAddCustomRule = {},
             onDeleteCustomRule = {},
-            onOpenApplyTemplate = {},
         )
     }
 }

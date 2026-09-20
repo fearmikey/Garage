@@ -7,7 +7,6 @@ import androidx.work.WorkerParameters
 import com.fearmikey.garage.data.repository.CustomMaintenanceRuleRepository
 import com.fearmikey.garage.data.repository.MaintenanceRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
-import com.fearmikey.garage.data.repository.ReminderRepository
 import com.fearmikey.garage.data.repository.ReminderStatus
 import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.data.schedule.MaintenanceScheduleEngine
@@ -26,7 +25,6 @@ import kotlinx.coroutines.flow.firstOrNull
 class ReminderCheckWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
-    private val reminderRepository: ReminderRepository,
     private val vehicleRepository: VehicleRepository,
     private val maintenanceRepository: MaintenanceRepository,
     private val customMaintenanceRuleRepository: CustomMaintenanceRuleRepository,
@@ -38,33 +36,7 @@ class ReminderCheckWorker @AssistedInject constructor(
         notifier.ensureChannel()
 
         val upcomingWindowMiles = preferencesRepository.maintenanceMileageWindow.firstOrNull()
-            ?: ReminderRepository.DEFAULT_UPCOMING_WINDOW_MILES
-
-        val incompleteReminders = reminderRepository.getIncompleteReminders()
-        val processedTasksByVehicle = mutableMapOf<Long, MutableSet<String>>()
-
-        for (reminder in incompleteReminders) {
-            val vehicle = vehicleRepository.getVehicleByIdOnce(reminder.vehicleId) ?: continue
-            val latestMileage = maintenanceRepository.getLatestMileageForVehicle(reminder.vehicleId).firstOrNull()
-            val status = ReminderRepository.computeStatus(
-                reminder = reminder,
-                latestMileage = latestMileage,
-                upcomingWindowMiles = upcomingWindowMiles,
-            )
-
-            processedTasksByVehicle
-                .getOrPut(reminder.vehicleId) { mutableSetOf() }
-                .add(reminder.taskName.lowercase())
-
-            if (status == ReminderStatus.OVERDUE || status == ReminderStatus.UPCOMING) {
-                val vehicleLabel = listOfNotNull(vehicle.year?.toString(), vehicle.make, vehicle.model)
-                    .joinToString(" ")
-                    .ifBlank { vehicle.vin }
-                notifier.notifyDue(reminder, vehicleLabel, status)
-            } else {
-                notifier.cancel(reminder.id)
-            }
-        }
+            ?: DEFAULT_UPCOMING_WINDOW_MILES
 
         val allVehicles = vehicleRepository.getAllVehicles().firstOrNull() ?: emptyList()
         for (vehicle in allVehicles) {
@@ -80,11 +52,8 @@ class ReminderCheckWorker @AssistedInject constructor(
                 upcomingWindowMiles = upcomingWindowMiles,
             )
 
-            val existingTasks = processedTasksByVehicle[vehicle.id] ?: emptySet()
-
             for (suggestion in suggestions) {
                 val taskNameLower = suggestion.rule.taskName.lowercase()
-                if (taskNameLower in existingTasks) continue
 
                 val notificationId = taskNameLower.hashCode() xor vehicle.id.toInt()
                 if (suggestion.status == ReminderStatus.OVERDUE || suggestion.status == ReminderStatus.UPCOMING) {
@@ -111,5 +80,6 @@ class ReminderCheckWorker @AssistedInject constructor(
     companion object {
         const val UNIQUE_WORK_NAME = "reminder-check"
         const val IMMEDIATE_WORK_NAME = "reminder-check-immediate"
+        const val DEFAULT_UPCOMING_WINDOW_MILES = 500
     }
 }

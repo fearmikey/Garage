@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import com.fearmikey.garage.ui.components.verticalScrollbar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.MenuBook
 import androidx.compose.material.icons.filled.Edit
@@ -114,8 +116,12 @@ private fun PartsContent(
                 modifier = Modifier.padding(innerPadding),
             )
         } else {
+            val listState = rememberLazyListState()
             LazyColumn(
-                modifier = Modifier.padding(innerPadding),
+                state = listState,
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .verticalScrollbar(listState),
                 contentPadding = PaddingValues(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 88.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {

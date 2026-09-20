@@ -16,15 +16,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.ui.text.input.KeyboardType
+import com.fearmikey.garage.ui.components.verticalScrollbar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AddAPhoto
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -58,11 +62,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
+import com.fearmikey.garage.config.FlavorConfig
 import com.fearmikey.garage.data.local.entity.Drivetrain
 import com.fearmikey.garage.ui.theme.GarageTheme
 
@@ -100,7 +106,9 @@ fun AddEditVehicleScreen(
         onModelChanged = viewModel::onModelChanged,
         onTrimChanged = viewModel::onTrimChanged,
         onDrivetrainChanged = viewModel::onDrivetrainChanged,
-        onImagePicked = viewModel::onImagePicked,
+        onImagesPicked = viewModel::onImagesPicked,
+        onReplaceImagePicked = viewModel::onReplaceImagePicked,
+        onRemovePhoto = viewModel::onRemovePhoto,
         onImageOffsetYChanged = viewModel::onImageOffsetYChanged,
         onSave = viewModel::onSave,
         onDelete = viewModel::onDeleteVehicle,
@@ -120,14 +128,29 @@ private fun AddEditVehicleContent(
     onModelChanged: (String) -> Unit,
     onTrimChanged: (String) -> Unit,
     onDrivetrainChanged: (Drivetrain) -> Unit = {},
-    onImagePicked: (Uri) -> Unit,
-    onImageOffsetYChanged: (Float) -> Unit = {},
+    onImagesPicked: (List<Uri>) -> Unit = {},
+    onReplaceImagePicked: (Int, Uri) -> Unit = { _, _ -> },
+    onRemovePhoto: (Int) -> Unit = {},
+    onImageOffsetYChanged: (Int, Float) -> Unit = { _, _ -> },
     onSave: () -> Unit,
     onDelete: () -> Unit = {},
 ) {
-    val photoPickerLauncher = rememberLauncherForActivityResult(
+    val multiplePhotoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickMultipleVisualMedia(maxItems = 3),
+    ) { uris ->
+        if (uris.isNotEmpty()) onImagesPicked(uris)
+    }
+
+    var replacingIndex by remember { mutableStateOf<Int?>(null) }
+    val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
-    ) { uri -> uri?.let(onImagePicked) }
+    ) { uri ->
+        val index = replacingIndex
+        if (uri != null && index != null) {
+            onReplaceImagePicked(index, uri)
+        }
+        replacingIndex = null
+    }
 
     var showDeleteDialog by remember { mutableStateOf(false) }
 
@@ -154,41 +177,82 @@ private fun AddEditVehicleContent(
             )
         },
     ) { innerPadding ->
+        val scrollState = rememberScrollState()
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
+                .verticalScrollbar(scrollState)
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            if ((uiState.imageFile != null) && uiState.imageFile.exists()) {
+            if (uiState.photos.isNotEmpty()) {
                 Column {
+                    val pagerState = rememberPagerState(pageCount = { uiState.photos.size })
+                    val currentPage = pagerState.currentPage.coerceIn(0, (uiState.photos.size - 1).coerceAtLeast(0))
+                    val currentPhoto = uiState.photos.getOrNull(currentPage)
+
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .aspectRatio(21f / 9f)
                             .clip(RoundedCornerShape(12.dp))
                             .background(MaterialTheme.colorScheme.surfaceVariant)
-                            .pointerInput(Unit) {
+                            .pointerInput(currentPage) {
                                 detectVerticalDragGestures { _, dragAmount ->
-                                    onImageOffsetYChanged(uiState.imageOffsetY + dragAmount * 0.008f)
+                                    if (currentPage in uiState.photos.indices) {
+                                        val currentOffsetY = uiState.photos[currentPage].offsetY
+                                        onImageOffsetYChanged(currentPage, currentOffsetY + dragAmount * 0.008f)
+                                    }
                                 }
-                            }
-                            .clickable {
-                                photoPickerLauncher.launch(
-                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
-                                )
                             },
                         contentAlignment = Alignment.Center,
                     ) {
-                        AsyncImage(
-                            model = uiState.imageFile,
-                            contentDescription = "Vehicle photo",
-                            contentScale = ContentScale.Crop,
-                            alignment = BiasAlignment(0f, uiState.imageOffsetY),
+                        HorizontalPager(
+                            state = pagerState,
                             modifier = Modifier.fillMaxSize(),
-                        )
+                        ) { page ->
+                            val photoItem = uiState.photos[page]
+                            if (photoItem.file?.exists() == true) {
+                                AsyncImage(
+                                    model = photoItem.file,
+                                    contentDescription = "Vehicle photo ${page + 1}",
+                                    contentScale = ContentScale.Crop,
+                                    alignment = BiasAlignment(0f, photoItem.offsetY),
+                                    modifier = Modifier.fillMaxSize(),
+                                )
+                            }
+                        }
+
+                        if (uiState.photos.size > 1) {
+                            Row(
+                                modifier = Modifier
+                                    .align(Alignment.BottomCenter)
+                                    .padding(bottom = 8.dp)
+                                    .background(
+                                        color = MaterialTheme.colorScheme.scrim.copy(alpha = 0.4f),
+                                        shape = CircleShape,
+                                    )
+                                    .padding(horizontal = 8.dp, vertical = 4.dp),
+                                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                repeat(uiState.photos.size) { iteration ->
+                                    val color = if (pagerState.currentPage == iteration) {
+                                        MaterialTheme.colorScheme.primary
+                                    } else {
+                                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                                    }
+                                    Box(
+                                        modifier = Modifier
+                                            .size(6.dp)
+                                            .background(color, shape = CircleShape)
+                                    )
+                                }
+                            }
+                        }
                     }
+
                     Column(modifier = Modifier.fillMaxWidth().padding(top = 4.dp)) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -196,26 +260,63 @@ private fun AddEditVehicleContent(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
-                                "Drag photo up/down to adjust position",
+                                if (uiState.photos.size > 1) {
+                                    "Photo ${currentPage + 1} of ${uiState.photos.size} - Drag up/down to adjust"
+                                } else {
+                                    "Drag photo up/down to adjust position"
+                                },
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
-                            TextButton(
-                                onClick = {
-                                    photoPickerLauncher.launch(
-                                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                if (uiState.photos.size < 3) {
+                                    IconButton(
+                                        onClick = {
+                                            multiplePhotoPickerLauncher.launch(
+                                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+                                            )
+                                        },
+                                    ) {
+                                        Icon(
+                                            Icons.Filled.AddAPhoto,
+                                            contentDescription = "Add photo",
+                                            tint = MaterialTheme.colorScheme.primary,
+                                        )
+                                    }
+                                }
+                                IconButton(
+                                    onClick = {
+                                        replacingIndex = currentPage
+                                        singlePhotoPickerLauncher.launch(
+                                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+                                        )
+                                    },
+                                ) {
+                                    Icon(
+                                        Icons.Filled.Edit,
+                                        contentDescription = "Change photo",
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
-                                },
-                            ) {
-                                Text("Change photo")
+                                }
+                                IconButton(
+                                    onClick = { onRemovePhoto(currentPage) },
+                                ) {
+                                    Icon(
+                                        Icons.Filled.Delete,
+                                        contentDescription = "Remove photo",
+                                        tint = MaterialTheme.colorScheme.error,
+                                    )
+                                }
                             }
                         }
-                        Slider(
-                            value = uiState.imageOffsetY,
-                            onValueChange = onImageOffsetYChanged,
-                            valueRange = -1f..1f,
-                            modifier = Modifier.fillMaxWidth(),
-                        )
+                        currentPhoto?.let { photo ->
+                            Slider(
+                                value = photo.offsetY,
+                                onValueChange = { offsetY -> onImageOffsetYChanged(currentPage, offsetY) },
+                                valueRange = -1f..1f,
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
                     }
                 }
             } else {
@@ -226,7 +327,7 @@ private fun AddEditVehicleContent(
                         .clip(RoundedCornerShape(12.dp))
                         .background(MaterialTheme.colorScheme.surfaceVariant)
                         .clickable {
-                            photoPickerLauncher.launch(
+                            multiplePhotoPickerLauncher.launch(
                                 PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
                             )
                         },
@@ -234,7 +335,7 @@ private fun AddEditVehicleContent(
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(Icons.Filled.AddAPhoto, contentDescription = null, modifier = Modifier.size(32.dp))
-                        Text("Add photo", style = MaterialTheme.typography.bodyMedium)
+                        Text("Add photos (up to 3)", style = MaterialTheme.typography.bodyMedium)
                     }
                 }
             }
@@ -248,7 +349,7 @@ private fun AddEditVehicleContent(
                     capitalization = KeyboardCapitalization.Characters,
                 ),
                 leadingIcon = {
-                    if (com.fearmikey.garage.config.FlavorConfig.isVinScannerSupported) {
+                    if (FlavorConfig.isVinScannerSupported) {
                         IconButton(onClick = onScanVinClicked) {
                             Icon(Icons.Filled.QrCodeScanner, contentDescription = "Scan VIN")
                         }
@@ -398,7 +499,6 @@ private fun AddEditVehicleScreenPreview() {
             onMakeChanged = {},
             onModelChanged = {},
             onTrimChanged = {},
-            onImagePicked = {},
             onSave = {},
             onDelete = {},
         )

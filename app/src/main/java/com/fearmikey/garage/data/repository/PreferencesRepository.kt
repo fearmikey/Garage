@@ -4,6 +4,7 @@ import com.fearmikey.garage.data.local.PreferencesManager
 import com.fearmikey.garage.ui.util.AppCurrency
 import com.fearmikey.garage.ui.util.UnitSystem
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 interface PreferencesRepository {
     val unitsType: Flow<String>
@@ -18,6 +19,8 @@ interface PreferencesRepository {
     val appOpenCount: Flow<Int>
     val buyMeACoffeeDontAskAgain: Flow<Boolean>
     val buyMeACoffeeNextPromptOpenCount: Flow<Int>
+    val isModsGridView: Flow<Boolean>
+        get() = flowOf(false)
 
     suspend fun setUnitsType(units: String)
     suspend fun setCurrencyCode(currencyCode: String)
@@ -28,6 +31,7 @@ interface PreferencesRepository {
     suspend fun incrementAppOpenCount(): Int
     suspend fun setBuyMeACoffeeDontAskAgain(dontAskAgain: Boolean)
     suspend fun setBuyMeACoffeeNextPromptOpenCount(openCount: Int)
+    suspend fun setModsGridView(isGrid: Boolean) {}
 }
 
 class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManager) : PreferencesRepository {
@@ -42,6 +46,7 @@ class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManag
     override val appOpenCount: Flow<Int> = preferencesManager.appOpenCount
     override val buyMeACoffeeDontAskAgain: Flow<Boolean> = preferencesManager.buyMeACoffeeDontAskAgain
     override val buyMeACoffeeNextPromptOpenCount: Flow<Int> = preferencesManager.buyMeACoffeeNextPromptOpenCount
+    override val isModsGridView: Flow<Boolean> = preferencesManager.isModsGridView
 
     override suspend fun setUnitsType(units: String) {
         preferencesManager.setUnitsType(units)
@@ -77,5 +82,9 @@ class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManag
 
     override suspend fun setBuyMeACoffeeNextPromptOpenCount(openCount: Int) {
         preferencesManager.setBuyMeACoffeeNextPromptOpenCount(openCount)
+    }
+
+    override suspend fun setModsGridView(isGrid: Boolean) {
+        preferencesManager.setModsGridView(isGrid)
     }
 }

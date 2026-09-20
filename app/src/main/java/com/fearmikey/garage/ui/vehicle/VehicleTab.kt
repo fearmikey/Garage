@@ -5,9 +5,8 @@ package com.fearmikey.garage.ui.vehicle
  */
 enum class VehicleTab(val title: String) {
     TIMELINE("Timeline"),
-    FUEL("Fuel"),
-    REMINDERS("Reminders"),
     SCHEDULE("Schedule"),
+    FUEL("Fuel"),
     EXPENSES("Expenses"),
     SPECS("Specs"),
     PARTS("Parts"),

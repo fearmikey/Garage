@@ -102,7 +102,7 @@ class MainViewModel @Inject constructor(
         val (tab, openAdd) = when (action) {
             MainActivity.ACTION_LOG_SERVICE -> VehicleTab.TIMELINE.ordinal to true
             MainActivity.ACTION_LOG_FUEL -> VehicleTab.FUEL.ordinal to true
-            MainActivity.ACTION_OPEN_REMINDERS -> VehicleTab.REMINDERS.ordinal to false
+            MainActivity.ACTION_OPEN_REMINDERS -> VehicleTab.SCHEDULE.ordinal to false
             else -> return
         }
         viewModelScope.launch {

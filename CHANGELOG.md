@@ -1,3 +1,15 @@
+## [1.2.0] - 2026-09-19
+
+### Added
+* **Enhanced Vehicle Modifications & Upgrades:** Overhauled modification logging with expanded category selection, filtering, detailed cost/part stats, and custom modification entries.
+* **Custom Scrollbar Component:** Added smooth custom-styled scrollbars across major screens for enhanced navigation.
+* **Database Migrations (Schemas 13-16):** Database schema updates for vehicle specifications, modification fields, and reminder data handling.
+* **Expanded Test Suite:** Added unit test coverage for `NumberFormattingTest`, `AddEditVehicleViewModelTest`, and `ModsViewModelTest`.
+
+### Changed
+* **Integrated Reminders System:** Streamlined maintenance reminder logic directly into the schedule engine and notification workers.
+* **UI & Widget Refinements:** Enhanced vehicle cards, fuel fill-up logs, maintenance suggestions screen, and home screen Glance app widget.
+
 ## [1.1.9] - 2026-09-12
 
 ### Added

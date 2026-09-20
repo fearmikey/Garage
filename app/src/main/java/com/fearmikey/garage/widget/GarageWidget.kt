@@ -29,12 +29,14 @@ import androidx.glance.text.TextStyle
 import com.fearmikey.garage.MainActivity
 import com.fearmikey.garage.data.fuel.FuelEconomyCalculator
 import com.fearmikey.garage.data.local.entity.Vehicle
+import com.fearmikey.garage.data.repository.CustomMaintenanceRuleRepository
 import com.fearmikey.garage.data.repository.FuelRepository
 import com.fearmikey.garage.data.repository.MaintenanceRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
-import com.fearmikey.garage.data.repository.ReminderRepository
 import com.fearmikey.garage.data.repository.ReminderStatus
 import com.fearmikey.garage.data.repository.VehicleRepository
+import com.fearmikey.garage.data.schedule.MaintenanceScheduleEngine
+import com.fearmikey.garage.data.schedule.toMaintenanceRule
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.toDisplayDate
 import dagger.hilt.EntryPoint
@@ -53,7 +55,7 @@ import kotlinx.coroutines.flow.first
 interface GarageWidgetEntryPoint {
     fun vehicleRepository(): VehicleRepository
     fun maintenanceRepository(): MaintenanceRepository
-    fun reminderRepository(): ReminderRepository
+    fun customMaintenanceRuleRepository(): CustomMaintenanceRuleRepository
     fun preferencesRepository(): PreferencesRepository
     fun fuelRepository(): FuelRepository
 }
@@ -73,37 +75,43 @@ class GarageWidget : GlanceAppWidget() {
         val entryPoint = EntryPointAccessors.fromApplication<GarageWidgetEntryPoint>(context)
         val vehicleRepository = entryPoint.vehicleRepository()
         val maintenanceRepository = entryPoint.maintenanceRepository()
-        val reminderRepository = entryPoint.reminderRepository()
+        val customMaintenanceRuleRepository = entryPoint.customMaintenanceRuleRepository()
         val preferencesRepository = entryPoint.preferencesRepository()
         val fuelRepository = entryPoint.fuelRepository()
 
         val vehicles = vehicleRepository.getAllVehicles().first()
-        val incompleteReminders = reminderRepository.getIncompleteReminders()
         val unitSystem = preferencesRepository.unitSystem.first()
         val upcomingWindowMiles = preferencesRepository.maintenanceMileageWindow.first()
 
-        val rows = incompleteReminders
-            .mapNotNull { reminder ->
-                val vehicle = vehicles.find { it.id == reminder.vehicleId } ?: return@mapNotNull null
-                val latestMileage = maintenanceRepository.getLatestMileageForVehicle(reminder.vehicleId).first()
-                val status = ReminderRepository.computeStatus(
-                    reminder = reminder,
+        val rows = vehicles
+            .flatMap { vehicle ->
+                val latestMileage = maintenanceRepository.getLatestMileageForVehicle(vehicle.id).first()
+                val records = maintenanceRepository.getRecordsForVehicle(vehicle.id).first()
+                val customRules = customMaintenanceRuleRepository.getRulesForVehicle(vehicle.id).first()
+
+                val suggestions = MaintenanceScheduleEngine.suggestionsFor(
+                    vehicle = vehicle,
                     latestMileage = latestMileage,
+                    records = records,
+                    customRules = customRules.map { it.toMaintenanceRule() },
                     upcomingWindowMiles = upcomingWindowMiles,
                 )
-                if (status != ReminderStatus.OVERDUE && status != ReminderStatus.UPCOMING) return@mapNotNull null
 
-                val dueInfo = listOfNotNull(
-                    reminder.dueDate?.toDisplayDate(),
-                    reminder.dueMileage?.let { UnitConverter.formatDistance(it, unitSystem) },
-                ).joinToString(" · ")
+                suggestions
+                    .filter { it.status == ReminderStatus.OVERDUE || it.status == ReminderStatus.UPCOMING }
+                    .map { suggestion ->
+                        val dueInfo = listOfNotNull(
+                            suggestion.nextDueDate?.toDisplayDate(),
+                            suggestion.nextDueMileage?.let { UnitConverter.formatDistance(it, unitSystem) },
+                        ).joinToString(" · ")
 
-                WidgetReminderRow(
-                    vehicleLabel = vehicle.widgetLabel(),
-                    taskName = reminder.taskName,
-                    status = status,
-                    dueInfo = dueInfo,
-                )
+                        WidgetReminderRow(
+                            vehicleLabel = vehicle.widgetLabel(),
+                            taskName = suggestion.rule.taskName,
+                            status = suggestion.status,
+                            dueInfo = dueInfo,
+                        )
+                    }
             }
             .sortedBy { if (it.status == ReminderStatus.OVERDUE) 0 else 1 }
             .take(MAX_ROWS)

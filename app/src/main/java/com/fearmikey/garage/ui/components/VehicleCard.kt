@@ -32,6 +32,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
@@ -49,13 +50,18 @@ import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
 import java.io.File
 
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
+
 /** Summary card for a [Vehicle], used in the Dashboard grid/list. */
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun VehicleCard(
     vehicle: Vehicle,
     latestMileage: Int?,
-    imageFile: File?,
+    imageFile: File? = null,
+    imageFiles: List<Pair<File, Float>> = emptyList(),
     unitSystem: UnitSystem = UnitSystem.IMPERIAL,
     avgMpg: Double? = null,
     overdueReminderCount: Int = 0,
@@ -66,6 +72,12 @@ fun VehicleCard(
     modifier: Modifier = Modifier,
     onOpenReminders: (() -> Unit)? = null,
 ) {
+    val effectiveImageFiles: List<Pair<File, Float>> = remember(imageFile, imageFiles, vehicle) {
+        if (imageFiles.isNotEmpty()) imageFiles
+        else if (imageFile != null && imageFile.exists()) listOf(Pair(imageFile, vehicle.imageOffsetY))
+        else emptyList()
+    }
+
     Card(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
@@ -83,14 +95,57 @@ fun VehicleCard(
                         ),
                     contentAlignment = Alignment.Center,
                 ) {
-                    if (imageFile != null && imageFile.exists()) {
-                        AsyncImage(
-                            model = imageFile,
-                            contentDescription = vehicleLabel(vehicle),
-                            contentScale = ContentScale.Crop,
-                            alignment = BiasAlignment(0f, vehicle.imageOffsetY),
-                            modifier = Modifier.fillMaxSize(),
-                        )
+                    if (effectiveImageFiles.isNotEmpty()) {
+                        if (effectiveImageFiles.size == 1) {
+                            val firstImage = effectiveImageFiles.first()
+                            AsyncImage(
+                                model = firstImage.first,
+                                contentDescription = vehicleLabel(vehicle),
+                                contentScale = ContentScale.Crop,
+                                alignment = BiasAlignment(0f, firstImage.second),
+                                modifier = Modifier.fillMaxSize(),
+                            )
+                        } else {
+                            val pagerState = rememberPagerState(pageCount = { effectiveImageFiles.size })
+                            HorizontalPager(
+                                state = pagerState,
+                                modifier = Modifier.fillMaxSize(),
+                            ) { page ->
+                                val currentImage = effectiveImageFiles[page]
+                                AsyncImage(
+                                    model = currentImage.first,
+                                    contentDescription = vehicleLabel(vehicle),
+                                    contentScale = ContentScale.Crop,
+                                    alignment = BiasAlignment(0f, currentImage.second),
+                                    modifier = Modifier.fillMaxSize(),
+                                )
+                            }
+                            Row(
+                                modifier = Modifier
+                                    .align(Alignment.BottomCenter)
+                                    .padding(bottom = 8.dp)
+                                    .background(
+                                        color = MaterialTheme.colorScheme.scrim.copy(alpha = 0.4f),
+                                        shape = CircleShape,
+                                    )
+                                    .padding(horizontal = 8.dp, vertical = 4.dp),
+                                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                repeat(effectiveImageFiles.size) { iteration ->
+                                    val color = if (pagerState.currentPage == iteration) {
+                                        MaterialTheme.colorScheme.primary
+                                    } else {
+                                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                                    }
+                                    Box(
+                                        modifier = Modifier
+                                            .size(6.dp)
+                                            .background(color, shape = CircleShape)
+                                    )
+                                }
+                            }
+                        }
                     } else {
                         Icon(
                             imageVector = Icons.Outlined.DirectionsCar,

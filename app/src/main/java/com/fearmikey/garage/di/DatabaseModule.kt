@@ -8,7 +8,6 @@ import com.fearmikey.garage.data.local.dao.CustomMaintenanceRuleDao
 import com.fearmikey.garage.data.local.dao.FuelDao
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
 import com.fearmikey.garage.data.local.dao.ModificationDao
-import com.fearmikey.garage.data.local.dao.ReminderDao
 import com.fearmikey.garage.data.local.dao.VehicleDao
 import com.fearmikey.garage.data.local.dao.VehiclePartsDao
 import com.fearmikey.garage.data.local.dao.VehicleRegistrationDao
@@ -35,9 +34,6 @@ object DatabaseModule {
 
     @Provides
     fun provideMaintenanceDao(database: GarageDatabase): MaintenanceDao = database.maintenanceDao()
-
-    @Provides
-    fun provideReminderDao(database: GarageDatabase): ReminderDao = database.reminderDao()
 
     @Provides
     fun provideVehicleSpecsDao(database: GarageDatabase): VehicleSpecsDao = database.vehicleSpecsDao()

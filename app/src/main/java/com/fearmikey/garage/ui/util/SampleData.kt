@@ -8,7 +8,6 @@ import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.ModificationCategory
 import com.fearmikey.garage.data.local.entity.ModificationRecord
-import com.fearmikey.garage.data.local.entity.Reminder
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.local.entity.VehiclePartsInfo
 import com.fearmikey.garage.data.local.entity.VehicleSpecs
@@ -116,33 +115,6 @@ object SampleData {
             description = "Replaced front brake pads",
             cost = 210.50,
             category = MaintenanceCategory.BRAKES,
-        ),
-    )
-
-    val tacomaReminders = listOf(
-        Reminder(
-            id = 1,
-            vehicleId = tacoma.id,
-            taskName = "Engine oil change",
-            dueDate = now + (20 * day),
-            dueMileage = 18000,
-            isCompleted = false,
-        ),
-        Reminder(
-            id = 2,
-            vehicleId = tacoma.id,
-            taskName = "Registration renewal",
-            dueDate = now - (2 * day),
-            dueMileage = null,
-            isCompleted = false,
-        ),
-        Reminder(
-            id = 3,
-            vehicleId = tacoma.id,
-            taskName = "Cabin air filter",
-            dueDate = now + (120 * day),
-            dueMileage = 20000,
-            isCompleted = false,
         ),
     )
 

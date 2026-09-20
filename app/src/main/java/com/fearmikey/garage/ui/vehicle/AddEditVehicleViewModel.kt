@@ -20,6 +20,12 @@ import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
 
+data class VehiclePhotoItem(
+    val filename: String? = null,
+    val file: File? = null,
+    val offsetY: Float = 0f,
+)
+
 data class AddEditVehicleUiState(
     val vin: String = "",
     val year: String = "",
@@ -27,9 +33,7 @@ data class AddEditVehicleUiState(
     val model: String = "",
     val trim: String = "",
     val drivetrain: Drivetrain = Drivetrain.UNKNOWN,
-    val imageFilename: String? = null,
-    val imageFile: File? = null,
-    val imageOffsetY: Float = 0f,
+    val photos: List<VehiclePhotoItem> = emptyList(),
     val isDecodingVin: Boolean = false,
     val vinDecodeError: String? = null,
     val isSaving: Boolean = false,
@@ -38,7 +42,11 @@ data class AddEditVehicleUiState(
     val deleteComplete: Boolean = false,
     /** Specs decoded alongside the last successful VIN decode; persisted once the vehicle is saved. */
     val pendingSpecs: VehicleSpecs? = null,
-)
+) {
+    val imageFilename: String? get() = photos.firstOrNull()?.filename
+    val imageFile: File? get() = photos.firstOrNull()?.file
+    val imageOffsetY: Float get() = photos.firstOrNull()?.offsetY ?: 0f
+}
 
 @HiltViewModel
 class AddEditVehicleViewModel @Inject constructor(
@@ -53,17 +61,22 @@ class AddEditVehicleViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(AddEditVehicleUiState(isEditing = isEditing))
     val uiState: StateFlow<AddEditVehicleUiState> = _uiState.asStateFlow()
 
-    // The filename the vehicle already had on disk when this editing session started (if
-    // any). Deleting the *old* photo is deferred until a new one is actually persisted via
-    // onSave() -- if we deleted it as soon as the user picked a replacement, backing out
-    // without saving would silently and permanently destroy their original photo.
-    private var originalImageFilename: String? = null
+    // The filenames the vehicle had on disk when this editing session started.
+    // Deleting old photos is deferred until saved via onSave().
+    private var originalImageFilenames: List<String> = emptyList()
 
     init {
         if (isEditing) {
             viewModelScope.launch {
                 vehicleRepository.getVehicleByIdOnce(vehicleId)?.let { vehicle ->
-                    originalImageFilename = vehicle.imageUri
+                    val loadedPhotos = vehicle.photos.map { photo ->
+                        VehiclePhotoItem(
+                            filename = photo.uri,
+                            file = imageStorageManager.imageFile(photo.uri),
+                            offsetY = photo.offsetY,
+                        )
+                    }
+                    originalImageFilenames = vehicle.photos.map { it.uri }
                     _uiState.update {
                         it.copy(
                             vin = vehicle.vin,
@@ -72,9 +85,7 @@ class AddEditVehicleViewModel @Inject constructor(
                             model = vehicle.model,
                             trim = vehicle.trim,
                             drivetrain = vehicle.drivetrain,
-                            imageFilename = vehicle.imageUri,
-                            imageFile = vehicle.imageUri?.let(imageStorageManager::imageFile),
-                            imageOffsetY = vehicle.imageOffsetY,
+                            photos = loadedPhotos,
                         )
                     }
                 }
@@ -122,29 +133,76 @@ class AddEditVehicleViewModel @Inject constructor(
     fun onModelChanged(model: String) = _uiState.update { it.copy(model = model) }
     fun onTrimChanged(trim: String) = _uiState.update { it.copy(trim = trim) }
     fun onDrivetrainChanged(drivetrain: Drivetrain) = _uiState.update { it.copy(drivetrain = drivetrain) }
-    fun onImageOffsetYChanged(offsetY: Float) = _uiState.update { it.copy(imageOffsetY = offsetY.coerceIn(-1f, 1f)) }
 
-    fun onImagePicked(uri: Uri) {
+    fun onImagesPicked(uris: List<Uri>) {
+        if (uris.isEmpty()) return
         viewModelScope.launch {
-            val filename = imageStorageManager.copyPickedImageToInternalStorage(uri)
-            // Clean up a previously *picked-but-not-yet-saved* replacement from earlier in
-            // this same session (if the user changed their mind and picked again) -- but
-            // never touch originalImageFilename here; that's only deleted once onSave()
-            // has actually persisted its replacement.
-            _uiState.value.imageFilename
-                ?.takeIf { it != originalImageFilename }
-                ?.let(imageStorageManager::deleteImage)
-            _uiState.update {
-                it.copy(imageFilename = filename, imageFile = imageStorageManager.imageFile(filename), imageOffsetY = 0f)
+            val currentPhotos = _uiState.value.photos.toMutableList()
+            val availableSlots = (3 - currentPhotos.size).coerceAtLeast(0)
+            for (uri in uris.take(availableSlots)) {
+                val filename = imageStorageManager.copyPickedImageToInternalStorage(uri)
+                val file = imageStorageManager.imageFile(filename)
+                currentPhotos.add(VehiclePhotoItem(filename = filename, file = file, offsetY = 0f))
+            }
+            _uiState.update { it.copy(photos = currentPhotos) }
+        }
+    }
+
+    fun onImagePicked(uri: Uri) = onImagesPicked(listOf(uri))
+
+    fun onReplaceImagePicked(index: Int, uri: Uri) {
+        viewModelScope.launch {
+            val currentPhotos = _uiState.value.photos.toMutableList()
+            if (index in currentPhotos.indices) {
+                val oldItem = currentPhotos[index]
+                val newFilename = imageStorageManager.copyPickedImageToInternalStorage(uri)
+                val newFile = imageStorageManager.imageFile(newFilename)
+
+                oldItem.filename?.let { oldName ->
+                    if (oldName !in originalImageFilenames) {
+                        imageStorageManager.deleteImage(oldName)
+                    }
+                }
+
+                currentPhotos[index] = VehiclePhotoItem(filename = newFilename, file = newFile, offsetY = 0f)
+                _uiState.update { it.copy(photos = currentPhotos) }
             }
         }
     }
+
+    fun onRemovePhoto(index: Int) {
+        val currentPhotos = _uiState.value.photos.toMutableList()
+        if (index in currentPhotos.indices) {
+            val removedItem = currentPhotos.removeAt(index)
+            removedItem.filename?.let { name ->
+                if (name !in originalImageFilenames) {
+                    imageStorageManager.deleteImage(name)
+                }
+            }
+            _uiState.update { it.copy(photos = currentPhotos) }
+        }
+    }
+
+    fun onImageOffsetYChanged(index: Int, offsetY: Float) {
+        val currentPhotos = _uiState.value.photos.toMutableList()
+        if (index in currentPhotos.indices) {
+            val clamped = offsetY.coerceIn(-1f, 1f)
+            currentPhotos[index] = currentPhotos[index].copy(offsetY = clamped)
+            _uiState.update { it.copy(photos = currentPhotos) }
+        }
+    }
+
+    fun onImageOffsetYChanged(offsetY: Float) = onImageOffsetYChanged(0, offsetY)
 
     fun onSave() {
         val state = _uiState.value
         viewModelScope.launch {
             _uiState.update { it.copy(isSaving = true) }
             try {
+                val photo1 = state.photos.getOrNull(0)
+                val photo2 = state.photos.getOrNull(1)
+                val photo3 = state.photos.getOrNull(2)
+
                 val newOrUpdatedId = vehicleRepository.saveVehicle(
                     Vehicle(
                         id = if (isEditing) vehicleId else 0,
@@ -154,22 +212,25 @@ class AddEditVehicleViewModel @Inject constructor(
                         model = state.model,
                         trim = state.trim,
                         drivetrain = state.drivetrain,
-                        imageUri = state.imageFilename,
-                        imageOffsetY = state.imageOffsetY,
+                        imageUri = photo1?.filename,
+                        imageOffsetY = photo1?.offsetY ?: 0f,
+                        imageUri2 = photo2?.filename,
+                        imageOffsetY2 = photo2?.offsetY ?: 0f,
+                        imageUri3 = photo3?.filename,
+                        imageOffsetY3 = photo3?.offsetY ?: 0f,
                     ),
                 )
                 val targetVehicleId = if (isEditing) vehicleId else newOrUpdatedId
 
-                // Only persist specs when this session actually decoded a VIN; otherwise leave
-                // whatever specs (if any) are already stored for this vehicle untouched.
                 state.pendingSpecs?.let { specs ->
                     vehicleRepository.saveVehicleSpecs(targetVehicleId, specs)
                 }
-                // Now that the new photo (if any) is safely referenced by the saved vehicle,
-                // it's safe to clean up the old one it replaced.
-                originalImageFilename
-                    ?.takeIf { it != state.imageFilename }
-                    ?.let(imageStorageManager::deleteImage)
+
+                val savedFilenames = state.photos.mapNotNull { it.filename }.toSet()
+                originalImageFilenames.filter { it !in savedFilenames }.forEach { oldFilename ->
+                    imageStorageManager.deleteImage(oldFilename)
+                }
+
                 _uiState.update { it.copy(isSaving = false, saveComplete = true) }
             } catch (e: Exception) {
                 _uiState.update {
@@ -182,7 +243,9 @@ class AddEditVehicleViewModel @Inject constructor(
     fun onDeleteVehicle() {
         if (!isEditing) return
         viewModelScope.launch {
-            _uiState.value.imageFilename?.let(imageStorageManager::deleteImage)
+            _uiState.value.photos.mapNotNull { it.filename }.forEach { filename ->
+                imageStorageManager.deleteImage(filename)
+            }
             vehicleRepository.getVehicleByIdOnce(vehicleId)?.let { vehicle ->
                 vehicleRepository.deleteVehicle(vehicle)
             }

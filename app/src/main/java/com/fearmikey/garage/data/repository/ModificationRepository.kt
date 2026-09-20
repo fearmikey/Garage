@@ -51,7 +51,7 @@ class ModificationRepository @Inject constructor(
     }
 
     suspend fun deleteMod(mod: ModificationRecord) {
-        mod.imageUri?.let { imageStorageManager.deleteImage(it) }
+        mod.imageUris.forEach { imageStorageManager.deleteImage(it) }
         modificationDao.delete(mod)
     }
 }

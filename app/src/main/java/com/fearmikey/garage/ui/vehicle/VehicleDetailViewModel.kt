@@ -47,4 +47,14 @@ class VehicleDetailViewModel @Inject constructor(
     val imageFile: StateFlow<File?> = vehicle
         .map { it?.imageUri?.let { uri -> imageStorageManager.imageFile(uri) } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    /** All available image files and their vertical offsets for swipeable photo viewing. */
+    val imageFiles: StateFlow<List<Pair<File, Float>>> = vehicle
+        .map { v ->
+            v?.photos?.mapNotNull { photo ->
+                val file = imageStorageManager.imageFile(photo.uri)
+                if (file.exists()) Pair(file, photo.offsetY) else null
+            } ?: emptyList()
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 }

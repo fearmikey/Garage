@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import com.fearmikey.garage.ui.components.verticalScrollbar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -100,10 +101,12 @@ fun ApplyTemplateSheet(
 
             Spacer(modifier = Modifier.height(12.dp))
 
+            val scrollState = rememberScrollState()
             Column(
                 modifier = Modifier
                     .weight(1f, fill = false)
-                    .verticalScroll(rememberScrollState()),
+                    .verticalScroll(scrollState)
+                    .verticalScrollbar(scrollState),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Text(

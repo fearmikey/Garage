@@ -29,6 +29,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ModsViewModelTest {
@@ -66,6 +67,8 @@ class ModsViewModelTest {
     }
 
     private class FakePreferencesRepository : PreferencesRepository {
+        val isModsGridViewFlow = MutableStateFlow(true)
+
         override val unitsType: Flow<String> = MutableStateFlow("imperial")
         override val unitSystem: Flow<UnitSystem> = MutableStateFlow(UnitSystem.IMPERIAL)
         override val currencyCode: Flow<String> = MutableStateFlow("USD")
@@ -77,6 +80,7 @@ class ModsViewModelTest {
         override val appOpenCount: Flow<Int> = MutableStateFlow(1)
         override val buyMeACoffeeDontAskAgain: Flow<Boolean> = MutableStateFlow(false)
         override val buyMeACoffeeNextPromptOpenCount: Flow<Int> = MutableStateFlow(2)
+        override val isModsGridView: Flow<Boolean> get() = isModsGridViewFlow
 
         override suspend fun setUnitsType(units: String) {}
         override suspend fun setCurrencyCode(currencyCode: String) {}
@@ -87,17 +91,24 @@ class ModsViewModelTest {
         override suspend fun incrementAppOpenCount(): Int = 1
         override suspend fun setBuyMeACoffeeDontAskAgain(dontAskAgain: Boolean) {}
         override suspend fun setBuyMeACoffeeNextPromptOpenCount(openCount: Int) {}
+        override suspend fun setModsGridView(isGrid: Boolean) {
+            isModsGridViewFlow.value = isGrid
+        }
     }
 
     private lateinit var fakeDao: FakeModificationDao
     private lateinit var repository: ModificationRepository
     private lateinit var imageStorageManager: ImageStorageManager
 
+    private class FakeImageStorageManager : ImageStorageManager(ContextWrapper(null)) {
+        override fun imageFile(filename: String): File = File(filename)
+    }
+
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         fakeDao = FakeModificationDao()
-        imageStorageManager = ImageStorageManager(ContextWrapper(null))
+        imageStorageManager = FakeImageStorageManager()
         repository = ModificationRepository(fakeDao, imageStorageManager)
     }
 
@@ -222,6 +233,127 @@ class ModsViewModelTest {
 
         assertFalse(viewModel.uiState.value.isSheetOpen)
         assertTrue(viewModel.uiState.value.mods.isEmpty())
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `toggle view mode updates grid state`() = runTest(testDispatcher) {
+        val savedStateHandle = SavedStateHandle(mapOf(Destinations.VEHICLE_ID_ARG to 10L))
+        val fakePrefs = FakePreferencesRepository()
+        val viewModel = ModsViewModel(
+            savedStateHandle = savedStateHandle,
+            modificationRepository = repository,
+            imageStorageManager = imageStorageManager,
+            preferencesRepository = fakePrefs,
+        )
+
+        val collectJob = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect {} }
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertTrue(viewModel.uiState.value.isGridView)
+
+        viewModel.onToggleViewMode(false)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.isGridView)
+
+        viewModel.onToggleViewMode(true)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertTrue(viewModel.uiState.value.isGridView)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `view mod sheet opens on mod click and transitions to edit`() = runTest(testDispatcher) {
+        val existing = ModificationRecord(
+            id = 8L,
+            vehicleId = 10L,
+            title = "Muffler Delete",
+            category = ModificationCategory.EXHAUST,
+            description = "Custom axle back",
+            cost = 200.0,
+        )
+        fakeDao.modsFlow.value = listOf(existing)
+
+        val savedStateHandle = SavedStateHandle(mapOf(Destinations.VEHICLE_ID_ARG to 10L))
+        val viewModel = ModsViewModel(
+            savedStateHandle = savedStateHandle,
+            modificationRepository = repository,
+            imageStorageManager = imageStorageManager,
+            preferencesRepository = FakePreferencesRepository(),
+        )
+
+        val collectJob = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect {} }
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertNull(viewModel.uiState.value.viewingMod)
+
+        viewModel.onModClicked(existing)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(existing, viewModel.uiState.value.viewingMod)
+
+        viewModel.onEditModClicked(existing)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertNull(viewModel.uiState.value.viewingMod)
+        assertTrue(viewModel.uiState.value.isSheetOpen)
+        assertEquals(8L, viewModel.uiState.value.editingModId)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `editing mod loads up to 6 photos into photos list`() = runTest(testDispatcher) {
+        val modWithPhotos = ModificationRecord(
+            id = 12L,
+            vehicleId = 10L,
+            title = "Supercharger",
+            category = ModificationCategory.PERFORMANCE,
+            description = "Magnuson Supercharger Kit",
+            cost = 6500.0,
+            imageUri = "mod1.jpg",
+            imageUri2 = "mod2.jpg",
+            imageUri3 = "mod3.jpg",
+            imageUri4 = "mod4.jpg",
+            imageUri5 = "mod5.jpg",
+            imageUri6 = "mod6.jpg",
+        )
+        fakeDao.modsFlow.value = listOf(modWithPhotos)
+
+        val savedStateHandle = SavedStateHandle(mapOf(Destinations.VEHICLE_ID_ARG to 10L))
+        val viewModel = ModsViewModel(
+            savedStateHandle = savedStateHandle,
+            modificationRepository = repository,
+            imageStorageManager = imageStorageManager,
+            preferencesRepository = FakePreferencesRepository(),
+        )
+
+        val collectJob = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect {} }
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        viewModel.onEditModClicked(modWithPhotos)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val state = viewModel.uiState.value
+        assertEquals(6, state.photos.size)
+        assertEquals("mod1.jpg", state.photos[0].filename)
+        assertEquals("mod6.jpg", state.photos[5].filename)
+
+        viewModel.onRemovePhoto(0)
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertEquals(5, viewModel.uiState.value.photos.size)
+
+        viewModel.onSaveMod()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val savedMod = viewModel.uiState.value.mods.first()
+        assertEquals(5, savedMod.imageUris.size)
+        assertEquals("mod2.jpg", savedMod.imageUri)
+        assertNull(savedMod.imageUri6)
 
         collectJob.cancel()
     }

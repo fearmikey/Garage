@@ -3,7 +3,6 @@ package com.fearmikey.garage.data.schedule
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.Vehicle
-import com.fearmikey.garage.data.repository.ReminderRepository
 import com.fearmikey.garage.data.repository.ReminderStatus
 import java.time.Instant
 import java.time.ZoneId
@@ -17,13 +16,16 @@ import java.util.concurrent.TimeUnit
  */
 object MaintenanceScheduleEngine {
 
+    const val DEFAULT_UPCOMING_WINDOW_MILES = 500
+    const val UPCOMING_WINDOW_DAYS = 30L
+
     fun suggestionsFor(
         vehicle: Vehicle,
         latestMileage: Int?,
         records: List<MaintenanceRecord>,
         customRules: List<MaintenanceRule> = emptyList(),
         now: Long = System.currentTimeMillis(),
-        upcomingWindowMiles: Int = ReminderRepository.DEFAULT_UPCOMING_WINDOW_MILES,
+        upcomingWindowMiles: Int = DEFAULT_UPCOMING_WINDOW_MILES,
     ): List<MaintenanceSuggestion> {
         val builtInMatching = MaintenanceScheduleRules.rules.filter { it.matches(vehicle) }
         val applicableRules = (builtInMatching + customRules).mostSpecificPerTask()
@@ -99,7 +101,7 @@ object MaintenanceScheduleEngine {
         }
 
         val dateStatus = nextDueDate?.let {
-            val upcomingWindowMillis = TimeUnit.DAYS.toMillis(ReminderRepository.UPCOMING_WINDOW_DAYS)
+            val upcomingWindowMillis = TimeUnit.DAYS.toMillis(UPCOMING_WINDOW_DAYS)
             if ((it - now) <= upcomingWindowMillis) ReminderStatus.UPCOMING else ReminderStatus.OK
         }
 

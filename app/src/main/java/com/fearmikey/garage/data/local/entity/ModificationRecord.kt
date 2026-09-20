@@ -1,5 +1,6 @@
 package com.fearmikey.garage.data.local.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -33,4 +34,22 @@ data class ModificationRecord(
     val imageUri: String? = null,
     val date: Long = System.currentTimeMillis(),
     val cost: Double = 0.0,
-)
+    @ColumnInfo(defaultValue = "")
+    val productUrl: String = "",
+    val imageUri2: String? = null,
+    val imageUri3: String? = null,
+    val imageUri4: String? = null,
+    val imageUri5: String? = null,
+    val imageUri6: String? = null,
+) {
+    /** Helper list of all attached photo filenames (up to 6). */
+    val imageUris: List<String>
+        get() = buildList {
+            imageUri?.let { add(it) }
+            imageUri2?.let { add(it) }
+            imageUri3?.let { add(it) }
+            imageUri4?.let { add(it) }
+            imageUri5?.let { add(it) }
+            imageUri6?.let { add(it) }
+        }
+}
