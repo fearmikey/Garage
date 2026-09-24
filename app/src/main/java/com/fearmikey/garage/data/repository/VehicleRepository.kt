@@ -109,6 +109,8 @@ class VehicleRepository @Inject constructor(
         displacementL = cleanSpec(displacementL),
         engineHp = cleanSpec(engineHp),
         fuelType = cleanSpec(fuelTypePrimary),
+        fuelTypeSecondary = cleanSpec(fuelTypeSecondary),
+        electrificationLevel = cleanSpec(electrificationLevel),
         transmissionStyle = cleanSpec(transmissionStyle),
         transmissionSpeeds = cleanSpec(transmissionSpeeds),
         bodyClass = cleanSpec(bodyClass),

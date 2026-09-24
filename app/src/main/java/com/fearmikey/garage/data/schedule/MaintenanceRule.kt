@@ -27,6 +27,16 @@ data class MaintenanceRule(
     val drivetrains: Set<Drivetrain>? = null,
     val notes: String? = null,
     /**
+     * Whether this task can be deferred (inspected and delayed for X miles/months)
+     * rather than replaced outright. Typically true for belts, brakes, tires, etc.
+     */
+    val isDeferrable: Boolean = false,
+    /**
+     * Whether to exclude this task for Pure Electric Vehicles (BEVs).
+     * Set to true for tasks that do not apply to vehicles lacking an internal combustion engine (e.g. Engine oil, Spark plugs).
+     */
+    val excludePureEv: Boolean = false,
+    /**
      * True for a user-defined rule (see [com.fearmikey.garage.data.local.entity.CustomMaintenanceRule])
      * rather than one of the built-in [MaintenanceScheduleRules]. Custom rules always take
      * precedence over a built-in rule sharing the same [taskName], regardless of specificity,
@@ -36,7 +46,7 @@ data class MaintenanceRule(
     val isCustom: Boolean = false,
 ) {
     init {
-        require(intervalMiles != null || intervalMonths != null) {
+        require((intervalMiles != null) || (intervalMonths != null)) {
             "MaintenanceRule '$taskName' must set intervalMiles and/or intervalMonths."
         }
     }
@@ -45,8 +55,9 @@ data class MaintenanceRule(
     val specificity: Int
         get() = listOfNotNull(makeMatch, modelMatch, drivetrains).size
 
-    fun matches(vehicle: Vehicle): Boolean =
+    fun matches(vehicle: Vehicle, isPureEv: Boolean = false): Boolean =
+        (!excludePureEv || !isPureEv) &&
         ((makeMatch == null) || vehicle.make.equals(makeMatch, ignoreCase = true)) &&
-            ((modelMatch == null) || vehicle.model.contains(modelMatch, ignoreCase = true)) &&
-            ((drivetrains == null) || (vehicle.drivetrain in drivetrains))
+        ((modelMatch == null) || vehicle.model.contains(modelMatch, ignoreCase = true)) &&
+        ((drivetrains == null) || (vehicle.drivetrain in drivetrains))
 }

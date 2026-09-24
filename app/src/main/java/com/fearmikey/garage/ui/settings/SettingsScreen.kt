@@ -25,7 +25,9 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Comment
 import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.filled.AttachMoney
+import androidx.compose.material.icons.filled.Badge
 import androidx.compose.material.icons.filled.BugReport
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.CloudSync
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.DeleteForever
@@ -39,6 +41,7 @@ import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.PrivacyTip
+import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Straighten
 import com.fearmikey.garage.ui.components.CurrencySelectionDialog
@@ -58,6 +61,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
@@ -68,6 +72,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -75,6 +80,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -89,6 +95,7 @@ import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.AppRestarter
 import kotlin.math.abs
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -107,6 +114,8 @@ fun SettingsScreen(
     var showThemeDialog by remember { mutableStateOf(false) }
     var showDefaultVehicleDialog by remember { mutableStateOf(false) }
     var showMaintenanceMileageDialog by remember { mutableStateOf(false) }
+    var showMaintenanceDaysDialog by remember { mutableStateOf(false) }
+    var showDocumentDaysDialog by remember { mutableStateOf(false) }
     var showClearDataDialog by remember { mutableStateOf(false) }
     var showAboutDialog by remember { mutableStateOf(false) }
     var showCloudBackupDialog by remember { mutableStateOf(false) }
@@ -223,9 +232,61 @@ fun SettingsScreen(
 
             item { HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp)) }
 
-            // Notifications Section
+            // Reminders & Expirations Section
             item {
-                SettingsCategoryHeader("Notifications")
+                SettingsCategoryHeader("Reminders & Expirations")
+            }
+            item {
+                ListItem(
+                    headlineContent = { Text("Document Renewal Reminders") },
+                    supportingContent = { Text("Notify for expiring vehicle registrations, smog tests, inspections, insurance, permits, and driver's licenses.") },
+                    leadingContent = { Icon(Icons.Filled.Badge, contentDescription = null) },
+                    trailingContent = {
+                        Switch(
+                            checked = uiState.documentExpirationRemindersEnabled,
+                            onCheckedChange = { viewModel.setDocumentExpirationRemindersEnabled(it) },
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { viewModel.setDocumentExpirationRemindersEnabled(!uiState.documentExpirationRemindersEnabled) },
+                )
+            }
+            if (uiState.documentExpirationRemindersEnabled) {
+                item {
+                    val daysText = if (uiState.documentExpirationDaysWindow == 1) "1 day" else "${uiState.documentExpirationDaysWindow} days"
+                    ListItem(
+                        headlineContent = { Text("Document Expiration Notice Window") },
+                        supportingContent = { Text("Notify when document expiration is due within $daysText") },
+                        leadingContent = { Icon(Icons.Filled.CalendarToday, contentDescription = null) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { showDocumentDaysDialog = true },
+                    )
+                }
+            }
+            item {
+                val unitSystem = UnitSystem.fromString(uiState.units)
+                val distanceText = UnitConverter.formatDistance(uiState.maintenanceMileageWindow, unitSystem)
+                ListItem(
+                    headlineContent = { Text("Maintenance Mileage Notice Window") },
+                    supportingContent = { Text("Notify when service is due within $distanceText") },
+                    leadingContent = { Icon(Icons.Filled.Straighten, contentDescription = null) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { showMaintenanceMileageDialog = true },
+                )
+            }
+            item {
+                val daysText = if (uiState.maintenanceDaysWindow == 1) "1 day" else "${uiState.maintenanceDaysWindow} days"
+                ListItem(
+                    headlineContent = { Text("Maintenance Time Notice Window") },
+                    supportingContent = { Text("Notify when service is due within $daysText") },
+                    leadingContent = { Icon(Icons.Filled.Schedule, contentDescription = null) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { showMaintenanceDaysDialog = true },
+                )
             }
             item {
                 ListItem(
@@ -233,7 +294,7 @@ fun SettingsScreen(
                     supportingContent = {
                         Text(
                             if (uiState.notificationPermissionGranted) {
-                                "Granted — reminders and other alerts can be delivered."
+                                "Granted — reminders and expiration alerts can be delivered."
                             } else {
                                 "Not granted — tap to allow Garage to send notifications."
                             }
@@ -262,18 +323,6 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable { viewModel.sendTestNotification() },
-                )
-            }
-            item {
-                val unitSystem = UnitSystem.fromString(uiState.units)
-                val distanceText = UnitConverter.formatDistance(uiState.maintenanceMileageWindow, unitSystem)
-                ListItem(
-                    headlineContent = { Text("Maintenance Mileage Notification") },
-                    supportingContent = { Text("Notify when service is due within $distanceText") },
-                    leadingContent = { Icon(Icons.Filled.Straighten, contentDescription = null) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { showMaintenanceMileageDialog = true },
                 )
             }
 
@@ -413,6 +462,22 @@ fun SettingsScreen(
             }
             item {
                 ListItem(
+                    headlineContent = { Text("Enable Affiliate Links") },
+                    supportingContent = { Text("Show optional Amazon affiliate links for tools/parts to help support the project.") },
+                    leadingContent = { Icon(Icons.Filled.AttachMoney, contentDescription = null) },
+                    trailingContent = {
+                        Switch(
+                            checked = uiState.affiliateLinksEnabled,
+                            onCheckedChange = { viewModel.setAffiliateLinksEnabled(it) }
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { viewModel.setAffiliateLinksEnabled(!uiState.affiliateLinksEnabled) },
+                )
+            }
+            item {
+                ListItem(
                     headlineContent = { Text("Help / FAQ") },
                     supportingContent = { Text("Get help with using the app and common questions.") },
                     leadingContent = { Icon(Icons.AutoMirrored.Filled.Help, contentDescription = null) },
@@ -498,6 +563,22 @@ fun SettingsScreen(
             unitSystem = UnitSystem.fromString(uiState.units),
             onOptionSelected = { viewModel.setMaintenanceMileageWindow(it) },
             onDismissRequest = { showMaintenanceMileageDialog = false },
+        )
+    }
+
+    if (showMaintenanceDaysDialog) {
+        MaintenanceDaysDialog(
+            currentDaysWindow = uiState.maintenanceDaysWindow,
+            onOptionSelected = { viewModel.setMaintenanceDaysWindow(it) },
+            onDismissRequest = { showMaintenanceDaysDialog = false },
+        )
+    }
+
+    if (showDocumentDaysDialog) {
+        DocumentDaysDialog(
+            currentDaysWindow = uiState.documentExpirationDaysWindow,
+            onOptionSelected = { viewModel.setDocumentExpirationDaysWindow(it) },
+            onDismissRequest = { showDocumentDaysDialog = false },
         )
     }
 
@@ -1016,6 +1097,108 @@ private fun MaintenanceMileageDialog(
                         )
                         Spacer(modifier = Modifier.padding(start = 8.dp))
                         Text(text = label)
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismissRequest) {
+                Text("Cancel")
+            }
+        },
+    )
+}
+
+@Composable
+private fun MaintenanceDaysDialog(
+    currentDaysWindow: Int,
+    onOptionSelected: (days: Int) -> Unit,
+    onDismissRequest: () -> Unit,
+) {
+    var selectedDays by remember { mutableFloatStateOf(currentDaysWindow.coerceIn(1, 30).toFloat()) }
+
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = { Text("Maintenance Time Notification") },
+        text = {
+            Column {
+                Text(
+                    text = "Notify when maintenance is due within:",
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                val currentDaysInt = selectedDays.roundToInt()
+                val daysLabel = if (currentDaysInt == 1) "1 day" else "$currentDaysInt days"
+                Text(
+                    text = daysLabel,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Slider(
+                    value = selectedDays,
+                    onValueChange = { selectedDays = it },
+                    valueRange = 1f..30f,
+                    steps = 28,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onOptionSelected(selectedDays.roundToInt())
+                    onDismissRequest()
+                }
+            ) {
+                Text("Save")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismissRequest) {
+                Text("Cancel")
+            }
+        },
+    )
+}
+
+@Composable
+private fun DocumentDaysDialog(
+    currentDaysWindow: Int,
+    onOptionSelected: (days: Int) -> Unit,
+    onDismissRequest: () -> Unit,
+) {
+    val options = listOf(7, 14, 30, 60, 90)
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = { Text("Document Expiration Notice Window") },
+        text = {
+            Column {
+                options.forEach { days ->
+                    val label = if (days == 1) "1 day before" else "$days days before"
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                onOptionSelected(days)
+                                onDismissRequest()
+                            }
+                            .padding(vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        RadioButton(
+                            selected = (days == currentDaysWindow),
+                            onClick = {
+                                onOptionSelected(days)
+                                onDismissRequest()
+                            },
+                        )
+                        Text(
+                            text = label,
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier.padding(start = 8.dp),
+                        )
                     }
                 }
             }

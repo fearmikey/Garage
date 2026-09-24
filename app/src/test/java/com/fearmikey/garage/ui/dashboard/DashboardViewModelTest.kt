@@ -36,6 +36,7 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -108,7 +109,7 @@ class DashboardViewModelTest {
         override suspend fun delete(record: MaintenanceRecord) {}
     }
 
-    private class FakePreferencesRepository : PreferencesRepository {
+    private open class FakePreferencesRepository : PreferencesRepository {
         override val unitsType: Flow<String> = MutableStateFlow("imperial")
         override val unitSystem: Flow<UnitSystem> = MutableStateFlow(UnitSystem.IMPERIAL)
         override val currencyCode: Flow<String> = MutableStateFlow("USD")
@@ -194,6 +195,83 @@ class DashboardViewModelTest {
         testDispatcher.scheduler.advanceUntilIdle()
 
         assertEquals(48000, viewModel.vehicles.value[0].latestMileage)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `drivers license state reflects repository values and supports updates`() = runTest {
+        val vehicleDao = FakeVehicleDao()
+        val maintenanceDao = FakeMaintenanceDao()
+        val fuelDao = FakeFuelDao()
+        val customRuleDao = FakeCustomRuleDao()
+
+        val vehicleRepository = VehicleRepository(
+            vehicleDao = vehicleDao,
+            vehicleSpecsDao = FakeVehicleSpecsDao(),
+            vehiclePartsDao = FakeVehiclePartsDao(),
+            vehicleRegistrationDao = FakeVehicleRegistrationDao(),
+            vinDecoderApi = FakeVinDecoderApi(),
+        )
+        val maintenanceRepository = MaintenanceRepository(maintenanceDao)
+        val fuelRepository = FuelRepository(fuelDao)
+        val customMaintenanceRuleRepository = CustomMaintenanceRuleRepository(customRuleDao)
+
+        class TestPreferencesRepository : FakePreferencesRepository() {
+            val numFlow = MutableStateFlow<String?>(null)
+            val stateFlow = MutableStateFlow<String?>(null)
+            val expFlow = MutableStateFlow<Long?>(null)
+            val notesFlow = MutableStateFlow<String?>(null)
+
+            override val driversLicenseNumber = numFlow
+            override val driversLicenseState = stateFlow
+            override val driversLicenseExpiration = expFlow
+            override val driversLicenseNotes = notesFlow
+
+            override suspend fun setDriversLicense(
+                number: String?,
+                state: String?,
+                expiration: Long?,
+                notes: String?,
+                imageFront: String?,
+                imageBack: String?,
+            ) {
+                numFlow.value = number
+                stateFlow.value = state
+                expFlow.value = expiration
+                notesFlow.value = notes
+            }
+        }
+
+        val testPrefsRepo = TestPreferencesRepository()
+
+        val viewModel = DashboardViewModel(
+            vehicleRepository = vehicleRepository,
+            maintenanceRepository = maintenanceRepository,
+            fuelRepository = fuelRepository,
+            customMaintenanceRuleRepository = customMaintenanceRuleRepository,
+            imageStorageManager = FakeImageStorageManager(),
+            preferencesRepository = testPrefsRepo,
+        )
+
+        val collectJob = backgroundScope.launch { viewModel.driversLicenseState.collect {} }
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        Assert.assertTrue(viewModel.driversLicenseState.value.isEmpty)
+
+        viewModel.onSaveDriversLicense("DL987654", "CA", 1_700_000_000_000L, "Class C", null, null, null, null)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        Assert.assertFalse(viewModel.driversLicenseState.value.isEmpty)
+        assertEquals("DL987654", viewModel.driversLicenseState.value.number)
+        assertEquals("CA", viewModel.driversLicenseState.value.state)
+        assertEquals(1_700_000_000_000L, viewModel.driversLicenseState.value.expiration)
+        assertEquals("Class C", viewModel.driversLicenseState.value.notes)
+
+        viewModel.onDeleteDriversLicense()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        Assert.assertTrue(viewModel.driversLicenseState.value.isEmpty)
 
         collectJob.cancel()
     }

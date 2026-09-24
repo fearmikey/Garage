@@ -6,12 +6,17 @@ import androidx.navigation.navArgument
 /** Route constants + helpers for the app's single-activity Nav Host. */
 object Destinations {
     const val STARTUP = "startup"
-    const val DASHBOARD = "dashboard"
-    const val SETTINGS = "settings"
-    const val SCAN_VIN = "vehicle/scan-vin"
+    const val DASHBOARD_TAB_ARG = "dashboardTab"
+    const val DASHBOARD = "dashboard?$DASHBOARD_TAB_ARG={$DASHBOARD_TAB_ARG}"
+    fun dashboardRoute(tab: Int = 0) = "dashboard?$DASHBOARD_TAB_ARG=$tab"
+    val dashboardArgs = listOf(
+        navArgument(DASHBOARD_TAB_ARG) {
+            type = NavType.IntType
+            defaultValue = 0
+        },
+    )
 
-    /** Key used to return a scanned VIN from [SCAN_VIN] to the previous back stack entry. */
-    const val SCANNED_VIN_RESULT = "scanned_vin"
+    const val SETTINGS = "settings"
 
     const val VEHICLE_ID_ARG = "vehicleId"
     const val NO_VEHICLE_ID = -1L

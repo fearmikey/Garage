@@ -1,7 +1,7 @@
-# 🚗 Garage
+# Garage
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.2.1-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-1.2.3-blue.svg)](CHANGELOG.md)
 [![Android Min SDK](https://img.shields.io/badge/Min%20SDK-34-brightgreen.svg)](https://developer.android.com/about/versions/14)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4-purple.svg?logo=kotlin)](https://kotlinlang.org/)
 [![Compose](https://img.shields.io/badge/Jetpack%20Compose-Material3-4285F4.svg?logo=android)](https://developer.android.com/jetpack/compose)
@@ -10,20 +10,20 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
-- [Features](#-features)
-- [100% FOSS & F-Droid First](#-100-foss--f-droid-first)
-- [Tech Stack & Architecture](#-tech-stack--architecture)
-- [Project Structure](#-project-structure)
-- [Getting Started](#-getting-started)
-- [Building & Testing](#-building--testing)
-- [Changelog](#-changelog)
-- [License](#-license)
+- [Features](#features)
+- [100% FOSS & F-Droid First](#100-foss--f-droid-first)
+- [Technical Stack & Architecture](#technical-stack--architecture)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Building & Testing](#building--testing)
+- [Changelog](#changelog)
+- [License](#license)
 
 ---
 
-## 🛡️ 100% FOSS & F-Droid First
+## 100% FOSS & F-Droid First
 
 Garage is strictly **Free and Open Source Software (FOSS)** built for distribution on F-Droid and open-source app repositories:
 * **Zero Google Play Services:** No `com.google.android.gms` dependencies.
@@ -32,49 +32,52 @@ Garage is strictly **Free and Open Source Software (FOSS)** built for distributi
 
 ---
 
-## ✨ Features
+## Features
 
-### 🚘 Vehicle Management & VIN Lookup
+### Vehicle Management & VIN Lookup
 * **Comprehensive Garage Profiles:** Maintain complete specs for every vehicle in your fleet—including make, model, year, trim, mileage, license plate, VIN, fuel type, and custom vehicle images.
-* **NHTSA VIN Decoder:** Automatically populate vehicle specifications and metadata using official NHTSA web service integrations.
+* **NHTSA VIN Decoder & Barcode Scanner:** Automatically populate vehicle specifications using official NHTSA web service integrations or scan VIN barcodes directly with the camera.
 
-### 🛠️ Service & Maintenance Tracking
+### Service & Maintenance Tracking
 * **Detailed Service Logs:** Log maintenance activities with date, mileage, service cost, category, service provider, and notes.
 * **Maintenance Timeline:** Visual chronological history of all past and scheduled service events per vehicle.
 * **Intelligent Maintenance Engine:** Smart recommendations based on current mileage, vehicle age, and custom usage rules.
+* **Document Expiration Alerts:** Track vehicle registration and insurance renewal dates with proactive expiration notifications.
 * **Custom Maintenance Rules:** Create personalized service rules and interval thresholds tailored to specific vehicle requirements.
 * **Automated Notifications:** Background workers powered by **WorkManager** deliver timely reminders for upcoming and overdue maintenance.
 
-### ⛽ Fuel Economy & Logging
+### Fuel & EV Charging Logging
 * **Fuel Fill-Up Logs:** Record odometer readings, fuel amounts, price per unit, and total cost during fill-ups.
-* **Multi-Unit Efficiency Calculations:** Automatically computes fuel economy in **MPG (US/UK)**, **L/100km**, or **km/L**.
-* **Fuel Consumption History:** Monitor fuel expense patterns and fuel efficiency over time.
+* **EV Charging Calculator & History:** Complete support for electric vehicle charging sessions, kWh energy tracking, charging rates, and electricity costs.
+* **Multi-Unit Efficiency Calculations:** Automatically computes efficiency in **MPG (US/UK)**, **L/100km**, **km/L**, or **kWh/100mi**.
+* **Expense Patterns:** Monitor fuel and charging expense trends over time.
 
-### 📊 Cost of Ownership Analytics
-* **Total Expense Breakdown:** In-depth visual breakdown comparing maintenance, fuel, and part expenses.
+### Cost of Ownership Analytics
+* **Total Expense Breakdown:** In-depth visual breakdown comparing maintenance, fuel, charging, and part expenses.
 * **Cost Metrics:** Calculate precise cost-per-mile / cost-per-kilometer metrics and operational cost trends over time.
 
-### ⚠️ NHTSA Safety Recalls
+### NHTSA Safety Recalls
 * **Recall Lookup:** Query the official **NHTSA Recall API** to receive real-time alerts regarding open safety recalls for your specific vehicle make, model, year, and VIN.
 
-### ⚙️ Vehicle Parts Directory & Estimator
+### Vehicle Parts Directory & Estimator
 * **Parts Cheat Sheet:** Track exact part numbers and specifications for essential components—such as oil filters, air filters, cabin filters, spark plugs, wiper blades, tire sizes, battery types, and fluid capacities.
 * **Cost Estimator:** Estimate parts costs and plan upcoming routine replacement budgets accurately.
 
-### 📄 PDF Report Export
+### PDF Report Export
 * **Exportable Maintenance Histories:** Generate professional, formatted PDF service records ready for personal archiving, insurance, or vehicle resale value verification.
 
-### 📲 Home Screen App Widget
-* **Android Glance Widget:** View upcoming and overdue maintenance status directly on your home screen with quick-action shortcuts for logging fuel fill-ups or service records.
+### Home Screen Widgets & Launcher Shortcuts
+* **Android Glance Widgets:** Access home screen widgets for viewing maintenance status, logging fuel fill-ups, or updating vehicle odometers.
+* **Quick Launcher Shortcuts:** Fast action shortcuts on the app icon for quick access to fuel logging and odometer updates.
 
-### 🔒 Privacy & Data Backup
+### Privacy & Data Backup
 * **Local-First Storage:** Fully functional offline data storage backed by **Room Persistence Library**.
 * **JSON Import & Export:** Transfer your entire garage dataset across devices using simple JSON backup files.
 * **Secure WebDAV Cloud Backup:** Schedule or run automated cloud backups via WebDAV, backed by **AndroidX Security Crypto** for credential protection.
 
 ---
 
-## 🛠️ Technical Stack & Architecture
+## Technical Stack & Architecture
 
 Garage is engineered according to modern Android development standards following Clean Architecture and MVVM patterns:
 
@@ -88,14 +91,14 @@ Garage is engineered according to modern Android development standards following
 | **Preferences & Crypto** | [DataStore](https://developer.android.com/topic/libraries/architecture/datastore) + [Security Crypto](https://developer.android.com/topic/security/data) | Reactive settings storage and encrypted credentials |
 | **Asynchronous Programming** | [Kotlin Coroutines & Flow](https://kotlinlang.org/docs/coroutines-overview.html) | Asynchronous stream processing and state management |
 | **Background Tasks** | [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) | Reliable periodic background task scheduling |
-| **Camera & Vision** | [CameraX](https://developer.android.com/training/camerax) + [ML Kit](https://developers.google.com/ml-kit) | Live camera feed and on-device text recognition for VIN scanning |
+| **Camera & Barcode Scanning** | [CameraX](https://developer.android.com/training/camerax) + [ZXing Embedded](https://github.com/journeyapps/zxing-android-embedded) | Open-source, on-device camera barcode scanning for VINs |
 | **App Widgets** | [Android Glance](https://developer.android.com/jetpack/compose/glance) | Declarative Compose-based home screen app widgets |
 | **Networking** | [Retrofit](https://square.github.io/retrofit/) + [OkHttp](https://square.github.io/okhttp/) + [Gson](https://github.com/google/gson) | Type-safe HTTP client for NHTSA API & WebDAV communication |
 | **Image Loading** | [Coil 3](https://coil-kt.github.io/coil/) | Kotlin-first image loading library for Compose |
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 Garage/
@@ -133,7 +136,7 @@ Garage/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -157,7 +160,7 @@ Garage/
 
 ---
 
-## 🧪 Building & Testing
+## Building & Testing
 
 ### Assemble Debug Build
 ```bash
@@ -171,12 +174,12 @@ Garage/
 
 ---
 
-## 📜 Changelog
+## Changelog
 
 See the [CHANGELOG.md](CHANGELOG.md) file for details on version updates and release history.
 
 ---
 
-## ⚖️ License
+## License
 
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for full details.

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.fearmikey.garage.data.local.GARAGE_DATABASE_NAME
 import com.fearmikey.garage.data.local.GarageDatabase
+import com.fearmikey.garage.data.local.dao.ChargingDao
 import com.fearmikey.garage.data.local.dao.CustomMaintenanceRuleDao
 import com.fearmikey.garage.data.local.dao.FuelDao
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
@@ -40,6 +41,9 @@ object DatabaseModule {
 
     @Provides
     fun provideFuelDao(database: GarageDatabase): FuelDao = database.fuelDao()
+
+    @Provides
+    fun provideChargingDao(database: GarageDatabase): ChargingDao = database.chargingDao()
 
     @Provides
     fun provideVehiclePartsDao(database: GarageDatabase): VehiclePartsDao = database.vehiclePartsDao()

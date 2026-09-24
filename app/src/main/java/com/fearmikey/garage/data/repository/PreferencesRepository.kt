@@ -16,6 +16,8 @@ interface PreferencesRepository {
     /** The user's explicitly chosen default vehicle, or `null` if none has been chosen. */
     val defaultVehicleId: Flow<Long?>
     val maintenanceMileageWindow: Flow<Int>
+    val maintenanceDaysWindow: Flow<Int>
+        get() = flowOf(10)
     val appOpenCount: Flow<Int>
     val buyMeACoffeeDontAskAgain: Flow<Boolean>
     val buyMeACoffeeNextPromptOpenCount: Flow<Int>
@@ -23,6 +25,24 @@ interface PreferencesRepository {
         get() = flowOf(false)
     val includeModsInCost: Flow<Boolean>
         get() = flowOf(false)
+    val affiliateLinksEnabled: Flow<Boolean>
+        get() = flowOf(true)
+    val documentExpirationRemindersEnabled: Flow<Boolean>
+        get() = flowOf(true)
+    val documentExpirationDaysWindow: Flow<Int>
+        get() = flowOf(30)
+    val driversLicenseNumber: Flow<String?>
+        get() = flowOf(null)
+    val driversLicenseState: Flow<String?>
+        get() = flowOf(null)
+    val driversLicenseExpiration: Flow<Long?>
+        get() = flowOf(null)
+    val driversLicenseNotes: Flow<String?>
+        get() = flowOf(null)
+    val driversLicenseImageFront: Flow<String?>
+        get() = flowOf(null)
+    val driversLicenseImageBack: Flow<String?>
+        get() = flowOf(null)
 
     suspend fun setUnitsType(units: String)
     suspend fun setCurrencyCode(currencyCode: String)
@@ -30,11 +50,23 @@ interface PreferencesRepository {
     suspend fun setOnboardingCompleted(completed: Boolean)
     suspend fun setDefaultVehicleId(vehicleId: Long?)
     suspend fun setMaintenanceMileageWindow(miles: Int)
+    suspend fun setMaintenanceDaysWindow(days: Int) {}
     suspend fun incrementAppOpenCount(): Int
     suspend fun setBuyMeACoffeeDontAskAgain(dontAskAgain: Boolean)
     suspend fun setBuyMeACoffeeNextPromptOpenCount(openCount: Int)
     suspend fun setModsGridView(isGrid: Boolean) {}
     suspend fun setIncludeModsInCost(includeMods: Boolean) {}
+    suspend fun setAffiliateLinksEnabled(enabled: Boolean) {}
+    suspend fun setDocumentExpirationRemindersEnabled(enabled: Boolean) {}
+    suspend fun setDocumentExpirationDaysWindow(days: Int) {}
+    suspend fun setDriversLicense(
+        number: String?,
+        state: String?,
+        expiration: Long?,
+        notes: String?,
+        imageFront: String?,
+        imageBack: String?,
+    ) {}
 }
 
 class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManager) : PreferencesRepository {
@@ -46,11 +78,21 @@ class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManag
     override val onboardingCompleted: Flow<Boolean> = preferencesManager.onboardingCompleted
     override val defaultVehicleId: Flow<Long?> = preferencesManager.defaultVehicleId
     override val maintenanceMileageWindow: Flow<Int> = preferencesManager.maintenanceMileageWindow
+    override val maintenanceDaysWindow: Flow<Int> = preferencesManager.maintenanceDaysWindow
     override val appOpenCount: Flow<Int> = preferencesManager.appOpenCount
     override val buyMeACoffeeDontAskAgain: Flow<Boolean> = preferencesManager.buyMeACoffeeDontAskAgain
     override val buyMeACoffeeNextPromptOpenCount: Flow<Int> = preferencesManager.buyMeACoffeeNextPromptOpenCount
     override val isModsGridView: Flow<Boolean> = preferencesManager.isModsGridView
     override val includeModsInCost: Flow<Boolean> = preferencesManager.includeModsInCost
+    override val affiliateLinksEnabled: Flow<Boolean> = preferencesManager.affiliateLinksEnabled
+    override val documentExpirationRemindersEnabled: Flow<Boolean> = preferencesManager.documentExpirationRemindersEnabled
+    override val documentExpirationDaysWindow: Flow<Int> = preferencesManager.documentExpirationDaysWindow
+    override val driversLicenseNumber: Flow<String?> = preferencesManager.driversLicenseNumber
+    override val driversLicenseState: Flow<String?> = preferencesManager.driversLicenseState
+    override val driversLicenseExpiration: Flow<Long?> = preferencesManager.driversLicenseExpiration
+    override val driversLicenseNotes: Flow<String?> = preferencesManager.driversLicenseNotes
+    override val driversLicenseImageFront: Flow<String?> = preferencesManager.driversLicenseImageFront
+    override val driversLicenseImageBack: Flow<String?> = preferencesManager.driversLicenseImageBack
 
     override suspend fun setUnitsType(units: String) {
         preferencesManager.setUnitsType(units)
@@ -76,6 +118,10 @@ class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManag
         preferencesManager.setMaintenanceMileageWindow(miles)
     }
 
+    override suspend fun setMaintenanceDaysWindow(days: Int) {
+        preferencesManager.setMaintenanceDaysWindow(days)
+    }
+
     override suspend fun incrementAppOpenCount(): Int {
         return preferencesManager.incrementAppOpenCount()
     }
@@ -94,5 +140,28 @@ class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManag
 
     override suspend fun setIncludeModsInCost(includeMods: Boolean) {
         preferencesManager.setIncludeModsInCost(includeMods)
+    }
+
+    override suspend fun setAffiliateLinksEnabled(enabled: Boolean) {
+        preferencesManager.setAffiliateLinksEnabled(enabled)
+    }
+
+    override suspend fun setDocumentExpirationRemindersEnabled(enabled: Boolean) {
+        preferencesManager.setDocumentExpirationRemindersEnabled(enabled)
+    }
+
+    override suspend fun setDocumentExpirationDaysWindow(days: Int) {
+        preferencesManager.setDocumentExpirationDaysWindow(days)
+    }
+
+    override suspend fun setDriversLicense(
+        number: String?,
+        state: String?,
+        expiration: Long?,
+        notes: String?,
+        imageFront: String?,
+        imageBack: String?,
+    ) {
+        preferencesManager.setDriversLicense(number, state, expiration, notes, imageFront, imageBack)
     }
 }

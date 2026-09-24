@@ -45,6 +45,7 @@ class ReminderNotifier @Inject constructor(
         vehicleLabel: String,
         status: ReminderStatus,
         vehicleId: Long = MainActivity.NO_VEHICLE_ID_EXTRA,
+        action: String = MainActivity.ACTION_OPEN_REMINDERS,
     ) {
         val hasPermission = ContextCompat.checkSelfPermission(
             context,
@@ -58,10 +59,12 @@ class ReminderNotifier @Inject constructor(
             context.getString(R.string.reminder_upcoming_title, taskName)
         }
 
-        val pendingIntent = if (vehicleId != MainActivity.NO_VEHICLE_ID_EXTRA) {
+        val pendingIntent = if ((vehicleId != MainActivity.NO_VEHICLE_ID_EXTRA) || (action == MainActivity.ACTION_OPEN_DRIVERS_LICENSE)) {
             val intent = Intent(context, MainActivity::class.java).apply {
-                action = MainActivity.ACTION_OPEN_REMINDERS
-                putExtra(MainActivity.EXTRA_VEHICLE_ID, vehicleId)
+                this.action = action
+                if (vehicleId != MainActivity.NO_VEHICLE_ID_EXTRA) {
+                    putExtra(MainActivity.EXTRA_VEHICLE_ID, vehicleId)
+                }
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
             }
             PendingIntent.getActivity(

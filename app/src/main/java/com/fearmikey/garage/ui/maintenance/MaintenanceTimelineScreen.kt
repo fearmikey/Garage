@@ -45,6 +45,7 @@ import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DropdownMenuItem
@@ -94,9 +95,10 @@ import com.fearmikey.garage.data.schedule.MaintenanceScheduleRules
 import com.fearmikey.garage.ui.components.EmptyState
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.SampleData
+import com.fearmikey.garage.ui.util.ThousandsSeparatorVisualTransformation
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
-import com.fearmikey.garage.ui.util.formatMileageInput
+import com.fearmikey.garage.ui.util.sanitizeMileageInput
 import com.fearmikey.garage.ui.util.fromUtcDatePickerMillis
 import com.fearmikey.garage.ui.util.toDisplayDate
 import com.fearmikey.garage.ui.util.toUtcDatePickerMillis
@@ -343,21 +345,25 @@ internal fun AddEditMaintenanceRecordSheet(
         mutableStateOf(
             if ((initial != null) && (initial.id != 0L)) {
                 if (initial.mileage > 0) {
-                    formatMileageInput(UnitConverter.displayDistanceValue(initial.mileage, unitSystem).toString())
+                    UnitConverter.displayDistanceValue(initial.mileage, unitSystem).toString()
                 } else ""
             } else {
                 val defaultMileage = initial?.mileage?.takeIf { it > 0 } ?: latestMileage?.takeIf { it > 0 }
-                defaultMileage?.let { formatMileageInput(UnitConverter.displayDistanceValue(it, unitSystem).toString()) }.orEmpty()
+                defaultMileage?.let { UnitConverter.displayDistanceValue(it, unitSystem).toString() }.orEmpty()
             }
         )
     }
     var cost by remember { mutableStateOf(initial?.cost?.toString().orEmpty()) }
-    var category by remember { mutableStateOf(initial?.category ?: MaintenanceCategory.OTHER) }
+    var category by remember { mutableStateOf(initial?.category) }
     var categoryMenuExpanded by remember { mutableStateOf(value = false) }
     var taskName by remember { mutableStateOf(initial?.taskName) }
     var taskMenuExpanded by remember { mutableStateOf(value = false) }
     var date by remember { mutableLongStateOf(initial?.date ?: System.currentTimeMillis()) }
     var showDatePicker by remember { mutableStateOf(value = false) }
+
+    var isDeferred by remember { mutableStateOf(initial?.isDeferred == true) }
+    var deferredMiles by remember { mutableStateOf(initial?.deferredMiles?.toString().orEmpty()) }
+    var deferredMonths by remember { mutableStateOf(initial?.deferredMonths?.toString().orEmpty()) }
 
     var pickedReceiptUri by remember { mutableStateOf<Uri?>(null) }
     var isReceiptRemoved by remember { mutableStateOf(value = false) }
@@ -475,7 +481,7 @@ internal fun AddEditMaintenanceRecordSheet(
                 onExpandedChange = { categoryMenuExpanded = it },
             ) {
                 OutlinedTextField(
-                    value = category.displayName,
+                    value = category?.displayName ?: "",
                     onValueChange = {},
                     readOnly = true,
                     singleLine = true,
@@ -536,7 +542,26 @@ internal fun AddEditMaintenanceRecordSheet(
                                 text = { Text(option) },
                                 onClick = {
                                     taskName = option
-                                    if (description.isBlank()) description = option
+                                    val isOptionDeferrable = MaintenanceScheduleRules.rules.any { it.category == category && it.taskName == option && it.isDeferrable }
+                                    if (!isOptionDeferrable) {
+                                        isDeferred = false
+                                    }
+                                    
+                                    // Only auto-update the description if it's blank or currently matches another known task (or its deferred variant)
+                                    val isKnownDescription = description.isBlank() || taskOptions.any { 
+                                        it.equals(description, ignoreCase = true) || 
+                                        it.replace("replacement", "inspection", ignoreCase = true)
+                                          .replace("replace", "inspect", ignoreCase = true)
+                                          .equals(description, ignoreCase = true)
+                                    }
+                                    
+                                    if (isKnownDescription) {
+                                        description = option
+                                        if (isDeferred && isOptionDeferrable) {
+                                            description = description.replace("replacement", "inspection", ignoreCase = true)
+                                                .replace("replace", "inspect", ignoreCase = true)
+                                        }
+                                    }
                                     taskMenuExpanded = false
                                 },
                             )
@@ -558,9 +583,10 @@ internal fun AddEditMaintenanceRecordSheet(
             )
             OutlinedTextField(
                 value = mileage,
-                onValueChange = { mileage = formatMileageInput(it) },
+                onValueChange = { mileage = sanitizeMileageInput(it) },
                 label = { Text("Mileage (${unitSystem.distanceUnit})") },
                 singleLine = true,
+                visualTransformation = ThousandsSeparatorVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next,
@@ -584,6 +610,76 @@ internal fun AddEditMaintenanceRecordSheet(
                 ),
                 modifier = Modifier.fillMaxWidth(),
             )
+
+            val isDeferrable = remember(category, taskName) {
+                MaintenanceScheduleRules.rules.any { it.category == category && it.taskName == taskName && it.isDeferrable }
+            }
+
+            if (isDeferrable) {
+                val toggleDeferred: (Boolean) -> Unit = { deferred ->
+                    isDeferred = deferred
+                    if (deferred) {
+                        description = description.replace("replacement", "inspection", ignoreCase = true)
+                            .replace("replace", "inspect", ignoreCase = true)
+                    } else {
+                        description = description.replace("inspection", "replacement", ignoreCase = true)
+                            .replace("inspect", "replace", ignoreCase = true)
+                    }
+                }
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { toggleDeferred(!isDeferred) }
+                        .padding(vertical = 4.dp),
+                ) {
+                    Checkbox(
+                        checked = isDeferred,
+                        onCheckedChange = toggleDeferred
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Inspected only (defer replacement)")
+                }
+
+                if (isDeferred) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        OutlinedTextField(
+                            value = deferredMiles,
+                            onValueChange = { deferredMiles = sanitizeMileageInput(it) },
+                            label = { Text("Remind in (${unitSystem.distanceUnit}) *") },
+                            isError = deferredMiles.isBlank(),
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Number,
+                                imeAction = ImeAction.Next,
+                            ),
+                            keyboardActions = KeyboardActions(
+                                onNext = { focusManager.moveFocus(FocusDirection.Down) },
+                            ),
+                            modifier = Modifier.weight(1f),
+                        )
+                        OutlinedTextField(
+                            value = deferredMonths,
+                            onValueChange = { deferredMonths = sanitizeMileageInput(it) },
+                            label = { Text("Remind in (months) *") },
+                            isError = deferredMonths.isBlank(),
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Number,
+                                imeAction = ImeAction.Next,
+                            ),
+                            keyboardActions = KeyboardActions(
+                                onNext = { focusManager.moveFocus(FocusDirection.Down) },
+                            ),
+                            modifier = Modifier.weight(1f),
+                        )
+                    }
+                }
+            }
 
             // Receipt / Invoice section
             Text("Receipt / Invoice", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -702,6 +798,8 @@ internal fun AddEditMaintenanceRecordSheet(
                 }
             }
 
+            val canSave = category != null && description.isNotBlank() && (!isDeferred || (deferredMiles.filter(Char::isDigit).isNotBlank() && deferredMonths.filter(Char::isDigit).isNotBlank()))
+
             Button(
                 onClick = {
                     val inputMileage = mileage.filter(Char::isDigit).toIntOrNull() ?: 0
@@ -714,15 +812,18 @@ internal fun AddEditMaintenanceRecordSheet(
                             mileage = canonicalMileage,
                             description = description,
                             cost = cost.toDoubleOrNull() ?: 0.0,
-                            category = category,
+                            category = category!!,
                             taskName = taskName,
                             receiptUri = initial?.receiptUri,
+                            isDeferred = isDeferred,
+                            deferredMiles = deferredMiles.filter(Char::isDigit).toIntOrNull(),
+                            deferredMonths = deferredMonths.filter(Char::isDigit).toIntOrNull(),
                         ),
                         pickedReceiptUri,
                         isReceiptRemoved,
                     )
                 },
-                enabled = description.isNotBlank(),
+                enabled = canSave,
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text("Save")

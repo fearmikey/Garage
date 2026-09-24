@@ -36,6 +36,17 @@ data class VehicleRegistrationInsurance(
     val inspectionResult: String? = null,
     val inspectionNotes: String? = null,
 
+    // Emissions / Smog Testing
+    val emissionsExpiration: Long? = null,
+    val emissionsDate: Long? = null,
+    val emissionsResult: String? = null,
+    val emissionsNotes: String? = null,
+
+    // State / Local Inspection Stickers
+    val inspectionStickerExpiration: Long? = null,
+    val inspectionStickerNumber: String? = null,
+    val inspectionStickerNotes: String? = null,
+
     // Insurance Policy
     val insuranceProvider: String? = null,
     val policyNumber: String? = null,
@@ -44,19 +55,39 @@ data class VehicleRegistrationInsurance(
     val insuranceAgentContact: String? = null,
     val insuranceNotes: String? = null,
     val insuranceImageUri: String? = null,
+
+    // Toll Pass & Parking Permits
+    val tollPassParkingExpiration: Long? = null,
+    val tollPassParkingAccount: String? = null,
+    val tollPassParkingNotes: String? = null,
+
+    // Driver's License
+    val driversLicenseExpiration: Long? = null,
+    val driversLicenseNumber: String? = null,
+    val driversLicenseState: String? = null,
+    val driversLicenseNotes: String? = null,
 ) {
     /** True when every field is null or blank, i.e. nothing worth displaying yet. */
-    fun isEmpty(): Boolean = listOf(
+    fun isEmpty(): Boolean = (listOf(
         licensePlate, registrationState, registrationNotes,
         inspectionResult, inspectionNotes,
+        emissionsResult, emissionsNotes,
+        inspectionStickerNumber, inspectionStickerNotes,
         insuranceProvider, policyNumber, insuranceAgentContact, insuranceNotes,
-    ).all { it.isNullOrBlank() } &&
+        tollPassParkingAccount, tollPassParkingNotes,
+        driversLicenseNumber, driversLicenseState, driversLicenseNotes,
+    ).all { it.isNullOrBlank() }) &&
         registrationExpiration == null &&
         registrationFee == null &&
         registrationImageUri == null &&
         inspectionExpiration == null &&
         inspectionDate == null &&
+        emissionsExpiration == null &&
+        emissionsDate == null &&
+        inspectionStickerExpiration == null &&
         insuranceExpiration == null &&
         insurancePremium == null &&
-        insuranceImageUri == null
+        insuranceImageUri == null &&
+        tollPassParkingExpiration == null &&
+        driversLicenseExpiration == null
 }

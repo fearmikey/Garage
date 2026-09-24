@@ -110,4 +110,36 @@ object UnitConverter {
             else "—"
         }
     }
+
+    // EV Charging efficiency conversions
+    /** Formats Wh/mi (or Wh/km) according to [UnitSystem]. */
+    fun formatWhPerMi(whPerMi: Double?, unitSystem: UnitSystem): String {
+        if (whPerMi == null || whPerMi <= 0.0) return "—"
+        return when (unitSystem) {
+            UnitSystem.IMPERIAL -> "%.0f Wh/mi".format(whPerMi)
+            UnitSystem.METRIC -> "%.0f Wh/km".format(whPerMi / KM_PER_MILE)
+        }
+    }
+
+    /** Formats kWh/100km (or kWh/100mi) according to [UnitSystem]. */
+    fun formatKwhPer100Km(whPerMi: Double?, unitSystem: UnitSystem): String {
+        if (whPerMi == null || whPerMi <= 0.0) return "—"
+        return when (unitSystem) {
+            UnitSystem.IMPERIAL -> {
+                val kwh100mi = (whPerMi * 100.0) / 1000.0
+                "%.1f kWh/100mi".format(kwh100mi)
+            }
+            UnitSystem.METRIC -> {
+                val whPerKm = whPerMi / KM_PER_MILE
+                val kwh100km = (whPerKm * 100.0) / 1000.0
+                "%.1f kWh/100km".format(kwh100km)
+            }
+        }
+    }
+
+    /** Formats MPGe (Miles per Gallon Equivalent). */
+    fun formatMpge(mpge: Double?): String {
+        if (mpge == null || mpge <= 0.0) return "—"
+        return "%.1f MPGe".format(mpge)
+    }
 }

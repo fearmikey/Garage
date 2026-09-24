@@ -82,6 +82,7 @@ class GarageWidget : GlanceAppWidget() {
         val vehicles = vehicleRepository.getAllVehicles().first()
         val unitSystem = preferencesRepository.unitSystem.first()
         val upcomingWindowMiles = preferencesRepository.maintenanceMileageWindow.first()
+        val upcomingWindowDays = preferencesRepository.maintenanceDaysWindow.first()
 
         val rows = vehicles
             .flatMap { vehicle ->
@@ -95,6 +96,7 @@ class GarageWidget : GlanceAppWidget() {
                     records = records,
                     customRules = customRules.map { it.toMaintenanceRule() },
                     upcomingWindowMiles = upcomingWindowMiles,
+                    upcomingWindowDays = upcomingWindowDays,
                 )
 
                 suggestions
@@ -199,17 +201,25 @@ private fun GarageWidgetContent(
 
         Row(modifier = GlanceModifier.fillMaxWidth()) {
             Button(
-                text = "Log Service",
-                onClick = actionStartActivity(
-                    logServiceIntent(context, MainActivity.ACTION_LOG_SERVICE, targetVehicleId),
-                ),
-                modifier = GlanceModifier.defaultWeight(),
-            )
-            Spacer(modifier = GlanceModifier.width(8.dp))
-            Button(
                 text = "Log Fuel",
                 onClick = actionStartActivity(
                     logServiceIntent(context, MainActivity.ACTION_LOG_FUEL, targetVehicleId),
+                ),
+                modifier = GlanceModifier.defaultWeight(),
+            )
+            Spacer(modifier = GlanceModifier.width(4.dp))
+            Button(
+                text = "Odometer",
+                onClick = actionStartActivity(
+                    logServiceIntent(context, MainActivity.ACTION_UPDATE_ODOMETER, targetVehicleId),
+                ),
+                modifier = GlanceModifier.defaultWeight(),
+            )
+            Spacer(modifier = GlanceModifier.width(4.dp))
+            Button(
+                text = "Log Service",
+                onClick = actionStartActivity(
+                    logServiceIntent(context, MainActivity.ACTION_LOG_SERVICE, targetVehicleId),
                 ),
                 modifier = GlanceModifier.defaultWeight(),
             )

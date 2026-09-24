@@ -26,6 +26,8 @@ data class VinDecodeResult(
     @SerializedName("DisplacementL") val displacementL: String? = null,
     @SerializedName("EngineHP") val engineHp: String? = null,
     @SerializedName("FuelTypePrimary") val fuelTypePrimary: String? = null,
+    @SerializedName("FuelTypeSecondary") val fuelTypeSecondary: String? = null,
+    @SerializedName("ElectrificationLevel") val electrificationLevel: String? = null,
     @SerializedName("TransmissionStyle") val transmissionStyle: String? = null,
     @SerializedName("TransmissionSpeeds") val transmissionSpeeds: String? = null,
     @SerializedName("BodyClass") val bodyClass: String? = null,

@@ -317,4 +317,102 @@ class RegistrationInsuranceViewModelTest {
 
         collectJob.cancel()
     }
+
+    @Test
+    fun `saving expanded vehicle document details updates repository`() = runTest(testDispatcher) {
+        val vehicleId = 1L
+        val savedStateHandle = SavedStateHandle(mapOf(Destinations.VEHICLE_ID_ARG to vehicleId))
+        val regDao = FakeVehicleRegistrationDao()
+
+        val vehicleRepo = VehicleRepository(
+            vehicleDao = FakeVehicleDao(),
+            vehicleSpecsDao = FakeVehicleSpecsDao(),
+            vehiclePartsDao = FakeVehiclePartsDao(),
+            vehicleRegistrationDao = regDao,
+            vinDecoderApi = FakeVinDecoderApi(),
+        )
+
+        val viewModel = RegistrationInsuranceViewModel(
+            savedStateHandle = savedStateHandle,
+            vehicleRepository = vehicleRepo,
+            imageStorageManager = ImageStorageManager(context = ContextWrapper(null)),
+            preferencesRepository = FakePreferencesRepository(),
+        )
+
+        val collectJob = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect {} }
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        viewModel.onAddOrEditClicked()
+        viewModel.onEmissionsResultChanged("Passed")
+        viewModel.onEmissionsNotesChanged("Smog Station #101")
+
+        viewModel.onInspectionStickerNumberChanged("STK-2025-01")
+        viewModel.onInspectionStickerNotesChanged("Windshield bottom left")
+
+        viewModel.onTollPassParkingAccountChanged("EZPass #12345")
+        viewModel.onTollPassParkingNotesChanged("Transponder in glove box")
+
+        viewModel.onSave()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val saved = regDao.flow.value
+        assertNotNull(saved)
+        assertEquals("Passed", saved?.emissionsResult)
+        assertEquals("Smog Station #101", saved?.emissionsNotes)
+        assertEquals("STK-2025-01", saved?.inspectionStickerNumber)
+        assertEquals("Windshield bottom left", saved?.inspectionStickerNotes)
+        assertEquals("EZPass #12345", saved?.tollPassParkingAccount)
+        assertEquals("Transponder in glove box", saved?.tollPassParkingNotes)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `deleting expanded document sections clears respective fields`() = runTest(testDispatcher) {
+        val vehicleId = 1L
+        val savedStateHandle = SavedStateHandle(mapOf(Destinations.VEHICLE_ID_ARG to vehicleId))
+        val regDao = FakeVehicleRegistrationDao()
+        regDao.flow.value = VehicleRegistrationInsurance(
+            vehicleId = vehicleId,
+            emissionsResult = "Passed",
+            inspectionStickerNumber = "STK-99",
+            tollPassParkingAccount = "EZPass-100",
+        )
+
+        val vehicleRepo = VehicleRepository(
+            vehicleDao = FakeVehicleDao(),
+            vehicleSpecsDao = FakeVehicleSpecsDao(),
+            vehiclePartsDao = FakeVehiclePartsDao(),
+            vehicleRegistrationDao = regDao,
+            vinDecoderApi = FakeVinDecoderApi(),
+        )
+
+        val viewModel = RegistrationInsuranceViewModel(
+            savedStateHandle = savedStateHandle,
+            vehicleRepository = vehicleRepo,
+            imageStorageManager = ImageStorageManager(context = ContextWrapper(null)),
+            preferencesRepository = FakePreferencesRepository(),
+        )
+
+        val collectJob = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect {} }
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        viewModel.onAddOrEditClicked()
+
+        viewModel.onDeleteEmissionsSection()
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertNull(regDao.flow.value?.emissionsResult)
+        assertEquals("STK-99", regDao.flow.value?.inspectionStickerNumber)
+
+        viewModel.onDeleteInspectionStickerSection()
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertNull(regDao.flow.value?.inspectionStickerNumber)
+        assertEquals("EZPass-100", regDao.flow.value?.tollPassParkingAccount)
+
+        viewModel.onDeleteTollPassParkingSection()
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertNull(regDao.flow.value)
+
+        collectJob.cancel()
+    }
 }

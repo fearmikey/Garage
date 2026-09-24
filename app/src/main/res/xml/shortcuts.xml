@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="log_fuel"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_fuel"
+        android:shortcutShortLabel="@string/shortcut_log_fuel_short"
+        android:shortcutLongLabel="@string/shortcut_log_fuel_long">
+        <intent
+            android:action="com.fearmikey.garage.action.LOG_FUEL"
+            android:targetPackage="${applicationId}"
+            android:targetClass="com.fearmikey.garage.MainActivity" />
+    </shortcut>
+    <shortcut
+        android:shortcutId="update_odometer"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_odometer"
+        android:shortcutShortLabel="@string/shortcut_update_odometer_short"
+        android:shortcutLongLabel="@string/shortcut_update_odometer_long">
+        <intent
+            android:action="com.fearmikey.garage.action.UPDATE_ODOMETER"
+            android:targetPackage="${applicationId}"
+            android:targetClass="com.fearmikey.garage.MainActivity" />
+    </shortcut>
+</shortcuts>

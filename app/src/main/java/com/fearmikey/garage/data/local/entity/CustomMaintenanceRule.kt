@@ -1,5 +1,6 @@
 package com.fearmikey.garage.data.local.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -36,5 +37,7 @@ data class CustomMaintenanceRule(
     val category: MaintenanceCategory,
     val intervalMiles: Int? = null,
     val intervalMonths: Int? = null,
+    @ColumnInfo(defaultValue = "0")
+    val isDeferrable: Boolean = false,
     val notes: String? = null,
 )

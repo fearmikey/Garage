@@ -7,6 +7,7 @@ import androidx.room.InvalidationTracker
 import androidx.sqlite.db.SupportSQLiteOpenHelper
 import com.fearmikey.garage.data.local.CloudBackupPreferencesManager
 import com.fearmikey.garage.data.local.GarageDatabase
+import com.fearmikey.garage.data.local.dao.ChargingDao
 import com.fearmikey.garage.data.local.dao.CustomMaintenanceRuleDao
 import com.fearmikey.garage.data.local.dao.FuelDao
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
@@ -15,6 +16,7 @@ import com.fearmikey.garage.data.local.dao.VehicleDao
 import com.fearmikey.garage.data.local.dao.VehiclePartsDao
 import com.fearmikey.garage.data.local.dao.VehicleRegistrationDao
 import com.fearmikey.garage.data.local.dao.VehicleSpecsDao
+import com.fearmikey.garage.data.local.entity.ChargingRecord
 import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
 import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
@@ -57,9 +59,10 @@ class SettingsViewModelTest {
         override fun checkSelfPermission(permission: String): Int = 0
     }
 
-    private class FakePreferencesRepository : PreferencesRepository {
+    private open class FakePreferencesRepository : PreferencesRepository {
         val currencyCodeFlow = MutableStateFlow("USD")
         val maintenanceMileageWindowFlow = MutableStateFlow(500)
+        val maintenanceDaysWindowFlow = MutableStateFlow(10)
         override val unitsType: Flow<String> = MutableStateFlow("metric")
         override val unitSystem: Flow<UnitSystem> = MutableStateFlow(UnitSystem.METRIC)
         override val currencyCode: Flow<String> = currencyCodeFlow
@@ -68,6 +71,7 @@ class SettingsViewModelTest {
         override val onboardingCompleted: Flow<Boolean> = MutableStateFlow(true)
         override val defaultVehicleId: Flow<Long?> = MutableStateFlow(null)
         override val maintenanceMileageWindow: Flow<Int> = maintenanceMileageWindowFlow
+        override val maintenanceDaysWindow: Flow<Int> = maintenanceDaysWindowFlow
         override val appOpenCount: Flow<Int> = MutableStateFlow(1)
         override val buyMeACoffeeDontAskAgain: Flow<Boolean> = MutableStateFlow(false)
         override val buyMeACoffeeNextPromptOpenCount: Flow<Int> = MutableStateFlow(2)
@@ -81,6 +85,9 @@ class SettingsViewModelTest {
         override suspend fun setDefaultVehicleId(vehicleId: Long?) {}
         override suspend fun setMaintenanceMileageWindow(miles: Int) {
             maintenanceMileageWindowFlow.value = miles
+        }
+        override suspend fun setMaintenanceDaysWindow(days: Int) {
+            maintenanceDaysWindowFlow.value = days
         }
         override suspend fun incrementAppOpenCount(): Int = 1
         override suspend fun setBuyMeACoffeeDontAskAgain(dontAskAgain: Boolean) {}
@@ -186,6 +193,12 @@ class SettingsViewModelTest {
                 override suspend fun update(record: FuelRecord) {}
                 override suspend fun delete(record: FuelRecord) {}
             }
+            override fun chargingDao(): ChargingDao = object : ChargingDao {
+                override fun getRecordsForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<ChargingRecord>())
+                override suspend fun upsert(record: ChargingRecord) = 1L
+                override suspend fun update(record: ChargingRecord) {}
+                override suspend fun delete(record: ChargingRecord) {}
+            }
             override fun vehiclePartsDao(): VehiclePartsDao = FakeVehiclePartsDao()
             override fun customMaintenanceRuleDao(): CustomMaintenanceRuleDao = object : CustomMaintenanceRuleDao {
                 override fun getForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<CustomMaintenanceRule>())
@@ -268,6 +281,12 @@ class SettingsViewModelTest {
                 override suspend fun update(record: FuelRecord) {}
                 override suspend fun delete(record: FuelRecord) {}
             }
+            override fun chargingDao(): ChargingDao = object : ChargingDao {
+                override fun getRecordsForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<ChargingRecord>())
+                override suspend fun upsert(record: ChargingRecord) = 1L
+                override suspend fun update(record: ChargingRecord) {}
+                override suspend fun delete(record: ChargingRecord) {}
+            }
             override fun vehiclePartsDao(): VehiclePartsDao = FakeVehiclePartsDao()
             override fun customMaintenanceRuleDao(): CustomMaintenanceRuleDao = object : CustomMaintenanceRuleDao {
                 override fun getForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<CustomMaintenanceRule>())
@@ -308,11 +327,123 @@ class SettingsViewModelTest {
 
         testDispatcher.scheduler.advanceUntilIdle()
         assertEquals(500, viewModel.uiState.value.maintenanceMileageWindow)
+        assertEquals(10, viewModel.uiState.value.maintenanceDaysWindow)
 
         viewModel.setMaintenanceMileageWindow(250)
         testDispatcher.scheduler.advanceUntilIdle()
 
         assertEquals(250, prefsRepo.maintenanceMileageWindowFlow.value)
         assertEquals(250, viewModel.uiState.value.maintenanceMileageWindow)
+
+        viewModel.setMaintenanceDaysWindow(14)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(14, prefsRepo.maintenanceDaysWindowFlow.value)
+        assertEquals(14, viewModel.uiState.value.maintenanceDaysWindow)
+    }
+
+    @Test
+    fun `document expiration preferences update uiState and repository`() = runTest {
+        val context = TestContext()
+        val prefsRepo = object : FakePreferencesRepository() {
+            val docRemindersEnabledFlow = MutableStateFlow(true)
+            val docDaysWindowFlow = MutableStateFlow(30)
+
+            override val documentExpirationRemindersEnabled = docRemindersEnabledFlow
+            override val documentExpirationDaysWindow = docDaysWindowFlow
+
+            override suspend fun setDocumentExpirationRemindersEnabled(enabled: Boolean) {
+                docRemindersEnabledFlow.value = enabled
+            }
+
+            override suspend fun setDocumentExpirationDaysWindow(days: Int) {
+                docDaysWindowFlow.value = days
+            }
+        }
+        val vehicleRepo = VehicleRepository(
+            vehicleDao = FakeVehicleDao(),
+            vehicleSpecsDao = FakeVehicleSpecsDao(),
+            vehiclePartsDao = FakeVehiclePartsDao(),
+            vehicleRegistrationDao = FakeVehicleRegistrationDao(),
+            vinDecoderApi = FakeVinDecoderApi(),
+        )
+        val cloudPrefs = TestCloudBackupPreferencesManager(context)
+        @Suppress("DEPRECATION")
+        val dummyDb = object : GarageDatabase() {
+            override fun vehicleDao(): VehicleDao = FakeVehicleDao()
+            override fun maintenanceDao(): MaintenanceDao = object : MaintenanceDao {
+                override fun getRecordsForVehicleByDate(vehicleId: Long) = MutableStateFlow(emptyList<MaintenanceRecord>())
+                override fun getRecordsForVehicleByMileage(vehicleId: Long) = MutableStateFlow(emptyList<MaintenanceRecord>())
+                override fun getLatestMileageForVehicle(vehicleId: Long) = MutableStateFlow(null)
+                override suspend fun upsert(record: MaintenanceRecord) = 1L
+                override suspend fun update(record: MaintenanceRecord) {}
+                override suspend fun delete(record: MaintenanceRecord) {}
+            }
+            override fun vehicleSpecsDao(): VehicleSpecsDao = FakeVehicleSpecsDao()
+            override fun fuelDao(): FuelDao = object : FuelDao {
+                override fun getRecordsForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<FuelRecord>())
+                override suspend fun upsert(record: FuelRecord) = 1L
+                override suspend fun update(record: FuelRecord) {}
+                override suspend fun delete(record: FuelRecord) {}
+            }
+            override fun chargingDao(): ChargingDao = object : ChargingDao {
+                override fun getRecordsForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<ChargingRecord>())
+                override suspend fun upsert(record: ChargingRecord) = 1L
+                override suspend fun update(record: ChargingRecord) {}
+                override suspend fun delete(record: ChargingRecord) {}
+            }
+            override fun vehiclePartsDao(): VehiclePartsDao = FakeVehiclePartsDao()
+            override fun customMaintenanceRuleDao(): CustomMaintenanceRuleDao = object : CustomMaintenanceRuleDao {
+                override fun getForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<CustomMaintenanceRule>())
+                override suspend fun upsert(rule: CustomMaintenanceRule) = 1L
+                override suspend fun delete(rule: CustomMaintenanceRule) {}
+            }
+            override fun modificationDao(): ModificationDao = object : ModificationDao {
+                override fun getModsForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<ModificationRecord>())
+                override suspend fun getModById(id: Long) = null
+                override suspend fun upsert(mod: ModificationRecord) = 1L
+                override suspend fun update(mod: ModificationRecord) {}
+                override suspend fun delete(mod: ModificationRecord) {}
+            }
+            override fun vehicleRegistrationDao(): VehicleRegistrationDao = FakeVehicleRegistrationDao()
+            override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper {
+                throw UnsupportedOperationException()
+            }
+            override fun createInvalidationTracker(): InvalidationTracker {
+                return InvalidationTracker(this, emptyMap(), emptyMap(), "vehicles")
+            }
+            override fun clearAllTables() {}
+        }
+        val backupRepo = BackupRepository(context, dummyDb, ImageStorageManager(context), cloudPrefs)
+        val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs)
+        val autoBackupManager = AutoBackupManager(dummyDb, backupRepo, cloudPrefs)
+        val notifier = ReminderNotifier(context)
+
+        val viewModel = SettingsViewModel(
+            context = context,
+            backupRepository = backupRepo,
+            preferencesRepository = prefsRepo,
+            vehicleRepository = vehicleRepo,
+            webDavBackupRepository = webDavRepo,
+            cloudBackupPreferencesManager = cloudPrefs,
+            autoBackupManager = autoBackupManager,
+            reminderNotifier = notifier,
+        )
+
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertEquals(true, viewModel.uiState.value.documentExpirationRemindersEnabled)
+        assertEquals(30, viewModel.uiState.value.documentExpirationDaysWindow)
+
+        viewModel.setDocumentExpirationRemindersEnabled(false)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(false, prefsRepo.docRemindersEnabledFlow.value)
+        assertEquals(false, viewModel.uiState.value.documentExpirationRemindersEnabled)
+
+        viewModel.setDocumentExpirationDaysWindow(60)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(60, prefsRepo.docDaysWindowFlow.value)
+        assertEquals(60, viewModel.uiState.value.documentExpirationDaysWindow)
     }
 }

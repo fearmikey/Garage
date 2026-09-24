@@ -1,5 +1,6 @@
 package com.fearmikey.garage.data.local.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -52,4 +53,17 @@ data class MaintenanceRecord(
      * (e.g. "3f1c...jpg" or "3f1c...pdf").
      */
     val receiptUri: String? = null,
+    /**
+     * Whether this record represents an inspection (deferral) rather than a full replacement/service.
+     */
+    @ColumnInfo(defaultValue = "0")
+    val isDeferred: Boolean = false,
+    /**
+     * If [isDeferred] is true, the number of miles until the next reminder.
+     */
+    val deferredMiles: Int? = null,
+    /**
+     * If [isDeferred] is true, the number of months until the next reminder.
+     */
+    val deferredMonths: Int? = null,
 )

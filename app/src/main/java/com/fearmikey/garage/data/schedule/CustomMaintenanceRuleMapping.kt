@@ -8,6 +8,7 @@ fun CustomMaintenanceRule.toMaintenanceRule(): MaintenanceRule =
         category = category,
         intervalMiles = intervalMiles,
         intervalMonths = intervalMonths,
+        isDeferrable = isDeferrable,
         notes = notes,
         isCustom = true,
     )

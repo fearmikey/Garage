@@ -54,6 +54,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
@@ -71,28 +72,27 @@ import coil3.compose.AsyncImage
 import com.fearmikey.garage.config.FlavorConfig
 import com.fearmikey.garage.data.local.entity.Drivetrain
 import com.fearmikey.garage.ui.theme.GarageTheme
+import com.fearmikey.garage.ui.vehicle.scan.CustomScannerActivity
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddEditVehicleScreen(
     onDone: () -> Unit,
     onBack: () -> Unit,
-    onScanVinClicked: () -> Unit = {},
-    scannedVin: String? = null,
-    onScannedVinConsumed: () -> Unit = {},
     viewModel: AddEditVehicleViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(uiState.saveComplete, uiState.deleteComplete) {
-        if (uiState.saveComplete || uiState.deleteComplete) onDone()
+    val scanLauncher = rememberLauncherForActivityResult(ScanContract()) { result ->
+        if (result.contents != null) {
+            viewModel.onVinChanged(result.contents)
+        }
     }
 
-    LaunchedEffect(scannedVin) {
-        if (!scannedVin.isNullOrBlank()) {
-            viewModel.onVinChanged(scannedVin)
-            onScannedVinConsumed()
-        }
+    LaunchedEffect(uiState.saveComplete, uiState.deleteComplete) {
+        if (uiState.saveComplete || uiState.deleteComplete) onDone()
     }
 
     AddEditVehicleContent(
@@ -100,7 +100,16 @@ fun AddEditVehicleScreen(
         onBack = onBack,
         onVinChanged = viewModel::onVinChanged,
         onDecodeVinClicked = viewModel::onDecodeVinClicked,
-        onScanVinClicked = onScanVinClicked,
+        onScanVinClicked = {
+            scanLauncher.launch(
+                ScanOptions().apply {
+                    setPrompt("Scan VIN Barcode")
+                    setBeepEnabled(false)
+                    setOrientationLocked(false)
+                    captureActivity = CustomScannerActivity::class.java
+                },
+            )
+        },
         onYearChanged = viewModel::onYearChanged,
         onMakeChanged = viewModel::onMakeChanged,
         onModelChanged = viewModel::onModelChanged,
@@ -188,9 +197,10 @@ private fun AddEditVehicleContent(
         ) {
             if (uiState.photos.isNotEmpty()) {
                 Column {
-                    val pagerState = rememberPagerState(pageCount = { uiState.photos.size })
+                    val pagerState = rememberPagerState { uiState.photos.size }
                     val currentPage = pagerState.currentPage.coerceIn(0, (uiState.photos.size - 1).coerceAtLeast(0))
                     val currentPhoto = uiState.photos.getOrNull(currentPage)
+                    val currentPhotos by rememberUpdatedState(uiState.photos)
 
                     Box(
                         modifier = Modifier
@@ -199,12 +209,18 @@ private fun AddEditVehicleContent(
                             .clip(RoundedCornerShape(12.dp))
                             .background(MaterialTheme.colorScheme.surfaceVariant)
                             .pointerInput(currentPage) {
-                                detectVerticalDragGestures { _, dragAmount ->
-                                    if (currentPage in uiState.photos.indices) {
-                                        val currentOffsetY = uiState.photos[currentPage].offsetY
-                                        onImageOffsetYChanged(currentPage, currentOffsetY + (dragAmount * 0.008f))
+                                var currentDragOffset = 0f
+                                detectVerticalDragGestures(
+                                    onDragStart = {
+                                        currentDragOffset = currentPhotos.getOrNull(currentPage)?.offsetY ?: 0f
+                                    },
+                                    onVerticalDrag = { _, dragAmount ->
+                                        if (currentPage in currentPhotos.indices) {
+                                            currentDragOffset += (dragAmount * 0.008f)
+                                            onImageOffsetYChanged(currentPage, currentDragOffset.coerceIn(-1f, 1f))
+                                        }
                                     }
-                                }
+                                )
                             },
                         contentAlignment = Alignment.Center,
                     ) {
@@ -246,7 +262,7 @@ private fun AddEditVehicleContent(
                                     Box(
                                         modifier = Modifier
                                             .size(6.dp)
-                                            .background(color, shape = CircleShape)
+                                            .background(color, shape = CircleShape),
                                     )
                                 }
                             }
@@ -500,7 +516,6 @@ private fun AddEditVehicleScreenPreview() {
             onModelChanged = {},
             onTrimChanged = {},
             onSave = {},
-            onDelete = {},
-        )
+        ) {}
     }
 }

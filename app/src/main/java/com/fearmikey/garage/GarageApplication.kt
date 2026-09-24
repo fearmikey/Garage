@@ -38,8 +38,14 @@ class GarageApplication : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
+        instance = this
         WorkScheduler.scheduleReminderChecks(this)
         val cloudSyncEnabled = runBlocking { cloudBackupPreferencesManager.cloudSyncEnabled.first() }
         CloudBackupScheduler.scheduleOrCancel(this, enabled = cloudSyncEnabled)
+    }
+
+    companion object {
+        lateinit var instance: GarageApplication
+            private set
     }
 }

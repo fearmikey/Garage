@@ -1,5 +1,6 @@
 package com.fearmikey.garage.ui.vehicle
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -30,6 +31,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -195,6 +198,9 @@ private fun PartsContent(
 
 @Composable
 private fun PartsGroupCard(group: PartsGroup) {
+    @Suppress("DEPRECATION")
+    val clipboardManager = LocalClipboardManager.current
+
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(12.dp)) {
             Text(
@@ -206,8 +212,14 @@ private fun PartsGroupCard(group: PartsGroup) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 6.dp),
+                        .clickable {
+                            if (value.isNotBlank()) {
+                                clipboardManager.setText(AnnotatedString(value))
+                            }
+                        }
+                        .padding(vertical = 6.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         label,
@@ -229,7 +241,7 @@ private fun PartsGroupCard(group: PartsGroup) {
 @Composable
 private fun PartsScreenPreview() {
     GarageTheme {
-        PartsContent(parts = SampleData.tacomaPartsInfo, onEditClicked = {})
+        PartsContent(parts = SampleData.tacomaPartsInfo) {}
     }
 }
 
@@ -237,6 +249,6 @@ private fun PartsScreenPreview() {
 @Composable
 private fun PartsScreenEmptyPreview() {
     GarageTheme {
-        PartsContent(parts = null, onEditClicked = {})
+        PartsContent(parts = null) {}
     }
 }

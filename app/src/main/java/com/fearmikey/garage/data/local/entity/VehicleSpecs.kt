@@ -31,6 +31,8 @@ data class VehicleSpecs(
     val displacementL: String? = null,
     val engineHp: String? = null,
     val fuelType: String? = null,
+    val fuelTypeSecondary: String? = null,
+    val electrificationLevel: String? = null,
     val transmissionStyle: String? = null,
     val transmissionSpeeds: String? = null,
     val bodyClass: String? = null,
@@ -49,8 +51,36 @@ data class VehicleSpecs(
 ) {
     /** True when every field is null/blank, i.e. nothing worth showing on the Specs tab. */
     fun isEmpty(): Boolean = listOf(
-        engineCylinders, displacementL, engineHp, fuelType, transmissionStyle, transmissionSpeeds,
-        bodyClass, doors, gvwr, series, vehicleType, plantCity, plantState, plantCountry, manufacturer,
-        trailerBrakedCapacity, trailerUnbrakedCapacity, gcwr, curbWeight,
+        engineCylinders, displacementL, engineHp, fuelType, fuelTypeSecondary, electrificationLevel,
+        transmissionStyle, transmissionSpeeds, bodyClass, doors, gvwr, series, vehicleType,
+        plantCity, plantState, plantCountry, manufacturer, trailerBrakedCapacity,
+        trailerUnbrakedCapacity, gcwr, curbWeight,
     ).all { it.isNullOrBlank() }
+
+    /** Evaluates whether this vehicle is an Electric Vehicle (EV), PHEV, or Hybrid. */
+    fun isEvOrPhev(): Boolean {
+        val ft1 = fuelType?.lowercase().orEmpty()
+        val ft2 = fuelTypeSecondary?.lowercase().orEmpty()
+        val el = electrificationLevel?.lowercase().orEmpty()
+        val combined = "$ft1 $ft2 $el"
+        return combined.contains("electric") ||
+            combined.contains("electricity") ||
+            combined.contains("bev") ||
+            combined.contains("phev") ||
+            combined.contains("plug-in") ||
+            combined.contains("hybrid") ||
+            combined.contains("hev")
+    }
+
+    /** Evaluates whether this vehicle is a pure Battery Electric Vehicle (BEV) without an ICE engine. */
+    fun isPureEv(): Boolean {
+        val ft1 = fuelType?.lowercase().orEmpty()
+        val ft2 = fuelTypeSecondary?.lowercase().orEmpty()
+        val el = electrificationLevel?.lowercase().orEmpty()
+        val combined = "$ft1 $ft2 $el"
+        val hasGas = combined.contains("gasoline") || combined.contains("diesel") ||
+            combined.contains("flex") || (engineCylinders?.isNotBlank() == true && engineCylinders != "0")
+        return (combined.contains("electric") || combined.contains("bev")) &&
+            !hasGas && !combined.contains("phev") && !combined.contains("hybrid")
+    }
 }

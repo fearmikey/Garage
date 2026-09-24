@@ -23,13 +23,25 @@ class PreferencesManager(private val context: Context) {
         val ONBOARDING_COMPLETED_KEY = booleanPreferencesKey("onboarding_completed")
         val DEFAULT_VEHICLE_ID_KEY = longPreferencesKey("default_vehicle_id")
         val MAINTENANCE_MILEAGE_WINDOW_KEY = intPreferencesKey("maintenance_mileage_window")
+        val MAINTENANCE_DAYS_WINDOW_KEY = intPreferencesKey("maintenance_days_window")
         val APP_OPEN_COUNT_KEY = intPreferencesKey("app_open_count")
         val BUY_ME_A_COFFEE_DONT_ASK_AGAIN_KEY = booleanPreferencesKey("buy_me_a_coffee_dont_ask_again")
         val BUY_ME_A_COFFEE_NEXT_PROMPT_OPEN_COUNT_KEY = intPreferencesKey("buy_me_a_coffee_next_prompt_open_count")
         val MODS_GRID_VIEW_KEY = booleanPreferencesKey("is_mods_grid_view")
         val INCLUDE_MODS_IN_COST_KEY = booleanPreferencesKey("include_mods_in_cost")
+        val AFFILIATE_LINKS_ENABLED_KEY = booleanPreferencesKey("affiliate_links_enabled")
+        val DRIVERS_LICENSE_NUMBER_KEY = stringPreferencesKey("drivers_license_number")
+        val DRIVERS_LICENSE_STATE_KEY = stringPreferencesKey("drivers_license_state")
+        val DRIVERS_LICENSE_EXPIRATION_KEY = longPreferencesKey("drivers_license_expiration")
+        val DRIVERS_LICENSE_NOTES_KEY = stringPreferencesKey("drivers_license_notes")
+        val DRIVERS_LICENSE_IMAGE_FRONT_KEY = stringPreferencesKey("drivers_license_image_front")
+        val DRIVERS_LICENSE_IMAGE_BACK_KEY = stringPreferencesKey("drivers_license_image_back")
+        val DOCUMENT_EXPIRATION_REMINDERS_ENABLED_KEY = booleanPreferencesKey("document_expiration_reminders_enabled")
+        val DOCUMENT_EXPIRATION_DAYS_WINDOW_KEY = intPreferencesKey("document_expiration_days_window")
 
         const val DEFAULT_MAINTENANCE_MILEAGE_WINDOW = 500
+        const val DEFAULT_MAINTENANCE_DAYS_WINDOW = 10
+        const val DEFAULT_DOCUMENT_EXPIRATION_DAYS_WINDOW = 30
     }
 
     val unitsType: Flow<String> = context.dataStore.data
@@ -87,6 +99,11 @@ class PreferencesManager(private val context: Context) {
             preferences[MAINTENANCE_MILEAGE_WINDOW_KEY] ?: DEFAULT_MAINTENANCE_MILEAGE_WINDOW
         }
 
+    val maintenanceDaysWindow: Flow<Int> = context.dataStore.data
+        .map { preferences ->
+            preferences[MAINTENANCE_DAYS_WINDOW_KEY] ?: DEFAULT_MAINTENANCE_DAYS_WINDOW
+        }
+
     val isModsGridView: Flow<Boolean> = context.dataStore.data
         .map { preferences ->
             preferences[MODS_GRID_VIEW_KEY] ?: true
@@ -95,6 +112,51 @@ class PreferencesManager(private val context: Context) {
     val includeModsInCost: Flow<Boolean> = context.dataStore.data
         .map { preferences ->
             preferences[INCLUDE_MODS_IN_COST_KEY] ?: false
+        }
+
+    val affiliateLinksEnabled: Flow<Boolean> = context.dataStore.data
+        .map { preferences ->
+            preferences[AFFILIATE_LINKS_ENABLED_KEY] ?: true
+        }
+
+    val documentExpirationRemindersEnabled: Flow<Boolean> = context.dataStore.data
+        .map { preferences ->
+            preferences[DOCUMENT_EXPIRATION_REMINDERS_ENABLED_KEY] ?: true
+        }
+
+    val documentExpirationDaysWindow: Flow<Int> = context.dataStore.data
+        .map { preferences ->
+            preferences[DOCUMENT_EXPIRATION_DAYS_WINDOW_KEY] ?: DEFAULT_DOCUMENT_EXPIRATION_DAYS_WINDOW
+        }
+
+    val driversLicenseNumber: Flow<String?> = context.dataStore.data
+        .map { preferences ->
+            preferences[DRIVERS_LICENSE_NUMBER_KEY]
+        }
+
+    val driversLicenseState: Flow<String?> = context.dataStore.data
+        .map { preferences ->
+            preferences[DRIVERS_LICENSE_STATE_KEY]
+        }
+
+    val driversLicenseExpiration: Flow<Long?> = context.dataStore.data
+        .map { preferences ->
+            preferences[DRIVERS_LICENSE_EXPIRATION_KEY]
+        }
+
+    val driversLicenseNotes: Flow<String?> = context.dataStore.data
+        .map { preferences ->
+            preferences[DRIVERS_LICENSE_NOTES_KEY]
+        }
+
+    val driversLicenseImageFront: Flow<String?> = context.dataStore.data
+        .map { preferences ->
+            preferences[DRIVERS_LICENSE_IMAGE_FRONT_KEY]
+        }
+
+    val driversLicenseImageBack: Flow<String?> = context.dataStore.data
+        .map { preferences ->
+            preferences[DRIVERS_LICENSE_IMAGE_BACK_KEY]
         }
 
     suspend fun incrementAppOpenCount(): Int {
@@ -159,6 +221,12 @@ class PreferencesManager(private val context: Context) {
         }
     }
 
+    suspend fun setMaintenanceDaysWindow(days: Int) {
+        context.dataStore.edit { preferences ->
+            preferences[MAINTENANCE_DAYS_WINDOW_KEY] = days
+        }
+    }
+
     suspend fun setModsGridView(isGrid: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[MODS_GRID_VIEW_KEY] = isGrid
@@ -168,6 +236,42 @@ class PreferencesManager(private val context: Context) {
     suspend fun setIncludeModsInCost(includeMods: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[INCLUDE_MODS_IN_COST_KEY] = includeMods
+        }
+    }
+
+    suspend fun setAffiliateLinksEnabled(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[AFFILIATE_LINKS_ENABLED_KEY] = enabled
+        }
+    }
+
+    suspend fun setDocumentExpirationRemindersEnabled(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[DOCUMENT_EXPIRATION_REMINDERS_ENABLED_KEY] = enabled
+        }
+    }
+
+    suspend fun setDocumentExpirationDaysWindow(days: Int) {
+        context.dataStore.edit { preferences ->
+            preferences[DOCUMENT_EXPIRATION_DAYS_WINDOW_KEY] = days
+        }
+    }
+
+    suspend fun setDriversLicense(
+        number: String?,
+        state: String?,
+        expiration: Long?,
+        notes: String?,
+        imageFront: String?,
+        imageBack: String?,
+    ) {
+        context.dataStore.edit { preferences ->
+            if (!number.isNullOrBlank()) preferences[DRIVERS_LICENSE_NUMBER_KEY] = number else preferences.remove(DRIVERS_LICENSE_NUMBER_KEY)
+            if (!state.isNullOrBlank()) preferences[DRIVERS_LICENSE_STATE_KEY] = state else preferences.remove(DRIVERS_LICENSE_STATE_KEY)
+            if (expiration != null) preferences[DRIVERS_LICENSE_EXPIRATION_KEY] = expiration else preferences.remove(DRIVERS_LICENSE_EXPIRATION_KEY)
+            if (!notes.isNullOrBlank()) preferences[DRIVERS_LICENSE_NOTES_KEY] = notes else preferences.remove(DRIVERS_LICENSE_NOTES_KEY)
+            if (!imageFront.isNullOrBlank()) preferences[DRIVERS_LICENSE_IMAGE_FRONT_KEY] = imageFront else preferences.remove(DRIVERS_LICENSE_IMAGE_FRONT_KEY)
+            if (!imageBack.isNullOrBlank()) preferences[DRIVERS_LICENSE_IMAGE_BACK_KEY] = imageBack else preferences.remove(DRIVERS_LICENSE_IMAGE_BACK_KEY)
         }
     }
 }

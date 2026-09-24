@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.Vehicle
+import com.fearmikey.garage.data.local.entity.VehicleSpecs
 import com.fearmikey.garage.data.repository.CustomMaintenanceRuleRepository
 import com.fearmikey.garage.data.repository.MaintenanceRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
@@ -54,26 +55,32 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
 
     val suggestions: StateFlow<List<MaintenanceSuggestion>> = combine(
         vehicleRepository.getVehicleById(vehicleId),
+        vehicleRepository.getVehicleSpecs(vehicleId),
         maintenanceRepository.getRecordsForVehicle(vehicleId),
         maintenanceRepository.getLatestMileageForVehicle(vehicleId),
         customMaintenanceRuleRepository.getRulesForVehicle(vehicleId),
         preferencesRepository.maintenanceMileageWindow,
+        preferencesRepository.maintenanceDaysWindow,
     ) { flows: Array<Any?> ->
         val vehicle = flows[0] as? Vehicle
-        val records = (flows[1] as? List<*>)?.filterIsInstance<MaintenanceRecord>() ?: emptyList()
-        val latestMileage = flows[2] as? Int
-        val customRules = (flows[3] as? List<*>)?.filterIsInstance<CustomMaintenanceRule>() ?: emptyList()
-        val mileageWindow = flows[4] as? Int ?: 500
+        val specs = flows[1] as? VehicleSpecs
+        val records = (flows[2] as? List<*>)?.filterIsInstance<MaintenanceRecord>() ?: emptyList()
+        val latestMileage = flows[3] as? Int
+        val customRules = (flows[4] as? List<*>)?.filterIsInstance<CustomMaintenanceRule>() ?: emptyList()
+        val mileageWindow = (flows[5] as? Int) ?: 500
+        val daysWindow = (flows[6] as? Int) ?: 10
 
         if (vehicle == null) {
             emptyList()
         } else {
             MaintenanceScheduleEngine.suggestionsFor(
                 vehicle = vehicle,
+                isPureEv = vehicle.isPureEv(specs),
                 latestMileage = latestMileage,
                 records = records,
                 customRules = customRules.map { it.toMaintenanceRule() },
                 upcomingWindowMiles = mileageWindow,
+                upcomingWindowDays = daysWindow,
             )
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
@@ -111,7 +118,7 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
     fun applyTemplate(template: MaintenanceTemplate) {
         viewModelScope.launch {
             val existing = customMaintenanceRuleRepository.getRulesForVehicle(vehicleId).first()
-            val existingTaskNames = existing.map { it.taskName.lowercase() }.toSet()
+            val existingTaskNames = existing.asSequence().map { it.taskName.lowercase() }.toSet()
 
             for (rule in template.rules) {
                 if (rule.taskName.lowercase() !in existingTaskNames) {
@@ -123,7 +130,7 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
                             intervalMiles = rule.intervalMiles,
                             intervalMonths = rule.intervalMonths,
                             notes = rule.notes,
-                        )
+                        ),
                     )
                 }
             }

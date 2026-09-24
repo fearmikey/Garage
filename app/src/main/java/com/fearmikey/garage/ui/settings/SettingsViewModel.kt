@@ -37,6 +37,10 @@ data class SettingsUiState(
     val theme: String = "system",
     val defaultVehicleId: Long? = null,
     val maintenanceMileageWindow: Int = 500,
+    val maintenanceDaysWindow: Int = 10,
+    val documentExpirationRemindersEnabled: Boolean = true,
+    val documentExpirationDaysWindow: Int = 30,
+    val affiliateLinksEnabled: Boolean = true,
     val vehicles: List<Vehicle> = emptyList(),
     /** True once an import has completed; the UI should prompt the user to restart the app. */
     val importSucceeded: Boolean = false,
@@ -93,6 +97,26 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             preferencesRepository.maintenanceMileageWindow.collect { miles ->
                 _uiState.update { it.copy(maintenanceMileageWindow = miles) }
+            }
+        }
+        viewModelScope.launch {
+            preferencesRepository.maintenanceDaysWindow.collect { days ->
+                _uiState.update { it.copy(maintenanceDaysWindow = days) }
+            }
+        }
+        viewModelScope.launch {
+            preferencesRepository.affiliateLinksEnabled.collect { enabled ->
+                _uiState.update { it.copy(affiliateLinksEnabled = enabled) }
+            }
+        }
+        viewModelScope.launch {
+            preferencesRepository.documentExpirationRemindersEnabled.collect { enabled ->
+                _uiState.update { it.copy(documentExpirationRemindersEnabled = enabled) }
+            }
+        }
+        viewModelScope.launch {
+            preferencesRepository.documentExpirationDaysWindow.collect { days ->
+                _uiState.update { it.copy(documentExpirationDaysWindow = days) }
             }
         }
         viewModelScope.launch {
@@ -204,6 +228,33 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             preferencesRepository.setMaintenanceMileageWindow(miles)
             WorkScheduler.triggerImmediateReminderCheck(context)
+        }
+    }
+
+    fun setMaintenanceDaysWindow(days: Int) {
+        viewModelScope.launch {
+            preferencesRepository.setMaintenanceDaysWindow(days)
+            WorkScheduler.triggerImmediateReminderCheck(context)
+        }
+    }
+
+    fun setDocumentExpirationRemindersEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            preferencesRepository.setDocumentExpirationRemindersEnabled(enabled)
+            WorkScheduler.triggerImmediateReminderCheck(context)
+        }
+    }
+
+    fun setDocumentExpirationDaysWindow(days: Int) {
+        viewModelScope.launch {
+            preferencesRepository.setDocumentExpirationDaysWindow(days)
+            WorkScheduler.triggerImmediateReminderCheck(context)
+        }
+    }
+
+    fun setAffiliateLinksEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            preferencesRepository.setAffiliateLinksEnabled(enabled)
         }
     }
 

@@ -9,6 +9,9 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.time.Instant
+import java.time.ZoneId
+import java.util.concurrent.TimeUnit
 
 class MaintenanceScheduleEngineTest {
 
@@ -33,14 +36,39 @@ class MaintenanceScheduleEngineTest {
         drivetrain = Drivetrain.FOUR_WD,
     )
 
+    private val pureEvModel = Vehicle(
+        id = 4,
+        make = "Tesla",
+        model = "Model 3",
+        drivetrain = Drivetrain.AWD,
+    )
+
     @Test
     fun `generic rules apply to any vehicle`() {
-        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 0, records = emptyList())
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, isPureEv = false, latestMileage = 0, records = emptyList())
 
         assertTrue(suggestions.any { it.rule.taskName == "Engine oil change" })
         assertTrue(suggestions.any { it.rule.taskName == "Rotation and Balance" })
         assertTrue(suggestions.any { it.rule.taskName == "Rust prevention" })
         assertTrue(suggestions.any { it.rule.taskName == "Paint protection" })
+    }
+
+    @Test
+    fun `ICE rules are excluded for pure EVs`() {
+        // pureEvModel is a Tesla Model 3
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(pureEvModel, isPureEv = true, latestMileage = 0, records = emptyList())
+
+        // Included generic stuff
+        assertTrue(suggestions.any { it.rule.taskName == "Rotation and Balance" })
+        assertTrue(suggestions.any { it.rule.taskName == "Wiper blade replacement" })
+        assertTrue(suggestions.any { it.rule.taskName == "Cabin air filter replacement" })
+
+        // Excluded ICE stuff
+        assertTrue(suggestions.none { it.rule.taskName == "Engine oil change" })
+        assertTrue(suggestions.none { it.rule.taskName == "Spark plug replacement" })
+        assertTrue(suggestions.none { it.rule.taskName == "Engine air filter replacement" })
+        assertTrue(suggestions.none { it.rule.taskName == "Serpentine belt replacement" })
+        assertTrue(suggestions.none { it.rule.taskName == "Coolant flush" })
     }
 
     @Test
@@ -91,7 +119,7 @@ class MaintenanceScheduleEngineTest {
                 description = "Engine oil change",
                 cost = 50.0,
                 category = MaintenanceCategory.FLUIDS,
-            )
+            ),
         )
 
         val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 20_200, records = records)
@@ -331,6 +359,51 @@ class MaintenanceScheduleEngineTest {
             records = records,
             now = testNow,
             upcomingWindowMiles = 500,
+        )
+        val oilChangeUpcoming = suggestionsUpcoming.first { it.rule.taskName == "Engine oil change" }
+        assertEquals(ReminderStatus.UPCOMING, oilChangeUpcoming.status)
+    }
+
+    @Test
+    fun `custom upcoming window days affects status`() {
+        val testNow = System.currentTimeMillis()
+        val fifteenDaysMillis = TimeUnit.DAYS.toMillis(15)
+        val sixMonthsAgoPlus15Days = Instant.ofEpochMilli(testNow)
+            .atZone(ZoneId.systemDefault())
+            .minusMonths(6)
+            .toInstant()
+            .toEpochMilli() + fifteenDaysMillis
+
+        val records = listOf(
+            MaintenanceRecord(
+                vehicleId = fwdCivic.id,
+                date = sixMonthsAgoPlus15Days,
+                mileage = 10_000,
+                taskName = "Engine oil change",
+                description = "Oil change",
+                cost = 50.0,
+                category = MaintenanceCategory.FLUIDS,
+            )
+        )
+
+        // With upcomingWindowDays = 7: due in 15 days > 7 days -> OK
+        val suggestionsOk = MaintenanceScheduleEngine.suggestionsFor(
+            vehicle = fwdCivic,
+            latestMileage = 10_000,
+            records = records,
+            now = testNow,
+            upcomingWindowDays = 7,
+        )
+        val oilChangeOk = suggestionsOk.first { it.rule.taskName == "Engine oil change" }
+        assertEquals(ReminderStatus.OK, oilChangeOk.status)
+
+        // With upcomingWindowDays = 20: due in 15 days <= 20 days -> UPCOMING
+        val suggestionsUpcoming = MaintenanceScheduleEngine.suggestionsFor(
+            vehicle = fwdCivic,
+            latestMileage = 10_000,
+            records = records,
+            now = testNow,
+            upcomingWindowDays = 20,
         )
         val oilChangeUpcoming = suggestionsUpcoming.first { it.rule.taskName == "Engine oil change" }
         assertEquals(ReminderStatus.UPCOMING, oilChangeUpcoming.status)

@@ -40,6 +40,15 @@ data class RegistrationInsuranceUiState(
     val inspectionResult: String = "",
     val inspectionNotes: String = "",
 
+    val emissionsExpiration: Long? = null,
+    val emissionsDate: Long? = null,
+    val emissionsResult: String = "",
+    val emissionsNotes: String = "",
+
+    val inspectionStickerExpiration: Long? = null,
+    val inspectionStickerNumber: String = "",
+    val inspectionStickerNotes: String = "",
+
     val insuranceProvider: String = "",
     val policyNumber: String = "",
     val insuranceExpiration: Long? = null,
@@ -48,6 +57,10 @@ data class RegistrationInsuranceUiState(
     val insuranceNotes: String = "",
     val insuranceImageFilename: String? = null,
     val pickedInsuranceImageUri: Uri? = null,
+
+    val tollPassParkingExpiration: Long? = null,
+    val tollPassParkingAccount: String = "",
+    val tollPassParkingNotes: String = "",
 ) {
     val hasRegistrationData: Boolean
         get() = licensePlate.isNotBlank() || registrationState.isNotBlank() || (registrationExpiration != null) ||
@@ -58,10 +71,22 @@ data class RegistrationInsuranceUiState(
         get() = (inspectionExpiration != null) || (inspectionDate != null) || inspectionResult.isNotBlank() ||
             inspectionNotes.isNotBlank()
 
+    val hasEmissionsData: Boolean
+        get() = (emissionsExpiration != null) || (emissionsDate != null) || emissionsResult.isNotBlank() ||
+            emissionsNotes.isNotBlank()
+
+    val hasInspectionStickerData: Boolean
+        get() = (inspectionStickerExpiration != null) || inspectionStickerNumber.isNotBlank() ||
+            inspectionStickerNotes.isNotBlank()
+
     val hasInsuranceData: Boolean
         get() = insuranceProvider.isNotBlank() || policyNumber.isNotBlank() || (insuranceExpiration != null) ||
             insurancePremium.isNotBlank() || insuranceAgentContact.isNotBlank() || insuranceNotes.isNotBlank() ||
             (insuranceImageFilename != null) || (pickedInsuranceImageUri != null)
+
+    val hasTollPassParkingData: Boolean
+        get() = (tollPassParkingExpiration != null) || tollPassParkingAccount.isNotBlank() ||
+            tollPassParkingNotes.isNotBlank()
 }
 
 @HiltViewModel
@@ -107,6 +132,15 @@ class RegistrationInsuranceViewModel @Inject constructor(
                 inspectionResult = currentRecord?.inspectionResult.orEmpty(),
                 inspectionNotes = currentRecord?.inspectionNotes.orEmpty(),
 
+                emissionsExpiration = currentRecord?.emissionsExpiration,
+                emissionsDate = currentRecord?.emissionsDate,
+                emissionsResult = currentRecord?.emissionsResult.orEmpty(),
+                emissionsNotes = currentRecord?.emissionsNotes.orEmpty(),
+
+                inspectionStickerExpiration = currentRecord?.inspectionStickerExpiration,
+                inspectionStickerNumber = currentRecord?.inspectionStickerNumber.orEmpty(),
+                inspectionStickerNotes = currentRecord?.inspectionStickerNotes.orEmpty(),
+
                 insuranceProvider = currentRecord?.insuranceProvider.orEmpty(),
                 policyNumber = currentRecord?.policyNumber.orEmpty(),
                 insuranceExpiration = currentRecord?.insuranceExpiration,
@@ -115,6 +149,10 @@ class RegistrationInsuranceViewModel @Inject constructor(
                 insuranceNotes = currentRecord?.insuranceNotes.orEmpty(),
                 insuranceImageFilename = currentRecord?.insuranceImageUri,
                 pickedInsuranceImageUri = null,
+
+                tollPassParkingExpiration = currentRecord?.tollPassParkingExpiration,
+                tollPassParkingAccount = currentRecord?.tollPassParkingAccount.orEmpty(),
+                tollPassParkingNotes = currentRecord?.tollPassParkingNotes.orEmpty(),
             )
         }
     }
@@ -167,6 +205,34 @@ class RegistrationInsuranceViewModel @Inject constructor(
         _sheetState.update { it.copy(inspectionNotes = value) }
     }
 
+    fun onEmissionsExpirationChanged(value: Long?) {
+        _sheetState.update { it.copy(emissionsExpiration = value) }
+    }
+
+    fun onEmissionsDateChanged(value: Long?) {
+        _sheetState.update { it.copy(emissionsDate = value) }
+    }
+
+    fun onEmissionsResultChanged(value: String) {
+        _sheetState.update { it.copy(emissionsResult = value) }
+    }
+
+    fun onEmissionsNotesChanged(value: String) {
+        _sheetState.update { it.copy(emissionsNotes = value) }
+    }
+
+    fun onInspectionStickerExpirationChanged(value: Long?) {
+        _sheetState.update { it.copy(inspectionStickerExpiration = value) }
+    }
+
+    fun onInspectionStickerNumberChanged(value: String) {
+        _sheetState.update { it.copy(inspectionStickerNumber = value) }
+    }
+
+    fun onInspectionStickerNotesChanged(value: String) {
+        _sheetState.update { it.copy(inspectionStickerNotes = value) }
+    }
+
     fun onInsuranceProviderChanged(value: String) {
         _sheetState.update { it.copy(insuranceProvider = value) }
     }
@@ -197,6 +263,18 @@ class RegistrationInsuranceViewModel @Inject constructor(
 
     fun onRemoveInsuranceImage() {
         _sheetState.update { it.copy(pickedInsuranceImageUri = null, insuranceImageFilename = null) }
+    }
+
+    fun onTollPassParkingExpirationChanged(value: Long?) {
+        _sheetState.update { it.copy(tollPassParkingExpiration = value) }
+    }
+
+    fun onTollPassParkingAccountChanged(value: String) {
+        _sheetState.update { it.copy(tollPassParkingAccount = value) }
+    }
+
+    fun onTollPassParkingNotesChanged(value: String) {
+        _sheetState.update { it.copy(tollPassParkingNotes = value) }
     }
 
     fun onDeleteRegistrationSection() {
@@ -230,6 +308,33 @@ class RegistrationInsuranceViewModel @Inject constructor(
         }
     }
 
+    fun onDeleteEmissionsSection() {
+        viewModelScope.launch {
+            _sheetState.update { state ->
+                state.copy(
+                    emissionsExpiration = null,
+                    emissionsDate = null,
+                    emissionsResult = "",
+                    emissionsNotes = "",
+                )
+            }
+            saveCurrentStateInternal()
+        }
+    }
+
+    fun onDeleteInspectionStickerSection() {
+        viewModelScope.launch {
+            _sheetState.update { state ->
+                state.copy(
+                    inspectionStickerExpiration = null,
+                    inspectionStickerNumber = "",
+                    inspectionStickerNotes = "",
+                )
+            }
+            saveCurrentStateInternal()
+        }
+    }
+
     fun onDeleteInsuranceSection() {
         viewModelScope.launch {
             _sheetState.update { state ->
@@ -242,6 +347,19 @@ class RegistrationInsuranceViewModel @Inject constructor(
                     insuranceNotes = "",
                     insuranceImageFilename = null,
                     pickedInsuranceImageUri = null,
+                )
+            }
+            saveCurrentStateInternal()
+        }
+    }
+
+    fun onDeleteTollPassParkingSection() {
+        viewModelScope.launch {
+            _sheetState.update { state ->
+                state.copy(
+                    tollPassParkingExpiration = null,
+                    tollPassParkingAccount = "",
+                    tollPassParkingNotes = "",
                 )
             }
             saveCurrentStateInternal()
@@ -302,6 +420,15 @@ class RegistrationInsuranceViewModel @Inject constructor(
             inspectionResult = currentState.inspectionResult.trim().takeIf { it.isNotBlank() },
             inspectionNotes = currentState.inspectionNotes.trim().takeIf { it.isNotBlank() },
 
+            emissionsExpiration = currentState.emissionsExpiration,
+            emissionsDate = currentState.emissionsDate,
+            emissionsResult = currentState.emissionsResult.trim().takeIf { it.isNotBlank() },
+            emissionsNotes = currentState.emissionsNotes.trim().takeIf { it.isNotBlank() },
+
+            inspectionStickerExpiration = currentState.inspectionStickerExpiration,
+            inspectionStickerNumber = currentState.inspectionStickerNumber.trim().takeIf { it.isNotBlank() },
+            inspectionStickerNotes = currentState.inspectionStickerNotes.trim().takeIf { it.isNotBlank() },
+
             insuranceProvider = currentState.insuranceProvider.trim().takeIf { it.isNotBlank() },
             policyNumber = currentState.policyNumber.trim().takeIf { it.isNotBlank() },
             insuranceExpiration = currentState.insuranceExpiration,
@@ -309,6 +436,10 @@ class RegistrationInsuranceViewModel @Inject constructor(
             insuranceAgentContact = currentState.insuranceAgentContact.trim().takeIf { it.isNotBlank() },
             insuranceNotes = currentState.insuranceNotes.trim().takeIf { it.isNotBlank() },
             insuranceImageUri = finalInsFilename,
+
+            tollPassParkingExpiration = currentState.tollPassParkingExpiration,
+            tollPassParkingAccount = currentState.tollPassParkingAccount.trim().takeIf { it.isNotBlank() },
+            tollPassParkingNotes = currentState.tollPassParkingNotes.trim().takeIf { it.isNotBlank() },
         )
 
         if (newRecord.isEmpty()) {

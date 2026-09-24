@@ -63,6 +63,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -203,65 +204,40 @@ private fun TotalCostCard(
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
             Spacer(modifier = Modifier.height(16.dp))
 
-            if (uiState.includeModsInCost) {
-                Row(
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Max),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                CostSubStat(
+                    title = if (uiState.includeModsInCost) "Maintenance" else "Maintenance & Repairs",
+                    amount = uiState.maintenanceCost,
+                    countText = "${uiState.maintenanceRecordCount} records",
+                    icon = Icons.Default.Handyman,
+                    currencySymbol = uiState.currencySymbol,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .horizontalScroll(rememberScrollState()),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                ) {
-                    CostSubStat(
-                        title = "Maintenance",
-                        amount = uiState.maintenanceCost,
-                        countText = "${uiState.maintenanceRecordCount} records",
-                        icon = Icons.Default.Handyman,
-                        currencySymbol = uiState.currencySymbol,
-                        modifier = Modifier.width(145.dp),
-                    )
+                        .weight(1f)
+                        .fillMaxHeight(),
+                )
 
-                    CostSubStat(
-                        title = "Fuel Spent",
-                        amount = uiState.fuelCost,
-                        countText = "${uiState.fuelRecordCount} fill-ups",
-                        icon = Icons.Default.LocalGasStation,
-                        currencySymbol = uiState.currencySymbol,
-                        modifier = Modifier.width(145.dp),
-                    )
+                CostSubStat(
+                    title = "Fuel Spent",
+                    amount = uiState.fuelCost,
+                    countText = "${uiState.fuelRecordCount} fill-ups",
+                    icon = Icons.Default.LocalGasStation,
+                    currencySymbol = uiState.currencySymbol,
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
+                )
 
+                if (uiState.includeModsInCost) {
                     CostSubStat(
-                        title = "Modifications",
+                        title = "Mods",
                         amount = uiState.modCost,
                         countText = "${uiState.modRecordCount} mods",
                         icon = Icons.Default.Build,
-                        currencySymbol = uiState.currencySymbol,
-                        modifier = Modifier.width(145.dp),
-                    )
-                }
-            } else {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(IntrinsicSize.Max),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    CostSubStat(
-                        title = "Maintenance & Repairs",
-                        amount = uiState.maintenanceCost,
-                        countText = "${uiState.maintenanceRecordCount} records",
-                        icon = Icons.Default.Handyman,
-                        currencySymbol = uiState.currencySymbol,
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight(),
-                    )
-
-                    Spacer(modifier = Modifier.width(16.dp))
-
-                    CostSubStat(
-                        title = "Fuel Spent",
-                        amount = uiState.fuelCost,
-                        countText = "${uiState.fuelRecordCount} fill-ups",
-                        icon = Icons.Default.LocalGasStation,
                         currencySymbol = uiState.currencySymbol,
                         modifier = Modifier
                             .weight(1f)
@@ -287,15 +263,15 @@ private fun CostSubStat(
         shape = RoundedCornerShape(12.dp),
         color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
+                .padding(horizontal = 10.dp, vertical = 10.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Box(
                 modifier = Modifier
-                    .size(36.dp)
+                    .size(28.dp)
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.primaryContainer),
                 contentAlignment = Alignment.Center,
@@ -304,27 +280,33 @@ private fun CostSubStat(
                     imageVector = icon,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(16.dp),
                 )
             }
-            Spacer(modifier = Modifier.width(10.dp))
+
+            Spacer(modifier = Modifier.height(6.dp))
+
             Column {
                 Text(
                     text = title,
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    minLines = 2,
-                    maxLines = 2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Text(
                     text = "%s%.2f".format(currencySymbol, amount),
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Text(
                     text = countText,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.outline,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }
@@ -505,6 +487,7 @@ private fun getCategoryIcon(
     modificationCategory: ModificationCategory? = null,
 ): ImageVector {
     if (key == "FUEL") return Icons.Default.LocalGasStation
+    if (key == "MODIFICATIONS") return Icons.Default.Build
     if (modificationCategory != null) {
         return when (modificationCategory) {
             ModificationCategory.PERFORMANCE -> Icons.Default.Speed
@@ -534,12 +517,26 @@ private fun getCategoryIcon(
 private fun CostOfOwnershipPreview() {
     GarageTheme {
         val sampleUiState = CostOfOwnershipUiState(
-            totalCost = 559.42,
+            totalCost = 809.42,
             maintenanceCost = 340.49,
             fuelCost = 218.93,
+            modCost = 250.00,
             maintenanceRecordCount = 3,
             fuelRecordCount = 4,
+            modRecordCount = 2,
+            includeModsInCost = true,
             categories = listOf(
+                CategoryCostItem(
+                    key = "MODIFICATIONS",
+                    title = "Modifications",
+                    totalCost = 250.00,
+                    percentage = 30.9f,
+                    recordCount = 2,
+                    entries = listOf(
+                        CostEntry(10, System.currentTimeMillis() - 400000000, "Cat-back Exhaust", 180.00, 0, "Performance Exhaust"),
+                        CostEntry(11, System.currentTimeMillis() - 800000000, "Cold Air Intake", 70.00, 0, "Air Intake Filter"),
+                    ),
+                ),
                 CategoryCostItem(
                     key = "FUEL",
                     title = "Fuel",

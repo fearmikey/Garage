@@ -1,0 +1,1 @@
+Added EV charging logging & cost calculator, VIN camera barcode scanner, registration & insurance expiration alerts, home screen quick action widgets, and launcher app shortcuts.

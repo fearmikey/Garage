@@ -11,7 +11,7 @@ import android.net.Uri
  * Play Services integrations or non-free dependencies to this project.
  */
 object FlavorConfig {
-    const val isVinScannerSupported = false
+    const val isVinScannerSupported = true
 
     fun launchOssLicenses(context: Context) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/fearmikey/Garage/blob/main/LICENSE"))

@@ -22,6 +22,7 @@ data class StartupUiState(
     val selectedCurrency: String = "USD",
     val notificationPermissionGranted: Boolean = false,
     val cameraPermissionGranted: Boolean = false,
+    val affiliateLinksEnabled: Boolean = true,
 )
 
 @HiltViewModel
@@ -37,10 +38,12 @@ class StartupViewModel @Inject constructor(
         viewModelScope.launch {
             val currentUnits = preferencesRepository.unitsType.first()
             val currentCurrency = preferencesRepository.currencyCode.first()
+            val affiliateLinks = preferencesRepository.affiliateLinksEnabled.first()
             _uiState.update {
                 it.copy(
                     selectedUnits = currentUnits,
                     selectedCurrency = currentCurrency,
+                    affiliateLinksEnabled = affiliateLinks,
                 )
             }
         }
@@ -82,10 +85,15 @@ class StartupViewModel @Inject constructor(
         _uiState.update { it.copy(selectedCurrency = currency) }
     }
 
+    fun toggleAffiliateLinks(enabled: Boolean) {
+        _uiState.update { it.copy(affiliateLinksEnabled = enabled) }
+    }
+
     fun completeStartup(onFinished: () -> Unit) {
         viewModelScope.launch {
             preferencesRepository.setUnitsType(_uiState.value.selectedUnits)
             preferencesRepository.setCurrencyCode(_uiState.value.selectedCurrency)
+            preferencesRepository.setAffiliateLinksEnabled(_uiState.value.affiliateLinksEnabled)
             preferencesRepository.setOnboardingCompleted(completed = true)
             onFinished()
         }

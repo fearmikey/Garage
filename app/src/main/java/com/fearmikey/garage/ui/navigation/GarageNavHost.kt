@@ -12,14 +12,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.fearmikey.garage.MainViewModel
 import com.fearmikey.garage.PendingDeepLink
+import com.fearmikey.garage.ui.components.UpdateOdometerDialog
 import com.fearmikey.garage.ui.dashboard.DashboardScreen
 import com.fearmikey.garage.ui.maintenance.export.MaintenanceExportScreen
 import com.fearmikey.garage.ui.settings.SettingsScreen
@@ -27,12 +34,12 @@ import com.fearmikey.garage.ui.startup.StartupScreen
 import com.fearmikey.garage.ui.vehicle.AddEditVehicleScreen
 import com.fearmikey.garage.ui.vehicle.EditPartsScreen
 import com.fearmikey.garage.ui.vehicle.VehicleDetailScreen
-import com.fearmikey.garage.ui.vehicle.scan.VinScannerScreen
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun GarageNavHost(
     navController: NavHostController = rememberNavController(),
+    mainViewModel: MainViewModel = hiltViewModel(),
     pendingDeepLink: PendingDeepLink? = null,
     onDeepLinkHandled: () -> Unit = {},
     isOnboardingCompleted: Boolean? = true,
@@ -47,11 +54,42 @@ fun GarageNavHost(
         return
     }
 
+    val context = LocalContext.current
+    val allVehicles by mainViewModel.allVehicles.collectAsStateWithLifecycle()
+    val unitSystem by mainViewModel.unitSystem.collectAsStateWithLifecycle()
+
     LaunchedEffect(pendingDeepLink) {
         pendingDeepLink?.let {
-            navController.navigate(Destinations.vehicleDetailRoute(it.vehicleId, it.tab, it.openAdd))
-            onDeepLinkHandled()
+            if (!it.openOdometerDialog) {
+                if (it.openDriversLicenseTab) {
+                    navController.navigate(Destinations.dashboardRoute(tab = 1)) {
+                        popUpTo(Destinations.DASHBOARD) { inclusive = true }
+                    }
+                } else {
+                    navController.navigate(Destinations.vehicleDetailRoute(it.vehicleId, it.tab, it.openAdd))
+                }
+                onDeepLinkHandled()
+            }
         }
+    }
+
+    if (pendingDeepLink?.openOdometerDialog == true) {
+        val latestMileageMap = remember { mutableStateMapOf<Long, Int?>() }
+        allVehicles.forEach { vehicle ->
+            val mileageState by mainViewModel.getLatestMileageForVehicle(vehicle.id).collectAsStateWithLifecycle()
+            latestMileageMap[vehicle.id] = mileageState
+        }
+
+        UpdateOdometerDialog(
+            vehicles = allVehicles,
+            initialVehicleId = pendingDeepLink.vehicleId,
+            getLatestMileage = { vehicleId -> latestMileageMap[vehicleId] },
+            unitSystem = unitSystem,
+            onDismiss = onDeepLinkHandled,
+            onSave = { vehicleId, canonicalMileage, date, notes ->
+                mainViewModel.insertOdometerRecord(vehicleId, canonicalMileage, date, notes, context)
+            },
+        )
     }
 
     val startDestination = if (isOnboardingCompleted) Destinations.DASHBOARD else Destinations.STARTUP
@@ -74,8 +112,13 @@ fun GarageNavHost(
                     },
                 )
             }
-            composable(Destinations.DASHBOARD) {
+            composable(
+                route = Destinations.DASHBOARD,
+                arguments = Destinations.dashboardArgs,
+            ) { backStackEntry ->
+                val initialTab = backStackEntry.arguments?.getInt(Destinations.DASHBOARD_TAB_ARG) ?: 0
                 DashboardScreen(
+                    initialTab = initialTab,
                     onAddVehicle = { navController.navigate(Destinations.addVehicleRoute()) },
                     onOpenVehicle = { vehicleId, tab -> navController.navigate(Destinations.vehicleDetailRoute(vehicleId, tab)) },
                     onOpenSettings = { navController.navigate(Destinations.SETTINGS) },
@@ -86,29 +129,11 @@ fun GarageNavHost(
             composable(
                 route = Destinations.ADD_EDIT_VEHICLE_ROUTE,
                 arguments = Destinations.addEditVehicleArgs,
-            ) { backStackEntry ->
-                val scannedVin = backStackEntry.savedStateHandle
-                    .getStateFlow<String?>(Destinations.SCANNED_VIN_RESULT, null)
-                    .collectAsStateWithLifecycle()
+            ) {
                 AddEditVehicleScreen(
                     onDone = { navController.popBackStack(Destinations.DASHBOARD, inclusive = false) },
                     onBack = { navController.popBackStack() },
-                    onScanVinClicked = { navController.navigate(Destinations.SCAN_VIN) },
-                    scannedVin = scannedVin.value,
-                    onScannedVinConsumed = {
-                        backStackEntry.savedStateHandle[Destinations.SCANNED_VIN_RESULT] = null
-                    },
                 )
-            }
-            composable(Destinations.SCAN_VIN) {
-                VinScannerScreen(
-                    onVinScanned = { vin ->
-                        navController.previousBackStackEntry
-                            ?.savedStateHandle
-                            ?.set(Destinations.SCANNED_VIN_RESULT, vin)
-                        navController.popBackStack()
-                    },
-                ) { navController.popBackStack() }
             }
             composable(
                 route = Destinations.VEHICLE_DETAIL_ROUTE,

@@ -1,19 +1,23 @@
 package com.fearmikey.garage
 
+import com.fearmikey.garage.data.local.dao.MaintenanceDao
 import com.fearmikey.garage.data.local.dao.VehicleDao
 import com.fearmikey.garage.data.local.dao.VehiclePartsDao
 import com.fearmikey.garage.data.local.dao.VehicleRegistrationDao
 import com.fearmikey.garage.data.local.dao.VehicleSpecsDao
+import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.local.entity.VehiclePartsInfo
 import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
 import com.fearmikey.garage.data.local.entity.VehicleSpecs
 import com.fearmikey.garage.data.remote.VinDecoderApi
 import com.fearmikey.garage.data.remote.dto.VinDecodeResponse
+import com.fearmikey.garage.data.repository.MaintenanceRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.ui.util.AppCurrency
 import com.fearmikey.garage.ui.util.UnitSystem
+import com.fearmikey.garage.ui.vehicle.VehicleTab
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -28,6 +32,8 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -74,11 +80,21 @@ class MainViewModelTest {
         }
     }
 
-    private fun createFakeVehicleRepository(): VehicleRepository = VehicleRepository(
+    private class FakeMaintenanceDao : MaintenanceDao {
+        val recordsFlow = MutableStateFlow<List<MaintenanceRecord>>(emptyList())
+        override fun getRecordsForVehicleByDate(vehicleId: Long): Flow<List<MaintenanceRecord>> = recordsFlow
+        override fun getRecordsForVehicleByMileage(vehicleId: Long): Flow<List<MaintenanceRecord>> = recordsFlow
+        override fun getLatestMileageForVehicle(vehicleId: Long): Flow<Int?> = MutableStateFlow(42000)
+        override suspend fun upsert(record: MaintenanceRecord): Long = 1L
+        override suspend fun update(record: MaintenanceRecord) {}
+        override suspend fun delete(record: MaintenanceRecord) {}
+    }
+
+    private fun createFakeVehicleRepository(vehicles: List<Vehicle> = emptyList()): VehicleRepository = VehicleRepository(
         vehicleDao = object : VehicleDao {
-            override fun getAllVehicles(): Flow<List<Vehicle>> = MutableStateFlow(emptyList())
-            override fun getVehicleById(vehicleId: Long): Flow<Vehicle?> = MutableStateFlow(null)
-            override suspend fun getVehicleByIdOnce(vehicleId: Long): Vehicle? = null
+            override fun getAllVehicles(): Flow<List<Vehicle>> = MutableStateFlow(vehicles)
+            override fun getVehicleById(vehicleId: Long): Flow<Vehicle?> = MutableStateFlow(vehicles.find { it.id == vehicleId })
+            override suspend fun getVehicleByIdOnce(vehicleId: Long): Vehicle? = vehicles.find { it.id == vehicleId }
             override suspend fun upsert(vehicle: Vehicle): Long = 1L
             override suspend fun update(vehicle: Vehicle) {}
             override suspend fun delete(vehicle: Vehicle) {}
@@ -102,6 +118,9 @@ class MainViewModelTest {
         }
     )
 
+    private fun createFakeMaintenanceRepository(): MaintenanceRepository =
+        MaintenanceRepository(FakeMaintenanceDao())
+
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
@@ -115,7 +134,7 @@ class MainViewModelTest {
     @Test
     fun `first open does not show buy me a coffee prompt`() = runTest {
         val prefsRepo = FakePreferencesRepository()
-        val viewModel = MainViewModel(prefsRepo, createFakeVehicleRepository())
+        val viewModel = MainViewModel(prefsRepo, createFakeVehicleRepository(), createFakeMaintenanceRepository())
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             viewModel.showBuyMeACoffeePrompt.collect()
         }
@@ -130,7 +149,7 @@ class MainViewModelTest {
         val prefsRepo = FakePreferencesRepository().apply {
             appOpenCountFlow.value = 1 // next increment will make it 2
         }
-        val viewModel = MainViewModel(prefsRepo, createFakeVehicleRepository())
+        val viewModel = MainViewModel(prefsRepo, createFakeVehicleRepository(), createFakeMaintenanceRepository())
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             viewModel.showBuyMeACoffeePrompt.collect()
         }
@@ -145,7 +164,7 @@ class MainViewModelTest {
         val prefsRepo = FakePreferencesRepository().apply {
             appOpenCountFlow.value = 1
         }
-        val viewModel = MainViewModel(prefsRepo, createFakeVehicleRepository())
+        val viewModel = MainViewModel(prefsRepo, createFakeVehicleRepository(), createFakeMaintenanceRepository())
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             viewModel.showBuyMeACoffeePrompt.collect()
         }
@@ -165,7 +184,7 @@ class MainViewModelTest {
         val prefsRepo = FakePreferencesRepository().apply {
             appOpenCountFlow.value = 1 // becomes 2 on init
         }
-        val viewModel = MainViewModel(prefsRepo, createFakeVehicleRepository())
+        val viewModel = MainViewModel(prefsRepo, createFakeVehicleRepository(), createFakeMaintenanceRepository())
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             viewModel.showBuyMeACoffeePrompt.collect()
         }
@@ -179,5 +198,39 @@ class MainViewModelTest {
         // Verify next prompt open count is set to 2 + 4 = 6
         assertEquals(6, prefsRepo.buyMeACoffeeNextPromptOpenCountFlow.value)
         assertFalse(viewModel.showBuyMeACoffeePrompt.value)
+    }
+
+    @Test
+    fun `handleDeepLinkIntent ACTION_LOG_FUEL routes to fuel tab with openAdd`() = runTest {
+        val testVehicle = Vehicle(id = 10L, vin = "12345678901234567", make = "Toyota", model = "Tacoma")
+        val prefsRepo = FakePreferencesRepository()
+        val vehicleRepo = createFakeVehicleRepository(listOf(testVehicle))
+        val viewModel = MainViewModel(prefsRepo, vehicleRepo, createFakeMaintenanceRepository())
+
+        viewModel.handleDeepLinkIntent(MainActivity.ACTION_LOG_FUEL, 10L)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val deepLink = viewModel.pendingDeepLink.value
+        assertNotNull(deepLink)
+        assertEquals(10L, deepLink?.vehicleId)
+        assertEquals(VehicleTab.FUEL.ordinal, deepLink?.tab)
+        assertTrue(deepLink?.openAdd == true)
+        assertFalse(deepLink?.openOdometerDialog == true)
+    }
+
+    @Test
+    fun `handleDeepLinkIntent ACTION_UPDATE_ODOMETER routes to odometer dialog`() = runTest {
+        val testVehicle = Vehicle(id = 20L, vin = "98765432109876543", make = "Honda", model = "Civic")
+        val prefsRepo = FakePreferencesRepository()
+        val vehicleRepo = createFakeVehicleRepository(listOf(testVehicle))
+        val viewModel = MainViewModel(prefsRepo, vehicleRepo, createFakeMaintenanceRepository())
+
+        viewModel.handleDeepLinkIntent(MainActivity.ACTION_UPDATE_ODOMETER, 20L)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val deepLink = viewModel.pendingDeepLink.value
+        assertNotNull(deepLink)
+        assertEquals(20L, deepLink?.vehicleId)
+        assertTrue(deepLink?.openOdometerDialog == true)
     }
 }

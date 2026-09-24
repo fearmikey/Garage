@@ -13,6 +13,7 @@ data class MaintenanceTemplateRule(
     val category: MaintenanceCategory,
     val intervalMiles: Int?,
     val intervalMonths: Int?,
+    val isDeferrable: Boolean = false,
     val notes: String? = null,
 )
 
@@ -65,6 +66,7 @@ object MaintenanceScheduleTemplates {
                     category = MaintenanceCategory.BRAKES,
                     intervalMiles = 12_000,
                     intervalMonths = 12,
+                    isDeferrable = true,
                     notes = "Inspect brake pad thickness, rotors, trailer brake controller, and leaf springs.",
                 ),
             ),
@@ -97,11 +99,26 @@ object MaintenanceScheduleTemplates {
                     notes = "Replace both air filters annually for HVAC & engine efficiency.",
                 ),
                 MaintenanceTemplateRule(
+                    taskName = "Wiper Blade Replacement",
+                    category = MaintenanceCategory.OTHER,
+                    intervalMiles = 10_000,
+                    intervalMonths = 6,
+                    notes = "Replace wiper blades for clear visibility.",
+                ),
+                MaintenanceTemplateRule(
+                    taskName = "Serpentine Belt Replacement",
+                    category = MaintenanceCategory.OTHER,
+                    intervalMiles = 60_000,
+                    intervalMonths = 60,
+                    isDeferrable = true,
+                    notes = "Replace drive belts to prevent accessory failures.",
+                ),
+                MaintenanceTemplateRule(
                     taskName = "Multi-Point Inspection",
                     category = MaintenanceCategory.OTHER,
                     intervalMiles = 15_000,
                     intervalMonths = 12,
-                    notes = "Check belts, hoses, wiper blades, lights, and fluid levels.",
+                    notes = "Check hoses, lights, and fluid levels.",
                 ),
             ),
         ),
@@ -123,6 +140,7 @@ object MaintenanceScheduleTemplates {
                     category = MaintenanceCategory.BRAKES,
                     intervalMiles = 20_000,
                     intervalMonths = 24,
+                    isDeferrable = true,
                     notes = "Regenerative braking reduces pad wear, but slide pins need regular lubrication to prevent seizing.",
                 ),
                 MaintenanceTemplateRule(
@@ -173,6 +191,7 @@ object MaintenanceScheduleTemplates {
                     category = MaintenanceCategory.OTHER,
                     intervalMiles = 10_000,
                     intervalMonths = 12,
+                    isDeferrable = true,
                     notes = "Check drive belt tension and inspect for cracking or glazing.",
                 ),
                 MaintenanceTemplateRule(

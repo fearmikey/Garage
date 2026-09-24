@@ -11,7 +11,7 @@ enum class VehicleTab(val title: String) {
     SPECS("Specs"),
     PARTS("Parts"),
     MODS("Mods"),
-    DOCUMENTS("Docs & Insurance"),
+    DOCUMENTS("Documents"),
     RECALLS("Recalls");
 
     companion object {

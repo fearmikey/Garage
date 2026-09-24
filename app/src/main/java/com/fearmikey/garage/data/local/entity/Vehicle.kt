@@ -41,6 +41,19 @@ data class Vehicle(
             imageUri2?.let { add(VehiclePhoto(it, imageOffsetY2)) }
             imageUri3?.let { add(VehiclePhoto(it, imageOffsetY3)) }
         }
+
+    /** 
+     * Evaluates whether this vehicle is a pure Battery Electric Vehicle (BEV) without an ICE engine.
+     * Checks both the provided [specs] and a fallback keyword check on make/model/trim. 
+     */
+    fun isPureEv(specs: VehicleSpecs? = null): Boolean {
+        if (specs?.isPureEv() == true) return true
+        val text = "$make $model $trim".lowercase()
+        val hasGas = text.contains("phev") || text.contains("hybrid") || text.contains("plug-in")
+        return (text.contains("tesla") || text.contains("rivian") || text.contains("polestar") ||
+            text.contains("lucid") || text.contains("ioniq") || text.contains("ev6") || text.contains("id.4") ||
+            text.contains("leaf") || text.contains("bolt")) && !hasGas
+    }
 }
 
 /** Represents a single photo URI (filename) and its vertical offset. */

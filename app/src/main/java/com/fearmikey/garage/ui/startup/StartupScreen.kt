@@ -27,7 +27,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DirectionsCar
-import androidx.compose.material.icons.filled.Gavel
 import androidx.compose.material.icons.filled.LocalCafe
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Speed
@@ -109,6 +108,7 @@ fun StartupScreen(
         uiState = uiState,
         onSelectUnits = viewModel::selectUnits,
         onSelectCurrency = viewModel::selectCurrency,
+        onToggleAffiliateLinks = viewModel::toggleAffiliateLinks,
         onRequestNotificationPermission = {
             notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         },
@@ -125,6 +125,7 @@ private fun StartupContent(
     uiState: StartupUiState,
     onSelectUnits: (String) -> Unit,
     onSelectCurrency: (String) -> Unit,
+    onToggleAffiliateLinks: (Boolean) -> Unit,
     onRequestNotificationPermission: () -> Unit,
     onRequestCameraPermission: () -> Unit,
     onGetStarted: () -> Unit,
@@ -433,6 +434,45 @@ private fun StartupContent(
                         }
                     }
                 }
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                OutlinedCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.outlinedCardColors(containerColor = MaterialTheme.colorScheme.surface),
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = "Enable Affiliate Links",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                )
+                                Spacer(modifier = Modifier.height(2.dp))
+                                Text(
+                                    text = "Allow the app to display optional Amazon affiliate links for tools and parts recommended by the developer. Purchasing through these links helps support the project at no extra cost to you.",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Checkbox(
+                                checked = uiState.affiliateLinksEnabled,
+                                onCheckedChange = onToggleAffiliateLinks,
+                            )
+                        }
+                    }
+                }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -613,9 +653,11 @@ private fun StartupContentPreview() {
                 selectedCurrency = "USD",
                 notificationPermissionGranted = false,
                 cameraPermissionGranted = true,
+                affiliateLinksEnabled = true,
             ),
             onSelectUnits = {},
             onSelectCurrency = {},
+            onToggleAffiliateLinks = {},
             onRequestNotificationPermission = {},
             onRequestCameraPermission = {},
             onGetStarted = {},

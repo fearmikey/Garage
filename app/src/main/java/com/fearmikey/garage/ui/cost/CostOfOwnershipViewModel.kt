@@ -3,11 +3,13 @@ package com.fearmikey.garage.ui.cost
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fearmikey.garage.data.local.entity.ChargingRecord
 import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.ModificationCategory
 import com.fearmikey.garage.data.local.entity.ModificationRecord
+import com.fearmikey.garage.data.repository.ChargingRepository
 import com.fearmikey.garage.data.repository.FuelRepository
 import com.fearmikey.garage.data.repository.MaintenanceRepository
 import com.fearmikey.garage.data.repository.ModificationRepository
@@ -75,6 +77,7 @@ class CostOfOwnershipViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     maintenanceRepository: MaintenanceRepository,
     fuelRepository: FuelRepository,
+    chargingRepository: ChargingRepository,
     modificationRepository: ModificationRepository,
     private val preferencesRepository: PreferencesRepository,
 ) : ViewModel() {
@@ -86,6 +89,7 @@ class CostOfOwnershipViewModel @Inject constructor(
     val uiState: StateFlow<CostOfOwnershipUiState> = combine(
         maintenanceRepository.getRecordsForVehicle(vehicleId),
         fuelRepository.getRecordsForVehicle(vehicleId),
+        chargingRepository.getRecordsForVehicle(vehicleId),
         modificationRepository.getModsForVehicle(vehicleId),
         preferencesRepository.unitSystem,
         preferencesRepository.appCurrency,
@@ -97,11 +101,13 @@ class CostOfOwnershipViewModel @Inject constructor(
         @Suppress("UNCHECKED_CAST")
         val fuelRecords = array[1] as List<FuelRecord>
         @Suppress("UNCHECKED_CAST")
-        val modRecords = array[2] as List<ModificationRecord>
-        val unitSystem = array[3] as UnitSystem
-        val currency = array[4] as AppCurrency
-        val includeMods = array[5] as Boolean
-        val filter = array[6] as TimeFilter
+        val chargingRecords = array[2] as List<ChargingRecord>
+        @Suppress("UNCHECKED_CAST")
+        val modRecords = array[3] as List<ModificationRecord>
+        val unitSystem = array[4] as UnitSystem
+        val currency = array[5] as AppCurrency
+        val includeMods = array[6] as Boolean
+        val filter = array[7] as TimeFilter
 
         val timeRange = computeTimeRange(filter)
 
@@ -115,13 +121,18 @@ class CostOfOwnershipViewModel @Inject constructor(
             ((timeRange.end == null) || (record.date <= timeRange.end))
         }
 
+        val filteredCharging = chargingRecords.filter { record ->
+            ((timeRange.start == null) || (record.date >= timeRange.start)) &&
+            ((timeRange.end == null) || (record.date <= timeRange.end))
+        }
+
         val filteredMods = modRecords.filter { record ->
             ((timeRange.start == null) || (record.date >= timeRange.start)) &&
             ((timeRange.end == null) || (record.date <= timeRange.end))
         }
 
         val maintTotal = filteredMaintenance.sumOf { it.cost }
-        val fuelTotal = filteredFuel.sumOf { it.totalCost }
+        val fuelTotal = filteredFuel.sumOf { it.totalCost } + filteredCharging.sumOf { it.totalCost }
         val modTotal = filteredMods.sumOf { it.cost }
 
         val grandTotal = maintTotal + fuelTotal + if (includeMods) modTotal else 0.0
@@ -160,7 +171,8 @@ class CostOfOwnershipViewModel @Inject constructor(
         }
 
         if (filteredFuel.isNotEmpty()) {
-            val pct = if (grandTotal > 0.0) ((fuelTotal / grandTotal) * 100).toFloat() else 0f
+            val gasTotal = filteredFuel.sumOf { it.totalCost }
+            val pct = if (grandTotal > 0.0) ((gasTotal / grandTotal) * 100).toFloat() else 0f
             val entries = filteredFuel.asSequence().sortedByDescending { it.date }.map { record ->
                 val displayVolume = UnitConverter.displayVolumeValue(record.gallons, unitSystem)
                 val volumeUnit = if (unitSystem == UnitSystem.METRIC) "L" else "gal"
@@ -178,7 +190,7 @@ class CostOfOwnershipViewModel @Inject constructor(
                 CategoryCostItem(
                     key = "FUEL",
                     title = "Fuel",
-                    totalCost = fuelTotal,
+                    totalCost = gasTotal,
                     percentage = pct,
                     recordCount = filteredFuel.size,
                     entries = entries,
@@ -187,37 +199,57 @@ class CostOfOwnershipViewModel @Inject constructor(
             )
         }
 
+        if (filteredCharging.isNotEmpty()) {
+            val chargeTotal = filteredCharging.sumOf { it.totalCost }
+            val pct = if (grandTotal > 0.0) ((chargeTotal / grandTotal) * 100).toFloat() else 0f
+            val entries = filteredCharging.asSequence().sortedByDescending { it.date }.map { record ->
+                CostEntry(
+                    id = record.id,
+                    date = record.date,
+                    title = "Charging Session (${record.chargerSpeed.displayName})",
+                    cost = record.totalCost,
+                    mileage = record.mileage,
+                    detail = "%.1f kWh · %d%% → %d%%".format(record.kwhAdded, record.batteryPercentStart, record.batteryPercentEnd),
+                )
+            }.toList()
+            categoryItems.add(
+                CategoryCostItem(
+                    key = "CHARGING",
+                    title = "EV Charging",
+                    totalCost = chargeTotal,
+                    percentage = pct,
+                    recordCount = filteredCharging.size,
+                    entries = entries,
+                    category = null,
+                ),
+            )
+        }
+
         if (includeMods && filteredMods.isNotEmpty()) {
-            val modsByCategory = filteredMods.groupBy { it.category }
-            ModificationCategory.entries.forEach { modCategory ->
-                val records = modsByCategory[modCategory].orEmpty()
-                val categoryTotal = records.sumOf { it.cost }
-                if (records.isNotEmpty() || (categoryTotal > 0.0)) {
-                    val pct = if (grandTotal > 0.0) ((categoryTotal / grandTotal) * 100).toFloat() else 0f
-                    val entries = records.asSequence().sortedByDescending { it.date }.map { record ->
-                        CostEntry(
-                            id = record.id,
-                            date = record.date,
-                            title = record.title.ifBlank { modCategory.displayName },
-                            cost = record.cost,
-                            mileage = 0,
-                            detail = record.description.takeIf { it.isNotBlank() },
-                        )
-                    }.toList()
-                    categoryItems.add(
-                        CategoryCostItem(
-                            key = "MOD_${modCategory.name}",
-                            title = "Mod: ${modCategory.displayName}",
-                            totalCost = categoryTotal,
-                            percentage = pct,
-                            recordCount = records.size,
-                            entries = entries,
-                            category = null,
-                            modificationCategory = modCategory,
-                        ),
-                    )
-                }
-            }
+            val modTotalCost = filteredMods.sumOf { it.cost }
+            val pct = if (grandTotal > 0.0) ((modTotalCost / grandTotal) * 100).toFloat() else 0f
+            val entries = filteredMods.asSequence().sortedByDescending { it.date }.map { record ->
+                CostEntry(
+                    id = record.id,
+                    date = record.date,
+                    title = record.title.ifBlank { record.category.displayName },
+                    cost = record.cost,
+                    mileage = 0,
+                    detail = record.description.takeIf { it.isNotBlank() } ?: record.category.displayName,
+                )
+            }.toList()
+            categoryItems.add(
+                CategoryCostItem(
+                    key = "MODIFICATIONS",
+                    title = "Modifications",
+                    totalCost = modTotalCost,
+                    percentage = pct,
+                    recordCount = filteredMods.size,
+                    entries = entries,
+                    category = null,
+                    modificationCategory = null,
+                ),
+            )
         }
 
         categoryItems.sortByDescending { it.totalCost }
@@ -228,7 +260,7 @@ class CostOfOwnershipViewModel @Inject constructor(
             fuelCost = fuelTotal,
             modCost = modTotal,
             maintenanceRecordCount = filteredMaintenance.size,
-            fuelRecordCount = filteredFuel.size,
+            fuelRecordCount = filteredFuel.size + filteredCharging.size,
             modRecordCount = filteredMods.size,
             includeModsInCost = includeMods,
             categories = categoryItems,

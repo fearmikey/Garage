@@ -15,4 +15,20 @@
 
     <!-- App widget -->
     <string name="garage_widget_description">Shows upcoming/overdue maintenance reminders and quick-logs service or fuel</string>
+
+    <!-- App Shortcuts & Quick Settings Tiles -->
+    <string name="shortcut_log_fuel_short">Log Fuel</string>
+    <string name="shortcut_log_fuel_long">Log Fuel Fill-Up</string>
+    <string name="shortcut_update_odometer_short">Odometer</string>
+    <string name="shortcut_update_odometer_long">Update Odometer</string>
+    <string name="tile_log_fuel_label">Log Fuel</string>
+    <string name="tile_update_odometer_label">Update Odometer</string>
+    <string name="dialog_update_odometer_title">Update Odometer</string>
+
+    <!-- Scanner -->
+    <string name="cd_go_back">Go back</string>
+    <string name="cd_toggle_flashlight">Toggle flashlight</string>
+    <string name="scan_vin_instruction">Align VIN barcode within frame</string>
+    <string name="cd_scan_vin">Scan VIN</string>
+    <string name="scan_vin_failed">No barcode detected. Align VIN barcode and try again.</string>
 </resources>

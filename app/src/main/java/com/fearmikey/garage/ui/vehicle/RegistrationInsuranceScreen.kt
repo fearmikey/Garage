@@ -39,17 +39,18 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddAPhoto
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.ConfirmationNumber
 import androidx.compose.material.icons.filled.ContactPage
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.LocalParking
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
@@ -65,10 +66,9 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.SecondaryScrollableTabRow
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
@@ -130,6 +130,13 @@ fun RegistrationInsuranceScreen(
         onInspectionDateChanged = viewModel::onInspectionDateChanged,
         onInspectionResultChanged = viewModel::onInspectionResultChanged,
         onInspectionNotesChanged = viewModel::onInspectionNotesChanged,
+        onEmissionsExpirationChanged = viewModel::onEmissionsExpirationChanged,
+        onEmissionsDateChanged = viewModel::onEmissionsDateChanged,
+        onEmissionsResultChanged = viewModel::onEmissionsResultChanged,
+        onEmissionsNotesChanged = viewModel::onEmissionsNotesChanged,
+        onInspectionStickerExpirationChanged = viewModel::onInspectionStickerExpirationChanged,
+        onInspectionStickerNumberChanged = viewModel::onInspectionStickerNumberChanged,
+        onInspectionStickerNotesChanged = viewModel::onInspectionStickerNotesChanged,
         onInsuranceProviderChanged = viewModel::onInsuranceProviderChanged,
         onPolicyNumberChanged = viewModel::onPolicyNumberChanged,
         onInsuranceExpirationChanged = viewModel::onInsuranceExpirationChanged,
@@ -138,9 +145,15 @@ fun RegistrationInsuranceScreen(
         onInsuranceNotesChanged = viewModel::onInsuranceNotesChanged,
         onInsuranceImagePicked = viewModel::onInsuranceImagePicked,
         onRemoveInsuranceImage = viewModel::onRemoveInsuranceImage,
+        onTollPassParkingExpirationChanged = viewModel::onTollPassParkingExpirationChanged,
+        onTollPassParkingAccountChanged = viewModel::onTollPassParkingAccountChanged,
+        onTollPassParkingNotesChanged = viewModel::onTollPassParkingNotesChanged,
         onDeleteRegistrationSection = viewModel::onDeleteRegistrationSection,
         onDeleteInspectionSection = viewModel::onDeleteInspectionSection,
+        onDeleteEmissionsSection = viewModel::onDeleteEmissionsSection,
+        onDeleteInspectionStickerSection = viewModel::onDeleteInspectionStickerSection,
         onDeleteInsuranceSection = viewModel::onDeleteInsuranceSection,
+        onDeleteTollPassParkingSection = viewModel::onDeleteTollPassParkingSection,
         onSave = viewModel::onSave,
         onDelete = viewModel::onDelete,
     )
@@ -164,6 +177,13 @@ private fun RegistrationInsuranceContent(
     onInspectionDateChanged: (Long?) -> Unit,
     onInspectionResultChanged: (String) -> Unit,
     onInspectionNotesChanged: (String) -> Unit,
+    onEmissionsExpirationChanged: (Long?) -> Unit,
+    onEmissionsDateChanged: (Long?) -> Unit,
+    onEmissionsResultChanged: (String) -> Unit,
+    onEmissionsNotesChanged: (String) -> Unit,
+    onInspectionStickerExpirationChanged: (Long?) -> Unit,
+    onInspectionStickerNumberChanged: (String) -> Unit,
+    onInspectionStickerNotesChanged: (String) -> Unit,
     onInsuranceProviderChanged: (String) -> Unit,
     onPolicyNumberChanged: (String) -> Unit,
     onInsuranceExpirationChanged: (Long?) -> Unit,
@@ -172,9 +192,15 @@ private fun RegistrationInsuranceContent(
     onInsuranceNotesChanged: (String) -> Unit,
     onInsuranceImagePicked: (Uri) -> Unit,
     onRemoveInsuranceImage: () -> Unit,
+    onTollPassParkingExpirationChanged: (Long?) -> Unit,
+    onTollPassParkingAccountChanged: (String) -> Unit,
+    onTollPassParkingNotesChanged: (String) -> Unit,
     onDeleteRegistrationSection: () -> Unit,
     onDeleteInspectionSection: () -> Unit,
+    onDeleteEmissionsSection: () -> Unit,
+    onDeleteInspectionStickerSection: () -> Unit,
     onDeleteInsuranceSection: () -> Unit,
+    onDeleteTollPassParkingSection: () -> Unit,
     onSave: () -> Unit,
     onDelete: () -> Unit,
 ) {
@@ -193,7 +219,7 @@ private fun RegistrationInsuranceContent(
             ) {
                 Icon(
                     imageVector = if (hasData) Icons.Default.Edit else Icons.Default.Add,
-                    contentDescription = if (hasData) "Edit details" else "Add registration & insurance",
+                    contentDescription = if (hasData) "Edit details" else "Add vehicle documents",
                 )
             }
         },
@@ -205,7 +231,7 @@ private fun RegistrationInsuranceContent(
         ) {
             if (!hasData) {
                 EmptyState(
-                    message = "No registration, inspection, or insurance info added yet.\nTap + to track tag registration, state inspection, and policy details.",
+                    message = "No vehicle documents added yet.\nTap + to track tag registration, state inspection, emissions, stickers, insurance, or toll passes.",
                     icon = Icons.AutoMirrored.Filled.Assignment,
                 )
             } else {
@@ -234,11 +260,29 @@ private fun RegistrationInsuranceContent(
                     }
 
                     item {
+                        EmissionsCard(
+                            record = record,
+                        )
+                    }
+
+                    item {
+                        InspectionStickerCard(
+                            record = record,
+                        )
+                    }
+
+                    item {
                         InsuranceCard(
                             record = record,
                             currencySymbol = uiState.currencySymbol,
                             imageFileProvider = imageFileProvider,
                             onImageClicked = { previewImageFile = it },
+                        )
+                    }
+
+                    item {
+                        TollParkingCard(
+                            record = record,
                         )
                     }
                 }
@@ -269,6 +313,13 @@ private fun RegistrationInsuranceContent(
             onInspectionDateChanged = onInspectionDateChanged,
             onInspectionResultChanged = onInspectionResultChanged,
             onInspectionNotesChanged = onInspectionNotesChanged,
+            onEmissionsExpirationChanged = onEmissionsExpirationChanged,
+            onEmissionsDateChanged = onEmissionsDateChanged,
+            onEmissionsResultChanged = onEmissionsResultChanged,
+            onEmissionsNotesChanged = onEmissionsNotesChanged,
+            onInspectionStickerExpirationChanged = onInspectionStickerExpirationChanged,
+            onInspectionStickerNumberChanged = onInspectionStickerNumberChanged,
+            onInspectionStickerNotesChanged = onInspectionStickerNotesChanged,
             onInsuranceProviderChanged = onInsuranceProviderChanged,
             onPolicyNumberChanged = onPolicyNumberChanged,
             onInsuranceExpirationChanged = onInsuranceExpirationChanged,
@@ -277,9 +328,15 @@ private fun RegistrationInsuranceContent(
             onInsuranceNotesChanged = onInsuranceNotesChanged,
             onInsuranceImagePicked = onInsuranceImagePicked,
             onRemoveInsuranceImage = onRemoveInsuranceImage,
+            onTollPassParkingExpirationChanged = onTollPassParkingExpirationChanged,
+            onTollPassParkingAccountChanged = onTollPassParkingAccountChanged,
+            onTollPassParkingNotesChanged = onTollPassParkingNotesChanged,
             onDeleteRegistrationSection = onDeleteRegistrationSection,
             onDeleteInspectionSection = onDeleteInspectionSection,
+            onDeleteEmissionsSection = onDeleteEmissionsSection,
+            onDeleteInspectionStickerSection = onDeleteInspectionStickerSection,
             onDeleteInsuranceSection = onDeleteInsuranceSection,
+            onDeleteTollPassParkingSection = onDeleteTollPassParkingSection,
             onSave = onSave,
             onDelete = onDelete,
         )
@@ -293,6 +350,14 @@ private fun RegistrationCard(
     imageFileProvider: (String) -> File,
     onImageClicked: (File) -> Unit,
 ) {
+    if (record.licensePlate.isNullOrBlank() &&
+        record.registrationState.isNullOrBlank() &&
+        record.registrationExpiration == null &&
+        record.registrationFee == null &&
+        record.registrationNotes.isNullOrBlank() &&
+        record.registrationImageUri.isNullOrBlank()
+    ) return
+
     val regImageFile = remember(record.registrationImageUri) {
         record.registrationImageUri?.let(imageFileProvider)
     }
@@ -344,7 +409,6 @@ private fun RegistrationCard(
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             Spacer(modifier = Modifier.height(12.dp))
 
-            // License Plate Badge Display
             if (!record.licensePlate.isNullOrBlank() || !record.registrationState.isNullOrBlank()) {
                 val plateText = listOfNotNull(
                     record.registrationState?.uppercase()?.takeIf { it.isNotBlank() },
@@ -397,7 +461,6 @@ private fun RegistrationCard(
                 Spacer(modifier = Modifier.height(12.dp))
             }
 
-            // Details list
             record.registrationExpiration?.let { exp ->
                 InfoRow(
                     icon = Icons.Default.CalendarToday,
@@ -540,8 +603,188 @@ private fun InspectionCard(
             if (!record.inspectionNotes.isNullOrBlank()) {
                 InfoRow(
                     icon = Icons.AutoMirrored.Filled.Notes,
-                    label = "Notes / Sticker #",
+                    label = "Notes / Station Info",
                     value = record.inspectionNotes,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun EmissionsCard(
+    record: VehicleRegistrationInsurance,
+) {
+    val hasEmissionsData = (record.emissionsExpiration != null) ||
+        (record.emissionsDate != null) ||
+        !record.emissionsResult.isNullOrBlank() ||
+        !record.emissionsNotes.isNullOrBlank()
+
+    if (!hasEmissionsData) return
+
+    ElevatedCard(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.primaryContainer),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.FactCheck,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.size(20.dp),
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = "Emissions & Smog Testing",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+
+                ExpirationStatusChip(expirationDate = record.emissionsExpiration)
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            Spacer(modifier = Modifier.height(12.dp))
+
+            record.emissionsExpiration?.let { exp ->
+                InfoRow(
+                    icon = Icons.Default.CalendarToday,
+                    label = "Emissions Due / Expiration",
+                    value = exp.toDisplayDate(),
+                    isCopyable = false,
+                )
+            }
+
+            record.emissionsDate?.let { date ->
+                InfoRow(
+                    icon = Icons.Default.CalendarToday,
+                    label = "Last Smog Test Date",
+                    value = date.toDisplayDate(),
+                    isCopyable = false,
+                )
+            }
+
+            if (!record.emissionsResult.isNullOrBlank()) {
+                InfoRow(
+                    icon = Icons.AutoMirrored.Filled.Assignment,
+                    label = "Test Result",
+                    value = record.emissionsResult,
+                )
+            }
+
+            if (!record.emissionsNotes.isNullOrBlank()) {
+                InfoRow(
+                    icon = Icons.AutoMirrored.Filled.Notes,
+                    label = "Notes / Station Info",
+                    value = record.emissionsNotes,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun InspectionStickerCard(
+    record: VehicleRegistrationInsurance,
+) {
+    val hasStickerData = (record.inspectionStickerExpiration != null) ||
+        !record.inspectionStickerNumber.isNullOrBlank() ||
+        !record.inspectionStickerNotes.isNullOrBlank()
+
+    if (!hasStickerData) return
+
+    ElevatedCard(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.secondaryContainer),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ConfirmationNumber,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                            modifier = Modifier.size(20.dp),
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = "State & Local Inspection Stickers",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+
+                ExpirationStatusChip(expirationDate = record.inspectionStickerExpiration)
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            Spacer(modifier = Modifier.height(12.dp))
+
+            record.inspectionStickerExpiration?.let { exp ->
+                InfoRow(
+                    icon = Icons.Default.CalendarToday,
+                    label = "Sticker Renewal / Expiration",
+                    value = exp.toDisplayDate(),
+                    isCopyable = false,
+                )
+            }
+
+            if (!record.inspectionStickerNumber.isNullOrBlank()) {
+                InfoRow(
+                    icon = Icons.Default.ConfirmationNumber,
+                    label = "Sticker / Decal #",
+                    value = record.inspectionStickerNumber,
+                )
+            }
+
+            if (!record.inspectionStickerNotes.isNullOrBlank()) {
+                InfoRow(
+                    icon = Icons.AutoMirrored.Filled.Notes,
+                    label = "Notes / Sticker Location",
+                    value = record.inspectionStickerNotes,
                 )
             }
         }
@@ -555,6 +798,15 @@ private fun InsuranceCard(
     imageFileProvider: (String) -> File,
     onImageClicked: (File) -> Unit,
 ) {
+    if (record.insuranceProvider.isNullOrBlank() &&
+        record.policyNumber.isNullOrBlank() &&
+        record.insuranceExpiration == null &&
+        record.insurancePremium == null &&
+        record.insuranceAgentContact.isNullOrBlank() &&
+        record.insuranceNotes.isNullOrBlank() &&
+        record.insuranceImageUri.isNullOrBlank()
+    ) return
+
     val insImageFile = remember(record.insuranceImageUri) {
         record.insuranceImageUri?.let(imageFileProvider)
     }
@@ -704,10 +956,89 @@ private fun InsuranceCard(
     }
 }
 
-private fun copyToClipboard(context: Context, label: String, text: String) {
-    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
-    clipboard?.setPrimaryClip(ClipData.newPlainText(label, text))
-    Toast.makeText(context, "$label copied to clipboard", Toast.LENGTH_SHORT).show()
+@Composable
+private fun TollParkingCard(
+    record: VehicleRegistrationInsurance,
+) {
+    val hasTollData = (record.tollPassParkingExpiration != null) ||
+        !record.tollPassParkingAccount.isNullOrBlank() ||
+        !record.tollPassParkingNotes.isNullOrBlank()
+
+    if (!hasTollData) return
+
+    ElevatedCard(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.tertiaryContainer),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.LocalParking,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onTertiaryContainer,
+                            modifier = Modifier.size(20.dp),
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = "Toll Pass & Parking Permits",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+
+                ExpirationStatusChip(expirationDate = record.tollPassParkingExpiration)
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            Spacer(modifier = Modifier.height(12.dp))
+
+            record.tollPassParkingExpiration?.let { exp ->
+                InfoRow(
+                    icon = Icons.Default.CalendarToday,
+                    label = "Permit / Pass Expiration",
+                    value = exp.toDisplayDate(),
+                    isCopyable = false,
+                )
+            }
+
+            if (!record.tollPassParkingAccount.isNullOrBlank()) {
+                InfoRow(
+                    icon = Icons.Default.CreditCard,
+                    label = "Account / Tag / Permit #",
+                    value = record.tollPassParkingAccount,
+                )
+            }
+
+            if (!record.tollPassParkingNotes.isNullOrBlank()) {
+                InfoRow(
+                    icon = Icons.AutoMirrored.Filled.Notes,
+                    label = "Notes / Provider Details",
+                    value = record.tollPassParkingNotes,
+                )
+            }
+        }
+    }
 }
 
 @Composable
@@ -715,58 +1046,43 @@ private fun InfoRow(
     icon: ImageVector,
     label: String,
     value: String,
-    copyableText: String? = value,
     isCopyable: Boolean = true,
 ) {
     val context = LocalContext.current
-    val textToCopy = copyableText ?: value
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .then(
-                if (isCopyable) {
-                    Modifier
-                        .clip(RoundedCornerShape(8.dp))
-                        .clickable { copyToClipboard(context, label, textToCopy) }
-                        .padding(horizontal = 6.dp, vertical = 6.dp)
-                } else {
-                    Modifier.padding(horizontal = 6.dp, vertical = 4.dp)
-                },
-            ),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.weight(1f),
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(18.dp),
+                if (isCopyable) Modifier.clickable { copyToClipboard(context, label, value) }
+                else Modifier
             )
-            Spacer(modifier = Modifier.width(8.dp))
-            Column {
-                Text(
-                    text = label,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.outline,
-                )
-                Text(
-                    text = value,
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Medium,
-                )
-            }
+            .padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(18.dp),
+        )
+        Spacer(modifier = Modifier.width(12.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.outline,
+            )
+            Text(
+                text = value,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.SemiBold,
+            )
         }
-
         if (isCopyable) {
             Icon(
                 imageVector = Icons.Default.ContentCopy,
                 contentDescription = "Copy $label",
-                tint = MaterialTheme.colorScheme.outline.copy(alpha = 0.6f),
+                tint = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
                 modifier = Modifier.size(16.dp),
             )
         }
@@ -781,15 +1097,15 @@ private fun ExpirationStatusChip(expirationDate: Long?) {
     val daysLeft = TimeUnit.MILLISECONDS.toDays(expirationDate - now)
 
     val (label, color) = when {
-        daysLeft < 0 -> "Expired" to StatusOverdue
-        daysLeft <= 30 -> "Expires Soon" to StatusUpcoming
-        else -> "Active" to StatusOk
+        daysLeft < 0 -> "Expired (%d d ago)".format(-daysLeft) to StatusOverdue
+        daysLeft <= 30 -> "Expires in %d d".format(daysLeft) to StatusUpcoming
+        else -> "Active (%d d left)".format(daysLeft) to StatusOk
     }
 
     AssistChip(
         onClick = {},
         enabled = false,
-        label = { Text(label) },
+        label = { Text(label, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold) },
         leadingIcon = {
             Box(
                 modifier = Modifier
@@ -822,6 +1138,13 @@ private fun AddEditRegistrationInsuranceSheet(
     onInspectionDateChanged: (Long?) -> Unit,
     onInspectionResultChanged: (String) -> Unit,
     onInspectionNotesChanged: (String) -> Unit,
+    onEmissionsExpirationChanged: (Long?) -> Unit,
+    onEmissionsDateChanged: (Long?) -> Unit,
+    onEmissionsResultChanged: (String) -> Unit,
+    onEmissionsNotesChanged: (String) -> Unit,
+    onInspectionStickerExpirationChanged: (Long?) -> Unit,
+    onInspectionStickerNumberChanged: (String) -> Unit,
+    onInspectionStickerNotesChanged: (String) -> Unit,
     onInsuranceProviderChanged: (String) -> Unit,
     onPolicyNumberChanged: (String) -> Unit,
     onInsuranceExpirationChanged: (Long?) -> Unit,
@@ -830,9 +1153,15 @@ private fun AddEditRegistrationInsuranceSheet(
     onInsuranceNotesChanged: (String) -> Unit,
     onInsuranceImagePicked: (Uri) -> Unit,
     onRemoveInsuranceImage: () -> Unit,
+    onTollPassParkingExpirationChanged: (Long?) -> Unit,
+    onTollPassParkingAccountChanged: (String) -> Unit,
+    onTollPassParkingNotesChanged: (String) -> Unit,
     onDeleteRegistrationSection: () -> Unit,
     onDeleteInspectionSection: () -> Unit,
+    onDeleteEmissionsSection: () -> Unit,
+    onDeleteInspectionStickerSection: () -> Unit,
     onDeleteInsuranceSection: () -> Unit,
+    onDeleteTollPassParkingSection: () -> Unit,
     onSave: () -> Unit,
     onDelete: () -> Unit,
 ) {
@@ -847,20 +1176,26 @@ private fun AddEditRegistrationInsuranceSheet(
         contract = ActivityResultContracts.PickVisualMedia(),
     ) { uri -> uri?.let(onInsuranceImagePicked) }
 
-    var showRegDatePicker by remember { mutableStateOf(value = false) }
-    var showInspExpDatePicker by remember { mutableStateOf(value = false) }
-    var showInspDateDatePicker by remember { mutableStateOf(value = false) }
-    var showInsDatePicker by remember { mutableStateOf(value = false) }
+    var showRegDatePicker by remember { mutableStateOf(false) }
+    var showInspExpDatePicker by remember { mutableStateOf(false) }
+    var showInspDateDatePicker by remember { mutableStateOf(false) }
+    var showEmissionsExpDatePicker by remember { mutableStateOf(false) }
+    var showEmissionsDateDatePicker by remember { mutableStateOf(false) }
+    var showStickerExpDatePicker by remember { mutableStateOf(false) }
+    var showInsDatePicker by remember { mutableStateOf(false) }
+    var showTollParkingExpDatePicker by remember { mutableStateOf(false) }
 
-    var showDeleteRegConfirmDialog by remember { mutableStateOf(value = false) }
-    var showDeleteInspConfirmDialog by remember { mutableStateOf(value = false) }
-    var showDeleteInsConfirmDialog by remember { mutableStateOf(value = false) }
-    var showDeleteAllConfirmDialog by remember { mutableStateOf(value = false) }
+    var showDeleteRegConfirmDialog by remember { mutableStateOf(false) }
+    var showDeleteInspConfirmDialog by remember { mutableStateOf(false) }
+    var showDeleteEmissionsConfirmDialog by remember { mutableStateOf(false) }
+    var showDeleteStickerConfirmDialog by remember { mutableStateOf(false) }
+    var showDeleteInsConfirmDialog by remember { mutableStateOf(false) }
+    var showDeleteTollParkingConfirmDialog by remember { mutableStateOf(false) }
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        contentWindowInsets = { BottomSheetDefaults.windowInsets },
+        contentWindowInsets = { WindowInsets(0, 0, 0, 0) },
     ) {
         val sheetScrollState = rememberScrollState()
         Column(
@@ -872,34 +1207,30 @@ private fun AddEditRegistrationInsuranceSheet(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Text(
-                text = "Registration & Insurance",
+                text = "Vehicle Documents & Expirations",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
             )
 
-            SingleChoiceSegmentedButtonRow(
+            SecondaryScrollableTabRow(
+                selectedTabIndex = selectedSheetSegment,
+                edgePadding = 0.dp,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                SegmentedButton(
-                    selected = selectedSheetSegment == 0,
-                    onClick = { selectedSheetSegment = 0 },
-                    shape = SegmentedButtonDefaults.itemShape(index = 0, count = 3),
-                ) {
-                    Text("Tag & Reg")
-                }
-                SegmentedButton(
-                    selected = selectedSheetSegment == 1,
-                    onClick = { selectedSheetSegment = 1 },
-                    shape = SegmentedButtonDefaults.itemShape(index = 1, count = 3),
-                ) {
-                    Text("Inspection")
-                }
-                SegmentedButton(
-                    selected = selectedSheetSegment == 2,
-                    onClick = { selectedSheetSegment = 2 },
-                    shape = SegmentedButtonDefaults.itemShape(index = 2, count = 3),
-                ) {
-                    Text("Insurance")
+                val tabTitles = listOf(
+                    "Tag & Reg",
+                    "Inspection",
+                    "Smog / Emissions",
+                    "Stickers",
+                    "Insurance",
+                    "Toll / Parking",
+                )
+                tabTitles.forEachIndexed { index, title ->
+                    Tab(
+                        selected = selectedSheetSegment == index,
+                        onClick = { selectedSheetSegment = index },
+                        text = { Text(title) },
+                    )
                 }
             }
 
@@ -968,7 +1299,6 @@ private fun AddEditRegistrationInsuranceSheet(
                         modifier = Modifier.fillMaxWidth(),
                     )
 
-                    // Registration card photo picker
                     ImagePickerBox(
                         title = "Registration Card Photo",
                         pickedUri = uiState.pickedRegistrationImageUri,
@@ -1042,8 +1372,8 @@ private fun AddEditRegistrationInsuranceSheet(
                     OutlinedTextField(
                         value = uiState.inspectionNotes,
                         onValueChange = onInspectionNotesChanged,
-                        label = { Text("Inspection Notes / Sticker #") },
-                        placeholder = { Text("Station name, sticker/certificate #...") },
+                        label = { Text("Inspection Notes / Station Info") },
+                        placeholder = { Text("Station name, certificate #...") },
                         minLines = 2,
                         maxLines = 3,
                         keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
@@ -1064,7 +1394,127 @@ private fun AddEditRegistrationInsuranceSheet(
                     }
                 }
                 2 -> {
-                    // Section 3: Insurance Policy
+                    // Section 3: Emissions / Smog Testing
+                    OutlinedTextField(
+                        value = uiState.emissionsExpiration?.toDisplayDate().orEmpty(),
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text("Emissions Expiration / Due Date") },
+                        placeholder = { Text("Select due date") },
+                        trailingIcon = {
+                            IconButton(onClick = { showEmissionsExpDatePicker = true }) {
+                                Icon(Icons.Default.CalendarToday, contentDescription = "Select Emissions Expiration")
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { showEmissionsExpDatePicker = true },
+                    )
+
+                    OutlinedTextField(
+                        value = uiState.emissionsDate?.toDisplayDate().orEmpty(),
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text("Last Smog Test Date") },
+                        placeholder = { Text("Select date tested") },
+                        trailingIcon = {
+                            IconButton(onClick = { showEmissionsDateDatePicker = true }) {
+                                Icon(Icons.Default.CalendarToday, contentDescription = "Select Last Smog Test Date")
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { showEmissionsDateDatePicker = true },
+                    )
+
+                    OutlinedTextField(
+                        value = uiState.emissionsResult,
+                        onValueChange = onEmissionsResultChanged,
+                        label = { Text("Test Result") },
+                        placeholder = { Text("e.g., Passed, Failed, Exempt") },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+
+                    OutlinedTextField(
+                        value = uiState.emissionsNotes,
+                        onValueChange = onEmissionsNotesChanged,
+                        label = { Text("Emissions Notes / Station Details") },
+                        placeholder = { Text("Station location, certificate #, notes...") },
+                        minLines = 2,
+                        maxLines = 3,
+                        keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+
+                    if (uiState.hasEmissionsData) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        OutlinedButton(
+                            onClick = { showDeleteEmissionsConfirmDialog = true },
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error),
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text("Delete Emissions & Smog Info")
+                        }
+                    }
+                }
+                3 -> {
+                    // Section 4: Inspection Stickers & Decals
+                    OutlinedTextField(
+                        value = uiState.inspectionStickerExpiration?.toDisplayDate().orEmpty(),
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text("Sticker Renewal / Expiration Date") },
+                        placeholder = { Text("Select expiration date") },
+                        trailingIcon = {
+                            IconButton(onClick = { showStickerExpDatePicker = true }) {
+                                Icon(Icons.Default.CalendarToday, contentDescription = "Select Sticker Expiration")
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { showStickerExpDatePicker = true },
+                    )
+
+                    OutlinedTextField(
+                        value = uiState.inspectionStickerNumber,
+                        onValueChange = onInspectionStickerNumberChanged,
+                        label = { Text("Sticker / Decal Number") },
+                        placeholder = { Text("e.g., STK-2025-9988") },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters),
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+
+                    OutlinedTextField(
+                        value = uiState.inspectionStickerNotes,
+                        onValueChange = onInspectionStickerNotesChanged,
+                        label = { Text("Sticker Notes / Location") },
+                        placeholder = { Text("e.g., Windshield bottom left, local county decal...") },
+                        minLines = 2,
+                        maxLines = 3,
+                        keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+
+                    if (uiState.hasInspectionStickerData) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        OutlinedButton(
+                            onClick = { showDeleteStickerConfirmDialog = true },
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error),
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text("Delete Inspection Sticker Info")
+                        }
+                    }
+                }
+                4 -> {
+                    // Section 5: Insurance Policy
                     OutlinedTextField(
                         value = uiState.insuranceProvider,
                         onValueChange = onInsuranceProviderChanged,
@@ -1132,7 +1582,6 @@ private fun AddEditRegistrationInsuranceSheet(
                         modifier = Modifier.fillMaxWidth(),
                     )
 
-                    // Insurance card photo picker
                     ImagePickerBox(
                         title = "Insurance Card Photo",
                         pickedUri = uiState.pickedInsuranceImageUri,
@@ -1159,6 +1608,58 @@ private fun AddEditRegistrationInsuranceSheet(
                         }
                     }
                 }
+                5 -> {
+                    // Section 6: Toll Pass & Parking Permits
+                    OutlinedTextField(
+                        value = uiState.tollPassParkingExpiration?.toDisplayDate().orEmpty(),
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text("Pass / Permit Expiration Date") },
+                        placeholder = { Text("Select expiration date") },
+                        trailingIcon = {
+                            IconButton(onClick = { showTollParkingExpDatePicker = true }) {
+                                Icon(Icons.Default.CalendarToday, contentDescription = "Select Toll Pass Expiration")
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { showTollParkingExpDatePicker = true },
+                    )
+
+                    OutlinedTextField(
+                        value = uiState.tollPassParkingAccount,
+                        onValueChange = onTollPassParkingAccountChanged,
+                        label = { Text("Account / Tag / Permit #") },
+                        placeholder = { Text("e.g., EZPass #1234567, Resident Permit #88") },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters),
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+
+                    OutlinedTextField(
+                        value = uiState.tollPassParkingNotes,
+                        onValueChange = onTollPassParkingNotesChanged,
+                        label = { Text("Notes / Provider Details") },
+                        placeholder = { Text("Transponder serial, parking spot #, zone notes...") },
+                        minLines = 2,
+                        maxLines = 3,
+                        keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+
+                    if (uiState.hasTollPassParkingData) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        OutlinedButton(
+                            onClick = { showDeleteTollParkingConfirmDialog = true },
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error),
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text("Delete Toll Pass & Parking Info")
+                        }
+                    }
+                }
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -1168,19 +1669,7 @@ private fun AddEditRegistrationInsuranceSheet(
                 enabled = !uiState.isSaving,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(if (uiState.isSaving) "Saving..." else "Save Registration & Insurance")
-            }
-
-            if ((uiState.record != null) && !uiState.record.isEmpty()) {
-                OutlinedButton(
-                    onClick = { showDeleteAllConfirmDialog = true },
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error),
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Delete All Categories")
-                }
+                Text(if (uiState.isSaving) "Saving..." else "Save Vehicle Documents")
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -1271,6 +1760,90 @@ private fun AddEditRegistrationInsuranceSheet(
         }
     }
 
+    if (showEmissionsExpDatePicker) {
+        val datePickerState = rememberDatePickerState(
+            initialSelectedDateMillis = uiState.emissionsExpiration?.toUtcDatePickerMillis(),
+        )
+        DatePickerDialog(
+            onDismissRequest = { showEmissionsExpDatePicker = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        datePickerState.selectedDateMillis?.let { utcMillis ->
+                            onEmissionsExpirationChanged(utcMillis.fromUtcDatePickerMillis())
+                        }
+                        showEmissionsExpDatePicker = false
+                    },
+                ) {
+                    Text("OK")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showEmissionsExpDatePicker = false }) {
+                    Text("Cancel")
+                }
+            },
+        ) {
+            DatePicker(state = datePickerState)
+        }
+    }
+
+    if (showEmissionsDateDatePicker) {
+        val datePickerState = rememberDatePickerState(
+            initialSelectedDateMillis = uiState.emissionsDate?.toUtcDatePickerMillis(),
+        )
+        DatePickerDialog(
+            onDismissRequest = { showEmissionsDateDatePicker = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        datePickerState.selectedDateMillis?.let { utcMillis ->
+                            onEmissionsDateChanged(utcMillis.fromUtcDatePickerMillis())
+                        }
+                        showEmissionsDateDatePicker = false
+                    },
+                ) {
+                    Text("OK")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showEmissionsDateDatePicker = false }) {
+                    Text("Cancel")
+                }
+            },
+        ) {
+            DatePicker(state = datePickerState)
+        }
+    }
+
+    if (showStickerExpDatePicker) {
+        val datePickerState = rememberDatePickerState(
+            initialSelectedDateMillis = uiState.inspectionStickerExpiration?.toUtcDatePickerMillis(),
+        )
+        DatePickerDialog(
+            onDismissRequest = { showStickerExpDatePicker = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        datePickerState.selectedDateMillis?.let { utcMillis ->
+                            onInspectionStickerExpirationChanged(utcMillis.fromUtcDatePickerMillis())
+                        }
+                        showStickerExpDatePicker = false
+                    },
+                ) {
+                    Text("OK")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showStickerExpDatePicker = false }) {
+                    Text("Cancel")
+                }
+            },
+        ) {
+            DatePicker(state = datePickerState)
+        }
+    }
+
     if (showInsDatePicker) {
         val datePickerState = rememberDatePickerState(
             initialSelectedDateMillis = uiState.insuranceExpiration?.toUtcDatePickerMillis(),
@@ -1291,6 +1864,34 @@ private fun AddEditRegistrationInsuranceSheet(
             },
             dismissButton = {
                 TextButton(onClick = { showInsDatePicker = false }) {
+                    Text("Cancel")
+                }
+            },
+        ) {
+            DatePicker(state = datePickerState)
+        }
+    }
+
+    if (showTollParkingExpDatePicker) {
+        val datePickerState = rememberDatePickerState(
+            initialSelectedDateMillis = uiState.tollPassParkingExpiration?.toUtcDatePickerMillis(),
+        )
+        DatePickerDialog(
+            onDismissRequest = { showTollParkingExpDatePicker = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        datePickerState.selectedDateMillis?.let { utcMillis ->
+                            onTollPassParkingExpirationChanged(utcMillis.fromUtcDatePickerMillis())
+                        }
+                        showTollParkingExpDatePicker = false
+                    },
+                ) {
+                    Text("OK")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showTollParkingExpDatePicker = false }) {
                     Text("Cancel")
                 }
             },
@@ -1347,6 +1948,54 @@ private fun AddEditRegistrationInsuranceSheet(
         )
     }
 
+    if (showDeleteEmissionsConfirmDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteEmissionsConfirmDialog = false },
+            title = { Text("Delete Emissions & Smog Info?") },
+            text = { Text("Are you sure you want to delete emissions / smog test details for this vehicle?") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showDeleteEmissionsConfirmDialog = false
+                        onDeleteEmissionsSection()
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
+                ) {
+                    Text("Delete")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteEmissionsConfirmDialog = false }) {
+                    Text("Cancel")
+                }
+            },
+        )
+    }
+
+    if (showDeleteStickerConfirmDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteStickerConfirmDialog = false },
+            title = { Text("Delete Inspection Sticker Info?") },
+            text = { Text("Are you sure you want to delete inspection sticker details for this vehicle?") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showDeleteStickerConfirmDialog = false
+                        onDeleteInspectionStickerSection()
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
+                ) {
+                    Text("Delete")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteStickerConfirmDialog = false }) {
+                    Text("Cancel")
+                }
+            },
+        )
+    }
+
     if (showDeleteInsConfirmDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteInsConfirmDialog = false },
@@ -1371,24 +2020,24 @@ private fun AddEditRegistrationInsuranceSheet(
         )
     }
 
-    if (showDeleteAllConfirmDialog) {
+    if (showDeleteTollParkingConfirmDialog) {
         AlertDialog(
-            onDismissRequest = { showDeleteAllConfirmDialog = false },
-            title = { Text("Delete All Categories?") },
-            text = { Text("Are you sure you want to delete all registration, inspection, and policy records for this vehicle? This action cannot be undone.") },
+            onDismissRequest = { showDeleteTollParkingConfirmDialog = false },
+            title = { Text("Delete Toll Pass & Parking Info?") },
+            text = { Text("Are you sure you want to delete toll pass and parking permit details for this vehicle?") },
             confirmButton = {
                 Button(
                     onClick = {
-                        showDeleteAllConfirmDialog = false
-                        onDelete()
+                        showDeleteTollParkingConfirmDialog = false
+                        onDeleteTollPassParkingSection()
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                 ) {
-                    Text("Delete All")
+                    Text("Delete")
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showDeleteAllConfirmDialog = false }) {
+                TextButton(onClick = { showDeleteTollParkingConfirmDialog = false }) {
                     Text("Cancel")
                 }
             },
@@ -1397,7 +2046,7 @@ private fun AddEditRegistrationInsuranceSheet(
 }
 
 @Composable
-private fun ImagePickerBox(
+internal fun ImagePickerBox(
     title: String,
     pickedUri: Uri?,
     existingFilename: String?,
@@ -1488,7 +2137,7 @@ private fun ImagePickerBox(
 }
 
 @Composable
-private fun ImagePreviewDialog(
+internal fun ImagePreviewDialog(
     imageFile: File,
     onDismiss: () -> Unit,
 ) {
@@ -1527,6 +2176,13 @@ private fun ImagePreviewDialog(
     }
 }
 
+private fun copyToClipboard(context: Context, label: String, text: String) {
+    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val clip = ClipData.newPlainText(label, text)
+    clipboard.setPrimaryClip(clip)
+    Toast.makeText(context, "$label copied to clipboard", Toast.LENGTH_SHORT).show()
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun RegistrationInsuranceScreenPreview() {
@@ -1541,13 +2197,23 @@ private fun RegistrationInsuranceScreenPreview() {
             inspectionExpiration = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(90),
             inspectionDate = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(275),
             inspectionResult = "Passed",
-            inspectionNotes = "Smog Station #102, Certificate #A98124",
+            inspectionNotes = "Station #102, Certificate #A98124",
+            emissionsExpiration = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(30),
+            emissionsDate = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(330),
+            emissionsResult = "Passed",
+            emissionsNotes = "Smog Check Star Station",
+            inspectionStickerExpiration = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(60),
+            inspectionStickerNumber = "STK-2025-99",
+            inspectionStickerNotes = "Windshield lower left",
             insuranceProvider = "Geico Insurance",
             policyNumber = "POL-987654321",
             insuranceExpiration = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(180),
             insurancePremium = 650.00,
             insuranceAgentContact = "John Smith 1-800-841-3000",
             insuranceNotes = "Comprehensive & collision with $500 deductible.",
+            tollPassParkingExpiration = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(120),
+            tollPassParkingAccount = "EZPass #01928374",
+            tollPassParkingNotes = "Transponder in glove box",
         )
 
         RegistrationInsuranceContent(
@@ -1569,6 +2235,13 @@ private fun RegistrationInsuranceScreenPreview() {
             onInspectionDateChanged = {},
             onInspectionResultChanged = {},
             onInspectionNotesChanged = {},
+            onEmissionsExpirationChanged = {},
+            onEmissionsDateChanged = {},
+            onEmissionsResultChanged = {},
+            onEmissionsNotesChanged = {},
+            onInspectionStickerExpirationChanged = {},
+            onInspectionStickerNumberChanged = {},
+            onInspectionStickerNotesChanged = {},
             onInsuranceProviderChanged = {},
             onPolicyNumberChanged = {},
             onInsuranceExpirationChanged = {},
@@ -1577,9 +2250,15 @@ private fun RegistrationInsuranceScreenPreview() {
             onInsuranceNotesChanged = {},
             onInsuranceImagePicked = {},
             onRemoveInsuranceImage = {},
+            onTollPassParkingExpirationChanged = {},
+            onTollPassParkingAccountChanged = {},
+            onTollPassParkingNotesChanged = {},
             onDeleteRegistrationSection = {},
             onDeleteInspectionSection = {},
+            onDeleteEmissionsSection = {},
+            onDeleteInspectionStickerSection = {},
             onDeleteInsuranceSection = {},
+            onDeleteTollPassParkingSection = {},
             onSave = {},
             onDelete = {},
         )

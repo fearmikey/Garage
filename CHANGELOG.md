@@ -1,3 +1,18 @@
+## [1.2.3] - 2026-09-19
+
+### Added
+* **EV Charging Logging & Cost Calculator:** Added full support for electric vehicle charging sessions, energy tracking (kWh), charge rates, and cost estimations.
+* **VIN Camera Barcode Scanner:** Added integrated camera barcode scanner for quick VIN scanning when adding vehicles.
+* **Document Expiration Alerts:** Added registration and insurance document expiration tracking with proactive reminder notifications.
+* **Home Screen Quick Action Widgets & Shortcuts:** Added new Glance widgets for logging fuel and updating vehicle odometers, plus launcher app shortcuts.
+* **Database Migrations (Schemas 17-19):** Schema updates supporting EV charging records, document tracking, and custom rules.
+* **Expanded Test Coverage:** Added unit test suites for charging calculations, document expiration logic, export utilities, and dashboard views.
+
+## [1.2.2] - 2026-09-19
+
+### Added
+* **Updated Build & Dependency Settings:** Updated dependencies and resolved F-Droid build configuration compliance checks.
+
 ## [1.2.1] - 2026-09-19
 
 ### Added

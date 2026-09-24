@@ -43,7 +43,17 @@ object SampleData {
         imageUri = null,
     )
 
-    val vehicles = listOf(tacoma, civic)
+    val teslaModel3 = Vehicle(
+        id = 3,
+        vin = "5YJ3E1EA0NF000003",
+        year = 2022,
+        make = "Tesla",
+        model = "Model 3",
+        trim = "Long Range",
+        imageUri = null,
+    )
+
+    val vehicles = listOf(tacoma, civic, teslaModel3)
 
     val tacomaSpecs = VehicleSpecs(
         vehicleId = tacoma.id,

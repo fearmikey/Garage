@@ -65,9 +65,10 @@ import com.fearmikey.garage.ui.components.EmptyState
 import com.fearmikey.garage.ui.components.StatusChip
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.SampleData
+import com.fearmikey.garage.ui.util.ThousandsSeparatorVisualTransformation
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
-import com.fearmikey.garage.ui.util.formatMileageInput
+import com.fearmikey.garage.ui.util.sanitizeMileageInput
 import com.fearmikey.garage.ui.util.toDisplayDate
 
 @Composable
@@ -169,7 +170,7 @@ private fun MaintenanceSuggestionsContent(
                 modifier = Modifier
                     .padding(innerPadding)
                     .verticalScrollbar(listState),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+                contentPadding = PaddingValues(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 88.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 if (customRules.isNotEmpty()) {
@@ -394,9 +395,10 @@ private fun AddCustomMaintenanceRuleSheet(
 
             OutlinedTextField(
                 value = intervalMiles,
-                onValueChange = { intervalMiles = formatMileageInput(it) },
+                onValueChange = { intervalMiles = sanitizeMileageInput(it) },
                 label = { Text("Interval (${unitSystem.distanceUnit})") },
                 singleLine = true,
+                visualTransformation = ThousandsSeparatorVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next,
