@@ -1,18 +1,17 @@
 package com.fearmikey.garage.ui.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -23,26 +22,30 @@ import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
 import com.fearmikey.garage.ui.util.sanitizeMileageInput
 import com.fearmikey.garage.ui.util.toDisplayDate
+import kotlinx.coroutines.flow.Flow
 
 private fun Vehicle.displayName(): String =
     listOfNotNull(year?.toString(), make, model).joinToString(" ").ifBlank { vin }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UpdateOdometerDialog(
     vehicles: List<Vehicle>,
     initialVehicleId: Long?,
-    getLatestMileage: (vehicleId: Long) -> Int?,
+    getLatestMileageFlow: (vehicleId: Long) -> Flow<Int?>,
     unitSystem: UnitSystem,
     onDismiss: () -> Unit,
     onSave: (vehicleId: Long, canonicalMileage: Int, date: Long, notes: String) -> Unit,
@@ -53,7 +56,9 @@ fun UpdateOdometerDialog(
         mutableStateOf(vehicles.find { it.id == initialVehicleId } ?: vehicles.first())
     }
 
-    val currentMileage = getLatestMileage(selectedVehicle.id)
+    val latestMileageFlow = remember(selectedVehicle.id) { getLatestMileageFlow(selectedVehicle.id) }
+    val currentMileage by latestMileageFlow.collectAsStateWithLifecycle(initialValue = null)
+
     val displayCurrentMileage = currentMileage?.let {
         UnitConverter.displayDistanceValue(it, unitSystem)
     }
@@ -64,7 +69,6 @@ fun UpdateOdometerDialog(
 
     var notesInput by remember { mutableStateOf("") }
     var selectedDate by remember { mutableLongStateOf(System.currentTimeMillis()) }
-    var vehicleDropdownExpanded by remember { mutableStateOf(false) }
 
     val numericInput = mileageInput.filter(Char::isDigit).toIntOrNull()
     val canSave = (numericInput != null) && (numericInput > 0)
@@ -80,39 +84,37 @@ fun UpdateOdometerDialog(
         text = {
             Column(modifier = Modifier.fillMaxWidth()) {
                 if (vehicles.size > 1) {
-                    Text(
-                        text = "Vehicle",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    OutlinedTextField(
-                        value = selectedVehicle.displayName(),
-                        onValueChange = {},
-                        readOnly = true,
-                        trailingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.ArrowDropDown,
-                                contentDescription = "Select vehicle",
-                                modifier = Modifier.clickable { vehicleDropdownExpanded = !vehicleDropdownExpanded },
-                            )
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { vehicleDropdownExpanded = !vehicleDropdownExpanded },
-                    )
-                    DropdownMenu(
+                    var vehicleDropdownExpanded by remember { mutableStateOf(false) }
+                    
+                    ExposedDropdownMenuBox(
                         expanded = vehicleDropdownExpanded,
-                        onDismissRequest = { vehicleDropdownExpanded = false },
+                        onExpandedChange = { vehicleDropdownExpanded = it },
                     ) {
-                        vehicles.forEach { vehicle ->
-                            DropdownMenuItem(
-                                text = { Text(vehicle.displayName()) },
-                                onClick = {
-                                    selectedVehicle = vehicle
-                                    vehicleDropdownExpanded = false
-                                },
-                            )
+                        OutlinedTextField(
+                            value = selectedVehicle.displayName(),
+                            onValueChange = {},
+                            readOnly = true,
+                            label = { Text("Vehicle") },
+                            trailingIcon = {
+                                ExposedDropdownMenuDefaults.TrailingIcon(expanded = vehicleDropdownExpanded)
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+                        )
+                        ExposedDropdownMenu(
+                            expanded = vehicleDropdownExpanded,
+                            onDismissRequest = { vehicleDropdownExpanded = false },
+                        ) {
+                            vehicles.forEach { vehicle ->
+                                DropdownMenuItem(
+                                    text = { Text(vehicle.displayName()) },
+                                    onClick = {
+                                        selectedVehicle = vehicle
+                                        vehicleDropdownExpanded = false
+                                    },
+                                )
+                            }
                         }
                     }
                     Spacer(modifier = Modifier.height(12.dp))

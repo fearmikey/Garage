@@ -153,4 +153,7 @@ dependencies {
 
     // EXIF orientation handling for vehicle photo downsampling
     implementation(libs.androidx.exifinterface)
+
+    // Barcode scanning
+    implementation(libs.zxing.android.embedded)
 }

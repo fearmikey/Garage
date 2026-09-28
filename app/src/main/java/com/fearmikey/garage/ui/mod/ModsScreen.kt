@@ -1,9 +1,8 @@
 package com.fearmikey.garage.ui.mod
 
-import android.content.Intent
 import android.net.Uri
-import androidx.core.net.toUri
 import android.widget.Toast
+import com.fearmikey.garage.util.UrlLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -1252,12 +1251,7 @@ private fun ViewModSheet(
                         modifier = Modifier
                             .weight(1f)
                             .clickable {
-                                try {
-                                    val intent = Intent(Intent.ACTION_VIEW, formattedUrl.toUri())
-                                    context.startActivity(intent)
-                                } catch (_: Exception) {
-                                    Toast.makeText(context, "Could not open link", Toast.LENGTH_SHORT).show()
-                                }
+                                UrlLauncher.openUrl(context, formattedUrl)
                             },
                     ) {
                         Icon(

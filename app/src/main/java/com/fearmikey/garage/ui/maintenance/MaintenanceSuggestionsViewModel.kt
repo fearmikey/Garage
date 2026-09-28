@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
+import com.fearmikey.garage.data.local.entity.IgnoredMaintenanceRule
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.local.entity.VehicleSpecs
@@ -53,12 +54,17 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
         customMaintenanceRuleRepository.getRulesForVehicle(vehicleId)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
+    val ignoredRules: StateFlow<List<IgnoredMaintenanceRule>> =
+        maintenanceRepository.getIgnoredRulesForVehicle(vehicleId)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
     val suggestions: StateFlow<List<MaintenanceSuggestion>> = combine(
         vehicleRepository.getVehicleById(vehicleId),
         vehicleRepository.getVehicleSpecs(vehicleId),
         maintenanceRepository.getRecordsForVehicle(vehicleId),
         maintenanceRepository.getLatestMileageForVehicle(vehicleId),
         customMaintenanceRuleRepository.getRulesForVehicle(vehicleId),
+        maintenanceRepository.getIgnoredRulesForVehicle(vehicleId),
         preferencesRepository.maintenanceMileageWindow,
         preferencesRepository.maintenanceDaysWindow,
     ) { flows: Array<Any?> ->
@@ -67,8 +73,9 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
         val records = (flows[2] as? List<*>)?.filterIsInstance<MaintenanceRecord>() ?: emptyList()
         val latestMileage = flows[3] as? Int
         val customRules = (flows[4] as? List<*>)?.filterIsInstance<CustomMaintenanceRule>() ?: emptyList()
-        val mileageWindow = (flows[5] as? Int) ?: 500
-        val daysWindow = (flows[6] as? Int) ?: 10
+        val ignoredRules = (flows[5] as? List<*>)?.filterIsInstance<IgnoredMaintenanceRule>() ?: emptyList()
+        val mileageWindow = (flows[6] as? Int) ?: 500
+        val daysWindow = (flows[7] as? Int) ?: 10
 
         if (vehicle == null) {
             emptyList()
@@ -79,6 +86,7 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
                 latestMileage = latestMileage,
                 records = records,
                 customRules = customRules.map { it.toMaintenanceRule() },
+                ignoredTaskNames = ignoredRules.map { it.taskName }.toSet(),
                 upcomingWindowMiles = mileageWindow,
                 upcomingWindowDays = daysWindow,
             )
@@ -104,6 +112,20 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
                 newPickedReceiptUri = pickedReceiptUri,
                 deleteExistingReceipt = deleteExistingReceipt,
             )
+            context?.let { WorkScheduler.triggerImmediateReminderCheck(it) }
+        }
+    }
+
+    fun ignoreRule(taskName: String) {
+        viewModelScope.launch {
+            maintenanceRepository.ignoreRule(vehicleId, taskName)
+            context?.let { WorkScheduler.triggerImmediateReminderCheck(it) }
+        }
+    }
+
+    fun unignoreRule(taskName: String) {
+        viewModelScope.launch {
+            maintenanceRepository.unignoreRule(vehicleId, taskName)
             context?.let { WorkScheduler.triggerImmediateReminderCheck(it) }
         }
     }

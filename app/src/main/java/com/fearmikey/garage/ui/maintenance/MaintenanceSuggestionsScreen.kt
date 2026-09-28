@@ -58,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
+import com.fearmikey.garage.data.local.entity.IgnoredMaintenanceRule
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.schedule.MaintenanceSuggestion
@@ -77,6 +78,7 @@ fun MaintenanceSuggestionsScreen(
 ) {
     val suggestions by viewModel.suggestions.collectAsStateWithLifecycle()
     val customRules by viewModel.customRules.collectAsStateWithLifecycle()
+    val ignoredRules by viewModel.ignoredRules.collectAsStateWithLifecycle()
     val latestMileage by viewModel.latestMileage.collectAsStateWithLifecycle()
     val unitSystem by viewModel.unitSystem.collectAsStateWithLifecycle()
     var logSheetSuggestion by remember { mutableStateOf<MaintenanceSuggestion?>(null) }
@@ -86,8 +88,11 @@ fun MaintenanceSuggestionsScreen(
     MaintenanceSuggestionsContent(
         suggestions = suggestions,
         customRules = customRules,
+        ignoredRules = ignoredRules,
         unitSystem = unitSystem,
         onLogNow = { logSheetSuggestion = it },
+        onIgnoreRule = { viewModel.ignoreRule(it.rule.taskName) },
+        onRestoreRule = { viewModel.unignoreRule(it.taskName) },
         onAddCustomRule = { showAddRuleSheet = true },
         onDeleteCustomRule = viewModel::deleteCustomRule,
     )
@@ -145,8 +150,11 @@ fun MaintenanceSuggestionsScreen(
 private fun MaintenanceSuggestionsContent(
     suggestions: List<MaintenanceSuggestion>,
     customRules: List<CustomMaintenanceRule>,
+    ignoredRules: List<IgnoredMaintenanceRule>,
     unitSystem: UnitSystem,
     onLogNow: (MaintenanceSuggestion) -> Unit,
+    onIgnoreRule: (MaintenanceSuggestion) -> Unit,
+    onRestoreRule: (IgnoredMaintenanceRule) -> Unit,
     onAddCustomRule: () -> Unit,
     onDeleteCustomRule: (CustomMaintenanceRule) -> Unit,
 ) {
@@ -158,7 +166,7 @@ private fun MaintenanceSuggestionsContent(
             }
         },
     ) { innerPadding ->
-        if (suggestions.isEmpty() && customRules.isEmpty()) {
+        if (suggestions.isEmpty() && customRules.isEmpty() && ignoredRules.isEmpty()) {
             EmptyState(
                 message = "No suggestions yet.\nLog some maintenance and mileage to see what's due.",
                 modifier = Modifier.padding(innerPadding),
@@ -195,7 +203,25 @@ private fun MaintenanceSuggestionsContent(
                         suggestion = suggestion,
                         unitSystem = unitSystem,
                         onLogNow = { onLogNow(suggestion) },
+                        onIgnore = { onIgnoreRule(suggestion) },
                     )
+                }
+
+                if (ignoredRules.isNotEmpty()) {
+                    item(key = "ignored_rules_header") {
+                        Text(
+                            text = "Ignored tasks (${ignoredRules.size})",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(top = 12.dp, bottom = 4.dp),
+                        )
+                    }
+                    items(ignoredRules, key = { "ignored_${it.id}" }) { ignored ->
+                        IgnoredRuleRow(
+                            rule = ignored,
+                            onRestore = { onRestoreRule(ignored) },
+                        )
+                    }
                 }
             }
         }
@@ -240,6 +266,7 @@ private fun MaintenanceSuggestionRow(
     suggestion: MaintenanceSuggestion,
     unitSystem: UnitSystem,
     onLogNow: () -> Unit,
+    onIgnore: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(modifier = modifier.fillMaxWidth()) {
@@ -270,9 +297,45 @@ private fun MaintenanceSuggestionRow(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 StatusChip(status = suggestion.status)
-                TextButton(onClick = onLogNow) {
-                    Text("Log now")
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    TextButton(onClick = onIgnore) {
+                        Text("Ignore", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Button(onClick = onLogNow) {
+                        Text("Log now")
+                    }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun IgnoredRuleRow(
+    rule: IgnoredMaintenanceRule,
+    onRestore: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)),
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(rule.taskName, style = MaterialTheme.typography.titleSmall)
+                Text(
+                    "Ignored for this vehicle",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            TextButton(onClick = onRestore) {
+                Text("Restore")
             }
         }
     }
@@ -465,8 +528,11 @@ private fun MaintenanceSuggestionsScreenPreview() {
         MaintenanceSuggestionsContent(
             suggestions = SampleData.tacomaMaintenanceSuggestions,
             customRules = SampleData.tacomaCustomRules,
+            ignoredRules = emptyList(),
             unitSystem = UnitSystem.IMPERIAL,
             onLogNow = {},
+            onIgnoreRule = {},
+            onRestoreRule = {},
             onAddCustomRule = {},
             onDeleteCustomRule = {},
         )

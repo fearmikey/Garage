@@ -13,6 +13,7 @@ import com.fearmikey.garage.ui.util.UnitSystem
 import com.fearmikey.garage.ui.vehicle.VehicleTab
 import com.fearmikey.garage.widget.WidgetRefresher
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -95,12 +96,8 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun getLatestMileageForVehicle(vehicleId: Long): StateFlow<Int?> =
-        maintenanceRepository.getLatestMileageForVehicle(vehicleId).stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = null,
-        )
+    fun getLatestMileageForVehicle(vehicleId: Long): Flow<Int?> =
+        maintenanceRepository.getLatestMileageForVehicle(vehicleId)
 
     fun onBuyMeACoffeeClicked() {
         _dismissedBuyMeACoffeeForSession.value = true

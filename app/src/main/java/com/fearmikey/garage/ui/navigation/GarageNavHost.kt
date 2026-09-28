@@ -74,20 +74,15 @@ fun GarageNavHost(
     }
 
     if (pendingDeepLink?.openOdometerDialog == true) {
-        val latestMileageMap = remember { mutableStateMapOf<Long, Int?>() }
-        allVehicles.forEach { vehicle ->
-            val mileageState by mainViewModel.getLatestMileageForVehicle(vehicle.id).collectAsStateWithLifecycle()
-            latestMileageMap[vehicle.id] = mileageState
-        }
-
         UpdateOdometerDialog(
             vehicles = allVehicles,
             initialVehicleId = pendingDeepLink.vehicleId,
-            getLatestMileage = { vehicleId -> latestMileageMap[vehicleId] },
+            getLatestMileageFlow = { vehicleId -> mainViewModel.getLatestMileageForVehicle(vehicleId) },
             unitSystem = unitSystem,
             onDismiss = onDeepLinkHandled,
             onSave = { vehicleId, canonicalMileage, date, notes ->
                 mainViewModel.insertOdometerRecord(vehicleId, canonicalMileage, date, notes, context)
+                onDeepLinkHandled()
             },
         )
     }

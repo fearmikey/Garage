@@ -34,10 +34,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.fearmikey.garage.util.UrlLauncher
 
 data class RecommendedProduct(
     val name: String,
@@ -286,7 +287,7 @@ val developerFavorites = listOf(
 
 @Composable
 fun DeveloperFavoritesContent() {
-    val uriHandler = LocalUriHandler.current
+    val context = LocalContext.current
 
     LazyColumn(
         modifier = Modifier
@@ -321,7 +322,7 @@ fun DeveloperFavoritesContent() {
             items(products) { product ->
                 ProductCard(
                     product = product
-                ) { uriHandler.openUri(product.url) }
+                ) { UrlLauncher.openUrl(context, product.url) }
             }
         }
 

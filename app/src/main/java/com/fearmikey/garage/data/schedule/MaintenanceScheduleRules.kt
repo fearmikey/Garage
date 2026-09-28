@@ -58,12 +58,14 @@ object MaintenanceScheduleRules {
             category = MaintenanceCategory.OTHER,
             intervalMiles = 15_000,
             intervalMonths = 12,
+            isDeferrable = true,
         ),
         MaintenanceRule(
             taskName = "Engine air filter replacement",
             category = MaintenanceCategory.OTHER,
             intervalMiles = 15_000,
             intervalMonths = 12,
+            isDeferrable = true,
             excludePureEv = true,
         ),
         MaintenanceRule(
@@ -85,6 +87,7 @@ object MaintenanceScheduleRules {
             category = MaintenanceCategory.OTHER,
             intervalMiles = 60_000,
             intervalMonths = 60,
+            isDeferrable = true,
             excludePureEv = true,
         ),
         MaintenanceRule(
@@ -99,12 +102,14 @@ object MaintenanceScheduleRules {
             category = MaintenanceCategory.OTHER,
             intervalMiles = 15_000,
             intervalMonths = 12,
+            isDeferrable = true,
         ),
         MaintenanceRule(
             taskName = "Paint protection",
             category = MaintenanceCategory.OTHER,
             intervalMiles = 15_000,
             intervalMonths = 12,
+            isDeferrable = true,
         ),
         MaintenanceRule(
             taskName = "Serpentine belt replacement",
@@ -119,6 +124,7 @@ object MaintenanceScheduleRules {
             category = MaintenanceCategory.OTHER,
             intervalMiles = 10_000,
             intervalMonths = 6,
+            isDeferrable = true,
         ),
         MaintenanceRule(
             taskName = "Brake pad replacement",

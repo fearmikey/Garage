@@ -89,12 +89,14 @@ class GarageWidget : GlanceAppWidget() {
                 val latestMileage = maintenanceRepository.getLatestMileageForVehicle(vehicle.id).first()
                 val records = maintenanceRepository.getRecordsForVehicle(vehicle.id).first()
                 val customRules = customMaintenanceRuleRepository.getRulesForVehicle(vehicle.id).first()
+                val ignoredRules = maintenanceRepository.getIgnoredRulesForVehicle(vehicle.id).first()
 
                 val suggestions = MaintenanceScheduleEngine.suggestionsFor(
                     vehicle = vehicle,
                     latestMileage = latestMileage,
                     records = records,
                     customRules = customRules.map { it.toMaintenanceRule() },
+                    ignoredTaskNames = ignoredRules.map { it.taskName }.toSet(),
                     upcomingWindowMiles = upcomingWindowMiles,
                     upcomingWindowDays = upcomingWindowDays,
                 )

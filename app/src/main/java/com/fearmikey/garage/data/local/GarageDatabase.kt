@@ -9,6 +9,7 @@ import androidx.room.migration.AutoMigrationSpec
 import com.fearmikey.garage.data.local.dao.ChargingDao
 import com.fearmikey.garage.data.local.dao.CustomMaintenanceRuleDao
 import com.fearmikey.garage.data.local.dao.FuelDao
+import com.fearmikey.garage.data.local.dao.IgnoredMaintenanceRuleDao
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
 import com.fearmikey.garage.data.local.dao.ModificationDao
 import com.fearmikey.garage.data.local.dao.VehicleDao
@@ -18,6 +19,7 @@ import com.fearmikey.garage.data.local.dao.VehicleSpecsDao
 import com.fearmikey.garage.data.local.entity.ChargingRecord
 import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
 import com.fearmikey.garage.data.local.entity.FuelRecord
+import com.fearmikey.garage.data.local.entity.IgnoredMaintenanceRule
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.ModificationRecord
 import com.fearmikey.garage.data.local.entity.Vehicle
@@ -32,7 +34,7 @@ const val GARAGE_DATABASE_NAME = "garage.db"
  * The current Room schema version, kept as a standalone constant so it can be
  * compared against a backup's on-disk schema version before restoring it.
  */
-const val GARAGE_DATABASE_VERSION = 19
+const val GARAGE_DATABASE_VERSION = 20
 
 @DeleteTable.Entries(value = [DeleteTable(tableName = "reminders")])
 class DeleteRemindersTableSpec : AutoMigrationSpec
@@ -41,7 +43,7 @@ class DeleteRemindersTableSpec : AutoMigrationSpec
     entities = [
         Vehicle::class, MaintenanceRecord::class, VehicleSpecs::class, FuelRecord::class,
         VehiclePartsInfo::class, CustomMaintenanceRule::class, ModificationRecord::class, VehicleRegistrationInsurance::class,
-        ChargingRecord::class,
+        ChargingRecord::class, IgnoredMaintenanceRule::class,
     ],
     version = GARAGE_DATABASE_VERSION,
     exportSchema = true,
@@ -72,6 +74,8 @@ class DeleteRemindersTableSpec : AutoMigrationSpec
         AutoMigration(from = 17, to = 18),
         // Additive: emissions, inspection sticker, toll pass/parking, and driver's license fields added to vehicle_registration_insurance table.
         AutoMigration(from = 18, to = 19),
+        // Additive: ignored_maintenance_rules table added for ignoring maintenance suggestions per vehicle.
+        AutoMigration(from = 19, to = 20),
     ],
 )
 @TypeConverters(Converters::class)
@@ -85,4 +89,5 @@ abstract class GarageDatabase : RoomDatabase() {
     abstract fun customMaintenanceRuleDao(): CustomMaintenanceRuleDao
     abstract fun modificationDao(): ModificationDao
     abstract fun vehicleRegistrationDao(): VehicleRegistrationDao
+    abstract fun ignoredMaintenanceRuleDao(): IgnoredMaintenanceRuleDao
 }

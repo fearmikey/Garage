@@ -8,6 +8,7 @@ import com.fearmikey.garage.data.fuel.FuelEconomyCalculator
 import com.fearmikey.garage.data.fuel.FuelEconomyEntry
 import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
 import com.fearmikey.garage.data.local.entity.FuelRecord
+import com.fearmikey.garage.data.local.entity.IgnoredMaintenanceRule
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.repository.CustomMaintenanceRuleRepository
@@ -96,6 +97,7 @@ class DashboardViewModel @Inject constructor(
                             customMaintenanceRuleRepository.getRulesForVehicle(vehicle.id),
                             fuelRepository.getRecordsForVehicle(vehicle.id),
                             vehicleRepository.getRegistrationInsurance(vehicle.id),
+                            maintenanceRepository.getIgnoredRulesForVehicle(vehicle.id),
                             preferencesRepository.maintenanceMileageWindow,
                             preferencesRepository.maintenanceDaysWindow,
                         ) { flows: Array<Any?> ->
@@ -104,8 +106,9 @@ class DashboardViewModel @Inject constructor(
                             val customRules = (flows[2] as? List<*>)?.filterIsInstance<CustomMaintenanceRule>() ?: emptyList()
                             val fuelRecords = (flows[3] as? List<*>)?.filterIsInstance<FuelRecord>() ?: emptyList()
                             val regIns = flows[4] as? VehicleRegistrationInsurance
-                            val upcomingWindowMiles = flows[5] as? Int ?: 500
-                            val upcomingWindowDays = flows[6] as? Int ?: 10
+                            val ignoredRules = (flows[5] as? List<*>)?.filterIsInstance<IgnoredMaintenanceRule>() ?: emptyList()
+                            val upcomingWindowMiles = flows[6] as? Int ?: 500
+                            val upcomingWindowDays = flows[7] as? Int ?: 10
 
                             val fuelEntries = FuelEconomyCalculator.entriesFor(fuelRecords)
                             val avgMpg = FuelEconomyCalculator.averageMpg(fuelEntries)
@@ -115,6 +118,7 @@ class DashboardViewModel @Inject constructor(
                                 latestMileage = mileage,
                                 records = maintenanceRecords,
                                 customRules = customRules.map { it.toMaintenanceRule() },
+                                ignoredTaskNames = ignoredRules.map { it.taskName }.toSet(),
                                 upcomingWindowMiles = upcomingWindowMiles,
                                 upcomingWindowDays = upcomingWindowDays,
                             )

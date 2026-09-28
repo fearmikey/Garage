@@ -25,12 +25,16 @@ object MaintenanceScheduleEngine {
         latestMileage: Int?,
         records: List<MaintenanceRecord>,
         customRules: List<MaintenanceRule> = emptyList(),
+        ignoredTaskNames: Set<String> = emptySet(),
         now: Long = System.currentTimeMillis(),
         upcomingWindowMiles: Int = DEFAULT_UPCOMING_WINDOW_MILES,
         upcomingWindowDays: Int = DEFAULT_UPCOMING_WINDOW_DAYS,
     ): List<MaintenanceSuggestion> {
         val builtInMatching = MaintenanceScheduleRules.rules.filter { it.matches(vehicle, isPureEv) }
-        val applicableRules = (builtInMatching + customRules).mostSpecificPerTask()
+        val ignoredLower = ignoredTaskNames.map { it.lowercase() }.toSet()
+        val applicableRules = (builtInMatching + customRules)
+            .mostSpecificPerTask()
+            .filter { rule -> rule.taskName.lowercase() !in ignoredLower }
 
         return applicableRules
             .asSequence()

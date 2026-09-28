@@ -72,6 +72,29 @@ class MaintenanceScheduleEngineTest {
     }
 
     @Test
+    fun `ignored tasks are excluded from suggestions`() {
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(
+            vehicle = fwdCivic,
+            latestMileage = 0,
+            records = emptyList(),
+            ignoredTaskNames = setOf("Paint protection", "Rust prevention", "Wiper blade replacement"),
+        )
+
+        assertTrue(suggestions.none { it.rule.taskName == "Paint protection" })
+        assertTrue(suggestions.none { it.rule.taskName == "Rust prevention" })
+        assertTrue(suggestions.none { it.rule.taskName == "Wiper blade replacement" })
+        assertTrue(suggestions.any { it.rule.taskName == "Engine oil change" })
+    }
+
+    @Test
+    fun `optional items like paint protection, wiper blades, and rust prevention are deferrable`() {
+        val rules = MaintenanceScheduleRules.rules
+        assertTrue(rules.first { it.taskName == "Paint protection" }.isDeferrable)
+        assertTrue(rules.first { it.taskName == "Rust prevention" }.isDeferrable)
+        assertTrue(rules.first { it.taskName == "Wiper blade replacement" }.isDeferrable)
+    }
+
+    @Test
     fun `drivetrain-only rules are excluded for a vehicle without that drivetrain`() {
         val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 0, records = emptyList())
 

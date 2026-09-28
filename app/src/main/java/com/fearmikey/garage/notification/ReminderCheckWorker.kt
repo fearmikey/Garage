@@ -51,6 +51,7 @@ class ReminderCheckWorker @AssistedInject constructor(
             val latestMileage = maintenanceRepository.getLatestMileageForVehicle(vehicle.id).firstOrNull()
             val records = maintenanceRepository.getRecordsForVehicle(vehicle.id).firstOrNull() ?: emptyList()
             val customRules = customMaintenanceRuleRepository.getRulesForVehicle(vehicle.id).firstOrNull() ?: emptyList()
+            val ignoredRules = maintenanceRepository.getIgnoredRulesForVehicle(vehicle.id).firstOrNull() ?: emptyList()
 
             val vehicleLabel = listOfNotNull(vehicle.year?.toString(), vehicle.make, vehicle.model)
                 .joinToString(" ")
@@ -61,6 +62,7 @@ class ReminderCheckWorker @AssistedInject constructor(
                 latestMileage = latestMileage,
                 records = records,
                 customRules = customRules.map { it.toMaintenanceRule() },
+                ignoredTaskNames = ignoredRules.map { it.taskName }.toSet(),
                 upcomingWindowMiles = upcomingWindowMiles,
                 upcomingWindowDays = upcomingWindowDays,
             )

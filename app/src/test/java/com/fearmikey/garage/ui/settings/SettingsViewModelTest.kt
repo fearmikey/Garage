@@ -10,6 +10,7 @@ import com.fearmikey.garage.data.local.GarageDatabase
 import com.fearmikey.garage.data.local.dao.ChargingDao
 import com.fearmikey.garage.data.local.dao.CustomMaintenanceRuleDao
 import com.fearmikey.garage.data.local.dao.FuelDao
+import com.fearmikey.garage.data.local.dao.IgnoredMaintenanceRuleDao
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
 import com.fearmikey.garage.data.local.dao.ModificationDao
 import com.fearmikey.garage.data.local.dao.VehicleDao
@@ -19,6 +20,7 @@ import com.fearmikey.garage.data.local.dao.VehicleSpecsDao
 import com.fearmikey.garage.data.local.entity.ChargingRecord
 import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
 import com.fearmikey.garage.data.local.entity.FuelRecord
+import com.fearmikey.garage.data.local.entity.IgnoredMaintenanceRule
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.ModificationRecord
 import com.fearmikey.garage.data.local.entity.Vehicle
@@ -124,6 +126,12 @@ class SettingsViewModelTest {
         override suspend fun decodeVin(vin: String, format: String): VinDecodeResponse = VinDecodeResponse(results = emptyList())
     }
 
+    private class FakeIgnoredMaintenanceRuleDao : IgnoredMaintenanceRuleDao {
+        override fun getIgnoredRulesForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<IgnoredMaintenanceRule>())
+        override suspend fun ignoreRule(rule: IgnoredMaintenanceRule) {}
+        override suspend fun unignoreRule(vehicleId: Long, taskName: String) {}
+    }
+
     private class TestCloudBackupPreferencesManager(context: Context) : CloudBackupPreferencesManager(context) {
         val enabledFlow = MutableStateFlow(false)
         val folderUriFlow = MutableStateFlow("")
@@ -213,6 +221,7 @@ class SettingsViewModelTest {
                 override suspend fun delete(mod: ModificationRecord) {}
             }
             override fun vehicleRegistrationDao(): VehicleRegistrationDao = FakeVehicleRegistrationDao()
+            override fun ignoredMaintenanceRuleDao(): IgnoredMaintenanceRuleDao = FakeIgnoredMaintenanceRuleDao()
             override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper {
                 throw UnsupportedOperationException()
             }
@@ -301,6 +310,7 @@ class SettingsViewModelTest {
                 override suspend fun delete(mod: ModificationRecord) {}
             }
             override fun vehicleRegistrationDao(): VehicleRegistrationDao = FakeVehicleRegistrationDao()
+            override fun ignoredMaintenanceRuleDao(): IgnoredMaintenanceRuleDao = FakeIgnoredMaintenanceRuleDao()
             override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper {
                 throw UnsupportedOperationException()
             }
@@ -406,6 +416,7 @@ class SettingsViewModelTest {
                 override suspend fun delete(mod: ModificationRecord) {}
             }
             override fun vehicleRegistrationDao(): VehicleRegistrationDao = FakeVehicleRegistrationDao()
+            override fun ignoredMaintenanceRuleDao(): IgnoredMaintenanceRuleDao = FakeIgnoredMaintenanceRuleDao()
             override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper {
                 throw UnsupportedOperationException()
             }

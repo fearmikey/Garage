@@ -7,6 +7,15 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" android:required="false" />
 
+    <queries>
+        <package android:name="com.amazon.mShop.android.shopping" />
+        <package android:name="com.amazon.windowshop" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
+
     <application
         android:name=".GarageApplication"
         android:allowBackup="true"
