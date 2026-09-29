@@ -1,4 +1,4 @@
-## [Unreleased]
+## [1.2.4] - 2026-09-29
 
 ### Added
 * **Initial Mileage & New Vehicle Tracking:** Added support for recording a vehicle's initial mileage and whether it was purchased new.

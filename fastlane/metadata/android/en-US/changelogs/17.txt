@@ -1,0 +1,2 @@
+* Added support for recording a vehicle's initial mileage and whether it was purchased new.
+* Added customizable dashboard settings to toggle the visibility of the Fuel Trend Graph and Fleet Overview sections.
