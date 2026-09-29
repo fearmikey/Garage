@@ -115,6 +115,8 @@ fun AddEditVehicleScreen(
         onModelChanged = viewModel::onModelChanged,
         onTrimChanged = viewModel::onTrimChanged,
         onDrivetrainChanged = viewModel::onDrivetrainChanged,
+        onPurchasedNewChanged = viewModel::onPurchasedNewChanged,
+        onInitialMileageChanged = viewModel::onInitialMileageChanged,
         onImagesPicked = viewModel::onImagesPicked,
         onReplaceImagePicked = viewModel::onReplaceImagePicked,
         onRemovePhoto = viewModel::onRemovePhoto,
@@ -137,6 +139,8 @@ private fun AddEditVehicleContent(
     onModelChanged: (String) -> Unit,
     onTrimChanged: (String) -> Unit,
     onDrivetrainChanged: (Drivetrain) -> Unit = {},
+    onPurchasedNewChanged: (Boolean) -> Unit = {},
+    onInitialMileageChanged: (String) -> Unit = {},
     onImagesPicked: (List<Uri>) -> Unit = {},
     onReplaceImagePicked: (Int, Uri) -> Unit = { _, _ -> },
     onRemovePhoto: (Int) -> Unit = {},
@@ -446,6 +450,51 @@ private fun AddEditVehicleContent(
                     }
                 }
             }
+            
+            var conditionMenuExpanded by remember { mutableStateOf(false) }
+            ExposedDropdownMenuBox(
+                expanded = conditionMenuExpanded,
+                onExpandedChange = { conditionMenuExpanded = it },
+            ) {
+                OutlinedTextField(
+                    value = if (uiState.purchasedNew) "New" else "Used",
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text("Purchased Condition") },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = conditionMenuExpanded) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+                )
+                ExposedDropdownMenu(
+                    expanded = conditionMenuExpanded,
+                    onDismissRequest = { conditionMenuExpanded = false },
+                ) {
+                    DropdownMenuItem(
+                        text = { Text("New") },
+                        onClick = {
+                            onPurchasedNewChanged(true)
+                            conditionMenuExpanded = false
+                        },
+                    )
+                    DropdownMenuItem(
+                        text = { Text("Used") },
+                        onClick = {
+                            onPurchasedNewChanged(false)
+                            conditionMenuExpanded = false
+                        },
+                    )
+                }
+            }
+
+            OutlinedTextField(
+                value = uiState.initialMileage,
+                onValueChange = onInitialMileageChanged,
+                label = { Text("Initial Mileage (Upon Purchase)") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth(),
+            )
 
             Button(
                 onClick = onSave,

@@ -53,6 +53,8 @@ import java.io.File
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import com.fearmikey.garage.data.fuel.FuelEconomyEntry
+import com.fearmikey.garage.ui.dashboard.FuelTrendChart
 
 /** Summary card for a [Vehicle], used in the Dashboard grid/list. */
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalLayoutApi::class)
@@ -64,6 +66,7 @@ fun VehicleCard(
     imageFiles: List<Pair<File, Float>> = emptyList(),
     unitSystem: UnitSystem = UnitSystem.IMPERIAL,
     avgMpg: Double? = null,
+    fuelEntries: List<FuelEconomyEntry> = emptyList(),
     overdueReminderCount: Int = 0,
     upcomingReminderCount: Int = 0,
     sharedTransitionScope: SharedTransitionScope,
@@ -209,6 +212,21 @@ fun VehicleCard(
                             onClick = onOpenReminders,
                         )
                     }
+                }
+                
+                if (fuelEntries.size >= 2) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = "Fuel Trend",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    FuelTrendChart(
+                        entries = fuelEntries,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(60.dp)
+                    )
                 }
             }
         }

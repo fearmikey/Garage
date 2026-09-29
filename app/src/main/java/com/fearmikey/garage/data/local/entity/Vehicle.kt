@@ -33,6 +33,9 @@ data class Vehicle(
     val imageUri3: String? = null,
     @ColumnInfo(defaultValue = "0.0")
     val imageOffsetY3: Float = 0f,
+    @ColumnInfo(defaultValue = "0")
+    val purchasedNew: Boolean = false,
+    val initialMileage: Int? = null,
 ) {
     /** Helper list of all attached photos (up to 3) with their respective vertical offsets. */
     val photos: List<VehiclePhoto>

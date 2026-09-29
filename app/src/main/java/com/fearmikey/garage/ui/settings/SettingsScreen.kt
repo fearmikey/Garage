@@ -44,6 +44,7 @@ import androidx.compose.material.icons.filled.PrivacyTip
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Straighten
+import androidx.compose.material.icons.filled.TrendingUp
 import com.fearmikey.garage.ui.components.CurrencySelectionDialog
 import com.fearmikey.garage.ui.util.AppCurrency
 import com.fearmikey.garage.ui.util.UnitConverter
@@ -275,6 +276,38 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable { showMaintenanceMileageDialog = true },
+                )
+            }
+            item {
+                ListItem(
+                    headlineContent = { Text("Show Fuel Trend Graph") },
+                    supportingContent = { Text("Display the fuel trend sparkline graph on vehicle cards") },
+                    leadingContent = { Icon(Icons.Filled.TrendingUp, contentDescription = null) },
+                    trailingContent = {
+                        Switch(
+                            checked = uiState.showFuelTrendGraph,
+                            onCheckedChange = { viewModel.setShowFuelTrendGraph(it) },
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { viewModel.setShowFuelTrendGraph(!uiState.showFuelTrendGraph) },
+                )
+            }
+            item {
+                ListItem(
+                    headlineContent = { Text("Show Fleet Overview") },
+                    supportingContent = { Text("Display the summary card with fleet averages on the dashboard") },
+                    leadingContent = { Icon(Icons.Filled.DirectionsCar, contentDescription = null) },
+                    trailingContent = {
+                        Switch(
+                            checked = uiState.showFleetOverview,
+                            onCheckedChange = { viewModel.setShowFleetOverview(it) },
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { viewModel.setShowFleetOverview(!uiState.showFleetOverview) },
                 )
             }
             item {

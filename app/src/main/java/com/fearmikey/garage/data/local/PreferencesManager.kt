@@ -38,6 +38,8 @@ class PreferencesManager(private val context: Context) {
         val DRIVERS_LICENSE_IMAGE_BACK_KEY = stringPreferencesKey("drivers_license_image_back")
         val DOCUMENT_EXPIRATION_REMINDERS_ENABLED_KEY = booleanPreferencesKey("document_expiration_reminders_enabled")
         val DOCUMENT_EXPIRATION_DAYS_WINDOW_KEY = intPreferencesKey("document_expiration_days_window")
+        val SHOW_FUEL_TREND_GRAPH_KEY = booleanPreferencesKey("show_fuel_trend_graph")
+        val SHOW_FLEET_OVERVIEW_KEY = booleanPreferencesKey("show_fleet_overview")
 
         const val DEFAULT_MAINTENANCE_MILEAGE_WINDOW = 500
         const val DEFAULT_MAINTENANCE_DAYS_WINDOW = 10
@@ -117,6 +119,16 @@ class PreferencesManager(private val context: Context) {
     val affiliateLinksEnabled: Flow<Boolean> = context.dataStore.data
         .map { preferences ->
             preferences[AFFILIATE_LINKS_ENABLED_KEY] ?: true
+        }
+
+    val showFuelTrendGraph: Flow<Boolean> = context.dataStore.data
+        .map { preferences ->
+            preferences[SHOW_FUEL_TREND_GRAPH_KEY] ?: true
+        }
+
+    val showFleetOverview: Flow<Boolean> = context.dataStore.data
+        .map { preferences ->
+            preferences[SHOW_FLEET_OVERVIEW_KEY] ?: false
         }
 
     val documentExpirationRemindersEnabled: Flow<Boolean> = context.dataStore.data
@@ -242,6 +254,18 @@ class PreferencesManager(private val context: Context) {
     suspend fun setAffiliateLinksEnabled(enabled: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[AFFILIATE_LINKS_ENABLED_KEY] = enabled
+        }
+    }
+
+    suspend fun setShowFuelTrendGraph(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[SHOW_FUEL_TREND_GRAPH_KEY] = enabled
+        }
+    }
+
+    suspend fun setShowFleetOverview(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[SHOW_FLEET_OVERVIEW_KEY] = enabled
         }
     }
 

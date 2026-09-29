@@ -41,6 +41,8 @@ data class SettingsUiState(
     val documentExpirationRemindersEnabled: Boolean = true,
     val documentExpirationDaysWindow: Int = 30,
     val affiliateLinksEnabled: Boolean = true,
+    val showFuelTrendGraph: Boolean = true,
+    val showFleetOverview: Boolean = false,
     val vehicles: List<Vehicle> = emptyList(),
     /** True once an import has completed; the UI should prompt the user to restart the app. */
     val importSucceeded: Boolean = false,
@@ -107,6 +109,16 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             preferencesRepository.affiliateLinksEnabled.collect { enabled ->
                 _uiState.update { it.copy(affiliateLinksEnabled = enabled) }
+            }
+        }
+        viewModelScope.launch {
+            preferencesRepository.showFuelTrendGraph.collect { enabled ->
+                _uiState.update { it.copy(showFuelTrendGraph = enabled) }
+            }
+        }
+        viewModelScope.launch {
+            preferencesRepository.showFleetOverview.collect { enabled ->
+                _uiState.update { it.copy(showFleetOverview = enabled) }
             }
         }
         viewModelScope.launch {
@@ -255,6 +267,18 @@ class SettingsViewModel @Inject constructor(
     fun setAffiliateLinksEnabled(enabled: Boolean) {
         viewModelScope.launch {
             preferencesRepository.setAffiliateLinksEnabled(enabled)
+        }
+    }
+
+    fun setShowFuelTrendGraph(enabled: Boolean) {
+        viewModelScope.launch {
+            preferencesRepository.setShowFuelTrendGraph(enabled)
+        }
+    }
+
+    fun setShowFleetOverview(enabled: Boolean) {
+        viewModelScope.launch {
+            preferencesRepository.setShowFleetOverview(enabled)
         }
     }
 

@@ -27,6 +27,10 @@ interface PreferencesRepository {
         get() = flowOf(false)
     val affiliateLinksEnabled: Flow<Boolean>
         get() = flowOf(true)
+    val showFuelTrendGraph: Flow<Boolean>
+        get() = flowOf(true)
+    val showFleetOverview: Flow<Boolean>
+        get() = flowOf(false)
     val documentExpirationRemindersEnabled: Flow<Boolean>
         get() = flowOf(true)
     val documentExpirationDaysWindow: Flow<Int>
@@ -57,6 +61,8 @@ interface PreferencesRepository {
     suspend fun setModsGridView(isGrid: Boolean) {}
     suspend fun setIncludeModsInCost(includeMods: Boolean) {}
     suspend fun setAffiliateLinksEnabled(enabled: Boolean) {}
+    suspend fun setShowFuelTrendGraph(enabled: Boolean) {}
+    suspend fun setShowFleetOverview(enabled: Boolean) {}
     suspend fun setDocumentExpirationRemindersEnabled(enabled: Boolean) {}
     suspend fun setDocumentExpirationDaysWindow(days: Int) {}
     suspend fun setDriversLicense(
@@ -85,6 +91,8 @@ class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManag
     override val isModsGridView: Flow<Boolean> = preferencesManager.isModsGridView
     override val includeModsInCost: Flow<Boolean> = preferencesManager.includeModsInCost
     override val affiliateLinksEnabled: Flow<Boolean> = preferencesManager.affiliateLinksEnabled
+    override val showFuelTrendGraph: Flow<Boolean> = preferencesManager.showFuelTrendGraph
+    override val showFleetOverview: Flow<Boolean> = preferencesManager.showFleetOverview
     override val documentExpirationRemindersEnabled: Flow<Boolean> = preferencesManager.documentExpirationRemindersEnabled
     override val documentExpirationDaysWindow: Flow<Int> = preferencesManager.documentExpirationDaysWindow
     override val driversLicenseNumber: Flow<String?> = preferencesManager.driversLicenseNumber
@@ -144,6 +152,14 @@ class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManag
 
     override suspend fun setAffiliateLinksEnabled(enabled: Boolean) {
         preferencesManager.setAffiliateLinksEnabled(enabled)
+    }
+
+    override suspend fun setShowFuelTrendGraph(enabled: Boolean) {
+        preferencesManager.setShowFuelTrendGraph(enabled)
+    }
+
+    override suspend fun setShowFleetOverview(enabled: Boolean) {
+        preferencesManager.setShowFleetOverview(enabled)
     }
 
     override suspend fun setDocumentExpirationRemindersEnabled(enabled: Boolean) {

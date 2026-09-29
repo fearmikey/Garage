@@ -625,7 +625,7 @@ suspend fun generatePdf(
     }
 
     calcY += 56f + 12f // Cover banner
-    calcY += 108f + 12f // Overview card
+    calcY += 126f + 12f // Overview card
     calcY += 68f + 12f // Care investment card
 
     if (includeRecalls) {
@@ -826,7 +826,7 @@ suspend fun generatePdf(
 
     // --- 2. VEHICLE OVERVIEW CARD ---
     val cardTop = yPos
-    val cardHeight = 108f
+    val cardHeight = 126f
     val cardRect = RectF(marginLeft, cardTop, marginRight, cardTop + cardHeight)
 
     fillPaint.color = colorSlate50
@@ -895,10 +895,18 @@ suspend fun generatePdf(
     val fuelDisplay = specs?.fuelType ?: "Gasoline"
     canvas.drawText(fuelDisplay, col2X + 54f, cardTop + 80f, valueNormalPaint)
 
+    val purchasedDisplay = if (vehicle.purchasedNew) "New" else "Used"
+    canvas.drawText("PURCHASED:", col1X, cardTop + 98f, labelPaint)
+    canvas.drawText(purchasedDisplay, col1X + 58f, cardTop + 98f, valueNormalPaint)
+
+    canvas.drawText("INITIAL MILEAGE:", col2X, cardTop + 98f, labelPaint)
+    val initialDisplay = vehicle.initialMileage?.let { UnitConverter.formatDistance(it, unitSystem) } ?: "Not recorded"
+    canvas.drawText(initialDisplay, col2X + 82f, cardTop + 98f, valueNormalPaint)
+
     if (specs != null && (specs.bodyClass != null || specs.manufacturer != null)) {
         val extraDisplay = listOfNotNull(specs.bodyClass, specs.manufacturer).joinToString(" • ")
-        canvas.drawText("SPECS:", col1X, cardTop + 98f, labelPaint)
-        canvas.drawText(extraDisplay, col1X + 36f, cardTop + 98f, valueNormalPaint)
+        canvas.drawText("SPECS:", col1X, cardTop + 116f, labelPaint)
+        canvas.drawText(extraDisplay, col1X + 36f, cardTop + 116f, valueNormalPaint)
     }
 
     yPos = cardTop + cardHeight + 12f

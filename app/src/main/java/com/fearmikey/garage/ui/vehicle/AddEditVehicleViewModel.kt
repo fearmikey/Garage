@@ -36,6 +36,8 @@ data class AddEditVehicleUiState(
     val model: String = "",
     val trim: String = "",
     val drivetrain: Drivetrain = Drivetrain.UNKNOWN,
+    val purchasedNew: Boolean = false,
+    val initialMileage: String = "",
     val photos: List<VehiclePhotoItem> = emptyList(),
     val isDecodingVin: Boolean = false,
     val vinDecodeError: String? = null,
@@ -89,6 +91,8 @@ class AddEditVehicleViewModel @Inject constructor(
                             model = vehicle.model,
                             trim = vehicle.trim,
                             drivetrain = vehicle.drivetrain,
+                            purchasedNew = vehicle.purchasedNew,
+                            initialMileage = vehicle.initialMileage?.toString().orEmpty(),
                             photos = loadedPhotos,
                         )
                     }
@@ -137,6 +141,8 @@ class AddEditVehicleViewModel @Inject constructor(
     fun onModelChanged(model: String) = _uiState.update { it.copy(model = model) }
     fun onTrimChanged(trim: String) = _uiState.update { it.copy(trim = trim) }
     fun onDrivetrainChanged(drivetrain: Drivetrain) = _uiState.update { it.copy(drivetrain = drivetrain) }
+    fun onPurchasedNewChanged(isNew: Boolean) = _uiState.update { it.copy(purchasedNew = isNew) }
+    fun onInitialMileageChanged(mileage: String) = _uiState.update { it.copy(initialMileage = mileage.filter(Char::isDigit)) }
 
     fun onImagesPicked(uris: List<Uri>) {
         if (uris.isEmpty()) return
@@ -216,6 +222,8 @@ class AddEditVehicleViewModel @Inject constructor(
                         model = state.model,
                         trim = state.trim,
                         drivetrain = state.drivetrain,
+                        purchasedNew = state.purchasedNew,
+                        initialMileage = state.initialMileage.toIntOrNull(),
                         imageUri = photo1?.filename,
                         imageOffsetY = photo1?.offsetY ?: 0f,
                         imageUri2 = photo2?.filename,

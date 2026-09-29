@@ -123,6 +123,8 @@ fun DashboardScreen(
     val fleetSummary by viewModel.fleetSummary.collectAsStateWithLifecycle()
     val unitSystem by viewModel.unitSystem.collectAsStateWithLifecycle()
     val affiliateLinksEnabled by viewModel.affiliateLinksEnabled.collectAsStateWithLifecycle()
+    val showFuelTrendGraph by viewModel.showFuelTrendGraph.collectAsStateWithLifecycle()
+    val showFleetOverview by viewModel.showFleetOverview.collectAsStateWithLifecycle()
     val driversLicenseState by viewModel.driversLicenseState.collectAsStateWithLifecycle()
 
     DashboardContent(
@@ -131,6 +133,8 @@ fun DashboardScreen(
         fleetSummary = fleetSummary,
         unitSystem = unitSystem,
         affiliateLinksEnabled = affiliateLinksEnabled,
+        showFuelTrendGraph = showFuelTrendGraph,
+        showFleetOverview = showFleetOverview,
         driversLicenseState = driversLicenseState,
         imageFileProvider = viewModel::imageFileFor,
         onAddVehicle = onAddVehicle,
@@ -151,6 +155,8 @@ private fun DashboardContent(
     fleetSummary: FleetSummary,
     unitSystem: UnitSystem,
     affiliateLinksEnabled: Boolean,
+    showFuelTrendGraph: Boolean,
+    showFleetOverview: Boolean,
     driversLicenseState: DriversLicenseState,
     imageFileProvider: (String) -> File,
     onAddVehicle: () -> Unit,
@@ -226,18 +232,20 @@ private fun DashboardContent(
                             modifier = Modifier
                                 .weight(1f)
                                 .verticalScrollbar(listState),
-                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+                            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 88.dp),
                             verticalArrangement = Arrangement.spacedBy(10.dp),
                         ) {
-                            item(key = "fleet_summary") {
-                                FleetSummaryCard(
-                                    summary = fleetSummary,
-                                    unitSystem = unitSystem,
-                                    onOpenOverdueReminders = {
-                                        vehicles.firstOrNull { (it.overdueReminderCount > 0) || (it.upcomingReminderCount > 0) }
-                                            ?.let { onOpenVehicle(it.vehicle.id, VehicleTab.SCHEDULE.ordinal) }
-                                    },
-                                )
+                            if (showFleetOverview) {
+                                item(key = "fleet_summary") {
+                                    FleetSummaryCard(
+                                        summary = fleetSummary,
+                                        unitSystem = unitSystem,
+                                        onOpenOverdueReminders = {
+                                            vehicles.firstOrNull { (it.overdueReminderCount > 0) || (it.upcomingReminderCount > 0) }
+                                                ?.let { onOpenVehicle(it.vehicle.id, VehicleTab.SCHEDULE.ordinal) }
+                                        },
+                                    )
+                                }
                             }
 
                             items(vehicles, key = { it.vehicle.id }) { item ->
@@ -247,6 +255,7 @@ private fun DashboardContent(
                                     imageFile = item.imageFile,
                                     unitSystem = unitSystem,
                                     avgMpg = item.avgMpg,
+                                    fuelEntries = if (showFuelTrendGraph) item.fuelEntries else emptyList(),
                                     overdueReminderCount = item.overdueReminderCount,
                                     upcomingReminderCount = item.upcomingReminderCount,
                                     sharedTransitionScope = sharedTransitionScope,
@@ -854,6 +863,8 @@ private fun DashboardScreenPreview() {
                         ),
                         unitSystem = UnitSystem.IMPERIAL,
                         affiliateLinksEnabled = true,
+                        showFuelTrendGraph = true,
+                        showFleetOverview = true,
                         driversLicenseState = DriversLicenseState(
                             number = "D1234567",
                             state = "CA",
@@ -889,6 +900,8 @@ private fun DashboardScreenEmptyPreview() {
                         fleetSummary = FleetSummary(),
                         unitSystem = UnitSystem.IMPERIAL,
                         affiliateLinksEnabled = true,
+                        showFuelTrendGraph = true,
+                        showFleetOverview = true,
                         driversLicenseState = DriversLicenseState(),
                         imageFileProvider = { File("") },
                         onAddVehicle = {},

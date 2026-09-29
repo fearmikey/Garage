@@ -32,6 +32,8 @@ fun FuelTrendChart(
     val maxDate = entries.maxOf { it.record.date }
     val rangeDate = max(maxDate - minDate, 1L)
 
+    val primaryColor = MaterialTheme.colorScheme.primary
+
     Canvas(modifier = modifier.padding(horizontal = 8.dp, vertical = 4.dp)) {
         val width = size.width
         val height = size.height
@@ -51,7 +53,7 @@ fun FuelTrendChart(
 
         drawPath(
             path = path,
-            color = MaterialTheme.colorScheme.primary,
+            color = primaryColor,
             style = Stroke(width = 3.dp.toPx())
         )
         
@@ -60,7 +62,7 @@ fun FuelTrendChart(
             val x = (width * (entry.record.date - minDate).toDouble() / rangeDate.toDouble()).toFloat()
             val y = (height - (height * (entry.mpg - minMpg) / rangeMpg)).toFloat()
             drawCircle(
-                color = MaterialTheme.colorScheme.primary,
+                color = primaryColor,
                 radius = 4.dp.toPx(),
                 center = Offset(x, y)
             )

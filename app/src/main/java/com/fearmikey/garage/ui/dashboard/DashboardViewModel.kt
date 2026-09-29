@@ -83,6 +83,12 @@ class DashboardViewModel @Inject constructor(
 
     val affiliateLinksEnabled: StateFlow<Boolean> = preferencesRepository.affiliateLinksEnabled
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), true)
+        
+    val showFuelTrendGraph: StateFlow<Boolean> = preferencesRepository.showFuelTrendGraph
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), true)
+
+    val showFleetOverview: StateFlow<Boolean> = preferencesRepository.showFleetOverview
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
     val vehicles: StateFlow<List<VehicleListItem>> = vehicleRepository.getAllVehicles()
         .flatMapLatest { vehicles ->
