@@ -15,7 +15,7 @@ Builds:
     commit: v1.2.4
     subdir: app
     gradle:
-      - foss
+      - yes
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags
