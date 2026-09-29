@@ -35,8 +35,9 @@ Garage is strictly **Free and Open Source Software (FOSS)** built for distributi
 ## Features
 
 ### Vehicle Management & VIN Lookup
-* **Comprehensive Garage Profiles:** Maintain complete specs for every vehicle in your fleet—including make, model, year, trim, mileage, license plate, VIN, fuel type, and custom vehicle images.
+* **Comprehensive Garage Profiles:** Maintain complete specs for every vehicle in your fleet—including make, model, year, trim, mileage, license plate, VIN, fuel type, custom vehicle images, initial mileage, and purchase status (new/used).
 * **NHTSA VIN Decoder & Barcode Scanner:** Automatically populate vehicle specifications using official NHTSA web service integrations or scan VIN barcodes directly with the camera.
+* **Customizable Dashboard:** Personalize your fleet overview by toggling the visibility of fuel trend graphs and aggregate fleet metrics.
 
 ### Service & Maintenance Tracking
 * **Detailed Service Logs:** Log maintenance activities with date, mileage, service cost, category, service provider, and notes.

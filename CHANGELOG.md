@@ -1,3 +1,9 @@
+## [Unreleased]
+
+### Added
+* **Initial Mileage & New Vehicle Tracking:** Added support for recording a vehicle's initial mileage and whether it was purchased new.
+* **Dashboard Preferences:** Added customizable dashboard settings to toggle the visibility of the Fuel Trend Graph and Fleet Overview sections.
+
 ## [1.2.3] - 2026-09-19
 
 ### Added
