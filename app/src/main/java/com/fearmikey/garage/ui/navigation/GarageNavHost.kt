@@ -34,6 +34,7 @@ import com.fearmikey.garage.ui.startup.StartupScreen
 import com.fearmikey.garage.ui.vehicle.AddEditVehicleScreen
 import com.fearmikey.garage.ui.vehicle.EditPartsScreen
 import com.fearmikey.garage.ui.vehicle.VehicleDetailScreen
+import com.fearmikey.garage.ui.obd.ObdScannerScreen
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -139,6 +140,7 @@ fun GarageNavHost(
                     onEditVehicle = { vehicleId -> navController.navigate(Destinations.editVehicleRoute(vehicleId)) },
                     onEditParts = { vehicleId -> navController.navigate(Destinations.editPartsRoute(vehicleId)) },
                     onExportMaintenance = { vehicleId -> navController.navigate(Destinations.exportMaintenanceRoute(vehicleId)) },
+                    onOpenObd = { vehicleId -> navController.navigate("obd_scanner/$vehicleId") },
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedVisibilityScope = this@composable,
                 )
@@ -158,6 +160,16 @@ fun GarageNavHost(
                 EditPartsScreen(
                     onDone = { navController.popBackStack() },
                     onBack = { navController.popBackStack() },
+                )
+            }
+            composable(
+                route = "obd_scanner/{vehicleId}",
+                arguments = Destinations.vehicleDetailArgs
+            ) { backStackEntry ->
+                val vehicleId = backStackEntry.arguments?.getLong("vehicleId") ?: -1L
+                ObdScannerScreen(
+                    vehicleId = vehicleId,
+                    onNavigateBack = { navController.popBackStack() }
                 )
             }
             composable(Destinations.SETTINGS) {

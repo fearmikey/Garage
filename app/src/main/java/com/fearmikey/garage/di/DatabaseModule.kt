@@ -10,6 +10,7 @@ import com.fearmikey.garage.data.local.dao.FuelDao
 import com.fearmikey.garage.data.local.dao.IgnoredMaintenanceRuleDao
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
 import com.fearmikey.garage.data.local.dao.ModificationDao
+import com.fearmikey.garage.data.local.dao.RecallCampaignStateDao
 import com.fearmikey.garage.data.local.dao.VehicleDao
 import com.fearmikey.garage.data.local.dao.VehiclePartsDao
 import com.fearmikey.garage.data.local.dao.VehicleRegistrationDao
@@ -64,4 +65,8 @@ object DatabaseModule {
     @Provides
     fun provideIgnoredMaintenanceRuleDao(database: GarageDatabase): IgnoredMaintenanceRuleDao =
         database.ignoredMaintenanceRuleDao()
+
+    @Provides
+    fun provideRecallCampaignStateDao(database: GarageDatabase): RecallCampaignStateDao =
+        database.recallCampaignStateDao()
 }

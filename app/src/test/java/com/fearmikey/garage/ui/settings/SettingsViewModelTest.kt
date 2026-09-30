@@ -13,6 +13,7 @@ import com.fearmikey.garage.data.local.dao.FuelDao
 import com.fearmikey.garage.data.local.dao.IgnoredMaintenanceRuleDao
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
 import com.fearmikey.garage.data.local.dao.ModificationDao
+import com.fearmikey.garage.data.local.dao.RecallCampaignStateDao
 import com.fearmikey.garage.data.local.dao.VehicleDao
 import com.fearmikey.garage.data.local.dao.VehiclePartsDao
 import com.fearmikey.garage.data.local.dao.VehicleRegistrationDao
@@ -23,6 +24,7 @@ import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.data.local.entity.IgnoredMaintenanceRule
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.ModificationRecord
+import com.fearmikey.garage.data.local.entity.RecallCampaignState
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.local.entity.VehiclePartsInfo
 import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
@@ -132,6 +134,11 @@ class SettingsViewModelTest {
         override suspend fun unignoreRule(vehicleId: Long, taskName: String) {}
     }
 
+    private class FakeRecallCampaignStateDao : RecallCampaignStateDao {
+        override fun getStatesForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<RecallCampaignState>())
+        override suspend fun saveState(state: RecallCampaignState) {}
+    }
+
     private class TestCloudBackupPreferencesManager(context: Context) : CloudBackupPreferencesManager(context) {
         val enabledFlow = MutableStateFlow(false)
         val folderUriFlow = MutableStateFlow("")
@@ -222,6 +229,7 @@ class SettingsViewModelTest {
             }
             override fun vehicleRegistrationDao(): VehicleRegistrationDao = FakeVehicleRegistrationDao()
             override fun ignoredMaintenanceRuleDao(): IgnoredMaintenanceRuleDao = FakeIgnoredMaintenanceRuleDao()
+            override fun recallCampaignStateDao(): RecallCampaignStateDao = FakeRecallCampaignStateDao()
             override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper {
                 throw UnsupportedOperationException()
             }
@@ -311,6 +319,7 @@ class SettingsViewModelTest {
             }
             override fun vehicleRegistrationDao(): VehicleRegistrationDao = FakeVehicleRegistrationDao()
             override fun ignoredMaintenanceRuleDao(): IgnoredMaintenanceRuleDao = FakeIgnoredMaintenanceRuleDao()
+            override fun recallCampaignStateDao(): RecallCampaignStateDao = FakeRecallCampaignStateDao()
             override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper {
                 throw UnsupportedOperationException()
             }
@@ -417,6 +426,7 @@ class SettingsViewModelTest {
             }
             override fun vehicleRegistrationDao(): VehicleRegistrationDao = FakeVehicleRegistrationDao()
             override fun ignoredMaintenanceRuleDao(): IgnoredMaintenanceRuleDao = FakeIgnoredMaintenanceRuleDao()
+            override fun recallCampaignStateDao(): RecallCampaignStateDao = FakeRecallCampaignStateDao()
             override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper {
                 throw UnsupportedOperationException()
             }

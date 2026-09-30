@@ -531,7 +531,7 @@ fun SettingsScreen(
             item {
                 ListItem(
                     headlineContent = { Text("Re-run Setup") },
-                    supportingContent = { Text("Re-configure app permissions, terms, and measurement units") },
+                    supportingContent = { Text("Re-configure app permissions and measurement units") },
                     leadingContent = { Icon(Icons.Filled.School, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()

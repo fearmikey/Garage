@@ -1,7 +1,7 @@
 # Garage
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.2.4-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-1.2.5-blue.svg)](CHANGELOG.md)
 [![Android Min SDK](https://img.shields.io/badge/Min%20SDK-34-brightgreen.svg)](https://developer.android.com/about/versions/14)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4-purple.svg?logo=kotlin)](https://kotlinlang.org/)
 [![Compose](https://img.shields.io/badge/Jetpack%20Compose-Material3-4285F4.svg?logo=android)](https://developer.android.com/jetpack/compose)
@@ -57,8 +57,11 @@ Garage is strictly **Free and Open Source Software (FOSS)** built for distributi
 * **Total Expense Breakdown:** In-depth visual breakdown comparing maintenance, fuel, charging, and part expenses.
 * **Cost Metrics:** Calculate precise cost-per-mile / cost-per-kilometer metrics and operational cost trends over time.
 
-### NHTSA Safety Recalls
-* **Recall Lookup:** Query the official **NHTSA Recall API** to receive real-time alerts regarding open safety recalls for your specific vehicle make, model, year, and VIN.
+### NHTSA Safety Recalls & Campaign Management
+* **Recall Lookup & Status Tracking:** Query the official **NHTSA Recall API** to receive real-time alerts regarding open safety recalls for your specific vehicle make, model, year, and VIN, and track campaign resolution status (Open, Serviced/Completed, Does Not Affect) per vehicle.
+
+### OBD2 Vehicle Diagnostics
+* **Bluetooth OBD2 Scanner:** Connect to standard Bluetooth OBD2 adapters to read live engine telemetry (RPM, speed, coolant temperature, fuel level, VIN) and scan diagnostic trouble codes (DTCs).
 
 ### Vehicle Parts Directory & Estimator
 * **Parts Cheat Sheet:** Track exact part numbers and specifications for essential components—such as oil filters, air filters, cabin filters, spark plugs, wiper blades, tire sizes, battery types, and fluid capacities.

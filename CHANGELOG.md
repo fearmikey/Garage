@@ -1,3 +1,11 @@
+## [1.2.5] - 2026-09-29
+
+### Added
+* **OBD2 Bluetooth Diagnostics:** Added live diagnostic scanner support for reading vehicle engine telemetry (RPM, speed, coolant temperature, fuel level, VIN) and scanning diagnostic trouble codes (DTCs) via Bluetooth OBD2 adapters.
+* **Recall Campaign Status Tracking:** Track and persist individual recall campaign resolution statuses per vehicle (Open, Serviced/Completed, Does Not Affect Vehicle).
+* **Database Migration (Schema 22):** Room database migration adding `recall_campaign_states` entity for recall status tracking.
+* **Expanded Test Suite:** Unit test coverage for `ObdParserTest` and `RecallStateRepository`.
+
 ## [1.2.4] - 2026-09-29
 
 ### Added

@@ -211,7 +211,7 @@ private fun StartupContent(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Configure your preferences and agree to terms to get started.",
+                    text = "Configure your preferences to get started.",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
@@ -653,7 +653,7 @@ private fun StartupContentPreview() {
                 selectedCurrency = "USD",
                 notificationPermissionGranted = false,
                 cameraPermissionGranted = true,
-                affiliateLinksEnabled = true,
+                affiliateLinksEnabled = false,
             ),
             onSelectUnits = {},
             onSelectCurrency = {},

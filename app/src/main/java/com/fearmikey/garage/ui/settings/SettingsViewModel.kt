@@ -40,7 +40,7 @@ data class SettingsUiState(
     val maintenanceDaysWindow: Int = 10,
     val documentExpirationRemindersEnabled: Boolean = true,
     val documentExpirationDaysWindow: Int = 30,
-    val affiliateLinksEnabled: Boolean = true,
+    val affiliateLinksEnabled: Boolean = false,
     val showFuelTrendGraph: Boolean = true,
     val showFleetOverview: Boolean = false,
     val vehicles: List<Vehicle> = emptyList(),

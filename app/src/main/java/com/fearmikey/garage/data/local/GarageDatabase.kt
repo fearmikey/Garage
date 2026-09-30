@@ -12,6 +12,7 @@ import com.fearmikey.garage.data.local.dao.FuelDao
 import com.fearmikey.garage.data.local.dao.IgnoredMaintenanceRuleDao
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
 import com.fearmikey.garage.data.local.dao.ModificationDao
+import com.fearmikey.garage.data.local.dao.RecallCampaignStateDao
 import com.fearmikey.garage.data.local.dao.VehicleDao
 import com.fearmikey.garage.data.local.dao.VehiclePartsDao
 import com.fearmikey.garage.data.local.dao.VehicleRegistrationDao
@@ -22,6 +23,7 @@ import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.data.local.entity.IgnoredMaintenanceRule
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.ModificationRecord
+import com.fearmikey.garage.data.local.entity.RecallCampaignState
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.local.entity.VehiclePartsInfo
 import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
@@ -34,7 +36,7 @@ const val GARAGE_DATABASE_NAME = "garage.db"
  * The current Room schema version, kept as a standalone constant so it can be
  * compared against a backup's on-disk schema version before restoring it.
  */
-const val GARAGE_DATABASE_VERSION = 21
+const val GARAGE_DATABASE_VERSION = 22
 
 @DeleteTable.Entries(value = [DeleteTable(tableName = "reminders")])
 class DeleteRemindersTableSpec : AutoMigrationSpec
@@ -43,7 +45,7 @@ class DeleteRemindersTableSpec : AutoMigrationSpec
     entities = [
         Vehicle::class, MaintenanceRecord::class, VehicleSpecs::class, FuelRecord::class,
         VehiclePartsInfo::class, CustomMaintenanceRule::class, ModificationRecord::class, VehicleRegistrationInsurance::class,
-        ChargingRecord::class, IgnoredMaintenanceRule::class,
+        ChargingRecord::class, IgnoredMaintenanceRule::class, RecallCampaignState::class,
     ],
     version = GARAGE_DATABASE_VERSION,
     exportSchema = true,
@@ -78,6 +80,8 @@ class DeleteRemindersTableSpec : AutoMigrationSpec
         AutoMigration(from = 19, to = 20),
         // Additive: purchasedNew and initialMileage added to vehicles table.
         AutoMigration(from = 20, to = 21),
+        // Additive: recall_campaign_states table added
+        AutoMigration(from = 21, to = 22),
     ],
 )
 @TypeConverters(Converters::class)
@@ -92,4 +96,5 @@ abstract class GarageDatabase : RoomDatabase() {
     abstract fun modificationDao(): ModificationDao
     abstract fun vehicleRegistrationDao(): VehicleRegistrationDao
     abstract fun ignoredMaintenanceRuleDao(): IgnoredMaintenanceRuleDao
+    abstract fun recallCampaignStateDao(): RecallCampaignStateDao
 }

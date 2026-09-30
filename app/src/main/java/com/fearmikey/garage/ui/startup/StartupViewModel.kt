@@ -22,7 +22,7 @@ data class StartupUiState(
     val selectedCurrency: String = "USD",
     val notificationPermissionGranted: Boolean = false,
     val cameraPermissionGranted: Boolean = false,
-    val affiliateLinksEnabled: Boolean = true,
+    val affiliateLinksEnabled: Boolean = false,
 )
 
 @HiltViewModel

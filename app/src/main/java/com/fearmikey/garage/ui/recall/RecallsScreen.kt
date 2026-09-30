@@ -26,7 +26,13 @@ import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -34,16 +40,20 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.fearmikey.garage.data.repository.VehicleRecall
+import com.fearmikey.garage.data.local.entity.RecallState
 import com.fearmikey.garage.ui.components.EmptyState
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.SampleData
@@ -58,6 +68,7 @@ fun RecallsScreen(
     RecallsContent(
         uiState = uiState,
         onRefresh = viewModel::refresh,
+        onStateChange = viewModel::updateRecallState,
     ) { vin ->
         val trimmedVin = vin.trim()
         if (trimmedVin.isNotBlank()) {
@@ -80,6 +91,7 @@ fun RecallsScreen(
 private fun RecallsContent(
     uiState: RecallsUiState,
     onRefresh: () -> Unit,
+    onStateChange: (String, RecallState) -> Unit,
     onOpenVinCheck: (String) -> Unit = {},
 ) {
     Scaffold(contentWindowInsets = WindowInsets(0, 0, 0, 0)) { innerPadding ->
@@ -153,8 +165,13 @@ private fun RecallsContent(
                             }
                         }
                     } else {
-                        items(uiState.recalls, key = { it.campaignNumber }) { recall ->
-                            RecallCard(recall = recall)
+                        items(uiState.recalls, key = { it.recall.campaignNumber }) { recallItem ->
+                            RecallCard(
+                                recallItem = recallItem,
+                                onStateChange = { newState ->
+                                    onStateChange(recallItem.recall.campaignNumber, newState)
+                                },
+                            )
                         }
                     }
                 }
@@ -244,9 +261,17 @@ private fun RecallsErrorState(message: String, onRetry: () -> Unit) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun RecallCard(recall: VehicleRecall, modifier: Modifier = Modifier) {
+private fun RecallCard(
+    recallItem: RecallItemUiState,
+    onStateChange: (RecallState) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val recall = recallItem.recall
     val isUrgent = recall.parkIt || recall.parkOutside
+    var expanded by remember { mutableStateOf(value = false) }
+
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = if (isUrgent) {
@@ -257,25 +282,89 @@ private fun RecallCard(recall: VehicleRecall, modifier: Modifier = Modifier) {
     ) {
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(
-                    "Campaign #${recall.campaignNumber}",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-                if (isUrgent) {
-                    AssistChip(
-                        onClick = {},
-                        enabled = false,
-                        label = { Text(if (recall.parkIt) "Park it" else "Park outside") },
-                        leadingIcon = { Icon(Icons.Filled.Warning, contentDescription = null) },
-                        colors = AssistChipDefaults.assistChipColors(
-                            disabledLabelColor = MaterialTheme.colorScheme.error,
-                            disabledLeadingIconContentColor = MaterialTheme.colorScheme.error,
-                        ),
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    Text(
+                        text = "Campaign #${recall.campaignNumber}",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.primary,
                     )
+                    if (isUrgent) {
+                        AssistChip(
+                            onClick = {},
+                            enabled = false,
+                            label = { Text(if (recall.parkIt) "Park it" else "Park outside") },
+                            leadingIcon = { Icon(Icons.Filled.Warning, contentDescription = null) },
+                            colors = AssistChipDefaults.assistChipColors(
+                                disabledLabelColor = MaterialTheme.colorScheme.error,
+                                disabledLeadingIconContentColor = MaterialTheme.colorScheme.error,
+                            ),
+                        )
+                    }
+                }
+
+                ExposedDropdownMenuBox(
+                    expanded = expanded,
+                    onExpandedChange = { expanded = it },
+                ) {
+                    val labelText = when (recallItem.state) {
+                        RecallState.OPEN -> "Open"
+                        RecallState.SERVICED -> "Serviced"
+                        RecallState.DOES_NOT_AFFECT -> "Not Affected"
+                    }
+                    val (chipContainerColor, chipContentColor) = when (recallItem.state) {
+                        RecallState.OPEN -> MaterialTheme.colorScheme.errorContainer to MaterialTheme.colorScheme.onErrorContainer
+                        RecallState.SERVICED -> MaterialTheme.colorScheme.primaryContainer to MaterialTheme.colorScheme.onPrimaryContainer
+                        RecallState.DOES_NOT_AFFECT -> MaterialTheme.colorScheme.surfaceVariant to MaterialTheme.colorScheme.onSurfaceVariant
+                    }
+
+                    FilterChip(
+                        selected = recallItem.state != RecallState.OPEN,
+                        onClick = { expanded = true },
+                        label = {
+                            Text(
+                                text = labelText,
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Bold,
+                            )
+                        },
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                        },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = chipContainerColor,
+                            selectedLabelColor = chipContentColor,
+                        ),
+                        modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+                    )
+
+                    ExposedDropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false },
+                    ) {
+                        RecallState.entries.forEach { state ->
+                            val itemLabel = when (state) {
+                                RecallState.OPEN -> "Open"
+                                RecallState.SERVICED -> "Serviced / Completed"
+                                RecallState.DOES_NOT_AFFECT -> "Does Not Affect Vehicle"
+                            }
+                            DropdownMenuItem(
+                                text = { Text(itemLabel) },
+                                onClick = {
+                                    onStateChange(state)
+                                    expanded = false
+                                },
+                            )
+                        }
+                    }
                 }
             }
             Text(recall.component, style = MaterialTheme.typography.titleMedium)
@@ -313,13 +402,19 @@ private fun RecallsScreenPreview() {
     GarageTheme {
         RecallsContent(
             uiState = RecallsUiState(
-                recalls = SampleData.tacomaRecalls,
+                recalls = SampleData.tacomaRecalls.map { 
+                    RecallItemUiState(
+                        recall = it,
+                        state = RecallState.OPEN,
+                    )
+                },
                 vin = "5TBET30137S400000",
                 year = 2021,
                 make = "Toyota",
                 model = "Tacoma",
             ),
             onRefresh = {},
+            onStateChange = { _, _ -> },
         )
     }
 }
@@ -337,6 +432,7 @@ private fun RecallsScreenEmptyPreview() {
                 model = "Tacoma",
             ),
             onRefresh = {},
+            onStateChange = { _, _ -> },
         )
     }
 }

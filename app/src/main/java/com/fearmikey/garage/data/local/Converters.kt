@@ -4,6 +4,7 @@ import androidx.room.TypeConverter
 import com.fearmikey.garage.data.local.entity.Drivetrain
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.ModificationCategory
+import com.fearmikey.garage.data.local.entity.RecallState
 
 /** Room type converters for enum columns not natively supported. */
 class Converters {
@@ -33,4 +34,11 @@ class Converters {
             "AUDIO_ELECTRONICS", "AUDIO_ELECTRICAL" -> ModificationCategory.AUDIO_ELECTRICAL
             else -> ModificationCategory.entries.firstOrNull { it.name == value } ?: ModificationCategory.OTHER
         }
+
+    @TypeConverter
+    fun fromRecallState(state: RecallState): String = state.name
+
+    @TypeConverter
+    fun toRecallState(value: String): RecallState =
+        RecallState.entries.firstOrNull { it.name == value } ?: RecallState.OPEN
 }

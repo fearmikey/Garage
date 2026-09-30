@@ -1,0 +1,2 @@
+* Added Bluetooth OBD2 scanner for live vehicle diagnostics (RPM, speed, coolant temp, fuel level, VIN) and DTC fault code lookup.
+* Added recall campaign status management (Open, Serviced, Not Affected) with local persistence.

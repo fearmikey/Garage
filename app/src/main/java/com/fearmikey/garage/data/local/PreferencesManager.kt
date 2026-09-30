@@ -118,7 +118,7 @@ class PreferencesManager(private val context: Context) {
 
     val affiliateLinksEnabled: Flow<Boolean> = context.dataStore.data
         .map { preferences ->
-            preferences[AFFILIATE_LINKS_ENABLED_KEY] ?: true
+            preferences[AFFILIATE_LINKS_ENABLED_KEY] ?: false
         }
 
     val showFuelTrendGraph: Flow<Boolean> = context.dataStore.data
