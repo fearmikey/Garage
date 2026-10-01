@@ -45,6 +45,8 @@ object PartsEstimator {
                 oilFilterPartNumber = null,
                 sparkPlugPartNumber = null,
                 sparkPlugGap = "N/A (Electric)",
+                engineAirFilterPartNumber = "N/A (Electric)",
+                cabinAirFilterPartNumber = if (model.contains("model y") || model.contains("model 3")) "1103681-00-A" else null,
                 tireSizeFront = if (model.contains("model y")) "255/45R19" else if (model.contains("model 3")) "235/45R18" else null,
                 tireSizeRear = if (model.contains("model y")) "255/45R19" else if (model.contains("model 3")) "235/45R18" else null,
                 tirePsiFront = psi,
@@ -63,6 +65,8 @@ object PartsEstimator {
         val sparkPlugGap = spec?.sparkPlugGap ?: "0.040 in"
         val oilFilter = spec?.oilFilterPartNumber
         val sparkPlug = spec?.sparkPlugPartNumber
+        val engineAirFilter = spec?.engineAirFilterPartNumber
+        val cabinAirFilter = spec?.cabinAirFilterPartNumber
         val tireSizeFront = spec?.tireSizeFront
         val tireSizeRear = spec?.tireSizeRear ?: tireSizeFront
         val driverWiper = spec?.wiperBladeSizeDriver ?: (if (isTruckOrSuv) "22 in" else "24 in")
@@ -100,6 +104,8 @@ object PartsEstimator {
             oilFilterPartNumber = oilFilter,
             sparkPlugPartNumber = sparkPlug,
             sparkPlugGap = sparkPlugGap,
+            engineAirFilterPartNumber = engineAirFilter,
+            cabinAirFilterPartNumber = cabinAirFilter,
             tireSizeFront = tireSizeFront,
             tireSizeRear = tireSizeRear,
             tirePsiFront = psi,
@@ -116,6 +122,8 @@ object PartsEstimator {
         val sparkPlugGap: String = "0.040 in",
         val oilFilterPartNumber: String? = null,
         val sparkPlugPartNumber: String? = null,
+        val engineAirFilterPartNumber: String? = null,
+        val cabinAirFilterPartNumber: String? = null,
         val tireSizeFront: String? = null,
         val tireSizeRear: String? = null,
         val wiperBladeSizeDriver: String? = null,
@@ -180,6 +188,8 @@ object PartsEstimator {
                             sparkPlugGap = "0.043 in",
                             oilFilterPartNumber = "04152-YZZA1",
                             sparkPlugPartNumber = "Denso FK20HR11",
+                            engineAirFilterPartNumber = "17801-F0010",
+                            cabinAirFilterPartNumber = "87139-YZZ30",
                             tireSizeFront = "265/70R16",
                             wiperBladeSizeDriver = "22 in",
                             wiperBladeSizePassenger = "20 in",
@@ -191,6 +201,8 @@ object PartsEstimator {
                             sparkPlugGap = "0.043 in",
                             oilFilterPartNumber = "90915-YZZD3",
                             sparkPlugPartNumber = "Denso SK20HR11",
+                            engineAirFilterPartNumber = "17801-0C010",
+                            cabinAirFilterPartNumber = "87139-YZZ30",
                             tireSizeFront = "245/75R16",
                             wiperBladeSizeDriver = "22 in",
                             wiperBladeSizePassenger = "20 in",
@@ -204,6 +216,8 @@ object PartsEstimator {
                             viscosity = "5W-30",
                             oilFilterPartNumber = "90915-YZZD3",
                             sparkPlugPartNumber = "Denso K20HR-U11",
+                            engineAirFilterPartNumber = "17801-0P010",
+                            cabinAirFilterPartNumber = "87139-YZZ08",
                             tireSizeFront = "265/70R16",
                             wiperBladeSizeDriver = "22 in",
                             wiperBladeSizePassenger = "20 in",
@@ -229,6 +243,8 @@ object PartsEstimator {
                     capacity = "7.7 qts",
                     viscosity = "0W-20",
                     oilFilterPartNumber = "04152-YZZA1",
+                    engineAirFilterPartNumber = "17801-0P100",
+                    cabinAirFilterPartNumber = "87139-YZZ30",
                     tireSizeFront = "265/70R18",
                     wiperBladeSizeDriver = "26 in",
                     wiperBladeSizePassenger = "22 in",
@@ -250,6 +266,8 @@ object PartsEstimator {
                     capacity = "6.6 qts",
                     viscosity = "0W-20",
                     oilFilterPartNumber = "04152-YZZA5",
+                    engineAirFilterPartNumber = "17801-38051",
+                    cabinAirFilterPartNumber = "87139-YZZ20",
                     tireSizeFront = "265/70R17",
                     wiperBladeSizeDriver = "24 in",
                     wiperBladeSizePassenger = "20 in",
@@ -337,6 +355,8 @@ object PartsEstimator {
                             viscosity = "0W-20",
                             sparkPlugGap = "0.032 in",
                             oilFilterPartNumber = "15400-PLM-A02",
+                            engineAirFilterPartNumber = "17220-5AA-A00",
+                            cabinAirFilterPartNumber = "80292-TBA-A11",
                             tireSizeFront = "235/50R18",
                             wiperBladeSizeDriver = "26 in",
                             wiperBladeSizePassenger = "19 in",
@@ -382,6 +402,8 @@ object PartsEstimator {
                     oilFilterPartNumber = "15400-PLM-A02",
                     sparkPlugPartNumber = "NGK DILKAR8A8",
                     sparkPlugGap = "0.032 in",
+                    engineAirFilterPartNumber = "17220-5AA-A00",
+                    cabinAirFilterPartNumber = "80292-TBA-A11",
                     tireSizeFront = if (isAccord) "225/50R17" else if (isCrv) "235/65R17" else "215/55R16",
                     wiperBladeSizeDriver = "26 in",
                     wiperBladeSizePassenger = if (isAccord) "19 in" else "18 in",

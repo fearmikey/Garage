@@ -84,6 +84,8 @@ object SampleData {
         oilFilterPartNumber = "Toyota 04152-YZZA1",
         sparkPlugPartNumber = "Denso SK20HR11",
         sparkPlugGap = "0.043 in",
+        engineAirFilterPartNumber = "17801-0P100",
+        cabinAirFilterPartNumber = "87139-YZZ30",
         tireSizeFront = "265/70R16",
         tireSizeRear = "265/70R16",
         tirePsiFront = "32 psi",

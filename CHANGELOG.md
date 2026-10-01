@@ -1,3 +1,10 @@
+## [1.2.6] - 2026-09-29
+
+### Added
+* **Engine & Cabin Air Filter Tracking:** Added dedicated specification fields and parts directory support for engine air filter and cabin air filter part numbers.
+* **OBD2 Odometer Logging:** Automatically records vehicle odometer readings from OBD2 Bluetooth diagnostic scans directly to the vehicle timeline.
+* **Database Migration (Schema 23):** Room database schema update adding engine and cabin filter fields to vehicle parts info.
+
 ## [1.2.5] - 2026-09-29
 
 ### Added

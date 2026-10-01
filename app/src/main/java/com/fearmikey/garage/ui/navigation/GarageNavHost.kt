@@ -167,9 +167,22 @@ fun GarageNavHost(
                 arguments = Destinations.vehicleDetailArgs
             ) { backStackEntry ->
                 val vehicleId = backStackEntry.arguments?.getLong("vehicleId") ?: -1L
+                val unitSystem by mainViewModel.unitSystem.collectAsStateWithLifecycle()
+                val context = LocalContext.current
+                
                 ObdScannerScreen(
                     vehicleId = vehicleId,
-                    onNavigateBack = { navController.popBackStack() }
+                    onNavigateBack = { navController.popBackStack() },
+                    unitSystem = unitSystem,
+                    onLogMileage = { canonicalMileage ->
+                        mainViewModel.insertOdometerRecord(
+                            vehicleId = vehicleId,
+                            canonicalMileage = canonicalMileage,
+                            date = System.currentTimeMillis(),
+                            notes = "OBD2 Scan",
+                            context = context
+                        )
+                    }
                 )
             }
             composable(Destinations.SETTINGS) {

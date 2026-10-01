@@ -36,7 +36,7 @@ const val GARAGE_DATABASE_NAME = "garage.db"
  * The current Room schema version, kept as a standalone constant so it can be
  * compared against a backup's on-disk schema version before restoring it.
  */
-const val GARAGE_DATABASE_VERSION = 22
+const val GARAGE_DATABASE_VERSION = 23
 
 @DeleteTable.Entries(value = [DeleteTable(tableName = "reminders")])
 class DeleteRemindersTableSpec : AutoMigrationSpec
@@ -82,6 +82,8 @@ class DeleteRemindersTableSpec : AutoMigrationSpec
         AutoMigration(from = 20, to = 21),
         // Additive: recall_campaign_states table added
         AutoMigration(from = 21, to = 22),
+        // Additive: engineAirFilterPartNumber and cabinAirFilterPartNumber added to vehicle_parts_info table
+        AutoMigration(from = 22, to = 23),
     ],
 )
 @TypeConverters(Converters::class)

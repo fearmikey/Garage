@@ -33,6 +33,9 @@ data class VehiclePartsInfo(
     // Ignition
     val sparkPlugPartNumber: String? = null,
     val sparkPlugGap: String? = null,
+    // Filters
+    val engineAirFilterPartNumber: String? = null,
+    val cabinAirFilterPartNumber: String? = null,
     // Tires
     val tireSizeFront: String? = null,
     val tireSizeRear: String? = null,
@@ -47,6 +50,7 @@ data class VehiclePartsInfo(
     fun isEmpty(): Boolean = listOf(
         oilViscosity, oilCapacity, oilFilterPartNumber,
         sparkPlugPartNumber, sparkPlugGap,
+        engineAirFilterPartNumber, cabinAirFilterPartNumber,
         tireSizeFront, tireSizeRear, tirePsiFront, tirePsiRear,
         wiperBladeSizeDriver, wiperBladeSizePassenger, wiperBladeSizeRear,
     ).all { it.isNullOrBlank() }

@@ -79,6 +79,13 @@ private fun VehiclePartsInfo.toGroups(): List<PartsGroup> = listOf(
         ),
     ),
     PartsGroup(
+        title = "Filters",
+        rows = listOfNotNull(
+            engineAirFilterPartNumber?.let { "Engine air filter part #" to it },
+            cabinAirFilterPartNumber?.let { "Cabin air filter part #" to it },
+        ),
+    ),
+    PartsGroup(
         title = "Tires",
         rows = listOfNotNull(
             tireSizeFront?.let { "Front tire size" to it },

@@ -159,6 +159,8 @@ private fun EditPartsContent(
     var oilFilterPartNumber by remember(effectiveInitial) { mutableStateOf(effectiveInitial.oilFilterPartNumber.orEmpty()) }
     var sparkPlugPartNumber by remember(effectiveInitial) { mutableStateOf(effectiveInitial.sparkPlugPartNumber.orEmpty()) }
     var sparkPlugGap by remember(effectiveInitial) { mutableStateOf(effectiveInitial.sparkPlugGap.orEmpty()) }
+    var engineAirFilterPartNumber by remember(effectiveInitial) { mutableStateOf(effectiveInitial.engineAirFilterPartNumber.orEmpty()) }
+    var cabinAirFilterPartNumber by remember(effectiveInitial) { mutableStateOf(effectiveInitial.cabinAirFilterPartNumber.orEmpty()) }
     var tireSizeFront by remember(effectiveInitial) { mutableStateOf(effectiveInitial.tireSizeFront.orEmpty()) }
     var tireSizeRear by remember(effectiveInitial) { mutableStateOf(effectiveInitial.tireSizeRear.orEmpty()) }
     var tirePsiFront by remember(effectiveInitial) { mutableStateOf(effectiveInitial.tirePsiFront.orEmpty()) }
@@ -173,6 +175,8 @@ private fun EditPartsContent(
         if (overwriteAll || oilViscosity.isBlank()) oilViscosity = estimates.oilViscosity.orEmpty()
         if (overwriteAll || oilCapacity.isBlank()) oilCapacity = estimates.oilCapacity.orEmpty()
         if (overwriteAll || sparkPlugGap.isBlank()) sparkPlugGap = estimates.sparkPlugGap.orEmpty()
+        if (overwriteAll || engineAirFilterPartNumber.isBlank()) engineAirFilterPartNumber = estimates.engineAirFilterPartNumber.orEmpty()
+        if (overwriteAll || cabinAirFilterPartNumber.isBlank()) cabinAirFilterPartNumber = estimates.cabinAirFilterPartNumber.orEmpty()
         if (overwriteAll || tirePsiFront.isBlank()) tirePsiFront = estimates.tirePsiFront.orEmpty()
         if (overwriteAll || tirePsiRear.isBlank()) tirePsiRear = estimates.tirePsiRear.orEmpty()
         if (overwriteAll || wiperBladeSizeDriver.isBlank()) wiperBladeSizeDriver = estimates.wiperBladeSizeDriver.orEmpty()
@@ -243,6 +247,20 @@ private fun EditPartsContent(
                 modifier = Modifier.fillMaxWidth(),
             )
 
+            Text("Filters", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+            OutlinedTextField(
+                value = engineAirFilterPartNumber,
+                onValueChange = { engineAirFilterPartNumber = it },
+                label = { Text("Engine air filter part #") },
+                modifier = Modifier.fillMaxWidth(),
+            )
+            OutlinedTextField(
+                value = cabinAirFilterPartNumber,
+                onValueChange = { cabinAirFilterPartNumber = it },
+                label = { Text("Cabin air filter part #") },
+                modifier = Modifier.fillMaxWidth(),
+            )
+
             Text("Tires", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
             OutlinedTextField(
                 value = tireSizeFront,
@@ -306,6 +324,8 @@ private fun EditPartsContent(
                             oilFilterPartNumber = oilFilterPartNumber.trim().ifBlank { null },
                             sparkPlugPartNumber = sparkPlugPartNumber.trim().ifBlank { null },
                             sparkPlugGap = sparkPlugGap.trim().ifBlank { null },
+                            engineAirFilterPartNumber = engineAirFilterPartNumber.trim().ifBlank { null },
+                            cabinAirFilterPartNumber = cabinAirFilterPartNumber.trim().ifBlank { null },
                             tireSizeFront = tireSizeFront.trim().ifBlank { null },
                             tireSizeRear = tireSizeRear.trim().ifBlank { null },
                             tirePsiFront = tirePsiFront.trim().ifBlank { null },
