@@ -27,10 +27,15 @@
 The app is published on F-Droid with Reproducible Builds enabled and auto-update tracking via Git tags. When helping the user create a new release, agents **MUST** follow this exact workflow to ensure F-Droid successfully picks up the update:
 
 1. **Bump Versions:** Update `versionCode` and `versionName` in `app/build.gradle.kts`.
-2. **Fastlane Changelog:** Create a new text file at `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt` containing the release notes.
-3. **Standard Changelog:** Update the main `CHANGELOG.md` and `README.md` files in the project root if necessary.
-4. **Commit & Tag:** Instruct the user to commit these changes, create a git tag strictly following the `vX.Y.Z` format (e.g., `v1.1.9`), and push both the commit and the tag to GitHub.
-5. **Reproducible Build Binary:** F-Droid requires the compiled APK to verify reproducible builds. Instruct the user to:
+2. **Reproducible Build Configuration:** Ensure `vcsInfo { include = false }` is present in `app/build.gradle.kts` under `buildTypes.release`. This prevents AGP from embedding local Git commit metadata in `META-INF/version-control-info.textproto`, which breaks F-Droid reproducible build verification.
+3. **Fastlane Changelog:** Create a new text file at `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt` containing the concise release notes.
+4. **Standard Changelog & Readme:** Update the main `CHANGELOG.md` with detailed bullet points under `## [X.Y.Z] - YYYY-MM-DD` and update the version badge in `README.md`.
+5. **F-Droid Metadata Recipe:** Update `fdroid/com.fearmikey.garage.yml`:
+   * Update `versionName` and `versionCode`.
+   * Update `commit` (either `vX.Y.Z` tag or the 40-character Git commit hash).
+   * Ensure `gradle:` is set to `- yes` (do NOT use `- foss` as product flavors were removed).
+6. **Commit & Tag:** Commit all changes, create a git tag strictly following the `vX.Y.Z` format (e.g., `v1.2.8`), and push both the commit and the tag to GitHub.
+7. **Reproducible Build Binary:** F-Droid requires the compiled APK to verify reproducible builds. Instruct the user to:
    * Build the signed release APK (`app-release.apk`) using their secure `Garage-Release.jks` keystore.
    * Go to GitHub Releases, draft a new release for the newly pushed `vX.Y.Z` tag.
    * Upload the `app-release.apk` file. (F-Droid is hardcoded to look for this exact filename at `https://github.com/fearmikey/Garage/releases/download/v%v/app-release.apk`).
