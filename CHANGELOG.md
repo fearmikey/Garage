@@ -1,7 +1,14 @@
-## [1.2.7] - 2026-10-04
+## [1.2.8] - 2026-10-05
+
+### Added
+* **LubeLogger Self-Hosted Sync:** Sync vehicle service logs and fuel fill-up records directly with your self-hosted LubeLogger instance.
+* **Interactive Fuel Trend Analytics:** Added interactive fuel economy trend charts, cost breakdown graphs, and efficiency analytics across US/UK MPG, L/100km, and km/L.
+* **Expanded OBD2 Diagnostics & DTC Lookup:** Upgraded OBD2 Bluetooth/Wi-Fi diagnostic scanner with full Freeze Frame decoding, comprehensive offline DTC trouble code definitions, live PID readings, and adapter device selection.
+* **F-Droid Store Screenshots:** Updated high-resolution store screenshots for F-Droid listings in Fastlane metadata.
 
 ### Changed
-* Maintenance release with performance improvements and bug fixes.
+* **F-Droid Reproducible Build Compliance:** Disabled VCS info in Gradle release builds to ensure deterministic, reproducible APK generation for F-Droid.
+* **Expanded Test Suite:** Added unit test coverage for `ObdScannerContentTest`, `LubeLoggerMapperTest`, `TrendStatsTest`, `FuelTrendsTest`, and `ObdViewModelTest`.
 
 ## [1.2.6] - 2026-09-29
 

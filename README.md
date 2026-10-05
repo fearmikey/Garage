@@ -1,7 +1,7 @@
 # Garage
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.2.7-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-1.2.8-blue.svg)](CHANGELOG.md)
 [![Android Min SDK](https://img.shields.io/badge/Min%20SDK-34-brightgreen.svg)](https://developer.android.com/about/versions/14)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4-purple.svg?logo=kotlin)](https://kotlinlang.org/)
 [![Compose](https://img.shields.io/badge/Jetpack%20Compose-Material3-4285F4.svg?logo=android)](https://developer.android.com/jetpack/compose)
@@ -76,6 +76,7 @@ Garage is strictly **Free and Open Source Software (FOSS)** built for distributi
 
 ### Privacy & Data Backup
 * **Local-First Storage:** Fully functional offline data storage backed by **Room Persistence Library**.
+* **Self-Hosted LubeLogger Sync:** Seamlessly sync service records and fuel fill-up logs with your personal LubeLogger server.
 * **JSON Import & Export:** Transfer your entire garage dataset across devices using simple JSON backup files.
 * **Secure WebDAV Cloud Backup:** Schedule or run automated cloud backups via WebDAV, backed by **AndroidX Security Crypto** for credential protection.
 

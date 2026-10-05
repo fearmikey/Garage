@@ -1,0 +1,1 @@
+LubeLogger self-hosted sync, interactive fuel economy trend charts, upgraded OBD2 diagnostic scanner with Freeze Frame & offline DTC lookup, and F-Droid reproducible build improvements.
