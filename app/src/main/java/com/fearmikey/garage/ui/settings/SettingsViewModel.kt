@@ -19,14 +19,20 @@ import com.fearmikey.garage.data.repository.WebDavBackupRepository
 import com.fearmikey.garage.notification.CloudBackupScheduler
 import com.fearmikey.garage.notification.ReminderNotifier
 import com.fearmikey.garage.notification.WorkScheduler
+import com.fearmikey.garage.obd.ObdConnectionManager
+import com.fearmikey.garage.obd.ObdAdapterConfig
+import com.fearmikey.garage.obd.ObdDevice
 import com.fearmikey.garage.widget.WidgetRefresher
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import javax.inject.Inject
 
 data class SettingsUiState(
@@ -58,6 +64,10 @@ data class SettingsUiState(
     val lastLocalBackupTimestamp: Long? = null,
     val lastLocalBackupError: String? = null,
     val notificationPermissionGranted: Boolean = false,
+    val savedObdAdapter: ObdAdapterConfig? = null,
+    val pairedObdDevices: List<ObdDevice> = emptyList(),
+    val bleObdDevices: List<ObdDevice> = emptyList(),
+    val isObdBleScanning: Boolean = false,
 )
 
 @HiltViewModel
@@ -70,6 +80,7 @@ class SettingsViewModel @Inject constructor(
     private val cloudBackupPreferencesManager: CloudBackupPreferencesManager,
     private val autoBackupManager: AutoBackupManager,
     private val reminderNotifier: ReminderNotifier,
+    private val obdConnectionManager: ObdConnectionManager,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SettingsUiState())
@@ -129,6 +140,11 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             preferencesRepository.documentExpirationDaysWindow.collect { days ->
                 _uiState.update { it.copy(documentExpirationDaysWindow = days) }
+            }
+        }
+        viewModelScope.launch {
+            preferencesRepository.savedObdAdapter.collect { adapter ->
+                _uiState.update { it.copy(savedObdAdapter = adapter) }
             }
         }
         viewModelScope.launch {
@@ -282,6 +298,64 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    /** Refreshes the list of paired Bluetooth devices. Requires BLUETOOTH_CONNECT. */
+    fun loadPairedObdDevices() {
+        _uiState.update { it.copy(pairedObdDevices = obdConnectionManager.getPairedObdDevices()) }
+    }
+
+    fun setSavedObdAdapter(config: ObdAdapterConfig) {
+        stopObdBleScan()
+        viewModelScope.launch {
+            preferencesRepository.setSavedObdAdapter(config)
+        }
+    }
+
+    fun clearSavedObdAdapter() {
+        stopObdBleScan()
+        viewModelScope.launch {
+            preferencesRepository.setSavedObdAdapter(null)
+        }
+    }
+
+    private var obdBleScanJob: Job? = null
+
+    /** Scans for nearby Bluetooth LE OBD2 adapters. Requires BLUETOOTH_SCAN. */
+    fun startObdBleScan() {
+        obdBleScanJob?.cancel()
+        _uiState.update { it.copy(isObdBleScanning = true, bleObdDevices = emptyList()) }
+        obdBleScanJob = viewModelScope.launch {
+            try {
+                withTimeoutOrNull(OBD_BLE_SCAN_DURATION_MS) {
+                    obdConnectionManager.scanBleDevices().collect { device ->
+                        _uiState.update { state ->
+                            if (state.bleObdDevices.any { it.address == device.address }) {
+                                state
+                            } else {
+                                state.copy(
+                                    bleObdDevices = (state.bleObdDevices + device).sortedWith(
+                                        compareByDescending<ObdDevice> { it.looksLikeObdAdapter }.thenBy { it.name.lowercase() },
+                                    ),
+                                )
+                            }
+                        }
+                    }
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                _uiState.update { it.copy(message = "Bluetooth LE scan failed. Make sure Bluetooth is on.") }
+            } finally {
+                _uiState.update { it.copy(isObdBleScanning = false) }
+            }
+        }
+    }
+
+    fun stopObdBleScan() {
+        obdBleScanJob?.cancel()
+        obdBleScanJob = null
+        _uiState.update { it.copy(isObdBleScanning = false) }
+    }
+
     fun exportBackup(destination: Uri) {
         viewModelScope.launch {
             _uiState.update { it.copy(isBusy = true, message = null) }
@@ -408,6 +482,14 @@ class SettingsViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun showMessage(message: String) {
+        _uiState.update { it.copy(message = message) }
+    }
+
+    private companion object {
+        const val OBD_BLE_SCAN_DURATION_MS = 12_000L
     }
 
     fun consumeMessage() {

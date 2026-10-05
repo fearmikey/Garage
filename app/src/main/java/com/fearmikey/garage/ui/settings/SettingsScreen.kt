@@ -26,6 +26,7 @@ import androidx.compose.material.icons.automirrored.filled.Comment
 import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Badge
+import androidx.compose.material.icons.filled.Bluetooth
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.CloudSync
@@ -40,7 +41,6 @@ import androidx.compose.material.icons.filled.LocalCafe
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Palette
-import androidx.compose.material.icons.filled.PrivacyTip
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Straighten
@@ -81,6 +81,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -91,8 +92,11 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fearmikey.garage.BuildConfig
+import com.fearmikey.garage.R
 import com.fearmikey.garage.config.FlavorConfig
 import com.fearmikey.garage.data.local.entity.Vehicle
+import com.fearmikey.garage.ui.obd.ObdDevicePickerDialog
+import com.fearmikey.garage.ui.obd.hasObdBluetoothPermissions
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.AppRestarter
 import kotlin.math.abs
@@ -122,6 +126,7 @@ fun SettingsScreen(
     var showCloudBackupDialog by remember { mutableStateOf(false) }
     var showLocalBackupDialog by remember { mutableStateOf(false) }
     var showBugReportFeedbackDialog by remember { mutableStateOf(false) }
+    var showObdAdapterDialog by remember { mutableStateOf(false) }
 
     val exportLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.CreateDocument("application/zip"),
@@ -228,6 +233,27 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable { showDefaultVehicleDialog = true },
+                )
+            }
+            item {
+                val adapterText = uiState.savedObdAdapter?.let { adapter ->
+                    stringResource(
+                        R.string.settings_obd_adapter_summary,
+                        adapter.name,
+                        adapter.type.displayName,
+                        adapter.address,
+                    )
+                } ?: stringResource(R.string.settings_obd_adapter_not_set)
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.settings_obd_adapter_title)) },
+                    supportingContent = { Text(adapterText) },
+                    leadingContent = { Icon(Icons.Filled.Bluetooth, contentDescription = null) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            if (hasObdBluetoothPermissions(context)) viewModel.loadPairedObdDevices()
+                            showObdAdapterDialog = true
+                        },
                 )
             }
 
@@ -456,8 +482,8 @@ fun SettingsScreen(
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Open Source Licenses") },
-                    supportingContent = { Text("Third-party software notices and licenses.") },
+                    headlineContent = { Text("License") },
+                    supportingContent = { Text("MIT License") },
                     leadingContent = { Icon(Icons.Filled.Code, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -517,15 +543,6 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable { uriHandler.openUri("https://github.com/fearmikey/Garage/discussions") },
-                )
-            }
-            item {
-                ListItem(
-                    headlineContent = { Text("Privacy Policy") },
-                    leadingContent = { Icon(Icons.Filled.PrivacyTip, contentDescription = null) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { uriHandler.openUri("https://github.com/fearmikey/Garage/blob/main/PRIVACY.md") },
                 )
             }
             item {
@@ -590,6 +607,33 @@ fun SettingsScreen(
         )
     }
 
+    if (showObdAdapterDialog) {
+        ObdDevicePickerDialog(
+            pairedDevices = uiState.pairedObdDevices,
+            bleDevices = uiState.bleObdDevices,
+            isBleScanning = uiState.isObdBleScanning,
+            selected = uiState.savedObdAdapter,
+            onAdapterSelected = { config ->
+                viewModel.setSavedObdAdapter(config)
+                showObdAdapterDialog = false
+            },
+            onDismissRequest = {
+                viewModel.stopObdBleScan()
+                showObdAdapterDialog = false
+            },
+            onRefreshPaired = viewModel::loadPairedObdDevices,
+            onStartBleScan = viewModel::startObdBleScan,
+            onClearSelection = if (uiState.savedObdAdapter != null) {
+                {
+                    viewModel.clearSavedObdAdapter()
+                    showObdAdapterDialog = false
+                }
+            } else {
+                null
+            },
+        )
+    }
+
     if (showMaintenanceMileageDialog) {
         MaintenanceMileageDialog(
             currentMilesWindow = uiState.maintenanceMileageWindow,
@@ -650,6 +694,8 @@ fun SettingsScreen(
                     Spacer(modifier = Modifier.padding(top = 12.dp))
                     Text(text = "A simple, powerful vehicle management app to track maintenance, service history, fuel economy, and reminders.")
                     Spacer(modifier = Modifier.padding(top = 12.dp))
+                    Text(text = "Licensed under the MIT License", style = MaterialTheme.typography.bodySmall)
+                    Spacer(modifier = Modifier.padding(top = 4.dp))
                     Text(text = "Developed by fearmikey", style = MaterialTheme.typography.bodySmall)
                 }
             },

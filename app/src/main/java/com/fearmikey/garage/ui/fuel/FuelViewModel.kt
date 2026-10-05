@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fearmikey.garage.data.fuel.BatteryHealthSummary
 import com.fearmikey.garage.data.fuel.ChargingCalculator
+import com.fearmikey.garage.data.fuel.ChargingEfficiencyEntry
 import com.fearmikey.garage.data.fuel.FuelEconomyCalculator
+import com.fearmikey.garage.data.fuel.FuelEconomyEntry
 import com.fearmikey.garage.data.local.entity.ChargingRecord
 import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.data.local.entity.Vehicle
@@ -33,6 +35,8 @@ data class FuelUiState(
     val records: List<FuelRecord> = emptyList(),
     /** Segment MPG for the fill-up that *completed* it, keyed by [FuelRecord.id]. */
     val mpgByRecordId: Map<Long, Double> = emptyMap(),
+    /** Full-tank economy segments, oldest first; drives the trend chart. */
+    val fuelEntries: List<FuelEconomyEntry> = emptyList(),
     val averageMpg: Double? = null,
     val bestMpg: Double? = null,
     val worstMpg: Double? = null,
@@ -43,6 +47,8 @@ data class FuelUiState(
     val isEvOrPhev: Boolean = false,
     val isPureEv: Boolean = false,
     val chargingRecords: List<ChargingRecord> = emptyList(),
+    /** Charging efficiency segments, oldest first; drives the charging trend chart. */
+    val chargingEntries: List<ChargingEfficiencyEntry> = emptyList(),
     val averageWhPerMi: Double? = null,
     val averageKwhPer100Km: Double? = null,
     val averageMpge: Double? = null,
@@ -89,6 +95,7 @@ class FuelViewModel @Inject constructor(
         FuelUiState(
             records = fuelRecords,
             mpgByRecordId = fuelEntries.associateBy({ it.record.id }) { it.mpg },
+            fuelEntries = fuelEntries,
             averageMpg = FuelEconomyCalculator.averageMpg(fuelEntries),
             bestMpg = FuelEconomyCalculator.bestMpg(fuelEntries),
             worstMpg = FuelEconomyCalculator.worstMpg(fuelEntries),
@@ -98,6 +105,7 @@ class FuelViewModel @Inject constructor(
             isEvOrPhev = isEvOrPhev,
             isPureEv = isPureEv,
             chargingRecords = chargingRecords,
+            chargingEntries = chargingEntries,
             averageWhPerMi = ChargingCalculator.averageWhPerMi(chargingEntries),
             averageKwhPer100Km = ChargingCalculator.averageKwhPer100Km(chargingEntries),
             averageMpge = ChargingCalculator.averageMpge(chargingEntries),

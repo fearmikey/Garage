@@ -43,7 +43,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
-import androidx.compose.material.icons.filled.SettingsBluetooth
+import androidx.compose.material.icons.filled.CarRepair
 import com.fearmikey.garage.ui.cost.CostOfOwnershipScreen
 import com.fearmikey.garage.ui.fuel.FuelScreen
 import com.fearmikey.garage.ui.maintenance.MaintenanceSuggestionsScreen
@@ -82,7 +82,7 @@ fun VehicleDetailScreen(
                 actions = {
                     vehicle?.let {
                         IconButton(onClick = { onOpenObd(it.id) }) {
-                            Icon(Icons.Filled.SettingsBluetooth, contentDescription = "OBD2 Scanner")
+                            Icon(Icons.Filled.CarRepair, contentDescription = "OBD2 Scanner")
                         }
                         IconButton(onClick = { onExportMaintenance(it.id) }) {
                             Icon(Icons.Filled.PictureAsPdf, contentDescription = "Export Maintenance Log")

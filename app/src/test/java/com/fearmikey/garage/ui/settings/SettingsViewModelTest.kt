@@ -38,6 +38,9 @@ import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.data.repository.WebDavBackupRepository
 import com.fearmikey.garage.notification.ReminderNotifier
+import com.fearmikey.garage.obd.ObdConnectionManager
+import com.fearmikey.garage.obd.ObdAdapterConfig
+import com.fearmikey.garage.obd.ObdDevice
 import com.fearmikey.garage.ui.util.AppCurrency
 import com.fearmikey.garage.ui.util.UnitSystem
 import kotlinx.coroutines.Dispatchers
@@ -79,6 +82,12 @@ class SettingsViewModelTest {
         override val appOpenCount: Flow<Int> = MutableStateFlow(1)
         override val buyMeACoffeeDontAskAgain: Flow<Boolean> = MutableStateFlow(false)
         override val buyMeACoffeeNextPromptOpenCount: Flow<Int> = MutableStateFlow(2)
+        val obdAdapterFlow = MutableStateFlow<ObdAdapterConfig?>(null)
+        override val savedObdAdapter: Flow<ObdAdapterConfig?> = obdAdapterFlow
+
+        override suspend fun setSavedObdAdapter(config: ObdAdapterConfig?) {
+            obdAdapterFlow.value = config
+        }
 
         override suspend fun setUnitsType(units: String) {}
         override suspend fun setCurrencyCode(currencyCode: String) {
@@ -253,6 +262,7 @@ class SettingsViewModelTest {
             cloudBackupPreferencesManager = cloudPrefs,
             autoBackupManager = autoBackupManager,
             reminderNotifier = notifier,
+            obdConnectionManager = ObdConnectionManager(context),
         )
 
         testDispatcher.scheduler.advanceUntilIdle()
@@ -342,6 +352,7 @@ class SettingsViewModelTest {
             cloudBackupPreferencesManager = cloudPrefs,
             autoBackupManager = autoBackupManager,
             reminderNotifier = notifier,
+            obdConnectionManager = ObdConnectionManager(context),
         )
 
         testDispatcher.scheduler.advanceUntilIdle()
@@ -359,6 +370,22 @@ class SettingsViewModelTest {
 
         assertEquals(14, prefsRepo.maintenanceDaysWindowFlow.value)
         assertEquals(14, viewModel.uiState.value.maintenanceDaysWindow)
+
+        // OBD2 adapter preference: save then clear
+        assertEquals(null, viewModel.uiState.value.savedObdAdapter)
+        viewModel.setSavedObdAdapter(ObdDevice(name = "Veepeak VP11", address = "AA:BB:CC:DD:EE:FF").toConfig())
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertEquals("AA:BB:CC:DD:EE:FF", viewModel.uiState.value.savedObdAdapter?.address)
+        assertEquals("Veepeak VP11", viewModel.uiState.value.savedObdAdapter?.name)
+
+        val wifi = ObdAdapterConfig.wifi("192.168.0.10", 35000)
+        viewModel.setSavedObdAdapter(wifi)
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertEquals(wifi, viewModel.uiState.value.savedObdAdapter)
+
+        viewModel.clearSavedObdAdapter()
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertEquals(null, viewModel.uiState.value.savedObdAdapter)
     }
 
     @Test
@@ -449,6 +476,7 @@ class SettingsViewModelTest {
             cloudBackupPreferencesManager = cloudPrefs,
             autoBackupManager = autoBackupManager,
             reminderNotifier = notifier,
+            obdConnectionManager = ObdConnectionManager(context),
         )
 
         testDispatcher.scheduler.advanceUntilIdle()

@@ -6,7 +6,10 @@ import com.fearmikey.garage.data.local.dao.ChargingDao
 import com.fearmikey.garage.data.local.dao.FuelDao
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
 import com.fearmikey.garage.data.local.dao.ModificationDao
+import com.fearmikey.garage.data.local.dao.RecallCampaignStateDao
 import com.fearmikey.garage.data.local.dao.VehicleDao
+import com.fearmikey.garage.data.local.entity.RecallCampaignState
+import com.fearmikey.garage.data.repository.RecallStateRepository
 import com.fearmikey.garage.data.local.dao.VehiclePartsDao
 import com.fearmikey.garage.data.local.dao.VehicleRegistrationDao
 import com.fearmikey.garage.data.local.dao.VehicleSpecsDao
@@ -189,6 +192,14 @@ class MaintenanceExportViewModelTest {
         )
     }
 
+    private class FakeRecallCampaignStateDao : RecallCampaignStateDao {
+        private val states = MutableStateFlow<List<RecallCampaignState>>(emptyList())
+        override fun getStatesForVehicle(vehicleId: Long) = states
+        override suspend fun saveState(state: RecallCampaignState) {
+            states.value = states.value.filterNot { it.campaignNumber == state.campaignNumber && it.vehicleId == state.vehicleId } + state
+        }
+    }
+
     private class FakePreferencesRepository : PreferencesRepository {
         override val unitsType: Flow<String> = MutableStateFlow("imperial")
         override val unitSystem: Flow<UnitSystem> = MutableStateFlow(UnitSystem.IMPERIAL)
@@ -241,6 +252,7 @@ class MaintenanceExportViewModelTest {
         val fuelRepository = FuelRepository(FakeFuelDao())
         val chargingRepository = ChargingRepository(FakeChargingDao())
         val recallRepository = RecallRepository(FakeRecallApi())
+        val recallStateRepository = RecallStateRepository(FakeRecallCampaignStateDao())
         val preferencesRepository = FakePreferencesRepository()
         val pdfExportNotifier = PdfExportNotifier(ContextWrapper(null))
 
@@ -252,6 +264,7 @@ class MaintenanceExportViewModelTest {
             fuelRepository = fuelRepository,
             chargingRepository = chargingRepository,
             recallRepository = recallRepository,
+            recallStateRepository = recallStateRepository,
             preferencesRepository = preferencesRepository,
             imageStorageManager = ImageStorageManager(ContextWrapper(null)),
             pdfExportNotifier = pdfExportNotifier,
@@ -293,6 +306,7 @@ class MaintenanceExportViewModelTest {
         val fuelRepository = FuelRepository(FakeFuelDao())
         val chargingRepository = ChargingRepository(FakeChargingDao())
         val recallRepository = RecallRepository(FakeRecallApi())
+        val recallStateRepository = RecallStateRepository(FakeRecallCampaignStateDao())
         val preferencesRepository = FakePreferencesRepository()
         val pdfExportNotifier = PdfExportNotifier(ContextWrapper(null))
 
@@ -304,6 +318,7 @@ class MaintenanceExportViewModelTest {
             fuelRepository = fuelRepository,
             chargingRepository = chargingRepository,
             recallRepository = recallRepository,
+            recallStateRepository = recallStateRepository,
             preferencesRepository = preferencesRepository,
             imageStorageManager = ImageStorageManager(ContextWrapper(null)),
             pdfExportNotifier = pdfExportNotifier,
@@ -343,6 +358,9 @@ class MaintenanceExportViewModelTest {
         val fuelRepository = FuelRepository(FakeFuelDao())
         val chargingRepository = ChargingRepository(FakeChargingDao())
         val recallRepository = RecallRepository(FakeRecallApi())
+        val recallStateDao = FakeRecallCampaignStateDao()
+        recallStateDao.saveState(RecallCampaignState(1L, "20V123000", com.fearmikey.garage.data.local.entity.RecallState.SERVICED))
+        val recallStateRepository = RecallStateRepository(recallStateDao)
         val preferencesRepository = FakePreferencesRepository()
         val pdfExportNotifier = PdfExportNotifier(ContextWrapper(null))
 
@@ -354,6 +372,7 @@ class MaintenanceExportViewModelTest {
             fuelRepository = fuelRepository,
             chargingRepository = chargingRepository,
             recallRepository = recallRepository,
+            recallStateRepository = recallStateRepository,
             preferencesRepository = preferencesRepository,
             imageStorageManager = ImageStorageManager(ContextWrapper(null)),
             pdfExportNotifier = pdfExportNotifier,

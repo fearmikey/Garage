@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.net.Uri
 import android.widget.Toast
+import com.fearmikey.garage.obd.ObdScanSummary
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,6 +21,8 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -85,6 +88,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -96,6 +100,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
+import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
 import com.fearmikey.garage.ui.components.EmptyState
 import com.fearmikey.garage.ui.theme.GarageTheme
@@ -262,6 +267,8 @@ private fun RegistrationInsuranceContent(
                     item {
                         EmissionsCard(
                             record = record,
+                            obdReadiness = uiState.obdReadiness,
+                            obdReadinessDate = uiState.obdReadinessDate,
                         )
                     }
 
@@ -614,6 +621,8 @@ private fun InspectionCard(
 @Composable
 private fun EmissionsCard(
     record: VehicleRegistrationInsurance,
+    obdReadiness: ObdScanSummary.SavedReadiness? = null,
+    obdReadinessDate: Long? = null,
 ) {
     val hasEmissionsData = (record.emissionsExpiration != null) ||
         (record.emissionsDate != null) ||
@@ -700,6 +709,31 @@ private fun EmissionsCard(
                     icon = Icons.AutoMirrored.Filled.Notes,
                     label = "Notes / Station Info",
                     value = record.emissionsNotes,
+                )
+            }
+
+            if (obdReadiness != null) {
+                val verdict = when {
+                    obdReadiness.milOn == true -> stringResource(R.string.documents_obd_readiness_mil_on)
+                    obdReadiness.likelyReady -> stringResource(R.string.documents_obd_readiness_likely_ready)
+                    else -> stringResource(R.string.documents_obd_readiness_not_ready)
+                }
+                val notReady = obdReadiness.notReady.takeIf { it.isNotEmpty() }
+                    ?.let { "\n" + stringResource(R.string.documents_obd_readiness_not_ready_list, it.joinToString()) }
+                    .orEmpty()
+                val readinessLabel = obdReadinessDate?.let {
+                    stringResource(R.string.documents_obd_readiness_label_scanned, it.toDisplayDate())
+                } ?: stringResource(R.string.documents_obd_readiness_label)
+                InfoRow(
+                    icon = Icons.AutoMirrored.Filled.FactCheck,
+                    label = readinessLabel,
+                    value = stringResource(
+                        R.string.documents_obd_readiness_value,
+                        obdReadiness.complete,
+                        obdReadiness.total,
+                        verdict,
+                    ) + notReady,
+                    isCopyable = false,
                 )
             }
         }
@@ -1201,6 +1235,8 @@ private fun AddEditRegistrationInsuranceSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .navigationBarsPadding()
+                .imePadding()
                 .verticalScroll(sheetScrollState)
                 .verticalScrollbar(sheetScrollState)
                 .padding(horizontal = 24.dp, vertical = 16.dp),

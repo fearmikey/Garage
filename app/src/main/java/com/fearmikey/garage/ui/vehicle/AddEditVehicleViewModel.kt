@@ -142,7 +142,7 @@ class AddEditVehicleViewModel @Inject constructor(
     fun onTrimChanged(trim: String) = _uiState.update { it.copy(trim = trim) }
     fun onDrivetrainChanged(drivetrain: Drivetrain) = _uiState.update { it.copy(drivetrain = drivetrain) }
     fun onPurchasedNewChanged(isNew: Boolean) = _uiState.update { it.copy(purchasedNew = isNew) }
-    fun onInitialMileageChanged(mileage: String) = _uiState.update { it.copy(initialMileage = mileage.filter(Char::isDigit)) }
+    fun onInitialMileageChanged(mileage: String) = _uiState.update { it.copy(initialMileage = com.fearmikey.garage.ui.util.sanitizeMileageInput(mileage)) }
 
     fun onImagesPicked(uris: List<Uri>) {
         if (uris.isEmpty()) return

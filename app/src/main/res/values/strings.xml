@@ -31,4 +31,121 @@
     <string name="scan_vin_instruction">Align VIN barcode within frame</string>
     <string name="cd_scan_vin">Scan VIN</string>
     <string name="scan_vin_failed">No barcode detected. Align VIN barcode and try again.</string>
+
+    <!-- OBD2 scanner -->
+    <string name="obd_scanner_title">OBD2 Scanner</string>
+    <string name="obd_cd_back">Back</string>
+    <string name="obd_rescan">Rescan</string>
+    <string name="obd_reconnect">Reconnect</string>
+    <string name="obd_change">Change</string>
+    <string name="obd_cancel">Cancel</string>
+    <string name="obd_clearing_codes">Clearing trouble codes…</string>
+    <string name="obd_clear_codes">Clear Codes</string>
+    <string name="obd_clear_codes_confirm_title">Clear trouble codes?</string>
+    <string name="obd_clear_codes_confirm_message">For best results, turn the engine off but leave the ignition on.\n\nThis turns off the check engine light and resets all emissions readiness monitors. If the underlying problem isn\'t fixed, the codes will come back, and the vehicle may fail an emissions test until it has been driven enough for the monitors to complete.</string>
+    <string name="obd_permission_title">Bluetooth Permission Needed</string>
+    <string name="obd_permission_message">Garage needs Bluetooth permission to talk to your OBD2 adapter. Nothing leaves your device.</string>
+    <string name="obd_permission_action">Grant Permission</string>
+    <string name="obd_no_adapter_title">No OBD2 Adapter Selected</string>
+    <string name="obd_no_adapter_message">Plug a Bluetooth OBD2 adapter into your vehicle\'s diagnostic port and pair it with your phone. Garage will remember it and connect automatically every time you open the scanner.\n\nRead &amp; clear trouble codes, check emissions readiness, log your odometer, and watch live engine data.</string>
+    <string name="obd_no_adapter_action">Pair OBD2 Adapter</string>
+    <string name="obd_status_connected">Connected</string>
+    <string name="obd_status_connecting">Connecting…</string>
+    <string name="obd_status_disconnected">Disconnected</string>
+    <string name="obd_status_not_connected">Not connected</string>
+    <string name="obd_adapter_header">OBD2 Adapter · %1$s</string>
+    <string name="obd_unknown_device">Unknown Device</string>
+    <string name="obd_vin_mismatch_title">This adapter is connected to a different vehicle</string>
+    <string name="obd_vin_save_title">Save this VIN to the vehicle?</string>
+    <string name="obd_vin_mismatch_message">The car reports VIN %1$s, but this vehicle\'s VIN is %2$s. This scan wasn\'t saved to the timeline.</string>
+    <string name="obd_vin_save_message">The car reports VIN %1$s. This vehicle doesn\'t have a VIN saved yet.</string>
+    <string name="obd_save_scan_anyway">Save Scan Anyway</string>
+    <string name="obd_save_vin">Save VIN</string>
+    <string name="obd_freeze_frame_title">Freeze Frame</string>
+    <string name="obd_freeze_frame_description">Engine conditions recorded when %1$s was set.</string>
+    <string name="obd_freeze_frame_code_fallback">the code</string>
+    <string name="obd_freeze_frame_empty">The vehicle didn\'t report any freeze frame values.</string>
+    <string name="obd_vehicle_health_title">Vehicle Health</string>
+    <string name="obd_mil_on">Check engine light is ON</string>
+    <string name="obd_mil_off">Check engine light is off</string>
+    <plurals name="obd_emissions_codes_reported">
+        <item quantity="one">%1$d emissions-related code reported</item>
+        <item quantity="other">%1$d emissions-related codes reported</item>
+    </plurals>
+    <string name="obd_readiness_summary">Emissions readiness: %1$d/%2$d monitors complete</string>
+    <string name="obd_readiness_mil_on">Vehicles with the check engine light on fail emissions testing.</string>
+    <string name="obd_readiness_ok">Likely ready for an emissions/smog test.</string>
+    <string name="obd_readiness_not_ready">Not ready yet. Drive normally for a few days so the monitors can finish.</string>
+    <string name="obd_cd_hide_monitors">Hide monitors</string>
+    <string name="obd_cd_show_monitors">Show monitors</string>
+    <string name="obd_cd_monitor_complete">Complete</string>
+    <string name="obd_cd_monitor_incomplete">Incomplete</string>
+    <string name="obd_monitor_ready">Ready</string>
+    <string name="obd_monitor_not_ready">Not ready</string>
+    <string name="obd_no_codes_title">No trouble codes found</string>
+    <string name="obd_no_codes_message">No stored, pending, or permanent diagnostic trouble codes.</string>
+    <string name="obd_dtc_title">Diagnostic Trouble Codes</string>
+    <plurals name="obd_code_count">
+        <item quantity="one">%1$d code</item>
+        <item quantity="other">%1$d codes</item>
+    </plurals>
+    <string name="obd_dtc_stored_title">Stored</string>
+    <string name="obd_dtc_stored_explanation">Confirmed faults. These usually turn on the check engine light.</string>
+    <string name="obd_dtc_pending_title">Pending</string>
+    <string name="obd_dtc_pending_explanation">Detected once but not yet confirmed. An early warning.</string>
+    <string name="obd_dtc_permanent_title">Permanent</string>
+    <string name="obd_dtc_permanent_explanation">Can\'t be cleared with a scanner. They go away on their own after the vehicle verifies the repair.</string>
+    <string name="obd_dtc_reported_by">Reported by: %1$s</string>
+    <string name="obd_distance_title">Distance</string>
+    <string name="obd_odometer">Odometer</string>
+    <string name="obd_since_codes_cleared">Since codes cleared</string>
+    <string name="obd_timeline_saved">Scan saved to the vehicle\'s timeline.</string>
+    <string name="obd_timeline_unchanged">Nothing changed since the last scan, so it wasn\'t logged again.</string>
+    <string name="obd_timeline_vin_mismatch">Not saved to the timeline because the VIN doesn\'t match this vehicle.</string>
+    <string name="obd_live_data_title">Live Data</string>
+    <string name="obd_live">Live</string>
+    <string name="obd_waiting_for_data">Waiting for data…</string>
+    <string name="obd_stop_live_data">Stop Live Data</string>
+    <string name="obd_start_live_data">Start Live Data</string>
+    <string name="obd_snapshot_title">Sensor Snapshot</string>
+    <string name="obd_battery_at_port">Battery (at port)</string>
+    <string name="obd_vin">VIN</string>
+
+    <!-- OBD2 scanner: adapter picker -->
+    <string name="obd_picker_title">Select OBD2 Adapter</string>
+    <string name="obd_picker_tab_bluetooth">Bluetooth</string>
+    <string name="obd_picker_tab_ble">BLE</string>
+    <string name="obd_picker_tab_wifi">Wi-Fi</string>
+    <string name="obd_picker_forget_adapter">Forget Adapter</string>
+    <string name="obd_picker_classic_permission_hint">Garage needs Bluetooth permission to list your paired adapters.</string>
+    <string name="obd_picker_allow_bluetooth">Allow Bluetooth Access</string>
+    <string name="obd_picker_classic_empty">No paired Bluetooth devices found. Plug in your OBD2 adapter, turn on the ignition, then pair it in your phone\'s Bluetooth settings (the PIN is usually 1234 or 0000).</string>
+    <string name="obd_picker_classic_hint">Choose the adapter plugged into your vehicle. Likely OBD2 adapters are listed first.</string>
+    <string name="obd_picker_pair_new">Pair New Device</string>
+    <string name="obd_picker_refresh_list">Refresh List</string>
+    <string name="obd_picker_ble_hint">Bluetooth LE adapters (e.g. Vgate iCar Pro BLE, OBDLink CX, Veepeak BLE+) don\'t need to be paired. Plug the adapter in, turn on the ignition, and scan.</string>
+    <string name="obd_picker_ble_empty">No Bluetooth LE devices found yet.</string>
+    <string name="obd_picker_scanning">Scanning…</string>
+    <string name="obd_picker_scan_for_adapters">Scan for Adapters</string>
+    <string name="obd_picker_scan_again">Scan Again</string>
+    <string name="obd_picker_wifi_hint">First connect your phone to the adapter\'s Wi-Fi network (often named \"WiFi_OBDII\" or \"V-LINK\"). Most adapters use 192.168.0.10 port 35000.</string>
+    <string name="obd_picker_open_wifi_settings">Open Wi-Fi Settings</string>
+    <string name="obd_picker_wifi_host_label">Adapter IP address</string>
+    <string name="obd_picker_wifi_port_label">Port</string>
+    <string name="obd_picker_use_wifi_adapter">Use Wi-Fi Adapter</string>
+    <string name="obd_picker_cd_current_adapter">Current adapter</string>
+
+    <!-- OBD2 scanner: settings -->
+    <string name="settings_obd_adapter_title">OBD2 Adapter</string>
+    <string name="settings_obd_adapter_summary">%1$s · %2$s (%3$s)</string>
+    <string name="settings_obd_adapter_not_set">Not set — tap to choose a Bluetooth, BLE, or Wi-Fi adapter</string>
+
+    <!-- OBD2 scanner: documents (emissions) -->
+    <string name="documents_obd_readiness_label">OBD2 Readiness</string>
+    <string name="documents_obd_readiness_label_scanned">OBD2 Readiness (scanned %1$s)</string>
+    <string name="documents_obd_readiness_value">%1$d/%2$d monitors complete — %3$s</string>
+    <string name="documents_obd_readiness_not_ready_list">Not ready: %1$s</string>
+    <string name="documents_obd_readiness_mil_on">Check engine light on — likely to fail</string>
+    <string name="documents_obd_readiness_likely_ready">Likely ready for testing</string>
+    <string name="documents_obd_readiness_not_ready">Not ready yet — drive more before testing</string>
 </resources>

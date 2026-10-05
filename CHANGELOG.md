@@ -1,3 +1,8 @@
+## [1.2.7] - 2026-10-XX
+
+### Changed
+* Maintenance release with performance improvements and bug fixes.
+
 ## [1.2.6] - 2026-09-29
 
 ### Added

@@ -74,6 +74,8 @@ fun VehicleCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     onOpenReminders: (() -> Unit)? = null,
+    onFuelGraphClick: (() -> Unit)? = null,
+    onUpdateMileage: (() -> Unit)? = null,
 ) {
     val effectiveImageFiles: List<Pair<File, Float>> = remember(imageFile, imageFiles, vehicle) {
         if (imageFiles.isNotEmpty()) imageFiles
@@ -184,6 +186,7 @@ fun VehicleCard(
                         icon = Icons.Outlined.Speed,
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        onClick = onUpdateMileage,
                     )
 
                     if (avgMpg != null && avgMpg > 0.0) {
@@ -216,16 +219,18 @@ fun VehicleCard(
                 
                 if (fuelEntries.size >= 2) {
                     Spacer(modifier = Modifier.height(12.dp))
-                    Text(
-                        text = "Fuel Trend",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
                     FuelTrendChart(
                         entries = fuelEntries,
+                        unitSystem = unitSystem,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(60.dp)
+                            .then(
+                                if (onFuelGraphClick != null) {
+                                    Modifier.clickable(onClick = onFuelGraphClick)
+                                } else {
+                                    Modifier
+                                }
+                            ),
                     )
                 }
             }

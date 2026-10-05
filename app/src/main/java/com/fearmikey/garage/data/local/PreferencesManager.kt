@@ -7,6 +7,8 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.fearmikey.garage.obd.ObdAdapterConfig
+import com.fearmikey.garage.obd.ObdAdapterType
 import com.fearmikey.garage.ui.util.AppCurrency
 import com.fearmikey.garage.ui.util.UnitSystem
 import kotlinx.coroutines.flow.Flow
@@ -40,6 +42,9 @@ class PreferencesManager(private val context: Context) {
         val DOCUMENT_EXPIRATION_DAYS_WINDOW_KEY = intPreferencesKey("document_expiration_days_window")
         val SHOW_FUEL_TREND_GRAPH_KEY = booleanPreferencesKey("show_fuel_trend_graph")
         val SHOW_FLEET_OVERVIEW_KEY = booleanPreferencesKey("show_fleet_overview")
+        val SAVED_OBD_DEVICE_ADDRESS_KEY = stringPreferencesKey("saved_obd_device_address")
+        val SAVED_OBD_DEVICE_NAME_KEY = stringPreferencesKey("saved_obd_device_name")
+        val SAVED_OBD_DEVICE_TYPE_KEY = stringPreferencesKey("saved_obd_device_type")
 
         const val DEFAULT_MAINTENANCE_MILEAGE_WINDOW = 500
         const val DEFAULT_MAINTENANCE_DAYS_WINDOW = 10
@@ -170,6 +175,37 @@ class PreferencesManager(private val context: Context) {
         .map { preferences ->
             preferences[DRIVERS_LICENSE_IMAGE_BACK_KEY]
         }
+
+    /** The user's preferred OBD2 adapter, or `null` if none saved. Missing type means Bluetooth Classic. */
+    val savedObdAdapter: Flow<ObdAdapterConfig?> = context.dataStore.data
+        .map { preferences ->
+            val address = preferences[SAVED_OBD_DEVICE_ADDRESS_KEY]
+            if (address.isNullOrBlank()) {
+                null
+            } else {
+                val type = ObdAdapterType.fromName(preferences[SAVED_OBD_DEVICE_TYPE_KEY])
+                ObdAdapterConfig(
+                    type = type,
+                    address = address,
+                    name = preferences[SAVED_OBD_DEVICE_NAME_KEY]?.takeIf { it.isNotBlank() } ?: "OBD2 Adapter",
+                )
+            }
+        }
+
+    /** Persists the preferred OBD2 adapter, or clears it when [config] is null. */
+    suspend fun setSavedObdAdapter(config: ObdAdapterConfig?) {
+        context.dataStore.edit { preferences ->
+            if (config != null && config.address.isNotBlank()) {
+                preferences[SAVED_OBD_DEVICE_ADDRESS_KEY] = config.address
+                preferences[SAVED_OBD_DEVICE_NAME_KEY] = config.name
+                preferences[SAVED_OBD_DEVICE_TYPE_KEY] = config.type.name
+            } else {
+                preferences.remove(SAVED_OBD_DEVICE_ADDRESS_KEY)
+                preferences.remove(SAVED_OBD_DEVICE_NAME_KEY)
+                preferences.remove(SAVED_OBD_DEVICE_TYPE_KEY)
+            }
+        }
+    }
 
     suspend fun incrementAppOpenCount(): Int {
         var newCount = 1

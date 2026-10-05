@@ -1,6 +1,5 @@
 package com.fearmikey.garage.ui.fuel
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -8,10 +7,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -56,6 +57,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -65,11 +67,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.focusProperties
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -85,6 +83,9 @@ import com.fearmikey.garage.data.local.entity.ChargerVendorType
 import com.fearmikey.garage.data.local.entity.ChargingRecord
 import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.ui.components.EmptyState
+import com.fearmikey.garage.ui.components.TrendChart
+import com.fearmikey.garage.ui.components.TrendFooter
+import com.fearmikey.garage.ui.components.TrendPoint
 import com.fearmikey.garage.ui.components.verticalScrollbar
 import com.fearmikey.garage.ui.theme.FuelBestContainerDark
 import com.fearmikey.garage.ui.theme.FuelBestContainerLight
@@ -114,6 +115,8 @@ fun FuelScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showAddFuelSheet by remember { mutableStateOf(false) }
     var showAddChargingSheet by remember { mutableStateOf(false) }
+    var editingFuelRecord by remember { mutableStateOf<FuelRecord?>(null) }
+    var editingChargingRecord by remember { mutableStateOf<ChargingRecord?>(null) }
 
     LaunchedEffect(autoOpenAddSheet) {
         if (autoOpenAddSheet) {
@@ -132,7 +135,39 @@ fun FuelScreen(
         onAddChargingClicked = { showAddChargingSheet = true },
         onDeleteRecord = viewModel::deleteRecord,
         onDeleteChargingRecord = viewModel::deleteChargingRecord,
+        onEditFuelRecord = { editingFuelRecord = it },
+        onEditChargingRecord = { editingChargingRecord = it },
     )
+
+    editingFuelRecord?.let { record ->
+        key(record.id) {
+            AddEditFuelRecordSheet(
+                initial = record,
+                unitSystem = uiState.unitSystem,
+                currencySymbol = uiState.currencySymbol,
+                onDismiss = { editingFuelRecord = null },
+                onSave = { updated ->
+                    viewModel.saveRecord(updated)
+                    editingFuelRecord = null
+                },
+            )
+        }
+    }
+
+    editingChargingRecord?.let { record ->
+        key(record.id) {
+            AddEditChargingRecordSheet(
+                initial = record,
+                unitSystem = uiState.unitSystem,
+                currencySymbol = uiState.currencySymbol,
+                onDismiss = { editingChargingRecord = null },
+                onSave = { updated ->
+                    viewModel.saveChargingRecord(updated)
+                    editingChargingRecord = null
+                },
+            )
+        }
+    }
 
     if (showAddFuelSheet) {
         AddEditFuelRecordSheet(
@@ -167,6 +202,8 @@ private fun FuelContent(
     onAddChargingClicked: () -> Unit,
     onDeleteRecord: (FuelRecord) -> Unit,
     onDeleteChargingRecord: (ChargingRecord) -> Unit,
+    onEditFuelRecord: (FuelRecord) -> Unit = {},
+    onEditChargingRecord: (ChargingRecord) -> Unit = {},
 ) {
     // 0 = Charging, 1 = Fuel
     var selectedEvTab by remember(uiState.isEvOrPhev, uiState.isPureEv) {
@@ -246,6 +283,17 @@ private fun FuelContent(
                                 currencySymbol = uiState.currencySymbol,
                             )
                         }
+                        if (uiState.chargingRecords.size >= 2) {
+                            item(key = "charging-trend") {
+                                ChargingTrendCard(
+                                    entries = uiState.chargingEntries,
+                                    records = uiState.chargingRecords,
+                                    unitSystem = uiState.unitSystem,
+                                    currencySymbol = uiState.currencySymbol,
+                                    onEditRecord = onEditChargingRecord,
+                                )
+                            }
+                        }
                         if (uiState.batteryHealth.history.isNotEmpty()) {
                             item {
                                 BatteryHealthCard(
@@ -286,6 +334,17 @@ private fun FuelContent(
                                 unitSystem = uiState.unitSystem,
                                 currencySymbol = uiState.currencySymbol,
                             )
+                        }
+                        if (uiState.records.size >= 2) {
+                            item(key = "fuel-trend") {
+                                FuelTrendCard(
+                                    entries = uiState.fuelEntries,
+                                    records = uiState.records,
+                                    unitSystem = uiState.unitSystem,
+                                    currencySymbol = uiState.currencySymbol,
+                                    onEditRecord = onEditFuelRecord,
+                                )
+                            }
                         }
                         items(uiState.records, key = { it.id }) { record ->
                             FuelRecordRow(
@@ -449,90 +508,27 @@ private fun BatteryHealthCard(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(bottom = 8.dp),
                 )
-                BatteryHealthTrendChart(
-                    history = summary.history,
-                    unitSystem = unitSystem,
+                val points = remember(summary.history, unitSystem) {
+                    summary.history.mapIndexed { index, point ->
+                        TrendPoint(
+                            id = index.toLong(),
+                            date = point.date,
+                            value = UnitConverter.displayDistanceValue(point.rangeAt100, unitSystem).toDouble(),
+                            detail = "at ${UnitConverter.formatDistance(point.mileage, unitSystem)}",
+                        )
+                    }
+                }
+                TrendChart(
+                    points = points,
+                    formatValue = { "%.0f %s".format(it, unitSystem.distanceUnit) },
+                    interactive = true,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(110.dp),
+                        .height(120.dp),
                 )
+                Spacer(modifier = Modifier.height(4.dp))
+                TrendFooter(startDate = points.first().date, endDate = points.last().date)
             }
-        }
-    }
-}
-
-@Composable
-private fun BatteryHealthTrendChart(
-    history: List<BatteryHealthPoint>,
-    unitSystem: UnitSystem,
-    modifier: Modifier = Modifier,
-) {
-    val primaryColor = MaterialTheme.colorScheme.primary
-    val surfaceVariant = MaterialTheme.colorScheme.outlineVariant
-
-    Canvas(modifier = modifier) {
-        if (history.isEmpty()) return@Canvas
-
-        val ranges = history.map { UnitConverter.displayDistanceValue(it.rangeAt100, unitSystem).toFloat() }
-        val minRange = (ranges.minOrNull() ?: 0f) * 0.95f
-        val maxRange = (ranges.maxOrNull() ?: 100f) * 1.05f
-        val rangeDiff = (maxRange - minRange).coerceAtLeast(1f)
-
-        val width = size.width
-        val height = size.height
-
-        val stepX = if (history.size > 1) width / (history.size - 1) else width / 2f
-
-        val points = ranges.mapIndexed { index, rangeVal ->
-            val x = index * stepX
-            val y = height - ((rangeVal - minRange) / rangeDiff) * height
-            Pair(x, y)
-        }
-
-        // Draw guideline
-        drawLine(
-            color = surfaceVariant,
-            start = Offset(0f, height / 2f),
-            end = Offset(width, height / 2f),
-            strokeWidth = 1.dp.toPx(),
-        )
-
-        // Draw line path
-        val path = Path().apply {
-            moveTo(points.first().first, points.first().second)
-            for (i in 1 until points.size) {
-                lineTo(points[i].first, points[i].second)
-            }
-        }
-
-        // Fill path gradient
-        val fillPath = Path().apply {
-            addPath(path)
-            lineTo(points.last().first, height)
-            lineTo(points.first().first, height)
-            close()
-        }
-
-        drawPath(
-            path = fillPath,
-            brush = Brush.verticalGradient(
-                colors = listOf(primaryColor.copy(alpha = 0.3f), Color.Transparent),
-            ),
-        )
-
-        drawPath(
-            path = path,
-            color = primaryColor,
-            style = Stroke(width = 2.5.dp.toPx()),
-        )
-
-        // Draw point circles
-        for (p in points) {
-            drawCircle(
-                color = primaryColor,
-                radius = 4.dp.toPx(),
-                center = Offset(p.first, p.second),
-            )
         }
     }
 }
@@ -702,12 +698,13 @@ internal fun AddEditChargingRecordSheet(
         Column(
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp)
+                .navigationBarsPadding()
                 .imePadding()
                 .verticalScroll(sheetScrollState)
                 .verticalScrollbar(sheetScrollState),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text("Log Charging Session", style = MaterialTheme.typography.titleLarge)
+            Text(if (initial != null) "Edit Charging Session" else "Log Charging Session", style = MaterialTheme.typography.titleLarge)
 
             Box(modifier = Modifier.fillMaxWidth()) {
                 OutlinedTextField(
@@ -1194,12 +1191,13 @@ internal fun AddEditFuelRecordSheet(
         Column(
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp)
+                .navigationBarsPadding()
                 .imePadding()
                 .verticalScroll(sheetScrollState)
                 .verticalScrollbar(sheetScrollState),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text("Log Fuel Fill-Up", style = MaterialTheme.typography.titleLarge)
+            Text(if (initial != null) "Edit Fuel Fill-Up" else "Log Fuel Fill-Up", style = MaterialTheme.typography.titleLarge)
 
             Box(modifier = Modifier.fillMaxWidth()) {
                 OutlinedTextField(

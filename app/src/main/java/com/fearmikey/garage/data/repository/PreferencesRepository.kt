@@ -1,6 +1,7 @@
 package com.fearmikey.garage.data.repository
 
 import com.fearmikey.garage.data.local.PreferencesManager
+import com.fearmikey.garage.obd.ObdAdapterConfig
 import com.fearmikey.garage.ui.util.AppCurrency
 import com.fearmikey.garage.ui.util.UnitSystem
 import kotlinx.coroutines.flow.Flow
@@ -47,6 +48,9 @@ interface PreferencesRepository {
         get() = flowOf(null)
     val driversLicenseImageBack: Flow<String?>
         get() = flowOf(null)
+    /** The saved OBD2 adapter (Bluetooth, BLE, or Wi-Fi), or `null` if none saved. */
+    val savedObdAdapter: Flow<ObdAdapterConfig?>
+        get() = flowOf(null)
 
     suspend fun setUnitsType(units: String)
     suspend fun setCurrencyCode(currencyCode: String)
@@ -73,6 +77,8 @@ interface PreferencesRepository {
         imageFront: String?,
         imageBack: String?,
     ) {}
+    /** Saves the preferred OBD2 adapter; pass null to clear it. */
+    suspend fun setSavedObdAdapter(config: ObdAdapterConfig?) {}
 }
 
 class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManager) : PreferencesRepository {
@@ -101,6 +107,7 @@ class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManag
     override val driversLicenseNotes: Flow<String?> = preferencesManager.driversLicenseNotes
     override val driversLicenseImageFront: Flow<String?> = preferencesManager.driversLicenseImageFront
     override val driversLicenseImageBack: Flow<String?> = preferencesManager.driversLicenseImageBack
+    override val savedObdAdapter: Flow<ObdAdapterConfig?> = preferencesManager.savedObdAdapter
 
     override suspend fun setUnitsType(units: String) {
         preferencesManager.setUnitsType(units)
@@ -179,5 +186,9 @@ class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManag
         imageBack: String?,
     ) {
         preferencesManager.setDriversLicense(number, state, expiration, notes, imageFront, imageBack)
+    }
+
+    override suspend fun setSavedObdAdapter(config: ObdAdapterConfig?) {
+        preferencesManager.setSavedObdAdapter(config)
     }
 }

@@ -10,6 +10,8 @@ data class FuelEconomyEntry(
     val record: FuelRecord,
     val milesDriven: Int,
     val gallonsUsed: Double,
+    /** Total spent on every fill-up in this segment (partials included), matching [gallonsUsed]. */
+    val costUsed: Double = 0.0,
 ) {
     val mpg: Double get() = milesDriven / gallonsUsed
 }
@@ -36,15 +38,18 @@ object FuelEconomyCalculator {
         val entries = mutableListOf<FuelEconomyEntry>()
         var segmentStart = lastFullIndex
         var gallonsSinceLastFull = 0.0
+        var costSinceLastFull = 0.0
         for (i in (segmentStart + 1) until sorted.size) {
             gallonsSinceLastFull += sorted[i].gallons
+            costSinceLastFull += sorted[i].totalCost
             if (sorted[i].isFullTank) {
                 val milesDriven = sorted[i].mileage - sorted[segmentStart].mileage
                 if ((milesDriven > 0) && (gallonsSinceLastFull > 0.0)) {
-                    entries.add(FuelEconomyEntry(sorted[i], milesDriven, gallonsSinceLastFull))
+                    entries.add(FuelEconomyEntry(sorted[i], milesDriven, gallonsSinceLastFull, costSinceLastFull))
                 }
                 segmentStart = i
                 gallonsSinceLastFull = 0.0
+                costSinceLastFull = 0.0
             }
         }
         return entries

@@ -4,13 +4,19 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
+import com.fearmikey.garage.data.repository.MaintenanceRepository
+import com.fearmikey.garage.obd.ObdScanSummary
 import com.fearmikey.garage.data.repository.ImageStorageManager
 import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.ui.navigation.Destinations
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -61,6 +67,10 @@ data class RegistrationInsuranceUiState(
     val tollPassParkingExpiration: Long? = null,
     val tollPassParkingAccount: String = "",
     val tollPassParkingNotes: String = "",
+
+    /** Emissions readiness from the most recent OBD2 scan saved to the timeline, if any. */
+    val obdReadiness: ObdScanSummary.SavedReadiness? = null,
+    val obdReadinessDate: Long? = null,
 ) {
     val hasRegistrationData: Boolean
         get() = licensePlate.isNotBlank() || registrationState.isNotBlank() || (registrationExpiration != null) ||
@@ -95,20 +105,32 @@ class RegistrationInsuranceViewModel @Inject constructor(
     private val vehicleRepository: VehicleRepository,
     private val imageStorageManager: ImageStorageManager,
     preferencesRepository: PreferencesRepository,
+    maintenanceRepository: MaintenanceRepository? = null,
 ) : ViewModel() {
 
     val vehicleId: Long = checkNotNull(savedStateHandle[Destinations.VEHICLE_ID_ARG])
 
     private val _sheetState = MutableStateFlow(RegistrationInsuranceUiState())
 
+    private val latestObdScan: Flow<MaintenanceRecord?> =
+        maintenanceRepository?.getRecordsForVehicle(vehicleId)
+            ?.map { records ->
+                records.filter { it.taskName == ObdScanSummary.SCAN_TASK_NAME }.maxByOrNull { it.date }
+            }
+            ?: flowOf(null)
+
     val uiState: StateFlow<RegistrationInsuranceUiState> = combine(
         vehicleRepository.getRegistrationInsurance(vehicleId),
         preferencesRepository.appCurrency,
         _sheetState,
-    ) { record, currency, formState ->
+        latestObdScan,
+    ) { record, currency, formState, obdScan ->
+        val readiness = obdScan?.description?.let(ObdScanSummary::parseReadiness)
         formState.copy(
             record = record,
             currencySymbol = currency.symbol,
+            obdReadiness = readiness,
+            obdReadinessDate = obdScan?.date?.takeIf { readiness != null },
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), RegistrationInsuranceUiState())
 

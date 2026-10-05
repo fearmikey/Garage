@@ -23,6 +23,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -115,6 +117,7 @@ fun DashboardScreen(
     onAddVehicle: () -> Unit,
     onOpenVehicle: (vehicleId: Long, tab: Int) -> Unit,
     onOpenSettings: () -> Unit,
+    onUpdateMileage: (vehicleId: Long) -> Unit,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedContentScope,
     viewModel: DashboardViewModel = hiltViewModel(),
@@ -140,6 +143,7 @@ fun DashboardScreen(
         onAddVehicle = onAddVehicle,
         onOpenVehicle = onOpenVehicle,
         onOpenSettings = onOpenSettings,
+        onUpdateMileage = onUpdateMileage,
         onSaveDriversLicense = viewModel::onSaveDriversLicense,
         onDeleteDriversLicense = viewModel::onDeleteDriversLicense,
         sharedTransitionScope = sharedTransitionScope,
@@ -162,6 +166,7 @@ private fun DashboardContent(
     onAddVehicle: () -> Unit,
     onOpenVehicle: (vehicleId: Long, tab: Int) -> Unit,
     onOpenSettings: () -> Unit,
+    onUpdateMileage: (vehicleId: Long) -> Unit,
     onSaveDriversLicense: (
         number: String,
         state: String,
@@ -262,6 +267,8 @@ private fun DashboardContent(
                                     animatedVisibilityScope = animatedVisibilityScope,
                                     onClick = { onOpenVehicle(item.vehicle.id, 0) },
                                     onOpenReminders = { onOpenVehicle(item.vehicle.id, VehicleTab.SCHEDULE.ordinal) },
+                                    onFuelGraphClick = { onOpenVehicle(item.vehicle.id, VehicleTab.FUEL.ordinal) },
+                                    onUpdateMileage = { onUpdateMileage(item.vehicle.id) },
                                 )
                             }
                         }
@@ -591,6 +598,8 @@ private fun EditDriversLicenseSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .navigationBarsPadding()
+                .imePadding()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -875,6 +884,7 @@ private fun DashboardScreenPreview() {
                         onAddVehicle = {},
                         onOpenVehicle = { _, _ -> },
                         onOpenSettings = {},
+                        onUpdateMileage = {},
                         onSaveDriversLicense = { _, _, _, _, _, _, _, _ -> },
                         onDeleteDriversLicense = {},
                         sharedTransitionScope = this@SharedTransitionLayout,
@@ -907,6 +917,7 @@ private fun DashboardScreenEmptyPreview() {
                         onAddVehicle = {},
                         onOpenVehicle = { _, _ -> },
                         onOpenSettings = {},
+                        onUpdateMileage = {},
                         onSaveDriversLicense = { _, _, _, _, _, _, _, _ -> },
                         onDeleteDriversLicense = {},
                         sharedTransitionScope = this@SharedTransitionLayout,

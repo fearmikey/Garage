@@ -58,7 +58,7 @@ class RecallsViewModel @Inject constructor(
                 recall = recall,
                 state = stateMap[recall.campaignNumber] ?: RecallState.OPEN,
             )
-        }
+        }.sortedBy { it.state != RecallState.OPEN }
         state.copy(recalls = mappedRecalls)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), RecallsUiState())
 

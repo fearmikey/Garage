@@ -492,6 +492,7 @@ private fun AddEditVehicleContent(
                 onValueChange = onInitialMileageChanged,
                 label = { Text("Initial Mileage (Upon Purchase)") },
                 singleLine = true,
+                visualTransformation = com.fearmikey.garage.ui.util.ThousandsSeparatorVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth(),
             )

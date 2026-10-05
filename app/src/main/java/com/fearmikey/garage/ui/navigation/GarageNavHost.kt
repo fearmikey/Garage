@@ -35,6 +35,7 @@ import com.fearmikey.garage.ui.vehicle.AddEditVehicleScreen
 import com.fearmikey.garage.ui.vehicle.EditPartsScreen
 import com.fearmikey.garage.ui.vehicle.VehicleDetailScreen
 import com.fearmikey.garage.ui.obd.ObdScannerScreen
+import com.fearmikey.garage.widget.WidgetRefresher
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -118,6 +119,7 @@ fun GarageNavHost(
                     onAddVehicle = { navController.navigate(Destinations.addVehicleRoute()) },
                     onOpenVehicle = { vehicleId, tab -> navController.navigate(Destinations.vehicleDetailRoute(vehicleId, tab)) },
                     onOpenSettings = { navController.navigate(Destinations.SETTINGS) },
+                    onUpdateMileage = { vehicleId -> mainViewModel.handleDeepLinkIntent(com.fearmikey.garage.MainActivity.ACTION_UPDATE_ODOMETER, vehicleId) },
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedVisibilityScope = this@composable,
                 )
@@ -174,15 +176,7 @@ fun GarageNavHost(
                     vehicleId = vehicleId,
                     onNavigateBack = { navController.popBackStack() },
                     unitSystem = unitSystem,
-                    onLogMileage = { canonicalMileage ->
-                        mainViewModel.insertOdometerRecord(
-                            vehicleId = vehicleId,
-                            canonicalMileage = canonicalMileage,
-                            date = System.currentTimeMillis(),
-                            notes = "OBD2 Scan",
-                            context = context
-                        )
-                    }
+                    onTimelineUpdated = { WidgetRefresher.refresh(context) },
                 )
             }
             composable(Destinations.SETTINGS) {

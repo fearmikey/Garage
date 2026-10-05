@@ -14,7 +14,7 @@ object FlavorConfig {
     const val isVinScannerSupported = true
 
     fun launchOssLicenses(context: Context) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/fearmikey/Garage/blob/main/LICENSE"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/fearmikey/Garage/blob/master/LICENSE"))
         context.startActivity(intent)
     }
 }

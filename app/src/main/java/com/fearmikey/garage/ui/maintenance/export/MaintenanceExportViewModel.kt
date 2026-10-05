@@ -18,6 +18,7 @@ import com.fearmikey.garage.data.repository.ModificationRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.data.repository.RecallLookupResult
 import com.fearmikey.garage.data.repository.RecallRepository
+import com.fearmikey.garage.data.repository.RecallStateRepository
 import com.fearmikey.garage.data.repository.VehicleRecall
 import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.notification.PdfExportNotifier
@@ -29,6 +30,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -101,6 +103,7 @@ class MaintenanceExportViewModel @Inject constructor(
     fuelRepository: FuelRepository,
     chargingRepository: ChargingRepository,
     private val recallRepository: RecallRepository,
+    private val recallStateRepository: RecallStateRepository,
     preferencesRepository: PreferencesRepository,
     private val imageStorageManager: ImageStorageManager,
     val pdfExportNotifier: PdfExportNotifier,
@@ -246,8 +249,19 @@ class MaintenanceExportViewModel @Inject constructor(
             _isCheckingRecalls.value = true
             when (val result = recallRepository.getRecalls(year, make, model)) {
                 is RecallLookupResult.Success -> {
-                    _recallsState.value = result.recalls
-                    _unaddressedCampaigns.value = emptySet()
+                    val savedStates = recallStateRepository.getStatesForVehicle(vehicleId).first()
+                    val stateMap = savedStates.associateBy({ it.campaignNumber }, { it.state })
+                    
+                    val sortedRecalls = result.recalls.sortedBy { 
+                        (stateMap[it.campaignNumber] ?: com.fearmikey.garage.data.local.entity.RecallState.OPEN) != com.fearmikey.garage.data.local.entity.RecallState.OPEN
+                    }
+                    _recallsState.value = sortedRecalls
+                    
+                    val openCampaigns = sortedRecalls.filter {
+                        (stateMap[it.campaignNumber] ?: com.fearmikey.garage.data.local.entity.RecallState.OPEN) == com.fearmikey.garage.data.local.entity.RecallState.OPEN
+                    }.map { it.campaignNumber }.toSet()
+                    
+                    _unaddressedCampaigns.value = openCampaigns
                 }
                 is RecallLookupResult.Error -> {
                     _recallsState.value = emptyList()

@@ -135,6 +135,7 @@ fun UpdateOdometerDialog(
                     onValueChange = { mileageInput = sanitizeMileageInput(it) },
                     label = { Text("New Odometer Reading (${unitSystem.distanceUnit})") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    visualTransformation = com.fearmikey.garage.ui.util.ThousandsSeparatorVisualTransformation(),
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
