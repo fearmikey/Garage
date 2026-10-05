@@ -32,7 +32,7 @@ The app is published on F-Droid with Reproducible Builds enabled and auto-update
 4. **Standard Changelog & Readme:** Update the main `CHANGELOG.md` with detailed bullet points under `## [X.Y.Z] - YYYY-MM-DD` and update the version badge in `README.md`.
 5. **F-Droid Metadata Recipe:** Update `fdroid/com.fearmikey.garage.yml`:
    * Update `versionName` and `versionCode`.
-   * Update `commit` (either `vX.Y.Z` tag or the 40-character Git commit hash).
+   * Update `commit` with the full 40-character Git commit hash (`git rev-parse HEAD`).
    * Ensure `gradle:` is set to `- yes` (do NOT use `- foss` as product flavors were removed).
 6. **Commit & Tag:** Commit all changes, create a git tag strictly following the `vX.Y.Z` format (e.g., `v1.2.8`), and push both the commit and the tag to GitHub.
 7. **Reproducible Build Binary:** F-Droid requires the compiled APK to verify reproducible builds. Instruct the user to:
