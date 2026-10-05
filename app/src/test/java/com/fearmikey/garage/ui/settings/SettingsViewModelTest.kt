@@ -250,8 +250,9 @@ class SettingsViewModelTest {
 
         val backupRepo = BackupRepository(context, dummyDb, ImageStorageManager(context), cloudPrefs)
         val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs)
-        val autoBackupManager = AutoBackupManager(dummyDb, backupRepo, cloudPrefs)
+        val autoBackupManager = AutoBackupManager(context, dummyDb, backupRepo, cloudPrefs)
         val notifier = ReminderNotifier(context)
+        val lubeLoggerCredsManager = com.fearmikey.garage.data.remote.lubelogger.LubeLoggerCredentialsManager(context)
 
         val viewModel = SettingsViewModel(
             context = context,
@@ -263,6 +264,7 @@ class SettingsViewModelTest {
             autoBackupManager = autoBackupManager,
             reminderNotifier = notifier,
             obdConnectionManager = ObdConnectionManager(context),
+            lubeLoggerCredentialsManager = lubeLoggerCredsManager
         )
 
         testDispatcher.scheduler.advanceUntilIdle()
@@ -340,8 +342,9 @@ class SettingsViewModelTest {
         }
         val backupRepo = BackupRepository(context, dummyDb, ImageStorageManager(context), cloudPrefs)
         val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs)
-        val autoBackupManager = AutoBackupManager(dummyDb, backupRepo, cloudPrefs)
+        val autoBackupManager = AutoBackupManager(context, dummyDb, backupRepo, cloudPrefs)
         val notifier = ReminderNotifier(context)
+        val lubeLoggerCredsManager = com.fearmikey.garage.data.remote.lubelogger.LubeLoggerCredentialsManager(context)
 
         val viewModel = SettingsViewModel(
             context = context,
@@ -353,6 +356,7 @@ class SettingsViewModelTest {
             autoBackupManager = autoBackupManager,
             reminderNotifier = notifier,
             obdConnectionManager = ObdConnectionManager(context),
+            lubeLoggerCredentialsManager = lubeLoggerCredsManager
         )
 
         testDispatcher.scheduler.advanceUntilIdle()
@@ -464,8 +468,9 @@ class SettingsViewModelTest {
         }
         val backupRepo = BackupRepository(context, dummyDb, ImageStorageManager(context), cloudPrefs)
         val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs)
-        val autoBackupManager = AutoBackupManager(dummyDb, backupRepo, cloudPrefs)
+        val autoBackupManager = AutoBackupManager(context, dummyDb, backupRepo, cloudPrefs)
         val notifier = ReminderNotifier(context)
+        val lubeLoggerCredsManager = com.fearmikey.garage.data.remote.lubelogger.LubeLoggerCredentialsManager(context)
 
         val viewModel = SettingsViewModel(
             context = context,
@@ -477,6 +482,7 @@ class SettingsViewModelTest {
             autoBackupManager = autoBackupManager,
             reminderNotifier = notifier,
             obdConnectionManager = ObdConnectionManager(context),
+            lubeLoggerCredentialsManager = lubeLoggerCredsManager
         )
 
         testDispatcher.scheduler.advanceUntilIdle()

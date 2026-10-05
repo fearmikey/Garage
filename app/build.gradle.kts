@@ -46,6 +46,9 @@ android {
                 enable = true
             }
             isShrinkResources = true
+            vcsInfo {
+                include = false
+            }
         }
         // A release-like build type -- R8 optimization/shrinking enabled,
         // non-debuggable -- but signed with the debug keystore so it can be

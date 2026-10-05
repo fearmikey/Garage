@@ -22,6 +22,7 @@ import javax.inject.Singleton
  */
 @Singleton
 class AutoBackupManager @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val database: GarageDatabase,
     private val backupRepository: BackupRepository,
     private val cloudBackupPreferencesManager: CloudBackupPreferencesManager,
@@ -47,11 +48,25 @@ class AutoBackupManager @Inject constructor(
             val observer = object : InvalidationTracker.Observer(tables) {
                 override fun onInvalidated(tables: Set<String>) {
                     triggerAutoBackup()
+                    triggerLubeLoggerSync()
                 }
             }
             database.invalidationTracker.addObserver(observer)
         } catch (_: Exception) {
             // Ignored if database is an uninitialized test double
+        }
+    }
+
+    private fun triggerLubeLoggerSync() {
+        try {
+            val request = androidx.work.OneTimeWorkRequestBuilder<com.fearmikey.garage.notification.lubelogger.LubeLoggerSyncWorker>().build()
+            androidx.work.WorkManager.getInstance(context).enqueueUniqueWork(
+                "LubeLoggerSync",
+                androidx.work.ExistingWorkPolicy.REPLACE,
+                request
+            )
+        } catch (_: Exception) {
+            // Ignored if WorkManager is not initialized (e.g. unit tests)
         }
     }
 

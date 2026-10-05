@@ -8,7 +8,7 @@
         android:shortcutLongLabel="@string/shortcut_log_fuel_long">
         <intent
             android:action="com.fearmikey.garage.action.LOG_FUEL"
-            android:targetPackage="${applicationId}"
+            android:targetPackage="com.fearmikey.garage"
             android:targetClass="com.fearmikey.garage.MainActivity" />
     </shortcut>
     <shortcut
@@ -19,7 +19,7 @@
         android:shortcutLongLabel="@string/shortcut_update_odometer_long">
         <intent
             android:action="com.fearmikey.garage.action.UPDATE_ODOMETER"
-            android:targetPackage="${applicationId}"
+            android:targetPackage="com.fearmikey.garage"
             android:targetClass="com.fearmikey.garage.MainActivity" />
     </shortcut>
 </shortcuts>

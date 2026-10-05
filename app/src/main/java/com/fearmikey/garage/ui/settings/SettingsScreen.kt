@@ -124,6 +124,7 @@ fun SettingsScreen(
     var showClearDataDialog by remember { mutableStateOf(false) }
     var showAboutDialog by remember { mutableStateOf(false) }
     var showCloudBackupDialog by remember { mutableStateOf(false) }
+    var showLubeLoggerDialog by remember { mutableStateOf(false) }
     var showLocalBackupDialog by remember { mutableStateOf(false) }
     var showBugReportFeedbackDialog by remember { mutableStateOf(false) }
     var showObdAdapterDialog by remember { mutableStateOf(false) }
@@ -382,6 +383,23 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable { viewModel.sendTestNotification() },
+                )
+            }
+
+            item { HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp)) }
+
+            // Integrations Section
+            item {
+                SettingsCategoryHeader("Integrations")
+            }
+            item {
+                ListItem(
+                    headlineContent = { Text("LubeLogger Sync") },
+                    supportingContent = { Text(if (uiState.lubeLoggerConfigured) "Connected to ${uiState.lubeLoggerServerUrl}" else "Not configured") },
+                    leadingContent = { Icon(Icons.Filled.CloudSync, contentDescription = null) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { showLubeLoggerDialog = true },
                 )
             }
 
@@ -717,6 +735,18 @@ fun SettingsScreen(
                     Text("Restart now")
                 }
             },
+        )
+    }
+
+    if (showLubeLoggerDialog) {
+        LubeLoggerConfigDialog(
+            initialUrl = uiState.lubeLoggerServerUrl,
+            initialUsername = uiState.lubeLoggerUsername,
+            onDismissRequest = { showLubeLoggerDialog = false },
+            onSave = { url, username, password ->
+                viewModel.setLubeLoggerCredentials(url, username, password)
+                showLubeLoggerDialog = false
+            }
         )
     }
 

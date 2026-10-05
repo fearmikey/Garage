@@ -56,6 +56,9 @@ data class SettingsUiState(
     val webdavUrl: String = "",
     val webdavUsername: String = "",
     val webdavPasswordSet: Boolean = false,
+    val lubeLoggerConfigured: Boolean = false,
+    val lubeLoggerServerUrl: String = "",
+    val lubeLoggerUsername: String = "",
     val isSyncing: Boolean = false,
     val lastSyncTimestamp: Long? = null,
     val lastSyncError: String? = null,
@@ -81,12 +84,20 @@ class SettingsViewModel @Inject constructor(
     private val autoBackupManager: AutoBackupManager,
     private val reminderNotifier: ReminderNotifier,
     private val obdConnectionManager: ObdConnectionManager,
+    private val lubeLoggerCredentialsManager: com.fearmikey.garage.data.remote.lubelogger.LubeLoggerCredentialsManager,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SettingsUiState())
     val uiState: StateFlow<SettingsUiState> = _uiState.asStateFlow()
 
     init {
+        _uiState.update { 
+            it.copy(
+                lubeLoggerConfigured = lubeLoggerCredentialsManager.isConfigured(),
+                lubeLoggerServerUrl = lubeLoggerCredentialsManager.getServerUrl() ?: "",
+                lubeLoggerUsername = lubeLoggerCredentialsManager.getUsername() ?: ""
+            ) 
+        }
         viewModelScope.launch {
             preferencesRepository.unitsType.collect { units ->
                 _uiState.update { it.copy(units = units) }
@@ -440,6 +451,28 @@ class SettingsViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun setLubeLoggerCredentials(url: String, username: String, password: String?) {
+        lubeLoggerCredentialsManager.saveCredentials(url, username, password)
+        _uiState.update { 
+            it.copy(
+                lubeLoggerConfigured = lubeLoggerCredentialsManager.isConfigured(),
+                lubeLoggerServerUrl = url,
+                lubeLoggerUsername = username
+            ) 
+        }
+        
+        // Enqueue an immediate sync if they just configured it
+        if (lubeLoggerCredentialsManager.isConfigured()) {
+            syncLubeLoggerNow()
+        }
+    }
+
+    fun syncLubeLoggerNow() {
+        val request = androidx.work.OneTimeWorkRequestBuilder<com.fearmikey.garage.notification.lubelogger.LubeLoggerSyncWorker>()
+            .build()
+        androidx.work.WorkManager.getInstance(context).enqueue(request)
     }
 
     fun setWebdavCredentials(url: String, username: String, password: String) {
