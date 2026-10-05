@@ -1,4 +1,4 @@
-## [1.2.7] - 2026-10-XX
+## [1.2.7] - 2026-10-04
 
 ### Changed
 * Maintenance release with performance improvements and bug fixes.
