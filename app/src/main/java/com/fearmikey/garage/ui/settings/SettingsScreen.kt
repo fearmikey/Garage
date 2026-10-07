@@ -402,6 +402,18 @@ fun SettingsScreen(
                         .clickable { showLubeLoggerDialog = true },
                 )
             }
+            if (uiState.lubeLoggerConfigured) {
+                item {
+                    ListItem(
+                        headlineContent = { Text("Sync LubeLogger now") },
+                        supportingContent = { Text("Manually trigger a sync with your LubeLogger server.") },
+                        leadingContent = { Icon(Icons.Filled.CloudSync, contentDescription = null) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { viewModel.syncLubeLoggerNow() },
+                    )
+                }
+            }
 
             item { HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp)) }
 

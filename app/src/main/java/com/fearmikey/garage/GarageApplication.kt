@@ -40,6 +40,8 @@ class GarageApplication : Application(), Configuration.Provider {
         super.onCreate()
         instance = this
         WorkScheduler.scheduleReminderChecks(this)
+        WorkScheduler.scheduleLubeLoggerSync(this)
+        WorkScheduler.triggerImmediateLubeLoggerSync(this)
         val cloudSyncEnabled = runBlocking { cloudBackupPreferencesManager.cloudSyncEnabled.first() }
         CloudBackupScheduler.scheduleOrCancel(this, enabled = cloudSyncEnabled)
     }

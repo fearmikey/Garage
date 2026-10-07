@@ -37,4 +37,30 @@ object WorkScheduler {
             // WorkManager not initialized (e.g. in unit tests)
         }
     }
+
+    fun scheduleLubeLoggerSync(context: Context) {
+        try {
+            val request = PeriodicWorkRequestBuilder<com.fearmikey.garage.notification.lubelogger.LubeLoggerSyncWorker>(12, TimeUnit.HOURS).build()
+            WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+                "LubeLoggerPeriodicSync",
+                ExistingPeriodicWorkPolicy.KEEP,
+                request,
+            )
+        } catch (_: Exception) {
+            // WorkManager not initialized (e.g. in unit tests)
+        }
+    }
+
+    fun triggerImmediateLubeLoggerSync(context: Context) {
+        try {
+            val request = OneTimeWorkRequestBuilder<com.fearmikey.garage.notification.lubelogger.LubeLoggerSyncWorker>().build()
+            WorkManager.getInstance(context).enqueueUniqueWork(
+                "LubeLoggerImmediateSync",
+                ExistingWorkPolicy.REPLACE,
+                request,
+            )
+        } catch (_: Exception) {
+            // WorkManager not initialized (e.g. in unit tests)
+        }
+    }
 }
