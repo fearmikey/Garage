@@ -142,22 +142,24 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
 
                         for (remoteGas in remoteGasRecords) {
                             if (remoteGas.id != null) {
-                                val linkedLocally = localFuelRecords.find { it.lubeLoggerId == remoteGas.id }
-                                if (linkedLocally == null) {
-                                    val candidate = remoteGas.toFuelRecord(local.id, unitSystem)
-                                    if (candidate != null) {
-                                        // Match unlinked local records by mileage (within 1 mi/km) and date (within 24 hours)
-                                        val unlinkedMatch = localFuelRecords.find { localRec ->
-                                            localRec.lubeLoggerId == null &&
-                                            kotlin.math.abs(localRec.mileage - candidate.mileage) <= 1 &&
-                                            kotlin.math.abs(localRec.date - candidate.date) < 24 * 3600 * 1000L
-                                        }
+                                val candidate = remoteGas.toFuelRecord(local.id, unitSystem)
+                                if (candidate != null) {
+                                    // 1. Check if already linked by lubeLoggerId
+                                    val linkedLocally = localFuelRecords.find { it.lubeLoggerId == remoteGas.id }
+                                    
+                                    // 2. Check if a local record matches by odometer and date
+                                    val existingMatch = localFuelRecords.find { localRec ->
+                                        (localRec.lubeLoggerId == remoteGas.id) ||
+                                        (kotlin.math.abs(localRec.mileage - candidate.mileage) <= 1 &&
+                                         kotlin.math.abs(localRec.date - candidate.date) < 24 * 3600 * 1000L)
+                                    }
 
-                                        if (unlinkedMatch != null) {
-                                            fuelRepository.saveRecord(unlinkedMatch.copy(lubeLoggerId = remoteGas.id))
-                                        } else {
-                                            fuelRepository.saveRecord(candidate)
-                                        }
+                                    if (linkedLocally == null && existingMatch != null) {
+                                        // Link the unlinked local record to this LubeLogger ID
+                                        fuelRepository.saveRecord(existingMatch.copy(lubeLoggerId = remoteGas.id))
+                                    } else if (existingMatch == null) {
+                                        // Insert only if no duplicate exists locally
+                                        fuelRepository.saveRecord(candidate)
                                     }
                                 }
                             }
@@ -171,22 +173,19 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
 
                         for (remoteService in remoteServiceRecords) {
                             if (remoteService.id != null) {
-                                val linkedLocally = localMaintRecords.find { it.lubeLoggerId == remoteService.id }
-                                if (linkedLocally == null) {
-                                    val candidate = remoteService.toMaintenanceRecord(local.id, unitSystem)
-                                    if (candidate != null) {
-                                        // Match unlinked local records by mileage (within 1 mi/km) and date (within 24 hours)
-                                        val unlinkedMatch = localMaintRecords.find { localRec ->
-                                            localRec.lubeLoggerId == null &&
-                                            kotlin.math.abs(localRec.mileage - candidate.mileage) <= 1 &&
-                                            kotlin.math.abs(localRec.date - candidate.date) < 24 * 3600 * 1000L
-                                        }
+                                val candidate = remoteService.toMaintenanceRecord(local.id, unitSystem)
+                                if (candidate != null) {
+                                    val linkedLocally = localMaintRecords.find { it.lubeLoggerId == remoteService.id }
+                                    val existingMatch = localMaintRecords.find { localRec ->
+                                        (localRec.lubeLoggerId == remoteService.id) ||
+                                        (kotlin.math.abs(localRec.mileage - candidate.mileage) <= 1 &&
+                                         kotlin.math.abs(localRec.date - candidate.date) < 24 * 3600 * 1000L)
+                                    }
 
-                                        if (unlinkedMatch != null) {
-                                            maintenanceRepository.saveRecord(unlinkedMatch.copy(lubeLoggerId = remoteService.id))
-                                        } else {
-                                            maintenanceRepository.saveRecord(candidate)
-                                        }
+                                    if (linkedLocally == null && existingMatch != null) {
+                                        maintenanceRepository.saveRecord(existingMatch.copy(lubeLoggerId = remoteService.id))
+                                    } else if (existingMatch == null) {
+                                        maintenanceRepository.saveRecord(candidate)
                                     }
                                 }
                             }
