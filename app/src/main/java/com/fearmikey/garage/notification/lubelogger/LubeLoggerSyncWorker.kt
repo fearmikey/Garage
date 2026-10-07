@@ -9,6 +9,7 @@ import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerCredentialsManager
 import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerVehicleImportDto
 import com.fearmikey.garage.data.remote.lubelogger.toFuelRecord
 import com.fearmikey.garage.data.remote.lubelogger.toLubeLoggerDto
+import com.fearmikey.garage.data.remote.lubelogger.toLubeLoggerOdometerDto
 import com.fearmikey.garage.data.remote.lubelogger.toMaintenanceRecord
 import com.fearmikey.garage.data.repository.FuelRepository
 import com.fearmikey.garage.data.repository.ImageStorageManager
@@ -225,12 +226,24 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
                     // Push only un-synced records
                     val newMaintRecords = maintenanceRecords.filter { it.lubeLoggerId == null }
                     newMaintRecords.forEach { maintRecord ->
-                        val maintDto = maintRecord.toLubeLoggerDto(mappedId, unitSystem)
-                        val response = api.addServiceRecord(mappedId, maintDto)
-                        if (response.isSuccessful) {
-                            val returnedId = response.body()?.additionalData?.recordId
-                            if (returnedId != null) {
-                                maintenanceRepository.saveRecord(maintRecord.copy(lubeLoggerId = returnedId))
+                        if (maintRecord.category == com.fearmikey.garage.data.local.entity.MaintenanceCategory.INSPECTION && maintRecord.taskName == "Odometer Check-in") {
+                            // Push to /api/vehicle/odometerrecords/add
+                            val odometerDto = maintRecord.toLubeLoggerOdometerDto(mappedId, unitSystem)
+                            val response = api.addOdometerRecord(mappedId, odometerDto)
+                            if (response.isSuccessful) {
+                                val returnedId = response.body()?.additionalData?.recordId
+                                if (returnedId != null) {
+                                    maintenanceRepository.saveRecord(maintRecord.copy(lubeLoggerId = returnedId))
+                                }
+                            }
+                        } else {
+                            val maintDto = maintRecord.toLubeLoggerDto(mappedId, unitSystem)
+                            val response = api.addServiceRecord(mappedId, maintDto)
+                            if (response.isSuccessful) {
+                                val returnedId = response.body()?.additionalData?.recordId
+                                if (returnedId != null) {
+                                    maintenanceRepository.saveRecord(maintRecord.copy(lubeLoggerId = returnedId))
+                                }
                             }
                         }
                     }

@@ -32,7 +32,7 @@ fun MaintenanceRecord.toLubeLoggerDto(lubeLoggerVehicleId: Int, lubeLoggerUnitSy
 
     val fullDescription = buildString {
         append(description)
-        if (taskName != null) {
+        if (taskName != null && taskName != "Odometer Check-in") {
             append(" ($taskName)")
         }
         if (isDeferred) {
@@ -47,6 +47,19 @@ fun MaintenanceRecord.toLubeLoggerDto(lubeLoggerVehicleId: Int, lubeLoggerUnitSy
         odometer = convertedOdometer.toString(),
         description = fullDescription,
         cost = "%.2f".format(Locale.US, this.cost),
+    )
+}
+
+fun MaintenanceRecord.toLubeLoggerOdometerDto(lubeLoggerVehicleId: Int, lubeLoggerUnitSystem: String = "imperial"): LubeLoggerOdometerRecordDto {
+    val isMetric = lubeLoggerUnitSystem.equals("metric", ignoreCase = true)
+    val convertedOdometer = if (isMetric) UnitConverter.milesToKm(this.mileage) else this.mileage
+
+    return LubeLoggerOdometerRecordDto(
+        vehicleId = lubeLoggerVehicleId.toString(),
+        id = this.lubeLoggerId?.toString() ?: "0",
+        date = dateFormatter.format(Date(this.date)),
+        odometer = convertedOdometer.toString(),
+        notes = this.description.takeIf { it != "Odometer check-in" } ?: ""
     )
 }
 

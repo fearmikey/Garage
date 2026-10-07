@@ -61,4 +61,10 @@ interface LubeLoggerApiService {
     suspend fun deleteServiceRecord(
         @retrofit2.http.Query("id") id: Int
     ): Response<LubeLoggerOperationResponse>
+
+    @POST("api/vehicle/odometerrecords/add")
+    suspend fun addOdometerRecord(
+        @retrofit2.http.Query("vehicleId") vehicleId: Int,
+        @Body odometerRecord: LubeLoggerOdometerRecordDto
+    ): Response<LubeLoggerOperationResponse>
 }
