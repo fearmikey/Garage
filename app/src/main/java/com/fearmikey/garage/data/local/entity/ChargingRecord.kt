@@ -51,4 +51,8 @@ data class ChargingRecord(
      * Used by Battery Health Tracker to plot range degradation over time.
      */
     val estimatedRangeAt100: Int? = null,
+    @androidx.room.ColumnInfo(defaultValue = "NULL")
+    val lubeLoggerId: Int? = null,
+    @androidx.room.ColumnInfo(defaultValue = "NULL")
+    val lubeLoggerSyncHash: String? = null,
 )

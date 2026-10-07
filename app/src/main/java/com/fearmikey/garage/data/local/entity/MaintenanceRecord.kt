@@ -68,4 +68,8 @@ data class MaintenanceRecord(
     val deferredMonths: Int? = null,
     @ColumnInfo(defaultValue = "NULL")
     val lubeLoggerId: Int? = null,
+    @ColumnInfo(defaultValue = "NULL")
+    val lubeLoggerSyncHash: String? = null,
+    @ColumnInfo(defaultValue = "NULL")
+    val lubeLoggerRecordType: LubeLoggerRecordType? = null,
 )

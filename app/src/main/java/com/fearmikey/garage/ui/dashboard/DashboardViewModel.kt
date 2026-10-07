@@ -1,16 +1,21 @@
 package com.fearmikey.garage.ui.dashboard
 
+import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fearmikey.garage.GarageApplication
 import com.fearmikey.garage.data.fuel.FuelEconomyCalculator
 import com.fearmikey.garage.data.fuel.FuelEconomyEntry
+import com.fearmikey.garage.data.local.CloudBackupPreferencesManager
 import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
 import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.data.local.entity.IgnoredMaintenanceRule
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.Vehicle
+import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
+import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerCredentialsManager
+import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerSyncStatus
 import com.fearmikey.garage.data.repository.CustomMaintenanceRuleRepository
 import com.fearmikey.garage.data.repository.FuelRepository
 import com.fearmikey.garage.data.repository.ImageStorageManager
@@ -18,22 +23,30 @@ import com.fearmikey.garage.data.repository.MaintenanceRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.data.repository.ReminderStatus
 import com.fearmikey.garage.data.repository.VehicleRepository
-import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
+import com.fearmikey.garage.data.repository.WebDavBackupRepository
 import com.fearmikey.garage.data.schedule.DocumentExpirationEngine
 import com.fearmikey.garage.data.schedule.MaintenanceScheduleEngine
 import com.fearmikey.garage.data.schedule.toMaintenanceRule
 import com.fearmikey.garage.notification.WorkScheduler
 import com.fearmikey.garage.ui.util.UnitSystem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import java.io.File
 import javax.inject.Inject
 
@@ -70,13 +83,57 @@ data class FleetSummary(
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     vehicleRepository: VehicleRepository,
     maintenanceRepository: MaintenanceRepository,
     fuelRepository: FuelRepository,
     customMaintenanceRuleRepository: CustomMaintenanceRuleRepository,
     private val imageStorageManager: ImageStorageManager,
     private val preferencesRepository: PreferencesRepository,
+    private val lubeLoggerCredentialsManager: LubeLoggerCredentialsManager,
+    private val webDavBackupRepository: WebDavBackupRepository,
+    private val cloudBackupPreferencesManager: CloudBackupPreferencesManager,
 ) : ViewModel() {
+
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
+
+    fun refreshSync() {
+        viewModelScope.launch {
+            if (_isRefreshing.value) return@launch
+            _isRefreshing.value = true
+            try {
+                coroutineScope {
+                    val lubeLoggerJob = launch {
+                        if (lubeLoggerCredentialsManager.isConfigured()) {
+                            lubeLoggerCredentialsManager.markSyncStarted()
+                            WorkScheduler.triggerManualLubeLoggerSync(context)
+                            withTimeoutOrNull(20_000) {
+                                lubeLoggerCredentialsManager.syncStatus()
+                                    .filter { it !is LubeLoggerSyncStatus.Syncing }
+                                    .first()
+                            }
+                        }
+                    }
+
+                    val webDavJob = launch {
+                        if (cloudBackupPreferencesManager.cloudSyncEnabled.first()) {
+                            webDavBackupRepository.syncNow()
+                        }
+                    }
+
+                    val reminderJob = launch {
+                        WorkScheduler.triggerImmediateReminderCheck(context)
+                    }
+
+                    joinAll(lubeLoggerJob, webDavJob, reminderJob)
+                }
+            } catch (_: Exception) {
+            } finally {
+                _isRefreshing.value = false
+            }
+        }
+    }
 
     val unitSystem: StateFlow<UnitSystem> = preferencesRepository.unitSystem
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), UnitSystem.IMPERIAL)

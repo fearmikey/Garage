@@ -10,6 +10,7 @@ import com.fearmikey.garage.data.local.dao.ChargingDao
 import com.fearmikey.garage.data.local.dao.CustomMaintenanceRuleDao
 import com.fearmikey.garage.data.local.dao.FuelDao
 import com.fearmikey.garage.data.local.dao.IgnoredMaintenanceRuleDao
+import com.fearmikey.garage.data.local.dao.LubeLoggerPendingDeleteDao
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
 import com.fearmikey.garage.data.local.dao.ModificationDao
 import com.fearmikey.garage.data.local.dao.RecallCampaignStateDao
@@ -21,6 +22,7 @@ import com.fearmikey.garage.data.local.entity.ChargingRecord
 import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
 import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.data.local.entity.IgnoredMaintenanceRule
+import com.fearmikey.garage.data.local.entity.LubeLoggerPendingDelete
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.ModificationRecord
 import com.fearmikey.garage.data.local.entity.RecallCampaignState
@@ -36,7 +38,7 @@ const val GARAGE_DATABASE_NAME = "garage.db"
  * The current Room schema version, kept as a standalone constant so it can be
  * compared against a backup's on-disk schema version before restoring it.
  */
-const val GARAGE_DATABASE_VERSION = 24
+const val GARAGE_DATABASE_VERSION = 25
 
 @DeleteTable.Entries(value = [DeleteTable(tableName = "reminders")])
 class DeleteRemindersTableSpec : AutoMigrationSpec
@@ -45,7 +47,7 @@ class DeleteRemindersTableSpec : AutoMigrationSpec
     entities = [
         Vehicle::class, MaintenanceRecord::class, VehicleSpecs::class, FuelRecord::class,
         VehiclePartsInfo::class, CustomMaintenanceRule::class, ModificationRecord::class, VehicleRegistrationInsurance::class,
-        ChargingRecord::class, IgnoredMaintenanceRule::class, RecallCampaignState::class,
+        ChargingRecord::class, IgnoredMaintenanceRule::class, RecallCampaignState::class, LubeLoggerPendingDelete::class,
     ],
     version = GARAGE_DATABASE_VERSION,
     exportSchema = true,
@@ -86,6 +88,8 @@ class DeleteRemindersTableSpec : AutoMigrationSpec
         AutoMigration(from = 22, to = 23),
         // Additive: lubeLoggerId added to fuel_records and maintenance_records tables
         AutoMigration(from = 23, to = 24),
+        // Additive: LubeLogger sync hashes, LubeLoggerPendingDelete table, new lubeLoggerId fields
+        AutoMigration(from = 24, to = 25),
     ],
 )
 @TypeConverters(Converters::class)
@@ -101,4 +105,5 @@ abstract class GarageDatabase : RoomDatabase() {
     abstract fun vehicleRegistrationDao(): VehicleRegistrationDao
     abstract fun ignoredMaintenanceRuleDao(): IgnoredMaintenanceRuleDao
     abstract fun recallCampaignStateDao(): RecallCampaignStateDao
+    abstract fun lubeLoggerPendingDeleteDao(): LubeLoggerPendingDeleteDao
 }

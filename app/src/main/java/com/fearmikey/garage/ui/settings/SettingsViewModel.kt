@@ -10,6 +10,8 @@ import androidx.lifecycle.viewModelScope
 import android.content.Intent
 import com.fearmikey.garage.data.local.CloudBackupPreferencesManager
 import com.fearmikey.garage.data.local.entity.Vehicle
+import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerSyncStatus
+import com.fearmikey.garage.notification.lubelogger.LubeLoggerSyncWorker
 import com.fearmikey.garage.data.repository.AutoBackupManager
 import com.fearmikey.garage.data.repository.BackupRepository
 import com.fearmikey.garage.data.repository.BackupResult
@@ -61,6 +63,8 @@ data class SettingsUiState(
     val lubeLoggerUsername: String = "",
     val lubeLoggerApiKey: String = "",
     val lubeLoggerUnitSystem: String = "imperial",
+    /** What actually happened the last time Garage talked to the LubeLogger server. */
+    val lubeLoggerStatus: LubeLoggerSyncStatus = LubeLoggerSyncStatus.NeverSynced,
     val isSyncing: Boolean = false,
     val lastSyncTimestamp: Long? = null,
     val lastSyncError: String? = null,
@@ -101,6 +105,25 @@ class SettingsViewModel @Inject constructor(
                 lubeLoggerApiKey = lubeLoggerCredentialsManager.getApiKey() ?: "",
                 lubeLoggerUnitSystem = lubeLoggerCredentialsManager.getUnitSystem(),
             ) 
+        }
+        viewModelScope.launch {
+            lubeLoggerCredentialsManager.syncStatus().collect { status ->
+                _uiState.update { it.copy(lubeLoggerStatus = status) }
+                // Confirm the outcome of a sync the user started from Settings.
+                if (awaitingManualLubeLoggerSync) {
+                    when (status) {
+                        is LubeLoggerSyncStatus.Success -> {
+                            awaitingManualLubeLoggerSync = false
+                            showMessage("LubeLogger sync completed.")
+                        }
+                        is LubeLoggerSyncStatus.Failed -> {
+                            awaitingManualLubeLoggerSync = false
+                            showMessage("LubeLogger sync failed: ${status.message}")
+                        }
+                        else -> Unit
+                    }
+                }
+            }
         }
         viewModelScope.launch {
             preferencesRepository.unitsType.collect { units ->
@@ -475,10 +498,21 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    private var awaitingManualLubeLoggerSync = false
+
     fun syncLubeLoggerNow() {
-        val request = androidx.work.OneTimeWorkRequestBuilder<com.fearmikey.garage.notification.lubelogger.LubeLoggerSyncWorker>()
+        if (_uiState.value.lubeLoggerStatus is LubeLoggerSyncStatus.Syncing) return
+        awaitingManualLubeLoggerSync = true
+        // Show progress right away; the worker confirms success or failure when it finishes.
+        lubeLoggerCredentialsManager.markSyncStarted()
+        val request = androidx.work.OneTimeWorkRequestBuilder<LubeLoggerSyncWorker>()
+            .addTag(LubeLoggerSyncWorker.TAG_MANUAL)
             .build()
-        androidx.work.WorkManager.getInstance(context).enqueue(request)
+        androidx.work.WorkManager.getInstance(context).enqueueUniqueWork(
+            LubeLoggerSyncWorker.MANUAL_WORK_NAME,
+            androidx.work.ExistingWorkPolicy.KEEP,
+            request,
+        )
     }
 
     fun setWebdavCredentials(url: String, username: String, password: String) {

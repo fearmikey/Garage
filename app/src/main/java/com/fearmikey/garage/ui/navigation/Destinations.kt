@@ -17,6 +17,7 @@ object Destinations {
     )
 
     const val SETTINGS = "settings"
+    const val LUBE_LOGGER_DUPLICATES = "lubelogger_duplicates"
 
     const val VEHICLE_ID_ARG = "vehicleId"
     const val NO_VEHICLE_ID = -1L

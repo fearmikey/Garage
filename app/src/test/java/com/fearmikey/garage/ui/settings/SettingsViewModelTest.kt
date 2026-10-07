@@ -176,6 +176,52 @@ class SettingsViewModelTest {
         }
     }
 
+    /** In-memory stand-in: the real class needs the Android Keystore, which JVM tests lack. */
+    private class TestLubeLoggerCredentialsManager(context: Context) :
+        com.fearmikey.garage.data.remote.lubelogger.LubeLoggerCredentialsManager(context) {
+        private var serverUrl: String? = null
+        private var username: String? = null
+        private var password: String? = null
+        private var apiKey: String? = null
+        private var unitSystem = "imperial"
+        private val vehicleMappings = mutableMapOf<Long, Int>()
+
+        override fun saveCredentials(serverUrl: String, username: String, password: String?, apiKey: String?, unitSystem: String) {
+            this.serverUrl = serverUrl
+            this.username = username
+            this.password = password ?: this.password
+            this.apiKey = apiKey
+            this.unitSystem = unitSystem
+        }
+
+        override fun getServerUrl() = serverUrl
+        override fun getUsername() = username
+        override fun getPassword() = password
+        override fun getApiKey() = apiKey
+        override fun getUnitSystem() = unitSystem
+        override fun clearCredentials() {
+            serverUrl = null; username = null; password = null; apiKey = null; unitSystem = "imperial"
+            vehicleMappings.clear()
+        }
+        override fun getVehicleMapping(localVehicleId: Long) = vehicleMappings[localVehicleId]
+        override fun saveVehicleMapping(localVehicleId: Long, lubeLoggerVehicleId: Int) {
+            vehicleMappings[localVehicleId] = lubeLoggerVehicleId
+        }
+        private val snapshots = mutableMapOf<Long, com.fearmikey.garage.data.remote.lubelogger.VehicleSyncDetails>()
+        override fun getVehicleDetailsSnapshot(localVehicleId: Long) = snapshots[localVehicleId]
+        override fun saveVehicleDetailsSnapshot(localVehicleId: Long, details: com.fearmikey.garage.data.remote.lubelogger.VehicleSyncDetails) {
+            snapshots[localVehicleId] = details
+        }
+        val status = MutableStateFlow<com.fearmikey.garage.data.remote.lubelogger.LubeLoggerSyncStatus>(
+            com.fearmikey.garage.data.remote.lubelogger.LubeLoggerSyncStatus.NeverSynced,
+        )
+        override fun syncStatus() = status
+        override fun markSyncStarted() { status.value = com.fearmikey.garage.data.remote.lubelogger.LubeLoggerSyncStatus.Syncing(null) }
+        override fun markSyncSucceeded(at: Long) { status.value = com.fearmikey.garage.data.remote.lubelogger.LubeLoggerSyncStatus.Success(at) }
+        override fun markSyncFailed(message: String, at: Long) { status.value = com.fearmikey.garage.data.remote.lubelogger.LubeLoggerSyncStatus.Failed(at, message, null) }
+        override fun markSyncCancelled() = Unit
+    }
+
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
@@ -239,6 +285,7 @@ class SettingsViewModelTest {
             override fun vehicleRegistrationDao(): VehicleRegistrationDao = FakeVehicleRegistrationDao()
             override fun ignoredMaintenanceRuleDao(): IgnoredMaintenanceRuleDao = FakeIgnoredMaintenanceRuleDao()
             override fun recallCampaignStateDao(): RecallCampaignStateDao = FakeRecallCampaignStateDao()
+            override fun lubeLoggerPendingDeleteDao(): com.fearmikey.garage.data.local.dao.LubeLoggerPendingDeleteDao = throw NotImplementedError()
             override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper {
                 throw UnsupportedOperationException()
             }
@@ -252,7 +299,7 @@ class SettingsViewModelTest {
         val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs)
         val autoBackupManager = AutoBackupManager(context, dummyDb, backupRepo, cloudPrefs)
         val notifier = ReminderNotifier(context)
-        val lubeLoggerCredsManager = com.fearmikey.garage.data.remote.lubelogger.LubeLoggerCredentialsManager(context)
+        val lubeLoggerCredsManager = TestLubeLoggerCredentialsManager(context)
 
         val viewModel = SettingsViewModel(
             context = context,
@@ -332,6 +379,7 @@ class SettingsViewModelTest {
             override fun vehicleRegistrationDao(): VehicleRegistrationDao = FakeVehicleRegistrationDao()
             override fun ignoredMaintenanceRuleDao(): IgnoredMaintenanceRuleDao = FakeIgnoredMaintenanceRuleDao()
             override fun recallCampaignStateDao(): RecallCampaignStateDao = FakeRecallCampaignStateDao()
+            override fun lubeLoggerPendingDeleteDao(): com.fearmikey.garage.data.local.dao.LubeLoggerPendingDeleteDao = throw NotImplementedError()
             override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper {
                 throw UnsupportedOperationException()
             }
@@ -344,7 +392,7 @@ class SettingsViewModelTest {
         val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs)
         val autoBackupManager = AutoBackupManager(context, dummyDb, backupRepo, cloudPrefs)
         val notifier = ReminderNotifier(context)
-        val lubeLoggerCredsManager = com.fearmikey.garage.data.remote.lubelogger.LubeLoggerCredentialsManager(context)
+        val lubeLoggerCredsManager = TestLubeLoggerCredentialsManager(context)
 
         val viewModel = SettingsViewModel(
             context = context,
@@ -458,6 +506,7 @@ class SettingsViewModelTest {
             override fun vehicleRegistrationDao(): VehicleRegistrationDao = FakeVehicleRegistrationDao()
             override fun ignoredMaintenanceRuleDao(): IgnoredMaintenanceRuleDao = FakeIgnoredMaintenanceRuleDao()
             override fun recallCampaignStateDao(): RecallCampaignStateDao = FakeRecallCampaignStateDao()
+            override fun lubeLoggerPendingDeleteDao(): com.fearmikey.garage.data.local.dao.LubeLoggerPendingDeleteDao = throw NotImplementedError()
             override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper {
                 throw UnsupportedOperationException()
             }
@@ -470,7 +519,7 @@ class SettingsViewModelTest {
         val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs)
         val autoBackupManager = AutoBackupManager(context, dummyDb, backupRepo, cloudPrefs)
         val notifier = ReminderNotifier(context)
-        val lubeLoggerCredsManager = com.fearmikey.garage.data.remote.lubelogger.LubeLoggerCredentialsManager(context)
+        val lubeLoggerCredsManager = TestLubeLoggerCredentialsManager(context)
 
         val viewModel = SettingsViewModel(
             context = context,

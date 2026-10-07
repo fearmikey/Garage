@@ -41,6 +41,10 @@ data class ModificationRecord(
     val imageUri4: String? = null,
     val imageUri5: String? = null,
     val imageUri6: String? = null,
+    @ColumnInfo(defaultValue = "NULL")
+    val lubeLoggerId: Int? = null,
+    @ColumnInfo(defaultValue = "NULL")
+    val lubeLoggerSyncHash: String? = null,
 ) {
     /** Helper list of all attached photo filenames (up to 6). */
     val imageUris: List<String>

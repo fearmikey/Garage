@@ -63,4 +63,19 @@ object WorkScheduler {
             // WorkManager not initialized (e.g. in unit tests)
         }
     }
+
+    fun triggerManualLubeLoggerSync(context: Context) {
+        try {
+            val request = OneTimeWorkRequestBuilder<com.fearmikey.garage.notification.lubelogger.LubeLoggerSyncWorker>()
+                .addTag(com.fearmikey.garage.notification.lubelogger.LubeLoggerSyncWorker.TAG_MANUAL)
+                .build()
+            WorkManager.getInstance(context).enqueueUniqueWork(
+                com.fearmikey.garage.notification.lubelogger.LubeLoggerSyncWorker.MANUAL_WORK_NAME,
+                ExistingWorkPolicy.REPLACE,
+                request,
+            )
+        } catch (_: Exception) {
+            // WorkManager not initialized (e.g. in unit tests)
+        }
+    }
 }

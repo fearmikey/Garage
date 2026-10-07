@@ -1,3 +1,12 @@
+## [1.2.9] - 2026-10-05
+
+### Added
+* **Enhanced LubeLogger Integration & Bidirectional Sync:** Full synchronization support for service logs, repairs, upgrades, fuel records, and EV charging sessions with self-hosted LubeLogger instances.
+* **LubeLogger Duplicate Resolver:** Dedicated screen and ViewModel for detecting, reviewing, and resolving duplicate records between local storage and LubeLogger.
+* **LubeLogger Pending Deletion Tracking:** Local pending delete queue to safely propagate record deletions across sync cycles.
+* **Database Migration (Schema 25):** Room database updates for LubeLogger sync status metadata and pending delete tracking entities.
+* **Expanded Test Suite:** Unit test coverage for `LubeLoggerRecordSyncTest`, `LubeLoggerDuplicatesViewModelTest`, and updated sync ViewModels.
+
 ## [1.2.8] - 2026-10-05
 
 ### Added

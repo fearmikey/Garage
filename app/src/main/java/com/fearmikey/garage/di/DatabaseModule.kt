@@ -69,4 +69,8 @@ object DatabaseModule {
     @Provides
     fun provideRecallCampaignStateDao(database: GarageDatabase): RecallCampaignStateDao =
         database.recallCampaignStateDao()
+
+    @Provides
+    fun provideLubeLoggerPendingDeleteDao(database: GarageDatabase): com.fearmikey.garage.data.local.dao.LubeLoggerPendingDeleteDao =
+        database.lubeLoggerPendingDeleteDao()
 }

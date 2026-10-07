@@ -119,6 +119,8 @@ class ModsViewModel @Inject constructor(
         _sheetState.value = SheetState(
             isOpen = true,
             editingModId = mod.id,
+            editingLubeLoggerId = mod.lubeLoggerId,
+            editingLubeLoggerSyncHash = mod.lubeLoggerSyncHash,
             title = mod.title,
             category = mod.category,
             description = mod.description,
@@ -237,6 +239,8 @@ class ModsViewModel @Inject constructor(
                 date = sheet.date,
                 cost = sheet.cost.toDoubleOrNull() ?: 0.0,
                 productUrl = sheet.productUrl.trim(),
+                lubeLoggerId = sheet.editingLubeLoggerId,
+                lubeLoggerSyncHash = sheet.editingLubeLoggerSyncHash,
             )
 
             modificationRepository.saveMod(record)
@@ -265,6 +269,8 @@ class ModsViewModel @Inject constructor(
     private data class SheetState(
         val isOpen: Boolean = false,
         val editingModId: Long? = null,
+        val editingLubeLoggerId: Int? = null,
+        val editingLubeLoggerSyncHash: String? = null,
         val title: String = "",
         val category: ModificationCategory = ModificationCategory.PERFORMANCE,
         val description: String = "",

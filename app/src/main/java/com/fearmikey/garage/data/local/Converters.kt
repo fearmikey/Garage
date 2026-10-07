@@ -2,6 +2,7 @@ package com.fearmikey.garage.data.local
 
 import androidx.room.TypeConverter
 import com.fearmikey.garage.data.local.entity.Drivetrain
+import com.fearmikey.garage.data.local.entity.LubeLoggerRecordType
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.ModificationCategory
 import com.fearmikey.garage.data.local.entity.RecallState
@@ -41,4 +42,11 @@ class Converters {
     @TypeConverter
     fun toRecallState(value: String): RecallState =
         RecallState.entries.firstOrNull { it.name == value } ?: RecallState.OPEN
+
+    @TypeConverter
+    fun fromLubeLoggerRecordType(type: LubeLoggerRecordType): String = type.name
+
+    @TypeConverter
+    fun toLubeLoggerRecordType(value: String): LubeLoggerRecordType =
+        LubeLoggerRecordType.entries.firstOrNull { it.name == value } ?: LubeLoggerRecordType.SERVICE
 }

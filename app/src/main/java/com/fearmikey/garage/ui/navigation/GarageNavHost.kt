@@ -29,6 +29,7 @@ import com.fearmikey.garage.PendingDeepLink
 import com.fearmikey.garage.ui.components.UpdateOdometerDialog
 import com.fearmikey.garage.ui.dashboard.DashboardScreen
 import com.fearmikey.garage.ui.maintenance.export.MaintenanceExportScreen
+import com.fearmikey.garage.ui.settings.LubeLoggerDuplicatesScreen
 import com.fearmikey.garage.ui.settings.SettingsScreen
 import com.fearmikey.garage.ui.startup.StartupScreen
 import com.fearmikey.garage.ui.vehicle.AddEditVehicleScreen

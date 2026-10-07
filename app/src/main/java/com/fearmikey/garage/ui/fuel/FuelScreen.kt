@@ -886,6 +886,8 @@ internal fun AddEditChargingRecordSheet(
                             vendor = vendorName,
                             vendorType = vendorType,
                             estimatedRangeAt100 = canonicalEstRange,
+                            lubeLoggerId = initial?.lubeLoggerId,
+                            lubeLoggerSyncHash = initial?.lubeLoggerSyncHash,
                         )
                     )
                 },
@@ -1309,6 +1311,8 @@ internal fun AddEditFuelRecordSheet(
                             totalCost = finalTotalCost,
                             pricePerGallon = if (canonicalGallons > 0.0) finalTotalCost / canonicalGallons else 0.0,
                             isFullTank = isFullTank,
+                            lubeLoggerId = initial?.lubeLoggerId,
+                            lubeLoggerSyncHash = initial?.lubeLoggerSyncHash,
                         )
                     )
                 },

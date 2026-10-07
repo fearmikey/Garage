@@ -2,7 +2,7 @@ package com.fearmikey.garage.data.remote.lubelogger
 
 import com.google.gson.annotations.SerializedName
 
-data class LubeLoggerServiceRecordDto(
+data class LubeLoggerRepairRecordDto(
     @SerializedName("id") val id: Int? = null,
     @SerializedName("vehicleId") val vehicleId: Int? = null,
     @SerializedName("date") val date: String,

@@ -1,9 +1,14 @@
 package com.fearmikey.garage.data.repository
 
 import android.net.Uri
+import androidx.room.withTransaction
+import com.fearmikey.garage.data.local.GarageDatabase
 import com.fearmikey.garage.data.local.dao.IgnoredMaintenanceRuleDao
+import com.fearmikey.garage.data.local.dao.LubeLoggerPendingDeleteDao
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
 import com.fearmikey.garage.data.local.entity.IgnoredMaintenanceRule
+import com.fearmikey.garage.data.local.entity.LubeLoggerPendingDelete
+import com.fearmikey.garage.data.local.entity.LubeLoggerRecordType
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -18,6 +23,8 @@ class MaintenanceRepository @Inject constructor(
     private val maintenanceDao: MaintenanceDao,
     private val ignoredMaintenanceRuleDao: IgnoredMaintenanceRuleDao? = null,
     private val imageStorageManager: ImageStorageManager? = null,
+    private val pendingDeleteDao: LubeLoggerPendingDeleteDao? = null,
+    private val database: GarageDatabase? = null,
 ) {
     fun getRecordsForVehicle(
         vehicleId: Long,
@@ -68,7 +75,28 @@ class MaintenanceRepository @Inject constructor(
     }
 
     suspend fun deleteRecord(record: MaintenanceRecord) {
+        if (database != null) {
+            database.withTransaction {
+                if (record.lubeLoggerId != null && record.lubeLoggerRecordType != null && pendingDeleteDao != null) {
+                    pendingDeleteDao.insert(
+                        LubeLoggerPendingDelete(
+                            type = record.lubeLoggerRecordType,
+                            lubeLoggerId = record.lubeLoggerId,
+                            lubeLoggerVehicleId = record.vehicleId
+                        )
+                    )
+                }
+                maintenanceDao.delete(record)
+            }
+        } else {
+            maintenanceDao.delete(record)
+        }
         record.receiptUri?.let { imageStorageManager?.deleteImage(it) }
+    }
+
+    /** Deletes a record that was already deleted in LubeLogger, without queuing a server delete. */
+    suspend fun deleteRecordFromSync(record: MaintenanceRecord) {
         maintenanceDao.delete(record)
+        record.receiptUri?.let { imageStorageManager?.deleteImage(it) }
     }
 }

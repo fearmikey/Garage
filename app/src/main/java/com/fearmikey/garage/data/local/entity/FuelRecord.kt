@@ -44,4 +44,6 @@ data class FuelRecord(
     val isFullTank: Boolean = true,
     @androidx.room.ColumnInfo(defaultValue = "NULL")
     val lubeLoggerId: Int? = null,
+    @androidx.room.ColumnInfo(defaultValue = "NULL")
+    val lubeLoggerSyncHash: String? = null,
 )

@@ -70,6 +70,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -129,6 +130,7 @@ fun DashboardScreen(
     val showFuelTrendGraph by viewModel.showFuelTrendGraph.collectAsStateWithLifecycle()
     val showFleetOverview by viewModel.showFleetOverview.collectAsStateWithLifecycle()
     val driversLicenseState by viewModel.driversLicenseState.collectAsStateWithLifecycle()
+    val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
 
     DashboardContent(
         initialTab = initialTab,
@@ -139,6 +141,8 @@ fun DashboardScreen(
         showFuelTrendGraph = showFuelTrendGraph,
         showFleetOverview = showFleetOverview,
         driversLicenseState = driversLicenseState,
+        isRefreshing = isRefreshing,
+        onRefresh = viewModel::refreshSync,
         imageFileProvider = viewModel::imageFileFor,
         onAddVehicle = onAddVehicle,
         onOpenVehicle = onOpenVehicle,
@@ -162,6 +166,8 @@ private fun DashboardContent(
     showFuelTrendGraph: Boolean,
     showFleetOverview: Boolean,
     driversLicenseState: DriversLicenseState,
+    isRefreshing: Boolean,
+    onRefresh: () -> Unit,
     imageFileProvider: (String) -> File,
     onAddVehicle: () -> Unit,
     onOpenVehicle: (vehicleId: Long, tab: Int) -> Unit,
@@ -223,68 +229,82 @@ private fun DashboardContent(
                 }
             }
 
-            when (selectedTab) {
-                0 -> {
-                    if (vehicles.isEmpty()) {
-                        EmptyState(
-                            message = "No vehicles yet.\nTap + to add your first one.",
-                            modifier = Modifier.weight(1f),
-                        )
-                    } else {
-                        val listState = rememberLazyListState()
-                        LazyColumn(
-                            state = listState,
-                            modifier = Modifier
-                                .weight(1f)
-                                .verticalScrollbar(listState),
-                            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 88.dp),
-                            verticalArrangement = Arrangement.spacedBy(10.dp),
-                        ) {
-                            if (showFleetOverview) {
-                                item(key = "fleet_summary") {
-                                    FleetSummaryCard(
-                                        summary = fleetSummary,
+            PullToRefreshBox(
+                isRefreshing = isRefreshing,
+                onRefresh = onRefresh,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+            ) {
+                when (selectedTab) {
+                    0 -> {
+                        if (vehicles.isEmpty()) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .verticalScroll(rememberScrollState()),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                EmptyState(
+                                    message = "No vehicles yet.\nTap + to add your first one.",
+                                )
+                            }
+                        } else {
+                            val listState = rememberLazyListState()
+                            LazyColumn(
+                                state = listState,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .verticalScrollbar(listState),
+                                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 88.dp),
+                                verticalArrangement = Arrangement.spacedBy(10.dp),
+                            ) {
+                                if (showFleetOverview) {
+                                    item(key = "fleet_summary") {
+                                        FleetSummaryCard(
+                                            summary = fleetSummary,
+                                            unitSystem = unitSystem,
+                                            onOpenOverdueReminders = {
+                                                vehicles.firstOrNull { (it.overdueReminderCount > 0) || (it.upcomingReminderCount > 0) }
+                                                    ?.let { onOpenVehicle(it.vehicle.id, VehicleTab.SCHEDULE.ordinal) }
+                                            },
+                                        )
+                                    }
+                                }
+
+                                items(vehicles, key = { it.vehicle.id }) { item ->
+                                    VehicleCard(
+                                        vehicle = item.vehicle,
+                                        latestMileage = item.latestMileage,
+                                        imageFile = item.imageFile,
                                         unitSystem = unitSystem,
-                                        onOpenOverdueReminders = {
-                                            vehicles.firstOrNull { (it.overdueReminderCount > 0) || (it.upcomingReminderCount > 0) }
-                                                ?.let { onOpenVehicle(it.vehicle.id, VehicleTab.SCHEDULE.ordinal) }
-                                        },
+                                        avgMpg = item.avgMpg,
+                                        fuelEntries = if (showFuelTrendGraph) item.fuelEntries else emptyList(),
+                                        overdueReminderCount = item.overdueReminderCount,
+                                        upcomingReminderCount = item.upcomingReminderCount,
+                                        sharedTransitionScope = sharedTransitionScope,
+                                        animatedVisibilityScope = animatedVisibilityScope,
+                                        onClick = { onOpenVehicle(item.vehicle.id, 0) },
+                                        onOpenReminders = { onOpenVehicle(item.vehicle.id, VehicleTab.SCHEDULE.ordinal) },
+                                        onFuelGraphClick = { onOpenVehicle(item.vehicle.id, VehicleTab.FUEL.ordinal) },
+                                        onUpdateMileage = { onUpdateMileage(item.vehicle.id) },
                                     )
                                 }
                             }
-
-                            items(vehicles, key = { it.vehicle.id }) { item ->
-                                VehicleCard(
-                                    vehicle = item.vehicle,
-                                    latestMileage = item.latestMileage,
-                                    imageFile = item.imageFile,
-                                    unitSystem = unitSystem,
-                                    avgMpg = item.avgMpg,
-                                    fuelEntries = if (showFuelTrendGraph) item.fuelEntries else emptyList(),
-                                    overdueReminderCount = item.overdueReminderCount,
-                                    upcomingReminderCount = item.upcomingReminderCount,
-                                    sharedTransitionScope = sharedTransitionScope,
-                                    animatedVisibilityScope = animatedVisibilityScope,
-                                    onClick = { onOpenVehicle(item.vehicle.id, 0) },
-                                    onOpenReminders = { onOpenVehicle(item.vehicle.id, VehicleTab.SCHEDULE.ordinal) },
-                                    onFuelGraphClick = { onOpenVehicle(item.vehicle.id, VehicleTab.FUEL.ordinal) },
-                                    onUpdateMileage = { onUpdateMileage(item.vehicle.id) },
-                                )
-                            }
                         }
                     }
-                }
-                1 -> {
-                    DriversLicenseTab(
-                        state = driversLicenseState,
-                        imageFileProvider = imageFileProvider,
-                        onSaveDriversLicense = onSaveDriversLicense,
-                        onDeleteDriversLicense = onDeleteDriversLicense,
-                    )
-                }
-                2 -> {
-                    if (affiliateLinksEnabled) {
-                        DeveloperFavoritesContent()
+                    1 -> {
+                        DriversLicenseTab(
+                            state = driversLicenseState,
+                            imageFileProvider = imageFileProvider,
+                            onSaveDriversLicense = onSaveDriversLicense,
+                            onDeleteDriversLicense = onDeleteDriversLicense,
+                        )
+                    }
+                    2 -> {
+                        if (affiliateLinksEnabled) {
+                            DeveloperFavoritesContent()
+                        }
                     }
                 }
             }
@@ -880,6 +900,8 @@ private fun DashboardScreenPreview() {
                             expiration = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(180),
                             notes = "Class C / REAL ID",
                         ),
+                        isRefreshing = false,
+                        onRefresh = {},
                         imageFileProvider = { File("") },
                         onAddVehicle = {},
                         onOpenVehicle = { _, _ -> },
@@ -913,6 +935,8 @@ private fun DashboardScreenEmptyPreview() {
                         showFuelTrendGraph = true,
                         showFleetOverview = true,
                         driversLicenseState = DriversLicenseState(),
+                        isRefreshing = false,
+                        onRefresh = {},
                         imageFileProvider = { File("") },
                         onAddVehicle = {},
                         onOpenVehicle = { _, _ -> },

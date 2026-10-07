@@ -17,7 +17,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerSyncStatus
 import androidx.compose.foundation.lazy.rememberLazyListState
 import com.fearmikey.garage.ui.components.verticalScrollbar
 import androidx.compose.material.icons.Icons
@@ -107,6 +109,7 @@ import kotlin.math.roundToInt
 fun SettingsScreen(
     onBack: () -> Unit,
     onOpenStartup: () -> Unit = {},
+    onOpenDuplicates: () -> Unit = {},
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -393,24 +396,44 @@ fun SettingsScreen(
                 SettingsCategoryHeader("Integrations")
             }
             item {
-                ListItem(
-                    headlineContent = { Text("LubeLogger Sync") },
-                    supportingContent = { Text(if (uiState.lubeLoggerConfigured) "Connected to ${uiState.lubeLoggerServerUrl}" else "Not configured") },
-                    leadingContent = { Icon(Icons.Filled.CloudSync, contentDescription = null) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { showLubeLoggerDialog = true },
+                LubeLoggerStatusItem(
+                    configured = uiState.lubeLoggerConfigured,
+                    serverUrl = uiState.lubeLoggerServerUrl,
+                    status = uiState.lubeLoggerStatus,
+                    onClick = { showLubeLoggerDialog = true },
                 )
             }
             if (uiState.lubeLoggerConfigured) {
                 item {
+                    val syncing = uiState.lubeLoggerStatus is LubeLoggerSyncStatus.Syncing
                     ListItem(
-                        headlineContent = { Text("Sync LubeLogger now") },
-                        supportingContent = { Text("Manually trigger a sync with your LubeLogger server.") },
-                        leadingContent = { Icon(Icons.Filled.CloudSync, contentDescription = null) },
+                        headlineContent = { Text(if (syncing) "Syncing with LubeLogger…" else "Sync LubeLogger now") },
+                        supportingContent = {
+                            Text(
+                                if (syncing) "Exchanging records with your LubeLogger server."
+                                else "Manually trigger a sync with your LubeLogger server.",
+                            )
+                        },
+                        leadingContent = {
+                            if (syncing) {
+                                CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
+                            } else {
+                                Icon(Icons.Filled.CloudSync, contentDescription = null)
+                            }
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { viewModel.syncLubeLoggerNow() },
+                            .clickable(enabled = !syncing) { viewModel.syncLubeLoggerNow() },
+                    )
+                }
+                item {
+                    ListItem(
+                        headlineContent = { Text("Find duplicate records") },
+                        supportingContent = { Text("Review and remove identical fuel or maintenance records.") },
+                        leadingContent = { Icon(Icons.Filled.DeleteForever, contentDescription = null) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onOpenDuplicates() },
                     )
                 }
             }

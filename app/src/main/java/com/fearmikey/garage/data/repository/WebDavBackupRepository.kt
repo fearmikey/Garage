@@ -25,7 +25,7 @@ private const val BACKUP_FILE_NAME = "garage-backup.zip"
  * this deliberately doesn't go through Retrofit.
  */
 @Singleton
-class WebDavBackupRepository @Inject constructor(
+open class WebDavBackupRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val backupRepository: BackupRepository,
     private val cloudBackupPreferencesManager: CloudBackupPreferencesManager,
@@ -37,7 +37,7 @@ class WebDavBackupRepository @Inject constructor(
         .writeTimeout(60, TimeUnit.SECONDS)
         .build()
 
-    suspend fun syncNow(): BackupResult = withContext(Dispatchers.IO) {
+    open suspend fun syncNow(): BackupResult = withContext(Dispatchers.IO) {
         val enabled = cloudBackupPreferencesManager.cloudSyncEnabled.first()
         val url = cloudBackupPreferencesManager.webdavUrl.first()
         val username = cloudBackupPreferencesManager.webdavUsername.first()

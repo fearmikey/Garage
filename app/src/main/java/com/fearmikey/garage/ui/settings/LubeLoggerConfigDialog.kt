@@ -51,6 +51,7 @@ fun LubeLoggerConfigDialog(
                     value = url,
                     onValueChange = { url = it },
                     label = { Text("Server URL") },
+                    singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -88,6 +89,7 @@ fun LubeLoggerConfigDialog(
                     value = username,
                     onValueChange = { username = it },
                     label = { Text("Username") },
+                    singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -95,6 +97,7 @@ fun LubeLoggerConfigDialog(
                     value = password,
                     onValueChange = { password = it },
                     label = { Text("Password") },
+                    singleLine = true,
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     modifier = Modifier.fillMaxWidth(),
@@ -104,6 +107,7 @@ fun LubeLoggerConfigDialog(
                     value = apiKey,
                     onValueChange = { apiKey = it },
                     label = { Text("API Key (Optional)") },
+                    singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
