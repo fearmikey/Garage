@@ -20,7 +20,7 @@ fun FuelRecord.toLubeLoggerDto(lubeLoggerVehicleId: Int): LubeLoggerGasRecordDto
         fuelConsumed = this.gallons.toString(),
         cost = this.totalCost.toString(),
         isFillToFull = this.isFullTank.toString(),
-        missedFuelUp = "false" // We don't explicitly track missed fuel ups right now
+        missedFuelUp = "false", // We don't explicitly track missed fuel ups right now
     )
 }
 
@@ -43,4 +43,56 @@ fun MaintenanceRecord.toLubeLoggerDto(lubeLoggerVehicleId: Int): LubeLoggerServi
         description = fullDescription,
         cost = this.cost.toString()
     )
+}
+
+fun LubeLoggerGasRecordDto.toFuelRecord(localVehicleId: Long): FuelRecord? {
+    val recordId = id ?: return null
+    val parsedDate = parseDateToEpochMillis(date)
+    val parsedMileage = mileage ?: odometer?.toIntOrNull() ?: 0
+    val parsedGallons = gallons ?: fuelConsumed?.toDoubleOrNull() ?: 0.0
+    val parsedCost = cost?.toDoubleOrNull() ?: 0.0
+    val parsedIsFillToFull = isFillToFull?.toBooleanStrictOrNull() ?: true
+    val ppg = if (parsedGallons > 0.0) parsedCost / parsedGallons else 0.0
+
+    return FuelRecord(
+        vehicleId = localVehicleId,
+        date = parsedDate,
+        mileage = parsedMileage,
+        gallons = parsedGallons,
+        totalCost = parsedCost,
+        pricePerGallon = ppg,
+        isFullTank = parsedIsFillToFull,
+        lubeLoggerId = recordId
+    )
+}
+
+fun LubeLoggerServiceRecordDto.toMaintenanceRecord(localVehicleId: Long): MaintenanceRecord? {
+    val recordId = id ?: return null
+    val parsedDate = parseDateToEpochMillis(date)
+    val parsedMileage = mileage ?: odometer?.toIntOrNull() ?: 0
+    val parsedCost = cost?.toDoubleOrNull() ?: 0.0
+
+    return MaintenanceRecord(
+        vehicleId = localVehicleId,
+        date = parsedDate,
+        mileage = parsedMileage,
+        description = description,
+        cost = parsedCost,
+        category = com.fearmikey.garage.data.local.entity.MaintenanceCategory.OTHER,
+        lubeLoggerId = recordId
+    )
+}
+
+private fun parseDateToEpochMillis(dateStr: String): Long {
+    return try {
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+        sdf.parse(dateStr)?.time ?: System.currentTimeMillis()
+    } catch (_: Exception) {
+        try {
+            val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.US)
+            sdf.parse(dateStr)?.time ?: System.currentTimeMillis()
+        } catch (_: Exception) {
+            System.currentTimeMillis()
+        }
+    }
 }

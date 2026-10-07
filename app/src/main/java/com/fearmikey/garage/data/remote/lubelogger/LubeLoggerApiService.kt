@@ -12,6 +12,9 @@ interface LubeLoggerApiService {
     @GET("api/vehicles")
     suspend fun getVehicles(): Response<List<LubeLoggerVehicleDto>>
 
+    @GET
+    suspend fun downloadFile(@retrofit2.http.Url fileUrl: String): Response<okhttp3.ResponseBody>
+
     @POST("api/vehicles/add")
     suspend fun addVehicle(
         @Body vehicle: LubeLoggerVehicleImportDto

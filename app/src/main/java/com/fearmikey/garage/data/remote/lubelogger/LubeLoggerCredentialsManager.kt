@@ -1,15 +1,17 @@
 package com.fearmikey.garage.data.remote.lubelogger
 
 import android.content.Context
+import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@Suppress("DEPRECATION")
 @Singleton
 class LubeLoggerCredentialsManager @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
 ) {
     private val masterKey = MasterKey.Builder(context)
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
@@ -24,22 +26,20 @@ class LubeLoggerCredentialsManager @Inject constructor(
     )
 
     fun saveCredentials(serverUrl: String, username: String, password: String?, apiKey: String?) {
-        sharedPreferences.edit()
-            .putString("server_url", serverUrl)
-            .putString("username", username)
-            .apply {
-                if (password != null) {
-                    putString("password", password)
-                } else {
-                    remove("password")
-                }
-                if (apiKey != null) {
-                    putString("api_key", apiKey)
-                } else {
-                    remove("api_key")
-                }
+        sharedPreferences.edit {
+            putString("server_url", serverUrl)
+            putString("username", username)
+            if (password != null) {
+                putString("password", password)
+            } else {
+                remove("password")
             }
-            .apply()
+            if (apiKey != null) {
+                putString("api_key", apiKey)
+            } else {
+                remove("api_key")
+            }
+        }
     }
 
     fun getServerUrl(): String? = sharedPreferences.getString("server_url", null)
@@ -48,7 +48,7 @@ class LubeLoggerCredentialsManager @Inject constructor(
     fun getApiKey(): String? = sharedPreferences.getString("api_key", null)
 
     fun clearCredentials() {
-        sharedPreferences.edit().clear().apply()
+        sharedPreferences.edit { clear() }
     }
 
     fun isConfigured(): Boolean {
@@ -61,6 +61,6 @@ class LubeLoggerCredentialsManager @Inject constructor(
     }
 
     fun saveVehicleMapping(localVehicleId: Long, lubeLoggerVehicleId: Int) {
-        sharedPreferences.edit().putInt("ll_vehicle_map_$localVehicleId", lubeLoggerVehicleId).apply()
+        sharedPreferences.edit { putInt("ll_vehicle_map_$localVehicleId", lubeLoggerVehicleId) }
     }
 }

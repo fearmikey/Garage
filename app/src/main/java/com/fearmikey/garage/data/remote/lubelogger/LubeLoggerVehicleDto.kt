@@ -9,7 +9,8 @@ data class LubeLoggerVehicleDto(
     @SerializedName("year") val year: Int? = null,
     @SerializedName("make") val make: String? = null,
     @SerializedName("model") val model: String? = null,
-    @SerializedName("licensePlate") val licensePlate: String? = null
+    @SerializedName("licensePlate") val licensePlate: String? = null,
+    @SerializedName("imageLocation") val imageLocation: String? = null
 )
 
 // Used when creating a new vehicle in LubeLogger POST /api/vehicles/add

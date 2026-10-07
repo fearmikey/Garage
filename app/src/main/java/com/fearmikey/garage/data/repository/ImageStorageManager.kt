@@ -68,6 +68,19 @@ open class ImageStorageManager @Inject constructor(
         }
     }
 
+    suspend fun saveImageBytesToInternalStorage(bytes: ByteArray): String = withContext(Dispatchers.IO) {
+        val tempFile = File.createTempFile("remote_image_", ".tmp", context.cacheDir)
+        try {
+            tempFile.writeBytes(bytes)
+            val filename = "${UUID.randomUUID()}.jpg"
+            val destination = File(imagesDir, filename)
+            downsampleAndSave(tempFile, destination)
+            filename
+        } finally {
+            tempFile.delete()
+        }
+    }
+
     /**
      * Copies a picked file (either an Image or a PDF document) into internal
      * storage under [imagesDir]. PDFs are copied verbatim with a `.pdf` extension;

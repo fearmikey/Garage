@@ -7,8 +7,11 @@ import androidx.work.WorkerParameters
 import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerApiFactory
 import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerCredentialsManager
 import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerVehicleImportDto
+import com.fearmikey.garage.data.remote.lubelogger.toFuelRecord
 import com.fearmikey.garage.data.remote.lubelogger.toLubeLoggerDto
+import com.fearmikey.garage.data.remote.lubelogger.toMaintenanceRecord
 import com.fearmikey.garage.data.repository.FuelRepository
+import com.fearmikey.garage.data.repository.ImageStorageManager
 import com.fearmikey.garage.data.repository.MaintenanceRepository
 import com.fearmikey.garage.data.repository.VehicleRepository
 import dagger.assisted.Assisted
@@ -23,7 +26,8 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
     private val credentialsManager: LubeLoggerCredentialsManager,
     private val vehicleRepository: VehicleRepository,
     private val fuelRepository: FuelRepository,
-    private val maintenanceRepository: MaintenanceRepository
+    private val maintenanceRepository: MaintenanceRepository,
+    private val imageStorageManager: ImageStorageManager,
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
@@ -59,7 +63,7 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
                             year = local.year.toString(),
                             make = local.make,
                             model = local.model,
-                            licensePlate = if (local.vin.isNotBlank()) local.vin else "N/A"
+                            licensePlate = local.vin.ifBlank { "N/A" }
                         )
                         val createResp = api.addVehicle(importDto)
                         if (createResp.isSuccessful) {
@@ -110,15 +114,39 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
             for (local in localVehicles) {
                 val mappedId = credentialsManager.getVehicleMapping(local.id)
                 if (mappedId != null) {
+                    val remoteVehicle = remoteVehicles.find { it.id == mappedId }
+
+                    // Sync Vehicle Image if local imageUri is empty and remote has an imageLocation
+                    if (local.imageUri == null && remoteVehicle?.imageLocation != null && !remoteVehicle.imageLocation.contains("noimage.png")) {
+                        try {
+                            val imgResp = api.downloadFile(remoteVehicle.imageLocation)
+                            if (imgResp.isSuccessful) {
+                                val bytes = imgResp.body()?.bytes()
+                                if (bytes != null && bytes.isNotEmpty()) {
+                                    val savedFilename = imageStorageManager.saveImageBytesToInternalStorage(bytes)
+                                    vehicleRepository.saveVehicle(local.copy(imageUri = savedFilename))
+                                }
+                            }
+                        } catch (_: Exception) {}
+                    }
+
                     // ---------------------------------------------------------
                     // PULL REMOTE RECORDS & UPDATE LOCAL DATABASE
                     // ---------------------------------------------------------
                     val remoteGasRecordsResponse = api.getGasRecords(mappedId)
                     if (remoteGasRecordsResponse.isSuccessful) {
                         val remoteGasRecords = remoteGasRecordsResponse.body() ?: emptyList()
-                        for (remote in remoteGasRecords) {
-                            if (remote.id != null) {
-                                // TODO: Map remote LubeLogger record back to Garage FuelRecord entity and insert/update
+                        val localFuelRecords = fuelRepository.getRecordsForVehicle(local.id).first()
+
+                        for (remoteGas in remoteGasRecords) {
+                            if (remoteGas.id != null) {
+                                val existsLocally = localFuelRecords.any { it.lubeLoggerId == remoteGas.id }
+                                if (!existsLocally) {
+                                    val newFuelRecord = remoteGas.toFuelRecord(local.id)
+                                    if (newFuelRecord != null) {
+                                        fuelRepository.saveRecord(newFuelRecord)
+                                    }
+                                }
                             }
                         }
                     }
@@ -126,9 +154,17 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
                     val remoteServiceRecordsResponse = api.getServiceRecords(mappedId)
                     if (remoteServiceRecordsResponse.isSuccessful) {
                         val remoteServiceRecords = remoteServiceRecordsResponse.body() ?: emptyList()
-                        for (remote in remoteServiceRecords) {
-                            if (remote.id != null) {
-                                // TODO: Map remote LubeLogger record back to Garage MaintenanceRecord entity and insert/update
+                        val localMaintRecords = maintenanceRepository.getRecordsForVehicle(local.id).first()
+
+                        for (remoteService in remoteServiceRecords) {
+                            if (remoteService.id != null) {
+                                val existsLocally = localMaintRecords.any { it.lubeLoggerId == remoteService.id }
+                                if (!existsLocally) {
+                                    val newMaintRecord = remoteService.toMaintenanceRecord(local.id)
+                                    if (newMaintRecord != null) {
+                                        maintenanceRepository.saveRecord(newMaintRecord)
+                                    }
+                                }
                             }
                         }
                     }

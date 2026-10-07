@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 @Singleton
 class LubeLoggerApiFactory @Inject constructor(
     private val credentialsManager: LubeLoggerCredentialsManager,
-    private val gson: Gson
+    private val gson: Gson,
 ) {
     fun createApiService(): LubeLoggerApiService? {
         val serverUrl = credentialsManager.getServerUrl()
