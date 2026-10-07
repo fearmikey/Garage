@@ -139,11 +139,17 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
                     if (remoteGasRecordsResponse.isSuccessful) {
                         val remoteGasRecords = remoteGasRecordsResponse.body() ?: emptyList()
                         val localFuelRecords = fuelRepository.getRecordsForVehicle(local.id).first()
+                        val maxLocalMileage = localFuelRecords.maxOfOrNull { it.mileage } ?: 0
 
                         for (remoteGas in remoteGasRecords) {
                             if (remoteGas.id != null) {
                                 val candidate = remoteGas.toFuelRecord(local.id, unitSystem)
                                 if (candidate != null) {
+                                    // Sanity Check: Filter out unit-mismatched 1.6x kilometer-corrupted records from LubeLogger
+                                    if (maxLocalMileage > 0 && candidate.mileage > maxLocalMileage * 1.35 && candidate.mileage > maxLocalMileage + 10000) {
+                                        continue
+                                    }
+
                                     // 1. Check if already linked by lubeLoggerId
                                     val linkedLocally = localFuelRecords.find { it.lubeLoggerId == remoteGas.id }
                                     
@@ -170,11 +176,17 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
                     if (remoteServiceRecordsResponse.isSuccessful) {
                         val remoteServiceRecords = remoteServiceRecordsResponse.body() ?: emptyList()
                         val localMaintRecords = maintenanceRepository.getRecordsForVehicle(local.id).first()
+                        val maxLocalMaintMileage = localMaintRecords.maxOfOrNull { it.mileage } ?: 0
 
                         for (remoteService in remoteServiceRecords) {
                             if (remoteService.id != null) {
                                 val candidate = remoteService.toMaintenanceRecord(local.id, unitSystem)
                                 if (candidate != null) {
+                                    // Sanity Check: Filter out unit-mismatched 1.6x kilometer-corrupted records from LubeLogger
+                                    if (maxLocalMaintMileage > 0 && candidate.mileage > maxLocalMaintMileage * 1.35 && candidate.mileage > maxLocalMaintMileage + 10000) {
+                                        continue
+                                    }
+
                                     val linkedLocally = localMaintRecords.find { it.lubeLoggerId == remoteService.id }
                                     val existingMatch = localMaintRecords.find { localRec ->
                                         (localRec.lubeLoggerId == remoteService.id) ||
