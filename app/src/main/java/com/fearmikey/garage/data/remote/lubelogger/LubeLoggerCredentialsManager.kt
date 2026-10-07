@@ -25,10 +25,11 @@ class LubeLoggerCredentialsManager @Inject constructor(
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
 
-    fun saveCredentials(serverUrl: String, username: String, password: String?, apiKey: String?) {
+    fun saveCredentials(serverUrl: String, username: String, password: String?, apiKey: String?, unitSystem: String = "imperial") {
         sharedPreferences.edit {
             putString("server_url", serverUrl)
             putString("username", username)
+            putString("unit_system", unitSystem)
             if (password != null) {
                 putString("password", password)
             } else {
@@ -46,6 +47,7 @@ class LubeLoggerCredentialsManager @Inject constructor(
     fun getUsername(): String? = sharedPreferences.getString("username", null)
     fun getPassword(): String? = sharedPreferences.getString("password", null)
     fun getApiKey(): String? = sharedPreferences.getString("api_key", null)
+    fun getUnitSystem(): String = sharedPreferences.getString("unit_system", "imperial") ?: "imperial"
 
     fun clearCredentials() {
         sharedPreferences.edit { clear() }

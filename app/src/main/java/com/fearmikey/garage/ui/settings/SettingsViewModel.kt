@@ -60,6 +60,7 @@ data class SettingsUiState(
     val lubeLoggerServerUrl: String = "",
     val lubeLoggerUsername: String = "",
     val lubeLoggerApiKey: String = "",
+    val lubeLoggerUnitSystem: String = "imperial",
     val isSyncing: Boolean = false,
     val lastSyncTimestamp: Long? = null,
     val lastSyncError: String? = null,
@@ -97,7 +98,8 @@ class SettingsViewModel @Inject constructor(
                 lubeLoggerConfigured = lubeLoggerCredentialsManager.isConfigured(),
                 lubeLoggerServerUrl = lubeLoggerCredentialsManager.getServerUrl() ?: "",
                 lubeLoggerUsername = lubeLoggerCredentialsManager.getUsername() ?: "",
-                lubeLoggerApiKey = lubeLoggerCredentialsManager.getApiKey() ?: ""
+                lubeLoggerApiKey = lubeLoggerCredentialsManager.getApiKey() ?: "",
+                lubeLoggerUnitSystem = lubeLoggerCredentialsManager.getUnitSystem(),
             ) 
         }
         viewModelScope.launch {
@@ -455,14 +457,15 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun setLubeLoggerCredentials(url: String, username: String, password: String?, apiKey: String?) {
-        lubeLoggerCredentialsManager.saveCredentials(url, username, password, apiKey)
+    fun setLubeLoggerCredentials(url: String, username: String, password: String?, apiKey: String?, unitSystem: String = "imperial") {
+        lubeLoggerCredentialsManager.saveCredentials(url, username, password, apiKey, unitSystem)
         _uiState.update { 
             it.copy(
                 lubeLoggerConfigured = lubeLoggerCredentialsManager.isConfigured(),
                 lubeLoggerServerUrl = url,
                 lubeLoggerUsername = username,
-                lubeLoggerApiKey = apiKey ?: ""
+                lubeLoggerApiKey = apiKey ?: "",
+                lubeLoggerUnitSystem = unitSystem,
             ) 
         }
         

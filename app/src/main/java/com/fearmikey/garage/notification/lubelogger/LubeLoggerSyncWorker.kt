@@ -63,7 +63,7 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
                             year = local.year.toString(),
                             make = local.make,
                             model = local.model,
-                            licensePlate = local.vin.ifBlank { "N/A" }
+                            licensePlate = local.vin.ifBlank { "N/A" },
                         )
                         val createResp = api.addVehicle(importDto)
                         if (createResp.isSuccessful) {
@@ -111,6 +111,8 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
             // Refetch local vehicles to ensure all mapped vehicles participate in record sync
             localVehicles = vehicleRepository.getAllVehicles().first()
 
+            val unitSystem = credentialsManager.getUnitSystem()
+
             for (local in localVehicles) {
                 val mappedId = credentialsManager.getVehicleMapping(local.id)
                 if (mappedId != null) {
@@ -142,7 +144,7 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
                             if (remoteGas.id != null) {
                                 val existsLocally = localFuelRecords.any { it.lubeLoggerId == remoteGas.id }
                                 if (!existsLocally) {
-                                    val newFuelRecord = remoteGas.toFuelRecord(local.id)
+                                    val newFuelRecord = remoteGas.toFuelRecord(local.id, unitSystem)
                                     if (newFuelRecord != null) {
                                         fuelRepository.saveRecord(newFuelRecord)
                                     }
@@ -160,7 +162,7 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
                             if (remoteService.id != null) {
                                 val existsLocally = localMaintRecords.any { it.lubeLoggerId == remoteService.id }
                                 if (!existsLocally) {
-                                    val newMaintRecord = remoteService.toMaintenanceRecord(local.id)
+                                    val newMaintRecord = remoteService.toMaintenanceRecord(local.id, unitSystem)
                                     if (newMaintRecord != null) {
                                         maintenanceRepository.saveRecord(newMaintRecord)
                                     }
@@ -176,7 +178,7 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
                     // Push only un-synced records
                     val newFuelRecords = fuelRecords.filter { it.lubeLoggerId == null }
                     newFuelRecords.forEach { fuelRecord ->
-                        val gasDto = fuelRecord.toLubeLoggerDto(mappedId)
+                        val gasDto = fuelRecord.toLubeLoggerDto(mappedId, unitSystem)
                         val response = api.addGasRecord(mappedId, gasDto)
                         if (response.isSuccessful) {
                             val returnedId = response.body()?.additionalData?.recordId
@@ -190,7 +192,7 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
                     // Push only un-synced records
                     val newMaintRecords = maintenanceRecords.filter { it.lubeLoggerId == null }
                     newMaintRecords.forEach { maintRecord ->
-                        val maintDto = maintRecord.toLubeLoggerDto(mappedId)
+                        val maintDto = maintRecord.toLubeLoggerDto(mappedId, unitSystem)
                         val response = api.addServiceRecord(mappedId, maintDto)
                         if (response.isSuccessful) {
                             val returnedId = response.body()?.additionalData?.recordId

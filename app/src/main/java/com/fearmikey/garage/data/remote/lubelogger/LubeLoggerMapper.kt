@@ -2,29 +2,34 @@ package com.fearmikey.garage.data.remote.lubelogger
 
 import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
+import com.fearmikey.garage.ui.util.UnitConverter
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 private val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.US)
-// LubeLogger might return ISO dates or partial strings.
-// A more robust format parser may be required depending on server region config,
-// but for exporting, "yyyy-MM-dd" is acceptable.
 
-fun FuelRecord.toLubeLoggerDto(lubeLoggerVehicleId: Int): LubeLoggerGasRecordDto {
+fun FuelRecord.toLubeLoggerDto(lubeLoggerVehicleId: Int, lubeLoggerUnitSystem: String = "imperial"): LubeLoggerGasRecordDto {
+    val isMetric = lubeLoggerUnitSystem.equals("metric", ignoreCase = true)
+    val convertedOdometer = if (isMetric) UnitConverter.milesToKm(this.mileage) else this.mileage
+    val convertedGallons = if (isMetric) UnitConverter.gallonsToLiters(this.gallons) else this.gallons
+
     return LubeLoggerGasRecordDto(
         vehicleId = lubeLoggerVehicleId,
         id = this.lubeLoggerId,
         date = dateFormatter.format(Date(this.date)),
-        odometer = this.mileage.toString(),
-        fuelConsumed = this.gallons.toString(),
-        cost = this.totalCost.toString(),
+        odometer = convertedOdometer.toString(),
+        fuelConsumed = "%.3f".format(Locale.US, convertedGallons),
+        cost = "%.2f".format(Locale.US, this.totalCost),
         isFillToFull = this.isFullTank.toString(),
         missedFuelUp = "false", // We don't explicitly track missed fuel ups right now
     )
 }
 
-fun MaintenanceRecord.toLubeLoggerDto(lubeLoggerVehicleId: Int): LubeLoggerServiceRecordDto {
+fun MaintenanceRecord.toLubeLoggerDto(lubeLoggerVehicleId: Int, lubeLoggerUnitSystem: String = "imperial"): LubeLoggerServiceRecordDto {
+    val isMetric = lubeLoggerUnitSystem.equals("metric", ignoreCase = true)
+    val convertedOdometer = if (isMetric) UnitConverter.milesToKm(this.mileage) else this.mileage
+
     val fullDescription = buildString {
         append(description)
         if (taskName != null) {
@@ -39,19 +44,24 @@ fun MaintenanceRecord.toLubeLoggerDto(lubeLoggerVehicleId: Int): LubeLoggerServi
         vehicleId = lubeLoggerVehicleId,
         id = this.lubeLoggerId,
         date = dateFormatter.format(Date(this.date)),
-        odometer = this.mileage.toString(),
+        odometer = convertedOdometer.toString(),
         description = fullDescription,
-        cost = this.cost.toString()
+        cost = "%.2f".format(Locale.US, this.cost),
     )
 }
 
-fun LubeLoggerGasRecordDto.toFuelRecord(localVehicleId: Long): FuelRecord? {
+fun LubeLoggerGasRecordDto.toFuelRecord(localVehicleId: Long, lubeLoggerUnitSystem: String = "imperial"): FuelRecord? {
     val recordId = id ?: return null
+    val isMetric = lubeLoggerUnitSystem.equals("metric", ignoreCase = true)
     val parsedDate = parseDateToEpochMillis(date)
-    val parsedMileage = mileage ?: odometer?.toIntOrNull() ?: 0
-    val parsedGallons = gallons ?: fuelConsumed?.toDoubleOrNull() ?: 0.0
+    
+    val rawMileage = mileage ?: odometer?.toIntOrNull() ?: 0
+    val rawGallons = gallons ?: fuelConsumed?.toDoubleOrNull() ?: 0.0
     val parsedCost = cost?.toDoubleOrNull() ?: 0.0
     val parsedIsFillToFull = isFillToFull?.toBooleanStrictOrNull() ?: true
+
+    val parsedMileage = if (isMetric) UnitConverter.kmToMiles(rawMileage) else rawMileage
+    val parsedGallons = if (isMetric) UnitConverter.litersToGallons(rawGallons) else rawGallons
     val ppg = if (parsedGallons > 0.0) parsedCost / parsedGallons else 0.0
 
     return FuelRecord(
@@ -62,15 +72,19 @@ fun LubeLoggerGasRecordDto.toFuelRecord(localVehicleId: Long): FuelRecord? {
         totalCost = parsedCost,
         pricePerGallon = ppg,
         isFullTank = parsedIsFillToFull,
-        lubeLoggerId = recordId
+        lubeLoggerId = recordId,
     )
 }
 
-fun LubeLoggerServiceRecordDto.toMaintenanceRecord(localVehicleId: Long): MaintenanceRecord? {
+fun LubeLoggerServiceRecordDto.toMaintenanceRecord(localVehicleId: Long, lubeLoggerUnitSystem: String = "imperial"): MaintenanceRecord? {
     val recordId = id ?: return null
+    val isMetric = lubeLoggerUnitSystem.equals("metric", ignoreCase = true)
     val parsedDate = parseDateToEpochMillis(date)
-    val parsedMileage = mileage ?: odometer?.toIntOrNull() ?: 0
+    
+    val rawMileage = mileage ?: odometer?.toIntOrNull() ?: 0
     val parsedCost = cost?.toDoubleOrNull() ?: 0.0
+
+    val parsedMileage = if (isMetric) UnitConverter.kmToMiles(rawMileage) else rawMileage
 
     return MaintenanceRecord(
         vehicleId = localVehicleId,
@@ -79,7 +93,7 @@ fun LubeLoggerServiceRecordDto.toMaintenanceRecord(localVehicleId: Long): Mainte
         description = description,
         cost = parsedCost,
         category = com.fearmikey.garage.data.local.entity.MaintenanceCategory.OTHER,
-        lubeLoggerId = recordId
+        lubeLoggerId = recordId,
     )
 }
 
