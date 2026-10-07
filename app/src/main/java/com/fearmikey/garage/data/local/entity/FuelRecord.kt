@@ -42,4 +42,6 @@ data class FuelRecord(
     /** Derived from [totalCost] / [gallons] at save time, kept alongside so the UI never has to recompute it. */
     val pricePerGallon: Double,
     val isFullTank: Boolean = true,
+    @androidx.room.ColumnInfo(defaultValue = "NULL")
+    val lubeLoggerId: Int? = null,
 )

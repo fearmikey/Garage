@@ -7,16 +7,20 @@ import java.util.Date
 import java.util.Locale
 
 private val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+// LubeLogger might return ISO dates or partial strings.
+// A more robust format parser may be required depending on server region config,
+// but for exporting, "yyyy-MM-dd" is acceptable.
 
 fun FuelRecord.toLubeLoggerDto(lubeLoggerVehicleId: Int): LubeLoggerGasRecordDto {
     return LubeLoggerGasRecordDto(
         vehicleId = lubeLoggerVehicleId,
+        id = this.lubeLoggerId,
         date = dateFormatter.format(Date(this.date)),
-        mileage = this.mileage,
-        gallons = this.gallons,
-        cost = this.totalCost,
-        isFillToFull = this.isFullTank,
-        missedFuelUp = false // We don't explicitly track missed fuel ups right now
+        odometer = this.mileage.toString(),
+        fuelConsumed = this.gallons.toString(),
+        cost = this.totalCost.toString(),
+        isFillToFull = this.isFullTank.toString(),
+        missedFuelUp = "false" // We don't explicitly track missed fuel ups right now
     )
 }
 
@@ -33,9 +37,10 @@ fun MaintenanceRecord.toLubeLoggerDto(lubeLoggerVehicleId: Int): LubeLoggerServi
     
     return LubeLoggerServiceRecordDto(
         vehicleId = lubeLoggerVehicleId,
+        id = this.lubeLoggerId,
         date = dateFormatter.format(Date(this.date)),
-        mileage = this.mileage,
+        odometer = this.mileage.toString(),
         description = fullDescription,
-        cost = this.cost
+        cost = this.cost.toString()
     )
 }

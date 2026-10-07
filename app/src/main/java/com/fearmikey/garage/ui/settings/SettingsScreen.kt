@@ -742,9 +742,10 @@ fun SettingsScreen(
         LubeLoggerConfigDialog(
             initialUrl = uiState.lubeLoggerServerUrl,
             initialUsername = uiState.lubeLoggerUsername,
+            initialApiKey = uiState.lubeLoggerApiKey,
             onDismissRequest = { showLubeLoggerDialog = false },
-            onSave = { url, username, password ->
-                viewModel.setLubeLoggerCredentials(url, username, password)
+            onSave = { url, username, password, apiKey ->
+                viewModel.setLubeLoggerCredentials(url, username, password, apiKey)
                 showLubeLoggerDialog = false
             }
         )

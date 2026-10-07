@@ -18,6 +18,7 @@ class LubeLoggerApiFactory @Inject constructor(
         val serverUrl = credentialsManager.getServerUrl()
         val username = credentialsManager.getUsername()
         val password = credentialsManager.getPassword()
+        val apiKey = credentialsManager.getApiKey()
 
         if (serverUrl.isNullOrBlank()) {
             return null
@@ -30,8 +31,15 @@ class LubeLoggerApiFactory @Inject constructor(
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
 
-        // Add basic auth interceptor if credentials exist
-        if (!username.isNullOrBlank() && !password.isNullOrBlank()) {
+        // Add auth interceptor
+        if (!apiKey.isNullOrBlank()) {
+            clientBuilder.addInterceptor { chain ->
+                val request = chain.request().newBuilder()
+                    .header("x-api-key", apiKey)
+                    .build()
+                chain.proceed(request)
+            }
+        } else if (!username.isNullOrBlank() && !password.isNullOrBlank()) {
             clientBuilder.addInterceptor { chain ->
                 val auth = Credentials.basic(username, password)
                 val request = chain.request().newBuilder()

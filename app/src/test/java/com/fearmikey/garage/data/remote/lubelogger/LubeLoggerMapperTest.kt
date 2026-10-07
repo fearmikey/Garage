@@ -34,11 +34,11 @@ class LubeLoggerMapperTest {
         // Assert
         assertEquals(99, dto.vehicleId)
         assertEquals("2025-01-15", dto.date)
-        assertEquals(150000, dto.mileage)
-        assertEquals(12.5, dto.gallons, 0.001)
-        assertEquals(45.0, dto.cost, 0.001)
-        assertEquals(true, dto.isFillToFull)
-        assertEquals(false, dto.missedFuelUp) // Always false currently
+        assertEquals("150000", dto.odometer)
+        assertEquals("12.5", dto.fuelConsumed)
+        assertEquals("45.0", dto.cost)
+        assertEquals("true", dto.isFillToFull)
+        assertEquals("false", dto.missedFuelUp) // Always false currently
     }
 
     @Test
@@ -66,8 +66,8 @@ class LubeLoggerMapperTest {
         // Assert
         assertEquals(42, dto.vehicleId)
         assertEquals("2025-02-10", dto.date)
-        assertEquals(152000, dto.mileage)
-        assertEquals(65.0, dto.cost, 0.001)
+        assertEquals("152000", dto.odometer)
+        assertEquals("65.0", dto.cost)
         assertEquals("Oil Change (Engine Oil)", dto.description)
     }
 

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -23,25 +24,40 @@ import androidx.compose.ui.unit.dp
 fun LubeLoggerConfigDialog(
     initialUrl: String,
     initialUsername: String,
+    initialApiKey: String = "",
     onDismissRequest: () -> Unit,
-    onSave: (url: String, username: String, password: String?) -> Unit,
+    onSave: (url: String, username: String, password: String?, apiKey: String?) -> Unit,
 ) {
     var url by remember { mutableStateOf(initialUrl) }
     var username by remember { mutableStateOf(initialUsername) }
     var password by remember { mutableStateOf("") }
+    var apiKey by remember { mutableStateOf(initialApiKey) }
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
         title = { Text("LubeLogger Connection") },
         text = {
             Column {
-                Text("Connect Garage to your self-hosted LubeLogger instance to automatically push new records.")
+                Text("Connect Garage to your self-hosted LubeLogger instance to automatically sync records.")
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
                     value = url,
                     onValueChange = { url = it },
                     label = { Text("Server URL (https://...)") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Authentication (Provide either an API Key OR a Username/Password)",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = apiKey,
+                    onValueChange = { apiKey = it },
+                    label = { Text("API Key (Optional)") },
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -64,8 +80,8 @@ fun LubeLoggerConfigDialog(
         },
         confirmButton = {
             TextButton(
-                onClick = { onSave(url, username, password.takeIf { it.isNotBlank() }) },
-                enabled = url.isNotBlank() && username.isNotBlank()
+                onClick = { onSave(url, username, password.takeIf { it.isNotBlank() }, apiKey.takeIf { it.isNotBlank() }) },
+                enabled = url.isNotBlank() && (apiKey.isNotBlank() || username.isNotBlank())
             ) {
                 Text("Save")
             }

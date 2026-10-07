@@ -66,4 +66,6 @@ data class MaintenanceRecord(
      * If [isDeferred] is true, the number of months until the next reminder.
      */
     val deferredMonths: Int? = null,
+    @ColumnInfo(defaultValue = "NULL")
+    val lubeLoggerId: Int? = null,
 )
