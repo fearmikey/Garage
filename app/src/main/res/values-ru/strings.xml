@@ -16,6 +16,79 @@
     <string name="language_turkish">Türkçe</string>
     <string name="language_selection">Язык</string>
 
+    <!-- Startup / Onboarding -->
+    <string name="startup_get_started">Начать</string>
+    <string name="startup_welcome_title">Добро пожаловать в Garage</string>
+    <string name="startup_welcome_subtitle">Настройте параметры, чтобы приступить к работе.</string>
+    <string name="startup_measurement_system_title">Система измерения</string>
+    <string name="startup_measurement_system_subtitle">Выберите способ отображения расстояния, объема топлива и расхода.</string>
+    <string name="startup_metric_title">Метрическая система</string>
+    <string name="startup_metric_subtitle">Километры (км) · Литры (л) · Л/100км</string>
+    <string name="startup_imperial_title">Имперская / Стандартная</string>
+    <string name="startup_imperial_subtitle">Мили (ми) · Галлоны США (гал) · MPG</string>
+    <string name="startup_language_subtitle">Выберите предпочитаемый язык приложения.</string>
+    <string name="startup_currency_title">Предпочитаемая валюта</string>
+    <string name="startup_currency_subtitle">Выберите валюту для учета расходов, обслуживания и заправок.</string>
+    <string name="startup_change">Изменить</string>
+    <string name="startup_permissions_title">Разрешения приложения</string>
+    <string name="startup_permissions_subtitle">Предоставьте разрешения для доступа к напоминаниям и сканеру VIN.</string>
+    <string name="startup_reminders_title">Напоминания об обслуживании</string>
+    <string name="startup_reminders_subtitle">Получайте уведомления при наступлении срока технического обслуживания.</string>
+    <string name="startup_vin_title">Сканер VIN</string>
+    <string name="startup_vin_subtitle">Сканируйте штрихкод VIN камерой для быстрого импорта данных автомобиля.</string>
+    <string name="startup_permission_granted">Разрешение предоставлено</string>
+    <string name="startup_grant_permission">Предоставить разрешение</string>
+    <string name="startup_support_title">Поддержать разработку</string>
+    <string name="startup_support_subtitle">Garage — бесплатное приложение с открытым исходным кодом. Если оно вам полезно, поддержайте проект!</string>
+    <string name="startup_buy_coffee_title">Угостить кофе</string>
+    <string name="startup_buy_coffee_button">Поддержать на Buy Me a Coffee</string>
+    <string name="startup_affiliate_title">Включить партнерские ссылки</string>
+    <string name="startup_affiliate_subtitle">Разрешить приложение показывать партнерские ссылки Amazon на рекомендуемые инструменты и запчасти.</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Настройки</string>
+    <string name="settings_user_preferences">Пользовательские настройки</string>
+    <string name="settings_units">Единицы измерения</string>
+    <string name="settings_currency">Валюта</string>
+    <string name="settings_theme">Тема оформления</string>
+    <string name="settings_default_vehicle">Автомобиль по умолчанию</string>
+    <string name="settings_reminders_expirations">Напоминания и сроки</string>
+
+    <!-- Tabs -->
+    <string name="tab_my_vehicles">Мои автомобили</string>
+    <string name="tab_drivers_license">Водительские права</string>
+    <string name="tab_support_store">Поддержать проект</string>
+    <string name="tab_timeline">История</string>
+    <string name="tab_schedule">План</string>
+    <string name="tab_fuel">Топливо</string>
+    <string name="tab_expenses">Расходы</string>
+    <string name="tab_specs">Характеристики</string>
+    <string name="tab_parts">Запчасти</string>
+    <string name="tab_mods">Доработки</string>
+    <string name="tab_documents">Документы</string>
+    <string name="tab_recalls">Отзывные кампании</string>
+
+    <!-- Maintenance Tasks -->
+    <string name="task_engine_oil_change">Замена моторного масла</string>
+    <string name="task_power_steering_fluid">Жидкость ГУР</string>
+    <string name="task_tire_replacement">Замена шин</string>
+    <string name="task_rotation_and_balance">Перестановка и балансировка колес</string>
+    <string name="task_brake_fluid_flush">Замена тормозной жидкости</string>
+    <string name="task_cabin_air_filter">Замена салонного фильтра</string>
+    <string name="task_engine_air_filter">Замена воздушного фильтра</string>
+    <string name="task_transmission_fluid">Замена масла в АКПП</string>
+    <string name="task_coolant_flush">Замена охлаждающей жидкости</string>
+    <string name="task_spark_plug_replacement">Замена свечей зажигания</string>
+    <string name="task_battery_test">Проверка / замена аккумулятора</string>
+    <string name="task_rust_prevention">Антикоррозийная обработка</string>
+    <string name="task_paint_protection">Защита лакокрасочного покрытия</string>
+    <string name="task_serpentine_belt">Замена приводного ремня</string>
+    <string name="task_wiper_blades">Замена щеток стеклоочистителя</string>
+    <string name="task_brake_pads">Замена тормозных колодок</string>
+    <string name="task_transfer_case_fluid">Замена масла в раздаточной коробке</string>
+    <string name="task_front_diff_fluid">Замена масла в переднем дифференциале</string>
+    <string name="task_rear_diff_fluid">Замена масла в заднем дифференциале</string>
+
     <!-- Notifications -->
     <string name="reminder_notification_channel_name">Напоминания об обслуживании</string>
     <string name="reminder_notification_channel_description">Уведомления о предстоящем и просроченном обслуживании автомобилей</string>
@@ -167,4 +240,106 @@
     <string name="documents_obd_readiness_mil_on">Горит Check Engine — вероятен провал техосмотра</string>
     <string name="documents_obd_readiness_likely_ready">Вероятно, готов к техосмотру</string>
     <string name="documents_obd_readiness_not_ready">Еще не готов — поездите перед техосмотром</string>
+    <!-- Documents & Driver's License -->
+    <string name="license_empty_message">Информация о водительских правах не добавлена.\nОтслеживайте срок действия и получайте своевременные напоминания.</string>
+    <string name="license_add_button">Добавить водительские права</string>
+    <string name="license_title">Водительские права</string>
+    <string name="license_expiration_date">Срок действия</string>
+    <string name="license_number">Номер в/у</string>
+    <string name="license_issuing_state">Выдавший орган / Регион</string>
+    <string name="license_notes">Заметки / Категории</string>
+    <string name="license_photos">Фотографии в/у</string>
+    <string name="license_edit">Редактировать права</string>
+    <string name="license_delete">Удалить</string>
+    <string name="license_delete_confirm_title">Удалить данные о водительских правах?</string>
+    <string name="license_delete_confirm_msg">Вы уверены, что хотите удалить запись о правах и все сохраненные фотографии?</string>
+    <string name="license_details_title">Данные водительского удостоверения</string>
+    <string name="license_select_exp_date">Выберите срок действия</string>
+    <string name="license_number_label">Номер удостоверения</string>
+    <string name="license_number_placeholder">например, 9901 123456</string>
+    <string name="license_state_label">Регион выдачи</string>
+    <string name="license_state_placeholder">например, 77 RUS</string>
+    <string name="license_notes_placeholder">Категория B, особые отметки...</string>
+    <string name="license_front_photo">Лицевая сторона</string>
+    <string name="license_back_photo">Оборотная сторона</string>
+    <string name="license_save">Сохранить права</string>
+
+    <!-- Cost of Ownership -->
+    <string name="cost_empty_message">Записей о расходах пока нет.\nДобавьте записи об обслуживании или заправках для отслеживания стоимости владения.</string>
+    <string name="cost_category_breakdown">Расходы по категориям</string>
+    <string name="cost_total_title">Общая стоимость владения</string>
+    <string name="cost_include_mods">Учитывать доработки</string>
+    <string name="cost_per_distance">Расход / Расстояние</string>
+    <string name="cost_per_day">Расход / День</string>
+    <string name="time_filter_all_time">За всё время</string>
+    <string name="time_filter_this_year">В этом году</string>
+    <string name="time_filter_last_year">В прошлом году</string>
+    <string name="time_filter_12_months">12 месяцев</string>
+    <string name="time_filter_6_months">6 месяцев</string>
+
+    <!-- Fuel & Charging -->
+    <string name="fuel_tab_charging">Зарядка</string>
+    <string name="fuel_tab_fuel">Топливо</string>
+    <string name="fuel_est_range_100">Текущий оц. запас хода при 100%</string>
+    <string name="fuel_initial_range_100">Начальный оц. запас хода при 100%</string>
+    <string name="fuel_delete_charging_title">Удалить сессию зарядки?</string>
+    <string name="fuel_delete_charging_msg">Вы уверены, что хотите удалить эту запись о зарядке?</string>
+    <string name="fuel_log_charging">Записать зарядку</string>
+    <string name="fuel_edit_charging">Редактировать зарядку</string>
+    <string name="fuel_kwh_added">Заряжено кВт·ч</string>
+    <string name="fuel_charger_speed">Скорость зарядки</string>
+    <string name="fuel_location_vendor">Локация / Оператор</string>
+    <string name="fuel_vendor_placeholder">Название ЭЗС (необязательно)</string>
+    <string name="fuel_battery_start">% Заряда Старт</string>
+    <string name="fuel_battery_end">% Заряда Конец</string>
+    <string name="fuel_total_cost">Стоимость</string>
+    <string name="fuel_odometer_reading">Показания одометра (%1$s)</string>
+    <string name="fuel_battery_health_title">Здоровье батареи (Необязательно)</string>
+    <string name="fuel_est_range_soc">Оц. запас хода при 100% SoC (%1$s)</string>
+    <string name="fuel_est_range_end">Оц. запас хода в конце зарядки</string>
+    <string name="fuel_auto_calculate">Авторасчет</string>
+    <string name="fuel_save_charging">Сохранить сессию зарядки</string>
+    <string name="fuel_delete_fillup_title">Удалить заправку?</string>
+    <string name="fuel_delete_fillup_msg">Вы уверены, что хотите удалить эту запись о заправке?</string>
+    <string name="fuel_log_fillup">Записать заправку</string>
+    <string name="fuel_edit_fillup">Редактировать заправку</string>
+    <string name="fuel_liters">Литры</string>
+    <string name="fuel_gallons">Галлоны</string>
+    <string name="fuel_filled_full">Полный бак</string>
+
+    <!-- Vehicle Documents -->
+    <string name="doc_plate_label">Госномер</string>
+    <string name="doc_plate_placeholder">например, А001АА777</string>
+    <string name="doc_state_label">Регион</string>
+    <string name="doc_state_placeholder">например, 77</string>
+    <string name="doc_reg_exp_label">Срок действия СТС / Регистрации</string>
+    <string name="doc_select_date">Выберите дату</string>
+    <string name="doc_renewal_fee_label">Госпошлина (Необязательно)</string>
+    <string name="doc_reg_notes_label">Заметки к СТС</string>
+    <string name="doc_delete_reg_btn">Удалить регистрационные данные</string>
+    <string name="doc_insp_exp_label">Срок действия техосмотра (ДК)</string>
+    <string name="doc_last_inspected_label">Дата последнего техосмотра</string>
+    <string name="doc_insp_result_label">Результат техосмотра</string>
+    <string name="doc_insp_result_placeholder">например, Пройден</string>
+    <string name="doc_insp_notes_label">Заметки / ПТО</string>
+    <string name="doc_delete_insp_btn">Удалить данные о техосмотре</string>
+    <string name="doc_emissions_exp_label">Срок действия экологического контроля</string>
+    <string name="doc_last_smog_label">Дата экоконтроля</string>
+    <string name="doc_emissions_result_label">Результат проверки</string>
+    <string name="doc_emissions_result_placeholder">например, Соответствует</string>
+    <string name="doc_emissions_notes_label">Заметки об экоконтроле</string>
+    <string name="doc_delete_emissions_btn">Удалить экоконтроль</string>
+    <string name="doc_insur_provider_label">Страховая компания</string>
+    <string name="doc_insur_policy_num_label">Номер полиса ОСАГО / КАСКО</string>
+    <string name="doc_insur_exp_label">Срок действия полиса</string>
+    <string name="doc_insur_premium_label">Стоимость страховки (Необязательно)</string>
+    <string name="doc_insur_contact_label">Контакты агента / Горячая линия</string>
+    <string name="doc_insur_notes_label">Заметки к полису / Франшиза</string>
+    <string name="doc_delete_insur_btn">Удалить полис страхования</string>
+    <string name="doc_toll_exp_label">Срок действия транспондера / Пропуска</string>
+    <string name="doc_toll_account_label">N° транспондера / Лицевой счет</string>
+    <string name="doc_toll_notes_label">Заметки / Оператор (Автодор и др.)</string>
+    <string name="doc_delete_toll_btn">Удалить транспондер / Пропуск</string>
+    <string name="doc_save_docs_btn">Сохранить документы автомобиля</string>
+    <string name="doc_saving_btn">Сохранение...</string>
 </resources>

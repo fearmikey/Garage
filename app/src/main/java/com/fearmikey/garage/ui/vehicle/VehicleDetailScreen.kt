@@ -31,6 +31,8 @@ import androidx.compose.material3.SecondaryScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -173,7 +175,7 @@ fun VehicleDetailScreen(
                     Tab(
                         selected = selectedTab == index,
                         onClick = { selectedTab = index },
-                        text = { Text(tab.title, style = MaterialTheme.typography.labelLarge) },
+                        text = { Text(stringResource(tab.titleRes), style = MaterialTheme.typography.labelLarge) },
                     )
                 }
             }

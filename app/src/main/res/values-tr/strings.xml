@@ -16,6 +16,79 @@
     <string name="language_turkish">Türkçe</string>
     <string name="language_selection">Dil</string>
 
+    <!-- Startup / Onboarding -->
+    <string name="startup_get_started">Başla</string>
+    <string name="startup_welcome_title">Garage\'a Hoş Geldiniz</string>
+    <string name="startup_welcome_subtitle">Başlamak için tercihlerinizi yapılandırın.</string>
+    <string name="startup_measurement_system_title">Ölçü Sistemi</string>
+    <string name="startup_measurement_system_subtitle">Mesafe, yakıt hacmi ve tüketimin nasıl gösterileceğini seçin.</string>
+    <string name="startup_metric_title">Metrik Sistem</string>
+    <string name="startup_metric_subtitle">Kilometre (km) · Litre (L) · L/100km</string>
+    <string name="startup_imperial_title">İngiliz / Standart Sistem</string>
+    <string name="startup_imperial_subtitle">Mil (mi) · ABD Galonu (gal) · MPG</string>
+    <string name="startup_language_subtitle">Tercih ettiğiniz uygulama dilini seçin.</string>
+    <string name="startup_currency_title">Tercih Edilen Para Birimi</string>
+    <string name="startup_currency_subtitle">Maliyet, bakım ve yakıt takibi için para biriminizi seçin.</string>
+    <string name="startup_change">Değiştir</string>
+    <string name="startup_permissions_title">Uygulama İzinleri</string>
+    <string name="startup_permissions_subtitle">Hatırlatıcılar ve VIN tarayıcı gibi özellikleri açmak için izin verin.</string>
+    <string name="startup_reminders_title">Servis Hatırlatıcıları</string>
+    <string name="startup_reminders_subtitle">Araç bakımı yaklaştığında bildirim alın.</string>
+    <string name="startup_vin_title">VIN Tarayıcı</string>
+    <string name="startup_vin_subtitle">Araç detaylarını hızlıca içe aktarmak için kameranızla VIN barkodunu tarayın.</string>
+    <string name="startup_permission_granted">İzin Verildi</string>
+    <string name="startup_grant_permission">İzin Ver</string>
+    <string name="startup_support_title">Geliştirmeyi Destekleyin</string>
+    <string name="startup_support_subtitle">Garage tamamen ücretsiz ve açık kaynaklı bir yazılımdır. Faydalı buluyorsanız desteğinizi esirgemeyin!</string>
+    <string name="startup_buy_coffee_title">Kahve Ismarla</string>
+    <string name="startup_buy_coffee_button">Buy Me a Coffeeüzerinden Destek Olun</string>
+    <string name="startup_affiliate_title">Ortaklık Bağlantılarını Etkinleştir</string>
+    <string name="startup_affiliate_subtitle">Geliştirici tarafından önerilen araçlar için isteğe bağlı Amazon bağlantılarının gösterilmesine izin verin.</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Ayarlar</string>
+    <string name="settings_user_preferences">Kullanıcı Tercihleri</string>
+    <string name="settings_units">Ölçü Birimleri</string>
+    <string name="settings_currency">Para Birimi</string>
+    <string name="settings_theme">Tema</string>
+    <string name="settings_default_vehicle">Varsayılan Araç</string>
+    <string name="settings_reminders_expirations">Hatırlatıcılar ve Süreler</string>
+
+    <!-- Tabs -->
+    <string name="tab_my_vehicles">Araçlarım</string>
+    <string name="tab_drivers_license">Sürücü Belgesi</string>
+    <string name="tab_support_store">Destek Mağazası</string>
+    <string name="tab_timeline">Geçmiş</string>
+    <string name="tab_schedule">Bakım Planı</string>
+    <string name="tab_fuel">Yakıt</string>
+    <string name="tab_expenses">Harcamalar</string>
+    <string name="tab_specs">Özellikler</string>
+    <string name="tab_parts">Parçalar</string>
+    <string name="tab_mods">Modifikasyonlar</string>
+    <string name="tab_documents">Belgeler</string>
+    <string name="tab_recalls">Geri Çağırmalar</string>
+
+    <!-- Maintenance Tasks -->
+    <string name="task_engine_oil_change">Motor yağı değişimi</string>
+    <string name="task_power_steering_fluid">Direksiyon hidroliği</string>
+    <string name="task_tire_replacement">Lastik değişimi</string>
+    <string name="task_rotation_and_balance">Lastik rotasyonu ve balans</string>
+    <string name="task_brake_fluid_flush">Fren hidroliği değişimi</string>
+    <string name="task_cabin_air_filter">Polen filtresi değişimi</string>
+    <string name="task_engine_air_filter">Hava filtresi değişimi</string>
+    <string name="task_transmission_fluid">Otomatik şanzıman yağı değişimi</string>
+    <string name="task_coolant_flush">Antifriz / soğutma sıvısı değişimi</string>
+    <string name="task_spark_plug_replacement">Buji değişimi</string>
+    <string name="task_battery_test">Akü testi / değişimi</string>
+    <string name="task_rust_prevention">Pas önleme uygulaması</string>
+    <string name="task_paint_protection">Boya koruma</string>
+    <string name="task_serpentine_belt">V kayışı değişimi</string>
+    <string name="task_wiper_blades">Silecek lastiği değişimi</string>
+    <string name="task_brake_pads">Fren balatası değişimi</string>
+    <string name="task_transfer_case_fluid">Ara şanzıman yağı değişimi</string>
+    <string name="task_front_diff_fluid">Ön diferansiyel yağı değişimi</string>
+    <string name="task_rear_diff_fluid">Arka diferansiyel yağı değişimi</string>
+
     <!-- Notifications -->
     <string name="reminder_notification_channel_name">Bakım hatırlatıcıları</string>
     <string name="reminder_notification_channel_description">Yaklaşan ve geciken araç bakımları için uyarılar</string>
@@ -163,4 +236,106 @@
     <string name="documents_obd_readiness_mil_on">Motor arıza lambası açık — muhtemelen kalır</string>
     <string name="documents_obd_readiness_likely_ready">Muhtemelen muayeneye hazır</string>
     <string name="documents_obd_readiness_not_ready">Henüz hazır değil — muayeneden önce daha fazla sürün</string>
+    <!-- Documents & Driver's License -->
+    <string name="license_empty_message">Henüz sürücü belgesi bilgisi eklenmedi.\nEhliyetinizin geçerlilik süresini takip edin ve yenileme bildirimleri alın.</string>
+    <string name="license_add_button">Sürücü Belgesi Ekle</string>
+    <string name="license_title">Sürücü Belgesi</string>
+    <string name="license_expiration_date">Son Geçerlilik Tarihi</string>
+    <string name="license_number">Sürücü Belgesi / T.C. No</string>
+    <string name="license_issuing_state">Verilen İl / Ülke</string>
+    <string name="license_notes">Notlar / Sınıflar</string>
+    <string name="license_photos">Ehliyet Fotoğrafları</string>
+    <string name="license_edit">Ehliyeti Düzenle</string>
+    <string name="license_delete">Sil</string>
+    <string name="license_delete_confirm_title">Sürücü Belgesi Bilgileri Silinsin mi?</string>
+    <string name="license_delete_confirm_msg">Sürücü belgesi kaydınızı ve kayıtlı fotoğrafları silmek istediğinizden emin misiniz?</string>
+    <string name="license_details_title">Sürücü Belgesi Detayları</string>
+    <string name="license_select_exp_date">Geçerlilik tarihini seçin</string>
+    <string name="license_number_label">Belge Numarası</string>
+    <string name="license_number_placeholder">örn. 123456</string>
+    <string name="license_state_label">Düzenleyen İl / Makam</string>
+    <string name="license_state_placeholder">örn. TR</string>
+    <string name="license_notes_placeholder">B sınıfı, A2 ehliyet notları...</string>
+    <string name="license_front_photo">Ehliyet Ön Yüzü</string>
+    <string name="license_back_photo">Ehliyet Arka Yüzü</string>
+    <string name="license_save">Sürücü Belgesini Kaydet</string>
+
+    <!-- Cost of Ownership -->
+    <string name="cost_empty_message">Henüz harcama kaydı yok.\nMaliyet takibi yapmak için bakım veya yakıt kaydı ekleyin.</string>
+    <string name="cost_category_breakdown">Kategoriye Göre Dağılım</string>
+    <string name="cost_total_title">Toplam Sahiplik Maliyeti</string>
+    <string name="cost_include_mods">Modifikasyonları dahil et</string>
+    <string name="cost_per_distance">Maliyet / Mesafe</string>
+    <string name="cost_per_day">Maliyet / Gün</string>
+    <string name="time_filter_all_time">Tüm Zamanlar</string>
+    <string name="time_filter_this_year">Bu Yıl</string>
+    <string name="time_filter_last_year">Geçen Yıl</string>
+    <string name="time_filter_12_months">12 Ay</string>
+    <string name="time_filter_6_months">6 Ay</string>
+
+    <!-- Fuel & Charging -->
+    <string name="fuel_tab_charging">Şarj</string>
+    <string name="fuel_tab_fuel">Yakıt</string>
+    <string name="fuel_est_range_100">Mevcut Tahmini %100 Menzil</string>
+    <string name="fuel_initial_range_100">İlk Tahmini %100 Menzil</string>
+    <string name="fuel_delete_charging_title">Şarj Oturumunu Sil?</string>
+    <string name="fuel_delete_charging_msg">Bu şarj kaydını silmek istediğinizden emin misiniz?</string>
+    <string name="fuel_log_charging">Şarj Kaydı Ekle</string>
+    <string name="fuel_edit_charging">Şarj Kaydını Düzenle</string>
+    <string name="fuel_kwh_added">Eklenen kWh</string>
+    <string name="fuel_charger_speed">Şarj Hızı</string>
+    <string name="fuel_location_vendor">Konum / İstasyon</string>
+    <string name="fuel_vendor_placeholder">İstasyon adı (isteğe bağlı, örn. ZES)</string>
+    <string name="fuel_battery_start">% Batarya Başlangıç</string>
+    <string name="fuel_battery_end">% Batarya Bitiş</string>
+    <string name="fuel_total_cost">Toplam maliyet</string>
+    <string name="fuel_odometer_reading">Kilometre değeri (%1$s)</string>
+    <string name="fuel_battery_health_title">Batarya Sağlığı (İsteğe bağlı)</string>
+    <string name="fuel_est_range_soc">%100 Şarjda Tahmini Menzil (%1$s)</string>
+    <string name="fuel_est_range_end">Şarj sonunda tahmini menzil</string>
+    <string name="fuel_auto_calculate">Otomatik Hesapla</string>
+    <string name="fuel_save_charging">Şarj Kaydını Kaydet</string>
+    <string name="fuel_delete_fillup_title">Yakıt Kaydını Sil?</string>
+    <string name="fuel_delete_fillup_msg">Bu yakıt alım kaydını silmek istediğinizden emin misiniz?</string>
+    <string name="fuel_log_fillup">Yakıt Alımını Kaydet</string>
+    <string name="fuel_edit_fillup">Yakıt Alımını Düzenle</string>
+    <string name="fuel_liters">Litre</string>
+    <string name="fuel_gallons">Galon</string>
+    <string name="fuel_filled_full">Depo fullendi</string>
+
+    <!-- Vehicle Documents -->
+    <string name="doc_plate_label">Plaka</string>
+    <string name="doc_plate_placeholder">örn. 34 ABC 123</string>
+    <string name="doc_state_label">İl / Bölge</string>
+    <string name="doc_state_placeholder">örn. 34</string>
+    <string name="doc_reg_exp_label">Ruhsat / Trafik Sigortası Bitiş Tarihi</string>
+    <string name="doc_select_date">Tarih seçin</string>
+    <string name="doc_renewal_fee_label">Yenileme Ücreti (İsteğe bağlı)</string>
+    <string name="doc_reg_notes_label">Ruhsat Notları</string>
+    <string name="doc_delete_reg_btn">Plaka ve Ruhsat Bilgilerini Sil</string>
+    <string name="doc_insp_exp_label">TÜVTÜRK Muayene Bitiş Tarihi</string>
+    <string name="doc_last_inspected_label">Son Muayene Tarihi</string>
+    <string name="doc_insp_result_label">Muayene Sonucu</string>
+    <string name="doc_insp_result_placeholder">örn. Geçti, Ağır Kusurlu</string>
+    <string name="doc_insp_notes_label">Muayene Notları / İstasyon</string>
+    <string name="doc_delete_insp_btn">Muayene Bilgilerini Sil</string>
+    <string name="doc_emissions_exp_label">Egzoz Emisyon Muayene Bitiş Tarihi</string>
+    <string name="doc_last_smog_label">Son Egzoz Ölçüm Tarihi</string>
+    <string name="doc_emissions_result_label">Ölçüm Sonucu</string>
+    <string name="doc_emissions_result_placeholder">örn. Geçti, Kaldı</string>
+    <string name="doc_emissions_notes_label">Egzoz Ölçüm Notları</string>
+    <string name="doc_delete_emissions_btn">Egzoz Emisyon Bilgilerini Sil</string>
+    <string name="doc_insur_provider_label">Sigorta Şirketi</string>
+    <string name="doc_insur_policy_num_label">Kasko / Poliçe Numarası</string>
+    <string name="doc_insur_exp_label">Poliçe Bitiş Tarihi</string>
+    <string name="doc_insur_premium_label">Poliçe Tutarı (İsteğe bağlı)</string>
+    <string name="doc_insur_contact_label">Acente / Hasar İletişim</string>
+    <string name="doc_insur_notes_label">Poliçe Notları / Teminatlar</string>
+    <string name="doc_delete_insur_btn">Sigorta Bilgilerini Sil</string>
+    <string name="doc_toll_exp_label">HGS / OGS / Otopark İzin Bitiş Tarihi</string>
+    <string name="doc_toll_account_label">HGS Etiket / Hesap No</string>
+    <string name="doc_toll_notes_label">Notlar / Geçiş Detayları</string>
+    <string name="doc_delete_toll_btn">HGS ve Park Bilgilerini Sil</string>
+    <string name="doc_save_docs_btn">Araç Belgelerini Kaydet</string>
+    <string name="doc_saving_btn">Kaydediliyor...</string>
 </resources>

@@ -68,6 +68,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.ModificationCategory
 import com.fearmikey.garage.ui.components.EmptyState
@@ -102,7 +104,7 @@ private fun CostOfOwnershipContent(
                 onFilterSelected = onTimeFilterSelected,
             )
             EmptyState(
-                message = "No cost records logged yet.\nAdd maintenance or fuel entries to track cost of ownership.",
+                message = stringResource(R.string.cost_empty_message),
                 icon = Icons.Outlined.Calculate,
             )
         }
@@ -131,7 +133,7 @@ private fun CostOfOwnershipContent(
             }
 
             item {
-                SectionHeader(title = "Category Breakdown")
+                SectionHeader(title = stringResource(R.string.cost_category_breakdown))
             }
 
             items(uiState.categories, key = { it.key }) { category ->
@@ -168,7 +170,7 @@ private fun TotalCostCard(
             ) {
                 Column {
                     Text(
-                        text = "Total Cost of Ownership",
+                        text = stringResource(R.string.cost_total_title),
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -193,7 +195,7 @@ private fun TotalCostCard(
                         onCheckedChange = null,
                     )
                     Text(
-                        text = "Include mods",
+                        text = stringResource(R.string.cost_include_mods),
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -326,10 +328,17 @@ private fun TimeFilterRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         TimeFilter.entries.forEach { filter ->
+            val filterName = when (filter) {
+                TimeFilter.ALL_TIME -> stringResource(R.string.time_filter_all_time)
+                TimeFilter.THIS_YEAR -> stringResource(R.string.time_filter_this_year)
+                TimeFilter.LAST_YEAR -> stringResource(R.string.time_filter_last_year)
+                TimeFilter.PAST_12_MONTHS -> stringResource(R.string.time_filter_12_months)
+                TimeFilter.PAST_6_MONTHS -> stringResource(R.string.time_filter_6_months)
+            }
             FilterChip(
                 selected = selectedFilter == filter,
                 onClick = { onFilterSelected(filter) },
-                label = { Text(filter.displayName) },
+                label = { Text(filterName) },
             )
         }
     }

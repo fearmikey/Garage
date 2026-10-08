@@ -69,7 +69,9 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.fearmikey.garage.R
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -247,14 +249,14 @@ private fun FuelContent(
                         onClick = { selectedEvTab = 0 },
                         shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
                     ) {
-                        Text("⚡ Charging (${uiState.chargingRecords.size})")
+                        Text("⚡ ${stringResource(R.string.fuel_tab_charging)} (${uiState.chargingRecords.size})")
                     }
                     SegmentedButton(
                         selected = selectedEvTab == 1,
                         onClick = { selectedEvTab = 1 },
                         shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
                     ) {
-                        Text("⛽ Fuel (${uiState.records.size})")
+                        Text("⛽ ${stringResource(R.string.fuel_tab_fuel)} (${uiState.records.size})")
                     }
                 }
             }
@@ -704,7 +706,7 @@ internal fun AddEditChargingRecordSheet(
                 .verticalScrollbar(sheetScrollState),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text(if (initial != null) "Edit Charging Session" else "Log Charging Session", style = MaterialTheme.typography.titleLarge)
+            Text(if (initial != null) stringResource(R.string.fuel_edit_charging) else stringResource(R.string.fuel_log_charging), style = MaterialTheme.typography.titleLarge)
 
             Box(modifier = Modifier.fillMaxWidth()) {
                 OutlinedTextField(
@@ -712,7 +714,7 @@ internal fun AddEditChargingRecordSheet(
                     onValueChange = {},
                     readOnly = true,
                     singleLine = true,
-                    label = { Text("Date") },
+                    label = { Text(stringResource(R.string.doc_select_date)) },
                     trailingIcon = {
                         IconButton(onClick = { showDatePicker = true }) {
                             Icon(Icons.Filled.DateRange, contentDescription = "Select date")
@@ -732,7 +734,7 @@ internal fun AddEditChargingRecordSheet(
             OutlinedTextField(
                 value = kwhAdded,
                 onValueChange = { kwhAdded = it.filter { c -> (c.isDigit()) || (c == '.') } },
-                label = { Text("kWh added") },
+                label = { Text(stringResource(R.string.fuel_kwh_added)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Decimal,
@@ -744,7 +746,7 @@ internal fun AddEditChargingRecordSheet(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            Text("Charger Speed", style = MaterialTheme.typography.labelMedium)
+            Text(stringResource(R.string.fuel_charger_speed), style = MaterialTheme.typography.labelMedium)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 ChargerSpeed.entries.forEach { speed ->
                     FilterChip(
@@ -755,7 +757,7 @@ internal fun AddEditChargingRecordSheet(
                 }
             }
 
-            Text("Location / Vendor", style = MaterialTheme.typography.labelMedium)
+            Text(stringResource(R.string.fuel_location_vendor), style = MaterialTheme.typography.labelMedium)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 ChargerVendorType.entries.forEach { type ->
                     FilterChip(
@@ -769,7 +771,7 @@ internal fun AddEditChargingRecordSheet(
             OutlinedTextField(
                 value = vendorName,
                 onValueChange = { vendorName = it },
-                label = { Text("Vendor name (optional, e.g. Electrify America)") },
+                label = { Text(stringResource(R.string.fuel_vendor_placeholder)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 modifier = Modifier.fillMaxWidth(),
@@ -779,7 +781,7 @@ internal fun AddEditChargingRecordSheet(
                 OutlinedTextField(
                     value = percentStart,
                     onValueChange = { percentStart = it.filter(Char::isDigit) },
-                    label = { Text("Battery % Start") },
+                    label = { Text(stringResource(R.string.fuel_battery_start)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                     modifier = Modifier.weight(1f),
@@ -787,7 +789,7 @@ internal fun AddEditChargingRecordSheet(
                 OutlinedTextField(
                     value = percentEnd,
                     onValueChange = { percentEnd = it.filter(Char::isDigit) },
-                    label = { Text("Battery % End") },
+                    label = { Text(stringResource(R.string.fuel_battery_end)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                     modifier = Modifier.weight(1f),
@@ -797,7 +799,7 @@ internal fun AddEditChargingRecordSheet(
             OutlinedTextField(
                 value = totalCost,
                 onValueChange = { totalCost = it.filter { c -> (c.isDigit()) || (c == '.') } },
-                label = { Text("Total cost") },
+                label = { Text(stringResource(R.string.fuel_total_cost)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Decimal,
@@ -814,7 +816,7 @@ internal fun AddEditChargingRecordSheet(
             OutlinedTextField(
                 value = mileage,
                 onValueChange = { mileage = sanitizeMileageInput(it) },
-                label = { Text("Odometer reading (${unitSystem.distanceUnit})") },
+                label = { Text(stringResource(R.string.fuel_odometer_reading, unitSystem.distanceUnit)) },
                 singleLine = true,
                 visualTransformation = ThousandsSeparatorVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
@@ -826,13 +828,13 @@ internal fun AddEditChargingRecordSheet(
 
             HorizontalDivider()
 
-            Text("Battery Health (Optional)", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.fuel_battery_health_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 OutlinedTextField(
                     value = estRange100,
                     onValueChange = { estRange100 = it.filter(Char::isDigit) },
-                    label = { Text("Est. Range @ 100% SoC (${unitSystem.distanceUnit})") },
+                    label = { Text(stringResource(R.string.fuel_est_range_soc, unitSystem.distanceUnit)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
                     modifier = Modifier.weight(1f),
@@ -843,7 +845,7 @@ internal fun AddEditChargingRecordSheet(
                 OutlinedTextField(
                     value = rangeAtEnd,
                     onValueChange = { rangeAtEnd = it.filter(Char::isDigit) },
-                    label = { Text("Est. Range at charge end") },
+                    label = { Text(stringResource(R.string.fuel_est_range_end)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.weight(1f),
@@ -859,7 +861,7 @@ internal fun AddEditChargingRecordSheet(
                     },
                     enabled = percentEnd.toIntOrNull() != null && rangeAtEnd.toIntOrNull() != null,
                 ) {
-                    Text("Auto-Calculate")
+                    Text(stringResource(R.string.fuel_auto_calculate))
                 }
             }
 
@@ -894,7 +896,7 @@ internal fun AddEditChargingRecordSheet(
                 enabled = canSave,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text("Save Charging Session")
+                Text(stringResource(R.string.fuel_save_charging))
             }
         }
     }
@@ -1199,7 +1201,7 @@ internal fun AddEditFuelRecordSheet(
                 .verticalScrollbar(sheetScrollState),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text(if (initial != null) "Edit Fuel Fill-Up" else "Log Fuel Fill-Up", style = MaterialTheme.typography.titleLarge)
+            Text(if (initial != null) stringResource(R.string.fuel_edit_fillup) else stringResource(R.string.fuel_log_fillup), style = MaterialTheme.typography.titleLarge)
 
             Box(modifier = Modifier.fillMaxWidth()) {
                 OutlinedTextField(
@@ -1207,7 +1209,7 @@ internal fun AddEditFuelRecordSheet(
                     onValueChange = {},
                     readOnly = true,
                     singleLine = true,
-                    label = { Text("Date") },
+                    label = { Text(stringResource(R.string.doc_select_date)) },
                     trailingIcon = {
                         IconButton(onClick = { showDatePicker = true }) {
                             Icon(Icons.Filled.DateRange, contentDescription = "Select date")
@@ -1227,7 +1229,7 @@ internal fun AddEditFuelRecordSheet(
             OutlinedTextField(
                 value = gallons,
                 onValueChange = { gallons = it.filter { c -> (c.isDigit()) || (c == '.') } },
-                label = { Text(if (unitSystem == UnitSystem.METRIC) "Liters" else "Gallons") },
+                label = { Text(if (unitSystem == UnitSystem.METRIC) stringResource(R.string.fuel_liters) else stringResource(R.string.fuel_gallons)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Decimal,
@@ -1241,7 +1243,7 @@ internal fun AddEditFuelRecordSheet(
             OutlinedTextField(
                 value = totalCost,
                 onValueChange = { totalCost = it.filter { c -> (c.isDigit()) || (c == '.') } },
-                label = { Text("Total cost") },
+                label = { Text(stringResource(R.string.fuel_total_cost)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Decimal,
@@ -1261,7 +1263,7 @@ internal fun AddEditFuelRecordSheet(
             OutlinedTextField(
                 value = mileage,
                 onValueChange = { mileage = sanitizeMileageInput(it) },
-                label = { Text("Odometer reading (${unitSystem.distanceUnit})") },
+                label = { Text(stringResource(R.string.fuel_odometer_reading, unitSystem.distanceUnit)) },
                 singleLine = true,
                 visualTransformation = ThousandsSeparatorVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
@@ -1284,7 +1286,7 @@ internal fun AddEditFuelRecordSheet(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column {
-                    Text("Filled to full tank", style = MaterialTheme.typography.bodyLarge)
+                    Text(stringResource(R.string.fuel_filled_full), style = MaterialTheme.typography.bodyLarge)
                     Text(
                         "Turn off if you didn't top off the tank",
                         style = MaterialTheme.typography.bodySmall,

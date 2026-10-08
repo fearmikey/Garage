@@ -167,7 +167,7 @@ private fun StartupContent(
                         shape = RoundedCornerShape(16.dp),
                     ) {
                         Text(
-                            text = "Get Started",
+                            text = stringResource(R.string.startup_get_started),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                         )
@@ -217,7 +217,7 @@ private fun StartupContent(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Welcome to Garage",
+                    text = stringResource(R.string.startup_welcome_title),
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onBackground,
@@ -227,7 +227,7 @@ private fun StartupContent(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Configure your preferences to get started.",
+                    text = stringResource(R.string.startup_welcome_subtitle),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
@@ -237,14 +237,14 @@ private fun StartupContent(
             // Section 1: Measurement System
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
-                    text = "Measurement System",
+                    text = stringResource(R.string.startup_measurement_system_title),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onBackground,
                 )
 
                 Text(
-                    text = "Choose how distances, fuel volume, and fuel economy are displayed throughout the app.",
+                    text = stringResource(R.string.startup_measurement_system_subtitle),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -252,15 +252,15 @@ private fun StartupContent(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 UnitOptionCard(
-                    title = "Metric System",
-                    subtitle = "Kilometers (km) · Liters (L) · L/100km",
+                    title = stringResource(R.string.startup_metric_title),
+                    subtitle = stringResource(R.string.startup_metric_subtitle),
                     isSelected = uiState.selectedUnits == "metric",
                     onClick = { onSelectUnits("metric") },
                 )
 
                 UnitOptionCard(
-                    title = "Imperial / Standard",
-                    subtitle = "Miles (mi) · US Gallons (gal) · MPG",
+                    title = stringResource(R.string.startup_imperial_title),
+                    subtitle = stringResource(R.string.startup_imperial_subtitle),
                     isSelected = uiState.selectedUnits == "imperial",
                     onClick = { onSelectUnits("imperial") },
                 )
@@ -278,7 +278,7 @@ private fun StartupContent(
                 )
 
                 Text(
-                    text = "Select your preferred app language.",
+                    text = stringResource(R.string.startup_language_subtitle),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -340,14 +340,14 @@ private fun StartupContent(
             // Section 2: Preferred Currency
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
-                    text = "Preferred Currency",
+                    text = stringResource(R.string.startup_currency_title),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onBackground,
                 )
 
                 Text(
-                    text = "Select your currency for fuel logs, maintenance records, and cost tracking.",
+                    text = stringResource(R.string.startup_currency_subtitle),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -386,7 +386,7 @@ private fun StartupContent(
                         }
 
                         TextButton(onClick = { showCurrencyDialog = true }) {
-                            Text("Change")
+                            Text(stringResource(R.string.startup_change))
                         }
                     }
                 }
@@ -405,14 +405,14 @@ private fun StartupContent(
             // Section 2: Permissions
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
-                    text = "App Permissions",
+                    text = stringResource(R.string.startup_permissions_title),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onBackground,
                 )
 
                 Text(
-                    text = "Grant permissions to unlock features like maintenance reminders and VIN scanning.",
+                    text = stringResource(R.string.startup_permissions_subtitle),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -421,8 +421,8 @@ private fun StartupContent(
 
                 PermissionCard(
                     icon = Icons.Default.Notifications,
-                    title = "Service Reminders",
-                    description = "Get notified when vehicle maintenance or service schedules are due.",
+                    title = stringResource(R.string.startup_reminders_title),
+                    description = stringResource(R.string.startup_reminders_subtitle),
                     isGranted = uiState.notificationPermissionGranted,
                     onRequestPermission = onRequestNotificationPermission,
                 )
@@ -430,8 +430,8 @@ private fun StartupContent(
                 if (FlavorConfig.isVinScannerSupported) {
                     PermissionCard(
                         icon = Icons.Default.CameraAlt,
-                        title = "VIN Scanner",
-                        description = "Scan vehicle VIN barcodes with your camera to quickly import vehicle details.",
+                        title = stringResource(R.string.startup_vin_title),
+                        description = stringResource(R.string.startup_vin_subtitle),
                         isGranted = uiState.cameraPermissionGranted,
                         onRequestPermission = onRequestCameraPermission,
                     )
@@ -443,14 +443,14 @@ private fun StartupContent(
             // Section 4: Support Development
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
-                    text = "Support Development",
+                    text = stringResource(R.string.startup_support_title),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onBackground,
                 )
 
                 Text(
-                    text = "Garage is strictly free and open-source software. If you find it helpful, consider supporting development!",
+                    text = stringResource(R.string.startup_support_subtitle),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -490,7 +490,7 @@ private fun StartupContent(
 
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(
-                                    text = "Buy Me a Coffee",
+                                    text = stringResource(R.string.startup_buy_coffee_title),
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.SemiBold,
                                     color = MaterialTheme.colorScheme.onSurface,
@@ -515,7 +515,7 @@ private fun StartupContent(
                                 modifier = Modifier.size(18.dp),
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text("Support on Buy Me a Coffee")
+                            Text(stringResource(R.string.startup_buy_coffee_button))
                         }
                     }
                 }
@@ -538,14 +538,14 @@ private fun StartupContent(
                         ) {
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(
-                                    text = "Enable Affiliate Links",
+                                    text = stringResource(R.string.startup_affiliate_title),
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.SemiBold,
                                     color = MaterialTheme.colorScheme.onSurface,
                                 )
                                 Spacer(modifier = Modifier.height(2.dp))
                                 Text(
-                                    text = "Allow the app to display optional Amazon affiliate links for tools and parts recommended by the developer. Purchasing through these links helps support the project at no extra cost to you.",
+                                    text = stringResource(R.string.startup_affiliate_subtitle),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
@@ -701,7 +701,7 @@ private fun PermissionCard(
                 if (isGranted) {
                     AssistChip(
                         onClick = { },
-                        label = { Text("Permission Granted") },
+                        label = { Text(stringResource(R.string.startup_permission_granted)) },
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Default.Check,
@@ -720,7 +720,7 @@ private fun PermissionCard(
                         onClick = onRequestPermission,
                         shape = RoundedCornerShape(12.dp),
                     ) {
-                        Text("Grant Permission")
+                        Text(stringResource(R.string.startup_grant_permission))
                     }
                 }
             }

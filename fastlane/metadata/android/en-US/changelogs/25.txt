@@ -1,0 +1,1 @@
+Expanded localization translations across all supported languages and added localized maintenance task name formatting.

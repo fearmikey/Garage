@@ -41,6 +41,7 @@ import com.fearmikey.garage.data.schedule.MaintenanceTemplate
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
+import com.fearmikey.garage.ui.util.formatTaskName
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -139,7 +140,7 @@ fun ApplyTemplateSheet(
                                 color = MaterialTheme.colorScheme.primary,
                             )
                             Text(
-                                text = rule.taskName,
+                                text = formatTaskName(rule.taskName),
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.SemiBold,
                             )

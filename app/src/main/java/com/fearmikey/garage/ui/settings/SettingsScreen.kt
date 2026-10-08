@@ -18,7 +18,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.draw.clip
 import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerSyncStatus
 import androidx.compose.foundation.lazy.rememberLazyListState
 import com.fearmikey.garage.ui.components.verticalScrollbar
@@ -39,6 +44,7 @@ import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.filled.FileUpload
 import androidx.compose.material.icons.filled.FolderZip
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.LocalCafe
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.Notifications
@@ -47,6 +53,7 @@ import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Straighten
 import androidx.compose.material.icons.filled.TrendingUp
+import androidx.core.os.LocaleListCompat
 import com.fearmikey.garage.ui.components.CurrencySelectionDialog
 import com.fearmikey.garage.ui.util.AppCurrency
 import com.fearmikey.garage.ui.util.UnitConverter
@@ -54,6 +61,8 @@ import com.fearmikey.garage.ui.util.UnitSystem
 import androidx.documentfile.provider.DocumentFile
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -117,6 +126,7 @@ fun SettingsScreen(
     val uriHandler = LocalUriHandler.current
     val snackbarHostState = remember { SnackbarHostState() }
 
+    var showLanguageDialog by remember { mutableStateOf(false) }
     var showUnitsDialog by remember { mutableStateOf(false) }
     var showCurrencyDialog by remember { mutableStateOf(false) }
     var showThemeDialog by remember { mutableStateOf(false) }
@@ -171,7 +181,7 @@ fun SettingsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Settings") },
+                title = { Text(stringResource(R.string.settings_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -190,38 +200,37 @@ fun SettingsScreen(
         ) {
             // Preferences Section
             item {
-                SettingsCategoryHeader("User Preferences")
+                SettingsCategoryHeader(stringResource(R.string.settings_user_preferences))
             }
             item {
+                val currentLocales = remember(showLanguageDialog) { context.getSystemService(android.app.LocaleManager::class.java).applicationLocales }
+                val currentLang = if (currentLocales.isEmpty) "" else currentLocales.get(0)?.language ?: ""
+                val languageName = when (currentLang) {
+                    "en" -> stringResource(R.string.language_english)
+                    "fr" -> stringResource(R.string.language_french)
+                    "de" -> stringResource(R.string.language_german)
+                    "pl" -> stringResource(R.string.language_polish)
+                    "es" -> stringResource(R.string.language_spanish)
+                    "it" -> stringResource(R.string.language_italian)
+                    "pt" -> stringResource(R.string.language_portuguese)
+                    "nl" -> stringResource(R.string.language_dutch)
+                    "ru" -> stringResource(R.string.language_russian)
+                    "tr" -> stringResource(R.string.language_turkish)
+                    else -> stringResource(R.string.language_system_default)
+                }
+
                 ListItem(
                     headlineContent = { Text(stringResource(R.string.language_selection)) },
-                    supportingContent = {
-                        val currentLocales = remember { context.getSystemService(android.app.LocaleManager::class.java).applicationLocales }
-                        val currentLang = if (currentLocales.isEmpty) "" else currentLocales.get(0)?.language ?: ""
-                        val languageName = when (currentLang) {
-                            "en" -> stringResource(R.string.language_english)
-                            "fr" -> stringResource(R.string.language_french)
-                            "de" -> stringResource(R.string.language_german)
-                            "pl" -> stringResource(R.string.language_polish)
-                            "es" -> stringResource(R.string.language_spanish)
-                            "it" -> stringResource(R.string.language_italian)
-                            "pt" -> stringResource(R.string.language_portuguese)
-                            "nl" -> stringResource(R.string.language_dutch)
-                            "ru" -> stringResource(R.string.language_russian)
-                            "tr" -> stringResource(R.string.language_turkish)
-                            else -> stringResource(R.string.language_system_default)
-                        }
-                        Text(languageName)
-                    },
-                    leadingContent = { Icon(Icons.Filled.Badge, contentDescription = null) }, // Reusing an existing icon since Translate is not available
+                    supportingContent = { Text(languageName) },
+                    leadingContent = { Icon(Icons.Filled.Language, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { onOpenStartup() }, // Navigate to Onboarding screen for language change since it's already implemented there
+                        .clickable { showLanguageDialog = true },
                 )
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Units of Measurement") },
+                    headlineContent = { Text(stringResource(R.string.settings_units)) },
                     supportingContent = { Text(uiState.units.replaceFirstChar { it.uppercase() }) },
                     leadingContent = { Icon(Icons.Filled.Straighten, contentDescription = null) },
                     modifier = Modifier
@@ -232,7 +241,7 @@ fun SettingsScreen(
             item {
                 val selectedCurrencyObj = AppCurrency.fromCode(uiState.currency)
                 ListItem(
-                    headlineContent = { Text("Currency") },
+                    headlineContent = { Text(stringResource(R.string.settings_currency)) },
                     supportingContent = { Text(selectedCurrencyObj.displayName) },
                     leadingContent = { Icon(Icons.Filled.AttachMoney, contentDescription = null) },
                     modifier = Modifier
@@ -242,7 +251,7 @@ fun SettingsScreen(
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Theme") },
+                    headlineContent = { Text(stringResource(R.string.settings_theme)) },
                     supportingContent = { Text(uiState.theme.replaceFirstChar { it.uppercase() }) },
                     leadingContent = { Icon(Icons.Filled.Palette, contentDescription = null) },
                     modifier = Modifier
@@ -258,7 +267,7 @@ fun SettingsScreen(
                 } ?: "First vehicle added (default)"
 
                 ListItem(
-                    headlineContent = { Text("Default Vehicle") },
+                    headlineContent = { Text(stringResource(R.string.settings_default_vehicle)) },
                     supportingContent = { Text("Used for widget shortcuts ($selectedVehicleName)") },
                     leadingContent = { Icon(Icons.Filled.DirectionsCar, contentDescription = null) },
                     modifier = Modifier
@@ -647,6 +656,21 @@ fun SettingsScreen(
     }
 
     // Dialogs
+    if (showLanguageDialog) {
+        val currentLocales = remember { context.getSystemService(android.app.LocaleManager::class.java).applicationLocales }
+        val currentLang = if (currentLocales.isEmpty) "" else currentLocales.get(0)?.language ?: ""
+
+        LanguageSelectionDialog(
+            selectedLangCode = currentLang,
+            onLanguageSelected = { langCode ->
+                val localeManager = context.getSystemService(android.app.LocaleManager::class.java)
+                localeManager.applicationLocales = LocaleListCompat.forLanguageTags(langCode).unwrap() as android.os.LocaleList
+                showLanguageDialog = false
+            },
+            onDismissRequest = { showLanguageDialog = false },
+        )
+    }
+
     if (showUnitsDialog) {
         SingleChoiceDialog(
             title = "Units of Measurement",
@@ -1001,6 +1025,73 @@ private fun DefaultVehicleDialog(
         confirmButton = {
             TextButton(onClick = onDismissRequest) {
                 Text("Cancel")
+            }
+        },
+    )
+}
+
+@Composable
+private fun LanguageSelectionDialog(
+    selectedLangCode: String,
+    onLanguageSelected: (String) -> Unit,
+    onDismissRequest: () -> Unit,
+) {
+    val languageOptions = listOf(
+        "" to stringResource(R.string.language_system_default),
+        "en" to stringResource(R.string.language_english),
+        "fr" to stringResource(R.string.language_french),
+        "de" to stringResource(R.string.language_german),
+        "pl" to stringResource(R.string.language_polish),
+        "es" to stringResource(R.string.language_spanish),
+        "it" to stringResource(R.string.language_italian),
+        "pt" to stringResource(R.string.language_portuguese),
+        "nl" to stringResource(R.string.language_dutch),
+        "ru" to stringResource(R.string.language_russian),
+        "tr" to stringResource(R.string.language_turkish),
+    )
+
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = { Text(stringResource(R.string.language_selection)) },
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+            ) {
+                languageOptions.forEach { (code, name) ->
+                    val isSelected = code == selectedLangCode
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                            .clickable {
+                                onLanguageSelected(code)
+                                onDismissRequest()
+                            }
+                            .padding(vertical = 10.dp, horizontal = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        RadioButton(
+                            selected = isSelected,
+                            onClick = {
+                                onLanguageSelected(code)
+                                onDismissRequest()
+                            },
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(
+                            text = name,
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismissRequest) {
+                Text(stringResource(R.string.obd_cancel))
             }
         },
     )

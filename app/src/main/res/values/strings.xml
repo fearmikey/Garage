@@ -15,6 +15,79 @@
     <string name="language_turkish">Türkçe</string>
     <string name="language_selection">Language</string>
 
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_user_preferences">User Preferences</string>
+    <string name="settings_units">Units of Measurement</string>
+    <string name="settings_currency">Currency</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_default_vehicle">Default Vehicle</string>
+    <string name="settings_reminders_expirations">Reminders &amp; Expirations</string>
+
+    <!-- Tabs -->
+    <string name="tab_my_vehicles">My Vehicles</string>
+    <string name="tab_drivers_license">Driver\'s License</string>
+    <string name="tab_support_store">Support Store</string>
+    <string name="tab_timeline">Timeline</string>
+    <string name="tab_schedule">Schedule</string>
+    <string name="tab_fuel">Fuel</string>
+    <string name="tab_expenses">Expenses</string>
+    <string name="tab_specs">Specs</string>
+    <string name="tab_parts">Parts</string>
+    <string name="tab_mods">Mods</string>
+    <string name="tab_documents">Documents</string>
+    <string name="tab_recalls">Recalls</string>
+
+    <!-- Maintenance Tasks -->
+    <string name="task_engine_oil_change">Engine oil change</string>
+    <string name="task_power_steering_fluid">Power steering fluid</string>
+    <string name="task_tire_replacement">Tire Replacement</string>
+    <string name="task_rotation_and_balance">Rotation and Balance</string>
+    <string name="task_brake_fluid_flush">Brake fluid flush</string>
+    <string name="task_cabin_air_filter">Cabin air filter replacement</string>
+    <string name="task_engine_air_filter">Engine air filter replacement</string>
+    <string name="task_transmission_fluid">Automatic transmission fluid service</string>
+    <string name="task_coolant_flush">Coolant flush</string>
+    <string name="task_spark_plug_replacement">Spark plug replacement</string>
+    <string name="task_battery_test">Battery load test / replacement</string>
+    <string name="task_rust_prevention">Rust prevention</string>
+    <string name="task_paint_protection">Paint protection</string>
+    <string name="task_serpentine_belt">Serpentine belt replacement</string>
+    <string name="task_wiper_blades">Wiper blade replacement</string>
+    <string name="task_brake_pads">Brake pad replacement</string>
+    <string name="task_transfer_case_fluid">Transfer case fluid change</string>
+    <string name="task_front_diff_fluid">Front differential fluid change</string>
+    <string name="task_rear_diff_fluid">Rear differential fluid change</string>
+
+    <!-- Startup / Onboarding -->
+    <string name="startup_get_started">Get Started</string>
+    <string name="startup_welcome_title">Welcome to Garage</string>
+    <string name="startup_welcome_subtitle">Configure your preferences to get started.</string>
+    <string name="startup_measurement_system_title">Measurement System</string>
+    <string name="startup_measurement_system_subtitle">Choose how distances, fuel volume, and fuel economy are displayed throughout the app.</string>
+    <string name="startup_metric_title">Metric System</string>
+    <string name="startup_metric_subtitle">Kilometers (km) · Liters (L) · L/100km</string>
+    <string name="startup_imperial_title">Imperial / Standard</string>
+    <string name="startup_imperial_subtitle">Miles (mi) · US Gallons (gal) · MPG</string>
+    <string name="startup_language_subtitle">Select your preferred app language.</string>
+    <string name="startup_currency_title">Preferred Currency</string>
+    <string name="startup_currency_subtitle">Select your currency for fuel logs, maintenance records, and cost tracking.</string>
+    <string name="startup_change">Change</string>
+    <string name="startup_permissions_title">App Permissions</string>
+    <string name="startup_permissions_subtitle">Grant permissions to unlock features like maintenance reminders and VIN scanning.</string>
+    <string name="startup_reminders_title">Service Reminders</string>
+    <string name="startup_reminders_subtitle">Get notified when vehicle maintenance or service schedules are due.</string>
+    <string name="startup_vin_title">VIN Scanner</string>
+    <string name="startup_vin_subtitle">Scan vehicle VIN barcodes with your camera to quickly import vehicle details.</string>
+    <string name="startup_permission_granted">Permission Granted</string>
+    <string name="startup_grant_permission">Grant Permission</string>
+    <string name="startup_support_title">Support Development</string>
+    <string name="startup_support_subtitle">Garage is strictly free and open-source software. If you find it helpful, consider supporting development!</string>
+    <string name="startup_buy_coffee_title">Buy Me a Coffee</string>
+    <string name="startup_buy_coffee_button">Support on Buy Me a Coffee</string>
+    <string name="startup_affiliate_title">Enable Affiliate Links</string>
+    <string name="startup_affiliate_subtitle">Allow the app to display optional Amazon affiliate links for tools and parts recommended by the developer. Purchasing through these links helps support the project at no extra cost to you.</string>
+
     <!-- Notifications -->
     <string name="reminder_notification_channel_name">Maintenance reminders</string>
     <string name="reminder_notification_channel_description">Alerts for upcoming and overdue vehicle maintenance</string>
@@ -162,4 +235,106 @@
     <string name="documents_obd_readiness_mil_on">Check engine light on — likely to fail</string>
     <string name="documents_obd_readiness_likely_ready">Likely ready for testing</string>
     <string name="documents_obd_readiness_not_ready">Not ready yet — drive more before testing</string>
+    <!-- Documents & Driver's License -->
+    <string name="license_empty_message">No Driver\'s License details added yet.\nTrack your driver\'s license expiration and get timely renewal reminders.</string>
+    <string name="license_add_button">Add Driver\'s License</string>
+    <string name="license_title">Driver\'s License</string>
+    <string name="license_expiration_date">Expiration Date</string>
+    <string name="license_number">Driver\'s License Number</string>
+    <string name="license_issuing_state">Issuing State / Jurisdiction</string>
+    <string name="license_notes">Notes / Endorsements</string>
+    <string name="license_photos">License Photos</string>
+    <string name="license_edit">Edit License</string>
+    <string name="license_delete">Delete</string>
+    <string name="license_delete_confirm_title">Delete Driver\'s License Info?</string>
+    <string name="license_delete_confirm_msg">Are you sure you want to delete your driver\'s license record? This includes any saved photos.</string>
+    <string name="license_details_title">Driver\'s License Details</string>
+    <string name="license_select_exp_date">Select expiration date</string>
+    <string name="license_number_label">License Number</string>
+    <string name="license_number_placeholder">e.g., D1234567</string>
+    <string name="license_state_label">Issuing State</string>
+    <string name="license_state_placeholder">e.g., CA</string>
+    <string name="license_notes_placeholder">Class C, motorcycle endorsement, REAL ID notes...</string>
+    <string name="license_front_photo">Front of License</string>
+    <string name="license_back_photo">Back of License</string>
+    <string name="license_save">Save Driver\'s License</string>
+
+    <!-- Cost of Ownership -->
+    <string name="cost_empty_message">No cost records logged yet.\nAdd maintenance or fuel entries to track cost of ownership.</string>
+    <string name="cost_category_breakdown">Category Breakdown</string>
+    <string name="cost_total_title">Total Cost of Ownership</string>
+    <string name="cost_include_mods">Include mods</string>
+    <string name="cost_per_distance">Cost / Distance</string>
+    <string name="cost_per_day">Cost / Day</string>
+    <string name="time_filter_all_time">All Time</string>
+    <string name="time_filter_this_year">This Year</string>
+    <string name="time_filter_last_year">Last Year</string>
+    <string name="time_filter_12_months">12 Months</string>
+    <string name="time_filter_6_months">6 Months</string>
+
+    <!-- Fuel & Charging -->
+    <string name="fuel_tab_charging">Charging</string>
+    <string name="fuel_tab_fuel">Fuel</string>
+    <string name="fuel_est_range_100">Current Est. 100% Range</string>
+    <string name="fuel_initial_range_100">Initial Est. 100% Range</string>
+    <string name="fuel_delete_charging_title">Delete Charging Session</string>
+    <string name="fuel_delete_charging_msg">Are you sure you want to delete this charging record?</string>
+    <string name="fuel_log_charging">Log Charging Session</string>
+    <string name="fuel_edit_charging">Edit Charging Session</string>
+    <string name="fuel_kwh_added">kWh added</string>
+    <string name="fuel_charger_speed">Charger Speed</string>
+    <string name="fuel_location_vendor">Location / Vendor</string>
+    <string name="fuel_vendor_placeholder">Vendor name (optional, e.g. Electrify America)</string>
+    <string name="fuel_battery_start">Battery % Start</string>
+    <string name="fuel_battery_end">Battery % End</string>
+    <string name="fuel_total_cost">Total cost</string>
+    <string name="fuel_odometer_reading">Odometer reading (%1$s)</string>
+    <string name="fuel_battery_health_title">Battery Health (Optional)</string>
+    <string name="fuel_est_range_soc">Est. Range @ 100% SoC (%1$s)</string>
+    <string name="fuel_est_range_end">Est. Range at charge end</string>
+    <string name="fuel_auto_calculate">Auto-Calculate</string>
+    <string name="fuel_save_charging">Save Charging Session</string>
+    <string name="fuel_delete_fillup_title">Delete Fill-Up</string>
+    <string name="fuel_delete_fillup_msg">Are you sure you want to delete this fuel record?</string>
+    <string name="fuel_log_fillup">Log Fuel Fill-Up</string>
+    <string name="fuel_edit_fillup">Edit Fuel Fill-Up</string>
+    <string name="fuel_liters">Liters</string>
+    <string name="fuel_gallons">Gallons</string>
+    <string name="fuel_filled_full">Filled to full tank</string>
+
+    <!-- Vehicle Documents -->
+    <string name="doc_plate_label">License Plate / Tag</string>
+    <string name="doc_plate_placeholder">e.g., 7ABC123</string>
+    <string name="doc_state_label">State / Prov</string>
+    <string name="doc_state_placeholder">e.g., CA</string>
+    <string name="doc_reg_exp_label">Registration Expiration</string>
+    <string name="doc_select_date">Select date</string>
+    <string name="doc_renewal_fee_label">Renewal Fee (Optional)</string>
+    <string name="doc_reg_notes_label">Registration Notes</string>
+    <string name="doc_delete_reg_btn">Delete Tag &amp; Registration Info</string>
+    <string name="doc_insp_exp_label">Inspection Expiration / Due Date</string>
+    <string name="doc_last_inspected_label">Last Inspected Date</string>
+    <string name="doc_insp_result_label">Inspection Result</string>
+    <string name="doc_insp_result_placeholder">e.g., Passed, Failed, Pending</string>
+    <string name="doc_insp_notes_label">Inspection Notes / Station Info</string>
+    <string name="doc_delete_insp_btn">Delete State Inspection Info</string>
+    <string name="doc_emissions_exp_label">Emissions Expiration / Due Date</string>
+    <string name="doc_last_smog_label">Last Smog Test Date</string>
+    <string name="doc_emissions_result_label">Test Result</string>
+    <string name="doc_emissions_result_placeholder">e.g., Passed, Failed, Exempt</string>
+    <string name="doc_emissions_notes_label">Emissions Notes / Station Details</string>
+    <string name="doc_delete_emissions_btn">Delete Emissions &amp; Smog Info</string>
+    <string name="doc_insur_provider_label">Insurance Company / Provider</string>
+    <string name="doc_insur_policy_num_label">Insurance Policy Number</string>
+    <string name="doc_insur_exp_label">Policy Expiration</string>
+    <string name="doc_insur_premium_label">Premium / Cost (Optional)</string>
+    <string name="doc_insur_contact_label">Agent / Claims Contact Info</string>
+    <string name="doc_insur_notes_label">Policy Notes / Coverages</string>
+    <string name="doc_delete_insur_btn">Delete Insurance Policy Info</string>
+    <string name="doc_toll_exp_label">Pass / Permit Expiration Date</string>
+    <string name="doc_toll_account_label">Account / Tag / Permit #</string>
+    <string name="doc_toll_notes_label">Notes / Provider Details</string>
+    <string name="doc_delete_toll_btn">Delete Toll Pass &amp; Parking Info</string>
+    <string name="doc_save_docs_btn">Save Vehicle Documents</string>
+    <string name="doc_saving_btn">Saving...</string>
 </resources>

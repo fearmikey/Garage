@@ -70,6 +70,7 @@ import com.fearmikey.garage.ui.util.SampleData
 import com.fearmikey.garage.ui.util.ThousandsSeparatorVisualTransformation
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
+import com.fearmikey.garage.ui.util.formatTaskName
 import com.fearmikey.garage.ui.util.sanitizeMileageInput
 import com.fearmikey.garage.ui.util.toDisplayDate
 
@@ -243,7 +244,7 @@ private fun CustomMaintenanceRuleRow(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(rule.category.displayName, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
-                Text(rule.taskName, style = MaterialTheme.typography.titleMedium)
+                Text(formatTaskName(rule.taskName), style = MaterialTheme.typography.titleMedium)
 
                 val interval = listOfNotNull(
                     rule.intervalMiles?.let { UnitConverter.formatDistance(it, unitSystem) },
@@ -277,7 +278,7 @@ private fun MaintenanceSuggestionRow(
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary,
             )
-            Text(suggestion.rule.taskName, style = MaterialTheme.typography.titleMedium)
+            Text(formatTaskName(suggestion.rule.taskName), style = MaterialTheme.typography.titleMedium)
 
             val details = listOfNotNull(
                 suggestion.lastServiceMileage?.let { "last done at ${UnitConverter.formatDistance(it, unitSystem)}" },

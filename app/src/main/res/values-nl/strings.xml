@@ -16,6 +16,79 @@
     <string name="language_turkish">Türkçe</string>
     <string name="language_selection">Taal</string>
 
+    <!-- Startup / Onboarding -->
+    <string name="startup_get_started">Aan de slag</string>
+    <string name="startup_welcome_title">Welkom bij Garage</string>
+    <string name="startup_welcome_subtitle">Stel je voorkeuren in om te beginnen.</string>
+    <string name="startup_measurement_system_title">Meetsysteem</string>
+    <string name="startup_measurement_system_subtitle">Kies hoe afstanden, brandstofvolume en verbruik worden weergegeven.</string>
+    <string name="startup_metric_title">Metrisch systeem</string>
+    <string name="startup_metric_subtitle">Kilometer (km) · Liter (L) · L/100km</string>
+    <string name="startup_imperial_title">Imperiaal / Standaard</string>
+    <string name="startup_imperial_subtitle">Mijl (mi) · US Gallon (gal) · MPG</string>
+    <string name="startup_language_subtitle">Selecteer de gewenste app-taal.</string>
+    <string name="startup_currency_title">Voorkeursvaluta</string>
+    <string name="startup_currency_subtitle">Selecteer je valuta voor kosten-, onderhouds- en brandstofregistratie.</string>
+    <string name="startup_change">Wijzigen</string>
+    <string name="startup_permissions_title">App-machtigingen</string>
+    <string name="startup_permissions_subtitle">Verleen machtigingen om functies zoals herinneringen en VIN-scanner te ontgrendelen.</string>
+    <string name="startup_reminders_title">Onderhoudsherinneringen</string>
+    <string name="startup_reminders_subtitle">Ontvang een melding wanneer onderhoud aan je voertuig nodig is.</string>
+    <string name="startup_vin_title">VIN-scanner</string>
+    <string name="startup_vin_subtitle">Scan VIN-barcodes met je camera om voertuiggegevens snel te importeren.</string>
+    <string name="startup_permission_granted">Machtiging verleend</string>
+    <string name="startup_grant_permission">Machtiging verlenen</string>
+    <string name="startup_support_title">Ontwikkeling ondersteunen</string>
+    <string name="startup_support_subtitle">Garage is volledig gratis en open-source. Als je de app nuttig vindt, overweeg dan het project te steunen!</string>
+    <string name="startup_buy_coffee_title">Koop een kop koffie</string>
+    <string name="startup_buy_coffee_button">Steun via Buy Me a Coffee</string>
+    <string name="startup_affiliate_title">Affiliate-links inschakelen</string>
+    <string name="startup_affiliate_subtitle">Sta de app toe optionele Amazon affiliate-links te tonen voor aanbevolen gereedschappen en onderdelen.</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Instellingen</string>
+    <string name="settings_user_preferences">Gebruikersvoorkeuren</string>
+    <string name="settings_units">Meeteenheden</string>
+    <string name="settings_currency">Valuta</string>
+    <string name="settings_theme">Thema</string>
+    <string name="settings_default_vehicle">Standaardvoertuig</string>
+    <string name="settings_reminders_expirations">Herinneringen &amp; verlopen</string>
+
+    <!-- Tabs -->
+    <string name="tab_my_vehicles">Mijn voertuigen</string>
+    <string name="tab_drivers_license">Rijbewijs</string>
+    <string name="tab_support_store">Supportwinkel</string>
+    <string name="tab_timeline">Historie</string>
+    <string name="tab_schedule">Schema</string>
+    <string name="tab_fuel">Brandstof</string>
+    <string name="tab_expenses">Kosten</string>
+    <string name="tab_specs">Specificaties</string>
+    <string name="tab_parts">Onderdelen</string>
+    <string name="tab_mods">Aanpassingen</string>
+    <string name="tab_documents">Documenten</string>
+    <string name="tab_recalls">Terugroepacties</string>
+
+    <!-- Maintenance Tasks -->
+    <string name="task_engine_oil_change">Motorolie verversen</string>
+    <string name="task_power_steering_fluid">Stuurbekrachtigingsvloeistof</string>
+    <string name="task_tire_replacement">Banden vervangen</string>
+    <string name="task_rotation_and_balance">Banden wisselen en balanceren</string>
+    <string name="task_brake_fluid_flush">Remvloeistof verversen</string>
+    <string name="task_cabin_air_filter">Interieurfilter vervangen</string>
+    <string name="task_engine_air_filter">Luchtfilter vervangen</string>
+    <string name="task_transmission_fluid">Automatische versnellingsbakolie verversen</string>
+    <string name="task_coolant_flush">Koelvloeistof verversen</string>
+    <string name="task_spark_plug_replacement">Bougies vervangen</string>
+    <string name="task_battery_test">Accutest / vervanging</string>
+    <string name="task_rust_prevention">Antiroestbehandeling</string>
+    <string name="task_paint_protection">Lakbescherming</string>
+    <string name="task_serpentine_belt">Multiriem vervangen</string>
+    <string name="task_wiper_blades">Ruitenwissers vervangen</string>
+    <string name="task_brake_pads">Remblokken vervangen</string>
+    <string name="task_transfer_case_fluid">Tussenbakolie verversen</string>
+    <string name="task_front_diff_fluid">Voorste differentieelolie verversen</string>
+    <string name="task_rear_diff_fluid">Achterste differentieelolie verversen</string>
+
     <!-- Notifications -->
     <string name="reminder_notification_channel_name">Onderhoudsherinneringen</string>
     <string name="reminder_notification_channel_description">Meldingen voor aankomend en achterstallig voertuigonderhoud</string>
@@ -163,4 +236,106 @@
     <string name="documents_obd_readiness_mil_on">Motorlampje brandt — waarschijnlijk afkeur</string>
     <string name="documents_obd_readiness_likely_ready">Waarschijnlijk klaar voor test</string>
     <string name="documents_obd_readiness_not_ready">Nog niet klaar — rijd meer voor de test</string>
+    <!-- Documents & Driver's License -->
+    <string name="license_empty_message">Nog geen rijbewijsgegevens toegevoegd.\nHoud de verlopen datum bij en ontvang tijdig herinneringen.</string>
+    <string name="license_add_button">Rijbewijs toevoegen</string>
+    <string name="license_title">Rijbewijs</string>
+    <string name="license_expiration_date">Verloopdatum</string>
+    <string name="license_number">Rijbewijsnummer</string>
+    <string name="license_issuing_state">Afgifteland / Instantie</string>
+    <string name="license_notes">Opmerkingen / Categorieën</string>
+    <string name="license_photos">Foto\'s van rijbewijs</string>
+    <string name="license_edit">Rijbewijs bewerken</string>
+    <string name="license_delete">Verwijderen</string>
+    <string name="license_delete_confirm_title">Rijbewijsgegevens verwijderen?</string>
+    <string name="license_delete_confirm_msg">Weet je zeker dat je je rijbewijsinformatie en opgeslagen foto\'s wilt verwijderen?</string>
+    <string name="license_details_title">Rijbewijsdetails</string>
+    <string name="license_select_exp_date">Selecteer verloopdatum</string>
+    <string name="license_number_label">Rijbewijsnummer</string>
+    <string name="license_number_placeholder">bijv. 1234567890</string>
+    <string name="license_state_label">Afgifte-instantie / Land</string>
+    <string name="license_state_placeholder">bijv. NL</string>
+    <string name="license_notes_placeholder">Rijbewijs B, code 95, opmerkingen...</string>
+    <string name="license_front_photo">Voorkant rijbewijs</string>
+    <string name="license_back_photo">Achterkant rijbewijs</string>
+    <string name="license_save">Rijbewijs opslaan</string>
+
+    <!-- Cost of Ownership -->
+    <string name="cost_empty_message">Nog geen kosten geregistreerd.\nVoeg onderhouds- of brandstofinvoer toe om de totale eigendomskosten bij te houden.</string>
+    <string name="cost_category_breakdown">Verdeling per categorie</string>
+    <string name="cost_total_title">Totale eigendomskosten (Cost of Ownership)</string>
+    <string name="cost_include_mods">Inclusief aanpassingen</string>
+    <string name="cost_per_distance">Kosten / Afstand</string>
+    <string name="cost_per_day">Kosten / Dag</string>
+    <string name="time_filter_all_time">Gehele periode</string>
+    <string name="time_filter_this_year">Dit jaar</string>
+    <string name="time_filter_last_year">Vorig jaar</string>
+    <string name="time_filter_12_months">12 maanden</string>
+    <string name="time_filter_6_months">6 maanden</string>
+
+    <!-- Fuel & Charging -->
+    <string name="fuel_tab_charging">Laden</string>
+    <string name="fuel_tab_fuel">Brandstof</string>
+    <string name="fuel_est_range_100">Huidige geschatte 100% actieradius</string>
+    <string name="fuel_initial_range_100">Oorspronkelijke geschatte 100% actieradius</string>
+    <string name="fuel_delete_charging_title">Laadsessie verwijderen?</string>
+    <string name="fuel_delete_charging_msg">Weet je zeker dat je deze laadsessie wilt verwijderen?</string>
+    <string name="fuel_log_charging">Laadsessie registreren</string>
+    <string name="fuel_edit_charging">Laadsessie bewerken</string>
+    <string name="fuel_kwh_added">kWh geladen</string>
+    <string name="fuel_charger_speed">Laadsnelheid</string>
+    <string name="fuel_location_vendor">Locatie / Aanbieder</string>
+    <string name="fuel_vendor_placeholder">Aanbieder (optioneel, bijv. Fastned)</string>
+    <string name="fuel_battery_start">% Accu Begin</string>
+    <string name="fuel_battery_end">% Accu Einde</string>
+    <string name="fuel_total_cost">Totale kosten</string>
+    <string name="fuel_odometer_reading">Kilometerstand (%1$s)</string>
+    <string name="fuel_battery_health_title">Accugezondheid (Optioneel)</string>
+    <string name="fuel_est_range_soc">Gersch. actieradius bij 100% (%1$s)</string>
+    <string name="fuel_est_range_end">Gesch. actieradius einde laadsessie</string>
+    <string name="fuel_auto_calculate">Automatisch berekenen</string>
+    <string name="fuel_save_charging">Laadsessie opslaan</string>
+    <string name="fuel_delete_fillup_title">Tankbeurt verwijderen?</string>
+    <string name="fuel_delete_fillup_msg">Weet je zeker dat je deze tankbeurt wilt verwijderen?</string>
+    <string name="fuel_log_fillup">Tankbeurt registreren</string>
+    <string name="fuel_edit_fillup">Tankbeurt bewerken</string>
+    <string name="fuel_liters">Liter</string>
+    <string name="fuel_gallons">Gallons</string>
+    <string name="fuel_filled_full">Volgetankt</string>
+
+    <!-- Vehicle Documents -->
+    <string name="doc_plate_label">Kenteken</string>
+    <string name="doc_plate_placeholder">bijv. 1-ABC-123</string>
+    <string name="doc_state_label">Provincie / Land</string>
+    <string name="doc_state_placeholder">bijv. NL</string>
+    <string name="doc_reg_exp_label">Vervaldatum motorrijtuigenbelasting / kenteken</string>
+    <string name="doc_select_date">Selecteer datum</string>
+    <string name="doc_renewal_fee_label">Verlengingskosten (Optioneel)</string>
+    <string name="doc_reg_notes_label">Kentekenopmerkingen</string>
+    <string name="doc_delete_reg_btn">Kentekeninvoer verwijderen</string>
+    <string name="doc_insp_exp_label">APK vervaldatum</string>
+    <string name="doc_last_inspected_label">Datum laatste APK</string>
+    <string name="doc_insp_result_label">APK-resultaat</string>
+    <string name="doc_insp_result_placeholder">bijv. Goedgekeurd, Afgekeurd</string>
+    <string name="doc_insp_notes_label">APK-opmerkingen / Garage</string>
+    <string name="doc_delete_insp_btn">APK-gegevens verwijderen</string>
+    <string name="doc_emissions_exp_label">Vervaldatum emissietest</string>
+    <string name="doc_last_smog_label">Datum laatste emissietest</string>
+    <string name="doc_emissions_result_label">Resultaat emissietest</string>
+    <string name="doc_emissions_result_placeholder">bijv. Voldoet, Niet voldoet</string>
+    <string name="doc_emissions_notes_label">Emissie-opmerkingen</string>
+    <string name="doc_delete_emissions_btn">Emissiegegevens verwijderen</string>
+    <string name="doc_insur_provider_label">Verzekeringsmaatschappij</string>
+    <string name="doc_insur_policy_num_label">Polisnummer autorisk</string>
+    <string name="doc_insur_exp_label">Vervaldatum polis</string>
+    <string name="doc_insur_premium_label">Premie / Kosten (Optioneel)</string>
+    <string name="doc_insur_contact_label">Contactpersoon / Schade melden</string>
+    <string name="doc_insur_notes_label">Polisdekking opmerkingen</string>
+    <string name="doc_delete_insur_btn">Autoverzekering verwijderen</string>
+    <string name="doc_toll_exp_label">Vervaldatum parkeervergunning / toll-badge</string>
+    <string name="doc_toll_account_label">Vergunning- / Accountnummer</string>
+    <string name="doc_toll_notes_label">Opmerkingen / Zone</string>
+    <string name="doc_delete_toll_btn">Tol- / Parkeergegevens verwijderen</string>
+    <string name="doc_save_docs_btn">Voertuigdocumenten opslaan</string>
+    <string name="doc_saving_btn">Opslaan...</string>
 </resources>

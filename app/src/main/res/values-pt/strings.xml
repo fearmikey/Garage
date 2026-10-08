@@ -16,6 +16,79 @@
     <string name="language_turkish">Türkçe</string>
     <string name="language_selection">Idioma</string>
 
+    <!-- Startup / Onboarding -->
+    <string name="startup_get_started">Começar</string>
+    <string name="startup_welcome_title">Bem-vindo ao Garage</string>
+    <string name="startup_welcome_subtitle">Configure suas preferências para começar.</string>
+    <string name="startup_measurement_system_title">Sistema de medição</string>
+    <string name="startup_measurement_system_subtitle">Escolha como distâncias, volume de combustível e consumo são exibidos.</string>
+    <string name="startup_metric_title">Sistema Métrico</string>
+    <string name="startup_metric_subtitle">Quilômetros (km) · Litros (L) · L/100km</string>
+    <string name="startup_imperial_title">Imperial / Padrão</string>
+    <string name="startup_imperial_subtitle">Milhas (mi) · Galões US (gal) · MPG</string>
+    <string name="startup_language_subtitle">Selecione seu idioma preferido do aplicativo.</string>
+    <string name="startup_currency_title">Moeda preferida</string>
+    <string name="startup_currency_subtitle">Selecione sua moeda para o acompanhamento de custos, manutenção e combustível.</string>
+    <string name="startup_change">Alterar</string>
+    <string name="startup_permissions_title">Permissões do aplicativo</string>
+    <string name="startup_permissions_subtitle">Conceda permissões para desbloquear recursos como lembretes e leitor de VIN.</string>
+    <string name="startup_reminders_title">Lembretes de serviço</string>
+    <string name="startup_reminders_subtitle">Receba notificações quando a manutenção do veículo estiver próxima.</string>
+    <string name="startup_vin_title">Scanner de VIN</string>
+    <string name="startup_vin_subtitle">Escaneie o código de barras do VIN com a câmera para importar os dados rapidamente.</string>
+    <string name="startup_permission_granted">Permissão concedida</string>
+    <string name="startup_grant_permission">Conceder permissão</string>
+    <string name="startup_support_title">Apoie o desenvolvimento</string>
+    <string name="startup_support_subtitle">O Garage é totalmente gratuito e de código aberto. Se for útil para você, apoie o projeto!</string>
+    <string name="startup_buy_coffee_title">Pague um café</string>
+    <string name="startup_buy_coffee_button">Apoiar no Buy Me a Coffee</string>
+    <string name="startup_affiliate_title">Ativar links de afiliados</string>
+    <string name="startup_affiliate_subtitle">Permita a exibição de links opcionais de afiliados da Amazon para ferramentas e peças recomendadas.</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Configurações</string>
+    <string name="settings_user_preferences">Preferências do usuário</string>
+    <string name="settings_units">Unidades de medida</string>
+    <string name="settings_currency">Moeda</string>
+    <string name="settings_theme">Tema</string>
+    <string name="settings_default_vehicle">Veículo padrão</string>
+    <string name="settings_reminders_expirations">Lembretes e vencimentos</string>
+
+    <!-- Tabs -->
+    <string name="tab_my_vehicles">Meus veículos</string>
+    <string name="tab_drivers_license">Carteira de motorista</string>
+    <string name="tab_support_store">Loja de apoio</string>
+    <string name="tab_timeline">Histórico</string>
+    <string name="tab_schedule">Cronograma</string>
+    <string name="tab_fuel">Combustível</string>
+    <string name="tab_expenses">Despesas</string>
+    <string name="tab_specs">Ficha técnica</string>
+    <string name="tab_parts">Peças</string>
+    <string name="tab_mods">Modificações</string>
+    <string name="tab_documents">Documentos</string>
+    <string name="tab_recalls">Recalls</string>
+
+    <!-- Maintenance Tasks -->
+    <string name="task_engine_oil_change">Troca de óleo do motor</string>
+    <string name="task_power_steering_fluid">Fluido da direção hidráulica</string>
+    <string name="task_tire_replacement">Troca de pneus</string>
+    <string name="task_rotation_and_balance">Rodízio e balanceamento</string>
+    <string name="task_brake_fluid_flush">Troca do fluido de freio</string>
+    <string name="task_cabin_air_filter">Troca do filtro de cabine</string>
+    <string name="task_engine_air_filter">Troca do filtro de ar do motor</string>
+    <string name="task_transmission_fluid">Troca do fluido do câmbio automático</string>
+    <string name="task_coolant_flush">Troca do líquido de arrefecimento</string>
+    <string name="task_spark_plug_replacement">Troca de velas de ignição</string>
+    <string name="task_battery_test">Teste / troca de bateria</string>
+    <string name="task_rust_prevention">Proteção anticorrosiva</string>
+    <string name="task_paint_protection">Proteção de pintura</string>
+    <string name="task_serpentine_belt">Troca da correia de acessórios</string>
+    <string name="task_wiper_blades">Troca das palhetas do limpador</string>
+    <string name="task_brake_pads">Troca de pastilhas de freio</string>
+    <string name="task_transfer_case_fluid">Troca de óleo da caixa de transferência</string>
+    <string name="task_front_diff_fluid">Troca de óleo do diferencial dianteiro</string>
+    <string name="task_rear_diff_fluid">Troca de óleo do diferencial traseiro</string>
+
     <!-- Notifications -->
     <string name="reminder_notification_channel_name">Lembretes de manutenção</string>
     <string name="reminder_notification_channel_description">Alertas de manutenção de veículos próxima e atrasada</string>
@@ -165,4 +238,106 @@
     <string name="documents_obd_readiness_mil_on">Luz da injeção acesa — provável reprovação</string>
     <string name="documents_obd_readiness_likely_ready">Provavelmente pronto para inspeção</string>
     <string name="documents_obd_readiness_not_ready">Ainda não pronto — dirija mais antes da inspeção</string>
+    <!-- Documents & Driver's License -->
+    <string name="license_empty_message">Nenhum detalhe da carteira de motorista adicionado.\nAcompanhe a data de validade e receba lembretes de renovação.</string>
+    <string name="license_add_button">Adicionar carteira de motorista</string>
+    <string name="license_title">Carteira de Motorista</string>
+    <string name="license_expiration_date">Data de validade</string>
+    <string name="license_number">Número da CNH / Carteira</string>
+    <string name="license_issuing_state">Órgão emissor / Estado</string>
+    <string name="license_notes">Observações / Categoria</string>
+    <string name="license_photos">Fotos da carteira</string>
+    <string name="license_edit">Editar carteira</string>
+    <string name="license_delete">Excluir</string>
+    <string name="license_delete_confirm_title">Excluir carteira de motorista?</string>
+    <string name="license_delete_confirm_msg">Tem certeza de que deseja excluir o registro da sua carteira e as fotos salvas?</string>
+    <string name="license_details_title">Detalhes da carteira de motorista</string>
+    <string name="license_select_exp_date">Selecionar data de validade</string>
+    <string name="license_number_label">Número da carteira</string>
+    <string name="license_number_placeholder">ex., 123456789</string>
+    <string name="license_state_label">Estado emissor</string>
+    <string name="license_state_placeholder">ex., SP</string>
+    <string name="license_notes_placeholder">Categoria B, EAR, observações...</string>
+    <string name="license_front_photo">Frente do documento</string>
+    <string name="license_back_photo">Verso do documento</string>
+    <string name="license_save">Salvar carteira</string>
+
+    <!-- Cost of Ownership -->
+    <string name="cost_empty_message">Nenhum custo registrado ainda.\nAdicione registros de manutenção ou combustível para acompanhar o custo de propriedade.</string>
+    <string name="cost_category_breakdown">Detalhamento por categoria</string>
+    <string name="cost_total_title">Custo total de propriedade</string>
+    <string name="cost_include_mods">Incluir modificações</string>
+    <string name="cost_per_distance">Custo / Distância</string>
+    <string name="cost_per_day">Custo / Dia</string>
+    <string name="time_filter_all_time">Todo o período</string>
+    <string name="time_filter_this_year">Este ano</string>
+    <string name="time_filter_last_year">Ano passado</string>
+    <string name="time_filter_12_months">12 meses</string>
+    <string name="time_filter_6_months">6 meses</string>
+
+    <!-- Fuel & Charging -->
+    <string name="fuel_tab_charging">Recarga</string>
+    <string name="fuel_tab_fuel">Combustível</string>
+    <string name="fuel_est_range_100">Autonomia est. atual a 100%</string>
+    <string name="fuel_initial_range_100">Autonomia est. inicial a 100%</string>
+    <string name="fuel_delete_charging_title">Excluir sessão de recarga?</string>
+    <string name="fuel_delete_charging_msg">Tem certeza de que deseja excluir este registro de recarga?</string>
+    <string name="fuel_log_charging">Registrar recarga</string>
+    <string name="fuel_edit_charging">Editar recarga</string>
+    <string name="fuel_kwh_added">kWh adicionados</string>
+    <string name="fuel_charger_speed">Velocidade de recarga</string>
+    <string name="fuel_location_vendor">Local / Posto</string>
+    <string name="fuel_vendor_placeholder">Nome do posto ou rede (opcional)</string>
+    <string name="fuel_battery_start">% Bateria Início</string>
+    <string name="fuel_battery_end">% Bateria Fim</string>
+    <string name="fuel_total_cost">Custo total</string>
+    <string name="fuel_odometer_reading">Leitura do odômetro (%1$s)</string>
+    <string name="fuel_battery_health_title">Saúde da bateria (Opcional)</string>
+    <string name="fuel_est_range_soc">Autonomia est. a 100% SoC (%1$s)</string>
+    <string name="fuel_est_range_end">Autonomia est. no fim da recarga</string>
+    <string name="fuel_auto_calculate">Cálculo automático</string>
+    <string name="fuel_save_charging">Salvar sessão de recarga</string>
+    <string name="fuel_delete_fillup_title">Excluir abastecimento?</string>
+    <string name="fuel_delete_fillup_msg">Tem certeza de que deseja excluir este registro de combustível?</string>
+    <string name="fuel_log_fillup">Registrar abastecimento</string>
+    <string name="fuel_edit_fillup">Editar abastecimento</string>
+    <string name="fuel_liters">Litros</string>
+    <string name="fuel_gallons">Galões</string>
+    <string name="fuel_filled_full">Tanque cheio</string>
+
+    <!-- Vehicle Documents -->
+    <string name="doc_plate_label">Placa do veículo</string>
+    <string name="doc_plate_placeholder">ex., ABC1D23</string>
+    <string name="doc_state_label">Estado / UF</string>
+    <string name="doc_state_placeholder">ex., SP</string>
+    <string name="doc_reg_exp_label">Vencimento do IPVA / Licenciamento</string>
+    <string name="doc_select_date">Selecionar data</string>
+    <string name="doc_renewal_fee_label">Taxa de renovação (Opcional)</string>
+    <string name="doc_reg_notes_label">Observações do documento</string>
+    <string name="doc_delete_reg_btn">Excluir dados do licenciamento</string>
+    <string name="doc_insp_exp_label">Vencimento da inspeção veicular</string>
+    <string name="doc_last_inspected_label">Data da última inspeção</string>
+    <string name="doc_insp_result_label">Resultado da inspeção</string>
+    <string name="doc_insp_result_placeholder">ex., Aprovado, Reprovado</string>
+    <string name="doc_insp_notes_label">Observações / Posto de inspeção</string>
+    <string name="doc_delete_insp_btn">Excluir inspeção veicular</string>
+    <string name="doc_emissions_exp_label">Vencimento da medição de fumaça / emissões</string>
+    <string name="doc_last_smog_label">Data do último teste de emissões</string>
+    <string name="doc_emissions_result_label">Resultado do teste</string>
+    <string name="doc_emissions_result_placeholder">ex., Conforme, Não conforme</string>
+    <string name="doc_emissions_notes_label">Observações do teste de emissões</string>
+    <string name="doc_delete_emissions_btn">Excluir teste de emissões</string>
+    <string name="doc_insur_provider_label">Seguradora</string>
+    <string name="doc_insur_policy_num_label">Número da apólice de seguro</string>
+    <string name="doc_insur_exp_label">Vencimento da apólice</string>
+    <string name="doc_insur_premium_label">Prêmio / Valor do seguro (Opcional)</string>
+    <string name="doc_insur_contact_label">Contato do corretor / Sinistros</string>
+    <string name="doc_insur_notes_label">Observações / Coberturas</string>
+    <string name="doc_delete_insur_btn">Excluir apólice de seguro</string>
+    <string name="doc_toll_exp_label">Vencimento do Sem Parar / Tag de pedágio</string>
+    <string name="doc_toll_account_label">Nº da Tag / Conta de pedágio</string>
+    <string name="doc_toll_notes_label">Observações / Operadora</string>
+    <string name="doc_delete_toll_btn">Excluir dados de pedágio / estacionamento</string>
+    <string name="doc_save_docs_btn">Salvar documentos do veículo</string>
+    <string name="doc_saving_btn">Salvando...</string>
 </resources>

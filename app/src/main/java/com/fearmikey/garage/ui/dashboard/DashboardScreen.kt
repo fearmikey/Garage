@@ -85,6 +85,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
@@ -213,18 +214,18 @@ private fun DashboardContent(
                 Tab(
                     selected = selectedTab == 0,
                     onClick = { selectedTab = 0 },
-                    text = { Text("My Vehicles") },
+                    text = { Text(stringResource(com.fearmikey.garage.R.string.tab_my_vehicles)) },
                 )
                 Tab(
                     selected = selectedTab == 1,
                     onClick = { selectedTab = 1 },
-                    text = { Text("Driver's License") },
+                    text = { Text(stringResource(com.fearmikey.garage.R.string.tab_drivers_license)) },
                 )
                 if (affiliateLinksEnabled) {
                     Tab(
                         selected = selectedTab == 2,
                         onClick = { selectedTab = 2 },
-                        text = { Text("Support Store") },
+                        text = { Text(stringResource(com.fearmikey.garage.R.string.tab_support_store)) },
                     )
                 }
             }
@@ -339,7 +340,7 @@ private fun DriversLicenseTab(
     ) {
         if (state.isEmpty) {
             EmptyState(
-                message = "No Driver's License details added yet.\nTrack your driver's license expiration and get timely renewal reminders.",
+                message = stringResource(com.fearmikey.garage.R.string.license_empty_message),
                 icon = Icons.Default.Badge,
             )
             Button(
@@ -351,7 +352,7 @@ private fun DriversLicenseTab(
             ) {
                 Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Add Driver's License")
+                Text(stringResource(com.fearmikey.garage.R.string.license_add_button))
             }
         } else {
             Column(
@@ -395,7 +396,7 @@ private fun DriversLicenseTab(
                                 }
                                 Spacer(modifier = Modifier.width(12.dp))
                                 Text(
-                                    text = "Driver's License",
+                                    text = stringResource(com.fearmikey.garage.R.string.license_title),
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.Bold,
                                 )
@@ -413,7 +414,7 @@ private fun DriversLicenseTab(
                         if (state.expiration != null) {
                             InfoRow(
                                 icon = Icons.Default.CalendarToday,
-                                label = "Expiration Date",
+                                label = stringResource(com.fearmikey.garage.R.string.license_expiration_date),
                                 value = state.expiration.toDisplayDate(),
                                 isCopyable = false,
                             )
@@ -422,7 +423,7 @@ private fun DriversLicenseTab(
                         if (state.number.isNotBlank()) {
                             InfoRow(
                                 icon = Icons.Default.ContactPage,
-                                label = "Driver's License Number",
+                                label = stringResource(com.fearmikey.garage.R.string.license_number),
                                 value = state.number,
                             )
                         }
@@ -430,7 +431,7 @@ private fun DriversLicenseTab(
                         if (state.state.isNotBlank()) {
                             InfoRow(
                                 icon = Icons.Default.Badge,
-                                label = "Issuing State / Jurisdiction",
+                                label = stringResource(com.fearmikey.garage.R.string.license_issuing_state),
                                 value = state.state,
                                 isCopyable = false,
                             )
@@ -439,7 +440,7 @@ private fun DriversLicenseTab(
                         if (state.notes.isNotBlank()) {
                             InfoRow(
                                 icon = Icons.AutoMirrored.Filled.Notes,
-                                label = "Notes / Endorsements",
+                                label = stringResource(com.fearmikey.garage.R.string.license_notes),
                                 value = state.notes,
                             )
                         }
@@ -447,7 +448,7 @@ private fun DriversLicenseTab(
                         if (state.imageFilenameFront != null || state.imageFilenameBack != null) {
                             Spacer(modifier = Modifier.height(12.dp))
                             Text(
-                                text = "License Photos",
+                                text = stringResource(com.fearmikey.garage.R.string.license_photos),
                                 style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.outline,
                             )
@@ -470,7 +471,7 @@ private fun DriversLicenseTab(
                                     ) {
                                         AsyncImage(
                                             model = frontFile,
-                                            contentDescription = "Front of License",
+                                            contentDescription = stringResource(com.fearmikey.garage.R.string.license_front_photo),
                                             contentScale = ContentScale.Crop,
                                             modifier = Modifier.fillMaxSize(),
                                         )
@@ -490,7 +491,7 @@ private fun DriversLicenseTab(
                                     ) {
                                         AsyncImage(
                                             model = backFile,
-                                            contentDescription = "Back of License",
+                                            contentDescription = stringResource(com.fearmikey.garage.R.string.license_back_photo),
                                             contentScale = ContentScale.Crop,
                                             modifier = Modifier.fillMaxSize(),
                                         )
@@ -511,7 +512,7 @@ private fun DriversLicenseTab(
                     ) {
                         Icon(Icons.Default.Edit, contentDescription = null, modifier = Modifier.size(18.dp))
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Edit License")
+                        Text(stringResource(com.fearmikey.garage.R.string.license_edit))
                     }
 
                     OutlinedButton(
@@ -521,7 +522,7 @@ private fun DriversLicenseTab(
                     ) {
                         Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Delete")
+                        Text(stringResource(com.fearmikey.garage.R.string.license_delete))
                     }
                 }
             }
@@ -550,8 +551,8 @@ private fun DriversLicenseTab(
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text("Delete Driver's License Info?") },
-            text = { Text("Are you sure you want to delete your driver's license record? This includes any saved photos.") },
+            title = { Text(stringResource(com.fearmikey.garage.R.string.license_delete_confirm_title)) },
+            text = { Text(stringResource(com.fearmikey.garage.R.string.license_delete_confirm_msg)) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -560,12 +561,12 @@ private fun DriversLicenseTab(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                 ) {
-                    Text("Delete")
+                    Text(stringResource(com.fearmikey.garage.R.string.license_delete))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(com.fearmikey.garage.R.string.obd_cancel))
                 }
             },
         )
@@ -625,7 +626,7 @@ private fun EditDriversLicenseSheet(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Text(
-                text = "Driver's License Details",
+                text = stringResource(com.fearmikey.garage.R.string.license_details_title),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
             )
@@ -634,8 +635,8 @@ private fun EditDriversLicenseSheet(
                 value = expiration?.toDisplayDate().orEmpty(),
                 onValueChange = {},
                 readOnly = true,
-                label = { Text("Expiration Date") },
-                placeholder = { Text("Select expiration date") },
+                label = { Text(stringResource(com.fearmikey.garage.R.string.license_expiration_date)) },
+                placeholder = { Text(stringResource(com.fearmikey.garage.R.string.license_select_exp_date)) },
                 trailingIcon = {
                     IconButton(onClick = { showDatePicker = true }) {
                         Icon(Icons.Default.CalendarToday, contentDescription = "Select Expiration Date")
@@ -653,8 +654,8 @@ private fun EditDriversLicenseSheet(
                 OutlinedTextField(
                     value = number,
                     onValueChange = { number = it },
-                    label = { Text("License Number") },
-                    placeholder = { Text("e.g., D1234567") },
+                    label = { Text(stringResource(com.fearmikey.garage.R.string.license_number_label)) },
+                    placeholder = { Text(stringResource(com.fearmikey.garage.R.string.license_number_placeholder)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters),
                     modifier = Modifier.weight(1.8f),
@@ -663,8 +664,8 @@ private fun EditDriversLicenseSheet(
                 OutlinedTextField(
                     value = state,
                     onValueChange = { state = it },
-                    label = { Text("Issuing State") },
-                    placeholder = { Text("e.g., CA") },
+                    label = { Text(stringResource(com.fearmikey.garage.R.string.license_state_label)) },
+                    placeholder = { Text(stringResource(com.fearmikey.garage.R.string.license_state_placeholder)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters),
                     modifier = Modifier.weight(1f),
@@ -674,8 +675,8 @@ private fun EditDriversLicenseSheet(
             OutlinedTextField(
                 value = notes,
                 onValueChange = { notes = it },
-                label = { Text("Notes / Endorsements") },
-                placeholder = { Text("Class C, motorcycle endorsement, REAL ID notes...") },
+                label = { Text(stringResource(com.fearmikey.garage.R.string.license_notes)) },
+                placeholder = { Text(stringResource(com.fearmikey.garage.R.string.license_notes_placeholder)) },
                 minLines = 2,
                 maxLines = 3,
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
@@ -683,7 +684,7 @@ private fun EditDriversLicenseSheet(
             )
 
             ImagePickerBox(
-                title = "Front of License",
+                title = stringResource(com.fearmikey.garage.R.string.license_front_photo),
                 pickedUri = pickedFrontUri,
                 existingFilename = existingFrontFilename,
                 imageFileProvider = imageFileProvider,
@@ -733,7 +734,7 @@ private fun EditDriversLicenseSheet(
                 },
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text("Save Driver's License")
+                Text(stringResource(com.fearmikey.garage.R.string.license_save))
             }
 
             Spacer(modifier = Modifier.height(16.dp))

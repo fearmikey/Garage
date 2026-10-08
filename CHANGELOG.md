@@ -1,3 +1,9 @@
+## [1.3.2] - 2026-10-08
+
+### Added
+* **Comprehensive String Localization:** Expanded localized string translations across German, Spanish, French, Italian, Dutch, Polish, Portuguese, Russian, and Turkish.
+* **Localized Maintenance Task Formatter (`TaskNameFormatter`):** Dynamic localization for default maintenance tasks and suggestion labels across timeline, vehicle tabs, cost analytics, and maintenance templates.
+
 ## [1.3.1] - 2026-10-07
 
 ### Added

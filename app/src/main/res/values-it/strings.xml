@@ -16,6 +16,79 @@
     <string name="language_turkish">Türkçe</string>
     <string name="language_selection">Lingua</string>
 
+    <!-- Startup / Onboarding -->
+    <string name="startup_get_started">Inizia</string>
+    <string name="startup_welcome_title">Benvenuto in Garage</string>
+    <string name="startup_welcome_subtitle">Configura le tue preferenze per iniziare.</string>
+    <string name="startup_measurement_system_title">Sistema di misura</string>
+    <string name="startup_measurement_system_subtitle">Scegli come visualizzare distanze, volume carburante e consumi.</string>
+    <string name="startup_metric_title">Sistema metrico</string>
+    <string name="startup_metric_subtitle">Chilometri (km) · Litri (L) · L/100km</string>
+    <string name="startup_imperial_title">Imperiale / Standard</string>
+    <string name="startup_imperial_subtitle">Miglia (mi) · Galloni US (gal) · MPG</string>
+    <string name="startup_language_subtitle">Seleziona la lingua dell\'applicazione.</string>
+    <string name="startup_currency_title">Valuta preferita</string>
+    <string name="startup_currency_subtitle">Seleziona la valuta per monitorare costi, manutenzione e carburante.</string>
+    <string name="startup_change">Modifica</string>
+    <string name="startup_permissions_title">Autorizzazioni app</string>
+    <string name="startup_permissions_subtitle">Concedi le autorizzazioni per sbloccare i promemoria e lo scanner VIN.</string>
+    <string name="startup_reminders_title">Promemoria manutenzione</string>
+    <string name="startup_reminders_subtitle">Ricevi notifiche per le scadenze di manutenzione del veicolo.</string>
+    <string name="startup_vin_title">Scanner VIN</string>
+    <string name="startup_vin_subtitle">Scansiona il codice a barre del VIN per importare rapidamente i dettagli del veicolo.</string>
+    <string name="startup_permission_granted">Autorizzazione concessa</string>
+    <string name="startup_grant_permission">Concedi autorizzazione</string>
+    <string name="startup_support_title">Sostieni lo sviluppo</string>
+    <string name="startup_support_subtitle">Garage è un software completamente gratuito e open source. Se lo trovi utile, sostieni il progetto!</string>
+    <string name="startup_buy_coffee_title">Offrimi un caffè</string>
+    <string name="startup_buy_coffee_button">Sostieni su Buy Me a Coffee</string>
+    <string name="startup_affiliate_title">Abilita link di affiliazione</string>
+    <string name="startup_affiliate_subtitle">Consenti all\'app di mostrare link di affiliazione Amazon opzionali per attrezzi e ricambi consigliati.</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Impostazioni</string>
+    <string name="settings_user_preferences">Preferenze utente</string>
+    <string name="settings_units">Unità di misura</string>
+    <string name="settings_currency">Valuta</string>
+    <string name="settings_theme">Tema</string>
+    <string name="settings_default_vehicle">Veicolo predefinito</string>
+    <string name="settings_reminders_expirations">Promemoria e scadenze</string>
+
+    <!-- Tabs -->
+    <string name="tab_my_vehicles">Miei veicoli</string>
+    <string name="tab_drivers_license">Patente di guida</string>
+    <string name="tab_support_store">Negozio di supporto</string>
+    <string name="tab_timeline">Cronologia</string>
+    <string name="tab_schedule">Programma</string>
+    <string name="tab_fuel">Carburante</string>
+    <string name="tab_expenses">Spese</string>
+    <string name="tab_specs">Specifiche</string>
+    <string name="tab_parts">Ricambi</string>
+    <string name="tab_mods">Modifiche</string>
+    <string name="tab_documents">Documenti</string>
+    <string name="tab_recalls">Richiami</string>
+
+    <!-- Maintenance Tasks -->
+    <string name="task_engine_oil_change">Cambio olio motore</string>
+    <string name="task_power_steering_fluid">Liquido servosterzo</string>
+    <string name="task_tire_replacement">Sostituzione pneumatici</string>
+    <string name="task_rotation_and_balance">Inversione ed equilibratura gomme</string>
+    <string name="task_brake_fluid_flush">Sostituzione liquido freni</string>
+    <string name="task_cabin_air_filter">Sostituzione filtro abitacolo</string>
+    <string name="task_engine_air_filter">Sostituzione filtro aria motore</string>
+    <string name="task_transmission_fluid">Manutenzione olio cambio automatico</string>
+    <string name="task_coolant_flush">Sostituzione liquido refrigerante</string>
+    <string name="task_spark_plug_replacement">Sostituzione candele</string>
+    <string name="task_battery_test">Test / sostituzione batteria</string>
+    <string name="task_rust_prevention">Trattamento antiruggine</string>
+    <string name="task_paint_protection">Protezione vernice</string>
+    <string name="task_serpentine_belt">Sostituzione cinghia dei servizi</string>
+    <string name="task_wiper_blades">Sostituzione spazzole tergicristallo</string>
+    <string name="task_brake_pads">Sostituzione pastiglie freni</string>
+    <string name="task_transfer_case_fluid">Cambio olio riduttore</string>
+    <string name="task_front_diff_fluid">Cambio olio differenziale anteriore</string>
+    <string name="task_rear_diff_fluid">Cambio olio differenziale posteriore</string>
+
     <!-- Notifications -->
     <string name="reminder_notification_channel_name">Promemoria manutenzione</string>
     <string name="reminder_notification_channel_description">Avvisi per la manutenzione imminente e scaduta dei veicoli</string>
@@ -165,4 +238,107 @@
     <string name="documents_obd_readiness_mil_on">Spia motore accesa — probabile fallimento</string>
     <string name="documents_obd_readiness_likely_ready">Probabilmente pronto per il controllo</string>
     <string name="documents_obd_readiness_not_ready">Non ancora pronto — guida di più prima del controllo</string>
+    <!-- Documents & Driver's License -->
+    <string name="license_empty_message">Nessun dettaglio della patente aggiunto.\nTraccia la data di scadenza e ricevi promemoria tempestivi.</string>
+    <string name="license_add_button">Aggiungi patente di guida</string>
+    <string name="license_title">Patente di guida</string>
+    <string name="license_expiration_date">Data di scadenza</string>
+    <string name="license_number">Numero patente</string>
+    <string name="license_issuing_state">Autorità emittente / Paese</string>
+    <string name="license_notes">Note / Categorie</string>
+    <string name="license_photos">Foto della patente</string>
+    <string name="license_edit">Modifica patente</string>
+    <string name="license_delete">Elimina</string>
+
+    <string name="license_delete_confirm_title">Eliminare informazioni patente?</string>
+    <string name="license_delete_confirm_msg">Sei sicuro di voler eliminare la patente e tutte le foto salvate?</string>
+    <string name="license_details_title">Dettagli patente di guida</string>
+    <string name="license_select_exp_date">Seleziona data di scadenza</string>
+    <string name="license_number_label">Numero patente</string>
+    <string name="license_number_placeholder">es., B1234567</string>
+    <string name="license_state_label">Stato emittente</string>
+    <string name="license_state_placeholder">es., IT</string>
+    <string name="license_notes_placeholder">Patente B, limitazioni, note...</string>
+    <string name="license_front_photo">Fronte della patente</string>
+    <string name="license_back_photo">Retro della patente</string>
+    <string name="license_save">Salva patente</string>
+
+    <!-- Cost of Ownership -->
+    <string name="cost_empty_message">Nessun costo registrato.\nAggiungi manutenzioni o rifornimenti per tracciare il costo di gestione.</string>
+    <string name="cost_category_breakdown">Ripartizione per categoria</string>
+    <string name="cost_total_title">Costo totale di gestione</string>
+    <string name="cost_include_mods">Includi modifiche</string>
+    <string name="cost_per_distance">Costo / Distanza</string>
+    <string name="cost_per_day">Costo / Giorno</string>
+    <string name="time_filter_all_time">Tutto il periodo</string>
+    <string name="time_filter_this_year">Quest\'anno</string>
+    <string name="time_filter_last_year">L\'anno scorso</string>
+    <string name="time_filter_12_months">12 mesi</string>
+    <string name="time_filter_6_months">6 mesi</string>
+
+    <!-- Fuel & Charging -->
+    <string name="fuel_tab_charging">Ricarica</string>
+    <string name="fuel_tab_fuel">Carburante</string>
+    <string name="fuel_est_range_100">Autonomia stimata attuale al 100%</string>
+    <string name="fuel_initial_range_100">Autonomia stimata iniziale al 100%</string>
+    <string name="fuel_delete_charging_title">Eliminare sessione di ricarica?</string>
+    <string name="fuel_delete_charging_msg">Sei sicuro di voler eliminare questa ricarica?</string>
+    <string name="fuel_log_charging">Registra ricarica</string>
+    <string name="fuel_edit_charging">Modifica ricarica</string>
+    <string name="fuel_kwh_added">kWh aggiunti</string>
+    <string name="fuel_charger_speed">Velocità di ricarica</string>
+    <string name="fuel_location_vendor">Posizione / Fornitore</string>
+    <string name="fuel_vendor_placeholder">Nome fornitore (opzionale, es. Enel X)</string>
+    <string name="fuel_battery_start">% Batteria Inizio</string>
+    <string name="fuel_battery_end">% Batteria Fine</string>
+    <string name="fuel_total_cost">Costo totale</string>
+    <string name="fuel_odometer_reading">Lettura contachilometri (%1$s)</string>
+    <string name="fuel_battery_health_title">Stato della batteria (Opzionale)</string>
+    <string name="fuel_est_range_soc">Autonomia st. al 100% SoC (%1$s)</string>
+    <string name="fuel_est_range_end">Autonomia st. a fine ricarica</string>
+    <string name="fuel_auto_calculate">Calcolo automatico</string>
+    <string name="fuel_save_charging">Salva ricarica</string>
+    <string name="fuel_delete_fillup_title">Eliminare rifornimento?</string>
+    <string name="fuel_delete_fillup_msg">Sei sicuro di voler eliminare questo rifornimento?</string>
+    <string name="fuel_log_fillup">Registra rifornimento</string>
+    <string name="fuel_edit_fillup">Modifica rifornimento</string>
+    <string name="fuel_liters">Litri</string>
+    <string name="fuel_gallons">Galloni</string>
+    <string name="fuel_filled_full">Pieno effettuato</string>
+
+    <!-- Vehicle Documents -->
+    <string name="doc_plate_label">Targa del veicolo</string>
+    <string name="doc_plate_placeholder">es., AB123CD</string>
+    <string name="doc_state_label">Provincia / Regione</string>
+    <string name="doc_state_placeholder">es., RM</string>
+    <string name="doc_reg_exp_label">Scadenza bollo / immatricolazione</string>
+    <string name="doc_select_date">Seleziona data</string>
+    <string name="doc_renewal_fee_label">Tassa di rinnovo (Opzionale)</string>
+    <string name="doc_reg_notes_label">Note immatricolazione</string>
+    <string name="doc_delete_reg_btn">Elimina immatricolazione e targa</string>
+    <string name="doc_insp_exp_label">Scadenza revisione ministeriale</string>
+    <string name="doc_last_inspected_label">Data ultima revisione</string>
+    <string name="doc_insp_result_label">Esito revisione</string>
+    <string name="doc_insp_result_placeholder">es., Regolare, Ripetere</string>
+    <string name="doc_insp_notes_label">Note / Officina autorizzata</string>
+    <string name="doc_delete_insp_btn">Elimina informazioni revisione</string>
+    <string name="doc_emissions_exp_label">Scadenza bollino blu / emissioni</string>
+    <string name="doc_last_smog_label">Data ultimo controllo emissioni</string>
+    <string name="doc_emissions_result_label">Esito test emissioni</string>
+    <string name="doc_emissions_result_placeholder">es., Conforme, Non conforme</string>
+    <string name="doc_emissions_notes_label">Note / Centro diagnosi</string>
+    <string name="doc_delete_emissions_btn">Elimina test emissioni</string>
+    <string name="doc_insur_provider_label">Compagnia assicurativa</string>
+    <string name="doc_insur_policy_num_label">Numero di polizza RCA</string>
+    <string name="doc_insur_exp_label">Scadenza polizza RCA</string>
+    <string name="doc_insur_premium_label">Premio / Costo (Opzionale)</string>
+    <string name="doc_insur_contact_label">Contatto agente / Sinistri</string>
+    <string name="doc_insur_notes_label">Note polizza / Garanzie accessorie</string>
+    <string name="doc_delete_insur_btn">Elimina polizza assicurativa</string>
+    <string name="doc_toll_exp_label">Scadenza Telepass / Permesso ZTL</string>
+    <string name="doc_toll_account_label">N° apparato Telepass / Permesso</string>
+    <string name="doc_toll_notes_label">Note / Dettagli gestore</string>
+    <string name="doc_delete_toll_btn">Elimina dispositivo Telepass / ZTL</string>
+    <string name="doc_save_docs_btn">Salva documenti veicolo</string>
+    <string name="doc_saving_btn">Salvataggio in corso...</string>
 </resources>

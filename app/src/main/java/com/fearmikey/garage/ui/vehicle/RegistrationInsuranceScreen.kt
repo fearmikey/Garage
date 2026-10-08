@@ -1280,8 +1280,8 @@ private fun AddEditRegistrationInsuranceSheet(
                         OutlinedTextField(
                             value = uiState.licensePlate,
                             onValueChange = onLicensePlateChanged,
-                            label = { Text("License Plate / Tag") },
-                            placeholder = { Text("e.g., 7ABC123") },
+                            label = { Text(stringResource(com.fearmikey.garage.R.string.doc_plate_label)) },
+                            placeholder = { Text(stringResource(com.fearmikey.garage.R.string.doc_plate_placeholder)) },
                             singleLine = true,
                             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters),
                             modifier = Modifier.weight(1.8f),
@@ -1290,8 +1290,8 @@ private fun AddEditRegistrationInsuranceSheet(
                         OutlinedTextField(
                             value = uiState.registrationState,
                             onValueChange = onRegistrationStateChanged,
-                            label = { Text("State / Prov") },
-                            placeholder = { Text("e.g., CA") },
+                            label = { Text(stringResource(com.fearmikey.garage.R.string.doc_state_label)) },
+                            placeholder = { Text(stringResource(com.fearmikey.garage.R.string.doc_state_placeholder)) },
                             singleLine = true,
                             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters),
                             modifier = Modifier.weight(1f),
@@ -1302,8 +1302,8 @@ private fun AddEditRegistrationInsuranceSheet(
                         value = uiState.registrationExpiration?.toDisplayDate().orEmpty(),
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Registration Expiration") },
-                        placeholder = { Text("Select date") },
+                        label = { Text(stringResource(com.fearmikey.garage.R.string.doc_reg_exp_label)) },
+                        placeholder = { Text(stringResource(com.fearmikey.garage.R.string.doc_select_date)) },
                         trailingIcon = {
                             IconButton(onClick = { showRegDatePicker = true }) {
                                 Icon(Icons.Default.CalendarToday, contentDescription = "Select Expiration Date")
@@ -1317,7 +1317,7 @@ private fun AddEditRegistrationInsuranceSheet(
                     OutlinedTextField(
                         value = uiState.registrationFee,
                         onValueChange = onRegistrationFeeChanged,
-                        label = { Text("Renewal Fee (Optional)") },
+                        label = { Text(stringResource(com.fearmikey.garage.R.string.doc_renewal_fee_label)) },
                         prefix = { Text(uiState.currencySymbol) },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
@@ -1327,7 +1327,7 @@ private fun AddEditRegistrationInsuranceSheet(
                     OutlinedTextField(
                         value = uiState.registrationNotes,
                         onValueChange = onRegistrationNotesChanged,
-                        label = { Text("Registration Notes") },
+                        label = { Text(stringResource(com.fearmikey.garage.R.string.doc_reg_notes_label)) },
                         placeholder = { Text("VIN on title, registration office notes...") },
                         minLines = 2,
                         maxLines = 3,
@@ -1357,7 +1357,7 @@ private fun AddEditRegistrationInsuranceSheet(
                         ) {
                             Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text("Delete Tag & Registration Info")
+                            Text(stringResource(com.fearmikey.garage.R.string.doc_delete_reg_btn))
                         }
                     }
                 }
@@ -1367,8 +1367,8 @@ private fun AddEditRegistrationInsuranceSheet(
                         value = uiState.inspectionExpiration?.toDisplayDate().orEmpty(),
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Inspection Expiration / Due Date") },
-                        placeholder = { Text("Select expiration date") },
+                        label = { Text(stringResource(com.fearmikey.garage.R.string.doc_insp_exp_label)) },
+                        placeholder = { Text(stringResource(com.fearmikey.garage.R.string.license_select_exp_date)) },
                         trailingIcon = {
                             IconButton(onClick = { showInspExpDatePicker = true }) {
                                 Icon(Icons.Default.CalendarToday, contentDescription = "Select Inspection Expiration")
@@ -1383,8 +1383,8 @@ private fun AddEditRegistrationInsuranceSheet(
                         value = uiState.inspectionDate?.toDisplayDate().orEmpty(),
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Last Inspected Date") },
-                        placeholder = { Text("Select date inspected") },
+                        label = { Text(stringResource(com.fearmikey.garage.R.string.doc_last_inspected_label)) },
+                        placeholder = { Text(stringResource(com.fearmikey.garage.R.string.doc_select_date)) },
                         trailingIcon = {
                             IconButton(onClick = { showInspDateDatePicker = true }) {
                                 Icon(Icons.Default.CalendarToday, contentDescription = "Select Last Inspected Date")
@@ -1398,8 +1398,8 @@ private fun AddEditRegistrationInsuranceSheet(
                     OutlinedTextField(
                         value = uiState.inspectionResult,
                         onValueChange = onInspectionResultChanged,
-                        label = { Text("Inspection Result") },
-                        placeholder = { Text("e.g., Passed, Failed, Pending") },
+                        label = { Text(stringResource(com.fearmikey.garage.R.string.doc_insp_result_label)) },
+                        placeholder = { Text(stringResource(com.fearmikey.garage.R.string.doc_insp_result_placeholder)) },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
                         modifier = Modifier.fillMaxWidth(),
@@ -1408,7 +1408,7 @@ private fun AddEditRegistrationInsuranceSheet(
                     OutlinedTextField(
                         value = uiState.inspectionNotes,
                         onValueChange = onInspectionNotesChanged,
-                        label = { Text("Inspection Notes / Station Info") },
+                        label = { Text(stringResource(com.fearmikey.garage.R.string.doc_insp_notes_label)) },
                         placeholder = { Text("Station name, certificate #...") },
                         minLines = 2,
                         maxLines = 3,
@@ -1425,7 +1425,7 @@ private fun AddEditRegistrationInsuranceSheet(
                         ) {
                             Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text("Delete State Inspection Info")
+                            Text(stringResource(com.fearmikey.garage.R.string.doc_delete_insp_btn))
                         }
                     }
                 }
