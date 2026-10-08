@@ -41,7 +41,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Garage"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:localeConfig="@xml/locales_config">
 
         <!-- We provide our own Configuration.Provider (GarageApplication) for
              Hilt-aware WorkManager, so the default androidx.startup

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Garage</string>
+
+    <!-- Language -->
+    <string name="language_system_default">Системный по умолчанию</string>
+    <string name="language_english">English</string>
+    <string name="language_french">Français</string>
+    <string name="language_german">Deutsch</string>
+    <string name="language_polish">Polski</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_italian">Italiano</string>
+    <string name="language_portuguese">Português</string>
+    <string name="language_dutch">Nederlands</string>
+    <string name="language_russian">Русский</string>
+    <string name="language_turkish">Türkçe</string>
+    <string name="language_selection">Язык</string>
+
+    <!-- Notifications -->
+    <string name="reminder_notification_channel_name">Напоминания об обслуживании</string>
+    <string name="reminder_notification_channel_description">Уведомления о предстоящем и просроченном обслуживании автомобилей</string>
+    <string name="reminder_overdue_title">Просрочено: %1$s</string>
+    <string name="reminder_upcoming_title">Предстоит: %1$s</string>
+    <string name="pdf_export_notification_channel_name">Экспорт в PDF</string>
+    <string name="pdf_export_notification_channel_description">Уведомления при создании PDF-отчетов об обслуживании</string>
+    <string name="pdf_export_notification_title">Отчет об обслуживании экспортирован</string>
+    <string name="pdf_export_notification_text">Нажмите, чтобы открыть %1$s</string>
+    <string name="test_notification_title">Тестовое уведомление</string>
+    <string name="test_notification_text">Если вы видите это, push-уведомления работают правильно.</string>
+
+    <!-- App widget -->
+    <string name="garage_widget_description">Показывает предстоящие/просроченные напоминания и позволяет быстро записать заправку или сервис</string>
+
+    <!-- App Shortcuts & Quick Settings Tiles -->
+    <string name="shortcut_log_fuel_short">Заправка</string>
+    <string name="shortcut_log_fuel_long">Записать заправку</string>
+    <string name="shortcut_update_odometer_short">Пробег</string>
+    <string name="shortcut_update_odometer_long">Обновить одометр</string>
+    <string name="tile_log_fuel_label">Записать заправку</string>
+    <string name="tile_update_odometer_label">Обновить одометр</string>
+    <string name="dialog_update_odometer_title">Обновить одометр</string>
+
+    <!-- Scanner -->
+    <string name="cd_go_back">Назад</string>
+    <string name="cd_toggle_flashlight">Переключить фонарик</string>
+    <string name="scan_vin_instruction">Поместите штрихкод VIN в рамку</string>
+    <string name="cd_scan_vin">Сканировать VIN</string>
+    <string name="scan_vin_failed">Штрихкод не обнаружен. Наведите камеру на VIN и попробуйте снова.</string>
+
+    <!-- OBD2 scanner -->
+    <string name="obd_scanner_title">Сканер OBD2</string>
+    <string name="obd_cd_back">Назад</string>
+    <string name="obd_rescan">Повторить сканирование</string>
+    <string name="obd_reconnect">Переподключить</string>
+    <string name="obd_change">Изменить</string>
+    <string name="obd_cancel">Отмена</string>
+    <string name="obd_clearing_codes">Сброс кодов ошибок…</string>
+    <string name="obd_clear_codes">Сбросить ошибки</string>
+    <string name="obd_clear_codes_confirm_title">Сбросить коды ошибок?</string>
+    <string name="obd_clear_codes_confirm_message">Для лучших результатов заглушите двигатель, но оставьте зажигание включенным.\n\nЭто погасит индикатор Check Engine и сбросит мониторы готовности.</string>
+    <string name="obd_permission_title">Требуется разрешение Bluetooth</string>
+    <string name="obd_permission_message">Garage требуется разрешение Bluetooth для связи с OBD2-адаптером. Данные не покидают ваше устройство.</string>
+    <string name="obd_permission_action">Предоставить разрешение</string>
+    <string name="obd_no_adapter_title">OBD2-адаптер не выбран</string>
+    <string name="obd_no_adapter_message">Подключите Bluetooth OBD2-адаптер к диагностическому разъему автомобиля и выполните сопряжение с телефоном.\n\nЧитайте и сбрасывайте ошибки, проверяйте готовность систем и смотрите параметры в реальном времени.</string>
+    <string name="obd_no_adapter_action">Сопрячь OBD2-адаптер</string>
+    <string name="obd_status_connected">Подключено</string>
+    <string name="obd_status_connecting">Подключение…</string>
+    <string name="obd_status_disconnected">Отключено</string>
+    <string name="obd_status_not_connected">Не подключено</string>
+    <string name="obd_adapter_header">OBD2-адаптер · %1$s</string>
+    <string name="obd_unknown_device">Неизвестное устройство</string>
+    <string name="obd_vin_mismatch_title">Адаптер подключен к другому автомобилю</string>
+    <string name="obd_vin_save_title">Сохранить этот VIN для автомобиля?</string>
+    <string name="obd_vin_mismatch_message">Автомобиль сообщает VIN %1$s, но VIN этого автомобиля — %2$s. Сканирование не сохранено.</string>
+    <string name="obd_vin_save_message">Автомобиль сообщает VIN %1$s. У этого автомобиля еще нет сохраненного VIN.</string>
+    <string name="obd_save_scan_anyway">Сохранить всё равно</string>
+    <string name="obd_save_vin">Сохранить VIN</string>
+    <string name="obd_freeze_frame_title">Стоп-кадр (Freeze Frame)</string>
+    <string name="obd_freeze_frame_description">Параметры двигателя, записанные при возникновении ошибки %1$s.</string>
+    <string name="obd_freeze_frame_code_fallback">ошибки</string>
+    <string name="obd_freeze_frame_empty">Автомобиль не передал данные стоп-кадра.</string>
+    <string name="obd_vehicle_health_title">Состояние автомобиля</string>
+    <string name="obd_mil_on">Горит индикатор Check Engine</string>
+    <string name="obd_mil_off">Индикатор Check Engine погашен</string>
+    <plurals name="obd_emissions_codes_reported">
+        <item quantity="one">%1$d ошибка экологии</item>
+        <item quantity="few">%1$d ошибки экологии</item>
+        <item quantity="many">%1$d ошибок экологии</item>
+        <item quantity="other">%1$d ошибки экологии</item>
+    </plurals>
+    <string name="obd_readiness_summary">Готовность систем: %1$d/%2$d мониторов завершено</string>
+    <string name="obd_readiness_mil_on">Автомобили с горящим Check Engine не проходят техосмотр/экологический контроль.</string>
+    <string name="obd_readiness_ok">Вероятно, готов к техосмотру.</string>
+    <string name="obd_readiness_not_ready">Еще не готов. Поездите в обычном режиме несколько дней, чтобы мониторы завершили проверку.</string>
+    <string name="obd_cd_hide_monitors">Скрыть мониторы</string>
+    <string name="obd_cd_show_monitors">Показать мониторы</string>
+    <string name="obd_cd_monitor_complete">Завершено</string>
+    <string name="obd_cd_monitor_incomplete">Не завершено</string>
+    <string name="obd_monitor_ready">Готов</string>
+    <string name="obd_monitor_not_ready">Не готов</string>
+    <string name="obd_no_codes_title">Кодов ошибок не обнаружено</string>
+    <string name="obd_no_codes_message">Нет сохраненных, непотвержденных или постоянных ошибок.</string>
+    <string name="obd_dtc_title">Диагностические коды ошибок</string>
+    <plurals name="obd_code_count">
+        <item quantity="one">%1$d код</item>
+        <item quantity="few">%1$d кода</item>
+        <item quantity="many">%1$d кодов</item>
+        <item quantity="other">%1$d кода</item>
+    </plurals>
+    <string name="obd_dtc_stored_title">Сохраненные</string>
+    <string name="obd_dtc_stored_explanation">Подтвержденные неисправности. Обычно зажигают Check Engine.</string>
+    <string name="obd_dtc_pending_title">Ожидающие</string>
+    <string name="obd_dtc_pending_explanation">Обнаружены однократно, но еще не подтверждены. Раннее предупреждение.</string>
+    <string name="obd_dtc_permanent_title">Постоянные</string>
+    <string name="obd_dtc_permanent_explanation">Не сбрасываются сканером. Исчезают сами после того, как автомобиль подтвердит устранение неисправности.</string>
+    <string name="obd_dtc_reported_by">Источник: %1$s</string>
+    <string name="obd_distance_title">Расстояние</string>
+    <string name="obd_odometer">Одометр</string>
+    <string name="obd_since_codes_cleared">С момента сброса ошибок</string>
+    <string name="obd_timeline_saved">Сканирование сохранено в историю автомобиля.</string>
+    <string name="obd_timeline_unchanged">Изменений с последнего сканирования не обнаружено.</string>
+    <string name="obd_timeline_vin_mismatch">Не сохранено, так как VIN не совпадает с этим автомобилем.</string>
+    <string name="obd_live_data_title">Данные в реальном времени</string>
+    <string name="obd_live">Live</string>
+    <string name="obd_waiting_for_data">Ожидание данных…</string>
+    <string name="obd_stop_live_data">Остановить поток данных</string>
+    <string name="obd_start_live_data">Запустить поток данных</string>
+    <string name="obd_snapshot_title">Снимок датчиков</string>
+    <string name="obd_battery_at_port">Напряжение АКБ (в разъеме)</string>
+    <string name="obd_vin">VIN</string>
+
+    <!-- OBD2 scanner: adapter picker -->
+    <string name="obd_picker_title">Выберите OBD2-адаптер</string>
+    <string name="obd_picker_tab_bluetooth">Bluetooth</string>
+    <string name="obd_picker_tab_ble">BLE</string>
+    <string name="obd_picker_tab_wifi">Wi-Fi</string>
+    <string name="obd_picker_forget_adapter">Забыть адаптер</string>
+    <string name="obd_picker_classic_permission_hint">Garage требуется разрешение Bluetooth для отображения сопряженных адаптеров.</string>
+    <string name="obd_picker_allow_bluetooth">Разрешить доступ к Bluetooth</string>
+    <string name="obd_picker_classic_empty">Сопряженных Bluetooth-устройств не найдено. Вставьте OBD2-адаптер, включите зажигание и выполните сопряжение в настройках Bluetooth телефона (PIN обычно 1234 или 0000).</string>
+    <string name="obd_picker_classic_hint">Выберите подключенный адаптер. Наиболее вероятные OBD2-адаптеры находятся вверху.</string>
+    <string name="obd_picker_pair_new">Сопрячь новое устройство</string>
+    <string name="obd_picker_refresh_list">Обновить список</string>
+    <string name="obd_picker_ble_hint">Адаптеры Bluetooth LE не требуют сопряжения. Вставьте адаптер, включите зажигание и сканируйте.</string>
+    <string name="obd_picker_ble_empty">Устройства Bluetooth LE пока не найдены.</string>
+    <string name="obd_picker_scanning">Поиск…</string>
+    <string name="obd_picker_scan_for_adapters">Искать адаптеры</string>
+    <string name="obd_picker_scan_again">Искать снова</string>
+    <string name="obd_picker_wifi_hint">Сначала подключите телефон к Wi-Fi сети адаптера (часто называется "WiFi_OBDII" или "V-LINK").</string>
+    <string name="obd_picker_open_wifi_settings">Открыть настройки Wi-Fi</string>
+    <string name="obd_picker_wifi_host_label">IP-адрес адаптера</string>
+    <string name="obd_picker_wifi_port_label">Порт</string>
+    <string name="obd_picker_use_wifi_adapter">Использовать Wi-Fi адаптер</string>
+    <string name="obd_picker_cd_current_adapter">Текущий адаптер</string>
+
+    <!-- OBD2 scanner: settings -->
+    <string name="settings_obd_adapter_title">OBD2-адаптер</string>
+    <string name="settings_obd_adapter_summary">%1$s · %2$s (%3$s)</string>
+    <string name="settings_obd_adapter_not_set">Не выбрано — нажмите, чтобы выбрать</string>
+
+    <!-- OBD2 scanner: documents (emissions) -->
+    <string name="documents_obd_readiness_label">Готовность OBD2</string>
+    <string name="documents_obd_readiness_label_scanned">Готовность OBD2 (проверено %1$s)</string>
+    <string name="documents_obd_readiness_value">%1$d/%2$d мониторов завершено — %3$s</string>
+    <string name="documents_obd_readiness_not_ready_list">Не готовы: %1$s</string>
+    <string name="documents_obd_readiness_mil_on">Горит Check Engine — вероятен провал техосмотра</string>
+    <string name="documents_obd_readiness_likely_ready">Вероятно, готов к техосмотру</string>
+    <string name="documents_obd_readiness_not_ready">Еще не готов — поездите перед техосмотром</string>
+</resources>

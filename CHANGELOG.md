@@ -1,3 +1,9 @@
+## [1.3.1] - 2026-10-07
+
+### Added
+* **Multi-Language Localization Support:** Added full internationalization and native translations for German (`de`), Spanish (`es`), French (`fr`), Italian (`it`), Dutch (`nl`), Polish (`pl`), Portuguese (`pt`), Russian (`ru`), and Turkish (`tr`).
+* **Per-App Language Preferences:** Integrated `locales_config.xml` support allowing users to select their preferred language directly in system or in-app settings.
+
 ## [1.3.0] - 2026-10-07
 
 ### Added

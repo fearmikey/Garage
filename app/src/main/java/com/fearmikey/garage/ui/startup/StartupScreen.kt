@@ -60,18 +60,31 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.os.LocaleListCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.fearmikey.garage.R
 import com.fearmikey.garage.config.FlavorConfig
 import com.fearmikey.garage.ui.theme.GarageTheme
+import android.app.LocaleManager
+import android.os.Build
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun StartupScreen(
@@ -121,6 +134,7 @@ fun StartupScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun StartupContent(
     uiState: StartupUiState,
@@ -250,6 +264,75 @@ private fun StartupContent(
                     isSelected = uiState.selectedUnits == "imperial",
                     onClick = { onSelectUnits("imperial") },
                 )
+            }
+
+            HorizontalDivider()
+
+            // Section: Language Preference
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(
+                    text = stringResource(R.string.language_selection),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+
+                Text(
+                    text = "Select your preferred app language.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                val context = LocalContext.current
+                val localeManager = remember { context.getSystemService(LocaleManager::class.java) }
+                val currentLocales = localeManager.applicationLocales
+                val currentLang = if (currentLocales.isEmpty) "" else currentLocales.get(0)?.language ?: ""
+
+                val languageOptions = listOf(
+                    "" to stringResource(R.string.language_system_default),
+                    "en" to stringResource(R.string.language_english),
+                    "fr" to stringResource(R.string.language_french),
+                    "de" to stringResource(R.string.language_german),
+                    "pl" to stringResource(R.string.language_polish),
+                    "es" to stringResource(R.string.language_spanish),
+                    "it" to stringResource(R.string.language_italian),
+                    "pt" to stringResource(R.string.language_portuguese),
+                    "nl" to stringResource(R.string.language_dutch),
+                    "ru" to stringResource(R.string.language_russian),
+                    "tr" to stringResource(R.string.language_turkish)
+                )
+
+                var languageExpanded by remember { mutableStateOf(false) }
+
+                ExposedDropdownMenuBox(
+                    expanded = languageExpanded,
+                    onExpandedChange = { languageExpanded = it },
+                ) {
+                    val currentLangName = languageOptions.find { it.first == currentLang }?.second ?: stringResource(R.string.language_system_default)
+                    OutlinedTextField(
+                        value = currentLangName,
+                        onValueChange = {},
+                        readOnly = true,
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = languageExpanded) },
+                        modifier = Modifier.menuAnchor(type = ExposedDropdownMenuAnchorType.PrimaryEditable, enabled = true).fillMaxWidth(),
+                    )
+                    ExposedDropdownMenu(
+                        expanded = languageExpanded,
+                        onDismissRequest = { languageExpanded = false },
+                    ) {
+                        languageOptions.forEach { (langCode, langName) ->
+                            DropdownMenuItem(
+                                text = { Text(langName) },
+                                onClick = {
+                                    localeManager.applicationLocales = LocaleListCompat.forLanguageTags(langCode).unwrap() as android.os.LocaleList
+                                    languageExpanded = false
+                                }
+                            )
+                        }
+                    }
+                }
             }
 
             HorizontalDivider()

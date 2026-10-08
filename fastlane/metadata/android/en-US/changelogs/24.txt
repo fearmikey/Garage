@@ -1,0 +1,1 @@
+Added multi-language localization support for German, Spanish, French, Italian, Dutch, Polish, Portuguese, Russian, and Turkish.

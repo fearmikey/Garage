@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Garage</string>
+
+    <!-- Language -->
+    <string name="language_system_default">Systemstandard</string>
+    <string name="language_english">English</string>
+    <string name="language_french">Français</string>
+    <string name="language_german">Deutsch</string>
+    <string name="language_polish">Polski</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_italian">Italiano</string>
+    <string name="language_portuguese">Português</string>
+    <string name="language_dutch">Nederlands</string>
+    <string name="language_russian">Русский</string>
+    <string name="language_turkish">Türkçe</string>
+    <string name="language_selection">Sprache</string>
+
+    <!-- Notifications -->
+    <string name="reminder_notification_channel_name">Wartungserinnerungen</string>
+    <string name="reminder_notification_channel_description">Benachrichtigungen für anstehende und überfällige Fahrzeugwartungen</string>
+    <string name="reminder_overdue_title">Überfällig: %1$s</string>
+    <string name="reminder_upcoming_title">Anstehend: %1$s</string>
+    <string name="pdf_export_notification_channel_name">PDF-Exporte</string>
+    <string name="pdf_export_notification_channel_description">Benachrichtigungen beim Erstellen von PDF-Wartungsberichten</string>
+    <string name="pdf_export_notification_title">Wartungsbericht exportiert</string>
+    <string name="pdf_export_notification_text">Tippen zum Öffnen von %1$s</string>
+    <string name="test_notification_title">Test-Benachrichtigung</string>
+    <string name="test_notification_text">Wenn Sie dies sehen, funktionieren Push-Benachrichtigungen ordnungsgemäß.</string>
+
+    <!-- App widget -->
+    <string name="garage_widget_description">Zeigt anstehende/überfällige Wartungen an und ermöglicht schnelles Erfassen von Service oder Kraftstoff</string>
+
+    <!-- App Shortcuts & Quick Settings Tiles -->
+    <string name="shortcut_log_fuel_short">Tanken</string>
+    <string name="shortcut_log_fuel_long">Tankvorgang erfassen</string>
+    <string name="shortcut_update_odometer_short">Kilometerstand</string>
+    <string name="shortcut_update_odometer_long">Kilometerstand aktualisieren</string>
+    <string name="tile_log_fuel_label">Tanken erfassen</string>
+    <string name="tile_update_odometer_label">Tacho aktualisieren</string>
+    <string name="dialog_update_odometer_title">Kilometerstand aktualisieren</string>
+
+    <!-- Scanner -->
+    <string name="cd_go_back">Zurück</string>
+    <string name="cd_toggle_flashlight">Taschenlampe umschalten</string>
+    <string name="scan_vin_instruction">FIN-Barcode im Rahmen ausrichten</string>
+    <string name="cd_scan_vin">FIN scannen</string>
+    <string name="scan_vin_failed">Kein Barcode erkannt. FIN-Barcode ausrichten und erneut versuchen.</string>
+
+    <!-- OBD2 scanner -->
+    <string name="obd_scanner_title">OBD2-Scanner</string>
+    <string name="obd_cd_back">Zurück</string>
+    <string name="obd_rescan">Erneut scannen</string>
+    <string name="obd_reconnect">Neu verbinden</string>
+    <string name="obd_change">Ändern</string>
+    <string name="obd_cancel">Abbrechen</string>
+    <string name="obd_clearing_codes">Fehlercodes werden gelöscht…</string>
+    <string name="obd_clear_codes">Fehlercodes löschen</string>
+    <string name="obd_clear_codes_confirm_title">Fehlercodes löschen?</string>
+    <string name="obd_clear_codes_confirm_message">Schalten Sie für beste Ergebnisse den Motor aus, lassen Sie aber die Zündung an.\n\nDies schaltet die Motorkontrollleuchte aus und setzt alle Emissionsmonitore zurück.</string>
+    <string name="obd_permission_title">Bluetooth-Berechtigung erforderlich</string>
+    <string name="obd_permission_message">Garage benötigt die Bluetooth-Berechtigung, um mit Ihrem OBD2-Adapter zu kommunizieren. Keine Daten verlassen Ihr Gerät.</string>
+    <string name="obd_permission_action">Berechtigung erteilen</string>
+    <string name="obd_no_adapter_title">Kein OBD2-Adapter ausgewählt</string>
+    <string name="obd_no_adapter_message">Stecken Sie einen Bluetooth-OBD2-Adapter in die Diagnosebuchse Ihres Fahrzeugs und koppeln Sie ihn mit Ihrem Telefon.\n\nFehlercodes lesen &amp; löschen, Abgastests prüfen und Livedaten anzeigen.</string>
+    <string name="obd_no_adapter_action">OBD2-Adapter koppeln</string>
+    <string name="obd_status_connected">Verbunden</string>
+    <string name="obd_status_connecting">Verbindung wird hergestellt…</string>
+    <string name="obd_status_disconnected">Getrennt</string>
+    <string name="obd_status_not_connected">Nicht verbunden</string>
+    <string name="obd_adapter_header">OBD2-Adapter · %1$s</string>
+    <string name="obd_unknown_device">Unbekanntes Gerät</string>
+    <string name="obd_vin_mismatch_title">Dieser Adapter ist mit einem anderen Fahrzeug verbunden</string>
+    <string name="obd_vin_save_title">Diese FIN für das Fahrzeug speichern?</string>
+    <string name="obd_vin_mismatch_message">Das Auto meldet FIN %1$s, aber die FIN dieses Fahrzeugs ist %2$s. Dieser Scan wurde nicht gespeichert.</string>
+    <string name="obd_vin_save_message">Das Auto meldet FIN %1$s. Für dieses Fahrzeug ist noch keine FIN gespeichert.</string>
+    <string name="obd_save_scan_anyway">Scan trotzdem speichern</string>
+    <string name="obd_save_vin">FIN speichern</string>
+    <string name="obd_freeze_frame_title">Standbild (Freeze Frame)</string>
+    <string name="obd_freeze_frame_description">Motorbedingungen, die beim Setzen von %1$s aufgezeichnet wurden.</string>
+    <string name="obd_freeze_frame_code_fallback">Code</string>
+    <string name="obd_freeze_frame_empty">Das Fahrzeug hat keine Standbild-Werte gemeldet.</string>
+    <string name="obd_vehicle_health_title">Fahrzeugzustand</string>
+    <string name="obd_mil_on">Motorkontrollleuchte ist AN</string>
+    <string name="obd_mil_off">Motorkontrollleuchte ist aus</string>
+    <plurals name="obd_emissions_codes_reported">
+        <item quantity="one">%1$d abgasrelevanter Fehlercode gemeldet</item>
+        <item quantity="other">%1$d abgasrelevante Fehlercodes gemeldet</item>
+    </plurals>
+    <string name="obd_readiness_summary">Abgasbereitschaft: %1$d/%2$d Monitore bereit</string>
+    <string name="obd_readiness_mil_on">Fahrzeuge mit leuchtender Motorkontrollleuchte bestehen die Abgasuntersuchung nicht.</string>
+    <string name="obd_readiness_ok">Wahrscheinlich bereit für die Haupt-/Abgasuntersuchung.</string>
+    <string name="obd_readiness_not_ready">Noch nicht bereit. Fahren Sie einige Tage normal, damit die Monitore abschließen können.</string>
+    <string name="obd_cd_hide_monitors">Monitore ausblenden</string>
+    <string name="obd_cd_show_monitors">Monitore anzeigen</string>
+    <string name="obd_cd_monitor_complete">Abgeschlossen</string>
+    <string name="obd_cd_monitor_incomplete">Unvollständig</string>
+    <string name="obd_monitor_ready">Bereit</string>
+    <string name="obd_monitor_not_ready">Nicht bereit</string>
+    <string name="obd_no_codes_title">Keine Fehlercodes gefunden</string>
+    <string name="obd_no_codes_message">Keine gespeicherten, ausstehenden oder permanenten Fehlercodes.</string>
+    <string name="obd_dtc_title">Diagnose-Fehlercodes</string>
+    <plurals name="obd_code_count">
+        <item quantity="one">%1$d Code</item>
+        <item quantity="other">%1$d Codes</item>
+    </plurals>
+    <string name="obd_dtc_stored_title">Gespeichert</string>
+    <string name="obd_dtc_stored_explanation">Bestätigte Fehler. Diese schalten normalerweise die Motorkontrollleuchte ein.</string>
+    <string name="obd_dtc_pending_title">Ausstehend</string>
+    <string name="obd_dtc_pending_explanation">Einmal erkannt, aber noch nicht bestätigt. Frühe Warnung.</string>
+    <string name="obd_dtc_permanent_title">Permanent</string>
+    <string name="obd_dtc_permanent_explanation">Können nicht gelöscht werden. Verschwinden von selbst nach erfolgreicher Prüfung durch das Fahrzeug.</string>
+    <string name="obd_dtc_reported_by">Gemeldet von: %1$s</string>
+    <string name="obd_distance_title">Distanz</string>
+    <string name="obd_odometer">Kilometerstand</string>
+    <string name="obd_since_codes_cleared">Seit Fehlerlöschung</string>
+    <string name="obd_timeline_saved">Scan im Fahrzeugverlauf gespeichert.</string>
+    <string name="obd_timeline_unchanged">Seit dem letzten Scan hat sich nichts geändert.</string>
+    <string name="obd_timeline_vin_mismatch">Nicht gespeichert, da die FIN nicht mit diesem Fahrzeug übereinstimmt.</string>
+    <string name="obd_live_data_title">Livedaten</string>
+    <string name="obd_live">Live</string>
+    <string name="obd_waiting_for_data">Warten auf Daten…</string>
+    <string name="obd_stop_live_data">Livedaten stoppen</string>
+    <string name="obd_start_live_data">Livedaten starten</string>
+    <string name="obd_snapshot_title">Sensoren-Momentaufnahme</string>
+    <string name="obd_battery_at_port">Batterie (am Anschluss)</string>
+    <string name="obd_vin">FIN</string>
+
+    <!-- OBD2 scanner: adapter picker -->
+    <string name="obd_picker_title">OBD2-Adapter auswählen</string>
+    <string name="obd_picker_tab_bluetooth">Bluetooth</string>
+    <string name="obd_picker_tab_ble">BLE</string>
+    <string name="obd_picker_tab_wifi">WLAN</string>
+    <string name="obd_picker_forget_adapter">Adapter entkoppeln</string>
+    <string name="obd_picker_classic_permission_hint">Garage benötigt Bluetooth-Berechtigung, um Ihre gekoppelten Adapter aufzulisten.</string>
+    <string name="obd_picker_allow_bluetooth">Bluetooth-Zugriff erlauben</string>
+    <string name="obd_picker_classic_empty">Keine gekoppelten Bluetooth-Geräte gefunden. OBD2-Adapter einstecken, Zündung einschalten und in den Bluetooth-Einstellungen koppeln (PIN ist meist 1234 oder 0000).</string>
+    <string name="obd_picker_classic_hint">Wählen Sie den eingesteckten Adapter. Wahrscheinliche OBD2-Adapter stehen oben.</string>
+    <string name="obd_picker_pair_new">Neues Gerät koppeln</string>
+    <string name="obd_picker_refresh_list">Liste aktualisieren</string>
+    <string name="obd_picker_ble_hint">Bluetooth LE Adapter müssen nicht gekoppelt werden. Einstecken, Zündung an und scannen.</string>
+    <string name="obd_picker_ble_empty">Noch keine Bluetooth LE Geräte gefunden.</string>
+    <string name="obd_picker_scanning">Scannen…</string>
+    <string name="obd_picker_scan_for_adapters">Nach Adaptern suchen</string>
+    <string name="obd_picker_scan_again">Erneut suchen</string>
+    <string name="obd_picker_wifi_hint">Verbinden Sie das Telefon zuerst mit dem WLAN des Adapters (oft \"WiFi_OBDII\" oder \"V-LINK\").</string>
+    <string name="obd_picker_open_wifi_settings">WLAN-Einstellungen öffnen</string>
+    <string name="obd_picker_wifi_host_label">Adapter IP-Adresse</string>
+    <string name="obd_picker_wifi_port_label">Port</string>
+    <string name="obd_picker_use_wifi_adapter">WLAN-Adapter verwenden</string>
+    <string name="obd_picker_cd_current_adapter">Aktueller Adapter</string>
+
+    <!-- OBD2 scanner: settings -->
+    <string name="settings_obd_adapter_title">OBD2-Adapter</string>
+    <string name="settings_obd_adapter_summary">%1$s · %2$s (%3$s)</string>
+    <string name="settings_obd_adapter_not_set">Nicht festgelegt — tippen zum Auswählen</string>
+
+    <!-- OBD2 scanner: documents (emissions) -->
+    <string name="documents_obd_readiness_label">OBD2-Bereitschaft</string>
+    <string name="documents_obd_readiness_label_scanned">OBD2-Bereitschaft (gescannt am %1$s)</string>
+    <string name="documents_obd_readiness_value">%1$d/%2$d Monitore bereit — %3$s</string>
+    <string name="documents_obd_readiness_not_ready_list">Nicht bereit: %1$s</string>
+    <string name="documents_obd_readiness_mil_on">Motorkontrollleuchte an — Prüfung wahrscheinlich nicht bestanden</string>
+    <string name="documents_obd_readiness_likely_ready">Wahrscheinlich bereit für Prüfung</string>
+    <string name="documents_obd_readiness_not_ready">Noch nicht bereit — vor Prüfung mehr fahren</string>
+</resources>

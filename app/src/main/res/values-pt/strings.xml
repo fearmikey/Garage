@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Garage</string>
+
+    <!-- Language -->
+    <string name="language_system_default">Padrão do sistema</string>
+    <string name="language_english">English</string>
+    <string name="language_french">Français</string>
+    <string name="language_german">Deutsch</string>
+    <string name="language_polish">Polski</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_italian">Italiano</string>
+    <string name="language_portuguese">Português</string>
+    <string name="language_dutch">Nederlands</string>
+    <string name="language_russian">Русский</string>
+    <string name="language_turkish">Türkçe</string>
+    <string name="language_selection">Idioma</string>
+
+    <!-- Notifications -->
+    <string name="reminder_notification_channel_name">Lembretes de manutenção</string>
+    <string name="reminder_notification_channel_description">Alertas de manutenção de veículos próxima e atrasada</string>
+    <string name="reminder_overdue_title">Atrasado: %1$s</string>
+    <string name="reminder_upcoming_title">Próximo: %1$s</string>
+    <string name="pdf_export_notification_channel_name">Exportações em PDF</string>
+    <string name="pdf_export_notification_channel_description">Notificações ao gerar relatórios de manutenção em PDF</string>
+    <string name="pdf_export_notification_title">Relatório de manutenção exportado</string>
+    <string name="pdf_export_notification_text">Toque para abrir %1$s</string>
+    <string name="test_notification_title">Notificação de teste</string>
+    <string name="test_notification_text">Se você consegue ver isso, as notificações push estão funcionando corretamente.</string>
+
+    <!-- App widget -->
+    <string name="garage_widget_description">Exibe lembretes de manutenção próximos/atrasados e permite registrar rapidamente serviços ou combustível</string>
+
+    <!-- App Shortcuts & Quick Settings Tiles -->
+    <string name="shortcut_log_fuel_short">Combustível</string>
+    <string name="shortcut_log_fuel_long">Registrar abastecimento</string>
+    <string name="shortcut_update_odometer_short">Odômetro</string>
+    <string name="shortcut_update_odometer_long">Atualizar odômetro</string>
+    <string name="tile_log_fuel_label">Registrar combustível</string>
+    <string name="tile_update_odometer_label">Atualizar odômetro</string>
+    <string name="dialog_update_odometer_title">Atualizar odômetro</string>
+
+    <!-- Scanner -->
+    <string name="cd_go_back">Voltar</string>
+    <string name="cd_toggle_flashlight">Alternar lanterna</string>
+    <string name="scan_vin_instruction">Alinhe o código de barras do CHASSI/VIN na moldura</string>
+    <string name="cd_scan_vin">Escanear VIN</string>
+    <string name="scan_vin_failed">Nenhum código de barras detectado. Alinhe o código VIN e tente novamente.</string>
+
+    <!-- OBD2 scanner -->
+    <string name="obd_scanner_title">Scanner OBD2</string>
+    <string name="obd_cd_back">Voltar</string>
+    <string name="obd_rescan">Escanear novamente</string>
+    <string name="obd_reconnect">Reconectar</string>
+    <string name="obd_change">Alterar</string>
+    <string name="obd_cancel">Cancelar</string>
+    <string name="obd_clearing_codes">Limpando códigos de erro…</string>
+    <string name="obd_clear_codes">Limpar códigos</string>
+    <string name="obd_clear_codes_confirm_title">Limpar códigos de erro?</string>
+    <string name="obd_clear_codes_confirm_message">Para melhores resultados, desligue o motor mas mantenha a ignição ligada.\n\nIsso apagará a luz da injeção e reiniciará os monitores de emissões.</string>
+    <string name="obd_permission_title">Permissão de Bluetooth necessária</string>
+    <string name="obd_permission_message">O Garage precisa da permissão de Bluetooth para se comunicar com seu adaptador OBD2. Nenhum dado sai do seu dispositivo.</string>
+    <string name="obd_permission_action">Conceder permissão</string>
+    <string name="obd_no_adapter_title">Nenhum adaptador OBD2 selecionado</string>
+    <string name="obd_no_adapter_message">Conecte um adaptador Bluetooth OBD2 na tomada de diagnóstico do seu veículo e pareie com seu telefone.\n\nLeia e limpe códigos de erro, verifique emissões e acompanhe dados em tempo real.</string>
+    <string name="obd_no_adapter_action">Parear adaptador OBD2</string>
+    <string name="obd_status_connected">Conectado</string>
+    <string name="obd_status_connecting">Conectando…</string>
+    <string name="obd_status_disconnected">Desconectado</string>
+    <string name="obd_status_not_connected">Não conectado</string>
+    <string name="obd_adapter_header">Adaptador OBD2 · %1$s</string>
+    <string name="obd_unknown_device">Dispositivo desconhecido</string>
+    <string name="obd_vin_mismatch_title">Este adaptador está conectado a um veículo diferente</string>
+    <string name="obd_vin_save_title">Salvar este VIN no veículo?</string>
+    <string name="obd_vin_mismatch_message">O carro informa o VIN %1$s, mas o VIN deste veículo é %2$s. Este escaneamento não foi salvo no histórico.</string>
+    <string name="obd_vin_save_message">O carro informa o VIN %1$s. Este veículo ainda não possui um VIN salvo.</string>
+    <string name="obd_save_scan_anyway">Salvar mesmo assim</string>
+    <string name="obd_save_vin">Salvar VIN</string>
+    <string name="obd_freeze_frame_title">Dados congelados (Freeze Frame)</string>
+    <string name="obd_freeze_frame_description">Condições do motor registradas quando o código %1$s foi gravado.</string>
+    <string name="obd_freeze_frame_code_fallback">o código</string>
+    <string name="obd_freeze_frame_empty">O veículo não retornou valores de dados congelados.</string>
+    <string name="obd_vehicle_health_title">Saúde do veículo</string>
+    <string name="obd_mil_on">Luz da injeção LIGADA</string>
+    <string name="obd_mil_off">Luz da injeção desligada</string>
+    <plurals name="obd_emissions_codes_reported">
+        <item quantity="one">%1$d código de emissões detectado</item>
+        <item quantity="many">%1$d de códigos de emissões detectados</item>
+        <item quantity="other">%1$d códigos de emissões detectados</item>
+    </plurals>
+    <string name="obd_readiness_summary">Monitores de emissões: %1$d/%2$d prontos</string>
+    <string name="obd_readiness_mil_on">Veículos com a luz da injeção acesa reprovam na inspeção veicular.</string>
+    <string name="obd_readiness_ok">Provavelmente pronto para a inspeção de emissões.</string>
+    <string name="obd_readiness_not_ready">Ainda não está pronto. Dirija normalmente por alguns dias para concluir os testes.</string>
+    <string name="obd_cd_hide_monitors">Ocultar monitores</string>
+    <string name="obd_cd_show_monitors">Exibir monitores</string>
+    <string name="obd_cd_monitor_complete">Concluído</string>
+    <string name="obd_cd_monitor_incomplete">Incompleto</string>
+    <string name="obd_monitor_ready">Pronto</string>
+    <string name="obd_monitor_not_ready">Não pronto</string>
+    <string name="obd_no_codes_title">Nenhum código de erro encontrado</string>
+    <string name="obd_no_codes_message">Nenhum código de diagnóstico armazenado, pendente ou permanente.</string>
+    <string name="obd_dtc_title">Códigos de diagnóstico de falha</string>
+    <plurals name="obd_code_count">
+        <item quantity="one">%1$d código</item>
+        <item quantity="many">%1$d de códigos</item>
+        <item quantity="other">%1$d códigos</item>
+    </plurals>
+    <string name="obd_dtc_stored_title">Armazenados</string>
+    <string name="obd_dtc_stored_explanation">Falhas confirmadas. Geralmente acendem a luz da injeção.</string>
+    <string name="obd_dtc_pending_title">Pendentes</string>
+    <string name="obd_dtc_pending_explanation">Detectado uma vez, mas ainda não confirmado. Aviso prévio.</string>
+    <string name="obd_dtc_permanent_title">Permanentes</string>
+    <string name="obd_dtc_permanent_explanation">Não podem ser apagados pelo scanner. Desaparecem sozinhos após o veículo verificar o conserto.</string>
+    <string name="obd_dtc_reported_by">Informado por: %1$s</string>
+    <string name="obd_distance_title">Distância</string>
+    <string name="obd_odometer">Odômetro</string>
+    <string name="obd_since_codes_cleared">Desde a limpeza dos códigos</string>
+    <string name="obd_timeline_saved">Escaneamento salvo no histórico do veículo.</string>
+    <string name="obd_timeline_unchanged">Nenhuma alteração desde o último escaneamento.</string>
+    <string name="obd_timeline_vin_mismatch">Não foi salvo pois o VIN não coincide com este veículo.</string>
+    <string name="obd_live_data_title">Dados em tempo real</string>
+    <string name="obd_live">Ao vivo</string>
+    <string name="obd_waiting_for_data">Aguardando dados…</string>
+    <string name="obd_stop_live_data">Parar dados ao vivo</string>
+    <string name="obd_start_live_data">Iniciar dados ao vivo</string>
+    <string name="obd_snapshot_title">Instantanêo dos sensores</string>
+    <string name="obd_battery_at_port">Bateria (na tomada)</string>
+    <string name="obd_vin">VIN</string>
+
+    <!-- OBD2 scanner: adapter picker -->
+    <string name="obd_picker_title">Selecionar adaptador OBD2</string>
+    <string name="obd_picker_tab_bluetooth">Bluetooth</string>
+    <string name="obd_picker_tab_ble">BLE</string>
+    <string name="obd_picker_tab_wifi">Wi-Fi</string>
+    <string name="obd_picker_forget_adapter">Esquecer adaptador</string>
+    <string name="obd_picker_classic_permission_hint">O Garage precisa de permissão de Bluetooth para listar seus adaptadores pareados.</string>
+    <string name="obd_picker_allow_bluetooth">Permitir acesso ao Bluetooth</string>
+    <string name="obd_picker_classic_empty">Nenhum dispositivo Bluetooth pareado encontrado. Conecte seu adaptador OBD2, ligue a ignição e pareie nas configurações de Bluetooth do telefone (PIN geralmente é 1234 ou 0000).</string>
+    <string name="obd_picker_classic_hint">Escolha o adaptador conectado. Adaptadores OBD2 prováveis aparecem primeiro.</string>
+    <string name="obd_picker_pair_new">Parear novo dispositivo</string>
+    <string name="obd_picker_refresh_list">Atualizar lista</string>
+    <string name="obd_picker_ble_hint">Adaptadores Bluetooth LE não precisam de pareamento. Conecte o adaptador, ligue a ignição e escaneie.</string>
+    <string name="obd_picker_ble_empty">Nenhum dispositivo Bluetooth LE encontrado ainda.</string>
+    <string name="obd_picker_scanning">Buscando…</string>
+    <string name="obd_picker_scan_for_adapters">Buscar adaptadores</string>
+    <string name="obd_picker_scan_again">Buscar novamente</string>
+    <string name="obd_picker_wifi_hint">Primeiro conecte seu telefone à rede Wi-Fi do adaptador (frequentemente "WiFi_OBDII" ou "V-LINK").</string>
+    <string name="obd_picker_open_wifi_settings">Abrir configurações de Wi-Fi</string>
+    <string name="obd_picker_wifi_host_label">Endereço IP do adaptador</string>
+    <string name="obd_picker_wifi_port_label">Porta</string>
+    <string name="obd_picker_use_wifi_adapter">Usar adaptador Wi-Fi</string>
+    <string name="obd_picker_cd_current_adapter">Adaptador atual</string>
+
+    <!-- OBD2 scanner: settings -->
+    <string name="settings_obd_adapter_title">Adaptador OBD2</string>
+    <string name="settings_obd_adapter_summary">%1$s · %2$s (%3$s)</string>
+    <string name="settings_obd_adapter_not_set">Não configurado — toque para escolher</string>
+
+    <!-- OBD2 scanner: documents (emissions) -->
+    <string name="documents_obd_readiness_label">Monitores OBD2</string>
+    <string name="documents_obd_readiness_label_scanned">Monitores OBD2 (escanado em %1$s)</string>
+    <string name="documents_obd_readiness_value">%1$d/%2$d monitores prontos — %3$s</string>
+    <string name="documents_obd_readiness_not_ready_list">Não prontos: %1$s</string>
+    <string name="documents_obd_readiness_mil_on">Luz da injeção acesa — provável reprovação</string>
+    <string name="documents_obd_readiness_likely_ready">Provavelmente pronto para inspeção</string>
+    <string name="documents_obd_readiness_not_ready">Ainda não pronto — dirija mais antes da inspeção</string>
+</resources>

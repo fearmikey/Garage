@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Garage</string>
+
+    <!-- Language -->
+    <string name="language_system_default">Par défaut du système</string>
+    <string name="language_english">English</string>
+    <string name="language_french">Français</string>
+    <string name="language_german">Deutsch</string>
+    <string name="language_polish">Polski</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_italian">Italiano</string>
+    <string name="language_portuguese">Português</string>
+    <string name="language_dutch">Nederlands</string>
+    <string name="language_russian">Русский</string>
+    <string name="language_turkish">Türkçe</string>
+    <string name="language_selection">Langue</string>
+
+    <!-- Notifications -->
+    <string name="reminder_notification_channel_name">Rappels d\'entretien</string>
+    <string name="reminder_notification_channel_description">Avertissements pour l\'entretien à venir et en retard des véhicules</string>
+    <string name="reminder_overdue_title">En retard : %1$s</string>
+    <string name="reminder_upcoming_title">À venir : %1$s</string>
+    <string name="pdf_export_notification_channel_name">Exportations PDF</string>
+    <string name="pdf_export_notification_channel_description">Notifications lors de la génération de rapports d\'entretien en PDF</string>
+    <string name="pdf_export_notification_title">Rapport d\'entretien exporté</string>
+    <string name="pdf_export_notification_text">Appuyez pour ouvrir %1$s</string>
+    <string name="test_notification_title">Notification de test</string>
+    <string name="test_notification_text">Si vous voyez ceci, les notifications push fonctionnent correctement.</string>
+
+    <!-- App widget -->
+    <string name="garage_widget_description">Affiche les rappels d\'entretien à venir/en retard et permet d\'enregistrer rapidement le service ou le carburant</string>
+
+    <!-- App Shortcuts & Quick Settings Tiles -->
+    <string name="shortcut_log_fuel_short">Carburant</string>
+    <string name="shortcut_log_fuel_long">Enregistrer un plein de carburant</string>
+    <string name="shortcut_update_odometer_short">Kilométrage</string>
+    <string name="shortcut_update_odometer_long">Mettre à jour le compteur</string>
+    <string name="tile_log_fuel_label">Ajouter carburant</string>
+    <string name="tile_update_odometer_label">Mettre à jour compteur</string>
+    <string name="dialog_update_odometer_title">Mettre à jour le compteur</string>
+
+    <!-- Scanner -->
+    <string name="cd_go_back">Retour</string>
+    <string name="cd_toggle_flashlight">Activer/désactiver la lampe</string>
+    <string name="scan_vin_instruction">Alignez le code-barres du VIN dans le cadre</string>
+    <string name="cd_scan_vin">Scanner le VIN</string>
+    <string name="scan_vin_failed">Aucun code-barres détecté. Alignez le code-barres du VIN et réessayez.</string>
+
+    <!-- OBD2 scanner -->
+    <string name="obd_scanner_title">Scanner OBD2</string>
+    <string name="obd_cd_back">Retour</string>
+    <string name="obd_rescan">Rescanner</string>
+    <string name="obd_reconnect">Reconnecter</string>
+    <string name="obd_change">Changer</string>
+    <string name="obd_cancel">Annuler</string>
+    <string name="obd_clearing_codes">Effacement des codes d\'erreur…</string>
+    <string name="obd_clear_codes">Effacer les codes</string>
+    <string name="obd_clear_codes_confirm_title">Effacer les codes d\'erreur ?</string>
+    <string name="obd_clear_codes_confirm_message">Pour de meilleurs résultats, coupez le moteur mais laissez le contact mis.\n\nCeci éteint le voyant moteur et réinitialise tous les tests d\'émissions. Si le problème sous-jacent n\'est pas résolu, les codes reviendront.</string>
+    <string name="obd_permission_title">Permission Bluetooth requise</string>
+    <string name="obd_permission_message">Garage a besoin de la permission Bluetooth pour communiquer avec votre adaptateur OBD2. Rien ne quitte votre appareil.</string>
+    <string name="obd_permission_action">Accorder la permission</string>
+    <string name="obd_no_adapter_title">Aucun adaptateur OBD2 sélectionné</string>
+    <string name="obd_no_adapter_message">Branchez un adaptateur Bluetooth OBD2 sur la prise diagnostic de votre véhicule et associez-le avec votre téléphone. Garage s\'en souviendra et se connectera automatiquement à chaque ouverture du scanner.\n\nLisez et effacez les codes d\'erreur, vérifiez les tests d\'émissions et suivez les données moteur en direct.</string>
+    <string name="obd_no_adapter_action">Associer un adaptateur OBD2</string>
+    <string name="obd_status_connected">Connecté</string>
+    <string name="obd_status_connecting">Connexion en cours…</string>
+    <string name="obd_status_disconnected">Déconnecté</string>
+    <string name="obd_status_not_connected">Non connecté</string>
+    <string name="obd_adapter_header">Adaptateur OBD2 · %1$s</string>
+    <string name="obd_unknown_device">Appareil inconnu</string>
+    <string name="obd_vin_mismatch_title">Cet adaptateur est connecté à un autre véhicule</string>
+    <string name="obd_vin_save_title">Enregistrer ce VIN sur le véhicule ?</string>
+    <string name="obd_vin_mismatch_message">La voiture indique le VIN %1$s, mais le VIN de ce véhicule est %2$s. Ce scan n\'a pas été enregistré dans l\'historique.</string>
+    <string name="obd_vin_save_message">La voiture indique le VIN %1$s. Ce véhicule n\'a pas encore de VIN enregistré.</string>
+    <string name="obd_save_scan_anyway">Enregistrer le scan malgré tout</string>
+    <string name="obd_save_vin">Enregistrer le VIN</string>
+    <string name="obd_freeze_frame_title">Données figées (Freeze Frame)</string>
+    <string name="obd_freeze_frame_description">Conditions moteur enregistrées lorsque %1$s a été détecté.</string>
+    <string name="obd_freeze_frame_code_fallback">le code</string>
+    <string name="obd_freeze_frame_empty">Le véhicule n\'a renvoyé aucune valeur de données figées.</string>
+    <string name="obd_vehicle_health_title">Santé du véhicule</string>
+    <string name="obd_mil_on">Voyant moteur ALLUMÉ</string>
+    <string name="obd_mil_off">Voyant moteur éteint</string>
+    <plurals name="obd_emissions_codes_reported">
+        <item quantity="one">%1$d code lié aux émissions signalé</item>
+        <item quantity="many">%1$d de codes liés aux émissions signalés</item>
+        <item quantity="other">%1$d codes liés aux émissions signalés</item>
+    </plurals>
+    <string name="obd_readiness_summary">Test d\'émissions : %1$d/%2$d systèmes prêts</string>
+    <string name="obd_readiness_mil_on">Les véhicules avec le voyant moteur allumé échouent au contrôle technique.</string>
+    <string name="obd_readiness_ok">Probablement prêt pour le contrôle technique.</string>
+    <string name="obd_readiness_not_ready">Pas encore prêt. Roulez normalement pendant quelques jours pour terminer les tests.</string>
+    <string name="obd_cd_hide_monitors">Masquer les tests</string>
+    <string name="obd_cd_show_monitors">Afficher les tests</string>
+    <string name="obd_cd_monitor_complete">Terminé</string>
+    <string name="obd_cd_monitor_incomplete">Incomplet</string>
+    <string name="obd_monitor_ready">Prêt</string>
+    <string name="obd_monitor_not_ready">Non prêt</string>
+    <string name="obd_no_codes_title">Aucun code d\'erreur trouvé</string>
+    <string name="obd_no_codes_message">Aucun code de défaut enregistré, en attente ou permanent.</string>
+    <string name="obd_dtc_title">Codes de défaut de diagnostic</string>
+    <plurals name="obd_code_count">
+        <item quantity="one">%1$d code</item>
+        <item quantity="many">%1$d de codes</item>
+        <item quantity="other">%1$d codes</item>
+    </plurals>
+    <string name="obd_dtc_stored_title">Enregistrés</string>
+    <string name="obd_dtc_stored_explanation">Défauts confirmés. Ils allument généralement le voyant moteur.</string>
+    <string name="obd_dtc_pending_title">En attente</string>
+    <string name="obd_dtc_pending_explanation">Détecté une fois mais pas encore confirmé. Avertissement précoce.</string>
+    <string name="obd_dtc_permanent_title">Permanents</string>
+    <string name="obd_dtc_permanent_explanation">Ne peuvent pas être effacés avec un scanner. Ils disparaissent d\'eux-mêmes après vérification par le véhicule.</string>
+    <string name="obd_dtc_reported_by">Signalé par : %1$s</string>
+    <string name="obd_distance_title">Distance</string>
+    <string name="obd_odometer">Compteur</string>
+    <string name="obd_since_codes_cleared">Depuis l\'effacement des codes</string>
+    <string name="obd_timeline_saved">Scan enregistré dans l\'historique du véhicule.</string>
+    <string name="obd_timeline_unchanged">Rien n\'a changé depuis le dernier scan, aucun nouvel enregistrement.</string>
+    <string name="obd_timeline_vin_mismatch">Non enregistré dans l\'historique car le VIN ne correspond pas à ce véhicule.</string>
+    <string name="obd_live_data_title">Données en direct</string>
+    <string name="obd_live">En direct</string>
+    <string name="obd_waiting_for_data">En attente de données…</string>
+    <string name="obd_stop_live_data">Arrêter les données en direct</string>
+    <string name="obd_start_live_data">Démarrer les données en direct</string>
+    <string name="obd_snapshot_title">Aperçu des capteurs</string>
+    <string name="obd_battery_at_port">Batterie (à la prise)</string>
+    <string name="obd_vin">VIN</string>
+
+    <!-- OBD2 scanner: adapter picker -->
+    <string name="obd_picker_title">Sélectionner l\'adaptateur OBD2</string>
+    <string name="obd_picker_tab_bluetooth">Bluetooth</string>
+    <string name="obd_picker_tab_ble">BLE</string>
+    <string name="obd_picker_tab_wifi">Wi-Fi</string>
+    <string name="obd_picker_forget_adapter">Oublier l\'adaptateur</string>
+    <string name="obd_picker_classic_permission_hint">Garage a besoin de la permission Bluetooth pour lister vos adaptateurs associés.</string>
+    <string name="obd_picker_allow_bluetooth">Autoriser l\'accès Bluetooth</string>
+    <string name="obd_picker_classic_empty">Aucun appareil Bluetooth associé trouvé. Branchez votre adaptateur OBD2, mettez le contact, puis associez-le dans les paramètres Bluetooth de votre téléphone (le code PIN est généralement 1234 ou 0000).</string>
+    <string name="obd_picker_classic_hint">Choisissez l\'adaptateur branché sur votre véhicule. Les adaptateurs OBD2 probables sont affichés en premier.</string>
+    <string name="obd_picker_pair_new">Associer un nouvel appareil</string>
+    <string name="obd_picker_refresh_list">Actualiser la liste</string>
+    <string name="obd_picker_ble_hint">Les adaptateurs Bluetooth LE n\'ont pas besoin d\'être associés. Branchez l\'adaptateur, mettez le contact et scannez.</string>
+    <string name="obd_picker_ble_empty">Aucun appareil Bluetooth LE trouvé pour le moment.</string>
+    <string name="obd_picker_scanning">Recherche en cours…</string>
+    <string name="obd_picker_scan_for_adapters">Rechercher des adaptateurs</string>
+    <string name="obd_picker_scan_again">Rechercher à nouveau</string>
+    <string name="obd_picker_wifi_hint">Connectez d\'abord votre téléphone au réseau Wi-Fi de l\'adaptateur (souvent nommé \"WiFi_OBDII\" ou \"V-LINK\"). La plupart des adaptateurs utilisent 192.168.0.10 sur le port 35000.</string>
+    <string name="obd_picker_open_wifi_settings">Ouvrir les paramètres Wi-Fi</string>
+    <string name="obd_picker_wifi_host_label">Adresse IP de l\'adaptateur</string>
+    <string name="obd_picker_wifi_port_label">Port</string>
+    <string name="obd_picker_use_wifi_adapter">Utiliser l\'adaptateur Wi-Fi</string>
+    <string name="obd_picker_cd_current_adapter">Adaptateur actuel</string>
+
+    <!-- OBD2 scanner: settings -->
+    <string name="settings_obd_adapter_title">Adaptateur OBD2</string>
+    <string name="settings_obd_adapter_summary">%1$s · %2$s (%3$s)</string>
+    <string name="settings_obd_adapter_not_set">Non défini — appuyez pour choisir un adaptateur Bluetooth, BLE ou Wi-Fi</string>
+
+    <!-- OBD2 scanner: documents (emissions) -->
+    <string name="documents_obd_readiness_label">Tests d\'émissions OBD2</string>
+    <string name="documents_obd_readiness_label_scanned">Tests d\'émissions OBD2 (scanné le %1$s)</string>
+    <string name="documents_obd_readiness_value">%1$d/%2$d tests terminés — %3$s</string>
+    <string name="documents_obd_readiness_not_ready_list">Non prêts : %1$s</string>
+    <string name="documents_obd_readiness_mil_on">Voyant moteur allumé — échec probable</string>
+    <string name="documents_obd_readiness_likely_ready">Probablement prêt pour le contrôle</string>
+    <string name="documents_obd_readiness_not_ready">Pas encore prêt — roulez davantage avant le contrôle</string>
+</resources>

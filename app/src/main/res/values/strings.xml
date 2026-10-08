@@ -1,6 +1,20 @@
 <resources>
     <string name="app_name">Garage</string>
 
+    <!-- Language -->
+    <string name="language_system_default">System Default</string>
+    <string name="language_english">English</string>
+    <string name="language_french">Français</string>
+    <string name="language_german">Deutsch</string>
+    <string name="language_polish">Polski</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_italian">Italiano</string>
+    <string name="language_portuguese">Português</string>
+    <string name="language_dutch">Nederlands</string>
+    <string name="language_russian">Русский</string>
+    <string name="language_turkish">Türkçe</string>
+    <string name="language_selection">Language</string>
+
     <!-- Notifications -->
     <string name="reminder_notification_channel_name">Maintenance reminders</string>
     <string name="reminder_notification_channel_description">Alerts for upcoming and overdue vehicle maintenance</string>

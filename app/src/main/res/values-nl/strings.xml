@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Garage</string>
+
+    <!-- Language -->
+    <string name="language_system_default">Systeemstandaard</string>
+    <string name="language_english">English</string>
+    <string name="language_french">Français</string>
+    <string name="language_german">Deutsch</string>
+    <string name="language_polish">Polski</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_italian">Italiano</string>
+    <string name="language_portuguese">Português</string>
+    <string name="language_dutch">Nederlands</string>
+    <string name="language_russian">Русский</string>
+    <string name="language_turkish">Türkçe</string>
+    <string name="language_selection">Taal</string>
+
+    <!-- Notifications -->
+    <string name="reminder_notification_channel_name">Onderhoudsherinneringen</string>
+    <string name="reminder_notification_channel_description">Meldingen voor aankomend en achterstallig voertuigonderhoud</string>
+    <string name="reminder_overdue_title">Achterstallig: %1$s</string>
+    <string name="reminder_upcoming_title">Binnenkort: %1$s</string>
+    <string name="pdf_export_notification_channel_name">PDF-export</string>
+    <string name="pdf_export_notification_channel_description">Meldingen wanneer onderhoudsrapporten in PDF worden gegenereerd</string>
+    <string name="pdf_export_notification_title">Onderhoudsrapport geëxporteerd</string>
+    <string name="pdf_export_notification_text">Tik om %1$s te openen</string>
+    <string name="test_notification_title">Testmelding</string>
+    <string name="test_notification_text">Als je dit ziet, werken pushmeldingen correct.</string>
+
+    <!-- App widget -->
+    <string name="garage_widget_description">Toont herinneringen voor onderhoud en maakt snel vastleggen van tankbeurt of service mogelijk</string>
+
+    <!-- App Shortcuts & Quick Settings Tiles -->
+    <string name="shortcut_log_fuel_short">Tanken</string>
+    <string name="shortcut_log_fuel_long">Tankbeurt registreren</string>
+    <string name="shortcut_update_odometer_short">Kilometerstand</string>
+    <string name="shortcut_update_odometer_long">Kilometerstand bijwerken</string>
+    <string name="tile_log_fuel_label">Tanken registreren</string>
+    <string name="tile_update_odometer_label">Kilometerstand bijwerken</string>
+    <string name="dialog_update_odometer_title">Kilometerstand bijwerken</string>
+
+    <!-- Scanner -->
+    <string name="cd_go_back">Terug</string>
+    <string name="cd_toggle_flashlight">Zaklamp in-/uitschakelen</string>
+    <string name="scan_vin_instruction">Plaats VIN-barcode binnen het kader</string>
+    <string name="cd_scan_vin">VIN scannen</string>
+    <string name="scan_vin_failed">Geen barcode gedetecteerd. Lijn de VIN-barcode uit en probeer het opnieuw.</string>
+
+    <!-- OBD2 scanner -->
+    <string name="obd_scanner_title">OBD2-scanner</string>
+    <string name="obd_cd_back">Terug</string>
+    <string name="obd_rescan">Opnieuw scannen</string>
+    <string name="obd_reconnect">Opnieuw verbinden</string>
+    <string name="obd_change">Wijzigen</string>
+    <string name="obd_cancel">Annuleren</string>
+    <string name="obd_clearing_codes">Foutcodes wissen…</string>
+    <string name="obd_clear_codes">Foutcodes wissen</string>
+    <string name="obd_clear_codes_confirm_title">Foutcodes wissen?</string>
+    <string name="obd_clear_codes_confirm_message">Schakel de motor uit maar laat het contact aan voor het beste resultaat.\n\nDit schakelt het motorlampje uit en reset de emissiemonitors.</string>
+    <string name="obd_permission_title">Bluetooth-toestemming vereist</string>
+    <string name="obd_permission_message">Garage heeft Bluetooth-toestemming nodig om te communiceren met je OBD2-adapter. Er verlaat geen data je apparaat.</string>
+    <string name="obd_permission_action">Toestemming verlenen</string>
+    <string name="obd_no_adapter_title">Geen OBD2-adapter geselecteerd</string>
+    <string name="obd_no_adapter_message">Sluit een Bluetooth OBD2-adapter aan op de diagnosepoort van je voertuig en koppel deze met je telefoon.\n\nLees &amp; wis foutcodes, controleer emissiemonitors en bekijk live gegevens.</string>
+    <string name="obd_no_adapter_action">OBD2-adapter koppelen</string>
+    <string name="obd_status_connected">Verbonden</string>
+    <string name="obd_status_connecting">Verbinden…</string>
+    <string name="obd_status_disconnected">Verbinding verbroken</string>
+    <string name="obd_status_not_connected">Niet verbonden</string>
+    <string name="obd_adapter_header">OBD2-adapter · %1$s</string>
+    <string name="obd_unknown_device">Onbekend apparaat</string>
+    <string name="obd_vin_mismatch_title">Deze adapter is verbonden met een ander voertuig</string>
+    <string name="obd_vin_save_title">Dit VIN opslaan voor het voertuig?</string>
+    <string name="obd_vin_mismatch_message">De auto meldt VIN %1$s, maar het VIN van dit voertuig is %2$s. Deze scan is niet opgeslagen.</string>
+    <string name="obd_vin_save_message">De auto meldt VIN %1$s. Dit voertuig heeft nog geen VIN opgeslagen.</string>
+    <string name="obd_save_scan_anyway">Scan toch opslaan</string>
+    <string name="obd_save_vin">VIN opslaan</string>
+    <string name="obd_freeze_frame_title">Freeze Frame</string>
+    <string name="obd_freeze_frame_description">Motoromstandigheden vastgelegd toen %1$s optrad.</string>
+    <string name="obd_freeze_frame_code_fallback">de code</string>
+    <string name="obd_freeze_frame_empty">Het voertuig heeft geen freeze frame-waarden gerapporteerd.</string>
+    <string name="obd_vehicle_health_title">Voertuigstatus</string>
+    <string name="obd_mil_on">Motorlampje staat AAN</string>
+    <string name="obd_mil_off">Motorlampje staat uit</string>
+    <plurals name="obd_emissions_codes_reported">
+        <item quantity="one">%1$d emissiegerelateerde foutcode gemeld</item>
+        <item quantity="other">%1$d emissiegerelateerde foutcodes gemeld</item>
+    </plurals>
+    <string name="obd_readiness_summary">Emissiegereedheid: %1$d/%2$d monitors voltooid</string>
+    <string name="obd_readiness_mil_on">Voertuigen met een brandend motorlampje komen niet door de APK/emissietest.</string>
+    <string name="obd_readiness_ok">Waarschijnlijk klaar voor APK/emissietest.</string>
+    <string name="obd_readiness_not_ready">Nog niet klaar. Rijd een paar dagen normaal zodat de monitors kunnen voltooien.</string>
+    <string name="obd_cd_hide_monitors">Monitors verbergen</string>
+    <string name="obd_cd_show_monitors">Monitors tonen</string>
+    <string name="obd_cd_monitor_complete">Voltooid</string>
+    <string name="obd_cd_monitor_incomplete">Onvolledig</string>
+    <string name="obd_monitor_ready">Klaar</string>
+    <string name="obd_monitor_not_ready">Niet klaar</string>
+    <string name="obd_no_codes_title">Geen foutcodes gevonden</string>
+    <string name="obd_no_codes_message">Geen opgeslagen, in behandeling zijnde of permanente foutcodes.</string>
+    <string name="obd_dtc_title">Diagnostische foutcodes</string>
+    <plurals name="obd_code_count">
+        <item quantity="one">%1$d code</item>
+        <item quantity="other">%1$d codes</item>
+    </plurals>
+    <string name="obd_dtc_stored_title">Opgeslagen</string>
+    <string name="obd_dtc_stored_explanation">Bevestigde fouten. Deze doen meestal het motorlampje branden.</string>
+    <string name="obd_dtc_pending_title">In behandeling</string>
+    <string name="obd_dtc_pending_explanation">Eenmaal gedetecteerd maar nog niet bevestigd. Vroege waarschuwing.</string>
+    <string name="obd_dtc_permanent_title">Permanent</string>
+    <string name="obd_dtc_permanent_explanation">Kunnen niet met een scanner worden gewist. Verdwijnen vanzelf na controle door het voertuig.</string>
+    <string name="obd_dtc_reported_by">Gerapporteerd door: %1$s</string>
+    <string name="obd_distance_title">Afstand</string>
+    <string name="obd_odometer">Kilometerstand</string>
+    <string name="obd_since_codes_cleared">Sinds wisactie foutcodes</string>
+    <string name="obd_timeline_saved">Scan opgeslagen in de voertuighistorie.</string>
+    <string name="obd_timeline_unchanged">Niets gewijzigd sinds de vorige scan.</string>
+    <string name="obd_timeline_vin_mismatch">Niet opgeslagen omdat het VIN niet overeenkomt met dit voertuig.</string>
+    <string name="obd_live_data_title">Live gegevens</string>
+    <string name="obd_live">Live</string>
+    <string name="obd_waiting_for_data">Wachten op gegevens…</string>
+    <string name="obd_stop_live_data">Live gegevens stoppen</string>
+    <string name="obd_start_live_data">Live gegevens starten</string>
+    <string name="obd_snapshot_title">Sensor-momentopname</string>
+    <string name="obd_battery_at_port">Accu (bij poort)</string>
+    <string name="obd_vin">VIN</string>
+
+    <!-- OBD2 scanner: adapter picker -->
+    <string name="obd_picker_title">Selecteer OBD2-adapter</string>
+    <string name="obd_picker_tab_bluetooth">Bluetooth</string>
+    <string name="obd_picker_tab_ble">BLE</string>
+    <string name="obd_picker_tab_wifi">Wi-Fi</string>
+    <string name="obd_picker_forget_adapter">Adapter vergeten</string>
+    <string name="obd_picker_classic_permission_hint">Garage heeft Bluetooth-toestemming nodig om gekoppelde adapters te tonen.</string>
+    <string name="obd_picker_allow_bluetooth">Bluetooth-toegang toestaan</string>
+    <string name="obd_picker_classic_empty">Geen gekoppelde Bluetooth-apparaten gevonden. Sluit de OBD2-adapter aan, zet het contact aan en koppel in de Bluetooth-instellingen (PIN is meestal 1234 of 0000).</string>
+    <string name="obd_picker_classic_hint">Kies de aangesloten adapter. Waarschijnlijke OBD2-adapters staan bovenaan.</string>
+    <string name="obd_picker_pair_new">Nieuw apparaat koppelen</string>
+    <string name="obd_picker_refresh_list">Lijst vernieuwen</string>
+    <string name="obd_picker_ble_hint">Bluetooth LE-adapters hoeven niet te worden gekoppeld. Sluit aan, zet contact aan en scan.</string>
+    <string name="obd_picker_ble_empty">Nog geen Bluetooth LE-apparaten gevonden.</string>
+    <string name="obd_picker_scanning">Scannen…</string>
+    <string name="obd_picker_scan_for_adapters">Zoeken naar adapters</string>
+    <string name="obd_picker_scan_again">Opnieuw zoeken</string>
+    <string name="obd_picker_wifi_hint">Verbind je telefoon eerst met het Wi-Fi-netwerk van de adapter (vaak "WiFi_OBDII" of "V-LINK").</string>
+    <string name="obd_picker_open_wifi_settings">Wi-Fi-instellingen openen</string>
+    <string name="obd_picker_wifi_host_label">IP-adres adapter</string>
+    <string name="obd_picker_wifi_port_label">Poort</string>
+    <string name="obd_picker_use_wifi_adapter">Wi-Fi-adapter gebruiken</string>
+    <string name="obd_picker_cd_current_adapter">Huidige adapter</string>
+
+    <!-- OBD2 scanner: settings -->
+    <string name="settings_obd_adapter_title">OBD2-adapter</string>
+    <string name="settings_obd_adapter_summary">%1$s · %2$s (%3$s)</string>
+    <string name="settings_obd_adapter_not_set">Niet ingesteld — tik om te kiezen</string>
+
+    <!-- OBD2 scanner: documents (emissions) -->
+    <string name="documents_obd_readiness_label">OBD2-gereedheid</string>
+    <string name="documents_obd_readiness_label_scanned">OBD2-gereedheid (gescand op %1$s)</string>
+    <string name="documents_obd_readiness_value">%1$d/%2$d monitors voltooid — %3$s</string>
+    <string name="documents_obd_readiness_not_ready_list">Niet klaar: %1$s</string>
+    <string name="documents_obd_readiness_mil_on">Motorlampje brandt — waarschijnlijk afkeur</string>
+    <string name="documents_obd_readiness_likely_ready">Waarschijnlijk klaar voor test</string>
+    <string name="documents_obd_readiness_not_ready">Nog niet klaar — rijd meer voor de test</string>
+</resources>

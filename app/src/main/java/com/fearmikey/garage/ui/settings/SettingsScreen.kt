@@ -194,6 +194,33 @@ fun SettingsScreen(
             }
             item {
                 ListItem(
+                    headlineContent = { Text(stringResource(R.string.language_selection)) },
+                    supportingContent = {
+                        val currentLocales = remember { context.getSystemService(android.app.LocaleManager::class.java).applicationLocales }
+                        val currentLang = if (currentLocales.isEmpty) "" else currentLocales.get(0)?.language ?: ""
+                        val languageName = when (currentLang) {
+                            "en" -> stringResource(R.string.language_english)
+                            "fr" -> stringResource(R.string.language_french)
+                            "de" -> stringResource(R.string.language_german)
+                            "pl" -> stringResource(R.string.language_polish)
+                            "es" -> stringResource(R.string.language_spanish)
+                            "it" -> stringResource(R.string.language_italian)
+                            "pt" -> stringResource(R.string.language_portuguese)
+                            "nl" -> stringResource(R.string.language_dutch)
+                            "ru" -> stringResource(R.string.language_russian)
+                            "tr" -> stringResource(R.string.language_turkish)
+                            else -> stringResource(R.string.language_system_default)
+                        }
+                        Text(languageName)
+                    },
+                    leadingContent = { Icon(Icons.Filled.Badge, contentDescription = null) }, // Reusing an existing icon since Translate is not available
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onOpenStartup() }, // Navigate to Onboarding screen for language change since it's already implemented there
+                )
+            }
+            item {
+                ListItem(
                     headlineContent = { Text("Units of Measurement") },
                     supportingContent = { Text(uiState.units.replaceFirstChar { it.uppercase() }) },
                     leadingContent = { Icon(Icons.Filled.Straighten, contentDescription = null) },

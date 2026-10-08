@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Garage</string>
+
+    <!-- Language -->
+    <string name="language_system_default">Sistem Varsayılanı</string>
+    <string name="language_english">English</string>
+    <string name="language_french">Français</string>
+    <string name="language_german">Deutsch</string>
+    <string name="language_polish">Polski</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_italian">Italiano</string>
+    <string name="language_portuguese">Português</string>
+    <string name="language_dutch">Nederlands</string>
+    <string name="language_russian">Русский</string>
+    <string name="language_turkish">Türkçe</string>
+    <string name="language_selection">Dil</string>
+
+    <!-- Notifications -->
+    <string name="reminder_notification_channel_name">Bakım hatırlatıcıları</string>
+    <string name="reminder_notification_channel_description">Yaklaşan ve geciken araç bakımları için uyarılar</string>
+    <string name="reminder_overdue_title">Gecikmiş: %1$s</string>
+    <string name="reminder_upcoming_title">Yaklaşan: %1$s</string>
+    <string name="pdf_export_notification_channel_name">PDF Dışa Aktarımları</string>
+    <string name="pdf_export_notification_channel_description">PDF bakım raporları oluşturulduğunda yapılan bildirimler</string>
+    <string name="pdf_export_notification_title">Bakım Raporu Dışa Aktarıldı</string>
+    <string name="pdf_export_notification_text">%1$s açmak için dokunun</string>
+    <string name="test_notification_title">Test Bildirimi</string>
+    <string name="test_notification_text">Bunu görebiliyorsanız, anlık bildirimler düzgün çalışıyor demektir.</string>
+
+    <!-- App widget -->
+    <string name="garage_widget_description">Yaklaşan/geciken bakımları gösterir ve servis veya yakıt kaydını hızlıca yapmanızı sağlar</string>
+
+    <!-- App Shortcuts & Quick Settings Tiles -->
+    <string name="shortcut_log_fuel_short">Yakıt Kaydet</string>
+    <string name="shortcut_log_fuel_long">Yakıt Alımını Kaydet</string>
+    <string name="shortcut_update_odometer_short">Kilometre</string>
+    <string name="shortcut_update_odometer_long">Kilometreyi Güncelle</string>
+    <string name="tile_log_fuel_label">Yakıt Kaydet</string>
+    <string name="tile_update_odometer_label">Kilometre Güncelle</string>
+    <string name="dialog_update_odometer_title">Kilometreyi Güncelle</string>
+
+    <!-- Scanner -->
+    <string name="cd_go_back">Geri</string>
+    <string name="cd_toggle_flashlight">Feneri Aç/Kapat</string>
+    <string name="scan_vin_instruction">Şasi Numarası (VIN) barkodunu çerçeveye hizalayın</string>
+    <string name="cd_scan_vin">VIN Taraması Yap</string>
+    <string name="scan_vin_failed">Barkod algılanamadı. VIN barkodunu hizalayıp tekrar deneyin.</string>
+
+    <!-- OBD2 scanner -->
+    <string name="obd_scanner_title">OBD2 Taraması</string>
+    <string name="obd_cd_back">Geri</string>
+    <string name="obd_rescan">Yeniden Tara</string>
+    <string name="obd_reconnect">Yeniden Bağlan</string>
+    <string name="obd_change">Değiştir</string>
+    <string name="obd_cancel">İptal</string>
+    <string name="obd_clearing_codes">Arıza kodları siliniyor…</string>
+    <string name="obd_clear_codes">Kodları Sil</string>
+    <string name="obd_clear_codes_confirm_title">Arıza kodları silinsin mi?</string>
+    <string name="obd_clear_codes_confirm_message">En iyi sonuçlar için motoru kapatın ancak kontağı açık bırakın.\n\nBu işlem motor arıza lambasını söndürür ve emisyon monitörlerini sıfırlar.</string>
+    <string name="obd_permission_title">Bluetooth İzni Gerekli</string>
+    <string name="obd_permission_message">Garage, OBD2 adaptörünüzle iletişim kurmak için Bluetooth iznine ihtiyaç duyar. Hiçbir veri cihazınızdan dışarı çıkmaz.</string>
+    <string name="obd_permission_action">İzin Ver</string>
+    <string name="obd_no_adapter_title">OBD2 Adaptörü Seçilmedi</string>
+    <string name="obd_no_adapter_message">Aracınızın teşhis soketine bir Bluetooth OBD2 adaptörü takın ve telefonunuzla eşleştirin.\n\nArıza kodlarını okuyun ve silin, emisyon durumunu kontrol edin ve canlı verileri izleyin.</string>
+    <string name="obd_no_adapter_action">OBD2 Adaptörü Eşleştir</string>
+    <string name="obd_status_connected">Bağlandı</string>
+    <string name="obd_status_connecting">Bağlanıyor…</string>
+    <string name="obd_status_disconnected">Bağlantı Kesildi</string>
+    <string name="obd_status_not_connected">Bağlı Değil</string>
+    <string name="obd_adapter_header">OBD2 Adaptörü · %1$s</string>
+    <string name="obd_unknown_device">Bilinmeyen Cihaz</string>
+    <string name="obd_vin_mismatch_title">Bu adaptör farklı bir araca bağlı</string>
+    <string name="obd_vin_save_title">Bu VIN araca kaydedilsin mi?</string>
+    <string name="obd_vin_mismatch_message">Araç VIN %1$s bildiriyor, ancak bu aracın VIN\'i %2$s. Bu tarama geçmişe kaydedilmedi.</string>
+    <string name="obd_vin_save_message">Araç VIN %1$s bildiriyor. Bu aracın henüz kayıtlı bir VIN numarası yok.</string>
+    <string name="obd_save_scan_anyway">Yine de Taramayı Kaydet</string>
+    <string name="obd_save_vin">VIN Numarasını Kaydet</string>
+    <string name="obd_freeze_frame_title">Dondurulmuş Kare (Freeze Frame)</string>
+    <string name="obd_freeze_frame_description">%1$s kodu oluştuğunda kaydedilen motor koşulları.</string>
+    <string name="obd_freeze_frame_code_fallback">kod</string>
+    <string name="obd_freeze_frame_empty">Araç dondurulmuş kare verisi bildirmedi.</string>
+    <string name="obd_vehicle_health_title">Araç Sağlığı</string>
+    <string name="obd_mil_on">Motor arıza lambası AÇIK</string>
+    <string name="obd_mil_off">Motor arıza lambası kapalı</string>
+    <plurals name="obd_emissions_codes_reported">
+        <item quantity="one">%1$d emisyon arıza kodu bildirildi</item>
+        <item quantity="other">%1$d emisyon arıza kodu bildirildi</item>
+    </plurals>
+    <string name="obd_readiness_summary">Emisyon hazırlığı: %1$d/%2$d izleyici tamamlandı</string>
+    <string name="obd_readiness_mil_on">Motor arıza lambası yanan araçlar emisyon muayenesinden kalır.</string>
+    <string name="obd_readiness_ok">Muhtemelen emisyon muayenesine hazır.</string>
+    <string name="obd_readiness_not_ready">Henüz hazır değil. İzleyicilerin tamamlanması için birkaç gün normal sürün.</string>
+    <string name="obd_cd_hide_monitors">İzleyicileri gizle</string>
+    <string name="obd_cd_show_monitors">İzleyicileri göster</string>
+    <string name="obd_cd_monitor_complete">Tamamlandı</string>
+    <string name="obd_cd_monitor_incomplete">Tamamlanmadı</string>
+    <string name="obd_monitor_ready">Hazır</string>
+    <string name="obd_monitor_not_ready">Hazır değil</string>
+    <string name="obd_no_codes_title">Arıza kodu bulunamadı</string>
+    <string name="obd_no_codes_message">Kayıtlı, bekleyen veya kalıcı arıza kodu yok.</string>
+    <string name="obd_dtc_title">Teşhis Arıza Kodları</string>
+    <plurals name="obd_code_count">
+        <item quantity="one">%1$d kod</item>
+        <item quantity="other">%1$d kod</item>
+    </plurals>
+    <string name="obd_dtc_stored_title">Kayıtlı</string>
+    <string name="obd_dtc_stored_explanation">Onaylanmış arızalar. Genellikle motor arıza lambasını yakarlar.</string>
+    <string name="obd_dtc_pending_title">Bekleyen</string>
+    <string name="obd_dtc_pending_explanation">Bir kez algılandı ancak henüz onaylanmadı. Erken uyarı.</string>
+    <string name="obd_dtc_permanent_title">Kalıcı</string>
+    <string name="obd_dtc_permanent_explanation">Bir tarayıcı ile silinemezler. Araç onarımı doğruladıktan sonra kendiliğinden kaybolurlar.</string>
+    <string name="obd_dtc_reported_by">Bildiren: %1$s</string>
+    <string name="obd_distance_title">Mesafe</string>
+    <string name="obd_odometer">Kilometre</string>
+    <string name="obd_since_codes_cleared">Kodlar silindikten sonra</string>
+    <string name="obd_timeline_saved">Tarama araç geçmişine kaydedildi.</string>
+    <string name="obd_timeline_unchanged">Son taramadan bu yana hiçbir şey değişmedi.</string>
+    <string name="obd_timeline_vin_mismatch">VIN bu araçla eşleşmediği için kaydedilmedi.</string>
+    <string name="obd_live_data_title">Canlı Veri</string>
+    <string name="obd_live">Canlı</string>
+    <string name="obd_waiting_for_data">Veri bekleniyor…</string>
+    <string name="obd_stop_live_data">Canlı Veriyi Durdur</string>
+    <string name="obd_start_live_data">Canlı Veriyi Başlat</string>
+    <string name="obd_snapshot_title">Sensör Anlık Görüntüsü</string>
+    <string name="obd_battery_at_port">Akü (soketteki voltaj)</string>
+    <string name="obd_vin">VIN</string>
+
+    <!-- OBD2 scanner: adapter picker -->
+    <string name="obd_picker_title">OBD2 Adaptörü Seçin</string>
+    <string name="obd_picker_tab_bluetooth">Bluetooth</string>
+    <string name="obd_picker_tab_ble">BLE</string>
+    <string name="obd_picker_tab_wifi">Wi-Fi</string>
+    <string name="obd_picker_forget_adapter">Adaptörü Unut</string>
+    <string name="obd_picker_classic_permission_hint">Garage, eşleşmiş adaptörlerinizi listelemek için Bluetooth iznine ihtiyaç duyar.</string>
+    <string name="obd_picker_allow_bluetooth">Bluetooth Erişimine İzin Ver</string>
+    <string name="obd_picker_classic_empty">Eşleşmiş Bluetooth cihazı bulunamadı. OBD2 adaptörünüzü takın, kontağı açın ve telefonunuzun Bluetooth ayarlarından eşleştirin (PIN genellikle 1234 veya 0000\'dır).</string>
+    <string name="obd_picker_classic_hint">Aracınıza takılı adaptörü seçin. Muhtemel OBD2 adaptörleri üstte listelenir.</string>
+    <string name="obd_picker_pair_new">Yeni Cihaz Eşleştir</string>
+    <string name="obd_picker_refresh_list">Listeyi Yenile</string>
+    <string name="obd_picker_ble_hint">Bluetooth LE adaptörlerinin eşleştirilmesine gerek yoktur. Adaptörü takın, kontağı açın ve tarayın.</string>
+    <string name="obd_picker_ble_empty">Henüz Bluetooth LE cihazı bulunamadı.</string>
+    <string name="obd_picker_scanning">Taranıyor…</string>
+    <string name="obd_picker_scan_for_adapters">Adaptörleri Ara</string>
+    <string name="obd_picker_scan_again">Yeniden Ara</string>
+    <string name="obd_picker_wifi_hint">Önce telefonunuzu adaptörün Wi-Fi ağına bağlayın (genellikle "WiFi_OBDII" veya "V-LINK").</string>
+    <string name="obd_picker_open_wifi_settings">Wi-Fi Ayarlarını Aç</string>
+    <string name="obd_picker_wifi_host_label">Adaptör IP adresi</string>
+    <string name="obd_picker_wifi_port_label">Port</string>
+    <string name="obd_picker_use_wifi_adapter">Wi-Fi Adaptörünü Kullan</string>
+    <string name="obd_picker_cd_current_adapter">Mevcut adaptör</string>
+
+    <!-- OBD2 scanner: settings -->
+    <string name="settings_obd_adapter_title">OBD2 Adaptörü</string>
+    <string name="settings_obd_adapter_summary">%1$s · %2$s (%3$s)</string>
+    <string name="settings_obd_adapter_not_set">Ayarlanmadı — seçmek için dokunun</string>
+
+    <!-- OBD2 scanner: documents (emissions) -->
+    <string name="documents_obd_readiness_label">OBD2 Hazırlık Durumu</string>
+    <string name="documents_obd_readiness_label_scanned">OBD2 Hazırlık Durumu (%1$s tarihinde tarandı)</string>
+    <string name="documents_obd_readiness_value">%1$d/%2$d izleyici tamamlandı — %3$s</string>
+    <string name="documents_obd_readiness_not_ready_list">Hazır olmayanlar: %1$s</string>
+    <string name="documents_obd_readiness_mil_on">Motor arıza lambası açık — muhtemelen kalır</string>
+    <string name="documents_obd_readiness_likely_ready">Muhtemelen muayeneye hazır</string>
+    <string name="documents_obd_readiness_not_ready">Henüz hazır değil — muayeneden önce daha fazla sürün</string>
+</resources>
