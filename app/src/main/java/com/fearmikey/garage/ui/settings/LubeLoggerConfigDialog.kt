@@ -39,6 +39,45 @@ fun LubeLoggerConfigDialog(
     var password by remember { mutableStateOf("") }
     var apiKey by remember { mutableStateOf(initialApiKey) }
     var unitSystem by remember { mutableStateOf(initialUnitSystem) }
+    var showHttpWarning by remember { mutableStateOf(false) }
+
+    fun doSave() {
+        onSave(url, username, password.takeIf { it.isNotBlank() }, apiKey.takeIf { it.isNotBlank() }, unitSystem)
+    }
+
+    fun handleSaveClick() {
+        val isHttp = !url.trim().startsWith("https://", ignoreCase = true)
+        if (isHttp) {
+            showHttpWarning = true
+        } else {
+            doSave()
+        }
+    }
+
+    if (showHttpWarning) {
+        AlertDialog(
+            onDismissRequest = { showHttpWarning = false },
+            title = { Text("Insecure Connection Warning") },
+            text = {
+                Text("You are connecting over an unencrypted HTTP connection. To keep your login credentials and vehicle data secure, ensure you are using a secure private VPN connection (such as Tailscale or WireGuard) to your server.")
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showHttpWarning = false
+                        doSave()
+                    }
+                ) {
+                    Text("Continue")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showHttpWarning = false }) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
@@ -114,7 +153,7 @@ fun LubeLoggerConfigDialog(
         },
         confirmButton = {
             TextButton(
-                onClick = { onSave(url, username, password.takeIf { it.isNotBlank() }, apiKey.takeIf { it.isNotBlank() }, unitSystem) },
+                onClick = ::handleSaveClick,
                 enabled = url.isNotBlank() && (apiKey.isNotBlank() || username.isNotBlank()),
             ) {
                 Text("Save")

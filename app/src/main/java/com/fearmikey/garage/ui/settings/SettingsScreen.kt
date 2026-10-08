@@ -1035,6 +1035,45 @@ private fun CloudBackupConfigDialog(
     var url by remember { mutableStateOf(uiState.webdavUrl) }
     var username by remember { mutableStateOf(uiState.webdavUsername) }
     var password by remember { mutableStateOf("") }
+    var showHttpWarning by remember { mutableStateOf(false) }
+
+    fun doSave() {
+        onSave(enabled, url, username, password)
+    }
+
+    fun handleSaveClick() {
+        val isHttp = enabled && url.isNotBlank() && !url.trim().startsWith("https://", ignoreCase = true)
+        if (isHttp) {
+            showHttpWarning = true
+        } else {
+            doSave()
+        }
+    }
+
+    if (showHttpWarning) {
+        AlertDialog(
+            onDismissRequest = { showHttpWarning = false },
+            title = { Text("Insecure Connection Warning") },
+            text = {
+                Text("You are connecting over an unencrypted HTTP connection. To keep your cloud backup credentials and data secure, ensure you are using a secure private VPN connection (such as Tailscale or WireGuard) to your server.")
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showHttpWarning = false
+                        doSave()
+                    }
+                ) {
+                    Text("Continue")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showHttpWarning = false }) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
@@ -1085,7 +1124,7 @@ private fun CloudBackupConfigDialog(
         },
         confirmButton = {
             TextButton(
-                onClick = { onSave(enabled, url, username, password) },
+                onClick = ::handleSaveClick,
                 enabled = url.isNotBlank() && username.isNotBlank(),
             ) {
                 Text("Save")

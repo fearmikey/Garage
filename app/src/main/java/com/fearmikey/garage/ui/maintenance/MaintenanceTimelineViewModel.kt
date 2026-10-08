@@ -60,6 +60,7 @@ class MaintenanceTimelineViewModel @Inject constructor(
                 deleteExistingReceipt = deleteExistingReceipt,
             )
             WorkScheduler.triggerImmediateReminderCheck(context)
+            WorkScheduler.triggerImmediateLubeLoggerSync(context)
         }
     }
 
@@ -67,6 +68,7 @@ class MaintenanceTimelineViewModel @Inject constructor(
         viewModelScope.launch {
             maintenanceRepository.deleteRecord(record)
             WorkScheduler.triggerImmediateReminderCheck(context)
+            WorkScheduler.triggerImmediateLubeLoggerSync(context)
         }
     }
 }

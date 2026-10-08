@@ -3,11 +3,13 @@ package com.fearmikey.garage.ui.obd
 import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import android.content.Context
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.repository.MaintenanceRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.data.repository.VehicleRepository
+import com.fearmikey.garage.notification.WorkScheduler
 import com.fearmikey.garage.obd.ObdAdapterConfig
 import com.fearmikey.garage.obd.ObdAdapterException
 import com.fearmikey.garage.obd.ObdAdapterType
@@ -21,6 +23,7 @@ import com.fearmikey.garage.obd.ObdScanSummary
 import com.fearmikey.garage.obd.ObdTimeoutException
 import com.fearmikey.garage.ui.util.UnitConverter
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Job
@@ -46,6 +49,7 @@ class ObdViewModel @Inject constructor(
     private val maintenanceRepository: MaintenanceRepository,
     private val preferencesRepository: PreferencesRepository,
     private val vehicleRepository: VehicleRepository,
+    @ApplicationContext private val context: Context,
 ) : ViewModel() {
 
     enum class ConnectionStatus { IDLE, CONNECTING, CONNECTED, DISCONNECTED }
@@ -412,6 +416,8 @@ class ObdViewModel @Inject constructor(
                 taskName = taskName,
             )
         )
+        WorkScheduler.triggerImmediateReminderCheck(context)
+        WorkScheduler.triggerImmediateLubeLoggerSync(context)
         _timelineEvents.tryEmit(Unit)
     }
 

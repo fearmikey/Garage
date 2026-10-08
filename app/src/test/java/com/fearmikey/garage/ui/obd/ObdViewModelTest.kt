@@ -177,7 +177,7 @@ class ObdViewModelTest {
         val dao = FakeMaintenanceDao()
         val vehicleDao = FakeVehicleDao(vehicleVin)
         val prefs = FakePreferencesRepository(adapter)
-        val viewModel = ObdViewModel(manager, MaintenanceRepository(dao), prefs, vehicleRepository(vehicleDao))
+        val viewModel = ObdViewModel(manager, MaintenanceRepository(dao), prefs, vehicleRepository(vehicleDao), ContextWrapper(null))
         viewModel.setVehicleId(VEHICLE_ID)
         return Harness(manager, dao, vehicleDao, prefs, viewModel)
     }

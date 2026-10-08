@@ -112,7 +112,10 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
                 newPickedReceiptUri = pickedReceiptUri,
                 deleteExistingReceipt = deleteExistingReceipt,
             )
-            context?.let { WorkScheduler.triggerImmediateReminderCheck(it) }
+            context?.let {
+                WorkScheduler.triggerImmediateReminderCheck(it)
+                WorkScheduler.triggerImmediateLubeLoggerSync(it)
+            }
         }
     }
 

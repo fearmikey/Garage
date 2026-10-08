@@ -444,4 +444,38 @@ class LubeLoggerMapperTest {
         val remote = remoteWith("VIN" to "").copy(licensePlate = "1GNDT13W6W2123456")
         assertNull(remote.findVin())
     }
+
+    @Test
+    fun `createLubeLoggerOdometerDto creates correct DTO with imperial and metric conversion`() {
+        val cal = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
+            set(2025, Calendar.MARCH, 1, 12, 0, 0)
+        }
+        val dateMillis = cal.timeInMillis
+
+        // Imperial
+        val dtoImperial = createLubeLoggerOdometerDto(
+            lubeLoggerVehicleId = 42,
+            dateMillis = dateMillis,
+            mileageMiles = 50000,
+            notes = "Fuel fill-up",
+            lubeLoggerUnitSystem = "imperial"
+        )
+        assertEquals("42", dtoImperial.vehicleId)
+        assertEquals("2025-03-01", dtoImperial.date)
+        assertEquals("50000", dtoImperial.odometer)
+        assertEquals("Fuel fill-up", dtoImperial.notes)
+
+        // Metric (50000 miles -> 80467 km)
+        val dtoMetric = createLubeLoggerOdometerDto(
+            lubeLoggerVehicleId = 42,
+            dateMillis = dateMillis,
+            mileageMiles = 50000,
+            notes = "Oil Change",
+            lubeLoggerUnitSystem = "metric"
+        )
+        assertEquals("42", dtoMetric.vehicleId)
+        assertEquals("2025-03-01", dtoMetric.date)
+        assertEquals("80467", dtoMetric.odometer)
+        assertEquals("Oil Change", dtoMetric.notes)
+    }
 }

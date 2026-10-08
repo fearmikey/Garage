@@ -9,6 +9,7 @@ import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.repository.MaintenanceRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.data.repository.VehicleRepository
+import com.fearmikey.garage.notification.WorkScheduler
 import com.fearmikey.garage.ui.util.UnitSystem
 import com.fearmikey.garage.ui.vehicle.VehicleTab
 import com.fearmikey.garage.widget.WidgetRefresher
@@ -192,6 +193,8 @@ class MainViewModel @Inject constructor(
                 )
             )
             WidgetRefresher.refresh(context)
+            WorkScheduler.triggerImmediateReminderCheck(context)
+            WorkScheduler.triggerImmediateLubeLoggerSync(context)
             clearPendingDeepLink()
         }
     }

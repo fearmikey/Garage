@@ -1,3 +1,10 @@
+## [1.3.0] - 2026-10-07
+
+### Added
+* **Enhanced Background Sync & State Management:** Refined LubeLogger background sync worker, credentials manager, and ViewModel state synchronization across fuel, timeline, and suggestions screens.
+* **OBD2 Telemetry & Scanner Refinements:** Improved live diagnostic scanner stability, OBD2 reading state flows, and unit test coverage.
+* **Expanded Unit Test Suite:** Updated test suites for `ObdViewModelTest` and `LubeLoggerMapperTest`.
+
 ## [1.2.9] - 2026-10-05
 
 ### Added

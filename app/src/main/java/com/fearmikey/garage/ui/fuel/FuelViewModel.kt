@@ -119,6 +119,7 @@ class FuelViewModel @Inject constructor(
             fuelRepository.saveRecord(record.copy(vehicleId = vehicleId))
             WidgetRefresher.refresh(context)
             WorkScheduler.triggerImmediateReminderCheck(context)
+            WorkScheduler.triggerImmediateLubeLoggerSync(context)
         }
     }
 
@@ -127,6 +128,7 @@ class FuelViewModel @Inject constructor(
             fuelRepository.deleteRecord(record)
             WidgetRefresher.refresh(context)
             WorkScheduler.triggerImmediateReminderCheck(context)
+            WorkScheduler.triggerImmediateLubeLoggerSync(context)
         }
     }
 
@@ -135,6 +137,7 @@ class FuelViewModel @Inject constructor(
             chargingRepository.saveRecord(record.copy(vehicleId = vehicleId))
             WidgetRefresher.refresh(context)
             WorkScheduler.triggerImmediateReminderCheck(context)
+            WorkScheduler.triggerImmediateLubeLoggerSync(context)
         }
     }
 
@@ -143,6 +146,7 @@ class FuelViewModel @Inject constructor(
             chargingRepository.deleteRecord(record)
             WidgetRefresher.refresh(context)
             WorkScheduler.triggerImmediateReminderCheck(context)
+            WorkScheduler.triggerImmediateLubeLoggerSync(context)
         }
     }
 

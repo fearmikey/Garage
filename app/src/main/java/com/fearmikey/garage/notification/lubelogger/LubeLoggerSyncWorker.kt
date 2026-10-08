@@ -22,6 +22,7 @@ import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerOperationResponse
 import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerVehicleDto
 import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerVehicleImportDto
 import com.fearmikey.garage.data.remote.lubelogger.cleanLegacyTaskSuffix
+import com.fearmikey.garage.data.remote.lubelogger.createLubeLoggerOdometerDto
 import com.fearmikey.garage.data.remote.lubelogger.describeLubeLoggerFailure
 import com.fearmikey.garage.data.remote.lubelogger.describeLubeLoggerHttpFailure
 import com.fearmikey.garage.data.remote.lubelogger.flattenJsonToFormFields
@@ -413,10 +414,24 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
         val allMaintenance = maintenanceRepository.getRecordsForVehicle(localVehicleId).first()
         val localRecords = allMaintenance.filter { it.effectiveRecordType == LubeLoggerRecordType.ODOMETER }
 
-        // LubeLogger can auto-create odometer records for every fuel/service entry; those readings
-        // already exist in Garage, so don't clutter history with copies.
-        val localOtherReadings = allMaintenance.filterNot { it.isOdometerCheckIn }.map { it.mileage to it.date } +
-            fuelRepository.getRecordsForVehicle(localVehicleId).first().map { it.mileage to it.date }
+        val fuelRecords = fuelRepository.getRecordsForVehicle(localVehicleId).first().filter { it.mileage > 0 }
+        val chargingRecords = chargingRepository.getRecordsForVehicle(localVehicleId).first().filter { it.mileage > 0 }
+        val serviceRepairRecords = allMaintenance.filterNot { it.isOdometerCheckIn }.filter { it.mileage > 0 }
+
+        // Gather all non-check-in local readings (Fuel, Service/Repair, Charging)
+        val nonCheckInReadings = mutableListOf<Triple<Int, Long, String>>() // (mileage, date, notes)
+        fuelRecords.forEach { fuel ->
+            nonCheckInReadings.add(Triple(fuel.mileage, fuel.date, "Fuel fill-up"))
+        }
+        serviceRepairRecords.forEach { maint ->
+            val notes = maint.taskName?.ifBlank { null }
+                ?: maint.description.ifBlank { null }
+                ?: if (maint.category == MaintenanceCategory.REPAIR) "Repair" else "Service"
+            nonCheckInReadings.add(Triple(maint.mileage, maint.date, notes))
+        }
+        chargingRecords.forEach { charge ->
+            nonCheckInReadings.add(Triple(charge.mileage, charge.date, charge.vendor.ifBlank { "Charging" }))
+        }
 
         syncLubeLoggerRecords(
             localRecords = localRecords,
@@ -433,7 +448,7 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
                 isSameMaintReading(local.mileage, local.date, remote.toOdometerCheckIn(localVehicleId, unitSystem))
             },
             addLocal = { record ->
-                if (localOtherReadings.none { (mileage, date) -> isSameReading(mileage, date, record.mileage, record.date) }) {
+                if (nonCheckInReadings.none { (mileage, date, _) -> isSameReading(mileage, date, record.mileage, record.date) }) {
                     maintenanceRepository.saveRecord(record)
                 }
             },
@@ -448,6 +463,35 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
             },
             onDeletesSkipped = ::logSkippedDeletes,
         )
+
+        // Ensure LubeLogger's odometer log includes every non-check-in local reading
+        val updatedRemoteRecords = api.getOdometerRecords(mappedId).bodyIfSuccessful()
+            ?.filter { (parseLubeLoggerInt(it.id) ?: 0) > 0 } ?: remoteRecords
+        val remoteReadings = updatedRemoteRecords.mapNotNull { dto ->
+            dto.toOdometerCheckIn(localVehicleId, unitSystem)
+        }.toMutableList()
+
+        for ((mileage, date, notes) in nonCheckInReadings) {
+            val existsInRemote = remoteReadings.any { remote ->
+                isSameReading(mileage, date, remote.mileage, remote.date)
+            }
+            if (!existsInRemote) {
+                val dto = createLubeLoggerOdometerDto(
+                    lubeLoggerVehicleId = mappedId,
+                    dateMillis = date,
+                    mileageMiles = mileage,
+                    notes = notes,
+                    lubeLoggerUnitSystem = unitSystem,
+                )
+                val newRemoteId = api.addOdometerRecord(mappedId, dto).recordIdOrNull()
+                if (newRemoteId != null) {
+                    val newCheckIn = dto.copy(id = newRemoteId.toString()).toOdometerCheckIn(localVehicleId, unitSystem)
+                    if (newCheckIn != null) {
+                        remoteReadings.add(newCheckIn)
+                    }
+                }
+            }
+        }
     }
 
     private suspend fun syncChargingRecords(

@@ -41,7 +41,7 @@ open class LubeLoggerCredentialsManager @Inject constructor(
      */
     open fun saveCredentials(serverUrl: String, username: String, password: String?, apiKey: String?, unitSystem: String = "imperial") {
         // Stray whitespace (e.g. a Tab from moving between fields) silently breaks Basic auth.
-        val serverUrl = serverUrl.trim()
+        val serverUrl = normalizeServerUrl(serverUrl)
         val username = username.trim()
         val apiKey = apiKey?.trim()?.takeIf { it.isNotEmpty() }
         val usernameChanged = username != getUsername()
@@ -130,7 +130,12 @@ open class LubeLoggerCredentialsManager @Inject constructor(
         }
     }
 
-    open fun getServerUrl(): String? = sharedPreferences.getString("server_url", null)?.trim()
+    open fun getServerUrl(): String? {
+        val raw = sharedPreferences.getString("server_url", null)?.trim() ?: return null
+        if (raw.isBlank()) return null
+        return normalizeServerUrl(raw)
+    }
+
     open fun getUsername(): String? = sharedPreferences.getString("username", null)?.trim()
     open fun getPassword(): String? = sharedPreferences.getString("password", null)
     open fun getApiKey(): String? = sharedPreferences.getString("api_key", null)?.trim()
@@ -145,6 +150,16 @@ open class LubeLoggerCredentialsManager @Inject constructor(
         const val KEY_LAST_SUCCESS = "ll_last_sync_success_at"
         const val KEY_LAST_FAILURE = "ll_last_sync_failure_at"
         const val KEY_LAST_ERROR = "ll_last_sync_error"
+
+        fun normalizeServerUrl(rawUrl: String): String {
+            val trimmed = rawUrl.trim()
+            if (trimmed.isEmpty()) return ""
+            return if (!trimmed.startsWith("http://", ignoreCase = true) && !trimmed.startsWith("https://", ignoreCase = true)) {
+                "http://$trimmed"
+            } else {
+                trimmed
+            }
+        }
     }
 
     open fun isConfigured(): Boolean {

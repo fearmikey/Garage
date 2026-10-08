@@ -1,0 +1,1 @@
+Refined LubeLogger background sync worker, improved OBD2 diagnostic scanner stability, and updated test suites.

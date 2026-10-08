@@ -25,7 +25,7 @@ private const val ODOMETER_CHECK_IN_DESCRIPTION = "Odometer check-in"
 val MaintenanceRecord.isOdometerCheckIn: Boolean
     get() = category == MaintenanceCategory.INSPECTION && taskName == ODOMETER_CHECK_IN_TASK
 
-private fun formatDate(epochMillis: Long): String =
+internal fun formatDate(epochMillis: Long): String =
     SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date(epochMillis))
 
 /** Parses LubeLogger integer fields that may arrive as "123", "123.0" or a JSON number. */
@@ -216,6 +216,24 @@ fun MaintenanceRecord.toLubeLoggerOdometerDto(lubeLoggerVehicleId: Int, lubeLogg
         date = formatDate(this.date),
         odometer = convertedOdometer.toString(),
         notes = this.description.takeIf { it != ODOMETER_CHECK_IN_DESCRIPTION } ?: "",
+    )
+}
+
+fun createLubeLoggerOdometerDto(
+    lubeLoggerVehicleId: Int,
+    dateMillis: Long,
+    mileageMiles: Int,
+    notes: String,
+    lubeLoggerUnitSystem: String = "imperial",
+): LubeLoggerOdometerRecordDto {
+    val isMetric = lubeLoggerUnitSystem.equals("metric", ignoreCase = true)
+    val convertedOdometer = if (isMetric) UnitConverter.milesToKm(mileageMiles) else mileageMiles
+
+    return LubeLoggerOdometerRecordDto(
+        vehicleId = lubeLoggerVehicleId.toString(),
+        date = formatDate(dateMillis),
+        odometer = convertedOdometer.toString(),
+        notes = notes,
     )
 }
 
