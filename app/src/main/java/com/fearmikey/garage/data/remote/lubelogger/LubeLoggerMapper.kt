@@ -8,6 +8,7 @@ import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.ModificationRecord
 import com.fearmikey.garage.data.schedule.MaintenanceScheduleRules
 import com.fearmikey.garage.ui.util.UnitConverter
+import com.fearmikey.garage.ui.util.parseToDoubleOrNull
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -30,7 +31,7 @@ internal fun formatDate(epochMillis: Long): String =
 
 /** Parses LubeLogger integer fields that may arrive as "123", "123.0" or a JSON number. */
 internal fun parseLubeLoggerInt(value: String?): Int? =
-    value?.trim()?.toDoubleOrNull()?.roundToInt()
+    value?.trim()?.parseToDoubleOrNull()?.roundToInt()
 
 /** Parses LubeLogger booleans, which may be "True"/"False" (default culture) or true/false. */
 internal fun parseLubeLoggerBoolean(value: String?): Boolean? =
@@ -48,8 +49,8 @@ fun FuelRecord.toLubeLoggerDto(lubeLoggerVehicleId: Int, lubeLoggerUnitSystem: S
         odometer = convertedOdometer.toString(),
         fuelConsumed = "%.3f".format(Locale.US, convertedGallons),
         cost = "%.2f".format(Locale.US, this.totalCost),
-        isFillToFull = this.isFullTank.toString(),
-        missedFuelUp = "false", // We don't explicitly track missed fuel ups right now
+        isFillToFull = this.isFullTank,
+        missedFuelUp = false, // We don't explicitly track missed fuel ups right now
     )
 }
 
@@ -129,8 +130,8 @@ fun ChargingRecord.toLubeLoggerDto(lubeLoggerVehicleId: Int, lubeLoggerUnitSyste
         odometer = convertedOdometer.toString(),
         fuelConsumed = "%.3f".format(Locale.US, this.kwhAdded),
         cost = "%.2f".format(Locale.US, this.totalCost),
-        isFillToFull = "true",
-        missedFuelUp = "false",
+        isFillToFull = true,
+        missedFuelUp = false,
         startingSoc = this.batteryPercentStart.toString(),
         endingSoc = this.batteryPercentEnd.toString(),
         notes = this.vendor.ifBlank { "" },
@@ -143,8 +144,8 @@ fun LubeLoggerGasRecordDto.toChargingRecord(localVehicleId: Long, lubeLoggerUnit
     val parsedDate = parseDateToEpochMillis(date)
 
     val rawMileage = mileage ?: parseLubeLoggerInt(odometer) ?: 0
-    val rawKwh = gallons ?: fuelConsumed?.toDoubleOrNull() ?: 0.0
-    val parsedCost = cost?.toDoubleOrNull() ?: 0.0
+    val rawKwh = gallons ?: fuelConsumed?.parseToDoubleOrNull() ?: 0.0
+    val parsedCost = cost?.parseToDoubleOrNull() ?: 0.0
     val startSoc = parseLubeLoggerInt(startingSoc) ?: 20
     val endSoc = parseLubeLoggerInt(endingSoc) ?: 80
 
@@ -269,9 +270,9 @@ fun LubeLoggerGasRecordDto.toFuelRecord(localVehicleId: Long, lubeLoggerUnitSyst
     val parsedDate = parseDateToEpochMillis(date)
     
     val rawMileage = mileage ?: parseLubeLoggerInt(odometer) ?: 0
-    val rawGallons = gallons ?: fuelConsumed?.toDoubleOrNull() ?: 0.0
-    val parsedCost = cost?.toDoubleOrNull() ?: 0.0
-    val parsedIsFillToFull = parseLubeLoggerBoolean(isFillToFull) ?: true
+    val rawGallons = gallons ?: fuelConsumed?.parseToDoubleOrNull() ?: 0.0
+    val parsedCost = cost?.parseToDoubleOrNull() ?: 0.0
+    val parsedIsFillToFull = isFillToFull ?: true
 
     val parsedMileage = if (isMetric) UnitConverter.kmToMiles(rawMileage) else rawMileage
     val parsedGallons = if (isMetric) UnitConverter.litersToGallons(rawGallons) else rawGallons
@@ -353,7 +354,7 @@ private fun parseMaintenanceRecord(
         date = parseDateToEpochMillis(dateStr),
         mileage = if (isMetric) UnitConverter.kmToMiles(rawMileage) else rawMileage,
         description = cleanDescription,
-        cost = cost?.toDoubleOrNull() ?: 0.0,
+        cost = cost?.parseToDoubleOrNull() ?: 0.0,
         category = category,
         taskName = task,
         receiptUri = existing?.receiptUri,
@@ -372,7 +373,7 @@ private const val FIELD_DEFERRED = "Garage Deferred"
 fun LubeLoggerUpgradeRecordDto.toModificationRecord(localVehicleId: Long, existing: ModificationRecord? = null): ModificationRecord? {
     val recordId = id ?: return null
     val parsedDate = parseDateToEpochMillis(date)
-    val parsedCost = cost?.toDoubleOrNull() ?: 0.0
+    val parsedCost = cost?.parseToDoubleOrNull() ?: 0.0
     
     // We split title and description by " - " if it exists, otherwise it's just title
     val parts = description.split(" - ", limit = 2)

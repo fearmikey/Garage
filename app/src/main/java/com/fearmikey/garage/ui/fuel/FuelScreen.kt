@@ -103,6 +103,8 @@ import com.fearmikey.garage.ui.util.ThousandsSeparatorVisualTransformation
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
 import com.fearmikey.garage.ui.util.fromUtcDatePickerMillis
+import com.fearmikey.garage.ui.util.parseToDoubleOrNull
+import com.fearmikey.garage.ui.util.parseToIntOrNull
 import com.fearmikey.garage.ui.util.sanitizeMileageInput
 import com.fearmikey.garage.ui.util.toDisplayDate
 import com.fearmikey.garage.ui.util.toUtcDatePickerMillis
@@ -654,9 +656,9 @@ internal fun AddEditChargingRecordSheet(
     var date by remember { mutableLongStateOf(initial?.date ?: System.currentTimeMillis()) }
     var showDatePicker by remember { mutableStateOf(false) }
 
-    val kwhValue = kwhAdded.toDoubleOrNull()
-    val totalCostValue = totalCost.toDoubleOrNull()
-    val canSave = (mileage.filter(Char::isDigit).toIntOrNull() != null) &&
+    val kwhValue = kwhAdded.parseToDoubleOrNull()
+    val totalCostValue = totalCost.parseToDoubleOrNull()
+    val canSave = (mileage.parseToIntOrNull() != null) &&
         (kwhValue != null) && (kwhValue > 0.0) &&
         (totalCostValue != null)
 
@@ -733,7 +735,7 @@ internal fun AddEditChargingRecordSheet(
 
             OutlinedTextField(
                 value = kwhAdded,
-                onValueChange = { kwhAdded = it.filter { c -> (c.isDigit()) || (c == '.') } },
+                onValueChange = { kwhAdded = it.filter { c -> c.isDigit() || c == '.' || c == ',' } },
                 label = { Text(stringResource(R.string.fuel_kwh_added)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
@@ -798,7 +800,7 @@ internal fun AddEditChargingRecordSheet(
 
             OutlinedTextField(
                 value = totalCost,
-                onValueChange = { totalCost = it.filter { c -> (c.isDigit()) || (c == '.') } },
+                onValueChange = { totalCost = it.filter { c -> c.isDigit() || c == '.' || c == ',' } },
                 label = { Text(stringResource(R.string.fuel_total_cost)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
@@ -820,7 +822,7 @@ internal fun AddEditChargingRecordSheet(
                 singleLine = true,
                 visualTransformation = ThousandsSeparatorVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
+                    keyboardType = KeyboardType.Decimal,
                     imeAction = ImeAction.Next,
                 ),
                 modifier = Modifier.fillMaxWidth(),
@@ -867,11 +869,11 @@ internal fun AddEditChargingRecordSheet(
 
             Button(
                 onClick = {
-                    val inputMileage = mileage.filter(Char::isDigit).toIntOrNull() ?: 0
+                    val inputMileage = mileage.parseToIntOrNull() ?: 0
                     val canonicalMileage = UnitConverter.canonicalMilesFromInput(inputMileage, unitSystem)
                     val canonicalKwh = kwhValue ?: 0.0
                     val finalTotalCost = totalCostValue ?: 0.0
-                    val inputEstRange = estRange100.toIntOrNull()
+                    val inputEstRange = estRange100.parseToIntOrNull()
                     val canonicalEstRange = inputEstRange?.let { UnitConverter.canonicalMilesFromInput(it, unitSystem) }
 
                     onSave(
@@ -882,8 +884,8 @@ internal fun AddEditChargingRecordSheet(
                             mileage = canonicalMileage,
                             kwhAdded = canonicalKwh,
                             chargerSpeed = chargerSpeed,
-                            batteryPercentStart = percentStart.toIntOrNull() ?: 20,
-                            batteryPercentEnd = percentEnd.toIntOrNull() ?: 80,
+                            batteryPercentStart = percentStart.parseToIntOrNull() ?: 20,
+                            batteryPercentEnd = percentEnd.parseToIntOrNull() ?: 80,
                             totalCost = finalTotalCost,
                             vendor = vendorName,
                             vendorType = vendorType,
@@ -1149,9 +1151,9 @@ internal fun AddEditFuelRecordSheet(
     var date by remember { mutableLongStateOf(initial?.date ?: System.currentTimeMillis()) }
     var showDatePicker by remember { mutableStateOf(false) }
 
-    val gallonsValue = gallons.toDoubleOrNull()
-    val totalCostValue = totalCost.toDoubleOrNull()
-    val canSave = (mileage.filter(Char::isDigit).toIntOrNull() != null) &&
+    val gallonsValue = gallons.parseToDoubleOrNull()
+    val totalCostValue = totalCost.parseToDoubleOrNull()
+    val canSave = (mileage.parseToIntOrNull() != null) &&
         (gallonsValue != null) && (gallonsValue > 0.0) &&
         (totalCostValue != null) && (totalCostValue > 0.0)
 
@@ -1228,7 +1230,7 @@ internal fun AddEditFuelRecordSheet(
 
             OutlinedTextField(
                 value = gallons,
-                onValueChange = { gallons = it.filter { c -> (c.isDigit()) || (c == '.') } },
+                onValueChange = { gallons = it.filter { c -> c.isDigit() || c == '.' || c == ',' } },
                 label = { Text(if (unitSystem == UnitSystem.METRIC) stringResource(R.string.fuel_liters) else stringResource(R.string.fuel_gallons)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
@@ -1242,7 +1244,7 @@ internal fun AddEditFuelRecordSheet(
             )
             OutlinedTextField(
                 value = totalCost,
-                onValueChange = { totalCost = it.filter { c -> (c.isDigit()) || (c == '.') } },
+                onValueChange = { totalCost = it.filter { c -> c.isDigit() || c == '.' || c == ',' } },
                 label = { Text(stringResource(R.string.fuel_total_cost)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
@@ -1267,7 +1269,7 @@ internal fun AddEditFuelRecordSheet(
                 singleLine = true,
                 visualTransformation = ThousandsSeparatorVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
+                    keyboardType = KeyboardType.Decimal,
                     imeAction = ImeAction.Done,
                 ),
                 keyboardActions = KeyboardActions(
@@ -1298,7 +1300,7 @@ internal fun AddEditFuelRecordSheet(
 
             Button(
                 onClick = {
-                    val inputMileage = mileage.filter(Char::isDigit).toIntOrNull() ?: 0
+                    val inputMileage = mileage.parseToIntOrNull() ?: 0
                     val canonicalMileage = UnitConverter.canonicalMilesFromInput(inputMileage, unitSystem)
                     val inputGallons = gallonsValue ?: 0.0
                     val canonicalGallons = UnitConverter.canonicalGallonsFromInput(inputGallons, unitSystem)

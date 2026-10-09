@@ -5,6 +5,7 @@ import com.fearmikey.garage.data.local.entity.VehiclePartsInfo
 import com.fearmikey.garage.data.local.entity.VehicleSpecs
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
+import com.fearmikey.garage.ui.util.parseToDoubleOrNull
 
 /**
  * Generates smart estimated baseline specs for common parts & fluids
@@ -23,7 +24,7 @@ object PartsEstimator {
         val make = vehicle?.make?.lowercase().orEmpty()
         val model = vehicle?.model?.lowercase().orEmpty()
         val trim = vehicle?.trim?.lowercase().orEmpty()
-        val displacement = specs?.displacementL?.toDoubleOrNull() ?: 2.5
+        val displacement = specs?.displacementL?.parseToDoubleOrNull() ?: 2.5
         val cylinders = specs?.engineCylinders?.filter { it.isDigit() }?.toIntOrNull() ?: 4
         val fuelType = specs?.fuelType?.lowercase().orEmpty()
         val bodyClass = specs?.bodyClass?.lowercase().orEmpty()

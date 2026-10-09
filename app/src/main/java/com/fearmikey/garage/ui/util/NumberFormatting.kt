@@ -4,9 +4,65 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
+import kotlin.math.roundToInt
 
 /** Formats a raw mileage value for display with thousands separators, e.g. "15,230". */
 fun Int.toDisplayMileage(): String = "%,d".format(this)
+
+/**
+ * Parses a string to a [Double] accepting both dot ('.') and comma (',') as decimal separators,
+ * as well as handling strings with mixed separators (thousands vs decimal).
+ */
+fun String.parseToDoubleOrNull(): Double? {
+    val trimmed = this.trim()
+    if (trimmed.isEmpty()) return null
+
+    val normalized = if (trimmed.contains(',') && trimmed.contains('.')) {
+        val lastComma = trimmed.lastIndexOf(',')
+        val lastDot = trimmed.lastIndexOf('.')
+        if (lastComma > lastDot) {
+            // EU style: 1.234,56 -> 1234.56
+            trimmed.replace(".", "").replace(',', '.')
+        } else {
+            // US style: 1,234.56 -> 1234.56
+            trimmed.replace(",", "")
+        }
+    } else {
+        // Single separator (comma or dot) or none
+        trimmed.replace(',', '.')
+    }
+
+    return normalized.toDoubleOrNull()
+}
+
+/**
+ * Parses a string representing an integer (like mileage or odometer reading) accepting
+ * numbers with thousands separators (commas, dots, spaces) or decimal numbers (e.g. 120,5 km -> 121).
+ */
+fun String.parseToIntOrNull(): Int? {
+    val trimmed = this.trim()
+    if (trimmed.isEmpty()) return null
+
+    // Direct integer parse
+    trimmed.toIntOrNull()?.let { return it }
+
+    val hasComma = trimmed.contains(',')
+    val hasDot = trimmed.contains('.')
+
+    if (hasComma && !hasDot) {
+        val parts = trimmed.split(',')
+        if ((parts.size == 2) && (parts[1].length in 1..2)) {
+            trimmed.replace(',', '.').toDoubleOrNull()?.let { return it.roundToInt() }
+        }
+    } else if (hasDot && !hasComma) {
+        val parts = trimmed.split('.')
+        if ((parts.size == 2) && (parts[1].length in 1..2)) {
+            trimmed.toDoubleOrNull()?.let { return it.roundToInt() }
+        }
+    }
+
+    return trimmed.filter { it.isDigit() }.toIntOrNull()
+}
 
 /**
  * Formats a user-entered mileage string with thousands separators (commas) as they type.
@@ -20,10 +76,12 @@ fun formatMileageInput(input: String): String {
 }
 
 /**
- * Sanitizes raw mileage input to contain only digits, stripping leading zeros when followed by other digits.
- * e.g. "05" -> "5", "0" -> "0", "" -> "".
+ * Sanitizes raw mileage input to contain only digits, stripping leading zeros when followed by other digits,
+ * while supporting decimal km/miles input (e.g. "120,5" -> "121").
  */
 fun sanitizeMileageInput(input: String): String {
+    val intValue = input.parseToIntOrNull()
+    if (intValue != null) return intValue.toString()
     val digits = input.filter(Char::isDigit)
     if (digits.isEmpty()) return ""
     val trimmed = digits.dropWhile { it == '0' }
@@ -75,5 +133,6 @@ class ThousandsSeparatorVisualTransformation : VisualTransformation {
         return TransformedText(AnnotatedString(formattedText), offsetMapping)
     }
 }
+
 
 

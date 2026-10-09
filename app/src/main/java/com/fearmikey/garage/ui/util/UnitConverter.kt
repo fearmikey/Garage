@@ -148,7 +148,7 @@ object UnitConverter {
     fun formatOilCapacity(capacityStr: String?, unitSystem: UnitSystem): String? {
         if (capacityStr.isNullOrBlank()) return null
         if (capacityStr.contains("N/A", ignoreCase = true)) return capacityStr
-        val numMatch = Regex("""\d+(?:\.\d+)?""").find(capacityStr)?.value?.toDoubleOrNull() ?: return capacityStr
+        val numMatch = Regex("""\d+(?:[.,]\d+)?""").find(capacityStr)?.value?.parseToDoubleOrNull() ?: return capacityStr
         val hasLiters = capacityStr.contains("L", ignoreCase = true) && !capacityStr.contains("gal", ignoreCase = true)
         return when (unitSystem) {
             UnitSystem.METRIC -> {
@@ -166,7 +166,7 @@ object UnitConverter {
     fun formatTirePressure(psiStr: String?, unitSystem: UnitSystem): String? {
         if (psiStr.isNullOrBlank()) return null
         if (psiStr.contains("N/A", ignoreCase = true)) return psiStr
-        val numMatch = Regex("""\d+(?:\.\d+)?""").find(psiStr)?.value?.toDoubleOrNull() ?: return psiStr
+        val numMatch = Regex("""\d+(?:[.,]\d+)?""").find(psiStr)?.value?.parseToDoubleOrNull() ?: return psiStr
         val hasBar = psiStr.contains("bar", ignoreCase = true)
         val hasKpa = psiStr.contains("kPa", ignoreCase = true)
         return when (unitSystem) {
@@ -187,7 +187,7 @@ object UnitConverter {
     fun formatWiperSize(sizeStr: String?, unitSystem: UnitSystem): String? {
         if (sizeStr.isNullOrBlank()) return null
         if (sizeStr.contains("N/A", ignoreCase = true)) return sizeStr
-        val numMatch = Regex("""\d+(?:\.\d+)?""").find(sizeStr)?.value?.toDoubleOrNull() ?: return sizeStr
+        val numMatch = Regex("""\d+(?:[.,]\d+)?""").find(sizeStr)?.value?.parseToDoubleOrNull() ?: return sizeStr
         val hasMm = sizeStr.contains("mm", ignoreCase = true)
         val hasCm = sizeStr.contains("cm", ignoreCase = true)
         return when (unitSystem) {
@@ -208,7 +208,7 @@ object UnitConverter {
     fun formatSparkPlugGap(gapStr: String?, unitSystem: UnitSystem): String? {
         if (gapStr.isNullOrBlank()) return null
         if (gapStr.contains("N/A", ignoreCase = true)) return gapStr
-        val numMatch = Regex("""\d+(?:\.\d+)?""").find(gapStr)?.value?.toDoubleOrNull() ?: return gapStr
+        val numMatch = Regex("""\d+(?:[.,]\d+)?""").find(gapStr)?.value?.parseToDoubleOrNull() ?: return gapStr
         val hasMm = gapStr.contains("mm", ignoreCase = true)
         return when (unitSystem) {
             UnitSystem.METRIC -> {

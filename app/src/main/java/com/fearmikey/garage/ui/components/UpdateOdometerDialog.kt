@@ -33,6 +33,7 @@ import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
+import com.fearmikey.garage.ui.util.parseToIntOrNull
 import com.fearmikey.garage.ui.util.sanitizeMileageInput
 import com.fearmikey.garage.ui.util.toDisplayDate
 import kotlinx.coroutines.flow.Flow
@@ -70,7 +71,7 @@ fun UpdateOdometerDialog(
     var notesInput by remember { mutableStateOf("") }
     var selectedDate by remember { mutableLongStateOf(System.currentTimeMillis()) }
 
-    val numericInput = mileageInput.filter(Char::isDigit).toIntOrNull()
+    val numericInput = mileageInput.parseToIntOrNull()
     val canSave = (numericInput != null) && (numericInput > 0)
 
     AlertDialog(
@@ -134,7 +135,7 @@ fun UpdateOdometerDialog(
                     value = mileageInput,
                     onValueChange = { mileageInput = sanitizeMileageInput(it) },
                     label = { Text("New Odometer Reading (${unitSystem.distanceUnit})") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     visualTransformation = com.fearmikey.garage.ui.util.ThousandsSeparatorVisualTransformation(),
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
@@ -164,7 +165,7 @@ fun UpdateOdometerDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    val input = mileageInput.filter(Char::isDigit).toIntOrNull() ?: 0
+                    val input = mileageInput.parseToIntOrNull() ?: 0
                     val canonicalMileage = UnitConverter.canonicalMilesFromInput(input, unitSystem)
                     onSave(
                         selectedVehicle.id,

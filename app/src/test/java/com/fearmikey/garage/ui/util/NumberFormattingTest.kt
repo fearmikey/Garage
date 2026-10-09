@@ -46,6 +46,33 @@ class NumberFormattingTest {
         assertEquals("123", sanitizeMileageInput("0123"))
         assertEquals("15230", sanitizeMileageInput("15,230"))
         assertEquals("123456", sanitizeMileageInput("123,456"))
+        assertEquals("121", sanitizeMileageInput("120,5"))
+        assertEquals("121", sanitizeMileageInput("120.5"))
+    }
+
+    @Test
+    fun `parseToDoubleOrNull accepts both comma and dot as decimal separators`() {
+        assertEquals(12.5, "12.5".parseToDoubleOrNull()!!, 0.001)
+        assertEquals(12.5, "12,5".parseToDoubleOrNull()!!, 0.001)
+        assertEquals(12.50, "12,50".parseToDoubleOrNull()!!, 0.001)
+        assertEquals(0.95, "0,95".parseToDoubleOrNull()!!, 0.001)
+        assertEquals(0.5, ",5".parseToDoubleOrNull()!!, 0.001)
+        assertEquals(1234.56, "1.234,56".parseToDoubleOrNull()!!, 0.001)
+        assertEquals(1234.56, "1,234.56".parseToDoubleOrNull()!!, 0.001)
+        assertEquals(null, "".parseToDoubleOrNull())
+        assertEquals(null, "abc".parseToDoubleOrNull())
+    }
+
+    @Test
+    fun `parseToIntOrNull handles integers, thousands separators and decimal entries`() {
+        assertEquals(120500, "120500".parseToIntOrNull()!!)
+        assertEquals(120500, "120,500".parseToIntOrNull()!!)
+        assertEquals(120500, "120.500".parseToIntOrNull()!!)
+        assertEquals(120500, "120 500".parseToIntOrNull()!!)
+        assertEquals(121, "120,5".parseToIntOrNull()!!)
+        assertEquals(121, "120.5".parseToIntOrNull()!!)
+        assertEquals(null, "".parseToIntOrNull())
+        assertEquals(null, "abc".parseToIntOrNull())
     }
 
     @Test

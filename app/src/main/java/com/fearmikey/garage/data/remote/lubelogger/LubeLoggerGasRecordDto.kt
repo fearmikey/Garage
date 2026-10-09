@@ -12,8 +12,8 @@ data class LubeLoggerGasRecordDto(
     @SerializedName("gallons") val gallons: Double? = null, // Used for GET
     @SerializedName("cost") val cost: String? = null, // Used for PUT/POST
     @SerializedName("costDouble") val costDouble: Double? = null, // Some GETs might return double, we can rely on String for export/import models usually
-    @SerializedName("isFillToFull") val isFillToFull: String? = null, // Used for PUT/POST
-    @SerializedName("missedFuelUp") val missedFuelUp: String? = null,
+    @SerializedName("isFillToFull") val isFillToFull: Boolean? = null, // Used for PUT/POST
+    @SerializedName("missedFuelUp") val missedFuelUp: Boolean? = null,
     @SerializedName("startingSoc") val startingSoc: String? = "20",
     @SerializedName("endingSoc") val endingSoc: String? = "80",
     @SerializedName("notes") val notes: String = "",

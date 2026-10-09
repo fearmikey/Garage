@@ -99,6 +99,8 @@ import com.fearmikey.garage.ui.util.SampleData
 import com.fearmikey.garage.ui.util.ThousandsSeparatorVisualTransformation
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
+import com.fearmikey.garage.ui.util.parseToDoubleOrNull
+import com.fearmikey.garage.ui.util.parseToIntOrNull
 import com.fearmikey.garage.ui.util.sanitizeMileageInput
 import com.fearmikey.garage.ui.util.fromUtcDatePickerMillis
 import com.fearmikey.garage.ui.util.toDisplayDate
@@ -590,7 +592,7 @@ internal fun AddEditMaintenanceRecordSheet(
                 singleLine = true,
                 visualTransformation = ThousandsSeparatorVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
+                    keyboardType = KeyboardType.Decimal,
                     imeAction = ImeAction.Next,
                 ),
                 keyboardActions = KeyboardActions(
@@ -600,7 +602,7 @@ internal fun AddEditMaintenanceRecordSheet(
             )
             OutlinedTextField(
                 value = cost,
-                onValueChange = { cost = it.filter { c -> c.isDigit() || (c == '.') } },
+                onValueChange = { cost = it.filter { c -> c.isDigit() || c == '.' || c == ',' } },
                 label = { Text("Cost ($currencySymbol)") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
@@ -800,11 +802,11 @@ internal fun AddEditMaintenanceRecordSheet(
                 }
             }
 
-            val canSave = category != null && description.isNotBlank() && (!isDeferred || (deferredMiles.filter(Char::isDigit).isNotBlank() && deferredMonths.filter(Char::isDigit).isNotBlank()))
+            val canSave = category != null && description.isNotBlank() && (!isDeferred || (deferredMiles.parseToIntOrNull() != null && deferredMonths.parseToIntOrNull() != null))
 
             Button(
                 onClick = {
-                    val inputMileage = mileage.filter(Char::isDigit).toIntOrNull() ?: 0
+                    val inputMileage = mileage.parseToIntOrNull() ?: 0
                     val canonicalMileage = UnitConverter.canonicalMilesFromInput(inputMileage, unitSystem)
                     onSave(
                         MaintenanceRecord(
@@ -813,13 +815,13 @@ internal fun AddEditMaintenanceRecordSheet(
                             date = date,
                             mileage = canonicalMileage,
                             description = description,
-                            cost = cost.toDoubleOrNull() ?: 0.0,
+                            cost = cost.parseToDoubleOrNull() ?: 0.0,
                             category = category!!,
                             taskName = taskName,
                             receiptUri = initial?.receiptUri,
                             isDeferred = isDeferred,
-                            deferredMiles = deferredMiles.filter(Char::isDigit).toIntOrNull(),
-                            deferredMonths = deferredMonths.filter(Char::isDigit).toIntOrNull(),
+                            deferredMiles = deferredMiles.parseToIntOrNull(),
+                            deferredMonths = deferredMonths.parseToIntOrNull(),
                             lubeLoggerId = initial?.lubeLoggerId,
                             lubeLoggerSyncHash = initial?.lubeLoggerSyncHash,
                             lubeLoggerRecordType = initial?.lubeLoggerRecordType,

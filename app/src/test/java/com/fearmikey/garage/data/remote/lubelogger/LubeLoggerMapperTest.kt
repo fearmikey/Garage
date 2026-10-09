@@ -40,8 +40,8 @@ class LubeLoggerMapperTest {
         assertEquals("150000", dto.odometer)
         assertEquals("12.500", dto.fuelConsumed)
         assertEquals("45.00", dto.cost)
-        assertEquals("true", dto.isFillToFull)
-        assertEquals("false", dto.missedFuelUp) // Always false currently
+        assertEquals(true, dto.isFillToFull)
+        assertEquals(false, dto.missedFuelUp) // Always false currently
     }
 
     @Test
@@ -220,7 +220,7 @@ class LubeLoggerMapperTest {
 
     @Test
     fun `gas record parses capitalized booleans`() {
-        val dto = LubeLoggerGasRecordDto(id = 1, date = "10/07/2026", odometer = "82828", fuelConsumed = "18.2", cost = "4.44", isFillToFull = "False")
+        val dto = LubeLoggerGasRecordDto(id = 1, date = "10/07/2026", odometer = "82828", fuelConsumed = "18.2", cost = "4.44", isFillToFull = false)
         val record = dto.toFuelRecord(5L)!!
         assertFalse(record.isFullTank)
         assertEquals(82828, record.mileage)

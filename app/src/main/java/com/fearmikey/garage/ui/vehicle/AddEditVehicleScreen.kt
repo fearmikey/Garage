@@ -540,7 +540,7 @@ private fun AddEditVehicleContent(
                 label = { Text(initialLabel) },
                 singleLine = true,
                 visualTransformation = com.fearmikey.garage.ui.util.ThousandsSeparatorVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth(),
             )
 

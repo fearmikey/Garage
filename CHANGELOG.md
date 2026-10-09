@@ -1,3 +1,10 @@
+## [1.3.4] - 2026-10-09
+
+### Added
+* **Number & Currency Formatting Refinements:** Improved number and financial formatting utilities (`NumberFormatting`, `UnitConverter`) across odometer updates, fuel logs, modification details, and vehicle registration screens.
+* **LubeLogger DTO & Mapping Enhancements:** Refined LubeLogger vehicle and gas record DTO mapping for robust cloud synchronization.
+* **Expanded Test Suite:** Updated `NumberFormattingTest` and `LubeLoggerMapperTest` unit test suites.
+
 ## [1.3.3] - 2026-10-08
 
 ### Added

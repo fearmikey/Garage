@@ -10,9 +10,9 @@ RepoType: git
 Repo: https://github.com/fearmikey/Garage.git
 
 Builds:
-  - versionName: '1.3.3'
-    versionCode: 26
-    commit: e71d7a6f5854e2806dc1a41c1beee3ab0042b489
+  - versionName: '1.3.4'
+    versionCode: 27
+    commit: 63350196807553f42caddb033d5b3d5b5365e33b
     subdir: app
     gradle:
       - yes

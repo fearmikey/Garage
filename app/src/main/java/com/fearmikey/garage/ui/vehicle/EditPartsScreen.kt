@@ -284,14 +284,14 @@ private fun EditPartsContent(
                 value = tirePsiFront,
                 onValueChange = { tirePsiFront = it },
                 label = { Text("Front tire PSI") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth(),
             )
             OutlinedTextField(
                 value = tirePsiRear,
                 onValueChange = { tirePsiRear = it },
                 label = { Text("Rear tire PSI") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth(),
             )
 
@@ -300,21 +300,21 @@ private fun EditPartsContent(
                 value = wiperBladeSizeDriver,
                 onValueChange = { wiperBladeSizeDriver = it },
                 label = { Text("Driver wiper size") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth(),
             )
             OutlinedTextField(
                 value = wiperBladeSizePassenger,
                 onValueChange = { wiperBladeSizePassenger = it },
                 label = { Text("Passenger wiper size") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth(),
             )
             OutlinedTextField(
                 value = wiperBladeSizeRear,
                 onValueChange = { wiperBladeSizeRear = it },
                 label = { Text("Rear wiper size") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth(),
             )
 

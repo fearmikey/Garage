@@ -10,6 +10,7 @@ import com.fearmikey.garage.data.repository.ImageStorageManager
 import com.fearmikey.garage.data.repository.ModificationRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.ui.navigation.Destinations
+import com.fearmikey.garage.ui.util.parseToDoubleOrNull
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -153,7 +154,8 @@ class ModsViewModel @Inject constructor(
     }
 
     fun onCostChanged(cost: String) {
-        _sheetState.update { it.copy(cost = cost) }
+        val filtered = cost.filter { c -> c.isDigit() || c == '.' || c == ',' }
+        _sheetState.update { it.copy(cost = filtered) }
     }
 
     fun onProductUrlChanged(productUrl: String) {
@@ -237,7 +239,7 @@ class ModsViewModel @Inject constructor(
                 imageUri5 = p5,
                 imageUri6 = p6,
                 date = sheet.date,
-                cost = sheet.cost.toDoubleOrNull() ?: 0.0,
+                cost = sheet.cost.parseToDoubleOrNull() ?: 0.0,
                 productUrl = sheet.productUrl.trim(),
                 lubeLoggerId = sheet.editingLubeLoggerId,
                 lubeLoggerSyncHash = sheet.editingLubeLoggerSyncHash,

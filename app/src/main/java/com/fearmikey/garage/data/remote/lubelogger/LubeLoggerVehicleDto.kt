@@ -1,5 +1,7 @@
 package com.fearmikey.garage.data.remote.lubelogger
 
+import com.fearmikey.garage.ui.util.parseToDoubleOrNull
+import com.fearmikey.garage.ui.util.parseToIntOrNull
 import com.google.gson.annotations.SerializedName
 
 // Used when reading vehicles from LubeLogger GET /api/vehicles
@@ -54,7 +56,7 @@ data class LubeLoggerVehicleDto(
      */
     fun findPurchaseOdometer(): Int? =
         extraFieldValues(*PURCHASE_MILEAGE_FIELD_NAMES).firstNotNullOfOrNull { value ->
-            value.filter { it.isDigit() || it == '.' }.toDoubleOrNull()?.toInt()?.takeIf { it >= 0 }
+            value.parseToIntOrNull()?.takeIf { it >= 0 }
         }
 
     internal fun matchingExtraFields(vararg names: String): List<LubeLoggerExtraFieldDto> {

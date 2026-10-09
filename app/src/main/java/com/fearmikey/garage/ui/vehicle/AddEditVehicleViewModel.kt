@@ -18,6 +18,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
+import com.fearmikey.garage.ui.util.parseToIntOrNull
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -232,7 +233,7 @@ class AddEditVehicleViewModel @Inject constructor(
                 val photo2 = state.photos.getOrNull(1)
                 val photo3 = state.photos.getOrNull(2)
 
-                val inputInitial = state.initialMileage.filter(Char::isDigit).toIntOrNull()
+                val inputInitial = state.initialMileage.parseToIntOrNull()
                 val canonicalInitial = inputInitial?.let { UnitConverter.canonicalMilesFromInput(it, state.unitSystem) }
 
                 val newOrUpdatedId = vehicleRepository.saveVehicle(

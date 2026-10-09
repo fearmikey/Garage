@@ -12,6 +12,7 @@ import com.fearmikey.garage.data.repository.ImageStorageManager
 import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.ui.navigation.Destinations
+import com.fearmikey.garage.ui.util.parseToDoubleOrNull
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -196,7 +197,8 @@ class RegistrationInsuranceViewModel @Inject constructor(
     }
 
     fun onRegistrationFeeChanged(value: String) {
-        _sheetState.update { it.copy(registrationFee = value) }
+        val filtered = value.filter { c -> c.isDigit() || c == '.' || c == ',' }
+        _sheetState.update { it.copy(registrationFee = filtered) }
     }
 
     fun onRegistrationNotesChanged(value: String) {
@@ -268,7 +270,8 @@ class RegistrationInsuranceViewModel @Inject constructor(
     }
 
     fun onInsurancePremiumChanged(value: String) {
-        _sheetState.update { it.copy(insurancePremium = value) }
+        val filtered = value.filter { c -> c.isDigit() || c == '.' || c == ',' }
+        _sheetState.update { it.copy(insurancePremium = filtered) }
     }
 
     fun onInsuranceAgentContactChanged(value: String) {
@@ -433,7 +436,7 @@ class RegistrationInsuranceViewModel @Inject constructor(
             licensePlate = currentState.licensePlate.trim().takeIf { it.isNotBlank() },
             registrationState = currentState.registrationState.trim().takeIf { it.isNotBlank() },
             registrationExpiration = currentState.registrationExpiration,
-            registrationFee = currentState.registrationFee.toDoubleOrNull(),
+            registrationFee = currentState.registrationFee.parseToDoubleOrNull(),
             registrationNotes = currentState.registrationNotes.trim().takeIf { it.isNotBlank() },
             registrationImageUri = finalRegFilename,
 
@@ -454,7 +457,7 @@ class RegistrationInsuranceViewModel @Inject constructor(
             insuranceProvider = currentState.insuranceProvider.trim().takeIf { it.isNotBlank() },
             policyNumber = currentState.policyNumber.trim().takeIf { it.isNotBlank() },
             insuranceExpiration = currentState.insuranceExpiration,
-            insurancePremium = currentState.insurancePremium.toDoubleOrNull(),
+            insurancePremium = currentState.insurancePremium.parseToDoubleOrNull(),
             insuranceAgentContact = currentState.insuranceAgentContact.trim().takeIf { it.isNotBlank() },
             insuranceNotes = currentState.insuranceNotes.trim().takeIf { it.isNotBlank() },
             insuranceImageUri = finalInsFilename,
