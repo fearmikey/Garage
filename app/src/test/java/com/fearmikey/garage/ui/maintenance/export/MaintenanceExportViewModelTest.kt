@@ -84,15 +84,15 @@ class MaintenanceExportViewModelTest {
     }
 
     private class FakeVehicleSpecsDao : VehicleSpecsDao {
-        override fun getByVehicleId(vehicleId: Long): Flow<VehicleSpecs?> = MutableStateFlow(
-            VehicleSpecs(
-                vehicleId = 1L,
-                engineCylinders = "4",
-                displacementL = "2.5",
-                engineHp = "203",
-                fuelType = "Gasoline",
-            ),
+        private val specs = VehicleSpecs(
+            vehicleId = 1L,
+            engineCylinders = "4",
+            displacementL = "2.5",
+            engineHp = "203",
+            fuelType = "Gasoline",
         )
+        override fun getByVehicleId(vehicleId: Long): Flow<VehicleSpecs?> = MutableStateFlow(specs)
+        override suspend fun getByVehicleIdOnce(vehicleId: Long): VehicleSpecs? = specs
         override suspend fun upsert(specs: VehicleSpecs) {}
     }
 
@@ -200,7 +200,7 @@ class MaintenanceExportViewModelTest {
         }
     }
 
-    private class FakePreferencesRepository : PreferencesRepository {
+    private open class FakePreferencesRepository : PreferencesRepository {
         override val unitsType: Flow<String> = MutableStateFlow("imperial")
         override val unitSystem: Flow<UnitSystem> = MutableStateFlow(UnitSystem.IMPERIAL)
         override val currencyCode: Flow<String> = MutableStateFlow("USD")
@@ -397,6 +397,52 @@ class MaintenanceExportViewModelTest {
         advanceUntilIdle()
 
         assertEquals(0, viewModel.uiState.value.openRecalls.size)
+
+        job.cancel()
+    }
+
+    @Test
+    fun `export uiState inherits metric unit system from preferences`() = runTest {
+        val savedStateHandle = SavedStateHandle(mapOf(Destinations.VEHICLE_ID_ARG to 1L))
+        val vehicleRepository = VehicleRepository(
+            vehicleDao = FakeVehicleDao(),
+            vehicleSpecsDao = FakeVehicleSpecsDao(),
+            vehiclePartsDao = FakeVehiclePartsDao(),
+            vehicleRegistrationDao = FakeVehicleRegistrationDao(),
+            vinDecoderApi = FakeVinDecoderApi(),
+        )
+        val maintenanceRepository = MaintenanceRepository(FakeMaintenanceDao())
+        val modificationRepository = ModificationRepository(
+            modificationDao = FakeModificationDao(),
+            imageStorageManager = ImageStorageManager(ContextWrapper(null)),
+        )
+        val fuelRepository = FuelRepository(FakeFuelDao())
+        val chargingRepository = ChargingRepository(FakeChargingDao())
+        val recallRepository = RecallRepository(FakeRecallApi())
+        val recallStateRepository = RecallStateRepository(FakeRecallCampaignStateDao())
+        val preferencesRepository = object : FakePreferencesRepository() {
+            override val unitSystem: Flow<UnitSystem> = MutableStateFlow(UnitSystem.METRIC)
+        }
+        val pdfExportNotifier = PdfExportNotifier(ContextWrapper(null))
+
+        val viewModel = MaintenanceExportViewModel(
+            savedStateHandle = savedStateHandle,
+            vehicleRepository = vehicleRepository,
+            maintenanceRepository = maintenanceRepository,
+            modificationRepository = modificationRepository,
+            fuelRepository = fuelRepository,
+            chargingRepository = chargingRepository,
+            recallRepository = recallRepository,
+            recallStateRepository = recallStateRepository,
+            preferencesRepository = preferencesRepository,
+            imageStorageManager = ImageStorageManager(ContextWrapper(null)),
+            pdfExportNotifier = pdfExportNotifier,
+        )
+
+        val job = backgroundScope.launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        assertEquals(UnitSystem.METRIC, viewModel.uiState.value.unitSystem)
 
         job.cancel()
     }

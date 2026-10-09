@@ -27,6 +27,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.entity.VehicleSpecs
 import com.fearmikey.garage.ui.components.EmptyState
 import com.fearmikey.garage.ui.theme.GarageTheme
@@ -55,52 +57,53 @@ private fun formatWeight(value: String): String {
     return if (trimmed.toDoubleOrNull() != null) "$trimmed lbs" else trimmed
 }
 
+@Composable
 private fun VehicleSpecs.toGroups(): List<SpecGroup> {
     val hasTowingOrWeightSpecs = listOf(trailerBrakedCapacity, trailerUnbrakedCapacity, gcwr, curbWeight)
         .any { !it.isNullOrBlank() }
 
     return listOf(
         SpecGroup(
-            title = "Engine & Drivetrain",
+            title = stringResource(R.string.specs_group_engine),
             rows = listOfNotNull(
-                engineCylinders?.let { "Cylinders" to it },
-                displacementL?.let { "Displacement" to "$it L" },
-                engineHp?.let { "Horsepower" to "$it hp" },
-                fuelType?.let { "Fuel type" to it },
-                transmissionStyle?.let { "Transmission" to it },
-                transmissionSpeeds?.let { "Transmission speeds" to it },
+                engineCylinders?.let { stringResource(R.string.specs_cylinders) to it },
+                displacementL?.let { stringResource(R.string.specs_displacement) to "$it L" },
+                engineHp?.let { stringResource(R.string.specs_horsepower) to "$it hp" },
+                fuelType?.let { stringResource(R.string.specs_fuel_type) to it },
+                transmissionStyle?.let { stringResource(R.string.specs_transmission) to it },
+                transmissionSpeeds?.let { stringResource(R.string.specs_transmission_speeds) to it },
             ),
         ),
         SpecGroup(
-            title = "Weights & Towing",
+            title = stringResource(R.string.specs_group_weights),
             rows = if (hasTowingOrWeightSpecs) {
                 listOfNotNull(
-                    trailerBrakedCapacity?.let { "Towing capacity (braked)" to formatWeight(it) },
-                    trailerUnbrakedCapacity?.let { "Towing capacity (unbraked)" to formatWeight(it) },
-                    gcwr?.let { "GCWR" to formatWeight(it) },
-                    gvwr?.let { "GVWR" to it },
-                    curbWeight?.let { "Curb weight" to formatWeight(it) },
+                    trailerBrakedCapacity?.let { stringResource(R.string.specs_towing_braked) to formatWeight(it) },
+                    trailerUnbrakedCapacity?.let { stringResource(R.string.specs_towing_unbraked) to formatWeight(it) },
+                    gcwr?.let { stringResource(R.string.specs_gcwr) to formatWeight(it) },
+                    gvwr?.let { stringResource(R.string.specs_gvwr) to it },
+                    curbWeight?.let { stringResource(R.string.specs_curb_weight) to formatWeight(it) },
                 )
             } else {
                 emptyList()
             },
         ),
         SpecGroup(
-            title = "Body",
+            title = stringResource(R.string.specs_group_body),
             rows = listOfNotNull(
-                vehicleType?.let { "Vehicle type" to it },
-                bodyClass?.let { "Body class" to it },
-                doors?.let { "Doors" to it },
-                series?.let { "Series" to it },
-                if (!hasTowingOrWeightSpecs) gvwr?.let { "GVWR" to it } else null,
+                vehicleType?.let { stringResource(R.string.specs_vehicle_type) to it },
+                bodyClass?.let { stringResource(R.string.specs_body_class) to it },
+                doors?.let { stringResource(R.string.specs_doors) to it },
+                series?.let { stringResource(R.string.specs_series) to it },
+                if (!hasTowingOrWeightSpecs) gvwr?.let { stringResource(R.string.specs_gvwr) to it } else null,
             ),
         ),
         SpecGroup(
-            title = "Manufacturing",
+            title = stringResource(R.string.specs_group_manufacturing),
             rows = listOfNotNull(
-                manufacturer?.let { "Manufacturer" to it },
+                manufacturer?.let { stringResource(R.string.specs_manufacturer) to it },
                 listOfNotNull(plantCity, plantState, plantCountry).joinToString(", ").takeIf { it.isNotBlank() }
-                    ?.let { "Plant" to it },
+                    ?.let { stringResource(R.string.specs_plant) to it },
             ),
         ),
     ).filter { it.rows.isNotEmpty() }
@@ -113,7 +116,7 @@ private fun VehicleSpecsContent(specs: VehicleSpecs?) {
     Scaffold(contentWindowInsets = WindowInsets(0, 0, 0, 0)) { innerPadding ->
         if (groups.isEmpty()) {
             EmptyState(
-                message = "No specs yet.\nDecode this vehicle's VIN on the Edit screen to see full specs.",
+                message = stringResource(R.string.specs_empty_message),
                 modifier = Modifier.padding(innerPadding),
             )
         } else {

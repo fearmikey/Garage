@@ -101,6 +101,7 @@ class MainViewModelTest {
         },
         vehicleSpecsDao = object : VehicleSpecsDao {
             override fun getByVehicleId(vehicleId: Long) = MutableStateFlow(null)
+            override suspend fun getByVehicleIdOnce(vehicleId: Long) = null
             override suspend fun upsert(specs: VehicleSpecs) {}
         },
         vehiclePartsDao = object : VehiclePartsDao {

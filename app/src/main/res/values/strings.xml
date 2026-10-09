@@ -337,4 +337,86 @@
     <string name="doc_delete_toll_btn">Delete Toll Pass &amp; Parking Info</string>
     <string name="doc_save_docs_btn">Save Vehicle Documents</string>
     <string name="doc_saving_btn">Saving...</string>
+    <!-- Fleet Summary -->
+    <string name="fleet_overview_title">Fleet Overview</string>
+    <string name="fleet_vehicles">Vehicles</string>
+    <string name="fleet_avg">Fleet Avg</string>
+    <string name="fleet_overdue_count">%1$d Overdue</string>
+    <string name="fleet_due_soon_count">%1$d Due Soon</string>
+    <string name="fleet_all_clear">All Clear</string>
+    <string name="fleet_status">Status</string>
+
+    <!-- Vehicle Card -->
+    <string name="vehicle_card_no_mileage">No mileage</string>
+
+    <!-- Vehicle Specs -->
+    <string name="specs_empty_message">No specs yet.\nDecode this vehicle\'s VIN on the Edit screen to see full specs.</string>
+    <string name="specs_group_engine">Engine &amp; Drivetrain</string>
+    <string name="specs_group_weights">Weights &amp; Towing</string>
+    <string name="specs_group_body">Body</string>
+    <string name="specs_group_manufacturing">Manufacturing</string>
+    <string name="specs_cylinders">Cylinders</string>
+    <string name="specs_displacement">Displacement</string>
+    <string name="specs_horsepower">Horsepower</string>
+    <string name="specs_fuel_type">Fuel type</string>
+    <string name="specs_transmission">Transmission</string>
+    <string name="specs_transmission_speeds">Transmission speeds</string>
+    <string name="specs_towing_braked">Towing capacity (braked)</string>
+    <string name="specs_towing_unbraked">Towing capacity (unbraked)</string>
+    <string name="specs_gcwr">GCWR</string>
+    <string name="specs_gvwr">GVWR</string>
+    <string name="specs_curb_weight">Curb weight</string>
+    <string name="specs_vehicle_type">Vehicle type</string>
+    <string name="specs_body_class">Body class</string>
+    <string name="specs_doors">Doors</string>
+    <string name="specs_series">Series</string>
+    <string name="specs_manufacturer">Manufacturer</string>
+    <string name="specs_plant">Plant</string>
+
+    <!-- Parts & Fluids -->
+    <string name="parts_empty_message">No parts &amp; fluids info yet.\nTap the edit button to add your vehicle\'s specs.</string>
+    <string name="parts_manual_verification_title">Owner\'s Manual Verification</string>
+    <string name="parts_manual_verification_desc">Double check specs with your vehicle\'s manual to ensure accuracy. Tap for details.</string>
+    <string name="parts_verify_title">Verify with Owner\'s Manual</string>
+    <string name="parts_verify_msg">The fluid capacities (e.g. oil capacity &amp; viscosity) and part specifications shown on this screen are estimated using decoded VIN and engine specifications.\n\nFactory options, engine revisions, and regional variations can differ. Always double check these values with your vehicle\'s official owner\'s manual or factory service documentation to ensure exact accuracy before purchasing fluids or performing service.</string>
+    <string name="parts_got_it">Got It</string>
+    <string name="parts_group_oil">Oil</string>
+    <string name="parts_group_ignition">Ignition</string>
+    <string name="parts_group_filters">Filters</string>
+    <string name="parts_group_tires">Tires</string>
+    <string name="parts_group_wipers">Wipers</string>
+    <string name="parts_oil_viscosity">Oil viscosity</string>
+    <string name="parts_oil_capacity">Oil capacity</string>
+    <string name="parts_oil_filter_num">Oil filter part #</string>
+    <string name="parts_spark_plug_num">Spark plug part #</string>
+    <string name="parts_spark_plug_gap">Spark plug gap</string>
+    <string name="parts_engine_air_filter_num">Engine air filter part #</string>
+    <string name="parts_cabin_air_filter_num">Cabin air filter part #</string>
+    <string name="parts_front_tire_size">Front tire size</string>
+    <string name="parts_rear_tire_size">Rear tire size</string>
+    <string name="parts_front_tire_psi">Front tire pressure</string>
+    <string name="parts_rear_tire_psi">Rear tire pressure</string>
+    <string name="parts_driver_wiper">Driver wiper size</string>
+    <string name="parts_passenger_wiper">Passenger wiper size</string>
+    <string name="parts_rear_wiper">Rear wiper size</string>
+
+    <!-- Modifications -->
+    <string name="mods_empty_message">No modifications logged yet.\nTap + to add your vehicle\'s custom modifications, upgrades, or accessories.</string>
+    <string name="mods_title_label">Mod Title *</string>
+    <string name="mods_category_label">Category</string>
+    <string name="mods_desc_label">Description / Notes</string>
+    <string name="mods_date_label">Installation Date</string>
+    <string name="mods_cost_label">Cost (Optional)</string>
+    <string name="mods_url_label">Product Link / URL (Optional)</string>
+    <string name="mods_save_btn">Save Modification</string>
+    <string name="mods_delete_btn">Delete Modification</string>
+    <string name="mods_delete_confirm_title">Delete Modification?</string>
+    <string name="mods_delete_confirm_msg">Are you sure you want to delete \'%1$s\'? This action cannot be undone.</string>
+
+    <!-- Recalls -->
+    <string name="recalls_empty_message">No safety recalls found for this vehicle.\nSafety recall information is provided by NHTSA.</string>
+    <string name="recalls_nhtsa_check">Check VIN on NHTSA.gov</string>
+    <string name="recalls_retry">Retry</string>
+    <string name="recalls_park_it">Park it</string>
+    <string name="recalls_park_outside">Park outside</string>
 </resources>

@@ -115,6 +115,7 @@ fun AddEditVehicleScreen(
         onModelChanged = viewModel::onModelChanged,
         onTrimChanged = viewModel::onTrimChanged,
         onDrivetrainChanged = viewModel::onDrivetrainChanged,
+        onFuelTypeChanged = viewModel::onFuelTypeChanged,
         onPurchasedNewChanged = viewModel::onPurchasedNewChanged,
         onInitialMileageChanged = viewModel::onInitialMileageChanged,
         onImagesPicked = viewModel::onImagesPicked,
@@ -139,6 +140,7 @@ private fun AddEditVehicleContent(
     onModelChanged: (String) -> Unit,
     onTrimChanged: (String) -> Unit,
     onDrivetrainChanged: (Drivetrain) -> Unit = {},
+    onFuelTypeChanged: (String) -> Unit = {},
     onPurchasedNewChanged: (Boolean) -> Unit = {},
     onInitialMileageChanged: (String) -> Unit = {},
     onImagesPicked: (List<Uri>) -> Unit = {},
@@ -450,6 +452,50 @@ private fun AddEditVehicleContent(
                     }
                 }
             }
+
+            var fuelTypeMenuExpanded by remember { mutableStateOf(false) }
+            val fuelTypeOptions = remember {
+                listOf(
+                    "Gasoline",
+                    "Diesel",
+                    "Electric",
+                    "Hybrid",
+                    "Plug-in Hybrid (PHEV)",
+                    "Flex Fuel (E85)",
+                    "Compressed Natural Gas (CNG)",
+                    "Liquefied Petroleum Gas (LPG)",
+                    "Hydrogen",
+                )
+            }
+            ExposedDropdownMenuBox(
+                expanded = fuelTypeMenuExpanded,
+                onExpandedChange = { fuelTypeMenuExpanded = it },
+            ) {
+                OutlinedTextField(
+                    value = uiState.fuelType,
+                    onValueChange = onFuelTypeChanged,
+                    label = { Text("Fuel Type") },
+                    singleLine = true,
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = fuelTypeMenuExpanded) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable),
+                )
+                ExposedDropdownMenu(
+                    expanded = fuelTypeMenuExpanded,
+                    onDismissRequest = { fuelTypeMenuExpanded = false },
+                ) {
+                    fuelTypeOptions.forEach { option ->
+                        DropdownMenuItem(
+                            text = { Text(option) },
+                            onClick = {
+                                onFuelTypeChanged(option)
+                                fuelTypeMenuExpanded = false
+                            },
+                        )
+                    }
+                }
+            }
             
             var conditionMenuExpanded by remember { mutableStateOf(false) }
             ExposedDropdownMenuBox(
@@ -487,10 +533,11 @@ private fun AddEditVehicleContent(
                 }
             }
 
+            val initialLabel = if (uiState.unitSystem == com.fearmikey.garage.ui.util.UnitSystem.METRIC) "Initial Odometer (km)" else "Initial Mileage (mi)"
             OutlinedTextField(
                 value = uiState.initialMileage,
                 onValueChange = onInitialMileageChanged,
-                label = { Text("Initial Mileage (Upon Purchase)") },
+                label = { Text(initialLabel) },
                 singleLine = true,
                 visualTransformation = com.fearmikey.garage.ui.util.ThousandsSeparatorVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),

@@ -38,10 +38,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.entity.VehiclePartsInfo
 import com.fearmikey.garage.ui.components.EmptyState
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.SampleData
+import com.fearmikey.garage.ui.util.UnitConverter
+import com.fearmikey.garage.ui.util.UnitSystem
 
 @Composable
 fun PartsScreen(
@@ -49,9 +53,11 @@ fun PartsScreen(
     viewModel: PartsViewModel = hiltViewModel(),
 ) {
     val parts by viewModel.parts.collectAsStateWithLifecycle()
+    val unitSystem by viewModel.unitSystem.collectAsStateWithLifecycle()
 
     PartsContent(
         parts = parts,
+        unitSystem = unitSystem,
         onEditClicked = onEditParts,
     )
 }
@@ -62,44 +68,45 @@ private data class PartsGroup(
     val rows: List<Pair<String, String>>,
 )
 
-private fun VehiclePartsInfo.toGroups(): List<PartsGroup> = listOf(
+@Composable
+private fun VehiclePartsInfo.toGroups(unitSystem: UnitSystem): List<PartsGroup> = listOf(
     PartsGroup(
-        title = "Oil",
+        title = stringResource(R.string.parts_group_oil),
         rows = listOfNotNull(
-            oilViscosity?.let { "Oil viscosity" to it },
-            oilCapacity?.let { "Oil capacity" to it },
-            oilFilterPartNumber?.let { "Oil filter part #" to it },
+            oilViscosity?.let { stringResource(R.string.parts_oil_viscosity) to it },
+            oilCapacity?.let { UnitConverter.formatOilCapacity(it, unitSystem)?.let { formatted -> stringResource(R.string.parts_oil_capacity) to formatted } },
+            oilFilterPartNumber?.let { stringResource(R.string.parts_oil_filter_num) to it },
         ),
     ),
     PartsGroup(
-        title = "Ignition",
+        title = stringResource(R.string.parts_group_ignition),
         rows = listOfNotNull(
-            sparkPlugPartNumber?.let { "Spark plug part #" to it },
-            sparkPlugGap?.let { "Spark plug gap" to it },
+            sparkPlugPartNumber?.let { stringResource(R.string.parts_spark_plug_num) to it },
+            sparkPlugGap?.let { UnitConverter.formatSparkPlugGap(it, unitSystem)?.let { formatted -> stringResource(R.string.parts_spark_plug_gap) to formatted } },
         ),
     ),
     PartsGroup(
-        title = "Filters",
+        title = stringResource(R.string.parts_group_filters),
         rows = listOfNotNull(
-            engineAirFilterPartNumber?.let { "Engine air filter part #" to it },
-            cabinAirFilterPartNumber?.let { "Cabin air filter part #" to it },
+            engineAirFilterPartNumber?.let { stringResource(R.string.parts_engine_air_filter_num) to it },
+            cabinAirFilterPartNumber?.let { stringResource(R.string.parts_cabin_air_filter_num) to it },
         ),
     ),
     PartsGroup(
-        title = "Tires",
+        title = stringResource(R.string.parts_group_tires),
         rows = listOfNotNull(
-            tireSizeFront?.let { "Front tire size" to it },
-            tireSizeRear?.let { "Rear tire size" to it },
-            tirePsiFront?.let { "Front tire PSI" to it },
-            tirePsiRear?.let { "Rear tire PSI" to it },
+            tireSizeFront?.let { stringResource(R.string.parts_front_tire_size) to it },
+            tireSizeRear?.let { stringResource(R.string.parts_rear_tire_size) to it },
+            tirePsiFront?.let { UnitConverter.formatTirePressure(it, unitSystem)?.let { formatted -> stringResource(R.string.parts_front_tire_psi) to formatted } },
+            tirePsiRear?.let { UnitConverter.formatTirePressure(it, unitSystem)?.let { formatted -> stringResource(R.string.parts_rear_tire_psi) to formatted } },
         ),
     ),
     PartsGroup(
-        title = "Wipers",
+        title = stringResource(R.string.parts_group_wipers),
         rows = listOfNotNull(
-            wiperBladeSizeDriver?.let { "Driver wiper size" to it },
-            wiperBladeSizePassenger?.let { "Passenger wiper size" to it },
-            wiperBladeSizeRear?.let { "Rear wiper size" to it },
+            wiperBladeSizeDriver?.let { UnitConverter.formatWiperSize(it, unitSystem)?.let { formatted -> stringResource(R.string.parts_driver_wiper) to formatted } },
+            wiperBladeSizePassenger?.let { UnitConverter.formatWiperSize(it, unitSystem)?.let { formatted -> stringResource(R.string.parts_passenger_wiper) to formatted } },
+            wiperBladeSizeRear?.let { UnitConverter.formatWiperSize(it, unitSystem)?.let { formatted -> stringResource(R.string.parts_rear_wiper) to formatted } },
         ),
     ),
 ).filter { it.rows.isNotEmpty() }
@@ -107,9 +114,10 @@ private fun VehiclePartsInfo.toGroups(): List<PartsGroup> = listOf(
 @Composable
 private fun PartsContent(
     parts: VehiclePartsInfo?,
+    unitSystem: UnitSystem = UnitSystem.IMPERIAL,
     onEditClicked: () -> Unit,
 ) {
-    val groups = parts?.takeUnless { it.isEmpty() }?.toGroups().orEmpty()
+    val groups = parts?.takeUnless { it.isEmpty() }?.toGroups(unitSystem).orEmpty()
     var showManualWarningDialog by remember { mutableStateOf(value = false) }
 
     Scaffold(
@@ -122,7 +130,7 @@ private fun PartsContent(
     ) { innerPadding ->
         if (groups.isEmpty()) {
             EmptyState(
-                message = "No parts & fluids info yet.\nTap the edit button to add your vehicle's specs.",
+                message = stringResource(R.string.parts_empty_message),
                 modifier = Modifier.padding(innerPadding),
             )
         } else {
@@ -155,12 +163,12 @@ private fun PartsContent(
                             )
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(
-                                    text = "Owner's Manual Verification",
+                                    text = stringResource(R.string.parts_manual_verification_title),
                                     style = MaterialTheme.typography.labelLarge,
                                     color = MaterialTheme.colorScheme.onSurface,
                                 )
                                 Text(
-                                    text = "Double check specs with your vehicle's manual to ensure accuracy. Tap for details.",
+                                    text = stringResource(R.string.parts_manual_verification_desc),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
@@ -186,17 +194,16 @@ private fun PartsContent(
                     tint = MaterialTheme.colorScheme.primary,
                 )
             },
-            title = { Text("Verify with Owner's Manual") },
+            title = { Text(stringResource(R.string.parts_verify_title)) },
             text = {
                 Text(
-                    "The fluid capacities (e.g. oil capacity & viscosity) and part specifications shown on this screen are estimated using decoded VIN and engine specifications.\n\n" +
-                        "Factory options, engine revisions, and regional variations can differ. Always double check these values with your vehicle's official owner's manual or factory service documentation to ensure exact accuracy before purchasing fluids or performing service.",
+                    stringResource(R.string.parts_verify_msg),
                     style = MaterialTheme.typography.bodyMedium,
                 )
             },
             confirmButton = {
                 Button(onClick = { showManualWarningDialog = false }) {
-                    Text("Got It")
+                    Text(stringResource(R.string.parts_got_it))
                 }
             },
         )

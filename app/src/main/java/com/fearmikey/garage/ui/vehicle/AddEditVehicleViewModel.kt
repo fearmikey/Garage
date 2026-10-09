@@ -15,9 +15,13 @@ import com.fearmikey.garage.notification.WorkScheduler
 import com.fearmikey.garage.ui.navigation.Destinations
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import com.fearmikey.garage.data.repository.PreferencesRepository
+import com.fearmikey.garage.ui.util.UnitConverter
+import com.fearmikey.garage.ui.util.UnitSystem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.File
@@ -36,8 +40,10 @@ data class AddEditVehicleUiState(
     val model: String = "",
     val trim: String = "",
     val drivetrain: Drivetrain = Drivetrain.UNKNOWN,
+    val fuelType: String = "",
     val purchasedNew: Boolean = false,
     val initialMileage: String = "",
+    val unitSystem: UnitSystem = UnitSystem.IMPERIAL,
     val photos: List<VehiclePhotoItem> = emptyList(),
     val isDecodingVin: Boolean = false,
     val vinDecodeError: String? = null,
@@ -57,6 +63,7 @@ data class AddEditVehicleUiState(
 class AddEditVehicleViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val vehicleRepository: VehicleRepository,
+    private val preferencesRepository: PreferencesRepository,
     private val imageStorageManager: ImageStorageManager,
     @ApplicationContext private val context: Context? = null,
 ) : ViewModel() {
@@ -72,8 +79,15 @@ class AddEditVehicleViewModel @Inject constructor(
     private var originalImageFilenames: List<String> = emptyList()
 
     init {
+        viewModelScope.launch {
+            preferencesRepository.unitSystem.collect { system ->
+                _uiState.update { it.copy(unitSystem = system) }
+            }
+        }
         if (isEditing) {
             viewModelScope.launch {
+                val system = preferencesRepository.unitSystem.first()
+                val specs = vehicleRepository.getVehicleSpecsOnce(vehicleId)
                 vehicleRepository.getVehicleByIdOnce(vehicleId)?.let { vehicle ->
                     val loadedPhotos = vehicle.photos.map { photo ->
                         VehiclePhotoItem(
@@ -83,6 +97,7 @@ class AddEditVehicleViewModel @Inject constructor(
                         )
                     }
                     originalImageFilenames = vehicle.photos.map { it.uri }
+                    val displayInitial = vehicle.initialMileage?.let { UnitConverter.displayDistanceValue(it, system) }?.toString().orEmpty()
                     _uiState.update {
                         it.copy(
                             vin = vehicle.vin,
@@ -91,8 +106,10 @@ class AddEditVehicleViewModel @Inject constructor(
                             model = vehicle.model,
                             trim = vehicle.trim,
                             drivetrain = vehicle.drivetrain,
+                            fuelType = specs?.fuelType.orEmpty(),
                             purchasedNew = vehicle.purchasedNew,
-                            initialMileage = vehicle.initialMileage?.toString().orEmpty(),
+                            initialMileage = displayInitial,
+                            unitSystem = system,
                             photos = loadedPhotos,
                         )
                     }
@@ -126,6 +143,7 @@ class AddEditVehicleViewModel @Inject constructor(
                         model = result.info.model.ifBlank { it.model },
                         trim = result.info.trim.ifBlank { it.trim },
                         drivetrain = result.info.drivetrain ?: it.drivetrain,
+                        fuelType = result.info.specs.fuelType?.ifBlank { it.fuelType } ?: it.fuelType,
                         pendingSpecs = result.info.specs,
                     )
                 }
@@ -141,6 +159,7 @@ class AddEditVehicleViewModel @Inject constructor(
     fun onModelChanged(model: String) = _uiState.update { it.copy(model = model) }
     fun onTrimChanged(trim: String) = _uiState.update { it.copy(trim = trim) }
     fun onDrivetrainChanged(drivetrain: Drivetrain) = _uiState.update { it.copy(drivetrain = drivetrain) }
+    fun onFuelTypeChanged(fuelType: String) = _uiState.update { it.copy(fuelType = fuelType) }
     fun onPurchasedNewChanged(isNew: Boolean) = _uiState.update { it.copy(purchasedNew = isNew) }
     fun onInitialMileageChanged(mileage: String) = _uiState.update { it.copy(initialMileage = com.fearmikey.garage.ui.util.sanitizeMileageInput(mileage)) }
 
@@ -213,6 +232,9 @@ class AddEditVehicleViewModel @Inject constructor(
                 val photo2 = state.photos.getOrNull(1)
                 val photo3 = state.photos.getOrNull(2)
 
+                val inputInitial = state.initialMileage.filter(Char::isDigit).toIntOrNull()
+                val canonicalInitial = inputInitial?.let { UnitConverter.canonicalMilesFromInput(it, state.unitSystem) }
+
                 val newOrUpdatedId = vehicleRepository.saveVehicle(
                     Vehicle(
                         id = if (isEditing) vehicleId else 0,
@@ -223,7 +245,7 @@ class AddEditVehicleViewModel @Inject constructor(
                         trim = state.trim,
                         drivetrain = state.drivetrain,
                         purchasedNew = state.purchasedNew,
-                        initialMileage = state.initialMileage.toIntOrNull(),
+                        initialMileage = canonicalInitial,
                         imageUri = photo1?.filename,
                         imageOffsetY = photo1?.offsetY ?: 0f,
                         imageUri2 = photo2?.filename,
@@ -234,9 +256,13 @@ class AddEditVehicleViewModel @Inject constructor(
                 )
                 val targetVehicleId = if (isEditing) vehicleId else newOrUpdatedId
 
-                state.pendingSpecs?.let { specs ->
-                    vehicleRepository.saveVehicleSpecs(targetVehicleId, specs)
-                }
+                val existingSpecs = if (isEditing) vehicleRepository.getVehicleSpecsOnce(targetVehicleId) else null
+                val baseSpecs = existingSpecs ?: state.pendingSpecs ?: VehicleSpecs(vehicleId = targetVehicleId)
+                val updatedSpecs = baseSpecs.copy(
+                    vehicleId = targetVehicleId,
+                    fuelType = state.fuelType.trim().takeIf { it.isNotBlank() },
+                )
+                vehicleRepository.saveVehicleSpecs(targetVehicleId, updatedSpecs)
 
                 val savedFilenames = state.photos.mapNotNull { it.filename }.toSet()
                 originalImageFilenames.filter { it !in savedFilenames }.forEach { oldFilename ->

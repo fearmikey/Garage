@@ -80,6 +80,7 @@ class DashboardViewModelTest {
 
     private class FakeVehicleSpecsDao : VehicleSpecsDao {
         override fun getByVehicleId(vehicleId: Long): Flow<VehicleSpecs?> = MutableStateFlow(null)
+        override suspend fun getByVehicleIdOnce(vehicleId: Long): VehicleSpecs? = null
         override suspend fun upsert(specs: VehicleSpecs) {}
     }
 

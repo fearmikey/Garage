@@ -91,4 +91,32 @@ class UnitConverterTest {
         assertEquals("23.5 mpg since last full tank", UnitConverter.formatSegmentFuelEconomy(mpg, UnitSystem.IMPERIAL))
         assertEquals("10.0 L/100km since last full tank", UnitConverter.formatSegmentFuelEconomy(mpg, UnitSystem.METRIC))
     }
+
+    @Test
+    fun `vehicle parts and fluids formatting respects UnitSystem`() {
+        // Oil Capacity
+        assertEquals("4.9 L", UnitConverter.formatOilCapacity("5.2 qts", UnitSystem.METRIC))
+        assertEquals("5.2 qts", UnitConverter.formatOilCapacity("5.2 qts", UnitSystem.IMPERIAL))
+        assertEquals("5.2 qts", UnitConverter.formatOilCapacity("4.9 L", UnitSystem.IMPERIAL))
+        assertEquals("4.9 L", UnitConverter.formatOilCapacity("4.9 L", UnitSystem.METRIC))
+        assertEquals("N/A (Electric)", UnitConverter.formatOilCapacity("N/A (Electric)", UnitSystem.METRIC))
+
+        // Tire Pressure
+        assertEquals("2.4 bar", UnitConverter.formatTirePressure("35 PSI", UnitSystem.METRIC))
+        assertEquals("35 PSI", UnitConverter.formatTirePressure("35 PSI", UnitSystem.IMPERIAL))
+        assertEquals("35 PSI", UnitConverter.formatTirePressure("2.4 bar", UnitSystem.IMPERIAL))
+        assertEquals("2.4 bar", UnitConverter.formatTirePressure("2.4 bar", UnitSystem.METRIC))
+
+        // Wiper Size
+        assertEquals("660 mm", UnitConverter.formatWiperSize("26 in", UnitSystem.METRIC))
+        assertEquals("26 in", UnitConverter.formatWiperSize("26 in", UnitSystem.IMPERIAL))
+        assertEquals("26 in", UnitConverter.formatWiperSize("660 mm", UnitSystem.IMPERIAL))
+        assertEquals("650 mm", UnitConverter.formatWiperSize("650 mm", UnitSystem.METRIC))
+
+        // Spark Plug Gap
+        assertEquals("1.0 mm", UnitConverter.formatSparkPlugGap("0.040 in", UnitSystem.METRIC))
+        assertEquals("0.040 in", UnitConverter.formatSparkPlugGap("0.040 in", UnitSystem.IMPERIAL))
+        assertEquals("0.039 in", UnitConverter.formatSparkPlugGap("1.0 mm", UnitSystem.IMPERIAL))
+        assertEquals("1.0 mm", UnitConverter.formatSparkPlugGap("1.0 mm", UnitSystem.METRIC))
+    }
 }

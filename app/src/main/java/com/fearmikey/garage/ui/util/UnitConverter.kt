@@ -142,4 +142,83 @@ object UnitConverter {
         if (mpge == null || mpge <= 0.0) return "—"
         return "%.1f MPGe".format(mpge)
     }
+
+    // Vehicle Parts & Fluids Spec Conversions
+    /** Formats oil capacity according to [UnitSystem] (e.g. "5.2 qts" <-> "4.9 L"). */
+    fun formatOilCapacity(capacityStr: String?, unitSystem: UnitSystem): String? {
+        if (capacityStr.isNullOrBlank()) return null
+        if (capacityStr.contains("N/A", ignoreCase = true)) return capacityStr
+        val numMatch = Regex("""\d+(?:\.\d+)?""").find(capacityStr)?.value?.toDoubleOrNull() ?: return capacityStr
+        val hasLiters = capacityStr.contains("L", ignoreCase = true) && !capacityStr.contains("gal", ignoreCase = true)
+        return when (unitSystem) {
+            UnitSystem.METRIC -> {
+                if (hasLiters) "%.1f L".format(numMatch)
+                else "%.1f L".format(numMatch * 0.946353)
+            }
+            UnitSystem.IMPERIAL -> {
+                if (hasLiters) "%.1f qts".format(numMatch / 0.946353)
+                else "%.1f qts".format(numMatch)
+            }
+        }
+    }
+
+    /** Formats tire pressure according to [UnitSystem] (e.g. "35 PSI" <-> "2.4 bar"). */
+    fun formatTirePressure(psiStr: String?, unitSystem: UnitSystem): String? {
+        if (psiStr.isNullOrBlank()) return null
+        if (psiStr.contains("N/A", ignoreCase = true)) return psiStr
+        val numMatch = Regex("""\d+(?:\.\d+)?""").find(psiStr)?.value?.toDoubleOrNull() ?: return psiStr
+        val hasBar = psiStr.contains("bar", ignoreCase = true)
+        val hasKpa = psiStr.contains("kPa", ignoreCase = true)
+        return when (unitSystem) {
+            UnitSystem.METRIC -> {
+                if (hasBar) "%.1f bar".format(numMatch)
+                else if (hasKpa) "${numMatch.roundToInt()} kPa"
+                else "%.1f bar".format(numMatch * 0.0689476)
+            }
+            UnitSystem.IMPERIAL -> {
+                if (hasBar) "${(numMatch / 0.0689476).roundToInt()} PSI"
+                else if (hasKpa) "${(numMatch * 0.1450377).roundToInt()} PSI"
+                else "${numMatch.roundToInt()} PSI"
+            }
+        }
+    }
+
+    /** Formats wiper blade sizes according to [UnitSystem] (e.g. "26 in" <-> "650 mm"). */
+    fun formatWiperSize(sizeStr: String?, unitSystem: UnitSystem): String? {
+        if (sizeStr.isNullOrBlank()) return null
+        if (sizeStr.contains("N/A", ignoreCase = true)) return sizeStr
+        val numMatch = Regex("""\d+(?:\.\d+)?""").find(sizeStr)?.value?.toDoubleOrNull() ?: return sizeStr
+        val hasMm = sizeStr.contains("mm", ignoreCase = true)
+        val hasCm = sizeStr.contains("cm", ignoreCase = true)
+        return when (unitSystem) {
+            UnitSystem.METRIC -> {
+                if (hasMm) "${numMatch.roundToInt()} mm"
+                else if (hasCm) "${(numMatch * 10).roundToInt()} mm"
+                else "${(numMatch * 25.4).roundToInt()} mm"
+            }
+            UnitSystem.IMPERIAL -> {
+                if (hasMm) "${(numMatch / 25.4).roundToInt()} in"
+                else if (hasCm) "${(numMatch * 10 / 25.4).roundToInt()} in"
+                else "${numMatch.roundToInt()} in"
+            }
+        }
+    }
+
+    /** Formats spark plug gap according to [UnitSystem] (e.g. "0.040 in" <-> "1.0 mm"). */
+    fun formatSparkPlugGap(gapStr: String?, unitSystem: UnitSystem): String? {
+        if (gapStr.isNullOrBlank()) return null
+        if (gapStr.contains("N/A", ignoreCase = true)) return gapStr
+        val numMatch = Regex("""\d+(?:\.\d+)?""").find(gapStr)?.value?.toDoubleOrNull() ?: return gapStr
+        val hasMm = gapStr.contains("mm", ignoreCase = true)
+        return when (unitSystem) {
+            UnitSystem.METRIC -> {
+                if (hasMm) "%.1f mm".format(numMatch)
+                else "%.1f mm".format(numMatch * 25.4)
+            }
+            UnitSystem.IMPERIAL -> {
+                if (hasMm) "%.3f in".format(numMatch / 25.4)
+                else "%.3f in".format(numMatch)
+            }
+        }
+    }
 }

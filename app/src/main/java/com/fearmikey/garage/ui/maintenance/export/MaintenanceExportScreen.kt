@@ -860,7 +860,7 @@ suspend fun generatePdf(
     }
     canvas.drawText(vehicleTitle, contentX, cardTop + 24f, titlePaint)
 
-    val allMileages = (maintenanceRecords.map { it.mileage } + fuelRecords.map { it.mileage } + chargingRecords.map { it.mileage })
+    val allMileages = (listOfNotNull(vehicle.initialMileage) + maintenanceRecords.map { it.mileage } + fuelRecords.map { it.mileage } + chargingRecords.map { it.mileage })
         .filter { it > 0 }
     val maxMileage = allMileages.maxOrNull()
     val minMileage = allMileages.minOrNull()
@@ -875,7 +875,8 @@ suspend fun generatePdf(
     val vinDisplay = vehicle.vin.ifBlank { "Not specified" }
     canvas.drawText(vinDisplay, col1X + 28f, cardTop + 44f, valueBoldPaint)
 
-    canvas.drawText("CURRENT MILEAGE:", col2X, cardTop + 44f, labelPaint)
+    val currentLabel = if (unitSystem == UnitSystem.METRIC) "CURRENT ODOMETER:" else "CURRENT MILEAGE:"
+    canvas.drawText(currentLabel, col2X, cardTop + 44f, labelPaint)
     canvas.drawText(formattedMileage, col2X + 88f, cardTop + 44f, valueBoldPaint)
 
     canvas.drawText("DRIVETRAIN:", col1X, cardTop + 62f, labelPaint)
@@ -899,7 +900,8 @@ suspend fun generatePdf(
     canvas.drawText("PURCHASED:", col1X, cardTop + 98f, labelPaint)
     canvas.drawText(purchasedDisplay, col1X + 58f, cardTop + 98f, valueNormalPaint)
 
-    canvas.drawText("INITIAL MILEAGE:", col2X, cardTop + 98f, labelPaint)
+    val initialLabel = if (unitSystem == UnitSystem.METRIC) "INITIAL ODOMETER:" else "INITIAL MILEAGE:"
+    canvas.drawText(initialLabel, col2X, cardTop + 98f, labelPaint)
     val initialDisplay = vehicle.initialMileage?.let { UnitConverter.formatDistance(it, unitSystem) } ?: "Not recorded"
     canvas.drawText(initialDisplay, col2X + 82f, cardTop + 98f, valueNormalPaint)
 
@@ -1069,17 +1071,17 @@ suspend fun generatePdf(
 
         val partsItems = buildList {
             parts.oilViscosity?.takeIf { it.isNotBlank() }?.let { add("Oil Viscosity" to it) }
-            parts.oilCapacity?.takeIf { it.isNotBlank() }?.let { add("Oil Capacity" to it) }
+            parts.oilCapacity?.takeIf { it.isNotBlank() }?.let { UnitConverter.formatOilCapacity(it, unitSystem)?.let { formatted -> add("Oil Capacity" to formatted) } }
             parts.oilFilterPartNumber?.takeIf { it.isNotBlank() }?.let { add("Oil Filter Part #" to it) }
             parts.sparkPlugPartNumber?.takeIf { it.isNotBlank() }?.let { add("Spark Plug Part #" to it) }
-            parts.sparkPlugGap?.takeIf { it.isNotBlank() }?.let { add("Spark Plug Gap" to it) }
+            parts.sparkPlugGap?.takeIf { it.isNotBlank() }?.let { UnitConverter.formatSparkPlugGap(it, unitSystem)?.let { formatted -> add("Spark Plug Gap" to formatted) } }
             parts.tireSizeFront?.takeIf { it.isNotBlank() }?.let { add("Front Tire Size" to it) }
             parts.tireSizeRear?.takeIf { it.isNotBlank() }?.let { add("Rear Tire Size" to it) }
-            parts.tirePsiFront?.takeIf { it.isNotBlank() }?.let { add("Front Tire Pressure" to "$it PSI") }
-            parts.tirePsiRear?.takeIf { it.isNotBlank() }?.let { add("Rear Tire Pressure" to "$it PSI") }
-            parts.wiperBladeSizeDriver?.takeIf { it.isNotBlank() }?.let { add("Wiper Driver" to it) }
-            parts.wiperBladeSizePassenger?.takeIf { it.isNotBlank() }?.let { add("Wiper Passenger" to it) }
-            parts.wiperBladeSizeRear?.takeIf { it.isNotBlank() }?.let { add("Wiper Rear" to it) }
+            parts.tirePsiFront?.takeIf { it.isNotBlank() }?.let { UnitConverter.formatTirePressure(it, unitSystem)?.let { formatted -> add("Front Tire Pressure" to formatted) } }
+            parts.tirePsiRear?.takeIf { it.isNotBlank() }?.let { UnitConverter.formatTirePressure(it, unitSystem)?.let { formatted -> add("Rear Tire Pressure" to formatted) } }
+            parts.wiperBladeSizeDriver?.takeIf { it.isNotBlank() }?.let { UnitConverter.formatWiperSize(it, unitSystem)?.let { formatted -> add("Driver Wiper Size" to formatted) } }
+            parts.wiperBladeSizePassenger?.takeIf { it.isNotBlank() }?.let { UnitConverter.formatWiperSize(it, unitSystem)?.let { formatted -> add("Passenger Wiper Size" to formatted) } }
+            parts.wiperBladeSizeRear?.takeIf { it.isNotBlank() }?.let { UnitConverter.formatWiperSize(it, unitSystem)?.let { formatted -> add("Rear Wiper Size" to formatted) } }
         }
 
         if (partsItems.isNotEmpty()) {
@@ -1173,8 +1175,9 @@ suspend fun generatePdf(
             color = Color.WHITE
             isAntiAlias = true
         }
+        val odoHeader = if (unitSystem == UnitSystem.METRIC) "ODOMETER (${unitSystem.distanceUnit.uppercase()})" else "MILEAGE"
         canvas.drawText("DATE", marginLeft + 8f, yPos + 12f, tblHeaderPaint)
-        canvas.drawText("MILEAGE", marginLeft + 72f, yPos + 12f, tblHeaderPaint)
+        canvas.drawText(odoHeader, marginLeft + 72f, yPos + 12f, tblHeaderPaint)
         canvas.drawText("TYPE", marginLeft + 138f, yPos + 12f, tblHeaderPaint)
         canvas.drawText("DETAILS", marginLeft + 225f, yPos + 12f, tblHeaderPaint)
 
@@ -1237,8 +1240,9 @@ suspend fun generatePdf(
             color = Color.WHITE
             isAntiAlias = true
         }
+        val odoHeader = if (unitSystem == UnitSystem.METRIC) "ODOMETER (${unitSystem.distanceUnit.uppercase()})" else "MILEAGE"
         canvas.drawText("DATE", marginLeft + 8f, yPos + 12f, tblHeaderPaint)
-        canvas.drawText("MILEAGE", marginLeft + 72f, yPos + 12f, tblHeaderPaint)
+        canvas.drawText(odoHeader, marginLeft + 72f, yPos + 12f, tblHeaderPaint)
         canvas.drawText("CATEGORY", marginLeft + 138f, yPos + 12f, tblHeaderPaint)
         canvas.drawText("SERVICE & TASK DESCRIPTION", marginLeft + 225f, yPos + 12f, tblHeaderPaint)
 

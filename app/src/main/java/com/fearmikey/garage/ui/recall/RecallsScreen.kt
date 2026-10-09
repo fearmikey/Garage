@@ -53,6 +53,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.entity.RecallState
 import com.fearmikey.garage.ui.components.EmptyState
 import com.fearmikey.garage.ui.theme.GarageTheme
@@ -227,7 +229,7 @@ private fun VinRecallCard(
                         contentDescription = null,
                         modifier = Modifier.padding(end = 6.dp),
                     )
-                    Text("Check VIN on NHTSA.gov")
+                    Text(stringResource(R.string.recalls_nhtsa_check))
                 }
             } else {
                 Text(
@@ -256,7 +258,7 @@ private fun RecallsErrorState(message: String, onRetry: () -> Unit) {
             modifier = Modifier.padding(bottom = 16.dp),
         )
         Button(onClick = onRetry) {
-            Text("Retry")
+            Text(stringResource(R.string.recalls_retry))
         }
     }
 }

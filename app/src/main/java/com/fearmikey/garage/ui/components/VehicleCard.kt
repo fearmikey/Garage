@@ -43,6 +43,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.SampleData
@@ -180,7 +182,7 @@ fun VehicleCard(
                     verticalArrangement = Arrangement.spacedBy(6.dp),
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    val mileageText = latestMileage?.let { UnitConverter.formatDistance(it, unitSystem) } ?: "No mileage"
+                    val mileageText = latestMileage?.let { UnitConverter.formatDistance(it, unitSystem) } ?: stringResource(R.string.vehicle_card_no_mileage)
                     StatChip(
                         text = mileageText,
                         icon = Icons.Outlined.Speed,
@@ -200,7 +202,7 @@ fun VehicleCard(
 
                     if (overdueReminderCount > 0) {
                         StatChip(
-                            text = "$overdueReminderCount Overdue",
+                            text = stringResource(R.string.fleet_overdue_count, overdueReminderCount),
                             icon = Icons.Outlined.WarningAmber,
                             containerColor = MaterialTheme.colorScheme.errorContainer,
                             contentColor = MaterialTheme.colorScheme.onErrorContainer,
@@ -208,7 +210,7 @@ fun VehicleCard(
                         )
                     } else if (upcomingReminderCount > 0) {
                         StatChip(
-                            text = "$upcomingReminderCount Due Soon",
+                            text = stringResource(R.string.fleet_due_soon_count, upcomingReminderCount),
                             icon = Icons.Outlined.Notifications,
                             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                             contentColor = MaterialTheme.colorScheme.onTertiaryContainer,

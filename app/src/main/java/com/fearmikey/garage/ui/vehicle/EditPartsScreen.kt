@@ -45,8 +45,10 @@ import androidx.lifecycle.viewModelScope
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.local.entity.VehiclePartsInfo
 import com.fearmikey.garage.data.local.entity.VehicleSpecs
+import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.ui.navigation.Destinations
+import com.fearmikey.garage.ui.util.UnitSystem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -59,6 +61,7 @@ data class EditPartsUiState(
     val initialParts: VehiclePartsInfo? = null,
     val vehicle: Vehicle? = null,
     val specs: VehicleSpecs? = null,
+    val unitSystem: UnitSystem = UnitSystem.IMPERIAL,
     val isLoading: Boolean = true,
 )
 
@@ -66,6 +69,7 @@ data class EditPartsUiState(
 class EditPartsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val vehicleRepository: VehicleRepository,
+    preferencesRepository: PreferencesRepository,
 ) : ViewModel() {
 
     val vehicleId: Long = checkNotNull(savedStateHandle[Destinations.VEHICLE_ID_ARG])
@@ -74,18 +78,20 @@ class EditPartsViewModel @Inject constructor(
         vehicleRepository.getVehicleParts(vehicleId),
         vehicleRepository.getVehicleById(vehicleId),
         vehicleRepository.getVehicleSpecs(vehicleId),
-    ) { parts, vehicle, specs ->
+        preferencesRepository.unitSystem,
+    ) { parts, vehicle, specs, unitSystem ->
         EditPartsUiState(
             initialParts = parts,
             vehicle = vehicle,
             specs = specs,
+            unitSystem = unitSystem,
             isLoading = false,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), EditPartsUiState())
 
     fun getEstimatedParts(): VehiclePartsInfo {
         val state = uiState.value
-        return PartsEstimator.estimateParts(vehicleId, state.vehicle, state.specs)
+        return PartsEstimator.estimateParts(vehicleId, state.vehicle, state.specs, state.unitSystem)
     }
 
     fun saveParts(info: VehiclePartsInfo) {
@@ -151,7 +157,7 @@ private fun EditPartsContent(
 
     val effectiveInitial = remember(uiState) {
         uiState.initialParts?.takeUnless { it.isEmpty() }
-            ?: PartsEstimator.estimateParts(vehicleId, uiState.vehicle, uiState.specs)
+            ?: PartsEstimator.estimateParts(vehicleId, uiState.vehicle, uiState.specs, uiState.unitSystem)
     }
 
     var oilViscosity by remember(effectiveInitial) { mutableStateOf(effectiveInitial.oilViscosity.orEmpty()) }

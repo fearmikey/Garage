@@ -13,8 +13,10 @@ import com.fearmikey.garage.data.local.entity.VehicleSpecs
 import com.fearmikey.garage.data.remote.VinDecoderApi
 import com.fearmikey.garage.data.remote.dto.VinDecodeResponse
 import com.fearmikey.garage.data.repository.ImageStorageManager
+import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.ui.navigation.Destinations
+import com.fearmikey.garage.ui.util.UnitSystem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -64,8 +66,14 @@ class AddEditVehicleViewModelTest {
     }
 
     private class FakeVehicleSpecsDao : VehicleSpecsDao {
-        override fun getByVehicleId(vehicleId: Long): Flow<VehicleSpecs?> = MutableStateFlow(null)
-        override suspend fun upsert(specs: VehicleSpecs) {}
+        var savedSpecs: VehicleSpecs? = null
+        val specsFlow = MutableStateFlow<VehicleSpecs?>(null)
+        override fun getByVehicleId(vehicleId: Long): Flow<VehicleSpecs?> = specsFlow
+        override suspend fun getByVehicleIdOnce(vehicleId: Long): VehicleSpecs? = specsFlow.value
+        override suspend fun upsert(specs: VehicleSpecs) {
+            savedSpecs = specs
+            specsFlow.value = specs
+        }
     }
 
     private class FakeVehiclePartsDao : VehiclePartsDao {
@@ -85,6 +93,30 @@ class AddEditVehicleViewModelTest {
 
     private class FakeImageStorageManager : ImageStorageManager(ContextWrapper(null)) {
         override fun imageFile(filename: String): File = File(filename)
+    }
+
+    private class FakePreferencesRepository : PreferencesRepository {
+        override val unitsType: Flow<String> = MutableStateFlow("imperial")
+        override val unitSystem: Flow<UnitSystem> = MutableStateFlow(UnitSystem.IMPERIAL)
+        override val currencyCode: Flow<String> = MutableStateFlow("USD")
+        override val appCurrency: Flow<com.fearmikey.garage.ui.util.AppCurrency> = MutableStateFlow(com.fearmikey.garage.ui.util.AppCurrency.USD)
+        override val themeType: Flow<String> = MutableStateFlow("system")
+        override val onboardingCompleted: Flow<Boolean> = MutableStateFlow(true)
+        override val defaultVehicleId: Flow<Long?> = MutableStateFlow(null)
+        override val maintenanceMileageWindow: Flow<Int> = MutableStateFlow(500)
+        override val appOpenCount: Flow<Int> = MutableStateFlow(1)
+        override val buyMeACoffeeDontAskAgain: Flow<Boolean> = MutableStateFlow(false)
+        override val buyMeACoffeeNextPromptOpenCount: Flow<Int> = MutableStateFlow(2)
+
+        override suspend fun setUnitsType(units: String) {}
+        override suspend fun setCurrencyCode(currencyCode: String) {}
+        override suspend fun setThemeType(theme: String) {}
+        override suspend fun setOnboardingCompleted(completed: Boolean) {}
+        override suspend fun setDefaultVehicleId(vehicleId: Long?) {}
+        override suspend fun setMaintenanceMileageWindow(miles: Int) {}
+        override suspend fun incrementAppOpenCount(): Int = 1
+        override suspend fun setBuyMeACoffeeDontAskAgain(dontAskAgain: Boolean) {}
+        override suspend fun setBuyMeACoffeeNextPromptOpenCount(openCount: Int) {}
     }
 
     @Before
@@ -111,6 +143,7 @@ class AddEditVehicleViewModelTest {
         val viewModel = AddEditVehicleViewModel(
             savedStateHandle = SavedStateHandle(mapOf(Destinations.VEHICLE_ID_ARG to 1L)),
             vehicleRepository = vehicleRepository,
+            preferencesRepository = FakePreferencesRepository(),
             imageStorageManager = FakeImageStorageManager(),
         )
 
@@ -138,6 +171,7 @@ class AddEditVehicleViewModelTest {
         val viewModel = AddEditVehicleViewModel(
             savedStateHandle = SavedStateHandle(mapOf(Destinations.VEHICLE_ID_ARG to 1L)),
             vehicleRepository = vehicleRepository,
+            preferencesRepository = FakePreferencesRepository(),
             imageStorageManager = FakeImageStorageManager(),
         )
 
@@ -156,5 +190,35 @@ class AddEditVehicleViewModelTest {
         assertEquals(0.2f, saved?.imageOffsetY)
         assertNull(saved?.imageUri2)
         assertNull(saved?.imageUri3)
+    }
+
+    @Test
+    fun `fuel type changes are saved to vehicle specs`() = runTest {
+        val fakeDao = FakeVehicleDao()
+        val fakeSpecsDao = FakeVehicleSpecsDao()
+        val vehicleRepository = VehicleRepository(
+            vehicleDao = fakeDao,
+            vehicleSpecsDao = fakeSpecsDao,
+            vehiclePartsDao = FakeVehiclePartsDao(),
+            vehicleRegistrationDao = FakeVehicleRegistrationDao(),
+            vinDecoderApi = FakeVinDecoderApi(),
+        )
+
+        val viewModel = AddEditVehicleViewModel(
+            savedStateHandle = SavedStateHandle(mapOf(Destinations.VEHICLE_ID_ARG to 1L)),
+            vehicleRepository = vehicleRepository,
+            preferencesRepository = FakePreferencesRepository(),
+            imageStorageManager = FakeImageStorageManager(),
+        )
+
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        viewModel.onFuelTypeChanged("Diesel")
+        assertEquals("Diesel", viewModel.uiState.value.fuelType)
+
+        viewModel.onSave()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals("Diesel", fakeSpecsDao.savedSpecs?.fuelType)
     }
 }

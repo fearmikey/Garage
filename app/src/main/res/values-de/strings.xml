@@ -338,4 +338,86 @@
     <string name="doc_delete_toll_btn">Park- / Mautinfos löschen</string>
     <string name="doc_save_docs_btn">Dokumente speichern</string>
     <string name="doc_saving_btn">Speichern...</string>
+    <!-- Fleet Summary -->
+    <string name="fleet_overview_title">Flottenübersicht</string>
+    <string name="fleet_vehicles">Fahrzeuge</string>
+    <string name="fleet_avg">Flottendurchschnitt</string>
+    <string name="fleet_overdue_count">%1$d Überfällig</string>
+    <string name="fleet_due_soon_count">%1$d Demnächst fällig</string>
+    <string name="fleet_all_clear">Alles in Ordnung</string>
+    <string name="fleet_status">Status</string>
+
+    <!-- Vehicle Card -->
+    <string name="vehicle_card_no_mileage">Kein Kilometerstand</string>
+
+    <!-- Vehicle Specs -->
+    <string name="specs_empty_message">Noch keine Daten vorhanden.\nDekodieren Sie die FIN auf der Bearbeiten-Seite, um alle technischen Daten anzuzeigen.</string>
+    <string name="specs_group_engine">Motor &amp; Antrieb</string>
+    <string name="specs_group_weights">Gewichte &amp; Anhängelast</string>
+    <string name="specs_group_body">Karosserie</string>
+    <string name="specs_group_manufacturing">Herstellung</string>
+    <string name="specs_cylinders">Zylinder</string>
+    <string name="specs_displacement">Hubraum</string>
+    <string name="specs_horsepower">Leistung</string>
+    <string name="specs_fuel_type">Kraftstoffart</string>
+    <string name="specs_transmission">Getriebe</string>
+    <string name="specs_transmission_speeds">Gänge</string>
+    <string name="specs_towing_braked">Anhängelast (gebremst)</string>
+    <string name="specs_towing_unbraked">Anhängelast (ungebremst)</string>
+    <string name="specs_gcwr">Zulässiges Gesamtzuggewicht</string>
+    <string name="specs_gvwr">Zulässiges Gesamtgewicht</string>
+    <string name="specs_curb_weight">Leergewicht</string>
+    <string name="specs_vehicle_type">Fahrzeugtyp</string>
+    <string name="specs_body_class">Karosserieform</string>
+    <string name="specs_doors">Türen</string>
+    <string name="specs_series">Modellreihe</string>
+    <string name="specs_manufacturer">Hersteller</string>
+    <string name="specs_plant">Montagewerk</string>
+
+    <!-- Parts & Fluids -->
+    <string name="parts_empty_message">Noch keine Teile- &amp; Flüssigkeitsinfos.\nTippen Sie auf Bearbeiten, um die Spezifikationen einzugeben.</string>
+    <string name="parts_manual_verification_title">Prüfung anhand des Handbuchs</string>
+    <string name="parts_manual_verification_desc">Vergleichen Sie die Daten mit Ihrem Betriebshandbuch. Für Details tippen.</string>
+    <string name="parts_verify_title">Mit Betriebshandbuch abgleichen</string>
+    <string name="parts_verify_msg">Die angezeigten Füllmengen und Teilespezifikationen wurden basierend auf der dekodierten FIN geschätzt.\n\nSonderausstattungen und regionale Abweichungen sind möglich. Überprüfen Sie die Werte stets im offiziellen Handbuch vor dem Kauf von Teilen oder Flüssigkeiten.</string>
+    <string name="parts_got_it">Verstanden</string>
+    <string name="parts_group_oil">Motoröl</string>
+    <string name="parts_group_ignition">Zündung</string>
+    <string name="parts_group_filters">Filter</string>
+    <string name="parts_group_tires">Reifen</string>
+    <string name="parts_group_wipers">Scheibenwischer</string>
+    <string name="parts_oil_viscosity">Ölviskosität</string>
+    <string name="parts_oil_capacity">Ölfüllmenge</string>
+    <string name="parts_oil_filter_num">Ölfilter Teilenummer</string>
+    <string name="parts_spark_plug_num">Zündkerze Teilenummer</string>
+    <string name="parts_spark_plug_gap">Elektrodenabstand</string>
+    <string name="parts_engine_air_filter_num">Luftfilter Teilenummer</string>
+    <string name="parts_cabin_air_filter_num">Innenraumfilter Teilenummer</string>
+    <string name="parts_front_tire_size">Reifengröße vorne</string>
+    <string name="parts_rear_tire_size">Reifengröße hinten</string>
+    <string name="parts_front_tire_psi">Reifendruck vorne</string>
+    <string name="parts_rear_tire_psi">Reifendruck hinten</string>
+    <string name="parts_driver_wiper">Wischergröße Fahrerseite</string>
+    <string name="parts_passenger_wiper">Wischergröße Beifahrerseite</string>
+    <string name="parts_rear_wiper">Wischergröße hinten</string>
+
+    <!-- Modifications -->
+    <string name="mods_empty_message">Noch keine Umbauten erfasst.\nTippen Sie auf +, um Zubehör, Tuning oder Umbauten hinzuzufügen.</string>
+    <string name="mods_title_label">Bezeichnung des Umbaus *</string>
+    <string name="mods_category_label">Kategorie</string>
+    <string name="mods_desc_label">Beschreibung / Notizen</string>
+    <string name="mods_date_label">Einbaudatum</string>
+    <string name="mods_cost_label">Kosten (Optional)</string>
+    <string name="mods_url_label">Produktlink / URL (Optional)</string>
+    <string name="mods_save_btn">Umbau speichern</string>
+    <string name="mods_delete_btn">Umbau löschen</string>
+    <string name="mods_delete_confirm_title">Umbau löschen?</string>
+    <string name="mods_delete_confirm_msg">Möchten Sie \'%1$s\' wirklich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.</string>
+
+    <!-- Recalls -->
+    <string name="recalls_empty_message">Keine Sicherheitsrückrufe für dieses Fahrzeug gefunden.\nRückrufdaten werden von der NHTSA bereitgestellt.</string>
+    <string name="recalls_nhtsa_check">FIN auf NHTSA.gov prüfen</string>
+    <string name="recalls_retry">Erneut versuchen</string>
+    <string name="recalls_park_it">Nicht mehr fahren</string>
+    <string name="recalls_park_outside">Im Freien parken</string>
 </resources>

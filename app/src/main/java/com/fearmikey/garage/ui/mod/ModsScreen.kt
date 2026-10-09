@@ -110,6 +110,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.entity.ModificationCategory
 import com.fearmikey.garage.data.local.entity.ModificationRecord
 import com.fearmikey.garage.ui.components.EmptyState
@@ -190,7 +192,7 @@ private fun ModsContent(
         ) {
             if (uiState.mods.isEmpty()) {
                 EmptyState(
-                    message = "No modifications logged yet.\nTap + to add a mod.",
+                    message = stringResource(R.string.mods_empty_message),
                     icon = Icons.Default.Handyman,
                 )
             } else if (uiState.isGridView) {
@@ -871,7 +873,7 @@ private fun AddEditModSheet(
             OutlinedTextField(
                 value = uiState.title,
                 onValueChange = onTitleChanged,
-                label = { Text("Mod Title *") },
+                label = { Text(stringResource(R.string.mods_title_label)) },
                 placeholder = { Text("e.g., 2-inch Lift Kit, Cold Air Intake") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
@@ -887,7 +889,7 @@ private fun AddEditModSheet(
                     value = uiState.category.displayName,
                     onValueChange = {},
                     readOnly = true,
-                    label = { Text("Category") },
+                    label = { Text(stringResource(R.string.mods_category_label)) },
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = categoryExpanded) },
                     leadingIcon = {
                         Icon(
@@ -927,7 +929,7 @@ private fun AddEditModSheet(
             OutlinedTextField(
                 value = uiState.description,
                 onValueChange = onDescriptionChanged,
-                label = { Text("Description / Notes") },
+                label = { Text(stringResource(R.string.mods_desc_label)) },
                 placeholder = { Text("Details, part numbers, installation notes...") },
                 minLines = 3,
                 maxLines = 5,
@@ -939,7 +941,7 @@ private fun AddEditModSheet(
                 value = uiState.date.toDisplayDate(),
                 onValueChange = {},
                 readOnly = true,
-                label = { Text("Installation Date") },
+                label = { Text(stringResource(R.string.mods_date_label)) },
                 trailingIcon = {
                     IconButton(onClick = { showDatePickerDialog = true }) {
                         Icon(Icons.Default.CalendarToday, contentDescription = "Select Date")
@@ -953,7 +955,7 @@ private fun AddEditModSheet(
             OutlinedTextField(
                 value = uiState.cost,
                 onValueChange = onCostChanged,
-                label = { Text("Cost (Optional)") },
+                label = { Text(stringResource(R.string.mods_cost_label)) },
                 prefix = { Text(uiState.currencySymbol) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
@@ -963,7 +965,7 @@ private fun AddEditModSheet(
             OutlinedTextField(
                 value = uiState.productUrl,
                 onValueChange = onProductUrlChanged,
-                label = { Text("Product Link / URL (Optional)") },
+                label = { Text(stringResource(R.string.mods_url_label)) },
                 placeholder = { Text("e.g. https://example.com/parts/lift-kit") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
@@ -980,7 +982,7 @@ private fun AddEditModSheet(
                 enabled = uiState.title.isNotBlank() && !uiState.isSaving,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(if (uiState.isSaving) "Saving..." else "Save Modification")
+                Text(if (uiState.isSaving) stringResource(R.string.doc_saving_btn) else stringResource(R.string.mods_save_btn))
             }
 
             if (uiState.editingModId != null) {
@@ -991,7 +993,7 @@ private fun AddEditModSheet(
                 ) {
                     Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Delete Modification")
+                    Text(stringResource(R.string.mods_delete_btn))
                 }
             }
 
@@ -1019,7 +1021,7 @@ private fun AddEditModSheet(
             },
             dismissButton = {
                 TextButton(onClick = { showDatePickerDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.obd_cancel))
                 }
             },
         ) {
@@ -1030,8 +1032,8 @@ private fun AddEditModSheet(
     if (showDeleteConfirmDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteConfirmDialog = false },
-            title = { Text("Delete Modification?") },
-            text = { Text("Are you sure you want to delete '${uiState.title}'? This action cannot be undone.") },
+            title = { Text(stringResource(R.string.mods_delete_confirm_title)) },
+            text = { Text(stringResource(R.string.mods_delete_confirm_msg, uiState.title)) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -1040,12 +1042,12 @@ private fun AddEditModSheet(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                 ) {
-                    Text("Delete")
+                    Text(stringResource(R.string.mods_delete_btn))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteConfirmDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.obd_cancel))
                 }
             },
         )

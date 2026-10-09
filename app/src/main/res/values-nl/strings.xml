@@ -338,4 +338,86 @@
     <string name="doc_delete_toll_btn">Tol- / Parkeergegevens verwijderen</string>
     <string name="doc_save_docs_btn">Voertuigdocumenten opslaan</string>
     <string name="doc_saving_btn">Opslaan...</string>
+    <!-- Fleet Summary -->
+    <string name="fleet_overview_title">Wagenparkoverzicht</string>
+    <string name="fleet_vehicles">Voertuigen</string>
+    <string name="fleet_avg">Flootgemiddelde</string>
+    <string name="fleet_overdue_count">%1$d Achterstallig</string>
+    <string name="fleet_due_soon_count">%1$d Binnenkort</string>
+    <string name="fleet_all_clear">Alles in orde</string>
+    <string name="fleet_status">Status</string>
+
+    <!-- Vehicle Card -->
+    <string name="vehicle_card_no_mileage">Geen kilometerstand</string>
+
+    <!-- Vehicle Specs -->
+    <string name="specs_empty_message">Nog geen specificaties.\nDecodeer het VIN van dit voertuig op het bewerkscherm om alle specificaties te zien.</string>
+    <string name="specs_group_engine">Motor &amp; Aandrijflijn</string>
+    <string name="specs_group_weights">Gewichten &amp; Trekkracht</string>
+    <string name="specs_group_body">Carrosserie</string>
+    <string name="specs_group_manufacturing">Productie</string>
+    <string name="specs_cylinders">Cilinders</string>
+    <string name="specs_displacement">Cilinderinhoud</string>
+    <string name="specs_horsepower">Vermogen (pk)</string>
+    <string name="specs_fuel_type">Brandstoftype</string>
+    <string name="specs_transmission">Versnellingsbak</string>
+    <string name="specs_transmission_speeds">Aantal versnellingen</string>
+    <string name="specs_towing_braked">Trekvermogen (remmen)</string>
+    <string name="specs_towing_unbraked">Trekvermogen (ongeremd)</string>
+    <string name="specs_gcwr">Max. treingewicht (GCWR)</string>
+    <string name="specs_gvwr">Max. toegestaan gewicht (GVWR)</string>
+    <string name="specs_curb_weight">Rijklaar gewicht</string>
+    <string name="specs_vehicle_type">Voertuigtype</string>
+    <string name="specs_body_class">Carrosserie-klasse</string>
+    <string name="specs_doors">Deuren</string>
+    <string name="specs_series">Serie</string>
+    <string name="specs_manufacturer">Fabrikant</string>
+    <string name="specs_plant">Fabriek</string>
+
+    <!-- Parts & Fluids -->
+    <string name="parts_empty_message">Nog geen onderdelen &amp; vloeistoffen info.\nTik op bewerken om specificaties toe te voegen.</string>
+    <string name="parts_manual_verification_title">Controleer met instructieboekje</string>
+    <string name="parts_manual_verification_desc">Controleer specificaties altijd met het instructieboekje van je auto. Tik voor details.</string>
+    <string name="parts_verify_title">Controleer met instructieboekje</string>
+    <string name="parts_verify_msg">Inhoudsmaten voor vloeistoffen en onderdeelnummers zijn geschat op basis van de VIN-decodering.\n\nControleer deze waarden altijd met het officiële instructieboekje van het voertuig voordat je vloeistoffen of onderdelen koopt.</string>
+    <string name="parts_got_it">Begrepen</string>
+    <string name="parts_group_oil">Olie</string>
+    <string name="parts_group_ignition">Ontsteking</string>
+    <string name="parts_group_filters">Filters</string>
+    <string name="parts_group_tires">Banden</string>
+    <string name="parts_group_wipers">Ruitenwissers</string>
+    <string name="parts_oil_viscosity">Olieviscositeit</string>
+    <string name="parts_oil_capacity">Oliecapaciteit</string>
+    <string name="parts_oil_filter_num">Oliefilter onderdeel #</string>
+    <string name="parts_spark_plug_num">Bougie onderdeel #</string>
+    <string name="parts_spark_plug_gap">Bougie elektrode-afstand</string>
+    <string name="parts_engine_air_filter_num">Luchtfilter onderdeel #</string>
+    <string name="parts_cabin_air_filter_num">Interieurfilter onderdeel #</string>
+    <string name="parts_front_tire_size">Bandenmaat voor</string>
+    <string name="parts_rear_tire_size">Bandenmaat achter</string>
+    <string name="parts_front_tire_psi">Bandenspanning voor</string>
+    <string name="parts_rear_tire_psi">Bandenspanning achter</string>
+    <string name="parts_driver_wiper">Wissermaat bestuurder</string>
+    <string name="parts_passenger_wiper">Wissermaat passagier</string>
+    <string name="parts_rear_wiper">Wissermaat achter</string>
+
+    <!-- Modifications -->
+    <string name="mods_empty_message">Nog geen aanpassingen geregistreerd.\nTik op + om aanpassingen, upgrades of accessoires toe te voegen.</string>
+    <string name="mods_title_label">Naam aanpassing *</string>
+    <string name="mods_category_label">Categorie</string>
+    <string name="mods_desc_label">Beschrijving / Opmerkingen</string>
+    <string name="mods_date_label">Montagedatum</string>
+    <string name="mods_cost_label">Kosten (Optioneel)</string>
+    <string name="mods_url_label">Productlink / URL (Optioneel)</string>
+    <string name="mods_save_btn">Aanpassing opslaan</string>
+    <string name="mods_delete_btn">Aanpassing verwijderen</string>
+    <string name="mods_delete_confirm_title">Aanpassing verwijderen?</string>
+    <string name="mods_delete_confirm_msg">Weet je zeker dat je \'%1$s\' wilt verwijderen? Dit kan niet ongedaan worden gemaakt.</string>
+
+    <!-- Recalls -->
+    <string name="recalls_empty_message">Geen terugroepacties gevonden voor dit voertuig.\nInformatie is afkomstig van de NHTSA.</string>
+    <string name="recalls_nhtsa_check">Controleer VIN op NHTSA.gov</string>
+    <string name="recalls_retry">Opnieuw proberen</string>
+    <string name="recalls_park_it">Niet meer rijden</string>
+    <string name="recalls_park_outside">Buiten parkeren</string>
 </resources>

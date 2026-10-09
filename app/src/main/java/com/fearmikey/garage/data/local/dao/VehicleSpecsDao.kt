@@ -11,6 +11,9 @@ interface VehicleSpecsDao {
     @Query("SELECT * FROM vehicle_specs WHERE vehicleId = :vehicleId")
     fun getByVehicleId(vehicleId: Long): Flow<VehicleSpecs?>
 
+    @Query("SELECT * FROM vehicle_specs WHERE vehicleId = :vehicleId")
+    suspend fun getByVehicleIdOnce(vehicleId: Long): VehicleSpecs?
+
     @Upsert
     suspend fun upsert(specs: VehicleSpecs)
 }

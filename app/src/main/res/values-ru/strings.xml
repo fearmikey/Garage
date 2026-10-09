@@ -342,4 +342,86 @@
     <string name="doc_delete_toll_btn">Удалить транспондер / Пропуск</string>
     <string name="doc_save_docs_btn">Сохранить документы автомобиля</string>
     <string name="doc_saving_btn">Сохранение...</string>
+    <!-- Fleet Summary -->
+    <string name="fleet_overview_title">Обзор автопарка</string>
+    <string name="fleet_vehicles">Автомобили</string>
+    <string name="fleet_avg">Средний расход</string>
+    <string name="fleet_overdue_count">%1$d Просрочено</string>
+    <string name="fleet_due_soon_count">%1$d Скоро</string>
+    <string name="fleet_all_clear">Всё в норме</string>
+    <string name="fleet_status">Статус</string>
+
+    <!-- Vehicle Card -->
+    <string name="vehicle_card_no_mileage">Нет пробега</string>
+
+    <!-- Vehicle Specs -->
+    <string name="specs_empty_message">Характеристики отсутствуют.\nРасшифруйте VIN этого автомобиля на экране редактирования, чтобы увидеть все данные.</string>
+    <string name="specs_group_engine">Двигатель и Трансмиссия</string>
+    <string name="specs_group_weights">Масса и Буксировка</string>
+    <string name="specs_group_body">Кузов</string>
+    <string name="specs_group_manufacturing">Производство</string>
+    <string name="specs_cylinders">Цилиндры</string>
+    <string name="specs_displacement">Объем двигателя</string>
+    <string name="specs_horsepower">Мощность (л.с.)</string>
+    <string name="specs_fuel_type">Тип топлива</string>
+    <string name="specs_transmission">Коробка передач</string>
+    <string name="specs_transmission_speeds">Количество передач</string>
+    <string name="specs_towing_braked">Масса прицепа (с тормозами)</string>
+    <string name="specs_towing_unbraked">Масса прицепа (без тормозов)</string>
+    <string name="specs_gcwr">Разрешенная масса автопоезда (GCWR)</string>
+    <string name="specs_gvwr">Полная масса автомобиля (GVWR)</string>
+    <string name="specs_curb_weight">Снаряженная масса</string>
+    <string name="specs_vehicle_type">Тип транспортного средства</string>
+    <string name="specs_body_class">Тип кузова</string>
+    <string name="specs_doors">Количество дверей</string>
+    <string name="specs_series">Серия</string>
+    <string name="specs_manufacturer">Производитель</string>
+    <string name="specs_plant">Завод сборки</string>
+
+    <!-- Parts & Fluids -->
+    <string name="parts_empty_message">Нет данных о запчастях и жидкостях.\nНажмите «Изменить», чтобы добавить характеристики.</string>
+    <string name="parts_manual_verification_title">Сверка с инструкцией по эксплуатации</string>
+    <string name="parts_manual_verification_desc">Проверьте спецификации по руководству к автомобилю для точности. Нажмите для подробностей.</string>
+    <string name="parts_verify_title">Сверка с руководством пользователя</string>
+    <string name="parts_verify_msg">Объемы технических жидкостей и номера деталей рассчитаны по VIN-коду.\n\nКомплектации и модификации могут отличаться. Всегда сверяйте значения с руководством по эксплуатации перед покупкой запчастей или жидкостей.</string>
+    <string name="parts_got_it">Понятно</string>
+    <string name="parts_group_oil">Моторное масло</string>
+    <string name="parts_group_ignition">Зажигание</string>
+    <string name="parts_group_filters">Фильтры</string>
+    <string name="parts_group_tires">Шины</string>
+    <string name="parts_group_wipers">Дворники</string>
+    <string name="parts_oil_viscosity">Вязкость масла</string>
+    <string name="parts_oil_capacity">Заправочный объем масла</string>
+    <string name="parts_oil_filter_num">Артикул масляного фильтра</string>
+    <string name="parts_spark_plug_num">Артикул свечи зажигания</string>
+    <string name="parts_spark_plug_gap">Зазор между электродами свечи</string>
+    <string name="parts_engine_air_filter_num">Артикул воздушного фильтра</string>
+    <string name="parts_cabin_air_filter_num">Артикул салонного фильтра</string>
+    <string name="parts_front_tire_size">Размер передних шин</string>
+    <string name="parts_rear_tire_size">Размер задних шин</string>
+    <string name="parts_front_tire_psi">Давление в передних шинах</string>
+    <string name="parts_rear_tire_psi">Давление в задних шинах</string>
+    <string name="parts_driver_wiper">Размер дворника водителя</string>
+    <string name="parts_passenger_wiper">Размер дворника пассажира</string>
+    <string name="parts_rear_wiper">Размер заднего дворника</string>
+
+    <!-- Modifications -->
+    <string name="mods_empty_message">Записей о доработках пока нет.\nНажмите +, чтобы добавить тюнинг, аксессуары или доработки.</string>
+    <string name="mods_title_label">Название доработки *</string>
+    <string name="mods_category_label">Категория</string>
+    <string name="mods_desc_label">Описание / Заметки</string>
+    <string name="mods_date_label">Дата установки</string>
+    <string name="mods_cost_label">Стоимость (Необязательно)</string>
+    <string name="mods_url_label">Ссылка на товар / URL (Необязательно)</string>
+    <string name="mods_save_btn">Сохранить доработку</string>
+    <string name="mods_delete_btn">Удалить доработку</string>
+    <string name="mods_delete_confirm_title">Удалить доработку?</string>
+    <string name="mods_delete_confirm_msg">Вы уверены, что хотите удалить \'%1$s\'? Это действие нельзя отменить.</string>
+
+    <!-- Recalls -->
+    <string name="recalls_empty_message">Отзывных кампаний для этого автомобиля не найдено.\nДанные предоставлены NHTSA.</string>
+    <string name="recalls_nhtsa_check">Проверить VIN на NHTSA.gov</string>
+    <string name="recalls_retry">Повторить попытку</string>
+    <string name="recalls_park_it">Запрет эксплуатации</string>
+    <string name="recalls_park_outside">Парковать на улице</string>
 </resources>

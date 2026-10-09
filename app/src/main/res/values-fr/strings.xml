@@ -340,4 +340,86 @@
     <string name="doc_delete_toll_btn">Supprimer le badge de péage / stationnement</string>
     <string name="doc_save_docs_btn">Enregistrer les documents</string>
     <string name="doc_saving_btn">Enregistrement en cours...</string>
+    <!-- Fleet Summary -->
+    <string name="fleet_overview_title">Aperçu de la flotte</string>
+    <string name="fleet_vehicles">Véhicules</string>
+    <string name="fleet_avg">Moyenne flotte</string>
+    <string name="fleet_overdue_count">%1$d En retard</string>
+    <string name="fleet_due_soon_count">%1$d À venir</string>
+    <string name="fleet_all_clear">Tout est à jour</string>
+    <string name="fleet_status">Statut</string>
+
+    <!-- Vehicle Card -->
+    <string name="vehicle_card_no_mileage">Aucun kilométrage</string>
+
+    <!-- Vehicle Specs -->
+    <string name="specs_empty_message">Aucune fiche technique disponible.\nDécodez le VIN de ce véhicule dans l\'écran d\'édition pour afficher sa fiche complète.</string>
+    <string name="specs_group_engine">Moteur &amp; Transmission</string>
+    <string name="specs_group_weights">Poids &amp; Remorquage</string>
+    <string name="specs_group_body">Carrosserie</string>
+    <string name="specs_group_manufacturing">Fabrication</string>
+    <string name="specs_cylinders">Cylindres</string>
+    <string name="specs_displacement">Cylindrée</string>
+    <string name="specs_horsepower">Puissance</string>
+    <string name="specs_fuel_type">Type de carburant</string>
+    <string name="specs_transmission">Boîte de vitesses</string>
+    <string name="specs_transmission_speeds">Rapports de boîte</string>
+    <string name="specs_towing_braked">Capacité de remorquage (freiné)</string>
+    <string name="specs_towing_unbraked">Capacité de remorquage (non freiné)</string>
+    <string name="specs_gcwr">PTRA (GCWR)</string>
+    <string name="specs_gvwr">PTAC (GVWR)</string>
+    <string name="specs_curb_weight">Poids à vide</string>
+    <string name="specs_vehicle_type">Type de véhicule</string>
+    <string name="specs_body_class">Classe de carrosserie</string>
+    <string name="specs_doors">Portes</string>
+    <string name="specs_series">Série</string>
+    <string name="specs_manufacturer">Constructeur</string>
+    <string name="specs_plant">Usine d\'assemblage</string>
+
+    <!-- Parts & Fluids -->
+    <string name="parts_empty_message">Aucune information sur les pièces &amp; fluides.\nAppuyez sur le bouton d\'édition pour ajouter les spécifications de votre véhicule.</string>
+    <string name="parts_manual_verification_title">Vérification du manuel du propriétaire</string>
+    <string name="parts_manual_verification_desc">Vérifiez les données avec le manuel de votre véhicule pour garantir l\'exactitude. Appuyez pour plus de détails.</string>
+    <string name="parts_verify_title">Vérifier avec le manuel du propriétaire</string>
+    <string name="parts_verify_msg">Les capacités en fluides et spécifications présentées sont estimées à partir du VIN décodé.\n\nLes options constructeur et révisions moteur peuvent varier. Vérifiez toujours ces valeurs dans le manuel officiel de votre véhicule avant tout achat ou entretien.</string>
+    <string name="parts_got_it">J\'ai compris</string>
+    <string name="parts_group_oil">Huile</string>
+    <string name="parts_group_ignition">Allumage</string>
+    <string name="parts_group_filters">Filtres</string>
+    <string name="parts_group_tires">Pneus</string>
+    <string name="parts_group_wipers">Essuie-glaces</string>
+    <string name="parts_oil_viscosity">Viscosité d\'huile</string>
+    <string name="parts_oil_capacity">Capacité d\'huile</string>
+    <string name="parts_oil_filter_num">Réf. filtre à huile</string>
+    <string name="parts_spark_plug_num">Réf. bougie d\'allumage</string>
+    <string name="parts_spark_plug_gap">Écartement des électrodes</string>
+    <string name="parts_engine_air_filter_num">Réf. filtre à air moteur</string>
+    <string name="parts_cabin_air_filter_num">Réf. filtre d\'habitacle</string>
+    <string name="parts_front_tire_size">Taille pneus avant</string>
+    <string name="parts_rear_tire_size">Taille pneus arrière</string>
+    <string name="parts_front_tire_psi">Pression pneus avant</string>
+    <string name="parts_rear_tire_psi">Pression pneus arrière</string>
+    <string name="parts_driver_wiper">Taille essuie-glace conducteur</string>
+    <string name="parts_passenger_wiper">Taille essuie-glace passager</string>
+    <string name="parts_rear_wiper">Taille essuie-glace arrière</string>
+
+    <!-- Modifications -->
+    <string name="mods_empty_message">Aucune modification enregistrée.\nAppuyez sur + pour ajouter des améliorations, accessoires ou équipements personnalisés.</string>
+    <string name="mods_title_label">Titre de la modification *</string>
+    <string name="mods_category_label">Catégorie</string>
+    <string name="mods_desc_label">Description / Notes</string>
+    <string name="mods_date_label">Date d\'installation</string>
+    <string name="mods_cost_label">Coût (Optionnel)</string>
+    <string name="mods_url_label">Lien produit / URL (Optionnel)</string>
+    <string name="mods_save_btn">Enregistrer la modification</string>
+    <string name="mods_delete_btn">Supprimer la modification</string>
+    <string name="mods_delete_confirm_title">Supprimer la modification ?</string>
+    <string name="mods_delete_confirm_msg">Voulez-vous vraiment supprimer \'%1$s\' ? Cette action est irréversible.</string>
+
+    <!-- Recalls -->
+    <string name="recalls_empty_message">Aucun rappel de sécurité trouvé pour ce véhicule.\nLes informations de rappel sont fournies par la NHTSA.</string>
+    <string name="recalls_nhtsa_check">Vérifier le VIN sur NHTSA.gov</string>
+    <string name="recalls_retry">Réessayer</string>
+    <string name="recalls_park_it">Ne pas conduire</string>
+    <string name="recalls_park_outside">Garer à l\'extérieur</string>
 </resources>

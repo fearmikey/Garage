@@ -342,4 +342,86 @@
     <string name="doc_delete_toll_btn">Usuń dane opłat / Parkowania</string>
     <string name="doc_save_docs_btn">Zapisz dokumenty pojazdu</string>
     <string name="doc_saving_btn">Zapisywanie...</string>
+    <!-- Fleet Summary -->
+    <string name="fleet_overview_title">Przegląd floty</string>
+    <string name="fleet_vehicles">Pojazdy</string>
+    <string name="fleet_avg">Średnia floty</string>
+    <string name="fleet_overdue_count">%1$d Zaległe</string>
+    <string name="fleet_due_soon_count">%1$d Nadchodzące</string>
+    <string name="fleet_all_clear">Wszystko aktualne</string>
+    <string name="fleet_status">Status</string>
+
+    <!-- Vehicle Card -->
+    <string name="vehicle_card_no_mileage">Brak przebiegu</string>
+
+    <!-- Vehicle Specs -->
+    <string name="specs_empty_message">Brak danych technicznych.\nZdekoduj VIN tego pojazdu na ekranie edycji, aby zobaczyć pełną specyfikację.</string>
+    <string name="specs_group_engine">Silnik i Układ napędowy</string>
+    <string name="specs_group_weights">Masa i Holowanie</string>
+    <string name="specs_group_body">Nadwozie</string>
+    <string name="specs_group_manufacturing">Produkcja</string>
+    <string name="specs_cylinders">Liczba cylindrów</string>
+    <string name="specs_displacement">Pojemność silnika</string>
+    <string name="specs_horsepower">Moc silnika</string>
+    <string name="specs_fuel_type">Rodzaj paliwa</string>
+    <string name="specs_transmission">Skrzynia biegów</string>
+    <string name="specs_transmission_speeds">Liczba przełożeń</string>
+    <string name="specs_towing_braked">Masa przyczepy z hamulcem</string>
+    <string name="specs_towing_unbraked">Masa przyczepy bez hamulca</string>
+    <string name="specs_gcwr">Dopuszczalna masa zespołu pojazdów</string>
+    <string name="specs_gvwr">Dopuszczalna masa całkowita (DMC)</string>
+    <string name="specs_curb_weight">Masa własna</string>
+    <string name="specs_vehicle_type">Typ pojazdu</string>
+    <string name="specs_body_class">Typ nadwozia</string>
+    <string name="specs_doors">Liczba drzwi</string>
+    <string name="specs_series">Seria</string>
+    <string name="specs_manufacturer">Producent</string>
+    <string name="specs_plant">Zakład produkcyjny</string>
+
+    <!-- Parts & Fluids -->
+    <string name="parts_empty_message">Brak informacji o częściach i płynach.\nKliknij przycisk edycji, aby dodać specyfikację pojazdu.</string>
+    <string name="parts_manual_verification_title">Weryfikacja z instrukcją obsługi</string>
+    <string name="parts_manual_verification_desc">Sprawdź specyfikację w instrukcji pojazdu, aby upewnić się o jej dokładności. Kliknij po szczegóły.</string>
+    <string name="parts_verify_title">Sprawdź z instrukcją obsługi</string>
+    <string name="parts_verify_msg">Pojemności płynów i specyfikacje części zostały oszacowane na podstawie zdekodowanego numeru VIN.\n\nWersje silnikowe i wyposażenie mogą się różnić. Zawsze weryfikuj wartości z oficjalną instrukcją obsługi przed zakupem części i płynów.</string>
+    <string name="parts_got_it">Rozumiem</string>
+    <string name="parts_group_oil">Olej</string>
+    <string name="parts_group_ignition">Zapłon</string>
+    <string name="parts_group_filters">Filtry</string>
+    <string name="parts_group_tires">Opony</string>
+    <string name="parts_group_wipers">Wycieraczki</string>
+    <string name="parts_oil_viscosity">Lepkość oleju</string>
+    <string name="parts_oil_capacity">Ilość oleju</string>
+    <string name="parts_oil_filter_num">Numer filtra oleju</string>
+    <string name="parts_spark_plug_num">Numer świecy zapłonowej</string>
+    <string name="parts_spark_plug_gap">Odstęp elektrod świecy</string>
+    <string name="parts_engine_air_filter_num">Numer filtra powietrza</string>
+    <string name="parts_cabin_air_filter_num">Numer filtra kabinowego</string>
+    <string name="parts_front_tire_size">Rozmiar opon przednich</string>
+    <string name="parts_rear_tire_size">Rozmiar opon tylnych</string>
+    <string name="parts_front_tire_psi">Ciśnienie opon przednich</string>
+    <string name="parts_rear_tire_psi">Ciśnienie opon tylnych</string>
+    <string name="parts_driver_wiper">Długość wycieraczki kierowcy</string>
+    <string name="parts_passenger_wiper">Długość wycieraczki pasażera</string>
+    <string name="parts_rear_wiper">Długość wycieraczki tylnej</string>
+
+    <!-- Modifications -->
+    <string name="mods_empty_message">Brak zarejestrowanych modyfikacji.\nDotknij +, aby dodać akcesoria, ulepszenia lub modyfikacje.</string>
+    <string name="mods_title_label">Nazwa modyfikacji *</string>
+    <string name="mods_category_label">Kategoria</string>
+    <string name="mods_desc_label">Opis / Uwagi</string>
+    <string name="mods_date_label">Data montażu</string>
+    <string name="mods_cost_label">Koszt (Opcjonalnie)</string>
+    <string name="mods_url_label">Link do produktu / URL (Opcjonalnie)</string>
+    <string name="mods_save_btn">Zapisz modyfikację</string>
+    <string name="mods_delete_btn">Usuń modyfikację</string>
+    <string name="mods_delete_confirm_title">Usunąć modyfikację?</string>
+    <string name="mods_delete_confirm_msg">Czy na pewno chcesz usunąć \'%1$s\'? Ta operacja jest nieodwracalna.</string>
+
+    <!-- Recalls -->
+    <string name="recalls_empty_message">Brak akcji serwisowych dla tego pojazdu.\nInformacje pochodzą z bazy NHTSA.</string>
+    <string name="recalls_nhtsa_check">Sprawdź VIN na NHTSA.gov</string>
+    <string name="recalls_retry">Spróbuj ponownie</string>
+    <string name="recalls_park_it">Zakaz jazdy</string>
+    <string name="recalls_park_outside">Parkuj na zewnątrz</string>
 </resources>

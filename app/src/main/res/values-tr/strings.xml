@@ -338,4 +338,86 @@
     <string name="doc_delete_toll_btn">HGS ve Park Bilgilerini Sil</string>
     <string name="doc_save_docs_btn">Araç Belgelerini Kaydet</string>
     <string name="doc_saving_btn">Kaydediliyor...</string>
+    <!-- Fleet Summary -->
+    <string name="fleet_overview_title">Filo Genel Bakış</string>
+    <string name="fleet_vehicles">Araçlar</string>
+    <string name="fleet_avg">Filo Ortalaması</string>
+    <string name="fleet_overdue_count">%1$d Gecikmiş</string>
+    <string name="fleet_due_soon_count">%1$d Yaklaşan</string>
+    <string name="fleet_all_clear">Her Şey Güncel</string>
+    <string name="fleet_status">Durum</string>
+
+    <!-- Vehicle Card -->
+    <string name="vehicle_card_no_mileage">Kilometre verisi yok</string>
+
+    <!-- Vehicle Specs -->
+    <string name="specs_empty_message">Henüz teknik özellik yok.\nTüm teknik özellikleri görmek için bu aracın VIN numarasını Düzenle ekranında çözün.</string>
+    <string name="specs_group_engine">Motor ve Şanzıman</string>
+    <string name="specs_group_weights">Ağırlıklar ve Çekme Kapasitesi</string>
+    <string name="specs_group_body">Gövde / Karoser</string>
+    <string name="specs_group_manufacturing">Üretim</string>
+    <string name="specs_cylinders">Silindir Sayısı</string>
+    <string name="specs_displacement">Motor Hacmi</string>
+    <string name="specs_horsepower">Motor Gücü (BG)</string>
+    <string name="specs_fuel_type">Yakıt Türü</string>
+    <string name="specs_transmission">Şanzıman Türü</string>
+    <string name="specs_transmission_speeds">Vites Sayısı</string>
+    <string name="specs_towing_braked">Frenli Çekme Kapasitesi</string>
+    <string name="specs_towing_unbraked">Frensiz Çekme Kapasitesi</string>
+    <string name="specs_gcwr">Azami Katar Ağırlığı (GCWR)</string>
+    <string name="specs_gvwr">Azami Yüklü Ağırlık (GVWR)</string>
+    <string name="specs_curb_weight">Boş Ağırlık</string>
+    <string name="specs_vehicle_type">Araç Tipi</string>
+    <string name="specs_body_class">Gövde Tipi</string>
+    <string name="specs_doors">Kapı Sayısı</string>
+    <string name="specs_series">Seri</string>
+    <string name="specs_manufacturer">Üretici Firma</string>
+    <string name="specs_plant">Üretim Fabrikası</string>
+
+    <!-- Parts & Fluids -->
+    <string name="parts_empty_message">Henüz parça ve sıvı bilgisi yok.\nAraç özelliklerini eklemek için düzenle butonuna dokunun.</string>
+    <string name="parts_manual_verification_title">Kullanım Kılavuzu Doğrulaması</string>
+    <string name="parts_manual_verification_desc">Doğruluk için araç kullanım kılavuzunuzu kontrol edin. Detaylar için dokunun.</string>
+    <string name="parts_verify_title">Kullanım Kılavuzu İle Doğrulayın</string>
+    <string name="parts_verify_msg">Bu ekranda gösterilen sıvı kapasiteleri ve parça özellikleri çözümlenen VIN numarasına göre tahmin edilmiştir.\n\nDonanım paketleri ve motor revizyonları farklılık gösterebilir. Sıvı veya parça satın almadan önce her zaman aracınızın resmi kullanım kılavuzundan kontrol edin.</string>
+    <string name="parts_got_it">Anladım</string>
+    <string name="parts_group_oil">Motor Yağı</string>
+    <string name="parts_group_ignition">Ateşleme</string>
+    <string name="parts_group_filters">Filtreler</string>
+    <string name="parts_group_tires">Lastikler</string>
+    <string name="parts_group_wipers">Silecekler</string>
+    <string name="parts_oil_viscosity">Yağ Vizkozitesi</string>
+    <string name="parts_oil_capacity">Yağ Kapasitesi</string>
+    <string name="parts_oil_filter_num">Yağ Filtresi Parça No</string>
+    <string name="parts_spark_plug_num">Buji Parça No</string>
+    <string name="parts_spark_plug_gap">Buji Tırnak Aralığı</string>
+    <string name="parts_engine_air_filter_num">Hava Filtresi Parça No</string>
+    <string name="parts_cabin_air_filter_num">Polen Filtresi Parça No</string>
+    <string name="parts_front_tire_size">Ön Lastik Ebadı</string>
+    <string name="parts_rear_tire_size">Arka Lastik Ebadı</string>
+    <string name="parts_front_tire_psi">Ön Lastik Basıncı</string>
+    <string name="parts_rear_tire_psi">Arka Lastik Basıncı</string>
+    <string name="parts_driver_wiper">Sürücü Tarafı Silecek Ölçüsü</string>
+    <string name="parts_passenger_wiper">Yolcu Tarafı Silecek Ölçüsü</string>
+    <string name="parts_rear_wiper">Arka Silecek Ölçüsü</string>
+
+    <!-- Modifications -->
+    <string name="mods_empty_message">Henüz modifikasyon eklenmedi.\nAksesuar, donanım veya modifikasyon eklemek için + butonuna dokunun.</string>
+    <string name="mods_title_label">Modifikasyon Başlığı *</string>
+    <string name="mods_category_label">Kategori</string>
+    <string name="mods_desc_label">Açıklama / Notlar</string>
+    <string name="mods_date_label">Montaj Tarihi</string>
+    <string name="mods_cost_label">Maliyet (İsteğe bağlı)</string>
+    <string name="mods_url_label">Ürün Bağlantısı / URL (İsteğe bağlı)</string>
+    <string name="mods_save_btn">Modifikasyonu Kaydet</string>
+    <string name="mods_delete_btn">Modifikasyonu Sil</string>
+    <string name="mods_delete_confirm_title">Modifikasyon Silinsin mi?</string>
+    <string name="mods_delete_confirm_msg">\'%1$s\' modifikasyonunu silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</string>
+
+    <!-- Recalls -->
+    <string name="recalls_empty_message">Bu araç için güvenlik geri çağırması bulunamadı.\nGeri çağırma bilgileri NHTSA tarafından sağlanmaktadır.</string>
+    <string name="recalls_nhtsa_check">VIN Numarasını NHTSA.gov Üzerinden Kontrol Et</string>
+    <string name="recalls_retry">Yeniden Deneyin</string>
+    <string name="recalls_park_it">Kullanmayın</string>
+    <string name="recalls_park_outside">Açık alanda park edin</string>
 </resources>

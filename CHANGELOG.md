@@ -1,3 +1,10 @@
+## [1.3.3] - 2026-10-08
+
+### Added
+* **Parts Directory & Estimator Localization:** Fully localized vehicle parts catalog, parts cost estimator, parts details, and vehicle specs screens across all supported languages.
+* **Unit Converter Refinements:** Enhanced unit conversion formatting and localized labels for distance, volume, and fuel efficiency metrics.
+* **Comprehensive ViewModel Test Suite:** Expanded unit test coverage across `AddEditVehicleViewModelTest`, `VehicleDetailViewModelTest`, `RegistrationInsuranceViewModelTest`, `MaintenanceExportViewModelTest`, `UnitConverterTest`, and `DashboardViewModelTest`.
+
 ## [1.3.2] - 2026-10-08
 
 ### Added

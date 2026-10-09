@@ -3,6 +3,8 @@ package com.fearmikey.garage.ui.vehicle
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.local.entity.VehiclePartsInfo
 import com.fearmikey.garage.data.local.entity.VehicleSpecs
+import com.fearmikey.garage.ui.util.UnitConverter
+import com.fearmikey.garage.ui.util.UnitSystem
 
 /**
  * Generates smart estimated baseline specs for common parts & fluids
@@ -11,7 +13,12 @@ import com.fearmikey.garage.data.local.entity.VehicleSpecs
  */
 object PartsEstimator {
 
-    fun estimateParts(vehicleId: Long, vehicle: Vehicle?, specs: VehicleSpecs?): VehiclePartsInfo {
+    fun estimateParts(
+        vehicleId: Long,
+        vehicle: Vehicle?,
+        specs: VehicleSpecs?,
+        unitSystem: UnitSystem = UnitSystem.IMPERIAL,
+    ): VehiclePartsInfo {
         val year = vehicle?.year ?: 2020
         val make = vehicle?.make?.lowercase().orEmpty()
         val model = vehicle?.model?.lowercase().orEmpty()
@@ -38,7 +45,7 @@ object PartsEstimator {
 
         if (isElectric) {
             val psi = if (isTruckOrSuv) "42 PSI" else "38 PSI"
-            return VehiclePartsInfo(
+            val rawEvInfo = VehiclePartsInfo(
                 vehicleId = vehicleId,
                 oilViscosity = "N/A (Electric)",
                 oilCapacity = "N/A (Electric)",
@@ -54,6 +61,13 @@ object PartsEstimator {
                 wiperBladeSizeDriver = if (isTruckOrSuv) "24 in" else "26 in",
                 wiperBladeSizePassenger = "19 in",
                 wiperBladeSizeRear = if (isTruckOrSuv) "14 in" else null,
+            )
+            return rawEvInfo.copy(
+                tirePsiFront = UnitConverter.formatTirePressure(rawEvInfo.tirePsiFront, unitSystem),
+                tirePsiRear = UnitConverter.formatTirePressure(rawEvInfo.tirePsiRear, unitSystem),
+                wiperBladeSizeDriver = UnitConverter.formatWiperSize(rawEvInfo.wiperBladeSizeDriver, unitSystem),
+                wiperBladeSizePassenger = UnitConverter.formatWiperSize(rawEvInfo.wiperBladeSizePassenger, unitSystem),
+                wiperBladeSizeRear = UnitConverter.formatWiperSize(rawEvInfo.wiperBladeSizeRear, unitSystem),
             )
         }
 
@@ -97,7 +111,7 @@ object PartsEstimator {
 
         val psi = if (isTruckOrSuv) "35 PSI" else "32 PSI"
 
-        return VehiclePartsInfo(
+        val baseInfo = VehiclePartsInfo(
             vehicleId = vehicleId,
             oilViscosity = viscosity,
             oilCapacity = capacity,
@@ -113,6 +127,16 @@ object PartsEstimator {
             wiperBladeSizeDriver = driverWiper,
             wiperBladeSizePassenger = passengerWiper,
             wiperBladeSizeRear = rearWiper,
+        )
+
+        return baseInfo.copy(
+            oilCapacity = UnitConverter.formatOilCapacity(baseInfo.oilCapacity, unitSystem),
+            sparkPlugGap = UnitConverter.formatSparkPlugGap(baseInfo.sparkPlugGap, unitSystem),
+            tirePsiFront = UnitConverter.formatTirePressure(baseInfo.tirePsiFront, unitSystem),
+            tirePsiRear = UnitConverter.formatTirePressure(baseInfo.tirePsiRear, unitSystem),
+            wiperBladeSizeDriver = UnitConverter.formatWiperSize(baseInfo.wiperBladeSizeDriver, unitSystem),
+            wiperBladeSizePassenger = UnitConverter.formatWiperSize(baseInfo.wiperBladeSizePassenger, unitSystem),
+            wiperBladeSizeRear = UnitConverter.formatWiperSize(baseInfo.wiperBladeSizeRear, unitSystem),
         )
     }
 

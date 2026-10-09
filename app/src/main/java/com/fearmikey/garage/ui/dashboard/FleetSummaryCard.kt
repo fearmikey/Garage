@@ -28,6 +28,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
@@ -47,7 +49,7 @@ fun FleetSummaryCard(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = "Fleet Overview",
+                text = stringResource(R.string.fleet_overview_title),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface,
@@ -61,27 +63,27 @@ fun FleetSummaryCard(
             ) {
                 StatItem(
                     icon = Icons.Outlined.DirectionsCar,
-                    label = "Vehicles",
+                    label = stringResource(R.string.fleet_vehicles),
                     value = summary.totalVehicles.toString(),
                     modifier = Modifier.weight(1f),
                 )
 
                 StatItem(
                     icon = Icons.Outlined.LocalGasStation,
-                    label = "Fleet Avg",
+                    label = stringResource(R.string.fleet_avg),
                     value = UnitConverter.formatFuelEconomy(summary.fleetAvgMpg, unitSystem),
                     modifier = Modifier.weight(1f),
                 )
 
                 val (alertText, alertColor) = when {
                     summary.totalOverdueReminders > 0 -> {
-                        "${summary.totalOverdueReminders} Overdue" to MaterialTheme.colorScheme.error
+                        stringResource(R.string.fleet_overdue_count, summary.totalOverdueReminders) to MaterialTheme.colorScheme.error
                     }
                     summary.totalUpcomingReminders > 0 -> {
-                        "${summary.totalUpcomingReminders} Due Soon" to MaterialTheme.colorScheme.tertiary
+                        stringResource(R.string.fleet_due_soon_count, summary.totalUpcomingReminders) to MaterialTheme.colorScheme.tertiary
                     }
                     else -> {
-                        "All Clear" to MaterialTheme.colorScheme.primary
+                        stringResource(R.string.fleet_all_clear) to MaterialTheme.colorScheme.primary
                     }
                 }
 
@@ -96,7 +98,7 @@ fun FleetSummaryCard(
 
                 StatItem(
                     icon = if (summary.totalOverdueReminders > 0) Icons.Outlined.WarningAmber else Icons.Outlined.Notifications,
-                    label = "Status",
+                    label = stringResource(R.string.fleet_status),
                     value = alertText,
                     valueColor = alertColor,
                     modifier = statusModifier,

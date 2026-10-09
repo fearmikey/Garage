@@ -52,6 +52,8 @@ class VehicleRepository @Inject constructor(
 
     fun getVehicleSpecs(vehicleId: Long): Flow<VehicleSpecs?> = vehicleSpecsDao.getByVehicleId(vehicleId)
 
+    suspend fun getVehicleSpecsOnce(vehicleId: Long): VehicleSpecs? = vehicleSpecsDao.getByVehicleIdOnce(vehicleId)
+
     /** Persists specs decoded from a VIN, keyed to the (by-then known) vehicle id. */
     suspend fun saveVehicleSpecs(vehicleId: Long, specs: VehicleSpecs) =
         vehicleSpecsDao.upsert(specs.copy(vehicleId = vehicleId))
