@@ -425,6 +425,17 @@ class SettingsViewModel @Inject constructor(
     fun clearAllData() {
         viewModelScope.launch {
             _uiState.update { it.copy(isBusy = true, message = null) }
+            
+            lubeLoggerCredentialsManager.clearCredentials()
+            cloudBackupPreferencesManager.clearAll()
+            
+            com.fearmikey.garage.notification.CloudBackupScheduler.scheduleOrCancel(context, false)
+            val workManager = androidx.work.WorkManager.getInstance(context)
+            workManager.cancelUniqueWork("LubeLoggerSync")
+            workManager.cancelUniqueWork("LubeLoggerPeriodicSync")
+            workManager.cancelUniqueWork("LubeLoggerImmediateSync")
+            workManager.cancelUniqueWork(LubeLoggerSyncWorker.MANUAL_WORK_NAME)
+            
             when (val result = backupRepository.clearAllData()) {
                 BackupResult.Success -> _uiState.update {
                     it.copy(isBusy = false, message = "All data cleared successfully.")

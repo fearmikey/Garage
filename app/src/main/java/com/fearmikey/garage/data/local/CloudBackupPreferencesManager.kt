@@ -159,4 +159,9 @@ open class CloudBackupPreferencesManager @Inject constructor(
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
         )
     }
+
+    open suspend fun clearAll() = withContext(Dispatchers.IO) {
+        context.cloudBackupDataStore.edit { it.clear() }
+        encryptedPrefs().edit().clear().apply()
+    }
 }

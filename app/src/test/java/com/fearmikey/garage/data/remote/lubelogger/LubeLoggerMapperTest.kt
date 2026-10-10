@@ -3,6 +3,8 @@ package com.fearmikey.garage.data.remote.lubelogger
 import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
+import com.fearmikey.garage.data.local.entity.ModificationCategory
+import com.fearmikey.garage.data.local.entity.ModificationRecord
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -40,8 +42,9 @@ class LubeLoggerMapperTest {
         assertEquals("150000", dto.odometer)
         assertEquals("12.500", dto.fuelConsumed)
         assertEquals("45.00", dto.cost)
-        assertEquals(true, dto.isFillToFull)
-        assertEquals(false, dto.missedFuelUp) // Always false currently
+        // Sent as strings: older LubeLogger servers can't bind a JSON boolean to their string fields.
+        assertEquals("True", dto.isFillToFull)
+        assertEquals("False", dto.missedFuelUp) // Always false currently
     }
 
     @Test
@@ -220,10 +223,22 @@ class LubeLoggerMapperTest {
 
     @Test
     fun `gas record parses capitalized booleans`() {
-        val dto = LubeLoggerGasRecordDto(id = 1, date = "10/07/2026", odometer = "82828", fuelConsumed = "18.2", cost = "4.44", isFillToFull = false)
+        val dto = LubeLoggerGasRecordDto(id = 1, date = "10/07/2026", odometer = "82828", fuelConsumed = "18.2", cost = "4.44", isFillToFull = "False")
         val record = dto.toFuelRecord(5L)!!
         assertFalse(record.isFullTank)
         assertEquals(82828, record.mileage)
+    }
+
+    @Test
+    fun `gas record booleans read from json booleans and strings`() {
+        val gson = com.google.gson.Gson()
+        // Culture-invariant GETs return JSON booleans; the default culture returns "True"/"False".
+        val fromBool = gson.fromJson("""{"id":1,"date":"2026-10-09","odometer":79200,"isFillToFull":false,"notes":""}""", LubeLoggerGasRecordDto::class.java)
+        val fromString = gson.fromJson("""{"id":1,"date":"2026-10-09","odometer":"79200","isFillToFull":"False","notes":""}""", LubeLoggerGasRecordDto::class.java)
+        assertFalse(fromBool.toFuelRecord(5L)!!.isFullTank)
+        assertFalse(fromString.toFuelRecord(5L)!!.isFullTank)
+        // And the request body carries them as strings.
+        assertTrue(gson.toJson(fromBool.copy(isFillToFull = lubeLoggerBool(true))).contains("\"isFillToFull\":\"True\""))
     }
 
     @Test
@@ -360,7 +375,8 @@ class LubeLoggerMapperTest {
         assertEquals("Diesel", update.fuelType)
         assertEquals("true", update.odometerOptional)
         assertEquals("daily truck", update.tags)
-        assertEquals("3TYDZ5BN2PT021795", update.licensePlate)
+        // The VIN placeholder in the plate field is replaced; the VIN moves to its own extra field.
+        assertEquals("N/A", update.licensePlate)
         assertEquals(
             listOf(
                 LubeLoggerExtraFieldDto("Color", "Gray", true, 0),
@@ -477,5 +493,84 @@ class LubeLoggerMapperTest {
         assertEquals("2025-03-01", dtoMetric.date)
         assertEquals("80467", dtoMetric.odometer)
         assertEquals("Oil Change", dtoMetric.notes)
+    }
+
+    @Test
+    fun `modification record maps to upgrade dto with odometer reading from vehicle latest mileage`() {
+        val cal = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
+            set(2025, Calendar.MARCH, 1, 12, 0, 0)
+        }
+        val mod = ModificationRecord(
+            id = 1L,
+            vehicleId = 5L,
+            title = "Lift Kit",
+            category = ModificationCategory.SUSPENSION,
+            description = "2 inch lift",
+            date = cal.timeInMillis,
+            cost = 1200.0,
+        )
+
+        // Imperial unit system with latest mileage = 45000
+        val dtoImperial = mod.toLubeLoggerUpgradeDto(
+            lubeLoggerVehicleId = 99,
+            latestMileage = 45000,
+            lubeLoggerUnitSystem = "imperial",
+        )
+        assertEquals(99, dtoImperial.vehicleId)
+        assertEquals("2025-03-01", dtoImperial.date)
+        assertEquals("45000", dtoImperial.odometer)
+        assertEquals(45000, dtoImperial.mileage)
+        assertEquals("Lift Kit - 2 inch lift", dtoImperial.description)
+        assertEquals("1200.00", dtoImperial.cost)
+
+        // Metric unit system with latest mileage = 45000 (45000 mi -> 72420 km)
+        val dtoMetric = mod.toLubeLoggerUpgradeDto(
+            lubeLoggerVehicleId = 99,
+            latestMileage = 45000,
+            lubeLoggerUnitSystem = "metric",
+        )
+        assertEquals("72420", dtoMetric.odometer)
+        assertEquals(72420, dtoMetric.mileage)
+
+        // Fallback when latest mileage is null
+        val dtoFallback = mod.toLubeLoggerUpgradeDto(
+            lubeLoggerVehicleId = 99,
+            latestMileage = null,
+        )
+        assertEquals("0", dtoFallback.odometer)
+        assertEquals(0, dtoFallback.mileage)
+    }
+
+    @Test
+    fun `estimateMileageAtDate returns correct mileage based on target date`() {
+        val cal1 = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { set(2023, Calendar.JANUARY, 1, 12, 0) }
+        val cal2 = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { set(2023, Calendar.JUNE, 1, 12, 0) }
+        val cal3 = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { set(2024, Calendar.JANUARY, 1, 12, 0) }
+
+        val readings = listOf(
+            cal1.timeInMillis to 10000,
+            cal2.timeInMillis to 15000,
+            cal3.timeInMillis to 25000,
+        )
+        val initialMileage = 100
+
+        // Before any reading -> returns initial mileage
+        val dateBefore = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { set(2022, Calendar.JUNE, 1, 12, 0) }.timeInMillis
+        assertEquals(100, estimateMileageAtDate(dateBefore, readings, initialMileage))
+
+        // Exact match of first reading
+        assertEquals(10000, estimateMileageAtDate(cal1.timeInMillis, readings, initialMileage))
+
+        // Date between 1st and 2nd reading
+        val dateMid1 = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { set(2023, Calendar.MARCH, 1, 12, 0) }.timeInMillis
+        assertEquals(10000, estimateMileageAtDate(dateMid1, readings, initialMileage))
+
+        // Date between 2nd and 3rd reading
+        val dateMid2 = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { set(2023, Calendar.SEPTEMBER, 1, 12, 0) }.timeInMillis
+        assertEquals(15000, estimateMileageAtDate(dateMid2, readings, initialMileage))
+
+        // Date after all readings
+        val dateAfter = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { set(2024, Calendar.MAY, 1, 12, 0) }.timeInMillis
+        assertEquals(25000, estimateMileageAtDate(dateAfter, readings, initialMileage))
     }
 }

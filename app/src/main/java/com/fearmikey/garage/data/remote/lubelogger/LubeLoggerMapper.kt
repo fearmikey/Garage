@@ -31,7 +31,17 @@ internal fun formatDate(epochMillis: Long): String =
 
 /** Parses LubeLogger integer fields that may arrive as "123", "123.0" or a JSON number. */
 internal fun parseLubeLoggerInt(value: String?): Int? =
-    value?.trim()?.parseToDoubleOrNull()?.roundToInt()
+    value?.trim()?.replace(",", "")?.toDoubleOrNull()?.roundToInt()
+
+/** Parses LubeLogger double fields (cost, gallons) from en-US invariant culture strings. */
+internal fun parseLubeLoggerDouble(value: String?): Double? =
+    value?.trim()?.replace(",", "")?.toDoubleOrNull()
+
+/**
+ * Booleans are sent as strings: LubeLogger's export models declare them as `string` and call
+ * `bool.Parse`. Servers from Dec 2024 onwards also accept JSON `true`, older ones reject it.
+ */
+internal fun lubeLoggerBool(value: Boolean): String = if (value) "True" else "False"
 
 /** Parses LubeLogger booleans, which may be "True"/"False" (default culture) or true/false. */
 internal fun parseLubeLoggerBoolean(value: String?): Boolean? =
@@ -49,8 +59,8 @@ fun FuelRecord.toLubeLoggerDto(lubeLoggerVehicleId: Int, lubeLoggerUnitSystem: S
         odometer = convertedOdometer.toString(),
         fuelConsumed = "%.3f".format(Locale.US, convertedGallons),
         cost = "%.2f".format(Locale.US, this.totalCost),
-        isFillToFull = this.isFullTank,
-        missedFuelUp = false, // We don't explicitly track missed fuel ups right now
+        isFillToFull = lubeLoggerBool(this.isFullTank),
+        missedFuelUp = lubeLoggerBool(false), // We don't explicitly track missed fuel ups right now
     )
 }
 
@@ -104,14 +114,47 @@ fun MaintenanceRecord.toLubeLoggerRepairDto(lubeLoggerVehicleId: Int, lubeLogger
     )
 }
 
-fun ModificationRecord.toLubeLoggerUpgradeDto(lubeLoggerVehicleId: Int): LubeLoggerUpgradeRecordDto {
+fun ModificationRecord.toLubeLoggerUpgradeDto(
+    lubeLoggerVehicleId: Int,
+    latestMileage: Int? = null,
+    lubeLoggerUnitSystem: String = "imperial",
+): LubeLoggerUpgradeRecordDto {
+    val isMetric = lubeLoggerUnitSystem.equals("metric", ignoreCase = true)
+    val mileageMiles = latestMileage ?: 0
+    val convertedOdometer = if (isMetric) UnitConverter.milesToKm(mileageMiles) else mileageMiles
+
     return LubeLoggerUpgradeRecordDto(
         vehicleId = lubeLoggerVehicleId,
         id = this.lubeLoggerId,
         date = formatDate(this.date),
+        odometer = convertedOdometer.toString(),
+        mileage = convertedOdometer,
         description = this.title + (if (this.description.isNotBlank()) " - ${this.description}" else ""),
         cost = "%.2f".format(Locale.US, this.cost),
     )
+}
+
+/**
+ * Estimates the vehicle's odometer reading at [targetDate] based on known mileage readings
+ * from fuel, maintenance, or charging logs. Falls back to [initialMileage] or the earliest/latest
+ * known reading if no prior readings exist.
+ */
+fun estimateMileageAtDate(
+    targetDate: Long,
+    readings: List<Pair<Long, Int>>,
+    initialMileage: Int? = null,
+): Int {
+    val beforeOrAt = readings.filter { it.first <= targetDate }
+    if (beforeOrAt.isNotEmpty()) {
+        return beforeOrAt.maxOf { it.second }
+    }
+    if (initialMileage != null && initialMileage > 0) {
+        return initialMileage
+    }
+    if (readings.isNotEmpty()) {
+        return readings.minOf { it.second }
+    }
+    return 0
 }
 
 /*
@@ -130,8 +173,8 @@ fun ChargingRecord.toLubeLoggerDto(lubeLoggerVehicleId: Int, lubeLoggerUnitSyste
         odometer = convertedOdometer.toString(),
         fuelConsumed = "%.3f".format(Locale.US, this.kwhAdded),
         cost = "%.2f".format(Locale.US, this.totalCost),
-        isFillToFull = true,
-        missedFuelUp = false,
+        isFillToFull = lubeLoggerBool(true),
+        missedFuelUp = lubeLoggerBool(false),
         startingSoc = this.batteryPercentStart.toString(),
         endingSoc = this.batteryPercentEnd.toString(),
         notes = this.vendor.ifBlank { "" },
@@ -270,9 +313,9 @@ fun LubeLoggerGasRecordDto.toFuelRecord(localVehicleId: Long, lubeLoggerUnitSyst
     val parsedDate = parseDateToEpochMillis(date)
     
     val rawMileage = mileage ?: parseLubeLoggerInt(odometer) ?: 0
-    val rawGallons = gallons ?: fuelConsumed?.parseToDoubleOrNull() ?: 0.0
-    val parsedCost = cost?.parseToDoubleOrNull() ?: 0.0
-    val parsedIsFillToFull = isFillToFull ?: true
+    val rawGallons = gallons ?: parseLubeLoggerDouble(fuelConsumed) ?: 0.0
+    val parsedCost = parseLubeLoggerDouble(cost) ?: 0.0
+    val parsedIsFillToFull = parseLubeLoggerBoolean(isFillToFull) ?: true
 
     val parsedMileage = if (isMetric) UnitConverter.kmToMiles(rawMileage) else rawMileage
     val parsedGallons = if (isMetric) UnitConverter.litersToGallons(rawGallons) else rawGallons
@@ -354,7 +397,7 @@ private fun parseMaintenanceRecord(
         date = parseDateToEpochMillis(dateStr),
         mileage = if (isMetric) UnitConverter.kmToMiles(rawMileage) else rawMileage,
         description = cleanDescription,
-        cost = cost?.parseToDoubleOrNull() ?: 0.0,
+        cost = parseLubeLoggerDouble(cost) ?: 0.0,
         category = category,
         taskName = task,
         receiptUri = existing?.receiptUri,
@@ -373,7 +416,7 @@ private const val FIELD_DEFERRED = "Garage Deferred"
 fun LubeLoggerUpgradeRecordDto.toModificationRecord(localVehicleId: Long, existing: ModificationRecord? = null): ModificationRecord? {
     val recordId = id ?: return null
     val parsedDate = parseDateToEpochMillis(date)
-    val parsedCost = cost?.parseToDoubleOrNull() ?: 0.0
+    val parsedCost = parseLubeLoggerDouble(cost) ?: 0.0
     
     // We split title and description by " - " if it exists, otherwise it's just title
     val parts = description.split(" - ", limit = 2)
@@ -409,7 +452,7 @@ private fun parseDateToEpochMillis(dateStr: String): Long =
  */
 internal fun parseDateToEpochMillisOrNull(dateStr: String?): Long? {
     if (dateStr.isNullOrBlank()) return null
-    val value = dateStr.trim()
+    val value = dateStr.trim().substringBefore("T").substringBefore(" ")
     for (pattern in listOf("yyyy-MM-dd", "MM/dd/yyyy")) {
         val parsed = try {
             SimpleDateFormat(pattern, Locale.US).apply { isLenient = false }.parse(value)

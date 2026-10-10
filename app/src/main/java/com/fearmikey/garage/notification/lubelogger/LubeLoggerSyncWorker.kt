@@ -18,6 +18,7 @@ import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerApiFactory
 import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerApiService
 import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerCredentialsManager
+import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerExtraFieldDto
 import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerOperationResponse
 import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerVehicleDto
 import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerVehicleImportDto
@@ -25,6 +26,7 @@ import com.fearmikey.garage.data.remote.lubelogger.cleanLegacyTaskSuffix
 import com.fearmikey.garage.data.remote.lubelogger.createLubeLoggerOdometerDto
 import com.fearmikey.garage.data.remote.lubelogger.describeLubeLoggerFailure
 import com.fearmikey.garage.data.remote.lubelogger.describeLubeLoggerHttpFailure
+import com.fearmikey.garage.data.remote.lubelogger.estimateMileageAtDate
 import com.fearmikey.garage.data.remote.lubelogger.flattenJsonToFormFields
 import com.fearmikey.garage.data.remote.lubelogger.isOdometerCheckIn
 import com.fearmikey.garage.data.remote.lubelogger.mergeVehicleSyncDetails
@@ -132,15 +134,21 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
                     credentialsManager.saveVehicleMapping(local.id, match.id)
                 } else if (local.year != null && local.make.isNotBlank() && local.model.isNotBlank()) {
                     val localRegistration = registrationDao.getByVehicleId(local.id).first()
-                    val plateToUse = localRegistration?.licensePlate?.trim()?.takeIf { it.isNotBlank() }
-                        ?: local.vin.trim().takeIf { it.isNotBlank() }
-                        ?: "N/A"
+                    // The VIN goes in LubeLogger's "VIN" extra field, never the plate; "N/A" is the
+                    // placeholder LubeLogger needs when the plate is unknown.
+                    val plateToUse = localRegistration?.licensePlate?.trim()?.takeIf { it.isNotBlank() } ?: "N/A"
+                    val vin = local.vin.trim().uppercase()
 
                     val importDto = LubeLoggerVehicleImportDto(
                         year = local.year.toString(),
                         make = local.make,
                         model = local.model,
                         licensePlate = plateToUse,
+                        extraFields = if (vin.isNotBlank()) {
+                            listOf(LubeLoggerExtraFieldDto(LubeLoggerVehicleDto.VIN_FIELD_NAME, vin, false, 0))
+                        } else {
+                            emptyList()
+                        },
                     )
                     val createResp = api.addVehicle(importDto)
                     if (createResp.isSuccessful) {
@@ -165,6 +173,15 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
                 }
 
                 if (!isMapped && remote.year != null && !remote.make.isNullOrBlank() && !remote.model.isNullOrBlank()) {
+                    val existingMatch = localVehicles.find { local ->
+                        credentialsManager.getVehicleMapping(local.id) == null && vehiclesMatch(local, remote)
+                    }
+
+                    if (existingMatch != null) {
+                        credentialsManager.saveVehicleMapping(existingMatch.id, remote.id)
+                        continue
+                    }
+
                     val remoteVin = remote.findVin().orEmpty()
                     val remoteTrim = remote.matchingExtraFields(
                         com.fearmikey.garage.data.remote.lubelogger.VehicleSyncDetails.TRIM_FIELD_NAME
@@ -221,7 +238,7 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
                 }
                 syncServiceRecords(api, local.id, mappedId, unitSystem, pendingDeletes)
                 syncRepairRecords(api, local.id, mappedId, unitSystem, pendingDeletes)
-                syncUpgradeRecords(api, local.id, mappedId, pendingDeletes)
+                syncUpgradeRecords(api, local.id, mappedId, unitSystem, pendingDeletes)
                 syncOdometerRecords(api, local.id, mappedId, unitSystem, pendingDeletes)
             }
             credentialsManager.markSyncSucceeded()
@@ -365,10 +382,22 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
         api: LubeLoggerApiService,
         localVehicleId: Long,
         mappedId: Int,
+        unitSystem: String,
         pendingDeletes: List<LubeLoggerPendingDelete>,
     ) {
         val remoteRecords = api.getUpgradeRecords(mappedId).bodyIfSuccessful()?.filter { (it.id ?: 0) > 0 } ?: return
         val localRecords = modificationRepository.getModsForVehicle(localVehicleId).first()
+
+        val fuelRecords = fuelRepository.getRecordsForVehicle(localVehicleId).first().filter { it.mileage > 0 }
+        val maintRecords = maintenanceRepository.getRecordsForVehicle(localVehicleId).first().filter { it.mileage > 0 }
+        val chargingRecords = chargingRepository.getRecordsForVehicle(localVehicleId).first().filter { it.mileage > 0 }
+        val initialMileage = vehicleRepository.getVehicleByIdOnce(localVehicleId)?.initialMileage
+
+        val readings = buildList {
+            fuelRecords.forEach { add(it.date to it.mileage) }
+            maintRecords.forEach { add(it.date to it.mileage) }
+            chargingRecords.forEach { add(it.date to it.mileage) }
+        }
 
         syncLubeLoggerRecords(
             localRecords = localRecords,
@@ -379,7 +408,14 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
             getStoredHash = { it.lubeLoggerSyncHash },
             getLocalFingerprint = { it.syncFingerprint() },
             getRemoteFingerprint = { it.toModificationRecord(localVehicleId)?.syncFingerprint().orEmpty() },
-            toDto = { it.toLubeLoggerUpgradeDto(mappedId) },
+            toDto = { mod ->
+                val estimatedMileage = estimateMileageAtDate(
+                    targetDate = mod.date,
+                    readings = readings,
+                    initialMileage = initialMileage,
+                )
+                mod.toLubeLoggerUpgradeDto(mappedId, estimatedMileage, unitSystem)
+            },
             toLocal = { dto, existing -> dto.toModificationRecord(localVehicleId, existing) },
             // Modifications have no mileage: link same-day records with the same title.
             isSameReadingAs = { local, remote ->
@@ -492,6 +528,58 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
                 }
             }
         }
+
+        repairOdometerChain(api, localVehicleId, mappedId, unitSystem)
+    }
+
+    /**
+     * LubeLogger's "Distance Traveled" is the sum of (odometer - initialOdometer) over all odometer
+     * records. When a record is added without an initialOdometer, LubeLogger fills it with whatever
+     * record was added last -- so records pushed out of chronological order (or that once held a
+     * bad value) produce negative distances. Rebuild the chain so each record starts where the
+     * previous one (by date, then odometer) ended; the first starts at the purchase odometer.
+     * Values are compared in the server's own units, so no conversion round-trip is involved.
+     */
+    private suspend fun repairOdometerChain(
+        api: LubeLoggerApiService,
+        localVehicleId: Long,
+        mappedId: Int,
+        unitSystem: String,
+    ) {
+        val records = api.getOdometerRecords(mappedId).bodyIfSuccessful()
+            ?.filter { (parseLubeLoggerInt(it.id) ?: 0) > 0 && (parseLubeLoggerInt(it.odometer) ?: 0) > 0 }
+            ?: return
+        if (records.isEmpty()) return
+
+        val sorted = records.sortedWith(
+            compareBy(
+                { com.fearmikey.garage.data.remote.lubelogger.parseDateToEpochMillisOrNull(it.date) ?: Long.MAX_VALUE },
+                { parseLubeLoggerInt(it.odometer) ?: 0 },
+            )
+        )
+
+        val isMetric = unitSystem.equals("metric", ignoreCase = true)
+        val firstOdometer = parseLubeLoggerInt(sorted.first().odometer) ?: 0
+        val purchaseOdometer = vehicleRepository.getVehicleByIdOnce(localVehicleId)?.initialMileage
+            ?.let { if (isMetric) com.fearmikey.garage.ui.util.UnitConverter.milesToKm(it) else it }
+            ?.takeIf { it in 1..firstOdometer }
+
+        var previous = purchaseOdometer ?: firstOdometer
+        for (record in sorted) {
+            val odometer = parseLubeLoggerInt(record.odometer) ?: continue
+            val expectedInitial = previous.coerceAtMost(odometer)
+            if (parseLubeLoggerInt(record.initialOdometer) != expectedInitial) {
+                val fixed = record.copy(
+                    vehicleId = record.vehicleId ?: mappedId.toString(),
+                    initialOdometer = expectedInitial.toString(),
+                    notes = record.notes.orEmpty(),
+                )
+                if (!api.updateOdometerRecord(fixed).isOperationSuccess) {
+                    Log.w(TAG, "Could not repair initial odometer of LubeLogger record ${record.id}")
+                }
+            }
+            previous = odometer
+        }
     }
 
     private suspend fun syncChargingRecords(
@@ -591,6 +679,24 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
             remotePlate.isNotBlank() &&
             !remotePlate.equals("N/A", ignoreCase = true) &&
             localPlate.equals(remotePlate, ignoreCase = true)
+        ) {
+            return true
+        }
+
+        val rawRemotePlate = remote.licensePlate?.trim().orEmpty()
+
+        // Fallback: when we created the vehicle on LubeLogger, we might have used local.vin as the licensePlate
+        // if localPlate was blank. If so, remote.licensePlate will equal local.vin.
+        if (localVin.isNotBlank() && rawRemotePlate.isNotBlank() && localVin.equals(rawRemotePlate, ignoreCase = true)) {
+            return true
+        }
+
+        // Final Fallback: Match on year/make/model.
+        // If we are auto-matching unmapped vehicles, and the basic identifiers (VIN/Plate)
+        // were stripped by LubeLogger or not provided, we trust year/make/model.
+        if (local.year == remote.year &&
+            local.make.trim().equals(remote.make?.trim(), ignoreCase = true) &&
+            local.model.trim().equals(remote.model?.trim(), ignoreCase = true)
         ) {
             return true
         }
@@ -763,8 +869,16 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
 
     private fun <T> Response<List<T>>.bodyIfSuccessful(): List<T>? = if (isSuccessful) body() else null
 
-    private fun Response<LubeLoggerOperationResponse>.recordIdOrNull(): Int? =
-        if (isSuccessful && body()?.success == true) body()?.additionalData?.recordId?.takeIf { it > 0 } else null
+    private fun Response<LubeLoggerOperationResponse>.recordIdOrNull(): Int? {
+        val id = if (isSuccessful && body()?.success == true) body()?.additionalData?.recordId?.takeIf { it > 0 } else null
+        if (id == null) {
+            // A rejected push was previously invisible (the sync still reported success), which
+            // made "record never reached LubeLogger" reports impossible to diagnose.
+            val reason = body()?.message ?: runCatching { errorBody()?.string() }.getOrNull()
+            Log.w(TAG, "LubeLogger rejected ${raw().request.url.encodedPath}: HTTP ${code()} $reason")
+        }
+        return id
+    }
 
     /** A delete succeeded, or the record was already gone from the server. */
     private val Response<LubeLoggerOperationResponse>.isDeleted: Boolean
@@ -783,7 +897,7 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
         other != null && isSameReading(mileage, date, other.mileage, other.date)
 
     private fun isSameReading(mileageA: Int, dateA: Long, mileageB: Int, dateB: Long) =
-        abs(mileageA - mileageB) <= 1 && abs(dateA - dateB) < ONE_DAY_MILLIS
+        abs(mileageA - mileageB) <= 1 && abs(dateA - dateB) <= 36 * 3600 * 1000L
 
     companion object {
         /** Output-data key carrying a human-readable reason when the sync fails. */

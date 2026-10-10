@@ -23,6 +23,8 @@ interface MaintenanceDao {
             SELECT mileage FROM maintenance_records WHERE vehicleId = :vehicleId
             UNION ALL
             SELECT mileage FROM fuel_records WHERE vehicleId = :vehicleId
+            UNION ALL
+            SELECT mileage FROM charging_records WHERE vehicleId = :vehicleId
         )
         """
     )

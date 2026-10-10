@@ -1,0 +1,1 @@
+Added vehicle manufacturer brand emblems on vehicle cards and improved LubeLogger vehicle details sync.

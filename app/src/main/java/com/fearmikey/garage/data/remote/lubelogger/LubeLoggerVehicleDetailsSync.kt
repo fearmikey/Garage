@@ -159,7 +159,13 @@ fun LubeLoggerVehicleDto.toUpdateDto(details: VehicleSyncDetails, lubeLoggerUnit
     val newYear = details.year?.toIntOrNull() ?: year
     val newMake = details.make?.takeIf { it.isNotBlank() } ?: make
     val newModel = details.model?.takeIf { it.isNotBlank() } ?: model
-    val newPlate = details.plate?.takeIf { it.isNotBlank() } ?: licensePlate
+    // A VIN sitting in the plate field (pushed by older Garage versions) is only a placeholder:
+    // replace it with "N/A" so LubeLogger's License Plate never shows the VIN.
+    val plateIsVinPlaceholder = licensePlate?.trim()?.let {
+        !it.equals("N/A", ignoreCase = true) && syncablePlate(findVin()) == ""
+    } == true
+    val newPlate = details.plate?.takeIf { it.isNotBlank() }
+        ?: if (plateIsVinPlaceholder) "N/A" else licensePlate
     val unchanged = fields == extraFields.orEmpty() && newYear == year && newMake == make &&
         newModel == model && newPlate == licensePlate
     if (unchanged) return null

@@ -12,8 +12,11 @@ data class LubeLoggerGasRecordDto(
     @SerializedName("gallons") val gallons: Double? = null, // Used for GET
     @SerializedName("cost") val cost: String? = null, // Used for PUT/POST
     @SerializedName("costDouble") val costDouble: Double? = null, // Some GETs might return double, we can rely on String for export/import models usually
-    @SerializedName("isFillToFull") val isFillToFull: Boolean? = null, // Used for PUT/POST
-    @SerializedName("missedFuelUp") val missedFuelUp: Boolean? = null,
+    // LubeLogger's GasRecordExportModel declares these as *strings* and runs bool.Parse on them.
+    // A JSON boolean (true) can't bind to a string property, so the whole add/update request is
+    // rejected -- they must be sent as "True"/"False". GET returns them as strings too.
+    @SerializedName("isFillToFull") val isFillToFull: String? = null,
+    @SerializedName("missedFuelUp") val missedFuelUp: String? = null,
     @SerializedName("startingSoc") val startingSoc: String? = "20",
     @SerializedName("endingSoc") val endingSoc: String? = "80",
     @SerializedName("notes") val notes: String = "",

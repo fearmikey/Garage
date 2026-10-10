@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import com.fearmikey.garage.ui.components.BrandEmblem
 import com.fearmikey.garage.ui.components.verticalScrollbar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -405,6 +406,15 @@ private fun AddEditVehicleContent(
                 onValueChange = onMakeChanged,
                 label = { Text("Make") },
                 singleLine = true,
+                trailingIcon = if (uiState.make.isNotBlank()) {
+                    {
+                        BrandEmblem(
+                            make = uiState.make,
+                            size = 24.dp,
+                            modifier = Modifier.padding(end = 4.dp),
+                        )
+                    }
+                } else null,
                 modifier = Modifier.fillMaxWidth(),
             )
             OutlinedTextField(

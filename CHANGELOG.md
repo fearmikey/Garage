@@ -1,3 +1,9 @@
+## [1.3.5] - 2026-10-10
+
+### Added
+* **Vehicle Manufacturer Brand Emblems:** Added vector brand logos for over 60 vehicle makes (Ford, Toyota, Honda, BMW, Mercedes, Porsche, Chevrolet, Audi, Tesla, Volvo, etc.) displayed on vehicle dashboard cards and creation screens.
+* **LubeLogger Vehicle Details & Gas DTO Sync:** Expanded LubeLogger DTO mapper for full vehicle metadata and fuel log synchronization.
+
 ## [1.3.4] - 2026-10-09
 
 ### Added

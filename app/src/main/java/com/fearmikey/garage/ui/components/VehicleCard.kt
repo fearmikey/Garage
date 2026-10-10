@@ -163,16 +163,30 @@ fun VehicleCard(
                 }
             }
             Column(modifier = Modifier.padding(12.dp)) {
-                Text(
-                    text = vehicleLabel(vehicle),
-                    style = MaterialTheme.typography.titleMedium,
-                )
-                if (vehicle.trim.isNotBlank()) {
-                    Text(
-                        text = vehicle.trim,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    if (vehicle.make.isNotBlank()) {
+                        BrandEmblem(
+                            make = vehicle.make,
+                            size = 36.dp,
+                        )
+                    }
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = vehicleLabel(vehicle),
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                        if (vehicle.trim.isNotBlank()) {
+                            Text(
+                                text = vehicle.trim,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))

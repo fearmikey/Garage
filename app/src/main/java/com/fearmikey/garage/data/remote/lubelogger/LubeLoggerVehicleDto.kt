@@ -95,6 +95,7 @@ data class LubeLoggerVehicleImportDto(
     @SerializedName("licensePlate") val licensePlate: String = "N/A",
     @SerializedName("identifier") val identifier: String = "LicensePlate",
     @SerializedName("fuelType") val fuelType: String = "Gasoline",
+    @SerializedName("extraFields") val extraFields: List<LubeLoggerExtraFieldDto> = emptyList(),
 )
 
 /**
