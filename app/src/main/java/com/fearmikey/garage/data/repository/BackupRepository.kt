@@ -29,9 +29,10 @@ sealed interface BackupResult {
 
 /**
  * Handles zip export/import of the entire local dataset: the Room database
- * files and the internal vehicle-image library. This is the app's only form
- * of backup -- there is no cloud sync -- so the zip is meant to be a
- * complete, self-contained snapshot a user can move to a new device.
+ * files and the internal vehicle-image library. The same zip is used for
+ * manual export, automatic local-folder backups, and WebDAV uploads, and is
+ * meant to be a complete, self-contained snapshot a user can move to a new
+ * device.
  */
 @Singleton
 class BackupRepository @Inject constructor(

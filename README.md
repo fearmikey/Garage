@@ -14,6 +14,7 @@
 
 - [Features](#features)
 - [100% FOSS & F-Droid First](#100-foss--f-droid-first)
+- [How Garage Works](#how-garage-works)
 - [Technical Stack & Architecture](#technical-stack--architecture)
 - [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
@@ -35,7 +36,7 @@ Garage is strictly **Free and Open Source Software (FOSS)** built for distributi
 ## Features
 
 ### Vehicle Management & VIN Lookup
-* **Comprehensive Garage Profiles:** Maintain complete specs for every vehicle in your fleet—including make, model, year, trim, mileage, license plate, VIN, fuel type, custom vehicle images, initial mileage, and purchase status (new/used).
+* **Comprehensive Garage Profiles:** Maintain complete specs for every vehicle in your fleet—including make, model, year, trim, license plate, VIN, fuel type, custom vehicle images, initial mileage, and purchase status (new/used). Current mileage is derived automatically from your logs (see [How Garage Works](#how-garage-works)).
 * **NHTSA VIN Decoder & Barcode Scanner:** Automatically populate vehicle specifications using official NHTSA web service integrations or scan VIN barcodes directly with the camera.
 * **Customizable Dashboard:** Personalize your fleet overview by toggling the visibility of fuel trend graphs and aggregate fleet metrics.
 
@@ -58,7 +59,8 @@ Garage is strictly **Free and Open Source Software (FOSS)** built for distributi
 * **Cost Metrics:** Calculate precise cost-per-mile / cost-per-kilometer metrics and operational cost trends over time.
 
 ### NHTSA Safety Recalls & Campaign Management
-* **Recall Lookup & Status Tracking:** Query the official **NHTSA Recall API** to receive real-time alerts regarding open safety recalls for your specific vehicle make, model, year, and VIN, and track campaign resolution status (Open, Serviced/Completed, Does Not Affect) per vehicle.
+* **Recall Lookup & Status Tracking:** Query the official **NHTSA Recall API** for safety recalls matching your vehicle's **year, make, and model**, and track campaign resolution status (Open, Serviced/Completed, Does Not Affect) per vehicle.
+* **VIN Verification on NHTSA.gov:** NHTSA's public API does not support VIN-specific recall lookups, so results cover the general year/make/model. If a VIN is saved, Garage provides a one-tap link to NHTSA.gov's VIN lookup to confirm which recalls actually apply to your vehicle.
 
 ### OBD2 Vehicle Diagnostics
 * **Bluetooth OBD2 Scanner:** Connect to standard Bluetooth OBD2 adapters to read live engine telemetry (RPM, speed, coolant temperature, fuel level, VIN) and scan diagnostic trouble codes (DTCs).
@@ -77,8 +79,20 @@ Garage is strictly **Free and Open Source Software (FOSS)** built for distributi
 ### Privacy & Data Backup
 * **Local-First Storage:** Fully functional offline data storage backed by **Room Persistence Library**.
 * **Self-Hosted LubeLogger Sync:** Seamlessly sync service records and fuel fill-up logs with your personal LubeLogger server.
-* **JSON Import & Export:** Transfer your entire garage dataset across devices using simple JSON backup files.
-* **Secure WebDAV Cloud Backup:** Schedule or run automated cloud backups via WebDAV, backed by **AndroidX Security Crypto** for credential protection.
+* **Full ZIP Backup & Restore:** Export your entire garage as a single `.zip` containing the Room SQLite database and your vehicle photo library, and restore it on any device. Restores are validated (schema version check, Zip Slip protection) before any live data is replaced.
+* **Automatic Local Folder Backup:** Write `garage-backup.zip` to a folder of your choice via the Storage Access Framework.
+* **Secure WebDAV Cloud Backup:** Schedule or run automated uploads of the same ZIP backup to a WebDAV server, backed by **AndroidX Security Crypto** for credential protection.
+
+---
+
+## How Garage Works
+
+A few behaviors that aren't obvious from the UI alone:
+
+* **Current mileage is computed, not stored.** A vehicle's current odometer is the **highest mileage recorded across all of its maintenance records, fuel fill-ups, and EV charging sessions**. Maintenance suggestions, reminders, widgets, and the dashboard all use this value.
+* **Odometer updates are log entries.** "Update Odometer" (dialog, widget, or launcher shortcut) saves a zero-cost *Odometer Check-in* maintenance record, which then feeds the computed current mileage.
+* **Recalls are year/make/model-level.** See [NHTSA Safety Recalls](#nhtsa-safety-recalls--campaign-management); use the NHTSA.gov VIN link for vehicle-specific confirmation.
+* **Backups are complete snapshots.** A backup is the raw database plus images, so restoring replaces *all* current data. Backups from a newer app version are rejected rather than risking an unreadable database.
 
 ---
 

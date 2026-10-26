@@ -16,7 +16,7 @@ interface MaintenanceDao {
     @Query("SELECT * FROM maintenance_records WHERE vehicleId = :vehicleId ORDER BY mileage DESC")
     fun getRecordsForVehicleByMileage(vehicleId: Long): Flow<List<MaintenanceRecord>>
 
-    /** The highest recorded mileage for a vehicle from maintenance or fuel records, i.e. its last known odometer reading. */
+    /** The highest recorded mileage for a vehicle across maintenance, fuel, and charging records, i.e. its last known odometer reading. */
     @Query(
         """
         SELECT MAX(mileage) FROM (
