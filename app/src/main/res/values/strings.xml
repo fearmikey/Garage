@@ -23,6 +23,9 @@
     <string name="settings_theme">Theme</string>
     <string name="settings_default_vehicle">Default Vehicle</string>
     <string name="settings_reminders_expirations">Reminders &amp; Expirations</string>
+    <string name="settings_appearance_theme" translatable="false">Appearance &amp; Theme</string>
+    <string name="settings_reminders_notifications" translatable="false">Reminders &amp; Notifications</string>
+    <string name="settings_data_sync" translatable="false">Data, Backup &amp; Sync</string>
 
     <!-- Tabs -->
     <string name="tab_my_vehicles">My Vehicles</string>
@@ -37,6 +40,8 @@
     <string name="tab_mods">Mods</string>
     <string name="tab_documents">Documents</string>
     <string name="tab_recalls">Recalls</string>
+    <string name="tab_knowledge">Knowledge</string>
+    <string name="tab_trips">Trips</string>
 
     <!-- Maintenance Tasks -->
     <string name="task_engine_oil_change">Engine oil change</string>
@@ -58,6 +63,11 @@
     <string name="task_transfer_case_fluid">Transfer case fluid change</string>
     <string name="task_front_diff_fluid">Front differential fluid change</string>
     <string name="task_rear_diff_fluid">Rear differential fluid change</string>
+    <string name="task_chain_lube">Drive chain clean &amp; lube</string>
+    <string name="task_chain_sprocket">Chain &amp; sprocket replacement</string>
+    <string name="task_valve_clearance">Valve clearance check</string>
+    <string name="task_fork_oil">Fork oil change</string>
+    <string name="task_clutch_throttle_cable">Clutch &amp; throttle cable adjustment</string>
 
     <!-- Startup / Onboarding -->
     <string name="startup_get_started">Get Started</string>

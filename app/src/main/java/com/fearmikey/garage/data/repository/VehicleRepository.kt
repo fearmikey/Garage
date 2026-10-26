@@ -9,6 +9,7 @@ import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.local.entity.VehiclePartsInfo
 import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
 import com.fearmikey.garage.data.local.entity.VehicleSpecs
+import com.fearmikey.garage.data.local.entity.VehicleType
 import com.fearmikey.garage.data.remote.VinDecoderApi
 import com.fearmikey.garage.data.remote.dto.VinDecodeResult
 import kotlinx.coroutines.flow.Flow
@@ -23,6 +24,8 @@ data class VinInfo(
     val model: String,
     val trim: String,
     val drivetrain: Drivetrain?,
+    /** Car vs. motorcycle, derived from NHTSA's `VehicleType`; null when the decoder didn't say. */
+    val vehicleType: VehicleType? = null,
     /** Extended specs to persist alongside the vehicle once it's saved; see [VehicleSpecs]. */
     val specs: VehicleSpecs,
 )
@@ -92,6 +95,7 @@ class VehicleRepository @Inject constructor(
                     model = result.model.orEmpty(),
                     trim = result.trim.orEmpty(),
                     drivetrain = driveTypeToDrivetrain(result.driveType),
+                    vehicleType = VehicleType.fromNhtsa(cleanSpec(result.vehicleType)),
                     specs = result.toVehicleSpecs(),
                 ),
             )

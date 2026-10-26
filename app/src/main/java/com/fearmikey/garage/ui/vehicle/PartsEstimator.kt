@@ -44,6 +44,17 @@ object PartsEstimator {
             bodyClass.contains("pickup") || bodyClass.contains("sport utility") ||
             vehicleType.contains("truck") || vehicleType.contains("multipurpose")
 
+        if (vehicle?.isMotorcycle == true) {
+            return estimateMotorcycleParts(
+                vehicleId = vehicleId,
+                make = make,
+                displacementL = specs?.displacementL?.parseToDoubleOrNull(),
+                isElectric = fuelType.contains("electric") || make.contains("zero") || make.contains("energica") ||
+                    model.contains("livewire"),
+                unitSystem = unitSystem,
+            )
+        }
+
         if (isElectric) {
             val psi = if (isTruckOrSuv) "42 PSI" else "38 PSI"
             val rawEvInfo = VehiclePartsInfo(
@@ -138,6 +149,57 @@ object PartsEstimator {
             wiperBladeSizeDriver = UnitConverter.formatWiperSize(baseInfo.wiperBladeSizeDriver, unitSystem),
             wiperBladeSizePassenger = UnitConverter.formatWiperSize(baseInfo.wiperBladeSizePassenger, unitSystem),
             wiperBladeSizeRear = UnitConverter.formatWiperSize(baseInfo.wiperBladeSizeRear, unitSystem),
+        )
+    }
+
+    /**
+     * Generic motorcycle baselines. Motorcycles have no cabin air filter or wipers,
+     * typically share engine and (wet) clutch oil, and run higher rear tire pressures.
+     */
+    private fun estimateMotorcycleParts(
+        vehicleId: Long,
+        make: String,
+        displacementL: Double?,
+        isElectric: Boolean,
+        unitSystem: UnitSystem,
+    ): VehiclePartsInfo {
+        if (isElectric) {
+            return VehiclePartsInfo(
+                vehicleId = vehicleId,
+                oilViscosity = "N/A (Electric)",
+                oilCapacity = "N/A (Electric)",
+                sparkPlugGap = "N/A (Electric)",
+                engineAirFilterPartNumber = "N/A (Electric)",
+                tirePsiFront = UnitConverter.formatTirePressure("36 PSI", unitSystem),
+                tirePsiRear = UnitConverter.formatTirePressure("42 PSI", unitSystem),
+            )
+        }
+
+        val isHarley = make.contains("harley")
+        val viscosity = if (isHarley) "20W-50" else "10W-40 (JASO MA2)"
+        val capacity = when {
+            isHarley -> "5.0 qts"
+            displacementL == null -> "3.5 qts"
+            displacementL < 0.3 -> "1.2 qts"
+            displacementL < 0.5 -> "2.0 qts"
+            displacementL < 0.8 -> "3.2 qts"
+            displacementL < 1.2 -> "3.8 qts"
+            else -> "4.5 qts"
+        }
+
+        val baseInfo = VehiclePartsInfo(
+            vehicleId = vehicleId,
+            oilViscosity = viscosity,
+            oilCapacity = capacity,
+            sparkPlugGap = "0.032 in",
+            tirePsiFront = "36 PSI",
+            tirePsiRear = "42 PSI",
+        )
+        return baseInfo.copy(
+            oilCapacity = UnitConverter.formatOilCapacity(baseInfo.oilCapacity, unitSystem),
+            sparkPlugGap = UnitConverter.formatSparkPlugGap(baseInfo.sparkPlugGap, unitSystem),
+            tirePsiFront = UnitConverter.formatTirePressure(baseInfo.tirePsiFront, unitSystem),
+            tirePsiRear = UnitConverter.formatTirePressure(baseInfo.tirePsiRear, unitSystem),
         )
     }
 

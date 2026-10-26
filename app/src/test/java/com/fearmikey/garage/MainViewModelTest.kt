@@ -234,4 +234,22 @@ class MainViewModelTest {
         assertEquals(20L, deepLink?.vehicleId)
         assertTrue(deepLink?.openOdometerDialog == true)
     }
+
+    @Test
+    fun `theme state flows expose repository values`() = runTest {
+        val prefsRepo = FakePreferencesRepository()
+        val viewModel = MainViewModel(prefsRepo, createFakeVehicleRepository(), createFakeMaintenanceRepository())
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+            viewModel.themeType.collect()
+            viewModel.amoledDark.collect()
+            viewModel.dynamicColor.collect()
+            viewModel.appPalette.collect()
+        }
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals("system", viewModel.themeType.value)
+        assertEquals(false, viewModel.amoledDark.value)
+        assertEquals(true, viewModel.dynamicColor.value)
+        assertEquals("default", viewModel.appPalette.value)
+    }
 }

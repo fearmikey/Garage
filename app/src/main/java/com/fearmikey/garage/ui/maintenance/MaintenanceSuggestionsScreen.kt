@@ -83,6 +83,7 @@ fun MaintenanceSuggestionsScreen(
     val ignoredRules by viewModel.ignoredRules.collectAsStateWithLifecycle()
     val latestMileage by viewModel.latestMileage.collectAsStateWithLifecycle()
     val unitSystem by viewModel.unitSystem.collectAsStateWithLifecycle()
+    val vehicleType by viewModel.vehicleType.collectAsStateWithLifecycle()
     var logSheetSuggestion by remember { mutableStateOf<MaintenanceSuggestion?>(null) }
     var showAddRuleSheet by remember { mutableStateOf(false) }
     var showApplyTemplateSheet by remember { mutableStateOf(false) }
@@ -102,6 +103,7 @@ fun MaintenanceSuggestionsScreen(
     logSheetSuggestion?.let { suggestion ->
         AddEditMaintenanceRecordSheet(
             unitSystem = unitSystem,
+            vehicleType = vehicleType,
             latestMileage = latestMileage,
             receiptFileProvider = viewModel::receiptFileFor,
             onDismiss = { logSheetSuggestion = null },
@@ -139,6 +141,7 @@ fun MaintenanceSuggestionsScreen(
     if (showApplyTemplateSheet) {
         ApplyTemplateSheet(
             unitSystem = unitSystem,
+            vehicleType = vehicleType,
             onDismiss = { showApplyTemplateSheet = false },
             onApplyTemplate = { template ->
                 viewModel.applyTemplate(template)

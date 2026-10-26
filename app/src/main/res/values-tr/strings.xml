@@ -88,6 +88,11 @@
     <string name="task_transfer_case_fluid">Ara şanzıman yağı değişimi</string>
     <string name="task_front_diff_fluid">Ön diferansiyel yağı değişimi</string>
     <string name="task_rear_diff_fluid">Arka diferansiyel yağı değişimi</string>
+    <string name="task_chain_lube">Zincir temizliği ve yağlama</string>
+    <string name="task_chain_sprocket">Zincir dişli seti değişimi</string>
+    <string name="task_valve_clearance">Supap boşluğu kontrolü</string>
+    <string name="task_fork_oil">Ön amortisör yağı değişimi</string>
+    <string name="task_clutch_throttle_cable">Debriyaj ve gaz teli ayarı</string>
 
     <!-- Notifications -->
     <string name="reminder_notification_channel_name">Bakım hatırlatıcıları</string>

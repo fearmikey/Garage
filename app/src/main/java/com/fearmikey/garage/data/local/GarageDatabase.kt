@@ -14,6 +14,8 @@ import com.fearmikey.garage.data.local.dao.LubeLoggerPendingDeleteDao
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
 import com.fearmikey.garage.data.local.dao.ModificationDao
 import com.fearmikey.garage.data.local.dao.RecallCampaignStateDao
+import com.fearmikey.garage.data.local.dao.TripDao
+import com.fearmikey.garage.data.local.dao.KnowledgeDao
 import com.fearmikey.garage.data.local.dao.VehicleDao
 import com.fearmikey.garage.data.local.dao.VehiclePartsDao
 import com.fearmikey.garage.data.local.dao.VehicleRegistrationDao
@@ -26,7 +28,10 @@ import com.fearmikey.garage.data.local.entity.LubeLoggerPendingDelete
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.ModificationRecord
 import com.fearmikey.garage.data.local.entity.RecallCampaignState
+import com.fearmikey.garage.data.local.entity.TorqueSpec
+import com.fearmikey.garage.data.local.entity.TripRecord
 import com.fearmikey.garage.data.local.entity.Vehicle
+import com.fearmikey.garage.data.local.entity.VehicleNote
 import com.fearmikey.garage.data.local.entity.VehiclePartsInfo
 import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
 import com.fearmikey.garage.data.local.entity.VehicleSpecs
@@ -38,7 +43,7 @@ const val GARAGE_DATABASE_NAME = "garage.db"
  * The current Room schema version, kept as a standalone constant so it can be
  * compared against a backup's on-disk schema version before restoring it.
  */
-const val GARAGE_DATABASE_VERSION = 25
+const val GARAGE_DATABASE_VERSION = 29
 
 @DeleteTable.Entries(value = [DeleteTable(tableName = "reminders")])
 class DeleteRemindersTableSpec : AutoMigrationSpec
@@ -48,6 +53,7 @@ class DeleteRemindersTableSpec : AutoMigrationSpec
         Vehicle::class, MaintenanceRecord::class, VehicleSpecs::class, FuelRecord::class,
         VehiclePartsInfo::class, CustomMaintenanceRule::class, ModificationRecord::class, VehicleRegistrationInsurance::class,
         ChargingRecord::class, IgnoredMaintenanceRule::class, RecallCampaignState::class, LubeLoggerPendingDelete::class,
+        TorqueSpec::class, VehicleNote::class, TripRecord::class,
     ],
     version = GARAGE_DATABASE_VERSION,
     exportSchema = true,
@@ -90,6 +96,14 @@ class DeleteRemindersTableSpec : AutoMigrationSpec
         AutoMigration(from = 23, to = 24),
         // Additive: LubeLogger sync hashes, LubeLoggerPendingDelete table, new lubeLoggerId fields
         AutoMigration(from = 24, to = 25),
+        // Additive: themeColor added to vehicles table
+        AutoMigration(from = 25, to = 26),
+        // Additive: torque_specs and vehicle_notes tables added
+        AutoMigration(from = 26, to = 27),
+        // Additive: trip_records table added
+        AutoMigration(from = 27, to = 28),
+        // Additive: vehicleType added to vehicles table (car vs. motorcycle)
+        AutoMigration(from = 28, to = 29),
     ],
 )
 @TypeConverters(Converters::class)
@@ -106,4 +120,6 @@ abstract class GarageDatabase : RoomDatabase() {
     abstract fun ignoredMaintenanceRuleDao(): IgnoredMaintenanceRuleDao
     abstract fun recallCampaignStateDao(): RecallCampaignStateDao
     abstract fun lubeLoggerPendingDeleteDao(): LubeLoggerPendingDeleteDao
+    abstract fun knowledgeDao(): KnowledgeDao
+    abstract fun tripDao(): TripDao
 }

@@ -4,6 +4,7 @@ import com.fearmikey.garage.data.local.entity.Drivetrain
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.Vehicle
+import com.fearmikey.garage.data.local.entity.VehicleType
 import com.fearmikey.garage.data.repository.ReminderStatus
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -42,6 +43,48 @@ class MaintenanceScheduleEngineTest {
         model = "Model 3",
         drivetrain = Drivetrain.AWD,
     )
+
+    private val motorcycle = Vehicle(
+        id = 5,
+        make = "Honda",
+        model = "CB650R",
+        vehicleType = VehicleType.MOTORCYCLE,
+    )
+
+    @Test
+    fun `car-only tasks are excluded for motorcycles`() {
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(motorcycle, latestMileage = 0, records = emptyList())
+
+        listOf(
+            "Cabin air filter replacement",
+            "Wiper blade replacement",
+            "Rotation and Balance",
+            "Power steering fluid",
+            "Serpentine belt replacement",
+            "Automatic transmission fluid service",
+            "Transfer case fluid change",
+        ).forEach { task -> assertTrue("$task should not apply", suggestions.none { it.rule.taskName == task }) }
+    }
+
+    @Test
+    fun `motorcycles get motorcycle-only tasks and overridden intervals`() {
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(motorcycle, latestMileage = 0, records = emptyList())
+
+        assertTrue(suggestions.any { it.rule.taskName == "Drive chain clean & lube" })
+        assertTrue(suggestions.any { it.rule.taskName == "Fork oil change" })
+        assertTrue(suggestions.any { it.rule.taskName == "Valve clearance check" })
+        assertEquals(1, suggestions.count { it.rule.taskName == "Engine oil change" })
+        assertEquals(4_000, suggestions.first { it.rule.taskName == "Engine oil change" }.rule.intervalMiles)
+    }
+
+    @Test
+    fun `cars do not get motorcycle-only tasks`() {
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 0, records = emptyList())
+
+        assertTrue(suggestions.none { it.rule.taskName == "Drive chain clean & lube" })
+        assertTrue(suggestions.none { it.rule.taskName == "Fork oil change" })
+        assertEquals(5_000, suggestions.first { it.rule.taskName == "Engine oil change" }.rule.intervalMiles)
+    }
 
     @Test
     fun `generic rules apply to any vehicle`() {

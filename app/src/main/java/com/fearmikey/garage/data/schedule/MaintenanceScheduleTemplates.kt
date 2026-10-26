@@ -5,8 +5,10 @@ import androidx.compose.material.icons.outlined.DirectionsCar
 import androidx.compose.material.icons.outlined.ElectricCar
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.LocalShipping
+import androidx.compose.material.icons.outlined.TwoWheeler
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
+import com.fearmikey.garage.data.local.entity.VehicleType
 
 data class MaintenanceTemplateRule(
     val taskName: String,
@@ -23,10 +25,69 @@ data class MaintenanceTemplate(
     val description: String,
     val icon: ImageVector,
     val rules: List<MaintenanceTemplateRule>,
+    /** Which classes of vehicle this preset makes sense for. */
+    val vehicleTypes: Set<VehicleType> = setOf(VehicleType.CAR),
 )
 
 object MaintenanceScheduleTemplates {
+
+    /** Templates relevant to the given class of vehicle. */
+    fun templatesFor(vehicleType: VehicleType): List<MaintenanceTemplate> =
+        templates.filter { vehicleType in it.vehicleTypes }
+
     val templates: List<MaintenanceTemplate> = listOf(
+        MaintenanceTemplate(
+            id = "motorcycle_street",
+            title = "Street Motorcycle",
+            description = "Typical intervals for street, sport, and touring motorcycles, including chain care and suspension service.",
+            icon = Icons.Outlined.TwoWheeler,
+            vehicleTypes = setOf(VehicleType.MOTORCYCLE),
+            rules = listOf(
+                MaintenanceTemplateRule(
+                    taskName = "Motorcycle Oil & Filter",
+                    category = MaintenanceCategory.FLUIDS,
+                    intervalMiles = 4_000,
+                    intervalMonths = 12,
+                    notes = "Use JASO MA/MA2 rated oil for wet-clutch bikes.",
+                ),
+                MaintenanceTemplateRule(
+                    taskName = "Chain Clean, Lube & Slack Check",
+                    category = MaintenanceCategory.OTHER,
+                    intervalMiles = 500,
+                    intervalMonths = 1,
+                    notes = "More often after riding in rain or dirt.",
+                ),
+                MaintenanceTemplateRule(
+                    taskName = "Tire Pressure & Tread Inspection",
+                    category = MaintenanceCategory.TIRES,
+                    intervalMiles = 1_000,
+                    intervalMonths = 1,
+                    notes = "Check cold pressures and inspect for cupping, cracking, and embedded objects.",
+                ),
+                MaintenanceTemplateRule(
+                    taskName = "Brake Fluid Flush (Front & Rear)",
+                    category = MaintenanceCategory.FLUIDS,
+                    intervalMiles = 12_000,
+                    intervalMonths = 24,
+                    notes = "Brake fluid is hygroscopic; flush both master cylinders.",
+                ),
+                MaintenanceTemplateRule(
+                    taskName = "Fork Oil & Seal Service",
+                    category = MaintenanceCategory.FLUIDS,
+                    intervalMiles = 20_000,
+                    intervalMonths = 24,
+                    isDeferrable = true,
+                    notes = "Replace fork oil; inspect seals for weeping.",
+                ),
+                MaintenanceTemplateRule(
+                    taskName = "Battery Tender & Terminal Check",
+                    category = MaintenanceCategory.BATTERY,
+                    intervalMiles = null,
+                    intervalMonths = 6,
+                    notes = "Keep on a tender during winter storage; clean and tighten terminals.",
+                ),
+            ),
+        ),
         MaintenanceTemplate(
             id = "heavy_duty",
             title = "Heavy Duty & Towing",

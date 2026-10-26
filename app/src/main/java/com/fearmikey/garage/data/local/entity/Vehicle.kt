@@ -36,7 +36,13 @@ data class Vehicle(
     @ColumnInfo(defaultValue = "0")
     val purchasedNew: Boolean = false,
     val initialMileage: Int? = null,
+    val themeColor: Int? = null,
+    @ColumnInfo(defaultValue = "CAR")
+    val vehicleType: VehicleType = VehicleType.CAR,
 ) {
+    val isMotorcycle: Boolean
+        get() = vehicleType == VehicleType.MOTORCYCLE
+
     /** Helper list of all attached photos (up to 3) with their respective vertical offsets. */
     val photos: List<VehiclePhoto>
         get() = buildList {
@@ -70,6 +76,26 @@ data class VehiclePhoto(
  * rules that only apply to certain configurations (e.g. transfer case fluid
  * only applies to 4WD/AWD vehicles).
  */
+/**
+ * The broad class of vehicle. Drives which maintenance rules, parts fields and
+ * brand emblems are relevant (e.g. motorcycles have no cabin air filter or wipers,
+ * and Honda's motorcycle division uses the wing emblem rather than the car "H").
+ */
+enum class VehicleType(val displayName: String) {
+    CAR("Car / Truck"),
+    MOTORCYCLE("Motorcycle"),
+    ;
+
+    companion object {
+        /** Maps NHTSA vPIC's `VehicleType` field (e.g. "MOTORCYCLE") to a [VehicleType]. */
+        fun fromNhtsa(value: String?): VehicleType? {
+            val normalized = value?.trim()?.lowercase() ?: return null
+            if (normalized.isEmpty()) return null
+            return if (normalized.contains("motorcycle")) MOTORCYCLE else CAR
+        }
+    }
+}
+
 enum class Drivetrain(val displayName: String) {
     UNKNOWN("Unknown"),
     FWD("FWD"),

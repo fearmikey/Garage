@@ -1,0 +1,10 @@
+<!-- Kawasaki "K" mark from Wikimedia Commons (public domain, File:Kawasaki_K_Logo.svg). Trademark of its respective owner. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M 0.5,12.776 L 0.5,15.728 L 7.243,15.728 L 7.243,12.356 L 8.558,12.356 C 9.398,12.356 10.796,12.496 12.07,12.776 C 13.553,13.098 14.868,13.629 14.868,14.385 C 14.868,15.015 13.889,15.728 13.861,15.728 L 23.5,15.728 C 23.5,15.728 23.262,14.665 22.759,13.966 C 22.437,13.504 22.031,13.098 21.415,12.777 C 20.884,12.497 20.198,12.273 19.261,12.119 L 19.261,11.965 C 19.695,11.965 20.856,11.545 21.863,10.874 C 23.22,9.964 23.472,8.272 23.472,8.272 L 13.93,8.272 C 13.93,8.272 14.728,8.93 14.728,9.531 C 14.728,10.79 10.223,11.741 8.587,11.741 L 7.244,11.741 L 7.244,8.272 L 0.5,8.272 Z" />
+</vector>

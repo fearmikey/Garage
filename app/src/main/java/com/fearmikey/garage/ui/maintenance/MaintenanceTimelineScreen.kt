@@ -92,6 +92,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
+import com.fearmikey.garage.data.local.entity.VehicleType
 import com.fearmikey.garage.data.schedule.MaintenanceScheduleRules
 import com.fearmikey.garage.ui.components.EmptyState
 import com.fearmikey.garage.ui.theme.GarageTheme
@@ -117,6 +118,7 @@ fun MaintenanceTimelineScreen(
     val latestMileage by viewModel.latestMileage.collectAsStateWithLifecycle()
     val unitSystem by viewModel.unitSystem.collectAsStateWithLifecycle()
     val currencySymbol by viewModel.currencySymbol.collectAsStateWithLifecycle()
+    val vehicleType by viewModel.vehicleType.collectAsStateWithLifecycle()
     var showAddSheet by remember { mutableStateOf(value = false) }
     var editingRecord by remember { mutableStateOf<MaintenanceRecord?>(null) }
 
@@ -140,6 +142,7 @@ fun MaintenanceTimelineScreen(
     if (showAddSheet) {
         AddEditMaintenanceRecordSheet(
             unitSystem = unitSystem,
+            vehicleType = vehicleType,
             currencySymbol = currencySymbol,
             latestMileage = latestMileage,
             initial = editingRecord,
@@ -340,6 +343,7 @@ internal fun AddEditMaintenanceRecordSheet(
     unitSystem: UnitSystem = UnitSystem.IMPERIAL,
     currencySymbol: String = "$",
     receiptFileProvider: (String) -> File? = { null },
+    vehicleType: VehicleType = VehicleType.CAR,
 ) {
     val context = LocalContext.current
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -399,10 +403,10 @@ internal fun AddEditMaintenanceRecordSheet(
     // "Coolant flush" both under Fluids. Picking one of these (rather than "Other / custom")
     // is what lets MaintenanceScheduleEngine track each task's due date independently instead
     // of conflating every task in the same category.
-    val taskOptions = remember(category) {
+    val taskOptions = remember(category, vehicleType) {
         MaintenanceScheduleRules.rules
             .asSequence()
-            .filter { it.category == category }
+            .filter { it.category == category && it.appliesTo(vehicleType) }
             .map { it.taskName }
             .distinctBy { it.lowercase() }
             .sorted()

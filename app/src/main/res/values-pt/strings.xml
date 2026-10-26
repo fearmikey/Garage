@@ -88,6 +88,11 @@
     <string name="task_transfer_case_fluid">Troca de óleo da caixa de transferência</string>
     <string name="task_front_diff_fluid">Troca de óleo do diferencial dianteiro</string>
     <string name="task_rear_diff_fluid">Troca de óleo do diferencial traseiro</string>
+    <string name="task_chain_lube">Limpeza e lubrificação da corrente</string>
+    <string name="task_chain_sprocket">Troca do kit relação</string>
+    <string name="task_valve_clearance">Verificação da folga de válvulas</string>
+    <string name="task_fork_oil">Troca de óleo da suspensão dianteira</string>
+    <string name="task_clutch_throttle_cable">Ajuste dos cabos de embreagem e acelerador</string>
 
     <!-- Notifications -->
     <string name="reminder_notification_channel_name">Lembretes de manutenção</string>

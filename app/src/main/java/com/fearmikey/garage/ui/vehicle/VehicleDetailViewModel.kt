@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.repository.ImageStorageManager
+import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.ui.navigation.Destinations
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +23,7 @@ class VehicleDetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     vehicleRepository: VehicleRepository,
     imageStorageManager: ImageStorageManager,
+    preferencesRepository: PreferencesRepository,
 ) : ViewModel() {
 
     val vehicleId: Long = checkNotNull(savedStateHandle[Destinations.VEHICLE_ID_ARG])
@@ -42,6 +44,15 @@ class VehicleDetailViewModel @Inject constructor(
 
     val vehicle: StateFlow<Vehicle?> = vehicleRepository.getVehicleById(vehicleId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    val vehicleThemingEnabled: StateFlow<Boolean> = preferencesRepository.vehicleThemingEnabled
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), true)
+
+    val themeType: StateFlow<String> = preferencesRepository.themeType
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), "system")
+
+    val amoledDark: StateFlow<Boolean> = preferencesRepository.amoledDark
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
     /** Backs the shared-element vehicle photo header in [VehicleDetailScreen]. */
     val imageFile: StateFlow<File?> = vehicle

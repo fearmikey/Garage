@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,12 +17,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.fearmikey.garage.ui.theme.buildVehicleColorScheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.PictureAsPdf
 import androidx.compose.material.icons.outlined.DirectionsCar
+import androidx.compose.material.icons.outlined.TwoWheeler
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -48,6 +52,8 @@ import coil3.compose.AsyncImage
 import androidx.compose.material.icons.filled.CarRepair
 import com.fearmikey.garage.ui.cost.CostOfOwnershipScreen
 import com.fearmikey.garage.ui.fuel.FuelScreen
+import com.fearmikey.garage.ui.knowledge.VehicleKnowledgeScreen
+import com.fearmikey.garage.ui.trip.TripLoggerScreen
 import com.fearmikey.garage.ui.maintenance.MaintenanceSuggestionsScreen
 import com.fearmikey.garage.ui.maintenance.MaintenanceTimelineScreen
 import com.fearmikey.garage.ui.mod.ModsScreen
@@ -68,9 +74,33 @@ fun VehicleDetailScreen(
     val vehicle by viewModel.vehicle.collectAsStateWithLifecycle()
     val imageFiles by viewModel.imageFiles.collectAsStateWithLifecycle()
     val shouldOpenAddSheet by viewModel.shouldOpenAddSheet.collectAsStateWithLifecycle()
+    val vehicleThemingEnabled by viewModel.vehicleThemingEnabled.collectAsStateWithLifecycle()
+    val themeType by viewModel.themeType.collectAsStateWithLifecycle()
+    val amoledDark by viewModel.amoledDark.collectAsStateWithLifecycle()
     var selectedTab by remember { mutableIntStateOf(viewModel.initialTab) }
 
-    Scaffold(
+    val systemInDark = isSystemInDarkTheme()
+    val isDark = when (themeType) {
+        "dark" -> true
+        "light" -> false
+        else -> systemInDark
+    }
+
+    val vehicleThemeColor = vehicle?.themeColor?.let { Color(it) }
+    val vehicleColorScheme = remember(vehicleThemeColor, isDark, amoledDark, vehicleThemingEnabled) {
+        if (vehicleThemingEnabled && vehicleThemeColor != null) {
+            buildVehicleColorScheme(
+                seedColor = vehicleThemeColor,
+                darkTheme = isDark,
+                amoled = amoledDark,
+            )
+        } else {
+            null
+        }
+    }
+
+    val content = @Composable {
+        Scaffold(
         topBar = {
             TopAppBar(
                 title = {
@@ -163,7 +193,11 @@ fun VehicleDetailScreen(
                         }
                     } else {
                         Icon(
-                            imageVector = Icons.Outlined.DirectionsCar,
+                            imageVector = if (vehicle?.isMotorcycle == true) {
+                                Icons.Outlined.TwoWheeler
+                            } else {
+                                Icons.Outlined.DirectionsCar
+                            },
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -195,7 +229,19 @@ fun VehicleDetailScreen(
                 VehicleTab.MODS.ordinal -> ModsScreen()
                 VehicleTab.DOCUMENTS.ordinal -> RegistrationInsuranceScreen()
                 VehicleTab.RECALLS.ordinal -> RecallsScreen()
+                VehicleTab.KNOWLEDGE.ordinal -> VehicleKnowledgeScreen()
+                VehicleTab.TRIPS.ordinal -> TripLoggerScreen()
             }
         }
+    }
+    }
+
+    if (vehicleColorScheme != null) {
+        MaterialTheme(
+            colorScheme = vehicleColorScheme,
+            content = content,
+        )
+    } else {
+        content()
     }
 }

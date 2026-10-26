@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.fearmikey.garage.data.local.entity.VehicleType
 import com.fearmikey.garage.data.schedule.MaintenanceScheduleTemplates
 import com.fearmikey.garage.data.schedule.MaintenanceTemplate
 import com.fearmikey.garage.ui.theme.GarageTheme
@@ -49,9 +50,12 @@ fun ApplyTemplateSheet(
     unitSystem: UnitSystem,
     onDismiss: () -> Unit,
     onApplyTemplate: (MaintenanceTemplate) -> Unit,
+    vehicleType: VehicleType = VehicleType.CAR,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val templates = MaintenanceScheduleTemplates.templates
+    val templates = remember(vehicleType) {
+        MaintenanceScheduleTemplates.templatesFor(vehicleType).ifEmpty { MaintenanceScheduleTemplates.templates }
+    }
     var selectedTemplateIndex by remember { mutableIntStateOf(0) }
     val selectedTemplate = templates.getOrElse(selectedTemplateIndex) { templates.first() }
 

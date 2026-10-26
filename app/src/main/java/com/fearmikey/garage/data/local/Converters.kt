@@ -6,6 +6,8 @@ import com.fearmikey.garage.data.local.entity.LubeLoggerRecordType
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.ModificationCategory
 import com.fearmikey.garage.data.local.entity.RecallState
+import com.fearmikey.garage.data.local.entity.TripCategory
+import com.fearmikey.garage.data.local.entity.VehicleType
 
 /** Room type converters for enum columns not natively supported. */
 class Converters {
@@ -25,6 +27,13 @@ class Converters {
     @TypeConverter
     fun toDrivetrain(value: String): Drivetrain =
         Drivetrain.entries.firstOrNull { it.name == value } ?: Drivetrain.UNKNOWN
+
+    @TypeConverter
+    fun fromVehicleType(type: VehicleType): String = type.name
+
+    @TypeConverter
+    fun toVehicleType(value: String): VehicleType =
+        VehicleType.entries.firstOrNull { it.name == value } ?: VehicleType.CAR
 
     @TypeConverter
     fun fromModificationCategory(category: ModificationCategory): String = category.name
@@ -49,4 +58,11 @@ class Converters {
     @TypeConverter
     fun toLubeLoggerRecordType(value: String): LubeLoggerRecordType =
         LubeLoggerRecordType.entries.firstOrNull { it.name == value } ?: LubeLoggerRecordType.SERVICE
+
+    @TypeConverter
+    fun fromTripCategory(category: TripCategory): String = category.name
+
+    @TypeConverter
+    fun toTripCategory(value: String): TripCategory =
+        TripCategory.entries.firstOrNull { it.name == value } ?: TripCategory.OTHER
 }

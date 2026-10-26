@@ -43,6 +43,10 @@ data class SettingsUiState(
     val units: String = "metric",
     val currency: String = "USD",
     val theme: String = "system",
+    val amoledDark: Boolean = false,
+    val dynamicColor: Boolean = true,
+    val appPalette: String = "default",
+    val vehicleThemingEnabled: Boolean = true,
     val defaultVehicleId: Long? = null,
     val maintenanceMileageWindow: Int = 500,
     val maintenanceDaysWindow: Int = 10,
@@ -59,6 +63,7 @@ data class SettingsUiState(
     val webdavUsername: String = "",
     val webdavPasswordSet: Boolean = false,
     val lubeLoggerConfigured: Boolean = false,
+    val lubeLoggerSyncEnabled: Boolean = true,
     val lubeLoggerServerUrl: String = "",
     val lubeLoggerUsername: String = "",
     val lubeLoggerApiKey: String = "",
@@ -100,6 +105,7 @@ class SettingsViewModel @Inject constructor(
         _uiState.update { 
             it.copy(
                 lubeLoggerConfigured = lubeLoggerCredentialsManager.isConfigured(),
+                lubeLoggerSyncEnabled = lubeLoggerCredentialsManager.isSyncEnabled(),
                 lubeLoggerServerUrl = lubeLoggerCredentialsManager.getServerUrl() ?: "",
                 lubeLoggerUsername = lubeLoggerCredentialsManager.getUsername() ?: "",
                 lubeLoggerApiKey = lubeLoggerCredentialsManager.getApiKey() ?: "",
@@ -138,6 +144,26 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             preferencesRepository.themeType.collect { theme ->
                 _uiState.update { it.copy(theme = theme) }
+            }
+        }
+        viewModelScope.launch {
+            preferencesRepository.amoledDark.collect { amoled ->
+                _uiState.update { it.copy(amoledDark = amoled) }
+            }
+        }
+        viewModelScope.launch {
+            preferencesRepository.dynamicColor.collect { dynamic ->
+                _uiState.update { it.copy(dynamicColor = dynamic) }
+            }
+        }
+        viewModelScope.launch {
+            preferencesRepository.appPalette.collect { palette ->
+                _uiState.update { it.copy(appPalette = palette) }
+            }
+        }
+        viewModelScope.launch {
+            preferencesRepository.vehicleThemingEnabled.collect { enabled ->
+                _uiState.update { it.copy(vehicleThemingEnabled = enabled) }
             }
         }
         viewModelScope.launch {
@@ -280,6 +306,30 @@ class SettingsViewModel @Inject constructor(
     fun setTheme(theme: String) {
         viewModelScope.launch {
             preferencesRepository.setThemeType(theme)
+        }
+    }
+
+    fun setAmoledDark(enabled: Boolean) {
+        viewModelScope.launch {
+            preferencesRepository.setAmoledDark(enabled)
+        }
+    }
+
+    fun setDynamicColor(enabled: Boolean) {
+        viewModelScope.launch {
+            preferencesRepository.setDynamicColor(enabled)
+        }
+    }
+
+    fun setAppPalette(palette: String) {
+        viewModelScope.launch {
+            preferencesRepository.setAppPalette(palette)
+        }
+    }
+
+    fun setVehicleThemingEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            preferencesRepository.setVehicleThemingEnabled(enabled)
         }
     }
 
@@ -491,11 +541,31 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun setLubeLoggerCredentials(url: String, username: String, password: String?, apiKey: String?, unitSystem: String = "imperial") {
-        lubeLoggerCredentialsManager.saveCredentials(url, username, password, apiKey, unitSystem)
+    fun setLubeLoggerSyncEnabled(enabled: Boolean) {
+        lubeLoggerCredentialsManager.setSyncEnabled(enabled)
+        _uiState.update { it.copy(lubeLoggerSyncEnabled = enabled) }
+        if (!enabled) {
+            val workManager = androidx.work.WorkManager.getInstance(context)
+            workManager.cancelUniqueWork("LubeLoggerSync")
+            workManager.cancelUniqueWork("LubeLoggerPeriodicSync")
+            workManager.cancelUniqueWork("LubeLoggerImmediateSync")
+            workManager.cancelUniqueWork(LubeLoggerSyncWorker.MANUAL_WORK_NAME)
+        }
+    }
+
+    fun setLubeLoggerCredentials(
+        url: String,
+        username: String,
+        password: String?,
+        apiKey: String?,
+        unitSystem: String = "imperial",
+        syncEnabled: Boolean = true,
+    ) {
+        lubeLoggerCredentialsManager.saveCredentials(url, username, password, apiKey, unitSystem, syncEnabled)
         _uiState.update { 
             it.copy(
                 lubeLoggerConfigured = lubeLoggerCredentialsManager.isConfigured(),
+                lubeLoggerSyncEnabled = syncEnabled,
                 lubeLoggerServerUrl = url,
                 lubeLoggerUsername = username,
                 lubeLoggerApiKey = apiKey ?: "",
@@ -503,8 +573,8 @@ class SettingsViewModel @Inject constructor(
             ) 
         }
         
-        // Enqueue an immediate sync if they just configured it
-        if (lubeLoggerCredentialsManager.isConfigured()) {
+        // Enqueue an immediate sync if they just configured it and sync is enabled
+        if (lubeLoggerCredentialsManager.isConfigured() && syncEnabled) {
             syncLubeLoggerNow()
         }
     }

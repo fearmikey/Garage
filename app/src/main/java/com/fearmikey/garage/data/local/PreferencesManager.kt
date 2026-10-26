@@ -22,6 +22,10 @@ class PreferencesManager(private val context: Context) {
         val UNITS_KEY = stringPreferencesKey("units_type")
         val CURRENCY_KEY = stringPreferencesKey("currency_code")
         val THEME_KEY = stringPreferencesKey("theme_type")
+        val AMOLED_DARK_KEY = booleanPreferencesKey("amoled_dark")
+        val DYNAMIC_COLOR_KEY = booleanPreferencesKey("dynamic_color")
+        val APP_PALETTE_KEY = stringPreferencesKey("app_palette")
+        val VEHICLE_THEMING_ENABLED_KEY = booleanPreferencesKey("vehicle_theming_enabled")
         val ONBOARDING_COMPLETED_KEY = booleanPreferencesKey("onboarding_completed")
         val DEFAULT_VEHICLE_ID_KEY = longPreferencesKey("default_vehicle_id")
         val MAINTENANCE_MILEAGE_WINDOW_KEY = intPreferencesKey("maintenance_mileage_window")
@@ -68,6 +72,26 @@ class PreferencesManager(private val context: Context) {
     val themeType: Flow<String> = context.dataStore.data
         .map { preferences ->
             preferences[THEME_KEY] ?: "system"
+        }
+
+    val amoledDark: Flow<Boolean> = context.dataStore.data
+        .map { preferences ->
+            preferences[AMOLED_DARK_KEY] ?: false
+        }
+
+    val dynamicColor: Flow<Boolean> = context.dataStore.data
+        .map { preferences ->
+            preferences[DYNAMIC_COLOR_KEY] ?: true
+        }
+
+    val appPalette: Flow<String> = context.dataStore.data
+        .map { preferences ->
+            preferences[APP_PALETTE_KEY] ?: "default"
+        }
+
+    val vehicleThemingEnabled: Flow<Boolean> = context.dataStore.data
+        .map { preferences ->
+            preferences[VEHICLE_THEMING_ENABLED_KEY] ?: true
         }
 
     val onboardingCompleted: Flow<Boolean> = context.dataStore.data
@@ -244,6 +268,30 @@ class PreferencesManager(private val context: Context) {
     suspend fun setThemeType(theme: String) {
         context.dataStore.edit { preferences ->
             preferences[THEME_KEY] = theme
+        }
+    }
+
+    suspend fun setAmoledDark(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[AMOLED_DARK_KEY] = enabled
+        }
+    }
+
+    suspend fun setDynamicColor(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[DYNAMIC_COLOR_KEY] = enabled
+        }
+    }
+
+    suspend fun setAppPalette(palette: String) {
+        context.dataStore.edit { preferences ->
+            preferences[APP_PALETTE_KEY] = palette
+        }
+    }
+
+    suspend fun setVehicleThemingEnabled(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[VEHICLE_THEMING_ENABLED_KEY] = enabled
         }
     }
 

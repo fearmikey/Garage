@@ -20,6 +20,10 @@ import javax.inject.Inject
 data class StartupUiState(
     val selectedUnits: String = "metric",
     val selectedCurrency: String = "USD",
+    val selectedTheme: String = "system",
+    val selectedDynamicColor: Boolean = true,
+    val selectedPalette: String = "default",
+    val selectedAmoledDark: Boolean = false,
     val notificationPermissionGranted: Boolean = false,
     val cameraPermissionGranted: Boolean = false,
     val affiliateLinksEnabled: Boolean = false,
@@ -38,11 +42,19 @@ class StartupViewModel @Inject constructor(
         viewModelScope.launch {
             val currentUnits = preferencesRepository.unitsType.first()
             val currentCurrency = preferencesRepository.currencyCode.first()
+            val currentTheme = preferencesRepository.themeType.first()
+            val currentDynamic = preferencesRepository.dynamicColor.first()
+            val currentPalette = preferencesRepository.appPalette.first()
+            val currentAmoled = preferencesRepository.amoledDark.first()
             val affiliateLinks = preferencesRepository.affiliateLinksEnabled.first()
             _uiState.update {
                 it.copy(
                     selectedUnits = currentUnits,
                     selectedCurrency = currentCurrency,
+                    selectedTheme = currentTheme,
+                    selectedDynamicColor = currentDynamic,
+                    selectedPalette = currentPalette,
+                    selectedAmoledDark = currentAmoled,
                     affiliateLinksEnabled = affiliateLinks,
                 )
             }
@@ -85,6 +97,26 @@ class StartupViewModel @Inject constructor(
         _uiState.update { it.copy(selectedCurrency = currency) }
     }
 
+    fun selectTheme(theme: String) {
+        _uiState.update { it.copy(selectedTheme = theme) }
+        viewModelScope.launch { preferencesRepository.setThemeType(theme) }
+    }
+
+    fun selectPalette(palette: String) {
+        _uiState.update { it.copy(selectedPalette = palette) }
+        viewModelScope.launch { preferencesRepository.setAppPalette(palette) }
+    }
+
+    fun toggleDynamicColor(enabled: Boolean) {
+        _uiState.update { it.copy(selectedDynamicColor = enabled) }
+        viewModelScope.launch { preferencesRepository.setDynamicColor(enabled) }
+    }
+
+    fun toggleAmoledDark(enabled: Boolean) {
+        _uiState.update { it.copy(selectedAmoledDark = enabled) }
+        viewModelScope.launch { preferencesRepository.setAmoledDark(enabled) }
+    }
+
     fun toggleAffiliateLinks(enabled: Boolean) {
         _uiState.update { it.copy(affiliateLinksEnabled = enabled) }
     }
@@ -93,6 +125,10 @@ class StartupViewModel @Inject constructor(
         viewModelScope.launch {
             preferencesRepository.setUnitsType(_uiState.value.selectedUnits)
             preferencesRepository.setCurrencyCode(_uiState.value.selectedCurrency)
+            preferencesRepository.setThemeType(_uiState.value.selectedTheme)
+            preferencesRepository.setDynamicColor(_uiState.value.selectedDynamicColor)
+            preferencesRepository.setAppPalette(_uiState.value.selectedPalette)
+            preferencesRepository.setAmoledDark(_uiState.value.selectedAmoledDark)
             preferencesRepository.setAffiliateLinksEnabled(_uiState.value.affiliateLinksEnabled)
             preferencesRepository.setOnboardingCompleted(completed = true)
             onFinished()

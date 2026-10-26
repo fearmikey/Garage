@@ -253,6 +253,11 @@ object MaintenanceScheduleEngine {
             taskNameLower.contains("tire replacement") -> listOf("tire")
             taskNameLower.contains("rust") -> listOf("rust")
             taskNameLower.contains("paint") -> listOf("paint")
+            taskNameLower.contains("sprocket") -> listOf("sprocket")
+            taskNameLower.contains("chain") -> listOf("chain", "lub")
+            taskNameLower.contains("valve") -> listOf("valve")
+            taskNameLower.contains("fork") -> listOf("fork")
+            taskNameLower.contains("cable") -> listOf("cable")
             else -> emptyList()
         }
     }

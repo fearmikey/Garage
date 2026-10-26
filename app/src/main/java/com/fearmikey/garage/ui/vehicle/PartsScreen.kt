@@ -41,6 +41,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.res.stringResource
 import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.entity.VehiclePartsInfo
+import com.fearmikey.garage.data.local.entity.VehicleType
 import com.fearmikey.garage.ui.components.EmptyState
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.SampleData
@@ -54,10 +55,12 @@ fun PartsScreen(
 ) {
     val parts by viewModel.parts.collectAsStateWithLifecycle()
     val unitSystem by viewModel.unitSystem.collectAsStateWithLifecycle()
+    val vehicleType by viewModel.vehicleType.collectAsStateWithLifecycle()
 
     PartsContent(
         parts = parts,
         unitSystem = unitSystem,
+        vehicleType = vehicleType,
         onEditClicked = onEditParts,
     )
 }
@@ -69,7 +72,14 @@ private data class PartsGroup(
 )
 
 @Composable
-private fun VehiclePartsInfo.toGroups(unitSystem: UnitSystem): List<PartsGroup> = listOf(
+private fun VehiclePartsInfo.toGroups(
+    unitSystem: UnitSystem,
+    vehicleType: VehicleType = VehicleType.CAR,
+): List<PartsGroup> {
+    // Motorcycles have no cabin air filter or wipers; hide those rows even if
+    // stale values were stored before the vehicle was marked as a motorcycle.
+    val isCar = vehicleType == VehicleType.CAR
+    return listOf(
     PartsGroup(
         title = stringResource(R.string.parts_group_oil),
         rows = listOfNotNull(
@@ -89,7 +99,7 @@ private fun VehiclePartsInfo.toGroups(unitSystem: UnitSystem): List<PartsGroup> 
         title = stringResource(R.string.parts_group_filters),
         rows = listOfNotNull(
             engineAirFilterPartNumber?.let { stringResource(R.string.parts_engine_air_filter_num) to it },
-            cabinAirFilterPartNumber?.let { stringResource(R.string.parts_cabin_air_filter_num) to it },
+            cabinAirFilterPartNumber?.takeIf { isCar }?.let { stringResource(R.string.parts_cabin_air_filter_num) to it },
         ),
     ),
     PartsGroup(
@@ -103,21 +113,23 @@ private fun VehiclePartsInfo.toGroups(unitSystem: UnitSystem): List<PartsGroup> 
     ),
     PartsGroup(
         title = stringResource(R.string.parts_group_wipers),
-        rows = listOfNotNull(
+        rows = if (!isCar) emptyList() else listOfNotNull(
             wiperBladeSizeDriver?.let { UnitConverter.formatWiperSize(it, unitSystem)?.let { formatted -> stringResource(R.string.parts_driver_wiper) to formatted } },
             wiperBladeSizePassenger?.let { UnitConverter.formatWiperSize(it, unitSystem)?.let { formatted -> stringResource(R.string.parts_passenger_wiper) to formatted } },
             wiperBladeSizeRear?.let { UnitConverter.formatWiperSize(it, unitSystem)?.let { formatted -> stringResource(R.string.parts_rear_wiper) to formatted } },
         ),
     ),
-).filter { it.rows.isNotEmpty() }
+    ).filter { it.rows.isNotEmpty() }
+}
 
 @Composable
 private fun PartsContent(
     parts: VehiclePartsInfo?,
     unitSystem: UnitSystem = UnitSystem.IMPERIAL,
+    vehicleType: VehicleType = VehicleType.CAR,
     onEditClicked: () -> Unit,
 ) {
-    val groups = parts?.takeUnless { it.isEmpty() }?.toGroups(unitSystem).orEmpty()
+    val groups = parts?.takeUnless { it.isEmpty() }?.toGroups(unitSystem, vehicleType).orEmpty()
     var showManualWarningDialog by remember { mutableStateOf(value = false) }
 
     Scaffold(

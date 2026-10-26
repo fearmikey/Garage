@@ -29,7 +29,11 @@ import com.fearmikey.garage.PendingDeepLink
 import com.fearmikey.garage.ui.components.UpdateOdometerDialog
 import com.fearmikey.garage.ui.dashboard.DashboardScreen
 import com.fearmikey.garage.ui.maintenance.export.MaintenanceExportScreen
+import com.fearmikey.garage.ui.knowledge.VehicleKnowledgeScreen
+import com.fearmikey.garage.ui.settings.AppearanceSettingsScreen
+import com.fearmikey.garage.ui.settings.BackupSettingsScreen
 import com.fearmikey.garage.ui.settings.LubeLoggerDuplicatesScreen
+import com.fearmikey.garage.ui.settings.RemindersSettingsScreen
 import com.fearmikey.garage.ui.settings.SettingsScreen
 import com.fearmikey.garage.ui.startup.StartupScreen
 import com.fearmikey.garage.ui.vehicle.AddEditVehicleScreen
@@ -166,6 +170,12 @@ fun GarageNavHost(
                 )
             }
             composable(
+                route = Destinations.KNOWLEDGE_BASE_ROUTE,
+                arguments = Destinations.knowledgeBaseArgs,
+            ) {
+                VehicleKnowledgeScreen()
+            }
+            composable(
                 route = "obd_scanner/{vehicleId}",
                 arguments = Destinations.vehicleDetailArgs
             ) { backStackEntry ->
@@ -183,7 +193,31 @@ fun GarageNavHost(
             composable(Destinations.SETTINGS) {
                 SettingsScreen(
                     onBack = { navController.popBackStack() },
+                    onOpenAppearance = { navController.navigate(Destinations.SETTINGS_APPEARANCE) },
+                    onOpenReminders = { navController.navigate(Destinations.SETTINGS_REMINDERS) },
+                    onOpenBackup = { navController.navigate(Destinations.SETTINGS_BACKUP) },
                     onOpenStartup = { navController.navigate(Destinations.STARTUP) },
+                )
+            }
+            composable(Destinations.SETTINGS_APPEARANCE) {
+                AppearanceSettingsScreen(
+                    onBack = { navController.popBackStack() },
+                )
+            }
+            composable(Destinations.SETTINGS_REMINDERS) {
+                RemindersSettingsScreen(
+                    onBack = { navController.popBackStack() },
+                )
+            }
+            composable(Destinations.SETTINGS_BACKUP) {
+                BackupSettingsScreen(
+                    onBack = { navController.popBackStack() },
+                    onOpenDuplicates = { navController.navigate(Destinations.LUBE_LOGGER_DUPLICATES) },
+                )
+            }
+            composable(Destinations.LUBE_LOGGER_DUPLICATES) {
+                LubeLoggerDuplicatesScreen(
+                    onBack = { navController.popBackStack() },
                 )
             }
         }

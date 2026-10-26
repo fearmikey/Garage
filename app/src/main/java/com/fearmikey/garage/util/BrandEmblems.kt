@@ -2,18 +2,51 @@ package com.fearmikey.garage.util
 
 import androidx.annotation.DrawableRes
 import com.fearmikey.garage.R
+import com.fearmikey.garage.data.local.entity.VehicleType
 
 object BrandEmblems {
 
+    private val NON_ALPHANUMERIC = Regex("[^a-z0-9]")
+
     /**
      * Normalizes a make string (lowercase, alphanumeric only) and resolves it to a bundled brand emblem resource ID.
+     * Some manufacturers use a different emblem for their motorcycle division (e.g. Honda's wing vs. the car "H"),
+     * so [vehicleType] is checked first for a motorcycle-specific emblem.
      * Returns null if no emblem is available for the given make.
      */
     @DrawableRes
-    fun forMake(make: String): Int? {
-        val normalized = make.lowercase().replace(Regex("[^a-z0-9]"), "")
+    fun forMake(make: String, vehicleType: VehicleType = VehicleType.CAR): Int? {
+        val normalized = make.lowercase().replace(NON_ALPHANUMERIC, "")
         if (normalized.isBlank()) return null
 
+        if (vehicleType == VehicleType.MOTORCYCLE) {
+            motorcycleEmblem(normalized)?.let { return it }
+        }
+        return carEmblem(normalized) ?: motorcycleOnlyEmblem(normalized)
+    }
+
+    /** Emblems that differ from the same company's car emblem. */
+    @DrawableRes
+    private fun motorcycleEmblem(normalized: String): Int? = when (normalized) {
+        "honda", "hondamotorcycles", "hondamotorcycle", "americanhonda" -> R.drawable.brand_honda_motorcycle
+        else -> null
+    }
+
+    /** Brands that (essentially) only make motorcycles/scooters; shown regardless of the selected vehicle type. */
+    @DrawableRes
+    private fun motorcycleOnlyEmblem(normalized: String): Int? = when (normalized) {
+        "harleydavidson", "harley", "hd" -> R.drawable.brand_harleydavidson
+        "kawasaki" -> R.drawable.brand_kawasaki
+        "triumph", "triumphmotorcycles" -> R.drawable.brand_triumph
+        "yamaha", "yamahamotor" -> R.drawable.brand_yamaha
+        "piaggio", "piaggiogroup" -> R.drawable.brand_piaggio
+        "ducatimotorholding" -> R.drawable.brand_ducati
+        "bmwmotorrad" -> R.drawable.brand_bmw
+        else -> null
+    }
+
+    @DrawableRes
+    private fun carEmblem(normalized: String): Int? {
         return when (normalized) {
             "acura" -> R.drawable.brand_acura
             "astonmartin", "aston" -> R.drawable.brand_astonmartin

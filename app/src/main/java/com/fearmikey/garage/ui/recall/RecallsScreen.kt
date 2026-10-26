@@ -354,6 +354,7 @@ private fun RecallCard(
                     ExposedDropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false },
+                        matchAnchorWidth = false,
                     ) {
                         RecallState.entries.forEach { state ->
                             val itemLabel = when (state) {

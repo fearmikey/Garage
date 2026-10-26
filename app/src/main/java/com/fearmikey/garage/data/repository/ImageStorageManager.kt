@@ -170,6 +170,29 @@ open class ImageStorageManager @Inject constructor(
     /** Resolves a stored [filename] (as saved on [com.fearmikey.garage.data.local.entity.Vehicle.imageUri]) to its [File]. */
     open fun imageFile(filename: String): File = File(imagesDir, filename)
 
+    /**
+     * Extracts a dominant or vibrant signature ARGB color from [file] using AndroidX Palette.
+     * Returns null if the image cannot be decoded or no swatches are generated.
+     */
+    open suspend fun extractDominantColor(file: File): Int? = withContext(Dispatchers.IO) {
+        try {
+            if (!file.exists() || isPdfFile(file.name)) return@withContext null
+            val options = BitmapFactory.Options().apply {
+                inSampleSize = 4
+            }
+            val bitmap = BitmapFactory.decodeFile(file.absolutePath, options) ?: return@withContext null
+            val palette = androidx.palette.graphics.Palette.from(bitmap).generate()
+            bitmap.recycle()
+            palette.vibrantSwatch?.rgb
+                ?: palette.dominantSwatch?.rgb
+                ?: palette.mutedSwatch?.rgb
+                ?: palette.lightVibrantSwatch?.rgb
+                ?: palette.darkVibrantSwatch?.rgb
+        } catch (_: Throwable) {
+            null
+        }
+    }
+
     fun deleteImage(filename: String) {
         imageFile(filename).delete()
     }

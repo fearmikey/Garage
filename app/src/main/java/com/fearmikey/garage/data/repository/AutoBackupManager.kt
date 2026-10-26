@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.InvalidationTracker
 import com.fearmikey.garage.data.local.CloudBackupPreferencesManager
 import com.fearmikey.garage.data.local.GarageDatabase
+import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerCredentialsManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +27,7 @@ class AutoBackupManager @Inject constructor(
     private val database: GarageDatabase,
     private val backupRepository: BackupRepository,
     private val cloudBackupPreferencesManager: CloudBackupPreferencesManager,
+    private val lubeLoggerCredentialsManager: LubeLoggerCredentialsManager,
 ) {
     private val scope = CoroutineScope(Dispatchers.IO)
     private var debounceJob: Job? = null
@@ -58,6 +60,7 @@ class AutoBackupManager @Inject constructor(
     }
 
     private fun triggerLubeLoggerSync() {
+        if (!lubeLoggerCredentialsManager.isConfigured() || !lubeLoggerCredentialsManager.isSyncEnabled()) return
         try {
             val request = androidx.work.OneTimeWorkRequestBuilder<com.fearmikey.garage.notification.lubelogger.LubeLoggerSyncWorker>().build()
             androidx.work.WorkManager.getInstance(context).enqueueUniqueWork(

@@ -80,7 +80,7 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
-        if (!credentialsManager.isConfigured()) {
+        if (!credentialsManager.isConfigured() || !credentialsManager.isSyncEnabled()) {
             return Result.success()
         }
 

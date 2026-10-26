@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DirectionsCar
+import androidx.compose.material.icons.outlined.TwoWheeler
 import androidx.compose.material.icons.outlined.LocalGasStation
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Speed
@@ -85,9 +87,14 @@ fun VehicleCard(
         else emptyList()
     }
 
+    val accentColor = vehicle.themeColor?.let { Color(it) }
+
     Card(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
+        border = accentColor?.let {
+            BorderStroke(1.5.dp, it.copy(alpha = 0.5f))
+        },
     ) {
         Column {
             with(sharedTransitionScope) {
@@ -155,7 +162,7 @@ fun VehicleCard(
                         }
                     } else {
                         Icon(
-                            imageVector = Icons.Outlined.DirectionsCar,
+                            imageVector = if (vehicle.isMotorcycle) Icons.Outlined.TwoWheeler else Icons.Outlined.DirectionsCar,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -171,6 +178,7 @@ fun VehicleCard(
                     if (vehicle.make.isNotBlank()) {
                         BrandEmblem(
                             make = vehicle.make,
+                            vehicleType = vehicle.vehicleType,
                             size = 36.dp,
                         )
                     }

@@ -1,3 +1,12 @@
+## [1.3.6] - 2026-10-26
+
+### Added
+* **Trip & Mileage Tracking:** Log vehicle trips, record business vs. personal mileage, start/end odometers, trip categories, and expense tags.
+* **Vehicle Knowledge Base & Torque Specs Directory:** Built-in factory torque specification catalog, custom vehicle notes, technical cheat sheets, and component torque lookup.
+* **Redesigned Modular Settings & Accent Themes:** Overhauled Settings interface with sub-screens (Appearance, Backup, Reminders) and customizable vehicle color theme palettes.
+* **Motorcycle & Powersports Brand Emblems:** Added vector emblems for Harley-Davidson, Honda Motorcycle, Kawasaki, Piaggio, Triumph, and Yamaha.
+* **Expanded Test Suite:** Unit test coverage for `MaintenanceScheduleEngineTest`, `StartupViewModelTest`, `DashboardViewModelTest`, `VehicleDetailViewModelTest`, `SettingsViewModelTest`, and `MainViewModelTest`.
+
 ## [1.3.5] - 2026-10-10
 
 ### Added

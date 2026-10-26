@@ -88,6 +88,11 @@
     <string name="task_transfer_case_fluid">Cambio de aceite de caja de transferencia</string>
     <string name="task_front_diff_fluid">Cambio de aceite de diferencial delantero</string>
     <string name="task_rear_diff_fluid">Cambio de aceite de diferencial trasero</string>
+    <string name="task_chain_lube">Limpieza y engrase de cadena</string>
+    <string name="task_chain_sprocket">Cambio de kit de arrastre</string>
+    <string name="task_valve_clearance">Revisión de holgura de válvulas</string>
+    <string name="task_fork_oil">Cambio de aceite de horquilla</string>
+    <string name="task_clutch_throttle_cable">Ajuste de cables de embrague y acelerador</string>
 
     <!-- Notifications -->
     <string name="reminder_notification_channel_name">Recordatorios de mantenimiento</string>

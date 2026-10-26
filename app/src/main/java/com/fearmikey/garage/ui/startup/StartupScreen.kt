@@ -46,8 +46,10 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import com.fearmikey.garage.ui.theme.AppThemePalette
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -122,6 +124,10 @@ fun StartupScreen(
         uiState = uiState,
         onSelectUnits = viewModel::selectUnits,
         onSelectCurrency = viewModel::selectCurrency,
+        onSelectTheme = viewModel::selectTheme,
+        onSelectPalette = viewModel::selectPalette,
+        onToggleDynamicColor = viewModel::toggleDynamicColor,
+        onToggleAmoledDark = viewModel::toggleAmoledDark,
         onToggleAffiliateLinks = viewModel::toggleAffiliateLinks,
         onRequestNotificationPermission = {
             notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
@@ -140,6 +146,10 @@ private fun StartupContent(
     uiState: StartupUiState,
     onSelectUnits: (String) -> Unit,
     onSelectCurrency: (String) -> Unit,
+    onSelectTheme: (String) -> Unit,
+    onSelectPalette: (String) -> Unit,
+    onToggleDynamicColor: (Boolean) -> Unit,
+    onToggleAmoledDark: (Boolean) -> Unit,
     onToggleAffiliateLinks: (Boolean) -> Unit,
     onRequestNotificationPermission: () -> Unit,
     onRequestCameraPermission: () -> Unit,
@@ -397,6 +407,184 @@ private fun StartupContent(
                         onCurrencySelected = onSelectCurrency,
                         onDismissRequest = { showCurrencyDialog = false },
                     )
+                }
+            }
+
+            HorizontalDivider()
+
+            // Section: Appearance & Theme
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(
+                    text = "Appearance & Theme",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+
+                Text(
+                    text = "Personalize your garage with car-inspired colors and dark mode.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                // Theme Mode: System, Light, Dark
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    listOf(
+                        "system" to "System",
+                        "light" to "Light",
+                        "dark" to "Dark",
+                    ).forEach { (mode, label) ->
+                        val isSelected = uiState.selectedTheme == mode
+                        OutlinedCard(
+                            modifier = Modifier
+                                .weight(1f)
+                                .clickable { onSelectTheme(mode) },
+                            border = if (isSelected) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                            colors = CardDefaults.outlinedCardColors(
+                                containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surface,
+                            ),
+                            shape = RoundedCornerShape(12.dp),
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 12.dp),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Text(
+                                    text = label,
+                                    style = MaterialTheme.typography.labelLarge,
+                                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                                    color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                                )
+                            }
+                        }
+                    }
+                }
+
+                // Dynamic Color Switch Card
+                OutlinedCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = "Dynamic Color",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onSurface,
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = "Match colors to system wallpaper (Android 12+)",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                        Switch(
+                            checked = uiState.selectedDynamicColor,
+                            onCheckedChange = onToggleDynamicColor,
+                        )
+                    }
+                }
+
+                // Color Palettes when Dynamic Color is off
+                if (!uiState.selectedDynamicColor) {
+                    Text(
+                        text = "Accent Color Palette",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onBackground,
+                    )
+
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        AppThemePalette.entries.chunked(2).forEach { rowPalettes ->
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            ) {
+                                rowPalettes.forEach { palette ->
+                                    val isSelected = uiState.selectedPalette == palette.id
+                                    OutlinedCard(
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .clickable { onSelectPalette(palette.id) },
+                                        border = if (isSelected) BorderStroke(2.dp, palette.primaryColor) else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                                        colors = CardDefaults.outlinedCardColors(
+                                            containerColor = if (isSelected) palette.primaryColor.copy(alpha = 0.12f) else MaterialTheme.colorScheme.surface,
+                                        ),
+                                        shape = RoundedCornerShape(12.dp),
+                                    ) {
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(12.dp),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                        ) {
+                                            Box(
+                                                modifier = Modifier
+                                                    .size(20.dp)
+                                                    .background(palette.primaryColor, CircleShape),
+                                            )
+                                            Spacer(modifier = Modifier.width(8.dp))
+                                            Text(
+                                                text = palette.displayName,
+                                                style = MaterialTheme.typography.labelMedium,
+                                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                                maxLines = 1,
+                                            )
+                                        }
+                                    }
+                                }
+                                if (rowPalettes.size == 1) {
+                                    Spacer(modifier = Modifier.weight(1f))
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Pure Black (AMOLED) Switch Card
+                OutlinedCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = "Pure Black (AMOLED)",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onSurface,
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = "True pitch-black backgrounds in dark mode",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                        Switch(
+                            checked = uiState.selectedAmoledDark,
+                            onCheckedChange = onToggleAmoledDark,
+                        )
+                    }
                 }
             }
 
@@ -742,6 +930,10 @@ private fun StartupContentPreview() {
             ),
             onSelectUnits = {},
             onSelectCurrency = {},
+            onSelectTheme = {},
+            onSelectPalette = {},
+            onToggleDynamicColor = {},
+            onToggleAmoledDark = {},
             onToggleAffiliateLinks = {},
             onRequestNotificationPermission = {},
             onRequestCameraPermission = {},

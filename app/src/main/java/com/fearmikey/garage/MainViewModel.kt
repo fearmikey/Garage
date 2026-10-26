@@ -74,6 +74,24 @@ class MainViewModel @Inject constructor(
         initialValue = "system"
     )
 
+    val amoledDark: StateFlow<Boolean> = preferencesRepository.amoledDark.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = false
+    )
+
+    val dynamicColor: StateFlow<Boolean> = preferencesRepository.dynamicColor.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = true
+    )
+
+    val appPalette: StateFlow<String> = preferencesRepository.appPalette.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = "default"
+    )
+
     val showBuyMeACoffeePrompt: StateFlow<Boolean> = combine(
         preferencesRepository.appOpenCount,
         preferencesRepository.buyMeACoffeeDontAskAgain,

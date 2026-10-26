@@ -88,6 +88,11 @@
     <string name="task_transfer_case_fluid">Verteilergetriebeölwechsel</string>
     <string name="task_front_diff_fluid">Vorderachsgetriebeölwechsel</string>
     <string name="task_rear_diff_fluid">Hinterachsgetriebeölwechsel</string>
+    <string name="task_chain_lube">Antriebskette reinigen &amp; schmieren</string>
+    <string name="task_chain_sprocket">Kettensatz wechseln</string>
+    <string name="task_valve_clearance">Ventilspiel prüfen</string>
+    <string name="task_fork_oil">Gabelölwechsel</string>
+    <string name="task_clutch_throttle_cable">Kupplungs- &amp; Gaszug einstellen</string>
 
     <!-- Notifications -->
     <string name="reminder_notification_channel_name">Wartungserinnerungen</string>

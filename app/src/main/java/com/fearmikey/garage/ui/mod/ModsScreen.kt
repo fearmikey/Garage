@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -63,7 +62,6 @@ import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -702,13 +700,12 @@ private fun AddEditModSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        contentWindowInsets = { BottomSheetDefaults.windowInsets },
+        contentWindowInsets = { WindowInsets(0, 0, 0, 0) },
     ) {
         val addEditScrollState = rememberScrollState()
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.85f)
                 .navigationBarsPadding()
                 .imePadding()
                 .verticalScroll(addEditScrollState)
@@ -1099,13 +1096,12 @@ private fun ViewModSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        contentWindowInsets = { BottomSheetDefaults.windowInsets },
+        contentWindowInsets = { WindowInsets(0, 0, 0, 0) },
     ) {
         val detailScrollState = rememberScrollState()
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.85f)
                 .navigationBarsPadding()
                 .imePadding()
                 .verticalScroll(detailScrollState)

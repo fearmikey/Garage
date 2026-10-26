@@ -36,11 +36,13 @@ fun LubeLoggerStatusItem(
     status: LubeLoggerSyncStatus,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    syncEnabled: Boolean = true,
     now: Long = System.currentTimeMillis(),
 ) {
     val successColor = Color(0xFF2E7D32)
     val (statusText, iconColor) = when {
         !configured -> "Not configured" to MaterialTheme.colorScheme.onSurfaceVariant
+        !syncEnabled -> "Disabled (paired)" to MaterialTheme.colorScheme.onSurfaceVariant
         status is LubeLoggerSyncStatus.Syncing -> "Syncing\u2026" to MaterialTheme.colorScheme.primary
         status is LubeLoggerSyncStatus.Success -> "Connected \u00b7 last synced ${relative(status.at, now)}" to successColor
         status is LubeLoggerSyncStatus.Failed -> "Connection failed \u00b7 ${relative(status.at, now)}" to MaterialTheme.colorScheme.error
@@ -51,11 +53,11 @@ fun LubeLoggerStatusItem(
         headlineContent = { Text("LubeLogger Sync") },
         supportingContent = {
             Column {
-                Text(statusText, color = if (configured) iconColor else MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(statusText, color = if (configured && syncEnabled) iconColor else MaterialTheme.colorScheme.onSurfaceVariant)
                 if (configured && serverUrl.isNotBlank()) {
                     Text(serverUrl, style = MaterialTheme.typography.bodySmall)
                 }
-                if (configured && status is LubeLoggerSyncStatus.Failed) {
+                if (configured && syncEnabled && status is LubeLoggerSyncStatus.Failed) {
                     Text(status.message, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
                     status.lastSuccessAt?.let {
                         Text("Last successful sync ${relative(it, now)}", style = MaterialTheme.typography.bodySmall)
@@ -65,7 +67,7 @@ fun LubeLoggerStatusItem(
         },
         leadingContent = {
             when {
-                !configured -> Icon(Icons.Filled.CloudOff, contentDescription = "LubeLogger not configured", tint = iconColor)
+                !configured || !syncEnabled -> Icon(Icons.Filled.CloudOff, contentDescription = "LubeLogger disabled", tint = iconColor)
                 status is LubeLoggerSyncStatus.Syncing ->
                     CircularProgressIndicator(
                         modifier = Modifier.size(24.dp).semantics { contentDescription = "Syncing" },

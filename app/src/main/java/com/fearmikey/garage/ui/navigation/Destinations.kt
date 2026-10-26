@@ -17,6 +17,9 @@ object Destinations {
     )
 
     const val SETTINGS = "settings"
+    const val SETTINGS_APPEARANCE = "settings/appearance"
+    const val SETTINGS_REMINDERS = "settings/reminders"
+    const val SETTINGS_BACKUP = "settings/backup"
     const val LUBE_LOGGER_DUPLICATES = "lubelogger_duplicates"
 
     const val VEHICLE_ID_ARG = "vehicleId"
@@ -59,6 +62,12 @@ object Destinations {
     const val EXPORT_MAINTENANCE_ROUTE = "vehicle/export?$VEHICLE_ID_ARG={$VEHICLE_ID_ARG}"
     fun exportMaintenanceRoute(vehicleId: Long) = "vehicle/export?$VEHICLE_ID_ARG=$vehicleId"
     val exportMaintenanceArgs = listOf(
+        navArgument(VEHICLE_ID_ARG) { type = NavType.LongType },
+    )
+
+    const val KNOWLEDGE_BASE_ROUTE = "vehicle/knowledge?$VEHICLE_ID_ARG={$VEHICLE_ID_ARG}"
+    fun knowledgeBaseRoute(vehicleId: Long) = "vehicle/knowledge?$VEHICLE_ID_ARG=$vehicleId"
+    val knowledgeBaseArgs = listOf(
         navArgument(VEHICLE_ID_ARG) { type = NavType.LongType },
     )
 }

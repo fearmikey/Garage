@@ -27,6 +27,11 @@ fun formatTaskName(taskName: String?): String {
         "Transfer case fluid change" -> stringResource(R.string.task_transfer_case_fluid)
         "Front differential fluid change" -> stringResource(R.string.task_front_diff_fluid)
         "Rear differential fluid change" -> stringResource(R.string.task_rear_diff_fluid)
+        "Drive chain clean & lube" -> stringResource(R.string.task_chain_lube)
+        "Chain & sprocket replacement" -> stringResource(R.string.task_chain_sprocket)
+        "Valve clearance check" -> stringResource(R.string.task_valve_clearance)
+        "Fork oil change" -> stringResource(R.string.task_fork_oil)
+        "Clutch & throttle cable adjustment" -> stringResource(R.string.task_clutch_throttle_cable)
         else -> taskName
     }
 }

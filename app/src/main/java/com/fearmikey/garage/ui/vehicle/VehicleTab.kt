@@ -15,7 +15,9 @@ enum class VehicleTab(@StringRes val titleRes: Int) {
     PARTS(R.string.tab_parts),
     MODS(R.string.tab_mods),
     DOCUMENTS(R.string.tab_documents),
-    RECALLS(R.string.tab_recalls);
+    RECALLS(R.string.tab_recalls),
+    KNOWLEDGE(R.string.tab_knowledge),
+    TRIPS(R.string.tab_trips);
 
     companion object {
         val entriesList = entries

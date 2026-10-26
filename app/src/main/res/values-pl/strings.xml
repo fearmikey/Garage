@@ -88,6 +88,11 @@
     <string name="task_transfer_case_fluid">Wymiana oleju w reduktorze</string>
     <string name="task_front_diff_fluid">Wymiana oleju w przednim dyferencjale</string>
     <string name="task_rear_diff_fluid">Wymiana oleju w tylnym dyferencjale</string>
+    <string name="task_chain_lube">Czyszczenie i smarowanie łańcucha</string>
+    <string name="task_chain_sprocket">Wymiana zestawu napędowego</string>
+    <string name="task_valve_clearance">Kontrola luzów zaworowych</string>
+    <string name="task_fork_oil">Wymiana oleju w lagach</string>
+    <string name="task_clutch_throttle_cable">Regulacja linki sprzęgła i gazu</string>
 
     <!-- Notifications -->
     <string name="reminder_notification_channel_name">Przypomnienia o serwisie</string>

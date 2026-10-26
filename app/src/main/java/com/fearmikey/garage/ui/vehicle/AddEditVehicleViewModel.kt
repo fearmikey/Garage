@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.fearmikey.garage.data.local.entity.Drivetrain
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.local.entity.VehicleSpecs
+import com.fearmikey.garage.data.local.entity.VehicleType
 import com.fearmikey.garage.data.repository.ImageStorageManager
 import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.data.repository.VinLookupResult
@@ -35,6 +36,7 @@ data class VehiclePhotoItem(
 )
 
 data class AddEditVehicleUiState(
+    val vehicleType: VehicleType = VehicleType.CAR,
     val vin: String = "",
     val year: String = "",
     val make: String = "",
@@ -44,6 +46,7 @@ data class AddEditVehicleUiState(
     val fuelType: String = "",
     val purchasedNew: Boolean = false,
     val initialMileage: String = "",
+    val themeColor: Int? = null,
     val unitSystem: UnitSystem = UnitSystem.IMPERIAL,
     val photos: List<VehiclePhotoItem> = emptyList(),
     val isDecodingVin: Boolean = false,
@@ -101,6 +104,7 @@ class AddEditVehicleViewModel @Inject constructor(
                     val displayInitial = vehicle.initialMileage?.let { UnitConverter.displayDistanceValue(it, system) }?.toString().orEmpty()
                     _uiState.update {
                         it.copy(
+                            vehicleType = vehicle.vehicleType,
                             vin = vehicle.vin,
                             year = vehicle.year?.toString().orEmpty(),
                             make = vehicle.make,
@@ -110,6 +114,7 @@ class AddEditVehicleViewModel @Inject constructor(
                             fuelType = specs?.fuelType.orEmpty(),
                             purchasedNew = vehicle.purchasedNew,
                             initialMileage = displayInitial,
+                            themeColor = vehicle.themeColor,
                             unitSystem = system,
                             photos = loadedPhotos,
                         )
@@ -143,7 +148,12 @@ class AddEditVehicleViewModel @Inject constructor(
                         make = result.info.make.ifBlank { it.make },
                         model = result.info.model.ifBlank { it.model },
                         trim = result.info.trim.ifBlank { it.trim },
-                        drivetrain = result.info.drivetrain ?: it.drivetrain,
+                        vehicleType = result.info.vehicleType ?: it.vehicleType,
+                        drivetrain = if (result.info.vehicleType == VehicleType.MOTORCYCLE) {
+                            Drivetrain.UNKNOWN
+                        } else {
+                            result.info.drivetrain ?: it.drivetrain
+                        },
                         fuelType = result.info.specs.fuelType?.ifBlank { it.fuelType } ?: it.fuelType,
                         pendingSpecs = result.info.specs,
                     )
@@ -159,22 +169,40 @@ class AddEditVehicleViewModel @Inject constructor(
     fun onMakeChanged(make: String) = _uiState.update { it.copy(make = make) }
     fun onModelChanged(model: String) = _uiState.update { it.copy(model = model) }
     fun onTrimChanged(trim: String) = _uiState.update { it.copy(trim = trim) }
+    fun onVehicleTypeChanged(type: VehicleType) = _uiState.update {
+        // Car drivetrain layouts (FWD/AWD/4WD...) don't apply to motorcycles.
+        it.copy(
+            vehicleType = type,
+            drivetrain = if (type == VehicleType.MOTORCYCLE) Drivetrain.UNKNOWN else it.drivetrain,
+        )
+    }
     fun onDrivetrainChanged(drivetrain: Drivetrain) = _uiState.update { it.copy(drivetrain = drivetrain) }
     fun onFuelTypeChanged(fuelType: String) = _uiState.update { it.copy(fuelType = fuelType) }
     fun onPurchasedNewChanged(isNew: Boolean) = _uiState.update { it.copy(purchasedNew = isNew) }
     fun onInitialMileageChanged(mileage: String) = _uiState.update { it.copy(initialMileage = com.fearmikey.garage.ui.util.sanitizeMileageInput(mileage)) }
+    fun onThemeColorChanged(color: Int?) = _uiState.update { it.copy(themeColor = color) }
 
     fun onImagesPicked(uris: List<Uri>) {
         if (uris.isEmpty()) return
         viewModelScope.launch {
             val currentPhotos = _uiState.value.photos.toMutableList()
             val availableSlots = (3 - currentPhotos.size).coerceAtLeast(0)
+            val isFirstPhoto = currentPhotos.isEmpty()
             for (uri in uris.take(availableSlots)) {
                 val filename = imageStorageManager.copyPickedImageToInternalStorage(uri)
                 val file = imageStorageManager.imageFile(filename)
                 currentPhotos.add(VehiclePhotoItem(filename = filename, file = file, offsetY = 0f))
             }
-            _uiState.update { it.copy(photos = currentPhotos) }
+            var newThemeColor = _uiState.value.themeColor
+            if (isFirstPhoto && currentPhotos.isNotEmpty()) {
+                currentPhotos.first().file?.let { file ->
+                    val extracted = imageStorageManager.extractDominantColor(file)
+                    if (extracted != null) {
+                        newThemeColor = extracted
+                    }
+                }
+            }
+            _uiState.update { it.copy(photos = currentPhotos, themeColor = newThemeColor) }
         }
     }
 
@@ -195,7 +223,14 @@ class AddEditVehicleViewModel @Inject constructor(
                 }
 
                 currentPhotos[index] = VehiclePhotoItem(filename = newFilename, file = newFile, offsetY = 0f)
-                _uiState.update { it.copy(photos = currentPhotos) }
+                var newThemeColor = _uiState.value.themeColor
+                if (index == 0 && newFile != null) {
+                    val extracted = imageStorageManager.extractDominantColor(newFile)
+                    if (extracted != null) {
+                        newThemeColor = extracted
+                    }
+                }
+                _uiState.update { it.copy(photos = currentPhotos, themeColor = newThemeColor) }
             }
         }
     }
@@ -245,6 +280,7 @@ class AddEditVehicleViewModel @Inject constructor(
                         model = state.model,
                         trim = state.trim,
                         drivetrain = state.drivetrain,
+                        vehicleType = state.vehicleType,
                         purchasedNew = state.purchasedNew,
                         initialMileage = canonicalInitial,
                         imageUri = photo1?.filename,
@@ -253,6 +289,7 @@ class AddEditVehicleViewModel @Inject constructor(
                         imageOffsetY2 = photo2?.offsetY ?: 0f,
                         imageUri3 = photo3?.filename,
                         imageOffsetY3 = photo3?.offsetY ?: 0f,
+                        themeColor = state.themeColor,
                     ),
                 )
                 val targetVehicleId = if (isEditing) vehicleId else newOrUpdatedId

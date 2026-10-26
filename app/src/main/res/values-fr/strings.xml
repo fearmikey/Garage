@@ -59,6 +59,11 @@
     <string name="task_transfer_case_fluid">Vidange boîte de transfert</string>
     <string name="task_front_diff_fluid">Vidange différentiel avant</string>
     <string name="task_rear_diff_fluid">Vidange différentiel arrière</string>
+    <string name="task_chain_lube">Nettoyage et graissage de la chaîne</string>
+    <string name="task_chain_sprocket">Remplacement du kit chaîne</string>
+    <string name="task_valve_clearance">Contrôle du jeu aux soupapes</string>
+    <string name="task_fork_oil">Vidange de l\'huile de fourche</string>
+    <string name="task_clutch_throttle_cable">Réglage des câbles d\'embrayage et d\'accélérateur</string>
 
     <!-- Startup / Onboarding -->
     <string name="startup_get_started">Commencer</string>

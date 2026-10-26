@@ -105,7 +105,7 @@ class DashboardViewModel @Inject constructor(
             try {
                 coroutineScope {
                     val lubeLoggerJob = launch {
-                        if (lubeLoggerCredentialsManager.isConfigured()) {
+                        if (lubeLoggerCredentialsManager.isConfigured() && lubeLoggerCredentialsManager.isSyncEnabled()) {
                             lubeLoggerCredentialsManager.markSyncStarted()
                             WorkScheduler.triggerManualLubeLoggerSync(context)
                             withTimeoutOrNull(20_000) {

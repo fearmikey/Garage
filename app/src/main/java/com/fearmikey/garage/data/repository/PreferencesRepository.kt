@@ -13,6 +13,14 @@ interface PreferencesRepository {
     val currencyCode: Flow<String>
     val appCurrency: Flow<AppCurrency>
     val themeType: Flow<String>
+    val amoledDark: Flow<Boolean>
+        get() = flowOf(false)
+    val dynamicColor: Flow<Boolean>
+        get() = flowOf(true)
+    val appPalette: Flow<String>
+        get() = flowOf("default")
+    val vehicleThemingEnabled: Flow<Boolean>
+        get() = flowOf(true)
     val onboardingCompleted: Flow<Boolean>
     /** The user's explicitly chosen default vehicle, or `null` if none has been chosen. */
     val defaultVehicleId: Flow<Long?>
@@ -55,6 +63,10 @@ interface PreferencesRepository {
     suspend fun setUnitsType(units: String)
     suspend fun setCurrencyCode(currencyCode: String)
     suspend fun setThemeType(theme: String)
+    suspend fun setAmoledDark(enabled: Boolean) {}
+    suspend fun setDynamicColor(enabled: Boolean) {}
+    suspend fun setAppPalette(palette: String) {}
+    suspend fun setVehicleThemingEnabled(enabled: Boolean) {}
     suspend fun setOnboardingCompleted(completed: Boolean)
     suspend fun setDefaultVehicleId(vehicleId: Long?)
     suspend fun setMaintenanceMileageWindow(miles: Int)
@@ -87,6 +99,10 @@ class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManag
     override val currencyCode: Flow<String> = preferencesManager.currencyCode
     override val appCurrency: Flow<AppCurrency> = preferencesManager.appCurrency
     override val themeType: Flow<String> = preferencesManager.themeType
+    override val amoledDark: Flow<Boolean> = preferencesManager.amoledDark
+    override val dynamicColor: Flow<Boolean> = preferencesManager.dynamicColor
+    override val appPalette: Flow<String> = preferencesManager.appPalette
+    override val vehicleThemingEnabled: Flow<Boolean> = preferencesManager.vehicleThemingEnabled
     override val onboardingCompleted: Flow<Boolean> = preferencesManager.onboardingCompleted
     override val defaultVehicleId: Flow<Long?> = preferencesManager.defaultVehicleId
     override val maintenanceMileageWindow: Flow<Int> = preferencesManager.maintenanceMileageWindow
@@ -119,6 +135,22 @@ class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManag
 
     override suspend fun setThemeType(theme: String) {
         preferencesManager.setThemeType(theme)
+    }
+
+    override suspend fun setAmoledDark(enabled: Boolean) {
+        preferencesManager.setAmoledDark(enabled)
+    }
+
+    override suspend fun setDynamicColor(enabled: Boolean) {
+        preferencesManager.setDynamicColor(enabled)
+    }
+
+    override suspend fun setAppPalette(palette: String) {
+        preferencesManager.setAppPalette(palette)
+    }
+
+    override suspend fun setVehicleThemingEnabled(enabled: Boolean) {
+        preferencesManager.setVehicleThemingEnabled(enabled)
     }
 
     override suspend fun setOnboardingCompleted(completed: Boolean) {

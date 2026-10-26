@@ -70,11 +70,20 @@ class SettingsViewModelTest {
         val currencyCodeFlow = MutableStateFlow("USD")
         val maintenanceMileageWindowFlow = MutableStateFlow(500)
         val maintenanceDaysWindowFlow = MutableStateFlow(10)
+        val themeTypeFlow = MutableStateFlow("system")
+        val amoledDarkFlow = MutableStateFlow(false)
+        val dynamicColorFlow = MutableStateFlow(true)
+        val appPaletteFlow = MutableStateFlow("default")
         override val unitsType: Flow<String> = MutableStateFlow("metric")
         override val unitSystem: Flow<UnitSystem> = MutableStateFlow(UnitSystem.METRIC)
         override val currencyCode: Flow<String> = currencyCodeFlow
         override val appCurrency: Flow<AppCurrency> = MutableStateFlow(AppCurrency.USD)
-        override val themeType: Flow<String> = MutableStateFlow("system")
+        override val themeType: Flow<String> = themeTypeFlow
+        override val amoledDark: Flow<Boolean> = amoledDarkFlow
+        override val dynamicColor: Flow<Boolean> = dynamicColorFlow
+        override val appPalette: Flow<String> = appPaletteFlow
+        val vehicleThemingEnabledFlow = MutableStateFlow(true)
+        override val vehicleThemingEnabled: Flow<Boolean> = vehicleThemingEnabledFlow
         override val onboardingCompleted: Flow<Boolean> = MutableStateFlow(true)
         override val defaultVehicleId: Flow<Long?> = MutableStateFlow(null)
         override val maintenanceMileageWindow: Flow<Int> = maintenanceMileageWindowFlow
@@ -93,7 +102,21 @@ class SettingsViewModelTest {
         override suspend fun setCurrencyCode(currencyCode: String) {
             currencyCodeFlow.value = currencyCode
         }
-        override suspend fun setThemeType(theme: String) {}
+        override suspend fun setThemeType(theme: String) {
+            themeTypeFlow.value = theme
+        }
+        override suspend fun setAmoledDark(enabled: Boolean) {
+            amoledDarkFlow.value = enabled
+        }
+        override suspend fun setDynamicColor(enabled: Boolean) {
+            dynamicColorFlow.value = enabled
+        }
+        override suspend fun setAppPalette(palette: String) {
+            appPaletteFlow.value = palette
+        }
+        override suspend fun setVehicleThemingEnabled(enabled: Boolean) {
+            vehicleThemingEnabledFlow.value = enabled
+        }
         override suspend fun setOnboardingCompleted(completed: Boolean) {}
         override suspend fun setDefaultVehicleId(vehicleId: Long?) {}
         override suspend fun setMaintenanceMileageWindow(miles: Int) {
@@ -185,14 +208,21 @@ class SettingsViewModelTest {
         private var password: String? = null
         private var apiKey: String? = null
         private var unitSystem = "imperial"
+        private var syncEnabled = true
         private val vehicleMappings = mutableMapOf<Long, Int>()
 
-        override fun saveCredentials(serverUrl: String, username: String, password: String?, apiKey: String?, unitSystem: String) {
+        override fun saveCredentials(serverUrl: String, username: String, password: String?, apiKey: String?, unitSystem: String, syncEnabled: Boolean) {
             this.serverUrl = serverUrl
             this.username = username
             this.password = password ?: this.password
             this.apiKey = apiKey
             this.unitSystem = unitSystem
+            this.syncEnabled = syncEnabled
+        }
+
+        override fun isSyncEnabled() = syncEnabled
+        override fun setSyncEnabled(enabled: Boolean) {
+            this.syncEnabled = enabled
         }
 
         override fun getServerUrl() = serverUrl
@@ -202,6 +232,7 @@ class SettingsViewModelTest {
         override fun getUnitSystem() = unitSystem
         override fun clearCredentials() {
             serverUrl = null; username = null; password = null; apiKey = null; unitSystem = "imperial"
+            syncEnabled = true
             vehicleMappings.clear()
         }
         override fun getVehicleMapping(localVehicleId: Long) = vehicleMappings[localVehicleId]
@@ -287,6 +318,8 @@ class SettingsViewModelTest {
             override fun ignoredMaintenanceRuleDao(): IgnoredMaintenanceRuleDao = FakeIgnoredMaintenanceRuleDao()
             override fun recallCampaignStateDao(): RecallCampaignStateDao = FakeRecallCampaignStateDao()
             override fun lubeLoggerPendingDeleteDao(): com.fearmikey.garage.data.local.dao.LubeLoggerPendingDeleteDao = throw NotImplementedError()
+            override fun knowledgeDao(): com.fearmikey.garage.data.local.dao.KnowledgeDao = throw NotImplementedError()
+            override fun tripDao(): com.fearmikey.garage.data.local.dao.TripDao = throw NotImplementedError()
             override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper {
                 throw UnsupportedOperationException()
             }
@@ -298,9 +331,9 @@ class SettingsViewModelTest {
 
         val backupRepo = BackupRepository(context, dummyDb, ImageStorageManager(context), cloudPrefs)
         val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs)
-        val autoBackupManager = AutoBackupManager(context, dummyDb, backupRepo, cloudPrefs)
-        val notifier = ReminderNotifier(context)
         val lubeLoggerCredsManager = TestLubeLoggerCredentialsManager(context)
+        val autoBackupManager = AutoBackupManager(context, dummyDb, backupRepo, cloudPrefs, lubeLoggerCredsManager)
+        val notifier = ReminderNotifier(context)
 
         val viewModel = SettingsViewModel(
             context = context,
@@ -381,6 +414,8 @@ class SettingsViewModelTest {
             override fun ignoredMaintenanceRuleDao(): IgnoredMaintenanceRuleDao = FakeIgnoredMaintenanceRuleDao()
             override fun recallCampaignStateDao(): RecallCampaignStateDao = FakeRecallCampaignStateDao()
             override fun lubeLoggerPendingDeleteDao(): com.fearmikey.garage.data.local.dao.LubeLoggerPendingDeleteDao = throw NotImplementedError()
+            override fun knowledgeDao(): com.fearmikey.garage.data.local.dao.KnowledgeDao = throw NotImplementedError()
+            override fun tripDao(): com.fearmikey.garage.data.local.dao.TripDao = throw NotImplementedError()
             override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper {
                 throw UnsupportedOperationException()
             }
@@ -391,9 +426,9 @@ class SettingsViewModelTest {
         }
         val backupRepo = BackupRepository(context, dummyDb, ImageStorageManager(context), cloudPrefs)
         val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs)
-        val autoBackupManager = AutoBackupManager(context, dummyDb, backupRepo, cloudPrefs)
-        val notifier = ReminderNotifier(context)
         val lubeLoggerCredsManager = TestLubeLoggerCredentialsManager(context)
+        val autoBackupManager = AutoBackupManager(context, dummyDb, backupRepo, cloudPrefs, lubeLoggerCredsManager)
+        val notifier = ReminderNotifier(context)
 
         val viewModel = SettingsViewModel(
             context = context,
@@ -508,6 +543,8 @@ class SettingsViewModelTest {
             override fun ignoredMaintenanceRuleDao(): IgnoredMaintenanceRuleDao = FakeIgnoredMaintenanceRuleDao()
             override fun recallCampaignStateDao(): RecallCampaignStateDao = FakeRecallCampaignStateDao()
             override fun lubeLoggerPendingDeleteDao(): com.fearmikey.garage.data.local.dao.LubeLoggerPendingDeleteDao = throw NotImplementedError()
+            override fun knowledgeDao(): com.fearmikey.garage.data.local.dao.KnowledgeDao = throw NotImplementedError()
+            override fun tripDao(): com.fearmikey.garage.data.local.dao.TripDao = throw NotImplementedError()
             override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper {
                 throw UnsupportedOperationException()
             }
@@ -518,9 +555,9 @@ class SettingsViewModelTest {
         }
         val backupRepo = BackupRepository(context, dummyDb, ImageStorageManager(context), cloudPrefs)
         val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs)
-        val autoBackupManager = AutoBackupManager(context, dummyDb, backupRepo, cloudPrefs)
-        val notifier = ReminderNotifier(context)
         val lubeLoggerCredsManager = TestLubeLoggerCredentialsManager(context)
+        val autoBackupManager = AutoBackupManager(context, dummyDb, backupRepo, cloudPrefs, lubeLoggerCredsManager)
+        val notifier = ReminderNotifier(context)
 
         val viewModel = SettingsViewModel(
             context = context,
@@ -550,5 +587,220 @@ class SettingsViewModelTest {
 
         assertEquals(60, prefsRepo.docDaysWindowFlow.value)
         assertEquals(60, viewModel.uiState.value.documentExpirationDaysWindow)
+    }
+
+    @Test
+    fun `theme and appearance settings update uiState and propagate to repository`() = runTest {
+        val context = TestContext()
+        val prefsRepo = FakePreferencesRepository()
+        val vehicleRepo = VehicleRepository(
+            vehicleDao = FakeVehicleDao(),
+            vehicleSpecsDao = FakeVehicleSpecsDao(),
+            vehiclePartsDao = FakeVehiclePartsDao(),
+            vehicleRegistrationDao = FakeVehicleRegistrationDao(),
+            vinDecoderApi = FakeVinDecoderApi(),
+        )
+
+        val cloudPrefs = TestCloudBackupPreferencesManager(context)
+        @Suppress("DEPRECATION")
+        val dummyDb = object : GarageDatabase() {
+            override fun vehicleDao(): VehicleDao = FakeVehicleDao()
+            override fun maintenanceDao(): MaintenanceDao = object : MaintenanceDao {
+                override fun getRecordsForVehicleByDate(vehicleId: Long) = MutableStateFlow(emptyList<MaintenanceRecord>())
+                override fun getRecordsForVehicleByMileage(vehicleId: Long) = MutableStateFlow(emptyList<MaintenanceRecord>())
+                override fun getLatestMileageForVehicle(vehicleId: Long) = MutableStateFlow(null)
+                override suspend fun upsert(record: MaintenanceRecord) = 1L
+                override suspend fun update(record: MaintenanceRecord) {}
+                override suspend fun delete(record: MaintenanceRecord) {}
+            }
+            override fun vehicleSpecsDao(): VehicleSpecsDao = FakeVehicleSpecsDao()
+            override fun fuelDao(): FuelDao = object : FuelDao {
+                override fun getRecordsForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<FuelRecord>())
+                override suspend fun upsert(record: FuelRecord) = 1L
+                override suspend fun update(record: FuelRecord) {}
+                override suspend fun delete(record: FuelRecord) {}
+            }
+            override fun chargingDao(): ChargingDao = object : ChargingDao {
+                override fun getRecordsForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<ChargingRecord>())
+                override suspend fun upsert(record: ChargingRecord) = 1L
+                override suspend fun update(record: ChargingRecord) {}
+                override suspend fun delete(record: ChargingRecord) {}
+            }
+            override fun vehiclePartsDao(): VehiclePartsDao = FakeVehiclePartsDao()
+            override fun customMaintenanceRuleDao(): CustomMaintenanceRuleDao = object : CustomMaintenanceRuleDao {
+                override fun getForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<CustomMaintenanceRule>())
+                override suspend fun upsert(rule: CustomMaintenanceRule) = 1L
+                override suspend fun delete(rule: CustomMaintenanceRule) {}
+            }
+            override fun modificationDao(): ModificationDao = object : ModificationDao {
+                override fun getModsForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<ModificationRecord>())
+                override suspend fun getModById(id: Long) = null
+                override suspend fun upsert(mod: ModificationRecord) = 1L
+                override suspend fun update(mod: ModificationRecord) {}
+                override suspend fun delete(mod: ModificationRecord) {}
+            }
+            override fun vehicleRegistrationDao(): VehicleRegistrationDao = FakeVehicleRegistrationDao()
+            override fun ignoredMaintenanceRuleDao(): IgnoredMaintenanceRuleDao = FakeIgnoredMaintenanceRuleDao()
+            override fun recallCampaignStateDao(): RecallCampaignStateDao = FakeRecallCampaignStateDao()
+            override fun lubeLoggerPendingDeleteDao(): com.fearmikey.garage.data.local.dao.LubeLoggerPendingDeleteDao = throw NotImplementedError()
+            override fun knowledgeDao(): com.fearmikey.garage.data.local.dao.KnowledgeDao = throw NotImplementedError()
+            override fun tripDao(): com.fearmikey.garage.data.local.dao.TripDao = throw NotImplementedError()
+            override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper {
+                throw UnsupportedOperationException()
+            }
+            override fun createInvalidationTracker(): InvalidationTracker {
+                return InvalidationTracker(this, emptyMap(), emptyMap(), "vehicles")
+            }
+            override fun clearAllTables() {}
+        }
+
+        val backupRepo = BackupRepository(context, dummyDb, ImageStorageManager(context), cloudPrefs)
+        val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs)
+        val lubeLoggerCredsManager = TestLubeLoggerCredentialsManager(context)
+        val autoBackupManager = AutoBackupManager(context, dummyDb, backupRepo, cloudPrefs, lubeLoggerCredsManager)
+        val notifier = ReminderNotifier(context)
+
+        val viewModel = SettingsViewModel(
+            context = context,
+            backupRepository = backupRepo,
+            preferencesRepository = prefsRepo,
+            vehicleRepository = vehicleRepo,
+            webDavBackupRepository = webDavRepo,
+            cloudBackupPreferencesManager = cloudPrefs,
+            autoBackupManager = autoBackupManager,
+            reminderNotifier = notifier,
+            obdConnectionManager = ObdConnectionManager(context),
+            lubeLoggerCredentialsManager = lubeLoggerCredsManager
+        )
+
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals("system", viewModel.uiState.value.theme)
+        assertEquals(false, viewModel.uiState.value.amoledDark)
+        assertEquals(true, viewModel.uiState.value.dynamicColor)
+        assertEquals("default", viewModel.uiState.value.appPalette)
+
+        viewModel.setTheme("dark")
+        viewModel.setAmoledDark(true)
+        viewModel.setDynamicColor(false)
+        viewModel.setAppPalette("racing_green")
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals("dark", prefsRepo.themeTypeFlow.value)
+        assertEquals(true, prefsRepo.amoledDarkFlow.value)
+        assertEquals(false, prefsRepo.dynamicColorFlow.value)
+        assertEquals("racing_green", prefsRepo.appPaletteFlow.value)
+
+        assertEquals("dark", viewModel.uiState.value.theme)
+        assertEquals(true, viewModel.uiState.value.amoledDark)
+        assertEquals(false, viewModel.uiState.value.dynamicColor)
+        assertEquals("racing_green", viewModel.uiState.value.appPalette)
+        assertEquals(true, viewModel.uiState.value.vehicleThemingEnabled)
+
+        viewModel.setVehicleThemingEnabled(false)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(false, prefsRepo.vehicleThemingEnabledFlow.value)
+        assertEquals(false, viewModel.uiState.value.vehicleThemingEnabled)
+    }
+
+    @Test
+    fun `lubeLogger sync toggle enables and disables sync setting`() = runTest {
+        val context = TestContext()
+        val prefsRepo = FakePreferencesRepository()
+        val vehicleRepo = VehicleRepository(
+            vehicleDao = FakeVehicleDao(),
+            vehicleSpecsDao = FakeVehicleSpecsDao(),
+            vehiclePartsDao = FakeVehiclePartsDao(),
+            vehicleRegistrationDao = FakeVehicleRegistrationDao(),
+            vinDecoderApi = FakeVinDecoderApi(),
+        )
+
+        val cloudPrefs = TestCloudBackupPreferencesManager(context)
+        @Suppress("DEPRECATION")
+        val dummyDb = object : GarageDatabase() {
+            override fun vehicleDao(): VehicleDao = FakeVehicleDao()
+            override fun maintenanceDao(): MaintenanceDao = object : MaintenanceDao {
+                override fun getRecordsForVehicleByDate(vehicleId: Long) = MutableStateFlow(emptyList<MaintenanceRecord>())
+                override fun getRecordsForVehicleByMileage(vehicleId: Long) = MutableStateFlow(emptyList<MaintenanceRecord>())
+                override fun getLatestMileageForVehicle(vehicleId: Long) = MutableStateFlow(null)
+                override suspend fun upsert(record: MaintenanceRecord) = 1L
+                override suspend fun update(record: MaintenanceRecord) {}
+                override suspend fun delete(record: MaintenanceRecord) {}
+            }
+            override fun vehicleSpecsDao(): VehicleSpecsDao = FakeVehicleSpecsDao()
+            override fun fuelDao(): FuelDao = object : FuelDao {
+                override fun getRecordsForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<FuelRecord>())
+                override suspend fun upsert(record: FuelRecord) = 1L
+                override suspend fun update(record: FuelRecord) {}
+                override suspend fun delete(record: FuelRecord) {}
+            }
+            override fun chargingDao(): ChargingDao = object : ChargingDao {
+                override fun getRecordsForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<ChargingRecord>())
+                override suspend fun upsert(record: ChargingRecord) = 1L
+                override suspend fun update(record: ChargingRecord) {}
+                override suspend fun delete(record: ChargingRecord) {}
+            }
+            override fun vehiclePartsDao(): VehiclePartsDao = FakeVehiclePartsDao()
+            override fun customMaintenanceRuleDao(): CustomMaintenanceRuleDao = object : CustomMaintenanceRuleDao {
+                override fun getForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<CustomMaintenanceRule>())
+                override suspend fun upsert(rule: CustomMaintenanceRule) = 1L
+                override suspend fun delete(rule: CustomMaintenanceRule) {}
+            }
+            override fun modificationDao(): ModificationDao = object : ModificationDao {
+                override fun getModsForVehicle(vehicleId: Long) = MutableStateFlow(emptyList<ModificationRecord>())
+                override suspend fun getModById(id: Long) = null
+                override suspend fun upsert(mod: ModificationRecord) = 1L
+                override suspend fun update(mod: ModificationRecord) {}
+                override suspend fun delete(mod: ModificationRecord) {}
+            }
+            override fun vehicleRegistrationDao(): VehicleRegistrationDao = FakeVehicleRegistrationDao()
+            override fun ignoredMaintenanceRuleDao(): IgnoredMaintenanceRuleDao = FakeIgnoredMaintenanceRuleDao()
+            override fun recallCampaignStateDao(): RecallCampaignStateDao = FakeRecallCampaignStateDao()
+            override fun lubeLoggerPendingDeleteDao(): com.fearmikey.garage.data.local.dao.LubeLoggerPendingDeleteDao = throw NotImplementedError()
+            override fun knowledgeDao(): com.fearmikey.garage.data.local.dao.KnowledgeDao = throw NotImplementedError()
+            override fun tripDao(): com.fearmikey.garage.data.local.dao.TripDao = throw NotImplementedError()
+            override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper {
+                throw UnsupportedOperationException()
+            }
+            override fun createInvalidationTracker(): InvalidationTracker {
+                return InvalidationTracker(this, emptyMap(), emptyMap(), "vehicles")
+            }
+            override fun clearAllTables() {}
+        }
+
+        val backupRepo = BackupRepository(context, dummyDb, ImageStorageManager(context), cloudPrefs)
+        val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs)
+        val lubeLoggerCredsManager = TestLubeLoggerCredentialsManager(context)
+        val autoBackupManager = AutoBackupManager(context, dummyDb, backupRepo, cloudPrefs, lubeLoggerCredsManager)
+        val notifier = ReminderNotifier(context)
+
+        val viewModel = SettingsViewModel(
+            context = context,
+            backupRepository = backupRepo,
+            preferencesRepository = prefsRepo,
+            vehicleRepository = vehicleRepo,
+            webDavBackupRepository = webDavRepo,
+            cloudBackupPreferencesManager = cloudPrefs,
+            autoBackupManager = autoBackupManager,
+            reminderNotifier = notifier,
+            obdConnectionManager = ObdConnectionManager(context),
+            lubeLoggerCredentialsManager = lubeLoggerCredsManager
+        )
+
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertEquals(true, viewModel.uiState.value.lubeLoggerSyncEnabled)
+
+        viewModel.setLubeLoggerCredentials("https://ll.example.com", "user", "pass", null, "metric", syncEnabled = false)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(false, lubeLoggerCredsManager.isSyncEnabled())
+        assertEquals(false, viewModel.uiState.value.lubeLoggerSyncEnabled)
+
+        viewModel.setLubeLoggerSyncEnabled(true)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(true, lubeLoggerCredsManager.isSyncEnabled())
+        assertEquals(true, viewModel.uiState.value.lubeLoggerSyncEnabled)
     }
 }

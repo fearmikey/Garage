@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fearmikey.garage.data.local.entity.VehiclePartsInfo
+import com.fearmikey.garage.data.local.entity.VehicleType
 import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.ui.navigation.Destinations
@@ -12,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,6 +29,10 @@ class PartsViewModel @Inject constructor(
 
     val unitSystem: StateFlow<UnitSystem> = preferencesRepository.unitSystem
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), UnitSystem.IMPERIAL)
+
+    val vehicleType: StateFlow<VehicleType> = vehicleRepository.getVehicleById(vehicleId)
+        .map { it?.vehicleType ?: VehicleType.CAR }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), VehicleType.CAR)
 
     val parts: StateFlow<VehiclePartsInfo?> = combine(
         vehicleRepository.getVehicleParts(vehicleId),

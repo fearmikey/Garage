@@ -38,11 +38,18 @@ class StartupViewModelTest {
         val unitsTypeFlow = MutableStateFlow("metric")
         val currencyCodeFlow = MutableStateFlow("USD")
         val themeTypeFlow = MutableStateFlow("system")
+        val amoledDarkFlow = MutableStateFlow(false)
+        val dynamicColorFlow = MutableStateFlow(true)
+        val appPaletteFlow = MutableStateFlow("default")
         val onboardingCompletedFlow = MutableStateFlow(false)
         val defaultVehicleIdFlow = MutableStateFlow<Long?>(null)
 
         var savedUnits: String? = null
         var savedCurrency: String? = null
+        var savedTheme: String? = null
+        var savedAmoledDark: Boolean? = null
+        var savedDynamicColor: Boolean? = null
+        var savedPalette: String? = null
         var isCompleted: Boolean = false
 
         override val unitsType: Flow<String> = unitsTypeFlow
@@ -50,6 +57,9 @@ class StartupViewModelTest {
         override val currencyCode: Flow<String> = currencyCodeFlow
         override val appCurrency: Flow<AppCurrency> = MutableStateFlow(AppCurrency.USD)
         override val themeType: Flow<String> = themeTypeFlow
+        override val amoledDark: Flow<Boolean> = amoledDarkFlow
+        override val dynamicColor: Flow<Boolean> = dynamicColorFlow
+        override val appPalette: Flow<String> = appPaletteFlow
         override val onboardingCompleted: Flow<Boolean> = onboardingCompletedFlow
         override val defaultVehicleId: Flow<Long?> = defaultVehicleIdFlow
         override val maintenanceMileageWindow: Flow<Int> = MutableStateFlow(500)
@@ -68,7 +78,23 @@ class StartupViewModelTest {
         }
 
         override suspend fun setThemeType(theme: String) {
+            savedTheme = theme
             themeTypeFlow.value = theme
+        }
+
+        override suspend fun setAmoledDark(enabled: Boolean) {
+            savedAmoledDark = enabled
+            amoledDarkFlow.value = enabled
+        }
+
+        override suspend fun setDynamicColor(enabled: Boolean) {
+            savedDynamicColor = enabled
+            dynamicColorFlow.value = enabled
+        }
+
+        override suspend fun setAppPalette(palette: String) {
+            savedPalette = palette
+            appPaletteFlow.value = palette
         }
 
         override suspend fun setOnboardingCompleted(completed: Boolean) {
@@ -122,6 +148,31 @@ class StartupViewModelTest {
     }
 
     @Test
+    fun `theme and appearance selections update uiState and repository`() = runTest {
+        val context = TestContext()
+        val fakeRepo = FakePreferencesRepository()
+        val viewModel = StartupViewModel(context, fakeRepo)
+
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        viewModel.selectTheme("dark")
+        viewModel.selectPalette("racing_red")
+        viewModel.toggleDynamicColor(false)
+        viewModel.toggleAmoledDark(true)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals("dark", viewModel.uiState.value.selectedTheme)
+        assertEquals("racing_red", viewModel.uiState.value.selectedPalette)
+        assertEquals(false, viewModel.uiState.value.selectedDynamicColor)
+        assertEquals(true, viewModel.uiState.value.selectedAmoledDark)
+
+        assertEquals("dark", fakeRepo.savedTheme)
+        assertEquals("racing_red", fakeRepo.savedPalette)
+        assertEquals(false, fakeRepo.savedDynamicColor)
+        assertEquals(true, fakeRepo.savedAmoledDark)
+    }
+
+    @Test
     fun `completeStartup saves units, currency, and marks onboarding as completed`() = runTest {
         val context = TestContext()
         val fakeRepo = FakePreferencesRepository()
@@ -131,6 +182,8 @@ class StartupViewModelTest {
 
         viewModel.selectUnits("imperial")
         viewModel.selectCurrency("GBP")
+        viewModel.selectTheme("dark")
+        viewModel.selectPalette("tuner_amber")
 
         var finishedCalled = false
         viewModel.completeStartup {
@@ -141,6 +194,8 @@ class StartupViewModelTest {
 
         assertEquals("imperial", fakeRepo.savedUnits)
         assertEquals("GBP", fakeRepo.savedCurrency)
+        assertEquals("dark", fakeRepo.savedTheme)
+        assertEquals("tuner_amber", fakeRepo.savedPalette)
         assertTrue(fakeRepo.isCompleted)
         assertTrue(finishedCalled)
     }

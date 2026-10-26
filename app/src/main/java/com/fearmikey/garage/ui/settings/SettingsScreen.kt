@@ -1,68 +1,32 @@
-@file:Suppress("DEPRECATION")
-
 package com.fearmikey.garage.ui.settings
 
-import android.Manifest
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
-import android.text.format.DateUtils
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.ui.draw.clip
-import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerSyncStatus
 import androidx.compose.foundation.lazy.rememberLazyListState
-import com.fearmikey.garage.ui.components.verticalScrollbar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.Comment
 import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.filled.AttachMoney
-import androidx.compose.material.icons.filled.Badge
 import androidx.compose.material.icons.filled.Bluetooth
 import androidx.compose.material.icons.filled.BugReport
-import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.CloudSync
 import androidx.compose.material.icons.filled.Code
-import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.DirectionsCar
-import androidx.compose.material.icons.filled.FileDownload
-import androidx.compose.material.icons.filled.FileUpload
-import androidx.compose.material.icons.filled.FolderZip
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.LocalCafe
-import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Palette
-import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Straighten
-import androidx.compose.material.icons.filled.TrendingUp
-import androidx.core.os.LocaleListCompat
-import com.fearmikey.garage.ui.components.CurrencySelectionDialog
-import com.fearmikey.garage.ui.util.AppCurrency
-import com.fearmikey.garage.ui.util.UnitConverter
-import com.fearmikey.garage.ui.util.UnitSystem
-import androidx.documentfile.provider.DocumentFile
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -70,10 +34,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Slider
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
@@ -81,44 +42,36 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.os.LocaleListCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fearmikey.garage.BuildConfig
-import com.fearmikey.garage.R
 import com.fearmikey.garage.config.FlavorConfig
-import com.fearmikey.garage.data.local.entity.Vehicle
+import com.fearmikey.garage.R
+import com.fearmikey.garage.ui.components.CurrencySelectionDialog
+import com.fearmikey.garage.ui.components.verticalScrollbar
 import com.fearmikey.garage.ui.obd.ObdDevicePickerDialog
 import com.fearmikey.garage.ui.obd.hasObdBluetoothPermissions
-import com.fearmikey.garage.ui.theme.GarageTheme
-import com.fearmikey.garage.ui.util.AppRestarter
-import kotlin.math.abs
-import kotlin.math.roundToInt
+import com.fearmikey.garage.ui.util.AppCurrency
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     onBack: () -> Unit,
+    onOpenAppearance: () -> Unit = {},
+    onOpenReminders: () -> Unit = {},
+    onOpenBackup: () -> Unit = {},
     onOpenStartup: () -> Unit = {},
-    onOpenDuplicates: () -> Unit = {},
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -129,47 +82,10 @@ fun SettingsScreen(
     var showLanguageDialog by remember { mutableStateOf(false) }
     var showUnitsDialog by remember { mutableStateOf(false) }
     var showCurrencyDialog by remember { mutableStateOf(false) }
-    var showThemeDialog by remember { mutableStateOf(false) }
     var showDefaultVehicleDialog by remember { mutableStateOf(false) }
-    var showMaintenanceMileageDialog by remember { mutableStateOf(false) }
-    var showMaintenanceDaysDialog by remember { mutableStateOf(false) }
-    var showDocumentDaysDialog by remember { mutableStateOf(false) }
-    var showClearDataDialog by remember { mutableStateOf(false) }
     var showAboutDialog by remember { mutableStateOf(false) }
-    var showCloudBackupDialog by remember { mutableStateOf(false) }
-    var showLubeLoggerDialog by remember { mutableStateOf(false) }
-    var showLocalBackupDialog by remember { mutableStateOf(false) }
     var showBugReportFeedbackDialog by remember { mutableStateOf(false) }
     var showObdAdapterDialog by remember { mutableStateOf(false) }
-
-    val exportLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.CreateDocument("application/zip"),
-    ) { uri -> uri?.let(viewModel::exportBackup) }
-
-    val importLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.OpenDocument(),
-    ) { uri -> uri?.let(viewModel::importBackup) }
-
-    val localBackupFolderLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.OpenDocumentTree(),
-    ) { uri -> uri?.let(viewModel::setLocalBackupFolderUri) }
-
-    val notificationPermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-    ) { viewModel.refreshNotificationPermissionState() }
-
-    val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                viewModel.refreshNotificationPermissionState()
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
 
     LaunchedEffect(uiState.message) {
         uiState.message?.let {
@@ -198,7 +114,7 @@ fun SettingsScreen(
                 .padding(innerPadding)
                 .verticalScrollbar(listState),
         ) {
-            // Preferences Section
+            // General Preferences
             item {
                 SettingsCategoryHeader(stringResource(R.string.settings_user_preferences))
             }
@@ -250,16 +166,6 @@ fun SettingsScreen(
                 )
             }
             item {
-                ListItem(
-                    headlineContent = { Text(stringResource(R.string.settings_theme)) },
-                    supportingContent = { Text(uiState.theme.replaceFirstChar { it.uppercase() }) },
-                    leadingContent = { Icon(Icons.Filled.Palette, contentDescription = null) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { showThemeDialog = true },
-                )
-            }
-            item {
                 val selectedVehicleName = uiState.vehicles.find { it.id == uiState.defaultVehicleId }?.let { vehicle ->
                     listOfNotNull(vehicle.year?.toString(), vehicle.make, vehicle.model)
                         .joinToString(" ")
@@ -299,257 +205,55 @@ fun SettingsScreen(
 
             item { HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp)) }
 
-            // Reminders & Expirations Section
+            // Appearance & Customization
             item {
-                SettingsCategoryHeader("Reminders & Expirations")
+                SettingsCategoryHeader("Appearance & Customization")
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Document Renewal Reminders") },
-                    supportingContent = { Text("Notify for expiring vehicle registrations, smog tests, inspections, insurance, permits, and driver's licenses.") },
-                    leadingContent = { Icon(Icons.Filled.Badge, contentDescription = null) },
-                    trailingContent = {
-                        Switch(
-                            checked = uiState.documentExpirationRemindersEnabled,
-                            onCheckedChange = { viewModel.setDocumentExpirationRemindersEnabled(it) },
-                        )
-                    },
+                    headlineContent = { Text(stringResource(R.string.settings_appearance_theme)) },
+                    supportingContent = { Text("App theme, Pure Black AMOLED, Dynamic Color, accent colors, and vehicle tinting") },
+                    leadingContent = { Icon(Icons.Filled.Palette, contentDescription = null) },
+                    trailingContent = { Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { viewModel.setDocumentExpirationRemindersEnabled(!uiState.documentExpirationRemindersEnabled) },
+                        .clickable { onOpenAppearance() },
                 )
             }
-            if (uiState.documentExpirationRemindersEnabled) {
-                item {
-                    val daysText = if (uiState.documentExpirationDaysWindow == 1) "1 day" else "${uiState.documentExpirationDaysWindow} days"
-                    ListItem(
-                        headlineContent = { Text("Document Expiration Notice Window") },
-                        supportingContent = { Text("Notify when document expiration is due within $daysText") },
-                        leadingContent = { Icon(Icons.Filled.CalendarToday, contentDescription = null) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { showDocumentDaysDialog = true },
-                    )
-                }
-            }
+
+            item { HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp)) }
+
+            // Reminders & Notifications
             item {
-                val unitSystem = UnitSystem.fromString(uiState.units)
-                val distanceText = UnitConverter.formatDistance(uiState.maintenanceMileageWindow, unitSystem)
-                ListItem(
-                    headlineContent = { Text("Maintenance Mileage Notice Window") },
-                    supportingContent = { Text("Notify when service is due within $distanceText") },
-                    leadingContent = { Icon(Icons.Filled.Straighten, contentDescription = null) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { showMaintenanceMileageDialog = true },
-                )
+                SettingsCategoryHeader("Reminders & Notifications")
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Show Fuel Trend Graph") },
-                    supportingContent = { Text("Display the fuel trend sparkline graph on vehicle cards") },
-                    leadingContent = { Icon(Icons.Filled.TrendingUp, contentDescription = null) },
-                    trailingContent = {
-                        Switch(
-                            checked = uiState.showFuelTrendGraph,
-                            onCheckedChange = { viewModel.setShowFuelTrendGraph(it) },
-                        )
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { viewModel.setShowFuelTrendGraph(!uiState.showFuelTrendGraph) },
-                )
-            }
-            item {
-                ListItem(
-                    headlineContent = { Text("Show Fleet Overview") },
-                    supportingContent = { Text("Display the summary card with fleet averages on the dashboard") },
-                    leadingContent = { Icon(Icons.Filled.DirectionsCar, contentDescription = null) },
-                    trailingContent = {
-                        Switch(
-                            checked = uiState.showFleetOverview,
-                            onCheckedChange = { viewModel.setShowFleetOverview(it) },
-                        )
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { viewModel.setShowFleetOverview(!uiState.showFleetOverview) },
-                )
-            }
-            item {
-                val daysText = if (uiState.maintenanceDaysWindow == 1) "1 day" else "${uiState.maintenanceDaysWindow} days"
-                ListItem(
-                    headlineContent = { Text("Maintenance Time Notice Window") },
-                    supportingContent = { Text("Notify when service is due within $daysText") },
-                    leadingContent = { Icon(Icons.Filled.Schedule, contentDescription = null) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { showMaintenanceDaysDialog = true },
-                )
-            }
-            item {
-                ListItem(
-                    headlineContent = { Text("Notification Permission") },
-                    supportingContent = {
-                        Text(
-                            if (uiState.notificationPermissionGranted) {
-                                "Granted — reminders and expiration alerts can be delivered."
-                            } else {
-                                "Not granted — tap to allow Garage to send notifications."
-                            }
-                        )
-                    },
+                    headlineContent = { Text(stringResource(R.string.settings_reminders_notifications)) },
+                    supportingContent = { Text("Document expirations, maintenance notice windows, and notification permissions") },
                     leadingContent = { Icon(Icons.Filled.Notifications, contentDescription = null) },
+                    trailingContent = { Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable {
-                            if (!uiState.notificationPermissionGranted) {
-                                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                            } else {
-                                val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
-                                    putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
-                                }
-                                context.startActivity(intent)
-                            }
-                        },
-                )
-            }
-            item {
-                ListItem(
-                    headlineContent = { Text("Send Test Notification") },
-                    supportingContent = { Text("Send a sample notification to verify push notifications are working correctly.") },
-                    leadingContent = { Icon(Icons.Filled.NotificationsActive, contentDescription = null) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { viewModel.sendTestNotification() },
+                        .clickable { onOpenReminders() },
                 )
             }
 
             item { HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp)) }
 
-            // Integrations Section
+            // Data & Synchronization
             item {
-                SettingsCategoryHeader("Integrations")
-            }
-            item {
-                LubeLoggerStatusItem(
-                    configured = uiState.lubeLoggerConfigured,
-                    serverUrl = uiState.lubeLoggerServerUrl,
-                    status = uiState.lubeLoggerStatus,
-                    onClick = { showLubeLoggerDialog = true },
-                )
-            }
-            if (uiState.lubeLoggerConfigured) {
-                item {
-                    val syncing = uiState.lubeLoggerStatus is LubeLoggerSyncStatus.Syncing
-                    ListItem(
-                        headlineContent = { Text(if (syncing) "Syncing with LubeLogger…" else "Sync LubeLogger now") },
-                        supportingContent = {
-                            Text(
-                                if (syncing) "Exchanging records with your LubeLogger server."
-                                else "Manually trigger a sync with your LubeLogger server.",
-                            )
-                        },
-                        leadingContent = {
-                            if (syncing) {
-                                CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
-                            } else {
-                                Icon(Icons.Filled.CloudSync, contentDescription = null)
-                            }
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable(enabled = !syncing) { viewModel.syncLubeLoggerNow() },
-                    )
-                }
-                item {
-                    ListItem(
-                        headlineContent = { Text("Find duplicate records") },
-                        supportingContent = { Text("Review and remove identical fuel or maintenance records.") },
-                        leadingContent = { Icon(Icons.Filled.DeleteForever, contentDescription = null) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { onOpenDuplicates() },
-                    )
-                }
-            }
-
-            item { HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp)) }
-
-            // Data & Backup Section
-            item {
-                SettingsCategoryHeader("Data & Privacy")
+                SettingsCategoryHeader("Data & Synchronization")
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Export backup") },
-                    supportingContent = { Text("Save all vehicles, maintenance history, reminders and photos to a zip file.") },
-                    leadingContent = { Icon(Icons.Filled.FileDownload, contentDescription = null) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(enabled = !uiState.isBusy) { exportLauncher.launch("garage-backup.zip") },
-                )
-            }
-            item {
-                ListItem(
-                    headlineContent = { Text("Import backup") },
-                    supportingContent = { Text("Restore vehicles, maintenance history, reminders and photos from a backup zip. This replaces all current data.") },
-                    leadingContent = { Icon(Icons.Filled.FileUpload, contentDescription = null) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(enabled = !uiState.isBusy) { importLauncher.launch(arrayOf("application/zip")) },
-                )
-            }
-            item {
-                ListItem(
-                    headlineContent = { Text("Local Folder Auto-Backup") },
-                    supportingContent = { Text(localBackupStatusText(uiState, context)) },
-                    leadingContent = { Icon(Icons.Filled.FolderZip, contentDescription = null) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { showLocalBackupDialog = true },
-                )
-            }
-            item {
-                ListItem(
-                    headlineContent = { Text("WebDAV Cloud Sync") },
-                    supportingContent = { Text(cloudBackupStatusText(uiState)) },
+                    headlineContent = { Text(stringResource(R.string.settings_data_sync)) },
+                    supportingContent = { Text("Export/import backups, local auto-backup, WebDAV cloud sync, LubeLogger, clear data") },
                     leadingContent = { Icon(Icons.Filled.CloudSync, contentDescription = null) },
+                    trailingContent = { Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { showCloudBackupDialog = true },
-                )
-            }
-            item {
-                val cloudSyncReady = uiState.cloudSyncEnabled &&
-                    uiState.webdavUrl.isNotBlank() &&
-                    uiState.webdavUsername.isNotBlank() &&
-                    uiState.webdavPasswordSet
-                ListItem(
-                    headlineContent = { Text("Sync now") },
-                    supportingContent = { Text("Manually upload a backup to your WebDAV server.") },
-                    leadingContent = { Icon(Icons.Filled.CloudSync, contentDescription = null) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(enabled = cloudSyncReady && !uiState.isBusy && !uiState.isSyncing) {
-                            viewModel.syncNow()
-                        },
-                )
-            }
-            item {
-                ListItem(
-                    headlineContent = { Text("Clear All Data") },
-                    supportingContent = { Text("Permanently delete all vehicles, records, reminders, and photos.") },
-                    leadingContent = {
-                        Icon(
-                            Icons.Filled.DeleteForever,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.error
-                        )
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(enabled = !uiState.isBusy) { showClearDataDialog = true },
+                        .clickable { onOpenBackup() },
                 )
             }
 
@@ -594,7 +298,7 @@ fun SettingsScreen(
 
             item { HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp)) }
 
-            // Support & Onboarding Section
+            // Support & Legal Section
             item {
                 SettingsCategoryHeader("Support & Legal")
             }
@@ -644,14 +348,6 @@ fun SettingsScreen(
                         .clickable { onOpenStartup() },
                 )
             }
-
-            if (uiState.isBusy) {
-                item {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        CircularProgressIndicator()
-                    }
-                }
-            }
         }
     }
 
@@ -686,16 +382,6 @@ fun SettingsScreen(
             selectedCurrencyCode = uiState.currency,
             onCurrencySelected = { viewModel.setCurrency(it) },
             onDismissRequest = { showCurrencyDialog = false },
-        )
-    }
-
-    if (showThemeDialog) {
-        SingleChoiceDialog(
-            title = "Theme",
-            options = listOf("light", "dark", "system"),
-            selectedOption = uiState.theme,
-            onOptionSelected = { viewModel.setTheme(it) },
-            onDismissRequest = { showThemeDialog = false }
         )
     }
 
@@ -738,54 +424,6 @@ fun SettingsScreen(
         )
     }
 
-    if (showMaintenanceMileageDialog) {
-        MaintenanceMileageDialog(
-            currentMilesWindow = uiState.maintenanceMileageWindow,
-            unitSystem = UnitSystem.fromString(uiState.units),
-            onOptionSelected = { viewModel.setMaintenanceMileageWindow(it) },
-            onDismissRequest = { showMaintenanceMileageDialog = false },
-        )
-    }
-
-    if (showMaintenanceDaysDialog) {
-        MaintenanceDaysDialog(
-            currentDaysWindow = uiState.maintenanceDaysWindow,
-            onOptionSelected = { viewModel.setMaintenanceDaysWindow(it) },
-            onDismissRequest = { showMaintenanceDaysDialog = false },
-        )
-    }
-
-    if (showDocumentDaysDialog) {
-        DocumentDaysDialog(
-            currentDaysWindow = uiState.documentExpirationDaysWindow,
-            onOptionSelected = { viewModel.setDocumentExpirationDaysWindow(it) },
-            onDismissRequest = { showDocumentDaysDialog = false },
-        )
-    }
-
-    if (showClearDataDialog) {
-        AlertDialog(
-            onDismissRequest = { showClearDataDialog = false },
-            title = { Text("Clear All Data?") },
-            text = { Text("This will permanently delete all vehicles, maintenance records, reminders, and photos stored in Garage. This action cannot be undone.") },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showClearDataDialog = false
-                        viewModel.clearAllData()
-                    }
-                ) {
-                    Text("Delete Everything", color = MaterialTheme.colorScheme.error)
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showClearDataDialog = false }) {
-                    Text("Cancel")
-                }
-            }
-        )
-    }
-
     if (showAboutDialog) {
         AlertDialog(
             onDismissRequest = { showAboutDialog = false },
@@ -808,56 +446,6 @@ fun SettingsScreen(
                     Text("Close")
                 }
             }
-        )
-    }
-
-    if (uiState.importSucceeded) {
-        AlertDialog(
-            onDismissRequest = {},
-            title = { Text("Restart required") },
-            text = { Text("Your data has been restored. Garage needs to restart to load it.") },
-            confirmButton = {
-                TextButton(onClick = { AppRestarter.restart(context) }) {
-                    Text("Restart now")
-                }
-            },
-        )
-    }
-
-    if (showLubeLoggerDialog) {
-        LubeLoggerConfigDialog(
-            initialUrl = uiState.lubeLoggerServerUrl,
-            initialUsername = uiState.lubeLoggerUsername,
-            initialApiKey = uiState.lubeLoggerApiKey,
-            initialUnitSystem = uiState.lubeLoggerUnitSystem,
-            onDismissRequest = { showLubeLoggerDialog = false },
-            onSave = { url, username, password, apiKey, unitSystem ->
-                viewModel.setLubeLoggerCredentials(url, username, password, apiKey, unitSystem)
-                showLubeLoggerDialog = false
-            }
-        )
-    }
-
-    if (showCloudBackupDialog) {
-        CloudBackupConfigDialog(
-            uiState = uiState,
-            onSave = { enabled, url, username, password ->
-                viewModel.setCloudSyncEnabled(enabled)
-                viewModel.setWebdavCredentials(url, username, password)
-                showCloudBackupDialog = false
-            },
-            onTestConnection = { url, username, password -> viewModel.testConnection(url, username, password) },
-            onDismissRequest = { showCloudBackupDialog = false },
-        )
-    }
-
-    if (showLocalBackupDialog) {
-        LocalBackupConfigDialog(
-            uiState = uiState,
-            onSetEnabled = viewModel::setLocalBackupEnabled,
-            onSelectFolder = { localBackupFolderLauncher.launch(null) },
-            onBackupNow = viewModel::triggerLocalBackupNow,
-            onDismissRequest = { showLocalBackupDialog = false },
         )
     }
 
@@ -906,619 +494,5 @@ fun SettingsScreen(
                 }
             }
         )
-    }
-}
-
-private fun cloudBackupStatusText(uiState: SettingsUiState): String {
-    if (!uiState.cloudSyncEnabled) return "Disabled"
-    val error = uiState.lastSyncError
-    if (error != null) return "Enabled — sync failed: $error"
-    val lastSync = uiState.lastSyncTimestamp
-    return if (lastSync != null) {
-        val relative = DateUtils.getRelativeTimeSpanString(lastSync, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS)
-        "Enabled — last synced $relative"
-    } else {
-        "Enabled — not yet synced"
-    }
-}
-
-private fun localBackupStatusText(uiState: SettingsUiState, context: Context): String {
-    if (!uiState.localBackupEnabled) return "Disabled"
-    if (uiState.localBackupFolderUri.isBlank()) return "Enabled — no folder selected"
-    val folderName = formatFolderUriForDisplay(context, uiState.localBackupFolderUri)
-    val error = uiState.lastLocalBackupError
-    if (error != null) return "Folder: $folderName — Failed: $error"
-    val lastBackup = uiState.lastLocalBackupTimestamp
-    return if (lastBackup != null) {
-        val relative = DateUtils.getRelativeTimeSpanString(
-            lastBackup,
-            System.currentTimeMillis(),
-            DateUtils.MINUTE_IN_MILLIS
-        )
-        "Folder: $folderName — Last saved $relative"
-    } else {
-        "Folder: $folderName — Not yet backed up"
-    }
-}
-
-fun formatFolderUriForDisplay(context: Context, uriString: String): String {
-    if (uriString.isBlank()) return "No folder selected"
-    return try {
-        val uri = Uri.parse(uriString)
-        val docFile = DocumentFile.fromTreeUri(context, uri)
-        val name = docFile?.name
-        if (!name.isNullOrBlank()) {
-            name
-        } else {
-            val decoded = Uri.decode(uriString)
-            val treePart = decoded.substringAfter("/tree/").substringAfter(":")
-            if (treePart.isNotBlank() && treePart != uriString) {
-                treePart
-            } else {
-                "Selected Folder"
-            }
-        }
-    } catch (_: Exception) {
-        "Selected Folder"
-    }
-}
-
-@Composable
-private fun SettingsCategoryHeader(title: String) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.labelLarge,
-        color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 8.dp)
-    )
-}
-
-@Composable
-private fun DefaultVehicleDialog(
-    vehicles: List<Vehicle>,
-    selectedVehicleId: Long?,
-    onVehicleSelected: (Long?) -> Unit,
-    onDismissRequest: () -> Unit,
-) {
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        title = { Text("Default Vehicle") },
-        text = {
-            Column {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { onVehicleSelected(null) }
-                        .padding(vertical = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    RadioButton(
-                        selected = selectedVehicleId == null,
-                        onClick = { onVehicleSelected(null) },
-                    )
-                    Spacer(modifier = Modifier.padding(start = 8.dp))
-                    Text(text = "First vehicle added (default)")
-                }
-
-                vehicles.forEach { vehicle ->
-                    val vehicleName = listOfNotNull(vehicle.year?.toString(), vehicle.make, vehicle.model)
-                        .joinToString(" ")
-                        .ifBlank { vehicle.vin }
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { onVehicleSelected(vehicle.id) }
-                            .padding(vertical = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        RadioButton(
-                            selected = vehicle.id == selectedVehicleId,
-                            onClick = { onVehicleSelected(vehicle.id) },
-                        )
-                        Spacer(modifier = Modifier.padding(start = 8.dp))
-                        Text(text = vehicleName)
-                    }
-                }
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text("Cancel")
-            }
-        },
-    )
-}
-
-@Composable
-private fun LanguageSelectionDialog(
-    selectedLangCode: String,
-    onLanguageSelected: (String) -> Unit,
-    onDismissRequest: () -> Unit,
-) {
-    val languageOptions = listOf(
-        "" to stringResource(R.string.language_system_default),
-        "en" to stringResource(R.string.language_english),
-        "fr" to stringResource(R.string.language_french),
-        "de" to stringResource(R.string.language_german),
-        "pl" to stringResource(R.string.language_polish),
-        "es" to stringResource(R.string.language_spanish),
-        "it" to stringResource(R.string.language_italian),
-        "pt" to stringResource(R.string.language_portuguese),
-        "nl" to stringResource(R.string.language_dutch),
-        "ru" to stringResource(R.string.language_russian),
-        "tr" to stringResource(R.string.language_turkish),
-    )
-
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        title = { Text(stringResource(R.string.language_selection)) },
-        text = {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState()),
-            ) {
-                languageOptions.forEach { (code, name) ->
-                    val isSelected = code == selectedLangCode
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(12.dp))
-                            .clickable {
-                                onLanguageSelected(code)
-                                onDismissRequest()
-                            }
-                            .padding(vertical = 10.dp, horizontal = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        RadioButton(
-                            selected = isSelected,
-                            onClick = {
-                                onLanguageSelected(code)
-                                onDismissRequest()
-                            },
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Text(
-                            text = name,
-                            style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                        )
-                    }
-                }
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text(stringResource(R.string.obd_cancel))
-            }
-        },
-    )
-}
-
-@Composable
-private fun SingleChoiceDialog(
-    title: String,
-    options: List<String>,
-    selectedOption: String,
-    onOptionSelected: (String) -> Unit,
-    onDismissRequest: () -> Unit,
-) {
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        title = { Text(title) },
-        text = {
-            Column {
-                options.forEach { option ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                onOptionSelected(option)
-                                onDismissRequest()
-                            }
-                            .padding(vertical = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = option == selectedOption,
-                            onClick = {
-                                onOptionSelected(option)
-                                onDismissRequest()
-                            }
-                        )
-                        Spacer(modifier = Modifier.padding(start = 8.dp))
-                        Text(text = option.replaceFirstChar { it.uppercase() })
-                    }
-                }
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text("Cancel")
-            }
-        }
-    )
-}
-
-@Composable
-private fun CloudBackupConfigDialog(
-    uiState: SettingsUiState,
-    onSave: (enabled: Boolean, url: String, username: String, password: String) -> Unit,
-    onTestConnection: (url: String, username: String, password: String) -> Unit,
-    onDismissRequest: () -> Unit,
-) {
-    var enabled by remember { mutableStateOf(uiState.cloudSyncEnabled) }
-    var url by remember { mutableStateOf(uiState.webdavUrl) }
-    var username by remember { mutableStateOf(uiState.webdavUsername) }
-    var password by remember { mutableStateOf("") }
-    var showHttpWarning by remember { mutableStateOf(false) }
-
-    fun doSave() {
-        onSave(enabled, url, username, password)
-    }
-
-    fun handleSaveClick() {
-        val isHttp = enabled && url.isNotBlank() && !url.trim().startsWith("https://", ignoreCase = true)
-        if (isHttp) {
-            showHttpWarning = true
-        } else {
-            doSave()
-        }
-    }
-
-    if (showHttpWarning) {
-        AlertDialog(
-            onDismissRequest = { showHttpWarning = false },
-            title = { Text("Insecure Connection Warning") },
-            text = {
-                Text("You are connecting over an unencrypted HTTP connection. To keep your cloud backup credentials and data secure, ensure you are using a secure private VPN connection (such as Tailscale or WireGuard) to your server.")
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showHttpWarning = false
-                        doSave()
-                    }
-                ) {
-                    Text("Continue")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showHttpWarning = false }) {
-                    Text("Cancel")
-                }
-            }
-        )
-    }
-
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        title = { Text("Auto-Backup Configuration") },
-        text = {
-            Column {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text("Enable cloud sync", modifier = Modifier.weight(1f))
-                    Switch(checked = enabled, onCheckedChange = { enabled = it })
-                }
-                Spacer(modifier = Modifier.padding(top = 8.dp))
-                OutlinedTextField(
-                    value = url,
-                    onValueChange = { url = it },
-                    label = { Text("Server URL") },
-                    placeholder = { Text("https://cloud.example.com/remote.php/dav/files/user/") },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-                Spacer(modifier = Modifier.padding(top = 8.dp))
-                OutlinedTextField(
-                    value = username,
-                    onValueChange = { username = it },
-                    label = { Text("Username") },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-                Spacer(modifier = Modifier.padding(top = 8.dp))
-                OutlinedTextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    label = { Text(if (uiState.webdavPasswordSet) "Password (unchanged)" else "Password") },
-                    singleLine = true,
-                    visualTransformation = PasswordVisualTransformation(),
-                    modifier = Modifier.fillMaxWidth(),
-                )
-                Spacer(modifier = Modifier.padding(top = 8.dp))
-                TextButton(
-                    onClick = { onTestConnection(url, username, password) },
-                    enabled = url.isNotBlank() && username.isNotBlank(),
-                ) {
-                    Text("Test connection")
-                }
-            }
-        },
-        confirmButton = {
-            TextButton(
-                onClick = ::handleSaveClick,
-                enabled = url.isNotBlank() && username.isNotBlank(),
-            ) {
-                Text("Save")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text("Cancel")
-            }
-        },
-    )
-}
-
-@Composable
-private fun LocalBackupConfigDialog(
-    uiState: SettingsUiState,
-    onSetEnabled: (Boolean) -> Unit,
-    onSelectFolder: () -> Unit,
-    onBackupNow: () -> Unit,
-    onDismissRequest: () -> Unit,
-) {
-    val context = LocalContext.current
-    var enabled by remember { mutableStateOf(uiState.localBackupEnabled) }
-
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        title = { Text("Local Folder Auto-Backup") },
-        text = {
-            Column {
-                Text(
-                    text = "Automatically saves a backup zip (garage-backup.zip) to a folder on your phone whenever changes are made in Garage. You can sync this folder with custom or 3rd-party cloud storage apps.",
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text("Enable auto-backup", modifier = Modifier.weight(1f))
-                    Switch(
-                        checked = enabled,
-                        onCheckedChange = {
-                            enabled = it
-                            onSetEnabled(it)
-                        },
-                    )
-                }
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    text = "Backup Folder:",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = formatFolderUriForDisplay(context, uiState.localBackupFolderUri),
-                    style = MaterialTheme.typography.bodyLarge,
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                OutlinedButton(
-                    onClick = onSelectFolder,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Text(if (uiState.localBackupFolderUri.isBlank()) "Select Folder" else "Change Folder")
-                }
-                if (uiState.localBackupEnabled && uiState.localBackupFolderUri.isNotBlank()) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    OutlinedButton(
-                        onClick = onBackupNow,
-                        enabled = !uiState.isBusy,
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Text("Backup to Folder Now")
-                    }
-                }
-                val status = uiState.lastLocalBackupError?.let { "Status: $it" }
-                    ?: uiState.lastLocalBackupTimestamp?.let {
-                        val relative = DateUtils.getRelativeTimeSpanString(
-                            it,
-                            System.currentTimeMillis(),
-                            DateUtils.MINUTE_IN_MILLIS
-                        )
-                        "Last saved: $relative"
-                    }
-                if (status != null) {
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Text(
-                        text = status,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = if (uiState.lastLocalBackupError != null) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text("Close")
-            }
-        },
-    )
-}
-
-@Composable
-private fun MaintenanceMileageDialog(
-    currentMilesWindow: Int,
-    unitSystem: UnitSystem,
-    onOptionSelected: (miles: Int) -> Unit,
-    onDismissRequest: () -> Unit,
-) {
-    val options = if (unitSystem == UnitSystem.IMPERIAL) {
-        listOf(
-            250 to "250 mi",
-            500 to "500 mi",
-            1000 to "1,000 mi",
-        )
-    } else {
-        listOf(
-            UnitConverter.kmToMiles(250) to "250 km",
-            UnitConverter.kmToMiles(500) to "500 km",
-            UnitConverter.kmToMiles(800) to "800 km (~500 mi equivalent)",
-            UnitConverter.kmToMiles(1000) to "1,000 km",
-            UnitConverter.kmToMiles(1600) to "1,600 km (~1,000 mi equivalent)",
-        )
-    }
-
-    val selectedOptionMiles = options.minByOrNull { abs(it.first - currentMilesWindow) }?.first ?: 500
-
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        title = { Text("Maintenance Mileage Notification") },
-        text = {
-            Column {
-                Text(
-                    text = "Notify when maintenance is due within:",
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                options.forEach { (miles, label) ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                onOptionSelected(miles)
-                                onDismissRequest()
-                            }
-                            .padding(vertical = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        RadioButton(
-                            selected = miles == selectedOptionMiles,
-                            onClick = {
-                                onOptionSelected(miles)
-                                onDismissRequest()
-                            },
-                        )
-                        Spacer(modifier = Modifier.padding(start = 8.dp))
-                        Text(text = label)
-                    }
-                }
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text("Cancel")
-            }
-        },
-    )
-}
-
-@Composable
-private fun MaintenanceDaysDialog(
-    currentDaysWindow: Int,
-    onOptionSelected: (days: Int) -> Unit,
-    onDismissRequest: () -> Unit,
-) {
-    var selectedDays by remember { mutableFloatStateOf(currentDaysWindow.coerceIn(1, 30).toFloat()) }
-
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        title = { Text("Maintenance Time Notification") },
-        text = {
-            Column {
-                Text(
-                    text = "Notify when maintenance is due within:",
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                val currentDaysInt = selectedDays.roundToInt()
-                val daysLabel = if (currentDaysInt == 1) "1 day" else "$currentDaysInt days"
-                Text(
-                    text = daysLabel,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Slider(
-                    value = selectedDays,
-                    onValueChange = { selectedDays = it },
-                    valueRange = 1f..30f,
-                    steps = 28,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-            }
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    onOptionSelected(selectedDays.roundToInt())
-                    onDismissRequest()
-                }
-            ) {
-                Text("Save")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text("Cancel")
-            }
-        },
-    )
-}
-
-@Composable
-private fun DocumentDaysDialog(
-    currentDaysWindow: Int,
-    onOptionSelected: (days: Int) -> Unit,
-    onDismissRequest: () -> Unit,
-) {
-    val options = listOf(7, 14, 30, 60, 90)
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        title = { Text("Document Expiration Notice Window") },
-        text = {
-            Column {
-                options.forEach { days ->
-                    val label = if (days == 1) "1 day before" else "$days days before"
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                onOptionSelected(days)
-                                onDismissRequest()
-                            }
-                            .padding(vertical = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        RadioButton(
-                            selected = (days == currentDaysWindow),
-                            onClick = {
-                                onOptionSelected(days)
-                                onDismissRequest()
-                            },
-                        )
-                        Text(
-                            text = label,
-                            style = MaterialTheme.typography.bodyLarge,
-                            modifier = Modifier.padding(start = 8.dp),
-                        )
-                    }
-                }
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text("Cancel")
-            }
-        },
-    )
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-private fun SettingsScreenPreview() {
-    GarageTheme {
-        // The interactive screen requires a real Activity for its document
-        // picker launchers, so this preview just verifies the theme compiles.
     }
 }

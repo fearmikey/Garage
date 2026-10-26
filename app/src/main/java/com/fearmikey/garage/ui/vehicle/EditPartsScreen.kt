@@ -176,6 +176,8 @@ private fun EditPartsContent(
     var wiperBladeSizeRear by remember(effectiveInitial) { mutableStateOf(effectiveInitial.wiperBladeSizeRear.orEmpty()) }
 
     var showAutoFillWarningDialog by remember { mutableStateOf(value = false) }
+    // Cabin air filters and wipers don't exist on motorcycles.
+    val isMotorcycle = uiState.vehicle?.isMotorcycle == true
 
     fun applyEstimates(estimates: VehiclePartsInfo, overwriteAll: Boolean = false) {
         if (overwriteAll || oilViscosity.isBlank()) oilViscosity = estimates.oilViscosity.orEmpty()
@@ -260,12 +262,14 @@ private fun EditPartsContent(
                 label = { Text("Engine air filter part #") },
                 modifier = Modifier.fillMaxWidth(),
             )
-            OutlinedTextField(
-                value = cabinAirFilterPartNumber,
-                onValueChange = { cabinAirFilterPartNumber = it },
-                label = { Text("Cabin air filter part #") },
-                modifier = Modifier.fillMaxWidth(),
-            )
+            if (!isMotorcycle) {
+                OutlinedTextField(
+                    value = cabinAirFilterPartNumber,
+                    onValueChange = { cabinAirFilterPartNumber = it },
+                    label = { Text("Cabin air filter part #") },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
 
             Text("Tires", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
             OutlinedTextField(
@@ -295,28 +299,30 @@ private fun EditPartsContent(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            Text("Wipers", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
-            OutlinedTextField(
-                value = wiperBladeSizeDriver,
-                onValueChange = { wiperBladeSizeDriver = it },
-                label = { Text("Driver wiper size") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                modifier = Modifier.fillMaxWidth(),
-            )
-            OutlinedTextField(
-                value = wiperBladeSizePassenger,
-                onValueChange = { wiperBladeSizePassenger = it },
-                label = { Text("Passenger wiper size") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                modifier = Modifier.fillMaxWidth(),
-            )
-            OutlinedTextField(
-                value = wiperBladeSizeRear,
-                onValueChange = { wiperBladeSizeRear = it },
-                label = { Text("Rear wiper size") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                modifier = Modifier.fillMaxWidth(),
-            )
+            if (!isMotorcycle) {
+                Text("Wipers", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                OutlinedTextField(
+                    value = wiperBladeSizeDriver,
+                    onValueChange = { wiperBladeSizeDriver = it },
+                    label = { Text("Driver wiper size") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                OutlinedTextField(
+                    value = wiperBladeSizePassenger,
+                    onValueChange = { wiperBladeSizePassenger = it },
+                    label = { Text("Passenger wiper size") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                OutlinedTextField(
+                    value = wiperBladeSizeRear,
+                    onValueChange = { wiperBladeSizeRear = it },
+                    label = { Text("Rear wiper size") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -331,14 +337,14 @@ private fun EditPartsContent(
                             sparkPlugPartNumber = sparkPlugPartNumber.trim().ifBlank { null },
                             sparkPlugGap = sparkPlugGap.trim().ifBlank { null },
                             engineAirFilterPartNumber = engineAirFilterPartNumber.trim().ifBlank { null },
-                            cabinAirFilterPartNumber = cabinAirFilterPartNumber.trim().ifBlank { null },
+                            cabinAirFilterPartNumber = cabinAirFilterPartNumber.trim().ifBlank { null }?.takeUnless { isMotorcycle },
                             tireSizeFront = tireSizeFront.trim().ifBlank { null },
                             tireSizeRear = tireSizeRear.trim().ifBlank { null },
                             tirePsiFront = tirePsiFront.trim().ifBlank { null },
                             tirePsiRear = tirePsiRear.trim().ifBlank { null },
-                            wiperBladeSizeDriver = wiperBladeSizeDriver.trim().ifBlank { null },
-                            wiperBladeSizePassenger = wiperBladeSizePassenger.trim().ifBlank { null },
-                            wiperBladeSizeRear = wiperBladeSizeRear.trim().ifBlank { null },
+                            wiperBladeSizeDriver = wiperBladeSizeDriver.trim().ifBlank { null }?.takeUnless { isMotorcycle },
+                            wiperBladeSizePassenger = wiperBladeSizePassenger.trim().ifBlank { null }?.takeUnless { isMotorcycle },
+                            wiperBladeSizeRear = wiperBladeSizeRear.trim().ifBlank { null }?.takeUnless { isMotorcycle },
                         )
                     )
                 },

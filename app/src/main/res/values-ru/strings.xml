@@ -88,6 +88,11 @@
     <string name="task_transfer_case_fluid">Замена масла в раздаточной коробке</string>
     <string name="task_front_diff_fluid">Замена масла в переднем дифференциале</string>
     <string name="task_rear_diff_fluid">Замена масла в заднем дифференциале</string>
+    <string name="task_chain_lube">Чистка и смазка цепи</string>
+    <string name="task_chain_sprocket">Замена цепи и звёзд</string>
+    <string name="task_valve_clearance">Проверка тепловых зазоров клапанов</string>
+    <string name="task_fork_oil">Замена масла в вилке</string>
+    <string name="task_clutch_throttle_cable">Регулировка тросов сцепления и газа</string>
 
     <!-- Notifications -->
     <string name="reminder_notification_channel_name">Напоминания об обслуживании</string>

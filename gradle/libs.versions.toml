@@ -37,6 +37,8 @@ securityCrypto = "1.1.0"
 exifinterface = "1.4.2"
 documentfile = "1.0.1"
 zxingAndroidEmbedded = "4.3.0"
+palette = "1.0.0"
+richtext = "0.20.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -94,7 +96,9 @@ androidx-glance-material3 = { group = "androidx.glance", name = "glance-material
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "securityCrypto" }
 androidx-exifinterface = { group = "androidx.exifinterface", name = "exifinterface", version.ref = "exifinterface" }
+androidx-palette = { group = "androidx.palette", name = "palette-ktx", version.ref = "palette" }
 zxing-android-embedded = { group = "com.journeyapps", name = "zxing-android-embedded", version.ref = "zxingAndroidEmbedded" }
+multiplatform-markdown-renderer = { group = "com.mikepenz", name = "multiplatform-markdown-renderer-m3", version = "0.26.0" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

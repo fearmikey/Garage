@@ -26,6 +26,9 @@ class MainActivity : ComponentActivity() {
         handleDeepLinkIntent(intent)
         setContent {
             val themeType by mainViewModel.themeType.collectAsStateWithLifecycle()
+            val amoledDark by mainViewModel.amoledDark.collectAsStateWithLifecycle()
+            val dynamicColor by mainViewModel.dynamicColor.collectAsStateWithLifecycle()
+            val appPalette by mainViewModel.appPalette.collectAsStateWithLifecycle()
             val pendingDeepLink by mainViewModel.pendingDeepLink.collectAsStateWithLifecycle()
             val isOnboardingCompleted by mainViewModel.isOnboardingCompleted.collectAsStateWithLifecycle()
             val showBuyMeACoffeePrompt by mainViewModel.showBuyMeACoffeePrompt.collectAsStateWithLifecycle()
@@ -37,7 +40,12 @@ class MainActivity : ComponentActivity() {
                 else -> isSystemInDarkTheme()
             }
 
-            GarageTheme(darkTheme = isDarkTheme) {
+            GarageTheme(
+                darkTheme = isDarkTheme,
+                amoledDark = amoledDark,
+                dynamicColor = dynamicColor,
+                paletteId = appPalette,
+            ) {
                 GarageNavHost(
                     mainViewModel = mainViewModel,
                     pendingDeepLink = pendingDeepLink,

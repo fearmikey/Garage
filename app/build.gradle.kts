@@ -34,8 +34,8 @@ android {
         applicationId = "com.fearmikey.garage"
         minSdk = 34
         targetSdk = 37
-        versionCode = 28
-        versionName = "1.3.5"
+        versionCode = 29
+        versionName = "1.3.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -160,4 +160,10 @@ dependencies {
 
     // Barcode scanning
     implementation(libs.zxing.android.embedded)
+
+    // Palette extraction for vehicle photos
+    implementation(libs.androidx.palette)
+
+    // Markdown rendering
+    implementation(libs.multiplatform.markdown.renderer)
 }

@@ -3,6 +3,7 @@ package com.fearmikey.garage.data.schedule
 import com.fearmikey.garage.data.local.entity.Drivetrain
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.Vehicle
+import com.fearmikey.garage.data.local.entity.VehicleType
 
 /**
  * A single "do this every N miles and/or every N months" maintenance interval rule.
@@ -25,6 +26,12 @@ data class MaintenanceRule(
     val makeMatch: String? = null,
     val modelMatch: String? = null,
     val drivetrains: Set<Drivetrain>? = null,
+    /**
+     * Which classes of vehicle this rule applies to; `null` means "any". Used to keep
+     * car-only tasks (cabin air filter, wipers, tire rotation...) off motorcycles and
+     * motorcycle-only tasks (chain lube, fork oil...) off cars.
+     */
+    val vehicleTypes: Set<VehicleType>? = null,
     val notes: String? = null,
     /**
      * Whether this task can be deferred (inspected and delayed for X miles/months)
@@ -53,10 +60,15 @@ data class MaintenanceRule(
 
     /** How many matchers this rule pins down; used to prefer specific rules over generic ones. */
     val specificity: Int
-        get() = listOfNotNull(makeMatch, modelMatch, drivetrains).size
+        get() = listOfNotNull(makeMatch, modelMatch, drivetrains, vehicleTypes).size
+
+    /** Whether this rule is relevant for the given class of vehicle (ignores make/model/drivetrain). */
+    fun appliesTo(vehicleType: VehicleType): Boolean =
+        (vehicleTypes == null) || (vehicleType in vehicleTypes)
 
     fun matches(vehicle: Vehicle, isPureEv: Boolean = false): Boolean =
         (!excludePureEv || !isPureEv) &&
+        appliesTo(vehicle.vehicleType) &&
         ((makeMatch == null) || vehicle.make.equals(makeMatch, ignoreCase = true)) &&
         ((modelMatch == null) || vehicle.model.contains(modelMatch, ignoreCase = true)) &&
         ((drivetrains == null) || (vehicle.drivetrain in drivetrains))

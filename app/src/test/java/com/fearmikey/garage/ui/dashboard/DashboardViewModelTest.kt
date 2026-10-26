@@ -158,7 +158,10 @@ class DashboardViewModelTest {
     private class FakeLubeLoggerCredentialsManager(context: Context) :
         LubeLoggerCredentialsManager(context) {
         var isConfiguredValue = false
+        var isSyncEnabledValue = true
         override fun isConfigured(): Boolean = isConfiguredValue
+        override fun isSyncEnabled(): Boolean = isSyncEnabledValue
+        override fun setSyncEnabled(enabled: Boolean) { isSyncEnabledValue = enabled }
     }
 
 
@@ -188,6 +191,8 @@ class DashboardViewModelTest {
                 override fun recallCampaignStateDao(): RecallCampaignStateDao = throw NotImplementedError()
                 override fun modificationDao(): ModificationDao = throw NotImplementedError()
                 override fun lubeLoggerPendingDeleteDao(): LubeLoggerPendingDeleteDao = throw NotImplementedError()
+                override fun knowledgeDao(): com.fearmikey.garage.data.local.dao.KnowledgeDao = throw NotImplementedError()
+                override fun tripDao(): com.fearmikey.garage.data.local.dao.TripDao = throw NotImplementedError()
                 override fun clearAllTables() {}
                 override fun createInvalidationTracker(): androidx.room.InvalidationTracker =
                     androidx.room.InvalidationTracker(this, emptyMap(), emptyMap(), "vehicles")

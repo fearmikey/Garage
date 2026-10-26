@@ -16,18 +16,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fearmikey.garage.data.local.entity.VehicleType
 import com.fearmikey.garage.util.BrandEmblems
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.ui.tooling.preview.Preview
+import com.fearmikey.garage.ui.theme.GarageTheme
 
 @Composable
 fun BrandEmblem(
     make: String,
     modifier: Modifier = Modifier,
+    vehicleType: VehicleType = VehicleType.CAR,
     size: Dp = 28.dp,
 ) {
     val trimmedMake = make.trim()
     if (trimmedMake.isEmpty()) return
 
-    val iconRes = BrandEmblems.forMake(trimmedMake)
+    val iconRes = BrandEmblems.forMake(trimmedMake, vehicleType)
 
     Surface(
         shape = CircleShape,
@@ -58,6 +64,22 @@ fun BrandEmblem(
                     ),
                     color = MaterialTheme.colorScheme.primary,
                 )
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MotorcycleBrandEmblemsPreview() {
+    GarageTheme {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(8.dp),
+        ) {
+            BrandEmblem(make = "Honda", size = 40.dp)
+            listOf("Honda", "Yamaha", "Kawasaki", "Harley-Davidson", "Triumph", "Piaggio", "Ducati").forEach { make ->
+                BrandEmblem(make = make, vehicleType = VehicleType.MOTORCYCLE, size = 40.dp)
             }
         }
     }

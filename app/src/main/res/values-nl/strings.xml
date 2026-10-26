@@ -88,6 +88,11 @@
     <string name="task_transfer_case_fluid">Tussenbakolie verversen</string>
     <string name="task_front_diff_fluid">Voorste differentieelolie verversen</string>
     <string name="task_rear_diff_fluid">Achterste differentieelolie verversen</string>
+    <string name="task_chain_lube">Ketting reinigen &amp; smeren</string>
+    <string name="task_chain_sprocket">Kettingset vervangen</string>
+    <string name="task_valve_clearance">Klepspeling controleren</string>
+    <string name="task_fork_oil">Voorvorkolie verversen</string>
+    <string name="task_clutch_throttle_cable">Koppelings- &amp; gaskabel afstellen</string>
 
     <!-- Notifications -->
     <string name="reminder_notification_channel_name">Onderhoudsherinneringen</string>

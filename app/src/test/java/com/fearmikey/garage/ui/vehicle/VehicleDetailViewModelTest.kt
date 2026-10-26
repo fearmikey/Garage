@@ -108,6 +108,33 @@ class VehicleDetailViewModelTest {
             savedStateHandle = savedStateHandle,
             vehicleRepository = vehicleRepository,
             imageStorageManager = ImageStorageManager(context = ContextWrapper(null)),
+            preferencesRepository = object : com.fearmikey.garage.data.repository.PreferencesRepository {
+                override val unitsType = MutableStateFlow("metric")
+                override val unitSystem = MutableStateFlow(com.fearmikey.garage.ui.util.UnitSystem.METRIC)
+                override val currencyCode = MutableStateFlow("USD")
+                override val appCurrency = MutableStateFlow(com.fearmikey.garage.ui.util.AppCurrency.USD)
+                override val themeType = MutableStateFlow("system")
+                override val amoledDark = MutableStateFlow(false)
+                override val dynamicColor = MutableStateFlow(true)
+                override val appPalette = MutableStateFlow("default")
+                override val vehicleThemingEnabled = MutableStateFlow(true)
+                override val onboardingCompleted = MutableStateFlow(true)
+                override val defaultVehicleId = MutableStateFlow<Long?>(null)
+                override val maintenanceMileageWindow = MutableStateFlow(500)
+                override val maintenanceDaysWindow = MutableStateFlow(10)
+                override val appOpenCount = MutableStateFlow(1)
+                override val buyMeACoffeeDontAskAgain = MutableStateFlow(false)
+                override val buyMeACoffeeNextPromptOpenCount = MutableStateFlow(2)
+                override suspend fun setUnitsType(units: String) {}
+                override suspend fun setCurrencyCode(currencyCode: String) {}
+                override suspend fun setThemeType(theme: String) {}
+                override suspend fun setOnboardingCompleted(completed: Boolean) {}
+                override suspend fun setDefaultVehicleId(vehicleId: Long?) {}
+                override suspend fun setMaintenanceMileageWindow(miles: Int) {}
+                override suspend fun incrementAppOpenCount(): Int = 1
+                override suspend fun setBuyMeACoffeeDontAskAgain(dontAskAgain: Boolean) {}
+                override suspend fun setBuyMeACoffeeNextPromptOpenCount(openCount: Int) {}
+            },
         )
 
         assertEquals(VehicleTab.FUEL.ordinal, viewModel.initialTab)

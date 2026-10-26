@@ -6,8 +6,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
+import com.fearmikey.garage.data.local.entity.VehicleType
 import com.fearmikey.garage.data.repository.MaintenanceRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
+import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.notification.WorkScheduler
 import com.fearmikey.garage.ui.navigation.Destinations
 import com.fearmikey.garage.ui.util.UnitSystem
@@ -27,6 +29,7 @@ import javax.inject.Inject
 class MaintenanceTimelineViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val maintenanceRepository: MaintenanceRepository,
+    vehicleRepository: VehicleRepository,
     preferencesRepository: PreferencesRepository,
     @ApplicationContext private val context: Context,
 ) : ViewModel() {
@@ -39,6 +42,10 @@ class MaintenanceTimelineViewModel @Inject constructor(
     val currencySymbol: StateFlow<String> = preferencesRepository.appCurrency
         .map { it.symbol }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), "$")
+
+    val vehicleType: StateFlow<VehicleType> = vehicleRepository.getVehicleById(vehicleId)
+        .map { it?.vehicleType ?: VehicleType.CAR }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), VehicleType.CAR)
 
     val records: StateFlow<List<MaintenanceRecord>> = maintenanceRepository.getRecordsForVehicle(vehicleId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())

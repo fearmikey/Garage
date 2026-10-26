@@ -39,7 +39,14 @@ open class LubeLoggerCredentialsManager @Inject constructor(
      * The config dialog never pre-fills the password, so a null [password] means "unchanged"
      * when the username is the same; it is only cleared if the username changes.
      */
-    open fun saveCredentials(serverUrl: String, username: String, password: String?, apiKey: String?, unitSystem: String = "imperial") {
+    open fun saveCredentials(
+        serverUrl: String,
+        username: String,
+        password: String?,
+        apiKey: String?,
+        unitSystem: String = "imperial",
+        syncEnabled: Boolean = true,
+    ) {
         // Stray whitespace (e.g. a Tab from moving between fields) silently breaks Basic auth.
         val serverUrl = normalizeServerUrl(serverUrl)
         val username = username.trim()
@@ -57,6 +64,7 @@ open class LubeLoggerCredentialsManager @Inject constructor(
             putString("server_url", serverUrl)
             putString("username", username)
             putString("unit_system", unitSystem)
+            putBoolean("sync_enabled", syncEnabled)
             if (password != null) {
                 putString("password", password)
             } else if (usernameChanged || username.isBlank()) {
@@ -69,6 +77,13 @@ open class LubeLoggerCredentialsManager @Inject constructor(
             }
         }
         if (connectionChanged) syncStatusState?.value = LubeLoggerSyncStatus.NeverSynced
+    }
+
+    open fun isSyncEnabled(): Boolean =
+        sharedPreferences.getBoolean("sync_enabled", true)
+
+    open fun setSyncEnabled(enabled: Boolean) {
+        sharedPreferences.edit { putBoolean("sync_enabled", enabled) }
     }
 
     // ---------------------------------------------------------------------

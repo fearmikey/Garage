@@ -10,6 +10,7 @@ import com.fearmikey.garage.data.local.entity.IgnoredMaintenanceRule
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.local.entity.VehicleSpecs
+import com.fearmikey.garage.data.local.entity.VehicleType
 import com.fearmikey.garage.data.repository.CustomMaintenanceRuleRepository
 import com.fearmikey.garage.data.repository.MaintenanceRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
@@ -27,6 +28,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.io.File
@@ -46,6 +48,10 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
 
     val unitSystem: StateFlow<UnitSystem> = preferencesRepository.unitSystem
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), UnitSystem.IMPERIAL)
+
+    val vehicleType: StateFlow<VehicleType> = vehicleRepository.getVehicleById(vehicleId)
+        .map { it?.vehicleType ?: VehicleType.CAR }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), VehicleType.CAR)
 
     val latestMileage: StateFlow<Int?> = maintenanceRepository.getLatestMileageForVehicle(vehicleId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)

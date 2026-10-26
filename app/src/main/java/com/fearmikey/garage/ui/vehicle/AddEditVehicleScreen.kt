@@ -7,15 +7,18 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -23,6 +26,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.OutlinedCard
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.text.font.FontWeight
 import com.fearmikey.garage.ui.components.BrandEmblem
 import com.fearmikey.garage.ui.components.verticalScrollbar
 import androidx.compose.material.icons.Icons
@@ -72,6 +79,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.fearmikey.garage.config.FlavorConfig
 import com.fearmikey.garage.data.local.entity.Drivetrain
+import com.fearmikey.garage.data.local.entity.VehicleType
+import androidx.compose.material.icons.outlined.DirectionsCar
+import androidx.compose.material.icons.outlined.TwoWheeler
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.vehicle.scan.CustomScannerActivity
 import com.journeyapps.barcodescanner.ScanContract
@@ -115,10 +128,12 @@ fun AddEditVehicleScreen(
         onMakeChanged = viewModel::onMakeChanged,
         onModelChanged = viewModel::onModelChanged,
         onTrimChanged = viewModel::onTrimChanged,
+        onVehicleTypeChanged = viewModel::onVehicleTypeChanged,
         onDrivetrainChanged = viewModel::onDrivetrainChanged,
         onFuelTypeChanged = viewModel::onFuelTypeChanged,
         onPurchasedNewChanged = viewModel::onPurchasedNewChanged,
         onInitialMileageChanged = viewModel::onInitialMileageChanged,
+        onThemeColorChanged = viewModel::onThemeColorChanged,
         onImagesPicked = viewModel::onImagesPicked,
         onReplaceImagePicked = viewModel::onReplaceImagePicked,
         onRemovePhoto = viewModel::onRemovePhoto,
@@ -140,10 +155,12 @@ private fun AddEditVehicleContent(
     onMakeChanged: (String) -> Unit,
     onModelChanged: (String) -> Unit,
     onTrimChanged: (String) -> Unit,
+    onVehicleTypeChanged: (VehicleType) -> Unit = {},
     onDrivetrainChanged: (Drivetrain) -> Unit = {},
     onFuelTypeChanged: (String) -> Unit = {},
     onPurchasedNewChanged: (Boolean) -> Unit = {},
     onInitialMileageChanged: (String) -> Unit = {},
+    onThemeColorChanged: (Int?) -> Unit = {},
     onImagesPicked: (List<Uri>) -> Unit = {},
     onReplaceImagePicked: (Int, Uri) -> Unit = { _, _ -> },
     onRemovePhoto: (Int) -> Unit = {},
@@ -363,6 +380,87 @@ private fun AddEditVehicleContent(
                 }
             }
 
+            var showColorPicker by remember { mutableStateOf(false) }
+
+            OutlinedCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .clickable { showColorPicker = true },
+                shape = RoundedCornerShape(12.dp),
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    val activeColor = uiState.themeColor?.let { Color(it) } ?: MaterialTheme.colorScheme.primary
+                    Box(
+                        modifier = Modifier
+                            .size(28.dp)
+                            .background(activeColor, CircleShape)
+                            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, CircleShape),
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "Vehicle Theme Color",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                        Text(
+                            text = if (uiState.themeColor != null) {
+                                if (uiState.photos.isNotEmpty()) "Extracted from photo" else "Custom color"
+                            } else {
+                                "Default app theme"
+                            },
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    TextButton(onClick = { showColorPicker = true }) {
+                        Text("Customize")
+                    }
+                }
+            }
+
+            if (showColorPicker) {
+                VehicleColorPickerDialog(
+                    currentColor = uiState.themeColor,
+                    onColorSelected = {
+                        onThemeColorChanged(it)
+                        showColorPicker = false
+                    },
+                    onDismissRequest = { showColorPicker = false },
+                )
+            }
+
+            SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+                VehicleType.entries.forEachIndexed { index, type ->
+                    SegmentedButton(
+                        selected = uiState.vehicleType == type,
+                        onClick = { onVehicleTypeChanged(type) },
+                        shape = SegmentedButtonDefaults.itemShape(index = index, count = VehicleType.entries.size),
+                        icon = {
+                            SegmentedButtonDefaults.Icon(active = uiState.vehicleType == type) {
+                                Icon(
+                                    imageVector = if (type == VehicleType.MOTORCYCLE) {
+                                        Icons.Outlined.TwoWheeler
+                                    } else {
+                                        Icons.Outlined.DirectionsCar
+                                    },
+                                    contentDescription = null,
+                                    modifier = Modifier.size(SegmentedButtonDefaults.IconSize),
+                                )
+                            }
+                        },
+                    ) {
+                        Text(type.displayName)
+                    }
+                }
+            }
+
             OutlinedTextField(
                 value = uiState.vin,
                 onValueChange = onVinChanged,
@@ -410,6 +508,7 @@ private fun AddEditVehicleContent(
                     {
                         BrandEmblem(
                             make = uiState.make,
+                            vehicleType = uiState.vehicleType,
                             size = 24.dp,
                             modifier = Modifier.padding(end = 4.dp),
                         )
@@ -433,7 +532,8 @@ private fun AddEditVehicleContent(
             )
 
             var drivetrainMenuExpanded by remember { mutableStateOf(value = false) }
-            ExposedDropdownMenuBox(
+            // FWD/RWD/AWD/4WD layouts only make sense for cars and trucks.
+            if (uiState.vehicleType == VehicleType.CAR) ExposedDropdownMenuBox(
                 expanded = drivetrainMenuExpanded,
                 onExpandedChange = { drivetrainMenuExpanded = it },
             ) {
@@ -602,6 +702,87 @@ private fun AddEditVehicleContent(
     }
 }
 
+@Composable
+private fun VehicleColorPickerDialog(
+    currentColor: Int?,
+    onColorSelected: (Int?) -> Unit,
+    onDismissRequest: () -> Unit,
+) {
+    val presetColors = listOf(
+        "Racing Red" to 0xFFD32F2F.toInt(),
+        "Sunset Orange" to 0xFFE65100.toInt(),
+        "Speed Yellow" to 0xFFF9A825.toInt(),
+        "British Racing Green" to 0xFF2E7D32.toInt(),
+        "Electric Cyan" to 0xFF00838F.toInt(),
+        "Daytona Blue" to 0xFF1976D2.toInt(),
+        "Midnight Navy" to 0xFF0D47A1.toInt(),
+        "Midnight Purple" to 0xFF7B1FA2.toInt(),
+        "Silver / Slate" to 0xFF607D8B.toInt(),
+        "Charcoal Graphite" to 0xFF37474F.toInt(),
+        "Bronze / Brown" to 0xFF6D4C41.toInt(),
+        "Pure Black" to 0xFF212121.toInt(),
+    )
+
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = { Text("Choose Vehicle Theme Color") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(
+                    text = "Vehicle details, tabs, and dashboard cards will be tinted with this signature color.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+
+                presetColors.chunked(4).forEach { row ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                    ) {
+                        row.forEach { (name, colorInt) ->
+                            val isSelected = currentColor == colorInt
+                            Box(
+                                modifier = Modifier
+                                    .size(44.dp)
+                                    .clip(CircleShape)
+                                    .background(Color(colorInt))
+                                    .clickable { onColorSelected(colorInt) }
+                                    .border(
+                                        width = if (isSelected) 3.dp else 1.dp,
+                                        color = if (isSelected) MaterialTheme.colorScheme.primary else Color.White.copy(alpha = 0.5f),
+                                        shape = CircleShape,
+                                    ),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                if (isSelected) {
+                                    Icon(
+                                        Icons.Filled.Edit,
+                                        contentDescription = name,
+                                        tint = if ((0.299f * Color(colorInt).red + 0.587f * Color(colorInt).green + 0.114f * Color(colorInt).blue) > 0.5f) Color.Black else Color.White,
+                                        modifier = Modifier.size(20.dp),
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = { onColorSelected(null) },
+            ) {
+                Text("Reset to Default")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismissRequest) {
+                Text("Cancel")
+            }
+        },
+    )
+}
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun AddEditVehicleScreenPreview() {
@@ -624,5 +805,28 @@ private fun AddEditVehicleScreenPreview() {
             onTrimChanged = {},
             onSave = {},
         ) {}
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun AddEditMotorcyclePreview() {
+    GarageTheme {
+        AddEditVehicleContent(
+            uiState = AddEditVehicleUiState(
+                vehicleType = VehicleType.MOTORCYCLE,
+                year = "2022",
+                make = "Honda",
+                model = "CB650R",
+            ),
+            onBack = {},
+            onVinChanged = {},
+            onDecodeVinClicked = {},
+            onYearChanged = {},
+            onMakeChanged = {},
+            onModelChanged = {},
+            onTrimChanged = {},
+            onSave = {},
+        )
     }
 }
