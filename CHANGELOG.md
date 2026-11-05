@@ -1,4 +1,4 @@
-## [1.3.7] - 2026-10-26
+## [1.3.7] - 2026-11-04
 
 ### Added
 * **Updated Document Management:** Track custom vehicle documents, receipts, certificates, and files with dedicated document storage and management UI.
