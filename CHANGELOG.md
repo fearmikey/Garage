@@ -9,6 +9,7 @@
 * **Expanded Test Suite:** Comprehensive unit test coverage for document expiration engines, trip repositories, and timeline filters.
 * **GPS trip logging:** App can now log expensable trips with GPS enabled.
 * **Enhanced onboarding:** App now features a better onboarding workflow.
+
 ## [1.3.6] - 2026-10-26
 
 ### Added
