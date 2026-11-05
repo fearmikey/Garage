@@ -15,6 +15,10 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.PreferencesManager
+import com.fearmikey.garage.data.local.entity.TripCategory
+import com.fearmikey.garage.data.local.entity.TripRecord
+import com.fearmikey.garage.data.repository.TripRepository
+import com.fearmikey.garage.ui.util.UnitSystem
 import com.fearmikey.garage.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -26,7 +30,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.NonCancellable
 import javax.inject.Inject
+import kotlin.math.max
+import kotlin.math.roundToLong
 
 @AndroidEntryPoint
 class TripTrackingService : Service() {
@@ -34,12 +42,20 @@ class TripTrackingService : Service() {
     @Inject
     lateinit var preferencesManager: PreferencesManager
 
+    @Inject
+    lateinit var tripRepository: TripRepository
+
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private lateinit var locationManager: LocationManager
     private var isTracking = false
     private var isPaused = false
     private var distanceMeters = 0.0
-    private var lastLocation: Location? = null
+    /**
+     * The last fix that was actually counted toward the trip distance. Jittery fixes while
+     * stationary wander around this anchor without moving it, so they never accumulate.
+     */
+    private var anchorLocation: Location? = null
+    private var unitSystem: UnitSystem = UnitSystem.IMPERIAL
     
     private var startTimeMillis: Long = 0L
     private var vehicleId: Long? = null
@@ -49,6 +65,14 @@ class TripTrackingService : Service() {
     companion object {
         private val _tripState = MutableStateFlow<TripState>(TripState.Stopped)
         val tripState: StateFlow<TripState> = _tripState.asStateFlow()
+
+        /** The trip most recently saved by "Stop & Save", so the UI can offer to edit its details. */
+        private val _lastSavedTrip = MutableStateFlow<TripRecord?>(null)
+        val lastSavedTrip: StateFlow<TripRecord?> = _lastSavedTrip.asStateFlow()
+
+        fun consumeLastSavedTrip() {
+            _lastSavedTrip.value = null
+        }
         
         const val ACTION_START = "ACTION_START"
         const val ACTION_PAUSE = "ACTION_PAUSE"
@@ -58,6 +82,15 @@ class TripTrackingService : Service() {
 
         private const val NOTIFICATION_ID = 1001
         private const val CHANNEL_ID = "trip_tracking_channel"
+
+        // Drift filtering
+        private const val MAX_ACCURACY_METERS = 20f
+        private const val MIN_SEGMENT_METERS = 15f
+        private const val MAX_FIX_AGE_NANOS = 10_000_000_000L
+        private const val MIN_MOVING_SPEED_MPS = 1.0f // ~3.6 km/h
+        private const val MAX_PLAUSIBLE_SPEED_MPS = 70f // ~250 km/h
+        private const val METERS_PER_MILE = 1609.344
+        private const val METERS_PER_KM = 1000.0
     }
     
     sealed class TripState {
@@ -73,34 +106,49 @@ class TripTrackingService : Service() {
     private val locationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
             if (isPaused) return
-            
-            // Basic filtering: Ignore highly inaccurate points or points too close together
-            if (location.accuracy > 30.0f) return 
-            
-            lastLocation?.let { last ->
-                val distanceToNew = last.distanceTo(location)
-                if (distanceToNew > 2.0f) { // Ignore micro-movements < 2 meters (drift)
-                    distanceMeters += distanceToNew
-                    updateNotification()
-                    publishState()
-                    
-                    // Save to preferences for crash recovery
-                    serviceScope.launch {
-                        preferencesManager.setActiveTripDistance(distanceMeters)
-                        preferencesManager.setActiveTripLastLocation(location.latitude, location.longitude)
-                    }
-                }
-            } ?: run {
-                // First location point
+            if (!isUsableFix(location)) return
+
+            val anchor = anchorLocation
+            if (anchor == null) {
+                anchorLocation = location
                 serviceScope.launch {
                     preferencesManager.setActiveTripLastLocation(location.latitude, location.longitude)
                 }
+                return
             }
-            lastLocation = location
+
+            val segment = anchor.distanceTo(location)
+            // A move only counts once it clearly exceeds the combined uncertainty of both fixes.
+            val threshold = max(MIN_SEGMENT_METERS, anchor.accuracy + location.accuracy)
+            if (segment < threshold) return
+
+            // If the receiver reports we're essentially stationary, treat the offset as drift.
+            if (location.hasSpeed() && location.speed < MIN_MOVING_SPEED_MPS) return
+
+            val elapsedSec = (location.elapsedRealtimeNanos - anchor.elapsedRealtimeNanos) / 1e9
+            if (elapsedSec > 0 && segment / elapsedSec > MAX_PLAUSIBLE_SPEED_MPS) return // GPS jump
+
+            distanceMeters += segment
+            anchorLocation = location
+            updateNotification()
+            publishState()
+
+            // Save to preferences for crash recovery
+            serviceScope.launch {
+                preferencesManager.setActiveTripDistance(distanceMeters)
+                preferencesManager.setActiveTripLastLocation(location.latitude, location.longitude)
+            }
         }
-        
+
         override fun onProviderEnabled(provider: String) {}
         override fun onProviderDisabled(provider: String) {}
+    }
+
+    private fun isUsableFix(location: Location): Boolean {
+        if (!location.hasAccuracy() || location.accuracy > MAX_ACCURACY_METERS) return false
+        // Drop stale/cached fixes delivered when updates first start.
+        val ageNanos = android.os.SystemClock.elapsedRealtimeNanos() - location.elapsedRealtimeNanos
+        return ageNanos <= MAX_FIX_AGE_NANOS
     }
 
     override fun onCreate() {
@@ -147,6 +195,7 @@ class TripTrackingService : Service() {
 
         serviceScope.launch {
             try {
+                unitSystem = preferencesManager.unitSystem.first()
                 // Restore from crash if needed
                 val savedDistance = preferencesManager.activeTripDistance.first()
                 if (savedDistance > 0) {
@@ -170,22 +219,14 @@ class TripTrackingService : Service() {
     
     private fun requestLocationUpdates() {
         try {
-            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
-                    2000L,
-                    2f,
-                    locationListener,
-                )
-            }
-            if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-                locationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER,
-                    2000L,
-                    2f,
-                    locationListener,
-                )
-            }
+            // GPS only: network fixes are accurate to tens/hundreds of meters, and mixing
+            // providers makes the position hop between sources, which reads as phantom distance.
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                2000L,
+                5f,
+                locationListener,
+            )
         } catch (_: SecurityException) {
             stopSelf()
         }
@@ -205,20 +246,69 @@ class TripTrackingService : Service() {
         serviceScope.launch {
             preferencesManager.setActiveTripIsPaused(isPaused = false)
         }
-        lastLocation = null // Reset last location to prevent jumping lines
+        anchorLocation = null // Don't count the distance covered while paused
         publishState()
         updateNotification()
     }
 
     private fun stopTracking() {
         locationManager.removeUpdates(locationListener)
+        val wasTracking = isTracking
         isTracking = false
         _tripState.value = TripState.Stopped
-        
+
+        val endTime = System.currentTimeMillis()
+        val finalMeters = distanceMeters
+        val startTime = startTimeMillis
+        val tripVehicleId = vehicleId
+
         serviceScope.launch {
-            preferencesManager.clearActiveTrip()
+            withContext(NonCancellable) {
+                if (wasTracking) {
+                    saveCompletedTrip(tripVehicleId, startTime, endTime, finalMeters)
+                }
+                preferencesManager.clearActiveTrip()
+            }
+            distanceMeters = 0.0
+            anchorLocation = null
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
+        }
+    }
+
+    private suspend fun saveCompletedTrip(
+        tripVehicleId: Long?,
+        startTime: Long,
+        endTime: Long,
+        meters: Double,
+    ) {
+        val vid = tripVehicleId ?: preferencesManager.activeTripVehicleId.first()
+        if (vid == null) {
+            Log.w("TripTrackingService", "No vehicle for completed trip; not saving")
+            return
+        }
+        try {
+            val units = preferencesManager.unitSystem.first()
+            val perUnit = if (units == UnitSystem.METRIC) METERS_PER_KM else METERS_PER_MILE
+            val distance = (meters / perUnit * 100).roundToLong() / 100.0
+            val trip = TripRecord(
+                vehicleId = vid,
+                startDate = if (startTime > 0) startTime else endTime,
+                endDate = endTime,
+                startOdometer = 0,
+                endOdometer = 0,
+                calculatedDistance = distance,
+                category = TripCategory.BUSINESS,
+                reimbursementRate = preferencesManager.mileageReimbursementRate.first(),
+                tollExpense = 0.0,
+                parkingExpense = 0.0,
+                notes = "",
+                isReimbursed = false,
+            )
+            val id = tripRepository.insertTrip(trip)
+            _lastSavedTrip.value = trip.copy(id = id)
+        } catch (e: Exception) {
+            Log.e("TripTrackingService", "Failed to save completed trip", e)
         }
     }
 
@@ -232,9 +322,9 @@ class TripTrackingService : Service() {
     }
 
     private fun buildNotification(): Notification {
-        val miles = distanceMeters / 1609.34 // Conversion. Assuming miles for now.
+        val perUnit = if (unitSystem == UnitSystem.METRIC) METERS_PER_KM else METERS_PER_MILE
         val title = if (isPaused) "Trip Paused" else "Logging Trip..."
-        val content = "Distance: %.2f mi".format(miles)
+        val content = "Distance: %.2f %s".format(distanceMeters / perUnit, unitSystem.distanceUnit)
 
         val mainIntent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_SINGLE_TOP

@@ -46,6 +46,13 @@ class TripViewModel @Inject constructor(
     val tripState = com.fearmikey.garage.service.TripTrackingService.tripState
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), com.fearmikey.garage.service.TripTrackingService.TripState.Stopped)
 
+    /** Trip just saved by GPS "Stop & Save" for this vehicle, offered for editing. */
+    val lastSavedGpsTrip = com.fearmikey.garage.service.TripTrackingService.lastSavedTrip
+
+    fun consumeLastSavedGpsTrip() {
+        com.fearmikey.garage.service.TripTrackingService.consumeLastSavedTrip()
+    }
+
     fun saveTrip(trip: TripRecord) {
         viewModelScope.launch {
             if (trip.id == 0L) {

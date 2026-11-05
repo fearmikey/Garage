@@ -251,7 +251,7 @@
       ]
     },
     "trip_logging": {
-      "description": "Manual and GPS service-assisted trip logging for mileage categorization (business vs. personal).",
+      "description": "Manual and GPS service-assisted trip logging for mileage categorization (business vs. personal). TripTrackingService filters GPS drift (GPS-only, accuracy/anchor-distance/speed gating) and on Stop & Save inserts the TripRecord itself, exposing it via TripTrackingService.lastSavedTrip so TripLoggerScreen opens it in the edit dialog.",
       "entities": [
         "app/src/main/java/com/fearmikey/garage/data/local/entity/TripRecord.kt"
       ],

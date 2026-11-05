@@ -27,6 +27,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -63,6 +64,16 @@ fun TripLoggerScreen(
     var showAddDialog by remember { mutableStateOf(value = false) }
     var editingTrip by remember { mutableStateOf<TripRecord?>(null) }
     var selectedFilter by remember { mutableStateOf<TripCategory?>(null) }
+
+    // After a GPS trip is stopped and saved, open it for editing (category, notes, etc.).
+    val lastSavedGpsTrip by viewModel.lastSavedGpsTrip.collectAsStateWithLifecycle()
+    LaunchedEffect(lastSavedGpsTrip) {
+        val saved = lastSavedGpsTrip ?: return@LaunchedEffect
+        if (saved.vehicleId == viewModel.vehicleId) {
+            editingTrip = saved
+        }
+        viewModel.consumeLastSavedGpsTrip()
+    }
     
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -96,7 +107,7 @@ fun TripLoggerScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             item {
-                ActiveTripCard(viewModel = viewModel)
+                ActiveTripCard(viewModel = viewModel, distanceUnit = unitSystem.distanceUnit)
             }
 
             if (trips.isNotEmpty()) {
@@ -231,7 +242,8 @@ private fun TripRecordCard(
 
 @Composable
 private fun ActiveTripCard(
-    viewModel: TripViewModel
+    viewModel: TripViewModel,
+    distanceUnit: String,
 ) {
     val tripState by viewModel.tripState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -285,8 +297,7 @@ private fun ActiveTripCard(
             }
         }
         is TripTrackingService.TripState.Active -> {
-            // Convert meters to selected unit. (Hardcoded to miles for demo based on service for now)
-            val distance = state.distanceMeters / 1609.34
+            val distance = state.distanceMeters / if (distanceUnit == "km") 1000.0 else 1609.344
             
             Card(
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
@@ -302,7 +313,7 @@ private fun ActiveTripCard(
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                     Text(
-                        text = "%.2f mi".format(distance),
+                        text = "%.2f %s".format(distance, distanceUnit),
                         style = MaterialTheme.typography.displayMedium,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         modifier = Modifier.padding(vertical = 8.dp)
@@ -326,9 +337,8 @@ private fun ActiveTripCard(
                         }
                         
                         Button(onClick = {
+                            // The service saves the trip; the screen then opens it for editing.
                             context.startService(Intent(context, TripTrackingService::class.java).apply { action = TripTrackingService.ACTION_STOP })
-                            // To make this fully complete, we should ideally trigger `showAddDialog = true` here
-                            // with the pre-filled distance, but that requires hoisting `showAddDialog` higher.
                         }) {
                             Text("Stop & Save")
                         }
