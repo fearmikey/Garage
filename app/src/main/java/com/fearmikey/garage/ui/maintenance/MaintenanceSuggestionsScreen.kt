@@ -22,6 +22,7 @@ import com.fearmikey.garage.ui.components.verticalScrollbar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -62,6 +63,7 @@ import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
 import com.fearmikey.garage.data.local.entity.IgnoredMaintenanceRule
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
+import com.fearmikey.garage.data.schedule.MaintenanceRule
 import com.fearmikey.garage.data.schedule.MaintenanceSuggestion
 import com.fearmikey.garage.ui.components.EmptyState
 import com.fearmikey.garage.ui.components.StatusChip
@@ -86,6 +88,7 @@ fun MaintenanceSuggestionsScreen(
     val vehicleType by viewModel.vehicleType.collectAsStateWithLifecycle()
     var logSheetSuggestion by remember { mutableStateOf<MaintenanceSuggestion?>(null) }
     var showAddRuleSheet by remember { mutableStateOf(false) }
+    var editingRule by remember { mutableStateOf<MaintenanceRule?>(null) }
     var showApplyTemplateSheet by remember { mutableStateOf(false) }
 
     MaintenanceSuggestionsContent(
@@ -97,6 +100,10 @@ fun MaintenanceSuggestionsScreen(
         onIgnoreRule = { viewModel.ignoreRule(it.rule.taskName) },
         onRestoreRule = { viewModel.unignoreRule(it.taskName) },
         onAddCustomRule = { showAddRuleSheet = true },
+        onEditRule = {
+            editingRule = it
+            showAddRuleSheet = true
+        },
         onDeleteCustomRule = viewModel::deleteCustomRule,
     )
 
@@ -126,14 +133,20 @@ fun MaintenanceSuggestionsScreen(
     if (showAddRuleSheet) {
         AddCustomMaintenanceRuleSheet(
             unitSystem = unitSystem,
-            onDismiss = { showAddRuleSheet = false },
+            initialRule = editingRule,
+            onDismiss = {
+                showAddRuleSheet = false
+                editingRule = null
+            },
             onOpenApplyTemplate = {
                 showAddRuleSheet = false
+                editingRule = null
                 showApplyTemplateSheet = true
             },
             onSave = { rule ->
                 viewModel.saveCustomRule(rule)
                 showAddRuleSheet = false
+                editingRule = null
             },
         )
     }
@@ -161,6 +174,7 @@ private fun MaintenanceSuggestionsContent(
     onIgnoreRule: (MaintenanceSuggestion) -> Unit,
     onRestoreRule: (IgnoredMaintenanceRule) -> Unit,
     onAddCustomRule: () -> Unit,
+    onEditRule: (MaintenanceRule) -> Unit,
     onDeleteCustomRule: (CustomMaintenanceRule) -> Unit,
 ) {
     Scaffold(
@@ -198,6 +212,18 @@ private fun MaintenanceSuggestionsContent(
                         CustomMaintenanceRuleRow(
                             rule = rule,
                             unitSystem = unitSystem,
+                            onEdit = {
+                                onEditRule(
+                                    MaintenanceRule(
+                                        taskName = rule.taskName,
+                                        category = rule.category,
+                                        intervalMiles = rule.intervalMiles,
+                                        intervalMonths = rule.intervalMonths,
+                                        notes = rule.notes,
+                                        isCustom = true,
+                                    )
+                                )
+                            },
                             onDelete = { onDeleteCustomRule(rule) },
                         )
                     }
@@ -207,6 +233,7 @@ private fun MaintenanceSuggestionsContent(
                     MaintenanceSuggestionRow(
                         suggestion = suggestion,
                         unitSystem = unitSystem,
+                        onEdit = { onEditRule(suggestion.rule) },
                         onLogNow = { onLogNow(suggestion) },
                         onIgnore = { onIgnoreRule(suggestion) },
                     )
@@ -237,10 +264,14 @@ private fun MaintenanceSuggestionsContent(
 private fun CustomMaintenanceRuleRow(
     rule: CustomMaintenanceRule,
     unitSystem: UnitSystem,
+    onEdit: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Card(modifier = modifier.fillMaxWidth()) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        onClick = onEdit,
+    ) {
         Row(
             modifier = Modifier.padding(12.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -259,8 +290,13 @@ private fun CustomMaintenanceRuleRow(
                     Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
-            IconButton(onClick = onDelete) {
-                Icon(Icons.Filled.Delete, contentDescription = "Delete custom rule")
+            Row {
+                IconButton(onClick = onEdit) {
+                    Icon(Icons.Filled.Edit, contentDescription = "Edit rule")
+                }
+                IconButton(onClick = onDelete) {
+                    Icon(Icons.Filled.Delete, contentDescription = "Delete custom rule")
+                }
             }
         }
     }
@@ -270,18 +306,29 @@ private fun CustomMaintenanceRuleRow(
 private fun MaintenanceSuggestionRow(
     suggestion: MaintenanceSuggestion,
     unitSystem: UnitSystem,
+    onEdit: () -> Unit,
     onLogNow: () -> Unit,
     onIgnore: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Card(modifier = modifier.fillMaxWidth()) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        onClick = onEdit,
+    ) {
         Column(modifier = Modifier.padding(12.dp)) {
-            Text(
-                suggestion.rule.category.displayName,
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
-            )
-            Text(formatTaskName(suggestion.rule.taskName), style = MaterialTheme.typography.titleMedium)
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Top) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        suggestion.rule.category.displayName,
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                    Text(formatTaskName(suggestion.rule.taskName), style = MaterialTheme.typography.titleMedium)
+                }
+                IconButton(onClick = onEdit) {
+                    Icon(Icons.Filled.Edit, contentDescription = "Edit rule")
+                }
+            }
 
             val details = listOfNotNull(
                 suggestion.lastServiceMileage?.let { "last done at ${UnitConverter.formatDistance(it, unitSystem)}" },
@@ -350,17 +397,20 @@ private fun IgnoredRuleRow(
 @Composable
 private fun AddCustomMaintenanceRuleSheet(
     onDismiss: () -> Unit,
+    initialRule: MaintenanceRule? = null,
     unitSystem: UnitSystem = UnitSystem.IMPERIAL,
     onOpenApplyTemplate: () -> Unit = {},
     onSave: (CustomMaintenanceRule) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var taskName by remember { mutableStateOf("") }
-    var category by remember { mutableStateOf(MaintenanceCategory.OTHER) }
+    var taskName by remember(initialRule) { mutableStateOf(initialRule?.taskName ?: "") }
+    var category by remember(initialRule) { mutableStateOf(initialRule?.category ?: MaintenanceCategory.OTHER) }
     var categoryMenuExpanded by remember { mutableStateOf(false) }
-    var intervalMiles by remember { mutableStateOf("") }
-    var intervalMonths by remember { mutableStateOf("") }
-    var notes by remember { mutableStateOf("") }
+    var intervalMiles by remember(initialRule) { 
+        mutableStateOf(initialRule?.intervalMiles?.let { UnitConverter.displayDistanceValue(it, unitSystem).toString() } ?: "") 
+    }
+    var intervalMonths by remember(initialRule) { mutableStateOf(initialRule?.intervalMonths?.toString() ?: "") }
+    var notes by remember(initialRule) { mutableStateOf(initialRule?.notes ?: "") }
 
     val canSave = taskName.isNotBlank() && (intervalMiles.isNotBlank() || intervalMonths.isNotBlank())
 
@@ -381,40 +431,42 @@ private fun AddCustomMaintenanceRuleSheet(
                 .verticalScrollbar(sheetScrollState),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text("Add Custom Rule", style = MaterialTheme.typography.titleLarge)
+            Text(if (initialRule != null) "Edit Service Interval" else "Add Custom Rule", style = MaterialTheme.typography.titleLarge)
 
-            Card(
-                onClick = onOpenApplyTemplate,
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                ),
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
+            if (initialRule == null) {
+                Card(
+                    onClick = onOpenApplyTemplate,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    ),
                 ) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = "Schedule Presets",
-                            style = MaterialTheme.typography.titleSmall,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                        Text(
-                            text = "Apply pre-built maintenance templates (Towing, EV, Commuter, Classic).",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = "Schedule Presets",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.SemiBold,
+                            )
+                            Text(
+                                text = "Apply pre-built maintenance templates (Towing, EV, Commuter, Classic).",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Icon(
+                            imageVector = Icons.Outlined.AutoAwesome,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
                         )
                     }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Icon(
-                        imageVector = Icons.Outlined.AutoAwesome,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
                 }
             }
 
@@ -540,6 +592,7 @@ private fun MaintenanceSuggestionsScreenPreview() {
             onIgnoreRule = {},
             onRestoreRule = {},
             onAddCustomRule = {},
+            onEditRule = {},
             onDeleteCustomRule = {},
         )
     }

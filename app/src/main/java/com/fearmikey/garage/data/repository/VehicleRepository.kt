@@ -31,7 +31,8 @@ data class VinInfo(
 )
 
 sealed interface VinLookupResult {
-    data class Success(val info: VinInfo) : VinLookupResult
+    /** [warning] is set when NHTSA decoded the VIN but flagged parts of it as unreliable/missing. */
+    data class Success(val info: VinInfo, val warning: String? = null) : VinLookupResult
     data class Error(val message: String) : VinLookupResult
 }
 
@@ -80,17 +81,21 @@ class VehicleRepository @Inject constructor(
             val result = vinDecoderApi.decodeVin(vin).results.firstOrNull()
                 ?: return VinLookupResult.Error("No decode results returned for this VIN.")
 
-            val errorCode = result.errorCode?.trim()
-            if ((errorCode != null) && (errorCode != "0")) {
-                return VinLookupResult.Error(result.errorText?.takeIf { it.isNotBlank() } ?: "Unable to decode VIN.")
+            // NHTSA's ErrorCode is a comma-separated list (e.g. "0,14" = decoded clean, plus a
+            // minor note). Most codes are warnings that still come with usable data, which is
+            // very common for non-US (e.g. European) VINs, so data presence decides success.
+            val codes = parseErrorCodes(result.errorCode)
+            val hasData = !result.make.isNullOrBlank() || !result.model.isNullOrBlank()
+            if (!hasData) {
+                return VinLookupResult.Error(errorMessageFor(codes))
             }
-            if (result.make.isNullOrBlank() && result.model.isNullOrBlank()) {
-                return VinLookupResult.Error("VIN decoded but returned no vehicle details.")
-            }
+            // Code 11: position 10 isn't a valid model-year code (EU VINs aren't required to
+            // encode it there), so the decoded year can't be trusted.
+            val yearUnreliable = CODE_INVALID_MODEL_YEAR in codes
 
             VinLookupResult.Success(
-                VinInfo(
-                    year = result.modelYear?.toIntOrNull(),
+                info = VinInfo(
+                    year = if (yearUnreliable) null else result.modelYear?.toIntOrNull(),
                     make = result.make.orEmpty(),
                     model = result.model.orEmpty(),
                     trim = result.trim.orEmpty(),
@@ -98,6 +103,8 @@ class VehicleRepository @Inject constructor(
                     vehicleType = VehicleType.fromNhtsa(cleanSpec(result.vehicleType)),
                     specs = result.toVehicleSpecs(),
                 ),
+                warning = warningFor(codes)
+                    ?: if (result.model.isNullOrBlank()) "Model not found for this VIN; please enter it manually." else null,
             )
         } catch (e: Exception) {
             VinLookupResult.Error(e.message ?: "Network error while decoding VIN.")
@@ -154,6 +161,36 @@ class VehicleRepository @Inject constructor(
     }
 
     companion object {
+        private const val CODE_INCOMPLETE_VIN = 6
+        private const val CODE_MANUFACTURER_NOT_REGISTERED = 7
+        private const val CODE_INVALID_MODEL_YEAR = 11
+        private const val CODE_INVALID_CHARACTERS = 400
+
+        /** Codes that are purely informational and need no user-facing note. */
+        private val INFORMATIONAL_CODES = setOf(0, 14)
+
+        private const val NON_US_HINT =
+            "The NHTSA database mainly covers vehicles sold in the US, so vehicles from " +
+                "other markets may need to be entered manually."
+
+        /** Parses NHTSA's comma-separated `ErrorCode` field (e.g. "0,14") into a set of ints. */
+        internal fun parseErrorCodes(raw: String?): Set<Int> =
+            raw.orEmpty().split(',').mapNotNull { it.trim().toIntOrNull() }.toSet()
+
+        internal fun errorMessageFor(codes: Set<Int>): String = when {
+            CODE_INVALID_CHARACTERS in codes -> "This VIN contains invalid characters."
+            CODE_INCOMPLETE_VIN in codes -> "This VIN appears to be incomplete. Check it's 17 characters with no typos."
+            CODE_MANUFACTURER_NOT_REGISTERED in codes ->
+                "This manufacturer isn't in the NHTSA database. $NON_US_HINT"
+            else -> "No vehicle details found for this VIN. $NON_US_HINT"
+        }
+
+        internal fun warningFor(codes: Set<Int>): String? = when {
+            CODE_INVALID_MODEL_YEAR in codes -> "Model year couldn't be determined from this VIN; please enter it manually."
+            (codes - INFORMATIONAL_CODES).isNotEmpty() -> "VIN only partially decoded; please verify the details."
+            else -> null
+        }
+
         /**
          * NHTSA returns literal placeholder strings (rather than omitting the field) when a
          * value couldn't be decoded. Filtering these out keeps the Specs tab from showing

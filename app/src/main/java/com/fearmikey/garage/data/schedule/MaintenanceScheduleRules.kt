@@ -22,6 +22,10 @@ private val MOTORCYCLE_ONLY = setOf(VehicleType.MOTORCYCLE)
  * low-mileage vehicles that would otherwise never trigger a mileage-only rule.
  */
 object MaintenanceScheduleRules {
+    /** The category of the built-in rule with this [taskName] (case-insensitive), if any. */
+    fun categoryForTask(taskName: String): MaintenanceCategory? =
+        rules.firstOrNull { it.taskName.equals(taskName, ignoreCase = true) }?.category
+
     val rules: List<MaintenanceRule> = listOf(
         // Generic rules: apply to any vehicle regardless of make/model/drivetrain.
         MaintenanceRule(
@@ -61,7 +65,7 @@ object MaintenanceScheduleRules {
         ),
         MaintenanceRule(
             taskName = "Cabin air filter replacement",
-            category = MaintenanceCategory.OTHER,
+            category = MaintenanceCategory.FILTERS,
             intervalMiles = 15_000,
             intervalMonths = 12,
             isDeferrable = true,
@@ -69,7 +73,7 @@ object MaintenanceScheduleRules {
         ),
         MaintenanceRule(
             taskName = "Engine air filter replacement",
-            category = MaintenanceCategory.OTHER,
+            category = MaintenanceCategory.FILTERS,
             intervalMiles = 15_000,
             intervalMonths = 12,
             isDeferrable = true,
@@ -92,7 +96,7 @@ object MaintenanceScheduleRules {
         ),
         MaintenanceRule(
             taskName = "Spark plug replacement",
-            category = MaintenanceCategory.OTHER,
+            category = MaintenanceCategory.ENGINE,
             intervalMiles = 60_000,
             intervalMonths = 60,
             isDeferrable = true,
@@ -107,21 +111,21 @@ object MaintenanceScheduleRules {
         ),
         MaintenanceRule(
             taskName = "Rust prevention",
-            category = MaintenanceCategory.OTHER,
+            category = MaintenanceCategory.BODY,
             intervalMiles = 15_000,
             intervalMonths = 12,
             isDeferrable = true,
         ),
         MaintenanceRule(
             taskName = "Paint protection",
-            category = MaintenanceCategory.OTHER,
+            category = MaintenanceCategory.BODY,
             intervalMiles = 15_000,
             intervalMonths = 12,
             isDeferrable = true,
         ),
         MaintenanceRule(
             taskName = "Serpentine belt replacement",
-            category = MaintenanceCategory.OTHER,
+            category = MaintenanceCategory.ENGINE,
             intervalMiles = 60_000,
             intervalMonths = 60,
             isDeferrable = true,
@@ -130,7 +134,7 @@ object MaintenanceScheduleRules {
         ),
         MaintenanceRule(
             taskName = "Wiper blade replacement",
-            category = MaintenanceCategory.OTHER,
+            category = MaintenanceCategory.BODY,
             intervalMiles = 10_000,
             intervalMonths = 6,
             isDeferrable = true,
@@ -159,7 +163,7 @@ object MaintenanceScheduleRules {
         // Motorcycle-only tasks.
         MaintenanceRule(
             taskName = "Drive chain clean & lube",
-            category = MaintenanceCategory.OTHER,
+            category = MaintenanceCategory.DRIVETRAIN,
             intervalMiles = 600,
             intervalMonths = 2,
             vehicleTypes = MOTORCYCLE_ONLY,
@@ -167,7 +171,7 @@ object MaintenanceScheduleRules {
         ),
         MaintenanceRule(
             taskName = "Chain & sprocket replacement",
-            category = MaintenanceCategory.OTHER,
+            category = MaintenanceCategory.DRIVETRAIN,
             intervalMiles = 15_000,
             intervalMonths = 48,
             isDeferrable = true,
@@ -176,7 +180,7 @@ object MaintenanceScheduleRules {
         ),
         MaintenanceRule(
             taskName = "Valve clearance check",
-            category = MaintenanceCategory.OTHER,
+            category = MaintenanceCategory.ENGINE,
             intervalMiles = 15_000,
             intervalMonths = 48,
             isDeferrable = true,
@@ -192,7 +196,7 @@ object MaintenanceScheduleRules {
         ),
         MaintenanceRule(
             taskName = "Clutch & throttle cable adjustment",
-            category = MaintenanceCategory.OTHER,
+            category = MaintenanceCategory.DRIVETRAIN,
             intervalMiles = 6_000,
             intervalMonths = 12,
             vehicleTypes = MOTORCYCLE_ONLY,
@@ -227,7 +231,7 @@ object MaintenanceScheduleRules {
         ),
         MaintenanceRule(
             taskName = "Engine air filter replacement",
-            category = MaintenanceCategory.OTHER,
+            category = MaintenanceCategory.FILTERS,
             intervalMiles = 12_000,
             intervalMonths = 24,
             isDeferrable = true,
@@ -236,7 +240,7 @@ object MaintenanceScheduleRules {
         ),
         MaintenanceRule(
             taskName = "Spark plug replacement",
-            category = MaintenanceCategory.OTHER,
+            category = MaintenanceCategory.ENGINE,
             intervalMiles = 16_000,
             intervalMonths = 48,
             isDeferrable = true,

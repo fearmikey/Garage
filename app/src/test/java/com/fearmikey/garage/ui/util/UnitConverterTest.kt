@@ -9,6 +9,8 @@ class UnitConverterTest {
     fun `UnitSystem fromString returns expected enum`() {
         assertEquals(UnitSystem.METRIC, UnitSystem.fromString("metric"))
         assertEquals(UnitSystem.METRIC, UnitSystem.fromString("Metric"))
+        assertEquals(UnitSystem.UK_MIXED, UnitSystem.fromString("uk_mixed"))
+        assertEquals(UnitSystem.UK_MIXED, UnitSystem.fromString("UK_MIXED"))
         assertEquals(UnitSystem.IMPERIAL, UnitSystem.fromString("imperial"))
         assertEquals(UnitSystem.IMPERIAL, UnitSystem.fromString(null))
         assertEquals(UnitSystem.IMPERIAL, UnitSystem.fromString("unknown"))
@@ -23,12 +25,15 @@ class UnitConverterTest {
         assertEquals(miles, UnitConverter.kmToMiles(expectedKm))
 
         assertEquals(10000, UnitConverter.displayDistanceValue(miles, UnitSystem.IMPERIAL))
+        assertEquals(10000, UnitConverter.displayDistanceValue(miles, UnitSystem.UK_MIXED))
         assertEquals(16093, UnitConverter.displayDistanceValue(miles, UnitSystem.METRIC))
 
         assertEquals(10000, UnitConverter.canonicalMilesFromInput(10000, UnitSystem.IMPERIAL))
+        assertEquals(10000, UnitConverter.canonicalMilesFromInput(10000, UnitSystem.UK_MIXED))
         assertEquals(10000, UnitConverter.canonicalMilesFromInput(16093, UnitSystem.METRIC))
 
         assertEquals("10,000 mi", UnitConverter.formatDistance(miles, UnitSystem.IMPERIAL))
+        assertEquals("10,000 mi", UnitConverter.formatDistance(miles, UnitSystem.UK_MIXED))
         assertEquals("16,093 km", UnitConverter.formatDistance(miles, UnitSystem.METRIC))
     }
 
@@ -42,16 +47,20 @@ class UnitConverterTest {
 
         assertEquals(10.0, UnitConverter.displayVolumeValue(gallons, UnitSystem.IMPERIAL), 0.001)
         assertEquals(37.854, UnitConverter.displayVolumeValue(gallons, UnitSystem.METRIC), 0.001)
+        assertEquals(37.854, UnitConverter.displayVolumeValue(gallons, UnitSystem.UK_MIXED), 0.001)
 
         assertEquals(10.0, UnitConverter.canonicalGallonsFromInput(10.0, UnitSystem.IMPERIAL), 0.001)
         assertEquals(10.0, UnitConverter.canonicalGallonsFromInput(37.85411784, UnitSystem.METRIC), 0.001)
+        assertEquals(10.0, UnitConverter.canonicalGallonsFromInput(37.85411784, UnitSystem.UK_MIXED), 0.001)
 
         assertEquals("10.000 gal", UnitConverter.formatVolume(gallons, UnitSystem.IMPERIAL))
         assertEquals("37.854 L", UnitConverter.formatVolume(gallons, UnitSystem.METRIC))
+        assertEquals("37.854 L", UnitConverter.formatVolume(gallons, UnitSystem.UK_MIXED))
 
         val pricePerGallon = 3.785411784
         assertEquals("$3.785/gal", UnitConverter.formatPricePerVolume(pricePerGallon, UnitSystem.IMPERIAL))
         assertEquals("$1.000/L", UnitConverter.formatPricePerVolume(pricePerGallon, UnitSystem.METRIC))
+        assertEquals("$1.000/L", UnitConverter.formatPricePerVolume(pricePerGallon, UnitSystem.UK_MIXED))
 
         assertEquals("€3.785/gal", UnitConverter.formatPricePerVolume(pricePerGallon, UnitSystem.IMPERIAL, "€"))
         assertEquals("£1.000/L", UnitConverter.formatPricePerVolume(pricePerGallon, UnitSystem.METRIC, "£"))
@@ -83,12 +92,14 @@ class UnitConverterTest {
         assertEquals(10.0, UnitConverter.mpgToLitersPer100Km(mpg)!!, 0.01)
 
         assertEquals("23.5 mpg", UnitConverter.formatFuelEconomy(mpg, UnitSystem.IMPERIAL))
+        assertEquals("28.2 mpg", UnitConverter.formatFuelEconomy(mpg, UnitSystem.UK_MIXED)) // 23.5 * 1.20095 = 28.22
         assertEquals("10.0 L/100km", UnitConverter.formatFuelEconomy(mpg, UnitSystem.METRIC))
 
         assertEquals("—", UnitConverter.formatFuelEconomy(null, UnitSystem.IMPERIAL))
         assertEquals("—", UnitConverter.formatFuelEconomy(0.0, UnitSystem.METRIC))
 
         assertEquals("23.5 mpg since last full tank", UnitConverter.formatSegmentFuelEconomy(mpg, UnitSystem.IMPERIAL))
+        assertEquals("28.2 mpg since last full tank", UnitConverter.formatSegmentFuelEconomy(mpg, UnitSystem.UK_MIXED))
         assertEquals("10.0 L/100km since last full tank", UnitConverter.formatSegmentFuelEconomy(mpg, UnitSystem.METRIC))
     }
 
@@ -96,25 +107,30 @@ class UnitConverterTest {
     fun `vehicle parts and fluids formatting respects UnitSystem`() {
         // Oil Capacity
         assertEquals("4.9 L", UnitConverter.formatOilCapacity("5.2 qts", UnitSystem.METRIC))
+        assertEquals("4.9 L", UnitConverter.formatOilCapacity("5.2 qts", UnitSystem.UK_MIXED))
         assertEquals("5.2 qts", UnitConverter.formatOilCapacity("5.2 qts", UnitSystem.IMPERIAL))
         assertEquals("5.2 qts", UnitConverter.formatOilCapacity("4.9 L", UnitSystem.IMPERIAL))
         assertEquals("4.9 L", UnitConverter.formatOilCapacity("4.9 L", UnitSystem.METRIC))
+        assertEquals("4.9 L", UnitConverter.formatOilCapacity("4.9 L", UnitSystem.UK_MIXED))
         assertEquals("N/A (Electric)", UnitConverter.formatOilCapacity("N/A (Electric)", UnitSystem.METRIC))
 
         // Tire Pressure
         assertEquals("2.4 bar", UnitConverter.formatTirePressure("35 PSI", UnitSystem.METRIC))
+        assertEquals("2.4 bar", UnitConverter.formatTirePressure("35 PSI", UnitSystem.UK_MIXED))
         assertEquals("35 PSI", UnitConverter.formatTirePressure("35 PSI", UnitSystem.IMPERIAL))
         assertEquals("35 PSI", UnitConverter.formatTirePressure("2.4 bar", UnitSystem.IMPERIAL))
         assertEquals("2.4 bar", UnitConverter.formatTirePressure("2.4 bar", UnitSystem.METRIC))
 
         // Wiper Size
         assertEquals("660 mm", UnitConverter.formatWiperSize("26 in", UnitSystem.METRIC))
+        assertEquals("660 mm", UnitConverter.formatWiperSize("26 in", UnitSystem.UK_MIXED))
         assertEquals("26 in", UnitConverter.formatWiperSize("26 in", UnitSystem.IMPERIAL))
         assertEquals("26 in", UnitConverter.formatWiperSize("660 mm", UnitSystem.IMPERIAL))
         assertEquals("650 mm", UnitConverter.formatWiperSize("650 mm", UnitSystem.METRIC))
 
         // Spark Plug Gap
         assertEquals("1.0 mm", UnitConverter.formatSparkPlugGap("0.040 in", UnitSystem.METRIC))
+        assertEquals("1.0 mm", UnitConverter.formatSparkPlugGap("0.040 in", UnitSystem.UK_MIXED))
         assertEquals("0.040 in", UnitConverter.formatSparkPlugGap("0.040 in", UnitSystem.IMPERIAL))
         assertEquals("0.039 in", UnitConverter.formatSparkPlugGap("1.0 mm", UnitSystem.IMPERIAL))
         assertEquals("1.0 mm", UnitConverter.formatSparkPlugGap("1.0 mm", UnitSystem.METRIC))

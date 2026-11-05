@@ -1,5 +1,6 @@
 package com.fearmikey.garage.data.schedule
 
+import com.fearmikey.garage.data.local.entity.CustomDocument
 import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
 import com.fearmikey.garage.data.repository.ReminderStatus
 import org.junit.Assert.assertEquals
@@ -82,5 +83,38 @@ class DocumentExpirationEngineTest {
 
         assertEquals(2, reminders.size)
         assertTrue(reminders.all { it.status == ReminderStatus.OK })
+    }
+
+    @Test
+    fun `checkAll includes custom documents with expirations even without a fixed record`() {
+        val now = 1_000_000_000_000L
+        val documents = listOf(
+            CustomDocument(id = 7, vehicleId = 1L, title = "Extended Warranty", expiration = now - TimeUnit.DAYS.toMillis(1)),
+            CustomDocument(id = 8, vehicleId = 1L, title = "Roadside Assistance", expiration = now + TimeUnit.DAYS.toMillis(10)),
+            CustomDocument(id = 9, vehicleId = 1L, title = "Title"),
+        )
+
+        val reminders = DocumentExpirationEngine.checkAll(
+            record = null,
+            customDocuments = documents,
+            upcomingWindowDays = 30,
+            now = now,
+        )
+
+        assertEquals(listOf("custom_7", "custom_8"), reminders.map { it.idKey })
+        assertEquals(ReminderStatus.OVERDUE, reminders[0].status)
+        assertEquals(ReminderStatus.UPCOMING, reminders[1].status)
+        assertEquals("Extended Warranty Renewal", reminders[0].title)
+    }
+
+    @Test
+    fun `checkAll merges fixed sections and custom documents`() {
+        val now = 1_000_000_000_000L
+        val record = VehicleRegistrationInsurance(vehicleId = 1L, insuranceExpiration = now + TimeUnit.DAYS.toMillis(5))
+        val documents = listOf(CustomDocument(id = 1, vehicleId = 1L, title = "Loan", expiration = now + TimeUnit.DAYS.toMillis(90)))
+
+        val reminders = DocumentExpirationEngine.checkAll(record, documents, upcomingWindowDays = 30, now = now)
+
+        assertEquals(listOf("insurance", "custom_1"), reminders.map { it.idKey })
     }
 }

@@ -1,5 +1,9 @@
 # Garage - Copilot & Coding Assistant Instructions
 
+## AGENT NAVIGATION & CODE MAP
+- Before attempting any code modification, you must consult `.agent_manifest.json` to identify the architectural pattern and the specific files responsible for data flow. Do not guess file paths.
+- At the end of each session where code files, features, or architectural patterns were added, modified, or deleted, update `.agent_manifest.json` to keep the code map accurate.
+
 ## ARCHITECTURAL CONSTRAINTS
 
 - **100% FOSS & F-Droid Compliance:** Garage is strictly an Open Source (FOSS) application.

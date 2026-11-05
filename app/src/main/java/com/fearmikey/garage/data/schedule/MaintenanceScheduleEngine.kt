@@ -210,7 +210,10 @@ object MaintenanceScheduleEngine {
             // Any tire rotation service (Rotation, Rotation & Balance, etc.) satisfies a tire rotation rule
             return ruleNameLower.contains("rotat") && recordTaskLower.contains("rotat")
         }
-        if (category != rule.category) {
+        val categoryMatches = (category == rule.category) ||
+            // Records logged before a task moved out of OTHER into a finer category keep OTHER.
+            ((category == MaintenanceCategory.OTHER) && (rule.category in MaintenanceCategory.SPLIT_FROM_OTHER))
+        if (!categoryMatches) {
             return false
         }
         return descriptionMatchesTask(description, rule.taskName)

@@ -320,6 +320,7 @@ class SettingsViewModelTest {
             override fun lubeLoggerPendingDeleteDao(): com.fearmikey.garage.data.local.dao.LubeLoggerPendingDeleteDao = throw NotImplementedError()
             override fun knowledgeDao(): com.fearmikey.garage.data.local.dao.KnowledgeDao = throw NotImplementedError()
             override fun tripDao(): com.fearmikey.garage.data.local.dao.TripDao = throw NotImplementedError()
+            override fun customDocumentDao(): com.fearmikey.garage.data.local.dao.CustomDocumentDao = throw NotImplementedError()
             override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper {
                 throw UnsupportedOperationException()
             }
@@ -416,6 +417,7 @@ class SettingsViewModelTest {
             override fun lubeLoggerPendingDeleteDao(): com.fearmikey.garage.data.local.dao.LubeLoggerPendingDeleteDao = throw NotImplementedError()
             override fun knowledgeDao(): com.fearmikey.garage.data.local.dao.KnowledgeDao = throw NotImplementedError()
             override fun tripDao(): com.fearmikey.garage.data.local.dao.TripDao = throw NotImplementedError()
+            override fun customDocumentDao(): com.fearmikey.garage.data.local.dao.CustomDocumentDao = throw NotImplementedError()
             override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper {
                 throw UnsupportedOperationException()
             }
@@ -545,6 +547,7 @@ class SettingsViewModelTest {
             override fun lubeLoggerPendingDeleteDao(): com.fearmikey.garage.data.local.dao.LubeLoggerPendingDeleteDao = throw NotImplementedError()
             override fun knowledgeDao(): com.fearmikey.garage.data.local.dao.KnowledgeDao = throw NotImplementedError()
             override fun tripDao(): com.fearmikey.garage.data.local.dao.TripDao = throw NotImplementedError()
+            override fun customDocumentDao(): com.fearmikey.garage.data.local.dao.CustomDocumentDao = throw NotImplementedError()
             override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper {
                 throw UnsupportedOperationException()
             }
@@ -645,6 +648,7 @@ class SettingsViewModelTest {
             override fun lubeLoggerPendingDeleteDao(): com.fearmikey.garage.data.local.dao.LubeLoggerPendingDeleteDao = throw NotImplementedError()
             override fun knowledgeDao(): com.fearmikey.garage.data.local.dao.KnowledgeDao = throw NotImplementedError()
             override fun tripDao(): com.fearmikey.garage.data.local.dao.TripDao = throw NotImplementedError()
+            override fun customDocumentDao(): com.fearmikey.garage.data.local.dao.CustomDocumentDao = throw NotImplementedError()
             override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper {
                 throw UnsupportedOperationException()
             }
@@ -760,6 +764,7 @@ class SettingsViewModelTest {
             override fun lubeLoggerPendingDeleteDao(): com.fearmikey.garage.data.local.dao.LubeLoggerPendingDeleteDao = throw NotImplementedError()
             override fun knowledgeDao(): com.fearmikey.garage.data.local.dao.KnowledgeDao = throw NotImplementedError()
             override fun tripDao(): com.fearmikey.garage.data.local.dao.TripDao = throw NotImplementedError()
+            override fun customDocumentDao(): com.fearmikey.garage.data.local.dao.CustomDocumentDao = throw NotImplementedError()
             override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper {
                 throw UnsupportedOperationException()
             }

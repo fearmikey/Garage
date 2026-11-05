@@ -5,6 +5,7 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.fearmikey.garage.MainActivity
+import com.fearmikey.garage.data.repository.CustomDocumentRepository
 import com.fearmikey.garage.data.repository.CustomMaintenanceRuleRepository
 import com.fearmikey.garage.data.repository.MaintenanceRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
@@ -33,6 +34,7 @@ class ReminderCheckWorker @AssistedInject constructor(
     private val customMaintenanceRuleRepository: CustomMaintenanceRuleRepository,
     private val preferencesRepository: PreferencesRepository,
     private val notifier: ReminderNotifier,
+    private val customDocumentRepository: CustomDocumentRepository,
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result {
@@ -86,9 +88,11 @@ class ReminderCheckWorker @AssistedInject constructor(
 
             // Document & Renewal Expiry Reminders
             val regIns = vehicleRepository.getRegistrationInsurance(vehicle.id).firstOrNull()
-            if ((regIns != null) && docRemindersEnabled) {
-                val docReminders = DocumentExpirationEngine.checkExpirations(
+            val customDocuments = customDocumentRepository.getDocumentsForVehicle(vehicle.id).firstOrNull().orEmpty()
+            if (docRemindersEnabled) {
+                val docReminders = DocumentExpirationEngine.checkAll(
                     record = regIns,
+                    customDocuments = customDocuments,
                     upcomingWindowDays = docDaysWindow,
                 )
                 for (docReminder in docReminders) {

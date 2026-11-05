@@ -18,6 +18,7 @@ import org.junit.Before
 import org.junit.Test
 
 import com.fearmikey.garage.ui.util.AppCurrency
+import com.fearmikey.garage.ui.vehicle.VehicleTab
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class StartupViewModelTest {
@@ -51,6 +52,25 @@ class StartupViewModelTest {
         var savedDynamicColor: Boolean? = null
         var savedPalette: String? = null
         var isCompleted: Boolean = false
+        var savedShowFuelTrendGraph: Boolean? = null
+        var savedShowFleetOverview: Boolean? = null
+        var savedDefaultHiddenTabs: String? = null
+        val defaultHiddenTabsFlow = MutableStateFlow("")
+
+        override val defaultHiddenTabs: Flow<String> = defaultHiddenTabsFlow
+
+        override suspend fun setShowFuelTrendGraph(enabled: Boolean) {
+            savedShowFuelTrendGraph = enabled
+        }
+
+        override suspend fun setShowFleetOverview(enabled: Boolean) {
+            savedShowFleetOverview = enabled
+        }
+
+        override suspend fun setDefaultHiddenTabs(raw: String) {
+            savedDefaultHiddenTabs = raw
+            defaultHiddenTabsFlow.value = raw
+        }
 
         override val unitsType: Flow<String> = unitsTypeFlow
         override val unitSystem: Flow<UnitSystem> = MutableStateFlow(UnitSystem.METRIC)
@@ -198,5 +218,70 @@ class StartupViewModelTest {
         assertEquals("tuner_amber", fakeRepo.savedPalette)
         assertTrue(fakeRepo.isCompleted)
         assertTrue(finishedCalled)
+    }
+
+    @Test
+    fun `step navigation moves forward, backward and clamps at the ends`() = runTest {
+        val viewModel = StartupViewModel(TestContext(), FakePreferencesRepository())
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(OnboardingStep.WELCOME, viewModel.uiState.value.currentStep)
+        viewModel.previousStep()
+        assertEquals(OnboardingStep.WELCOME, viewModel.uiState.value.currentStep)
+
+        viewModel.nextStep()
+        viewModel.nextStep()
+        assertEquals(OnboardingStep.APPEARANCE, viewModel.uiState.value.currentStep)
+
+        viewModel.previousStep()
+        assertEquals(OnboardingStep.REGION, viewModel.uiState.value.currentStep)
+
+        viewModel.skipToFinish()
+        assertEquals(OnboardingStep.FINISH, viewModel.uiState.value.currentStep)
+        viewModel.nextStep()
+        assertEquals(OnboardingStep.FINISH, viewModel.uiState.value.currentStep)
+
+        viewModel.goToStep(OnboardingStep.SCREENS)
+        assertEquals(OnboardingStep.SCREENS, viewModel.uiState.value.currentStep)
+    }
+
+    @Test
+    fun `default hidden tabs load from preferences and ignore non-hideable tabs`() = runTest {
+        val fakeRepo = FakePreferencesRepository().apply { defaultHiddenTabsFlow.value = "MODS,TRIPS" }
+        val viewModel = StartupViewModel(TestContext(), fakeRepo)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(setOf(VehicleTab.MODS, VehicleTab.TRIPS), viewModel.uiState.value.defaultHiddenTabs)
+
+        viewModel.setTabVisible(VehicleTab.MODS, visible = true)
+        viewModel.setTabVisible(VehicleTab.RECALLS, visible = false)
+        viewModel.setTabVisible(VehicleTab.TIMELINE, visible = false)
+        assertEquals(setOf(VehicleTab.TRIPS, VehicleTab.RECALLS), viewModel.uiState.value.defaultHiddenTabs)
+
+        viewModel.setDefaultHiddenTabs(setOf(VehicleTab.TIMELINE, VehicleTab.SPECS))
+        assertEquals(setOf(VehicleTab.SPECS), viewModel.uiState.value.defaultHiddenTabs)
+    }
+
+    @Test
+    fun `completeStartup persists dashboard and default tab choices`() = runTest {
+        val fakeRepo = FakePreferencesRepository()
+        val viewModel = StartupViewModel(TestContext(), fakeRepo)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        viewModel.toggleFuelTrendGraph(false)
+        viewModel.toggleFleetOverview(true)
+        val allHideable = VehicleTab.entries.filter { it.canHide }.toSet()
+        viewModel.setDefaultHiddenTabs(allHideable - ESSENTIAL_VEHICLE_TABS)
+
+        viewModel.completeStartup {}
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(false, fakeRepo.savedShowFuelTrendGraph)
+        assertEquals(true, fakeRepo.savedShowFleetOverview)
+        assertEquals(
+            setOf(VehicleTab.SPECS, VehicleTab.PARTS, VehicleTab.MODS, VehicleTab.RECALLS, VehicleTab.KNOWLEDGE, VehicleTab.TRIPS),
+            VehicleTab.parseHidden(fakeRepo.savedDefaultHiddenTabs),
+        )
+        assertTrue(fakeRepo.isCompleted)
     }
 }

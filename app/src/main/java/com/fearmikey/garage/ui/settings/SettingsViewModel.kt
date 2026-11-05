@@ -53,6 +53,7 @@ data class SettingsUiState(
     val documentExpirationRemindersEnabled: Boolean = true,
     val documentExpirationDaysWindow: Int = 30,
     val affiliateLinksEnabled: Boolean = false,
+    val mileageReimbursementRate: Double = com.fearmikey.garage.data.local.PreferencesManager.DEFAULT_MILEAGE_REIMBURSEMENT_RATE,
     val showFuelTrendGraph: Boolean = true,
     val showFleetOverview: Boolean = false,
     val vehicles: List<Vehicle> = emptyList(),
@@ -184,6 +185,11 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             preferencesRepository.affiliateLinksEnabled.collect { enabled ->
                 _uiState.update { it.copy(affiliateLinksEnabled = enabled) }
+            }
+        }
+        viewModelScope.launch {
+            preferencesRepository.mileageReimbursementRate.collect { rate ->
+                _uiState.update { it.copy(mileageReimbursementRate = rate) }
             }
         }
         viewModelScope.launch {
@@ -371,6 +377,12 @@ class SettingsViewModel @Inject constructor(
     fun setAffiliateLinksEnabled(enabled: Boolean) {
         viewModelScope.launch {
             preferencesRepository.setAffiliateLinksEnabled(enabled)
+        }
+    }
+
+    fun setMileageReimbursementRate(rate: Double) {
+        viewModelScope.launch {
+            preferencesRepository.setMileageReimbursementRate(rate)
         }
     }
 

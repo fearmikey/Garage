@@ -1,5 +1,13 @@
 # Garage - Guidelines for AI Agents & Developers
 
+## AGENT WORKFLOW & CODE MAP (.agent_manifest.json)
+
+### MANDATORY CODE MAP CONSULTATION
+Before attempting any code modification, agents **MUST** consult `.agent_manifest.json` to identify the architectural pattern, data flow, and specific files responsible for the feature. Do not guess file paths.
+
+### CONTINUOUS MANIFEST MAINTENANCE
+At the end of each session, if any files, features, data flows, or package structures were added, renamed, deleted, or altered, agents **MUST** update `.agent_manifest.json` to keep the codebase map accurate and up-to-date for future sessions.
+
 ## CRITICAL ARCHITECTURAL CONSTRAINTS
 
 ### 1. STRICT 100% FOSS POLICY (F-DROID COMPLIANCE)

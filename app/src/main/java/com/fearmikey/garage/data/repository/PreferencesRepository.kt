@@ -34,12 +34,30 @@ interface PreferencesRepository {
         get() = flowOf(false)
     val includeModsInCost: Flow<Boolean>
         get() = flowOf(false)
+    val includePurchaseInCost: Flow<Boolean>
+        get() = flowOf(false)
     val affiliateLinksEnabled: Flow<Boolean>
         get() = flowOf(true)
     val showFuelTrendGraph: Flow<Boolean>
         get() = flowOf(true)
     val showFleetOverview: Flow<Boolean>
         get() = flowOf(false)
+    val mileageReimbursementRate: Flow<Double>
+        get() = flowOf(PreferencesManager.DEFAULT_MILEAGE_REIMBURSEMENT_RATE)
+    val defaultHiddenTabs: Flow<String>
+        get() = flowOf("")
+    val activeTripDistance: Flow<Double>
+        get() = flowOf(0.0)
+    val activeTripStartTime: Flow<Long>
+        get() = flowOf(0L)
+    val activeTripIsPaused: Flow<Boolean>
+        get() = flowOf(false)
+    val activeTripLastLat: Flow<Double?>
+        get() = flowOf(null)
+    val activeTripLastLng: Flow<Double?>
+        get() = flowOf(null)
+    val activeTripVehicleId: Flow<Long?>
+        get() = flowOf(null)
     val documentExpirationRemindersEnabled: Flow<Boolean>
         get() = flowOf(true)
     val documentExpirationDaysWindow: Flow<Int>
@@ -76,11 +94,22 @@ interface PreferencesRepository {
     suspend fun setBuyMeACoffeeNextPromptOpenCount(openCount: Int)
     suspend fun setModsGridView(isGrid: Boolean) {}
     suspend fun setIncludeModsInCost(includeMods: Boolean) {}
+    suspend fun setIncludePurchaseInCost(include: Boolean) {}
     suspend fun setAffiliateLinksEnabled(enabled: Boolean) {}
     suspend fun setShowFuelTrendGraph(enabled: Boolean) {}
     suspend fun setShowFleetOverview(enabled: Boolean) {}
+    suspend fun setMileageReimbursementRate(rate: Double) {}
+    suspend fun setDefaultHiddenTabs(raw: String) {}
     suspend fun setDocumentExpirationRemindersEnabled(enabled: Boolean) {}
     suspend fun setDocumentExpirationDaysWindow(days: Int) {}
+    fun getTabOrder(vehicleId: Long): Flow<String> = flowOf("")
+    suspend fun setTabOrder(vehicleId: Long, rawOrder: String) {}
+    suspend fun setActiveTripDistance(distance: Double) {}
+    suspend fun setActiveTripStartTime(startTime: Long) {}
+    suspend fun setActiveTripIsPaused(isPaused: Boolean) {}
+    suspend fun setActiveTripLastLocation(lat: Double, lng: Double) {}
+    suspend fun setActiveTripVehicleId(vehicleId: Long) {}
+    suspend fun clearActiveTrip() {}
     suspend fun setDriversLicense(
         number: String?,
         state: String?,
@@ -112,9 +141,18 @@ class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManag
     override val buyMeACoffeeNextPromptOpenCount: Flow<Int> = preferencesManager.buyMeACoffeeNextPromptOpenCount
     override val isModsGridView: Flow<Boolean> = preferencesManager.isModsGridView
     override val includeModsInCost: Flow<Boolean> = preferencesManager.includeModsInCost
+    override val includePurchaseInCost: Flow<Boolean> = preferencesManager.includePurchaseInCost
     override val affiliateLinksEnabled: Flow<Boolean> = preferencesManager.affiliateLinksEnabled
     override val showFuelTrendGraph: Flow<Boolean> = preferencesManager.showFuelTrendGraph
     override val showFleetOverview: Flow<Boolean> = preferencesManager.showFleetOverview
+    override val mileageReimbursementRate: Flow<Double> = preferencesManager.mileageReimbursementRate
+    override val defaultHiddenTabs: Flow<String> = preferencesManager.defaultHiddenTabs
+    override val activeTripDistance: Flow<Double> = preferencesManager.activeTripDistance
+    override val activeTripStartTime: Flow<Long> = preferencesManager.activeTripStartTime
+    override val activeTripIsPaused: Flow<Boolean> = preferencesManager.activeTripIsPaused
+    override val activeTripLastLat: Flow<Double?> = preferencesManager.activeTripLastLat
+    override val activeTripLastLng: Flow<Double?> = preferencesManager.activeTripLastLng
+    override val activeTripVehicleId: Flow<Long?> = preferencesManager.activeTripVehicleId
     override val documentExpirationRemindersEnabled: Flow<Boolean> = preferencesManager.documentExpirationRemindersEnabled
     override val documentExpirationDaysWindow: Flow<Int> = preferencesManager.documentExpirationDaysWindow
     override val driversLicenseNumber: Flow<String?> = preferencesManager.driversLicenseNumber
@@ -189,6 +227,10 @@ class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManag
         preferencesManager.setIncludeModsInCost(includeMods)
     }
 
+    override suspend fun setIncludePurchaseInCost(include: Boolean) {
+        preferencesManager.setIncludePurchaseInCost(include)
+    }
+
     override suspend fun setAffiliateLinksEnabled(enabled: Boolean) {
         preferencesManager.setAffiliateLinksEnabled(enabled)
     }
@@ -222,5 +264,11 @@ class PreferencesRepositoryImpl(private val preferencesManager: PreferencesManag
 
     override suspend fun setSavedObdAdapter(config: ObdAdapterConfig?) {
         preferencesManager.setSavedObdAdapter(config)
+    }
+
+    override fun getTabOrder(vehicleId: Long): Flow<String> = preferencesManager.getTabOrder(vehicleId)
+
+    override suspend fun setTabOrder(vehicleId: Long, rawOrder: String) {
+        preferencesManager.setTabOrder(vehicleId, rawOrder)
     }
 }

@@ -2,7 +2,11 @@ package com.fearmikey.garage.ui.vehicle
 
 import android.content.ContextWrapper
 import androidx.lifecycle.SavedStateHandle
+import com.fearmikey.garage.data.local.dao.CustomMaintenanceRuleDao
+import com.fearmikey.garage.data.local.dao.MaintenanceDao
 import com.fearmikey.garage.data.local.dao.VehicleDao
+import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
+import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.dao.VehiclePartsDao
 import com.fearmikey.garage.data.local.dao.VehicleRegistrationDao
 import com.fearmikey.garage.data.local.dao.VehicleSpecsDao
@@ -12,7 +16,10 @@ import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
 import com.fearmikey.garage.data.local.entity.VehicleSpecs
 import com.fearmikey.garage.data.remote.VinDecoderApi
 import com.fearmikey.garage.data.remote.dto.VinDecodeResponse
+import com.fearmikey.garage.data.repository.CustomMaintenanceRuleRepository
 import com.fearmikey.garage.data.repository.ImageStorageManager
+import com.fearmikey.garage.data.repository.MaintenanceRepository
+import com.fearmikey.garage.data.repository.ReminderStatus
 import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.ui.navigation.Destinations
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +27,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -50,9 +58,27 @@ class VehicleDetailViewModelTest {
         override fun getAllVehicles(): Flow<List<Vehicle>> = vehicleFlow
         override fun getVehicleById(vehicleId: Long): Flow<Vehicle?> = vehicleFlow.map { list -> list.find { it.id == vehicleId } }
         override suspend fun getVehicleByIdOnce(vehicleId: Long): Vehicle? = vehicleFlow.value.find { it.id == vehicleId }
-        override suspend fun upsert(vehicle: Vehicle): Long = 1L
+        override suspend fun upsert(vehicle: Vehicle): Long {
+            vehicleFlow.update { list -> list.map { if (it.id == vehicle.id) vehicle else it } }
+            return vehicle.id
+        }
         override suspend fun update(vehicle: Vehicle) {}
         override suspend fun delete(vehicle: Vehicle) {}
+    }
+
+    private class FakeMaintenanceDao : MaintenanceDao {
+        override fun getRecordsForVehicleByDate(vehicleId: Long): Flow<List<MaintenanceRecord>> = MutableStateFlow(emptyList())
+        override fun getRecordsForVehicleByMileage(vehicleId: Long): Flow<List<MaintenanceRecord>> = MutableStateFlow(emptyList())
+        override fun getLatestMileageForVehicle(vehicleId: Long): Flow<Int?> = MutableStateFlow(null)
+        override suspend fun upsert(record: MaintenanceRecord): Long = 1L
+        override suspend fun update(record: MaintenanceRecord) {}
+        override suspend fun delete(record: MaintenanceRecord) {}
+    }
+
+    private class FakeCustomRuleDao : CustomMaintenanceRuleDao {
+        override fun getForVehicle(vehicleId: Long): Flow<List<CustomMaintenanceRule>> = MutableStateFlow(emptyList())
+        override suspend fun upsert(rule: CustomMaintenanceRule): Long = 1L
+        override suspend fun delete(rule: CustomMaintenanceRule) {}
     }
 
     private class FakeVehicleSpecsDao : VehicleSpecsDao {
@@ -135,6 +161,8 @@ class VehicleDetailViewModelTest {
                 override suspend fun setBuyMeACoffeeDontAskAgain(dontAskAgain: Boolean) {}
                 override suspend fun setBuyMeACoffeeNextPromptOpenCount(openCount: Int) {}
             },
+            maintenanceRepository = MaintenanceRepository(FakeMaintenanceDao()),
+            customMaintenanceRuleRepository = CustomMaintenanceRuleRepository(FakeCustomRuleDao()),
         )
 
         assertEquals(VehicleTab.FUEL.ordinal, viewModel.initialTab)
@@ -144,6 +172,49 @@ class VehicleDetailViewModelTest {
 
         assertFalse(viewModel.shouldOpenAddSheet.value)
         assertEquals(false, savedStateHandle.get<Boolean>(Destinations.VEHICLE_DETAIL_OPEN_ADD_ARG))
+    }
+
+    @Test
+    fun `hidden tabs round-trip and never include non-hideable tabs`() {
+        val serialized = VehicleTab.serializeHidden(setOf(VehicleTab.TRIPS, VehicleTab.MODS, VehicleTab.TIMELINE))
+        assertEquals("MODS,TRIPS", serialized)
+        assertEquals(setOf(VehicleTab.MODS, VehicleTab.TRIPS), VehicleTab.parseHidden(serialized))
+        assertEquals(setOf(VehicleTab.FUEL), VehicleTab.parseHidden("FUEL, TIMELINE,BOGUS"))
+        assertTrue(VehicleTab.parseHidden("").isEmpty())
+    }
+
+    @Test
+    fun `document tab alert reflects most urgent expiration`() {
+        val day = 24L * 60 * 60 * 1000
+        val now = 1_700_000_000_000L
+        val alerts = VehicleTabAlerts.compute(
+            suggestions = emptyList(),
+            registration = VehicleRegistrationInsurance(
+                vehicleId = 1L,
+                registrationExpiration = now + 5 * day,
+                insuranceExpiration = now - day,
+            ),
+            documentDaysWindow = 30,
+            now = now,
+        )
+        assertEquals(ReminderStatus.OVERDUE, alerts[VehicleTab.DOCUMENTS])
+        assertFalse(VehicleTab.SCHEDULE in alerts)
+
+        val upcomingOnly = VehicleTabAlerts.compute(
+            suggestions = emptyList(),
+            registration = VehicleRegistrationInsurance(vehicleId = 1L, registrationExpiration = now + 5 * day),
+            documentDaysWindow = 30,
+            now = now,
+        )
+        assertEquals(ReminderStatus.UPCOMING, upcomingOnly[VehicleTab.DOCUMENTS])
+
+        val farOut = VehicleTabAlerts.compute(
+            suggestions = emptyList(),
+            registration = VehicleRegistrationInsurance(vehicleId = 1L, registrationExpiration = now + 90 * day),
+            documentDaysWindow = 30,
+            now = now,
+        )
+        assertTrue(farOut.isEmpty())
     }
 
     @Test

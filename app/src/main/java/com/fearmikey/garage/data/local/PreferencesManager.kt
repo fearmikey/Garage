@@ -2,6 +2,7 @@ package com.fearmikey.garage.data.local
 
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.doublePreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
@@ -35,6 +36,7 @@ class PreferencesManager(private val context: Context) {
         val BUY_ME_A_COFFEE_NEXT_PROMPT_OPEN_COUNT_KEY = intPreferencesKey("buy_me_a_coffee_next_prompt_open_count")
         val MODS_GRID_VIEW_KEY = booleanPreferencesKey("is_mods_grid_view")
         val INCLUDE_MODS_IN_COST_KEY = booleanPreferencesKey("include_mods_in_cost")
+        val INCLUDE_PURCHASE_IN_COST_KEY = booleanPreferencesKey("include_purchase_in_cost")
         val AFFILIATE_LINKS_ENABLED_KEY = booleanPreferencesKey("affiliate_links_enabled")
         val DRIVERS_LICENSE_NUMBER_KEY = stringPreferencesKey("drivers_license_number")
         val DRIVERS_LICENSE_STATE_KEY = stringPreferencesKey("drivers_license_state")
@@ -46,13 +48,25 @@ class PreferencesManager(private val context: Context) {
         val DOCUMENT_EXPIRATION_DAYS_WINDOW_KEY = intPreferencesKey("document_expiration_days_window")
         val SHOW_FUEL_TREND_GRAPH_KEY = booleanPreferencesKey("show_fuel_trend_graph")
         val SHOW_FLEET_OVERVIEW_KEY = booleanPreferencesKey("show_fleet_overview")
+
+        // Active Trip State
+        val ACTIVE_TRIP_DISTANCE_KEY = doublePreferencesKey("active_trip_distance")
+        val ACTIVE_TRIP_START_TIME_KEY = longPreferencesKey("active_trip_start_time")
+        val ACTIVE_TRIP_IS_PAUSED_KEY = booleanPreferencesKey("active_trip_is_paused")
+        val ACTIVE_TRIP_LAST_LAT_KEY = doublePreferencesKey("active_trip_last_lat")
+        val ACTIVE_TRIP_LAST_LNG_KEY = doublePreferencesKey("active_trip_last_lng")
+        val ACTIVE_TRIP_VEHICLE_ID_KEY = longPreferencesKey("active_trip_vehicle_id")
         val SAVED_OBD_DEVICE_ADDRESS_KEY = stringPreferencesKey("saved_obd_device_address")
         val SAVED_OBD_DEVICE_NAME_KEY = stringPreferencesKey("saved_obd_device_name")
         val SAVED_OBD_DEVICE_TYPE_KEY = stringPreferencesKey("saved_obd_device_type")
+        val MILEAGE_REIMBURSEMENT_RATE_KEY = doublePreferencesKey("mileage_reimbursement_rate")
+        val DEFAULT_HIDDEN_TABS_KEY = stringPreferencesKey("default_hidden_tabs")
 
         const val DEFAULT_MAINTENANCE_MILEAGE_WINDOW = 500
         const val DEFAULT_MAINTENANCE_DAYS_WINDOW = 10
         const val DEFAULT_DOCUMENT_EXPIRATION_DAYS_WINDOW = 30
+        /** IRS 2026 standard business mileage rate ($/mi), used until the user sets their own. */
+        const val DEFAULT_MILEAGE_REIMBURSEMENT_RATE = 0.725
     }
 
     val unitsType: Flow<String> = context.dataStore.data
@@ -335,6 +349,12 @@ class PreferencesManager(private val context: Context) {
         }
     }
 
+    suspend fun setIncludePurchaseInCost(include: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[INCLUDE_PURCHASE_IN_COST_KEY] = include
+        }
+    }
+
     suspend fun setAffiliateLinksEnabled(enabled: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[AFFILIATE_LINKS_ENABLED_KEY] = enabled
@@ -380,6 +400,86 @@ class PreferencesManager(private val context: Context) {
             if (!notes.isNullOrBlank()) preferences[DRIVERS_LICENSE_NOTES_KEY] = notes else preferences.remove(DRIVERS_LICENSE_NOTES_KEY)
             if (!imageFront.isNullOrBlank()) preferences[DRIVERS_LICENSE_IMAGE_FRONT_KEY] = imageFront else preferences.remove(DRIVERS_LICENSE_IMAGE_FRONT_KEY)
             if (!imageBack.isNullOrBlank()) preferences[DRIVERS_LICENSE_IMAGE_BACK_KEY] = imageBack else preferences.remove(DRIVERS_LICENSE_IMAGE_BACK_KEY)
+        }
+    }
+
+    val includePurchaseInCost: Flow<Boolean> = context.dataStore.data
+        .map { preferences -> preferences[INCLUDE_PURCHASE_IN_COST_KEY] ?: false }
+
+    val mileageReimbursementRate: Flow<Double> = context.dataStore.data
+        .map { preferences -> preferences[MILEAGE_REIMBURSEMENT_RATE_KEY] ?: DEFAULT_MILEAGE_REIMBURSEMENT_RATE }
+
+    val defaultHiddenTabs: Flow<String> = context.dataStore.data
+        .map { preferences -> preferences[DEFAULT_HIDDEN_TABS_KEY] ?: "" }
+
+    val activeTripDistance: Flow<Double> = context.dataStore.data
+        .map { preferences -> preferences[ACTIVE_TRIP_DISTANCE_KEY] ?: 0.0 }
+
+    val activeTripStartTime: Flow<Long> = context.dataStore.data
+        .map { preferences -> preferences[ACTIVE_TRIP_START_TIME_KEY] ?: 0L }
+
+    val activeTripIsPaused: Flow<Boolean> = context.dataStore.data
+        .map { preferences -> preferences[ACTIVE_TRIP_IS_PAUSED_KEY] ?: false }
+
+    val activeTripLastLat: Flow<Double?> = context.dataStore.data
+        .map { preferences -> preferences[ACTIVE_TRIP_LAST_LAT_KEY] }
+
+    val activeTripLastLng: Flow<Double?> = context.dataStore.data
+        .map { preferences -> preferences[ACTIVE_TRIP_LAST_LNG_KEY] }
+
+    val activeTripVehicleId: Flow<Long?> = context.dataStore.data
+        .map { preferences -> preferences[ACTIVE_TRIP_VEHICLE_ID_KEY] }
+
+    suspend fun setMileageReimbursementRate(rate: Double) {
+        context.dataStore.edit { preferences -> preferences[MILEAGE_REIMBURSEMENT_RATE_KEY] = rate }
+    }
+
+    suspend fun setDefaultHiddenTabs(raw: String) {
+        context.dataStore.edit { preferences -> preferences[DEFAULT_HIDDEN_TABS_KEY] = raw }
+    }
+
+    suspend fun setActiveTripDistance(distance: Double) {
+        context.dataStore.edit { preferences -> preferences[ACTIVE_TRIP_DISTANCE_KEY] = distance }
+    }
+
+    suspend fun setActiveTripStartTime(startTime: Long) {
+        context.dataStore.edit { preferences -> preferences[ACTIVE_TRIP_START_TIME_KEY] = startTime }
+    }
+
+    suspend fun setActiveTripIsPaused(isPaused: Boolean) {
+        context.dataStore.edit { preferences -> preferences[ACTIVE_TRIP_IS_PAUSED_KEY] = isPaused }
+    }
+
+    suspend fun setActiveTripLastLocation(lat: Double, lng: Double) {
+        context.dataStore.edit { preferences ->
+            preferences[ACTIVE_TRIP_LAST_LAT_KEY] = lat
+            preferences[ACTIVE_TRIP_LAST_LNG_KEY] = lng
+        }
+    }
+
+    suspend fun setActiveTripVehicleId(vehicleId: Long) {
+        context.dataStore.edit { preferences -> preferences[ACTIVE_TRIP_VEHICLE_ID_KEY] = vehicleId }
+    }
+
+    suspend fun clearActiveTrip() {
+        context.dataStore.edit { preferences ->
+            preferences.remove(ACTIVE_TRIP_DISTANCE_KEY)
+            preferences.remove(ACTIVE_TRIP_START_TIME_KEY)
+            preferences.remove(ACTIVE_TRIP_IS_PAUSED_KEY)
+            preferences.remove(ACTIVE_TRIP_LAST_LAT_KEY)
+            preferences.remove(ACTIVE_TRIP_LAST_LNG_KEY)
+            preferences.remove(ACTIVE_TRIP_VEHICLE_ID_KEY)
+        }
+    }
+
+    fun getTabOrder(vehicleId: Long): Flow<String> = context.dataStore.data
+        .map { preferences ->
+            preferences[stringPreferencesKey("vehicle_tab_order_$vehicleId")] ?: ""
+        }
+
+    suspend fun setTabOrder(vehicleId: Long, rawOrder: String) {
+        context.dataStore.edit { preferences ->
+            preferences[stringPreferencesKey("vehicle_tab_order_$vehicleId")] = rawOrder
         }
     }
 }

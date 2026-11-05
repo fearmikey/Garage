@@ -23,18 +23,23 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.fearmikey.garage.data.local.entity.TripCategory
 import com.fearmikey.garage.data.local.entity.TripRecord
+import com.fearmikey.garage.ui.settings.parseReimbursementRate
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddTripDialog(
     initialTrip: TripRecord? = null,
+    defaultRate: Double,
+    currencySymbol: String,
+    distanceUnit: String,
     onDismiss: () -> Unit,
     onSave: (TripRecord) -> Unit
 ) {
     var category by remember { mutableStateOf(initialTrip?.category ?: TripCategory.BUSINESS) }
     var distance by remember { mutableStateOf(initialTrip?.calculatedDistance?.toString() ?: "") }
-    var rate by remember { mutableStateOf(initialTrip?.reimbursementRate?.toString() ?: "0.67") } // Default IRS 2024 rate
+    // New trips start from the user's configured default rate (Settings > Mileage reimbursement rate).
+    var rate by remember { mutableStateOf((initialTrip?.reimbursementRate ?: defaultRate).toString()) }
     var notes by remember { mutableStateOf(initialTrip?.notes ?: "") }
     var categoryDropdownExpanded by remember { mutableStateOf(false) }
 
@@ -78,14 +83,15 @@ fun AddTripDialog(
                 OutlinedTextField(
                     value = distance,
                     onValueChange = { distance = it },
-                    label = { Text("Distance (mi)") },
+                    label = { Text("Distance ($distanceUnit)") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
                 )
                 OutlinedTextField(
                     value = rate,
                     onValueChange = { rate = it },
-                    label = { Text("Reimbursement Rate ($/mi)") },
+                    label = { Text("Reimbursement Rate ($currencySymbol/$distanceUnit)") },
+                    prefix = { Text(currencySymbol) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
                 )
@@ -99,7 +105,7 @@ fun AddTripDialog(
         },
         confirmButton = {
             Button(onClick = {
-                val dist = distance.toDoubleOrNull() ?: 0.0
+                val dist = distance.trim().replace(',', '.').toDoubleOrNull() ?: 0.0
                 val trip = TripRecord(
                     id = initialTrip?.id ?: 0,
                     vehicleId = initialTrip?.vehicleId ?: 0, // Assigned by ViewModel
@@ -109,7 +115,7 @@ fun AddTripDialog(
                     endOdometer = 0,
                     calculatedDistance = dist,
                     category = category,
-                    reimbursementRate = rate.toDoubleOrNull() ?: 0.0,
+                    reimbursementRate = parseReimbursementRate(rate) ?: 0.0,
                     tollExpense = 0.0,
                     parkingExpense = 0.0,
                     notes = notes,

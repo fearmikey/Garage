@@ -9,11 +9,13 @@ import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.ModificationCategory
 import com.fearmikey.garage.data.local.entity.ModificationRecord
+import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
 import com.fearmikey.garage.data.repository.ChargingRepository
 import com.fearmikey.garage.data.repository.FuelRepository
 import com.fearmikey.garage.data.repository.MaintenanceRepository
 import com.fearmikey.garage.data.repository.ModificationRepository
 import com.fearmikey.garage.data.repository.PreferencesRepository
+import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.ui.navigation.Destinations
 import com.fearmikey.garage.ui.util.AppCurrency
 import com.fearmikey.garage.ui.util.UnitConverter
@@ -23,6 +25,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -66,6 +69,11 @@ data class CostOfOwnershipUiState(
     val fuelRecordCount: Int = 0,
     val modRecordCount: Int = 0,
     val includeModsInCost: Boolean = false,
+    /** Purchase price recorded in Documents, or null when none was entered. */
+    val purchasePrice: Double? = null,
+    val includePurchaseInCost: Boolean = false,
+    /** Whether the purchase price is part of [totalCost] for the selected time filter. */
+    val purchaseCounted: Boolean = false,
     val categories: List<CategoryCostItem> = emptyList(),
     val selectedTimeFilter: TimeFilter = TimeFilter.ALL_TIME,
     val unitSystem: UnitSystem = UnitSystem.IMPERIAL,
@@ -80,6 +88,7 @@ class CostOfOwnershipViewModel @Inject constructor(
     chargingRepository: ChargingRepository,
     modificationRepository: ModificationRepository,
     private val preferencesRepository: PreferencesRepository,
+    vehicleRepository: VehicleRepository? = null,
 ) : ViewModel() {
 
     val vehicleId: Long = checkNotNull(savedStateHandle[Destinations.VEHICLE_ID_ARG])
@@ -95,6 +104,8 @@ class CostOfOwnershipViewModel @Inject constructor(
         preferencesRepository.appCurrency,
         preferencesRepository.includeModsInCost,
         _timeFilter,
+        vehicleRepository?.getRegistrationInsurance(vehicleId) ?: flowOf(null),
+        preferencesRepository.includePurchaseInCost,
     ) { array ->
         @Suppress("UNCHECKED_CAST")
         val maintenanceRecords = array[0] as List<MaintenanceRecord>
@@ -108,8 +119,22 @@ class CostOfOwnershipViewModel @Inject constructor(
         val currency = array[5] as AppCurrency
         val includeMods = array[6] as Boolean
         val filter = array[7] as TimeFilter
+        val documents = array[8] as VehicleRegistrationInsurance?
+        val includePurchase = array[9] as Boolean
 
         val timeRange = computeTimeRange(filter)
+
+        val purchasePrice = documents?.purchasePrice?.takeIf { it > 0.0 }
+        val purchaseDate = documents?.purchaseDate
+        // An undated purchase can only be placed in "All Time"; a dated one follows the filter.
+        val purchaseInRange = if (purchaseDate == null) {
+            (timeRange.start == null) && (timeRange.end == null)
+        } else {
+            ((timeRange.start == null) || (purchaseDate >= timeRange.start)) &&
+                ((timeRange.end == null) || (purchaseDate <= timeRange.end))
+        }
+        val purchaseCounted = includePurchase && (purchasePrice != null) && purchaseInRange
+        val purchaseTotal = if (purchaseCounted) purchasePrice else 0.0
 
         val filteredMaintenance = maintenanceRecords.filter { record ->
             ((timeRange.start == null) || (record.date >= timeRange.start)) &&
@@ -135,7 +160,7 @@ class CostOfOwnershipViewModel @Inject constructor(
         val fuelTotal = filteredFuel.sumOf { it.totalCost } + filteredCharging.sumOf { it.totalCost }
         val modTotal = filteredMods.sumOf { it.cost }
 
-        val grandTotal = maintTotal + fuelTotal + if (includeMods) modTotal else 0.0
+        val grandTotal = maintTotal + fuelTotal + (if (includeMods) modTotal else 0.0) + purchaseTotal
 
         val categoryItems = mutableListOf<CategoryCostItem>()
 
@@ -175,8 +200,8 @@ class CostOfOwnershipViewModel @Inject constructor(
             val pct = if (grandTotal > 0.0) ((gasTotal / grandTotal) * 100).toFloat() else 0f
             val entries = filteredFuel.asSequence().sortedByDescending { it.date }.map { record ->
                 val displayVolume = UnitConverter.displayVolumeValue(record.gallons, unitSystem)
-                val volumeUnit = if (unitSystem == UnitSystem.METRIC) "L" else "gal"
-                val displayPrice = if (unitSystem == UnitSystem.METRIC) record.pricePerGallon / UnitConverter.LITERS_PER_GALLON else record.pricePerGallon
+                val volumeUnit = unitSystem.volumeUnit
+                val displayPrice = if (unitSystem == UnitSystem.IMPERIAL) record.pricePerGallon else record.pricePerGallon / UnitConverter.LITERS_PER_GALLON
                 CostEntry(
                     id = record.id,
                     date = record.date,
@@ -252,6 +277,29 @@ class CostOfOwnershipViewModel @Inject constructor(
             )
         }
 
+        if (purchaseCounted) {
+            val pct = if (grandTotal > 0.0) ((purchaseTotal / grandTotal) * 100).toFloat() else 0f
+            categoryItems.add(
+                CategoryCostItem(
+                    key = PURCHASE_KEY,
+                    title = "Vehicle Purchase",
+                    totalCost = purchaseTotal,
+                    percentage = pct,
+                    recordCount = 1,
+                    entries = listOf(
+                        CostEntry(
+                            id = 0L,
+                            date = purchaseDate ?: 0L,
+                            title = "Purchase Price",
+                            cost = purchaseTotal,
+                            mileage = 0,
+                            detail = documents?.purchaseSeller?.takeIf { it.isNotBlank() },
+                        ),
+                    ),
+                ),
+            )
+        }
+
         categoryItems.sortByDescending { it.totalCost }
 
         CostOfOwnershipUiState(
@@ -263,6 +311,9 @@ class CostOfOwnershipViewModel @Inject constructor(
             fuelRecordCount = filteredFuel.size + filteredCharging.size,
             modRecordCount = filteredMods.size,
             includeModsInCost = includeMods,
+            purchasePrice = purchasePrice,
+            includePurchaseInCost = includePurchase,
+            purchaseCounted = purchaseCounted,
             categories = categoryItems,
             selectedTimeFilter = filter,
             unitSystem = unitSystem,
@@ -278,6 +329,16 @@ class CostOfOwnershipViewModel @Inject constructor(
         viewModelScope.launch {
             preferencesRepository.setIncludeModsInCost(include)
         }
+    }
+
+    fun toggleIncludePurchase(include: Boolean) {
+        viewModelScope.launch {
+            preferencesRepository.setIncludePurchaseInCost(include)
+        }
+    }
+
+    companion object {
+        const val PURCHASE_KEY = "PURCHASE"
     }
 
     private data class TimeRange(val start: Long? = null, val end: Long? = null)

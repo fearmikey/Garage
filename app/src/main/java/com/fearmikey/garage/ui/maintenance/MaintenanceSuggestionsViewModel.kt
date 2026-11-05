@@ -141,7 +141,13 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
 
     fun saveCustomRule(rule: CustomMaintenanceRule) {
         viewModelScope.launch {
-            customMaintenanceRuleRepository.saveRule(rule.copy(vehicleId = vehicleId))
+            val existing = customRules.value.find { it.taskName.equals(rule.taskName, ignoreCase = true) }
+            val ruleToSave = if (existing != null) {
+                rule.copy(id = existing.id, vehicleId = vehicleId)
+            } else {
+                rule.copy(vehicleId = vehicleId)
+            }
+            customMaintenanceRuleRepository.saveRule(ruleToSave)
             context?.let { WorkScheduler.triggerImmediateReminderCheck(it) }
         }
     }

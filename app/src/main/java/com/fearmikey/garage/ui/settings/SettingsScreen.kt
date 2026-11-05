@@ -14,10 +14,11 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.Comment
 import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.filled.AttachMoney
-import androidx.compose.material.icons.filled.Bluetooth
+
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.CloudSync
 import androidx.compose.material.icons.filled.Code
+import androidx.compose.material.icons.filled.Commute
 import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Language
@@ -34,6 +35,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -51,6 +53,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.unit.dp
 import androidx.core.os.LocaleListCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -63,11 +67,13 @@ import com.fearmikey.garage.ui.components.verticalScrollbar
 import com.fearmikey.garage.ui.obd.ObdDevicePickerDialog
 import com.fearmikey.garage.ui.obd.hasObdBluetoothPermissions
 import com.fearmikey.garage.ui.util.AppCurrency
+import com.fearmikey.garage.ui.util.UnitSystem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     onBack: () -> Unit,
+    onOpenUserPreferences: () -> Unit = {},
     onOpenAppearance: () -> Unit = {},
     onOpenReminders: () -> Unit = {},
     onOpenBackup: () -> Unit = {},
@@ -79,13 +85,8 @@ fun SettingsScreen(
     val uriHandler = LocalUriHandler.current
     val snackbarHostState = remember { SnackbarHostState() }
 
-    var showLanguageDialog by remember { mutableStateOf(false) }
-    var showUnitsDialog by remember { mutableStateOf(false) }
-    var showCurrencyDialog by remember { mutableStateOf(false) }
-    var showDefaultVehicleDialog by remember { mutableStateOf(false) }
     var showAboutDialog by remember { mutableStateOf(false) }
     var showBugReportFeedbackDialog by remember { mutableStateOf(false) }
-    var showObdAdapterDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(uiState.message) {
         uiState.message?.let {
@@ -119,87 +120,14 @@ fun SettingsScreen(
                 SettingsCategoryHeader(stringResource(R.string.settings_user_preferences))
             }
             item {
-                val currentLocales = remember(showLanguageDialog) { context.getSystemService(android.app.LocaleManager::class.java).applicationLocales }
-                val currentLang = if (currentLocales.isEmpty) "" else currentLocales.get(0)?.language ?: ""
-                val languageName = when (currentLang) {
-                    "en" -> stringResource(R.string.language_english)
-                    "fr" -> stringResource(R.string.language_french)
-                    "de" -> stringResource(R.string.language_german)
-                    "pl" -> stringResource(R.string.language_polish)
-                    "es" -> stringResource(R.string.language_spanish)
-                    "it" -> stringResource(R.string.language_italian)
-                    "pt" -> stringResource(R.string.language_portuguese)
-                    "nl" -> stringResource(R.string.language_dutch)
-                    "ru" -> stringResource(R.string.language_russian)
-                    "tr" -> stringResource(R.string.language_turkish)
-                    else -> stringResource(R.string.language_system_default)
-                }
-
                 ListItem(
-                    headlineContent = { Text(stringResource(R.string.language_selection)) },
-                    supportingContent = { Text(languageName) },
+                    headlineContent = { Text(stringResource(R.string.settings_user_preferences)) },
+                    supportingContent = { Text("Language, units, currency, default vehicle, OBD") },
                     leadingContent = { Icon(Icons.Filled.Language, contentDescription = null) },
+                    trailingContent = { Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { showLanguageDialog = true },
-                )
-            }
-            item {
-                ListItem(
-                    headlineContent = { Text(stringResource(R.string.settings_units)) },
-                    supportingContent = { Text(uiState.units.replaceFirstChar { it.uppercase() }) },
-                    leadingContent = { Icon(Icons.Filled.Straighten, contentDescription = null) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { showUnitsDialog = true },
-                )
-            }
-            item {
-                val selectedCurrencyObj = AppCurrency.fromCode(uiState.currency)
-                ListItem(
-                    headlineContent = { Text(stringResource(R.string.settings_currency)) },
-                    supportingContent = { Text(selectedCurrencyObj.displayName) },
-                    leadingContent = { Icon(Icons.Filled.AttachMoney, contentDescription = null) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { showCurrencyDialog = true },
-                )
-            }
-            item {
-                val selectedVehicleName = uiState.vehicles.find { it.id == uiState.defaultVehicleId }?.let { vehicle ->
-                    listOfNotNull(vehicle.year?.toString(), vehicle.make, vehicle.model)
-                        .joinToString(" ")
-                        .ifBlank { vehicle.vin }
-                } ?: "First vehicle added (default)"
-
-                ListItem(
-                    headlineContent = { Text(stringResource(R.string.settings_default_vehicle)) },
-                    supportingContent = { Text("Used for widget shortcuts ($selectedVehicleName)") },
-                    leadingContent = { Icon(Icons.Filled.DirectionsCar, contentDescription = null) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { showDefaultVehicleDialog = true },
-                )
-            }
-            item {
-                val adapterText = uiState.savedObdAdapter?.let { adapter ->
-                    stringResource(
-                        R.string.settings_obd_adapter_summary,
-                        adapter.name,
-                        adapter.type.displayName,
-                        adapter.address,
-                    )
-                } ?: stringResource(R.string.settings_obd_adapter_not_set)
-                ListItem(
-                    headlineContent = { Text(stringResource(R.string.settings_obd_adapter_title)) },
-                    supportingContent = { Text(adapterText) },
-                    leadingContent = { Icon(Icons.Filled.Bluetooth, contentDescription = null) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            if (hasObdBluetoothPermissions(context)) viewModel.loadPairedObdDevices()
-                            showObdAdapterDialog = true
-                        },
+                        .clickable { onOpenUserPreferences() },
                 )
             }
 
@@ -352,77 +280,7 @@ fun SettingsScreen(
     }
 
     // Dialogs
-    if (showLanguageDialog) {
-        val currentLocales = remember { context.getSystemService(android.app.LocaleManager::class.java).applicationLocales }
-        val currentLang = if (currentLocales.isEmpty) "" else currentLocales.get(0)?.language ?: ""
 
-        LanguageSelectionDialog(
-            selectedLangCode = currentLang,
-            onLanguageSelected = { langCode ->
-                val localeManager = context.getSystemService(android.app.LocaleManager::class.java)
-                localeManager.applicationLocales = LocaleListCompat.forLanguageTags(langCode).unwrap() as android.os.LocaleList
-                showLanguageDialog = false
-            },
-            onDismissRequest = { showLanguageDialog = false },
-        )
-    }
-
-    if (showUnitsDialog) {
-        SingleChoiceDialog(
-            title = "Units of Measurement",
-            options = listOf("metric", "imperial"),
-            selectedOption = uiState.units,
-            onOptionSelected = { viewModel.setUnits(it) },
-            onDismissRequest = { showUnitsDialog = false }
-        )
-    }
-
-    if (showCurrencyDialog) {
-        CurrencySelectionDialog(
-            selectedCurrencyCode = uiState.currency,
-            onCurrencySelected = { viewModel.setCurrency(it) },
-            onDismissRequest = { showCurrencyDialog = false },
-        )
-    }
-
-    if (showDefaultVehicleDialog) {
-        DefaultVehicleDialog(
-            vehicles = uiState.vehicles,
-            selectedVehicleId = uiState.defaultVehicleId,
-            onVehicleSelected = { vehicleId ->
-                viewModel.setDefaultVehicleId(vehicleId)
-                showDefaultVehicleDialog = false
-            },
-            onDismissRequest = { showDefaultVehicleDialog = false },
-        )
-    }
-
-    if (showObdAdapterDialog) {
-        ObdDevicePickerDialog(
-            pairedDevices = uiState.pairedObdDevices,
-            bleDevices = uiState.bleObdDevices,
-            isBleScanning = uiState.isObdBleScanning,
-            selected = uiState.savedObdAdapter,
-            onAdapterSelected = { config ->
-                viewModel.setSavedObdAdapter(config)
-                showObdAdapterDialog = false
-            },
-            onDismissRequest = {
-                viewModel.stopObdBleScan()
-                showObdAdapterDialog = false
-            },
-            onRefreshPaired = viewModel::loadPairedObdDevices,
-            onStartBleScan = viewModel::startObdBleScan,
-            onClearSelection = if (uiState.savedObdAdapter != null) {
-                {
-                    viewModel.clearSavedObdAdapter()
-                    showObdAdapterDialog = false
-                }
-            } else {
-                null
-            },
-        )
-    }
 
     if (showAboutDialog) {
         AlertDialog(
@@ -496,3 +354,5 @@ fun SettingsScreen(
         )
     }
 }
+
+

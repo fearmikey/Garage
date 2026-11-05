@@ -6,6 +6,9 @@ import com.fearmikey.garage.data.local.dao.ChargingDao
 import com.fearmikey.garage.data.local.dao.FuelDao
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
 import com.fearmikey.garage.data.local.dao.ModificationDao
+import com.fearmikey.garage.data.local.dao.VehicleRegistrationDao
+import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
+import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.data.local.entity.ChargingRecord
 import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
@@ -31,6 +34,8 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
@@ -83,6 +88,11 @@ class CostOfOwnershipViewModelTest {
 
     private class FakePreferencesRepository : PreferencesRepository {
         val includeModsFlow = MutableStateFlow(false)
+        val includePurchaseFlow = MutableStateFlow(false)
+        override val includePurchaseInCost: Flow<Boolean> = includePurchaseFlow
+        override suspend fun setIncludePurchaseInCost(include: Boolean) {
+            includePurchaseFlow.value = include
+        }
         override val unitsType: Flow<String> = MutableStateFlow("imperial")
         override val unitSystem: Flow<UnitSystem> = MutableStateFlow(UnitSystem.IMPERIAL)
         override val currencyCode: Flow<String> = MutableStateFlow("USD")
@@ -331,4 +341,83 @@ class CostOfOwnershipViewModelTest {
 
         collectJob.cancel()
     }
+
+    @Test
+    fun `purchase price is only counted when toggled on and within the time filter`() = runTest {
+        val vehicleId = 1L
+        val savedStateHandle = SavedStateHandle(mapOf("vehicleId" to vehicleId))
+        val maintDao = FakeMaintenanceDao()
+        val prefsRepo = FakePreferencesRepository()
+        val lastYear = Calendar.getInstance().apply { add(Calendar.YEAR, -1) }.timeInMillis
+
+        maintDao.recordsFlow.value = listOf(
+            MaintenanceRecord(
+                id = 1,
+                vehicleId = vehicleId,
+                date = System.currentTimeMillis(),
+                mileage = 10000,
+                description = "Oil Change",
+                cost = 100.00,
+                category = MaintenanceCategory.FLUIDS,
+            ),
+        )
+        val registrationFlow = MutableStateFlow<VehicleRegistrationInsurance?>(
+            VehicleRegistrationInsurance(
+                vehicleId = vehicleId,
+                purchasePrice = 20_000.0,
+                purchaseDate = lastYear,
+                purchaseSeller = "Main Street Toyota",
+            ),
+        )
+        val registrationDao = object : VehicleRegistrationDao {
+            override fun getByVehicleId(vehicleId: Long): Flow<VehicleRegistrationInsurance?> = registrationFlow
+            override suspend fun upsert(registrationInsurance: VehicleRegistrationInsurance) {}
+            override suspend fun deleteByVehicleId(vehicleId: Long) {}
+        }
+
+        val viewModel = CostOfOwnershipViewModel(
+            savedStateHandle = savedStateHandle,
+            maintenanceRepository = MaintenanceRepository(maintDao),
+            fuelRepository = FuelRepository(FakeFuelDao()),
+            chargingRepository = ChargingRepository(FakeChargingDao()),
+            modificationRepository = ModificationRepository(FakeModificationDao(), FakeImageStorageManager()),
+            preferencesRepository = prefsRepo,
+            vehicleRepository = VehicleRepository(
+                vehicleDao = unused(),
+                vehicleSpecsDao = unused(),
+                vehiclePartsDao = unused(),
+                vehicleRegistrationDao = registrationDao,
+                vinDecoderApi = unused(),
+            ),
+        )
+
+        val collectJob = backgroundScope.launch { viewModel.uiState.collect {} }
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        // Off by default: the price is exposed so the toggle can be shown, but not counted.
+        assertEquals(20_000.0, viewModel.uiState.value.purchasePrice!!, 0.001)
+        assertFalse(viewModel.uiState.value.purchaseCounted)
+        assertEquals(100.00, viewModel.uiState.value.totalCost, 0.001)
+
+        viewModel.toggleIncludePurchase(true)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val included = viewModel.uiState.value
+        assertTrue(included.purchaseCounted)
+        assertEquals(20_100.00, included.totalCost, 0.001)
+        assertEquals(CostOfOwnershipViewModel.PURCHASE_KEY, included.categories.first().key)
+
+        // Bought last year, so it falls outside "This Year".
+        viewModel.setTimeFilter(TimeFilter.THIS_YEAR)
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertFalse(viewModel.uiState.value.purchaseCounted)
+        assertEquals(100.00, viewModel.uiState.value.totalCost, 0.001)
+
+        collectJob.cancel()
+    }
+
+    private inline fun <reified T> unused(): T =
+        java.lang.reflect.Proxy.newProxyInstance(T::class.java.classLoader, arrayOf(T::class.java)) { _, _, _ ->
+            throw UnsupportedOperationException()
+        } as T
 }

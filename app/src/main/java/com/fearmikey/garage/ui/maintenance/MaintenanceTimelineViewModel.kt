@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.VehicleType
 import com.fearmikey.garage.data.repository.MaintenanceRepository
@@ -16,9 +17,13 @@ import com.fearmikey.garage.ui.util.UnitSystem
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.io.File
@@ -49,6 +54,28 @@ class MaintenanceTimelineViewModel @Inject constructor(
 
     val records: StateFlow<List<MaintenanceRecord>> = maintenanceRepository.getRecordsForVehicle(vehicleId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    private val _filter = MutableStateFlow(TimelineFilter())
+    val filter: StateFlow<TimelineFilter> = _filter.asStateFlow()
+
+    /** [records] with the current [filter] applied. */
+    val filteredRecords: StateFlow<List<MaintenanceRecord>> = combine(records, _filter) { all, filter ->
+        filter.apply(all)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    fun onQueryChanged(query: String) = _filter.update { it.copy(query = query) }
+
+    fun onCategoryToggled(category: MaintenanceCategory) = _filter.update {
+        it.copy(categories = if (category in it.categories) it.categories - category else it.categories + category)
+    }
+
+    fun onDateRangeSelected(range: TimelineDateRange) = _filter.update { it.copy(dateRange = range) }
+
+    fun onReceiptsOnlyToggled() = _filter.update { it.copy(receiptsOnly = !it.receiptsOnly) }
+
+    fun onHideAutoEntriesToggled() = _filter.update { it.copy(hideAutoEntries = !it.hideAutoEntries) }
+
+    fun clearFilters() = _filter.update { TimelineFilter() }
 
     val latestMileage: StateFlow<Int?> = maintenanceRepository.getLatestMileageForVehicle(vehicleId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)

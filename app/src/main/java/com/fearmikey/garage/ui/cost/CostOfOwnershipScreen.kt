@@ -26,20 +26,27 @@ import com.fearmikey.garage.ui.components.verticalScrollbar
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AcUnit
 import androidx.compose.material.icons.filled.Air
 import androidx.compose.material.icons.filled.AirlineSeatReclineNormal
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.BuildCircle
+import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.ElectricalServices
+import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.filled.Handyman
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material.icons.filled.Lightbulb
+import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.LocalGasStation
 import androidx.compose.material.icons.filled.Radio
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Sell
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.WaterDrop
@@ -88,6 +95,7 @@ fun CostOfOwnershipScreen(
         uiState = uiState,
         onTimeFilterSelected = viewModel::setTimeFilter,
         onIncludeModsToggled = viewModel::toggleIncludeMods,
+        onIncludePurchaseToggled = viewModel::toggleIncludePurchase,
     )
 }
 
@@ -96,6 +104,7 @@ private fun CostOfOwnershipContent(
     uiState: CostOfOwnershipUiState,
     onTimeFilterSelected: (TimeFilter) -> Unit,
     onIncludeModsToggled: (Boolean) -> Unit,
+    onIncludePurchaseToggled: (Boolean) -> Unit = {},
 ) {
     if (uiState.categories.isEmpty()) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -122,6 +131,7 @@ private fun CostOfOwnershipContent(
                 TotalCostCard(
                     uiState = uiState,
                     onIncludeModsToggled = onIncludeModsToggled,
+                    onIncludePurchaseToggled = onIncludePurchaseToggled,
                 )
             }
 
@@ -151,6 +161,7 @@ private fun CostOfOwnershipContent(
 private fun TotalCostCard(
     uiState: CostOfOwnershipUiState,
     onIncludeModsToggled: (Boolean) -> Unit,
+    onIncludePurchaseToggled: (Boolean) -> Unit,
 ) {
     ElevatedCard(
         modifier = Modifier
@@ -166,9 +177,11 @@ private fun TotalCostCard(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
+                verticalAlignment = Alignment.Top,
             ) {
-                Column {
+                Column(
+                    modifier = Modifier.weight(1f),
+                ) {
                     Text(
                         text = stringResource(R.string.cost_total_title),
                         style = MaterialTheme.typography.labelMedium,
@@ -183,23 +196,57 @@ private fun TotalCostCard(
                     )
                 }
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
-                        .clickable { onIncludeModsToggled(!uiState.includeModsInCost) }
-                        .padding(start = 4.dp, end = 4.dp, top = 4.dp, bottom = 4.dp),
+                Column(
+                    horizontalAlignment = Alignment.Start,
                 ) {
-                    Checkbox(
-                        checked = uiState.includeModsInCost,
-                        onCheckedChange = null,
-                    )
-                    Text(
-                        text = stringResource(R.string.cost_include_mods),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
+                    // Only offered once a purchase price has been entered in Documents.
+                    if (uiState.purchasePrice != null) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .clickable { onIncludePurchaseToggled(!uiState.includePurchaseInCost) }
+                                .padding(horizontal = 4.dp, vertical = 2.dp),
+                        ) {
+                            Checkbox(
+                                checked = uiState.includePurchaseInCost,
+                                onCheckedChange = null,
+                            )
+                            Text(
+                                text = stringResource(R.string.cost_include_purchase),
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .clickable { onIncludeModsToggled(!uiState.includeModsInCost) }
+                            .padding(horizontal = 4.dp, vertical = 2.dp),
+                    ) {
+                        Checkbox(
+                            checked = uiState.includeModsInCost,
+                            onCheckedChange = null,
+                        )
+                        Text(
+                            text = stringResource(R.string.cost_include_mods),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
                 }
+            }
+
+            if (uiState.purchasePrice != null && uiState.includePurchaseInCost && !uiState.purchaseCounted) {
+                Text(
+                    text = stringResource(R.string.cost_purchase_not_counted_in_period),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 4.dp, start = 4.dp),
+                )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -461,12 +508,14 @@ private fun CostEntryRow(
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium,
             )
-            Row {
-                val subtitleText = if (entry.mileage > 0) {
-                    "${entry.date.toDisplayDate()} · ${UnitConverter.formatDistance(entry.mileage, unitSystem)}"
-                } else {
-                    entry.date.toDisplayDate()
-                }
+            val dateText = if (entry.date > 0L) entry.date.toDisplayDate() else null
+            val subtitleText = if (entry.mileage > 0) {
+                if (dateText != null) "$dateText · ${UnitConverter.formatDistance(entry.mileage, unitSystem)}"
+                else UnitConverter.formatDistance(entry.mileage, unitSystem)
+            } else {
+                dateText
+            }
+            if (!subtitleText.isNullOrBlank()) {
                 Text(
                     text = subtitleText,
                     style = MaterialTheme.typography.bodySmall,
@@ -497,6 +546,7 @@ private fun getCategoryIcon(
 ): ImageVector {
     if (key == "FUEL") return Icons.Default.LocalGasStation
     if (key == "MODIFICATIONS") return Icons.Default.Build
+    if (key == CostOfOwnershipViewModel.PURCHASE_KEY) return Icons.Default.Sell
     if (modificationCategory != null) {
         return when (modificationCategory) {
             ModificationCategory.PERFORMANCE -> Icons.Default.Speed
@@ -515,6 +565,13 @@ private fun getCategoryIcon(
         MaintenanceCategory.BRAKES -> Icons.Default.Handyman
         MaintenanceCategory.BATTERY -> Icons.Default.ElectricalServices
         MaintenanceCategory.FLUIDS -> Icons.Default.WaterDrop
+        MaintenanceCategory.FILTERS -> Icons.Default.FilterAlt
+        MaintenanceCategory.ENGINE -> Icons.Default.Settings
+        MaintenanceCategory.DRIVETRAIN -> Icons.Default.Link
+        MaintenanceCategory.SUSPENSION -> Icons.Default.Tune
+        MaintenanceCategory.ELECTRICAL -> Icons.Default.Lightbulb
+        MaintenanceCategory.HVAC -> Icons.Default.AcUnit
+        MaintenanceCategory.BODY -> Icons.Default.DirectionsCar
         MaintenanceCategory.INSPECTION -> Icons.Default.Search
         MaintenanceCategory.REPAIR -> Icons.Default.BuildCircle
         MaintenanceCategory.OTHER, null -> Icons.Default.Build
@@ -591,12 +648,16 @@ private fun CostOfOwnershipPreview() {
                     category = MaintenanceCategory.TIRES,
                 ),
             ),
+            purchasePrice = 25000.0,
+            includePurchaseInCost = true,
+            purchaseCounted = true,
             unitSystem = UnitSystem.IMPERIAL,
         )
         CostOfOwnershipContent(
             uiState = sampleUiState,
             onTimeFilterSelected = {},
             onIncludeModsToggled = {},
+            onIncludePurchaseToggled = {},
         )
     }
 }

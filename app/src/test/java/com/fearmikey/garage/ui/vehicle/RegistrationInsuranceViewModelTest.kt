@@ -128,7 +128,7 @@ class RegistrationInsuranceViewModelTest {
             vinDecoderApi = FakeVinDecoderApi(),
         )
 
-        val viewModel = RegistrationInsuranceViewModel(
+        val viewModel = EditRegistrationInsuranceViewModel(
             savedStateHandle = savedStateHandle,
             vehicleRepository = vehicleRepo,
             imageStorageManager = ImageStorageManager(context = ContextWrapper(null)),
@@ -158,7 +158,7 @@ class RegistrationInsuranceViewModelTest {
             vinDecoderApi = FakeVinDecoderApi(),
         )
 
-        val viewModel = RegistrationInsuranceViewModel(
+        val viewModel = EditRegistrationInsuranceViewModel(
             savedStateHandle = savedStateHandle,
             vehicleRepository = vehicleRepo,
             imageStorageManager = ImageStorageManager(context = ContextWrapper(null)),
@@ -210,7 +210,7 @@ class RegistrationInsuranceViewModelTest {
             vinDecoderApi = FakeVinDecoderApi(),
         )
 
-        val viewModel = RegistrationInsuranceViewModel(
+        val viewModel = EditRegistrationInsuranceViewModel(
             savedStateHandle = savedStateHandle,
             vehicleRepository = vehicleRepo,
             imageStorageManager = ImageStorageManager(context = ContextWrapper(null)),
@@ -244,7 +244,7 @@ class RegistrationInsuranceViewModelTest {
             vinDecoderApi = FakeVinDecoderApi(),
         )
 
-        val viewModel = RegistrationInsuranceViewModel(
+        val viewModel = EditRegistrationInsuranceViewModel(
             savedStateHandle = savedStateHandle,
             vehicleRepository = vehicleRepo,
             imageStorageManager = ImageStorageManager(context = ContextWrapper(null)),
@@ -287,7 +287,7 @@ class RegistrationInsuranceViewModelTest {
             vinDecoderApi = FakeVinDecoderApi(),
         )
 
-        val viewModel = RegistrationInsuranceViewModel(
+        val viewModel = EditRegistrationInsuranceViewModel(
             savedStateHandle = savedStateHandle,
             vehicleRepository = vehicleRepo,
             imageStorageManager = ImageStorageManager(context = ContextWrapper(null)),
@@ -333,7 +333,7 @@ class RegistrationInsuranceViewModelTest {
             vinDecoderApi = FakeVinDecoderApi(),
         )
 
-        val viewModel = RegistrationInsuranceViewModel(
+        val viewModel = EditRegistrationInsuranceViewModel(
             savedStateHandle = savedStateHandle,
             vehicleRepository = vehicleRepo,
             imageStorageManager = ImageStorageManager(context = ContextWrapper(null)),
@@ -369,6 +369,64 @@ class RegistrationInsuranceViewModelTest {
     }
 
     @Test
+    fun `both registration photos are loaded, kept on save and cleared with section`() = runTest(testDispatcher) {
+        val vehicleId = 1L
+        val savedStateHandle = SavedStateHandle(mapOf(Destinations.VEHICLE_ID_ARG to vehicleId))
+        val regDao = FakeVehicleRegistrationDao()
+        regDao.flow.value = VehicleRegistrationInsurance(
+            vehicleId = vehicleId,
+            licensePlate = "WA 12345",
+            registrationImageUri = "front.jpg",
+            registrationImageUri2 = "back.jpg",
+            insuranceProvider = "PZU",
+        )
+
+        val vehicleRepo = VehicleRepository(
+            vehicleDao = FakeVehicleDao(),
+            vehicleSpecsDao = FakeVehicleSpecsDao(),
+            vehiclePartsDao = FakeVehiclePartsDao(),
+            vehicleRegistrationDao = regDao,
+            vinDecoderApi = FakeVinDecoderApi(),
+        )
+
+        val viewModel = EditRegistrationInsuranceViewModel(
+            savedStateHandle = savedStateHandle,
+            vehicleRepository = vehicleRepo,
+            imageStorageManager = ImageStorageManager(context = ContextWrapper(null)),
+            preferencesRepository = FakePreferencesRepository(),
+        )
+
+        val collectJob = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect {} }
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        viewModel.onAddOrEditClicked()
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertEquals("front.jpg", viewModel.uiState.value.registrationImageFilename)
+        assertEquals("back.jpg", viewModel.uiState.value.registrationImageFilename2)
+
+        viewModel.onSave()
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertEquals("front.jpg", regDao.flow.value?.registrationImageUri)
+        assertEquals("back.jpg", regDao.flow.value?.registrationImageUri2)
+
+        viewModel.onAddOrEditClicked()
+        viewModel.onRemoveRegistrationImage2()
+        viewModel.onSave()
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertEquals("front.jpg", regDao.flow.value?.registrationImageUri)
+        assertNull(regDao.flow.value?.registrationImageUri2)
+
+        viewModel.onAddOrEditClicked()
+        viewModel.onDeleteRegistrationSection()
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertNull(regDao.flow.value?.registrationImageUri)
+        assertNull(regDao.flow.value?.registrationImageUri2)
+        assertEquals("PZU", regDao.flow.value?.insuranceProvider)
+
+        collectJob.cancel()
+    }
+
+    @Test
     fun `deleting expanded document sections clears respective fields`() = runTest(testDispatcher) {
         val vehicleId = 1L
         val savedStateHandle = SavedStateHandle(mapOf(Destinations.VEHICLE_ID_ARG to vehicleId))
@@ -388,7 +446,7 @@ class RegistrationInsuranceViewModelTest {
             vinDecoderApi = FakeVinDecoderApi(),
         )
 
-        val viewModel = RegistrationInsuranceViewModel(
+        val viewModel = EditRegistrationInsuranceViewModel(
             savedStateHandle = savedStateHandle,
             vehicleRepository = vehicleRepo,
             imageStorageManager = ImageStorageManager(context = ContextWrapper(null)),
@@ -413,6 +471,58 @@ class RegistrationInsuranceViewModelTest {
         viewModel.onDeleteTollPassParkingSection()
         testDispatcher.scheduler.advanceUntilIdle()
         assertNull(regDao.flow.value)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun `purchase details save and delete without touching other sections or unedited columns`() = runTest(testDispatcher) {
+        val vehicleId = 1L
+        val savedStateHandle = SavedStateHandle(mapOf(Destinations.VEHICLE_ID_ARG to vehicleId))
+        val regDao = FakeVehicleRegistrationDao()
+        regDao.flow.value = VehicleRegistrationInsurance(
+            vehicleId = vehicleId,
+            licensePlate = "7ABC123",
+            // Not editable on this screen; must survive a save.
+            driversLicenseNumber = "D1234567",
+        )
+
+        val viewModel = EditRegistrationInsuranceViewModel(
+            savedStateHandle = savedStateHandle,
+            vehicleRepository = VehicleRepository(
+                vehicleDao = FakeVehicleDao(),
+                vehicleSpecsDao = FakeVehicleSpecsDao(),
+                vehiclePartsDao = FakeVehiclePartsDao(),
+                vehicleRegistrationDao = regDao,
+                vinDecoderApi = FakeVinDecoderApi(),
+            ),
+            imageStorageManager = ImageStorageManager(context = ContextWrapper(null)),
+            preferencesRepository = FakePreferencesRepository(),
+        )
+
+        val collectJob = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect {} }
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        viewModel.onAddOrEditClicked()
+        viewModel.onPurchasePriceChanged("18500.50")
+        viewModel.onPurchaseDateChanged(1_600_000_000_000L)
+        viewModel.onPurchaseSellerChanged("  Main Street Toyota ")
+        viewModel.onSave()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val saved = regDao.flow.value
+        assertEquals(18500.50, saved?.purchasePrice ?: 0.0, 0.001)
+        assertEquals(1_600_000_000_000L, saved?.purchaseDate)
+        assertEquals("Main Street Toyota", saved?.purchaseSeller)
+        assertEquals("7ABC123", saved?.licensePlate)
+        assertEquals("D1234567", saved?.driversLicenseNumber)
+
+        viewModel.onAddOrEditClicked()
+        viewModel.onDeletePurchaseSection()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertFalse(regDao.flow.value?.hasPurchaseData ?: true)
+        assertEquals("7ABC123", regDao.flow.value?.licensePlate)
 
         collectJob.cancel()
     }

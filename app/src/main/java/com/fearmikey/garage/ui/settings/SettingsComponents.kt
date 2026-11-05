@@ -228,7 +228,11 @@ fun SingleChoiceDialog(
                             }
                         )
                         Spacer(modifier = Modifier.padding(start = 8.dp))
-                        Text(text = option.replaceFirstChar { it.uppercase() })
+                        val displayText = when (option) {
+                            "uk_mixed" -> "UK (Mixed)"
+                            else -> option.replaceFirstChar { it.uppercase() }
+                        }
+                        Text(text = displayText)
                     }
                 }
             }
@@ -415,7 +419,7 @@ fun MaintenanceMileageDialog(
     onOptionSelected: (miles: Int) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    val options = if (unitSystem == UnitSystem.IMPERIAL) {
+    val options = if (unitSystem == UnitSystem.IMPERIAL || unitSystem == UnitSystem.UK_MIXED) {
         listOf(
             250 to "250 mi",
             500 to "500 mi",

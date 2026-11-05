@@ -35,6 +35,7 @@ import com.fearmikey.garage.ui.settings.BackupSettingsScreen
 import com.fearmikey.garage.ui.settings.LubeLoggerDuplicatesScreen
 import com.fearmikey.garage.ui.settings.RemindersSettingsScreen
 import com.fearmikey.garage.ui.settings.SettingsScreen
+import com.fearmikey.garage.ui.settings.UserPreferencesSettingsScreen
 import com.fearmikey.garage.ui.startup.StartupScreen
 import com.fearmikey.garage.ui.vehicle.AddEditVehicleScreen
 import com.fearmikey.garage.ui.vehicle.EditPartsScreen
@@ -107,9 +108,16 @@ fun GarageNavHost(
         ) {
             composable(Destinations.STARTUP) {
                 StartupScreen(
-                    onStartupFinished = {
-                        navController.navigate(Destinations.DASHBOARD) {
-                            popUpTo(Destinations.STARTUP) { inclusive = true }
+                    existingVehicleCount = allVehicles.size,
+                    onStartupFinished = { addVehicle ->
+                        // Reset to a single Dashboard entry, whether onboarding ran on first launch
+                        // or was re-opened from Settings (avoids stacking duplicate dashboards).
+                        navController.navigate(Destinations.dashboardRoute()) {
+                            popUpTo(navController.graph.id) { inclusive = true }
+                        }
+                        if (addVehicle) {
+                            // Add/Edit pops back to the Dashboard when done.
+                            navController.navigate(Destinations.addVehicleRoute())
                         }
                     },
                 )
@@ -122,7 +130,7 @@ fun GarageNavHost(
                 DashboardScreen(
                     initialTab = initialTab,
                     onAddVehicle = { navController.navigate(Destinations.addVehicleRoute()) },
-                    onOpenVehicle = { vehicleId, tab -> navController.navigate(Destinations.vehicleDetailRoute(vehicleId, tab)) },
+                    onOpenVehicle = { vehicleId, tab, openAdd -> navController.navigate(Destinations.vehicleDetailRoute(vehicleId, tab, openAdd)) },
                     onOpenSettings = { navController.navigate(Destinations.SETTINGS) },
                     onUpdateMileage = { vehicleId -> mainViewModel.handleDeepLinkIntent(com.fearmikey.garage.MainActivity.ACTION_UPDATE_ODOMETER, vehicleId) },
                     sharedTransitionScope = this@SharedTransitionLayout,
@@ -146,6 +154,7 @@ fun GarageNavHost(
                     onBack = { navController.popBackStack() },
                     onEditVehicle = { vehicleId -> navController.navigate(Destinations.editVehicleRoute(vehicleId)) },
                     onEditParts = { vehicleId -> navController.navigate(Destinations.editPartsRoute(vehicleId)) },
+                    onEditDocuments = { vehicleId -> navController.navigate(Destinations.editDocumentsRoute(vehicleId)) },
                     onExportMaintenance = { vehicleId -> navController.navigate(Destinations.exportMaintenanceRoute(vehicleId)) },
                     onOpenObd = { vehicleId -> navController.navigate("obd_scanner/$vehicleId") },
                     sharedTransitionScope = this@SharedTransitionLayout,
@@ -165,6 +174,15 @@ fun GarageNavHost(
                 arguments = Destinations.editPartsArgs,
             ) {
                 EditPartsScreen(
+                    onDone = { navController.popBackStack() },
+                    onBack = { navController.popBackStack() },
+                )
+            }
+            composable(
+                route = Destinations.EDIT_DOCUMENTS_ROUTE,
+                arguments = Destinations.editDocumentsArgs,
+            ) {
+                com.fearmikey.garage.ui.vehicle.EditRegistrationInsuranceScreen(
                     onDone = { navController.popBackStack() },
                     onBack = { navController.popBackStack() },
                 )
@@ -193,10 +211,16 @@ fun GarageNavHost(
             composable(Destinations.SETTINGS) {
                 SettingsScreen(
                     onBack = { navController.popBackStack() },
+                    onOpenUserPreferences = { navController.navigate(Destinations.SETTINGS_USER_PREFERENCES) },
                     onOpenAppearance = { navController.navigate(Destinations.SETTINGS_APPEARANCE) },
                     onOpenReminders = { navController.navigate(Destinations.SETTINGS_REMINDERS) },
                     onOpenBackup = { navController.navigate(Destinations.SETTINGS_BACKUP) },
                     onOpenStartup = { navController.navigate(Destinations.STARTUP) },
+                )
+            }
+            composable(Destinations.SETTINGS_USER_PREFERENCES) {
+                UserPreferencesSettingsScreen(
+                    onBack = { navController.popBackStack() },
                 )
             }
             composable(Destinations.SETTINGS_APPEARANCE) {

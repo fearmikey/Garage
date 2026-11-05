@@ -106,7 +106,7 @@ private fun finalizeSeries(
 }
 
 private fun distanceInDisplayUnits(miles: Int, unitSystem: UnitSystem): Double = when (unitSystem) {
-    UnitSystem.IMPERIAL -> miles.toDouble()
+    UnitSystem.IMPERIAL, UnitSystem.UK_MIXED -> miles.toDouble()
     UnitSystem.METRIC -> UnitConverter.milesToKm(miles.toDouble())
 }
 
@@ -129,6 +129,7 @@ fun buildFuelTrend(
                 date = e.record.date,
                 value = when (unitSystem) {
                     UnitSystem.IMPERIAL -> e.mpg
+                    UnitSystem.UK_MIXED -> e.mpg * UnitConverter.US_MPG_TO_UK_MPG_FACTOR
                     UnitSystem.METRIC -> UnitConverter.mpgToLitersPer100Km(e.mpg) ?: 0.0
                 },
                 detail = buildString {
@@ -149,10 +150,11 @@ fun buildFuelTrend(
                 val mpg = if (gallons > 0.0) miles / gallons else null
                 when (unitSystem) {
                     UnitSystem.IMPERIAL -> mpg
+                    UnitSystem.UK_MIXED -> mpg?.let { it * UnitConverter.US_MPG_TO_UK_MPG_FACTOR }
                     UnitSystem.METRIC -> mpg?.let { UnitConverter.mpgToLitersPer100Km(it) }
                 }
             },
-            higherIsBetter = unitSystem == UnitSystem.IMPERIAL,
+            higherIsBetter = unitSystem != UnitSystem.METRIC,
             formatValue = { "%.1f %s".format(it, unitSystem.fuelEconomyUnit) },
             formatDelta = { "%.1f".format(it) },
         )
@@ -195,7 +197,7 @@ fun buildFuelTrend(
                 date = r.date,
                 value = when (unitSystem) {
                     UnitSystem.IMPERIAL -> r.totalCost / r.gallons
-                    UnitSystem.METRIC -> r.totalCost / UnitConverter.gallonsToLiters(r.gallons)
+                    UnitSystem.METRIC, UnitSystem.UK_MIXED -> r.totalCost / UnitConverter.gallonsToLiters(r.gallons)
                 },
                 detail = "${money(currency, r.totalCost)} · ${UnitConverter.formatVolume(r.gallons, unitSystem)}" +
                     if (!r.isFullTank) " · partial" else "",
@@ -233,7 +235,7 @@ fun buildChargingTrend(
                 id = e.record.id,
                 date = e.record.date,
                 value = when (unitSystem) {
-                    UnitSystem.IMPERIAL -> e.whPerMi
+                    UnitSystem.IMPERIAL, UnitSystem.UK_MIXED -> e.whPerMi
                     UnitSystem.METRIC -> e.whPerMi / UnitConverter.KM_PER_MILE
                 },
                 detail = "%.1f kWh · %s".format(e.kwhUsed, UnitConverter.formatDistance(e.milesDriven, unitSystem)),

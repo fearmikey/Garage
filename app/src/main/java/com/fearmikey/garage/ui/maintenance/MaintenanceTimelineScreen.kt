@@ -41,6 +41,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.PictureAsPdf
 import androidx.compose.material.icons.filled.Receipt
+import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
@@ -55,6 +56,7 @@ import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -114,12 +116,15 @@ fun MaintenanceTimelineScreen(
     onAddSheetConsumed: () -> Unit = {},
     viewModel: MaintenanceTimelineViewModel = hiltViewModel(),
 ) {
-    val records by viewModel.records.collectAsStateWithLifecycle()
+    val allRecords by viewModel.records.collectAsStateWithLifecycle()
+    val filteredRecords by viewModel.filteredRecords.collectAsStateWithLifecycle()
+    val filter by viewModel.filter.collectAsStateWithLifecycle()
     val latestMileage by viewModel.latestMileage.collectAsStateWithLifecycle()
     val unitSystem by viewModel.unitSystem.collectAsStateWithLifecycle()
     val currencySymbol by viewModel.currencySymbol.collectAsStateWithLifecycle()
     val vehicleType by viewModel.vehicleType.collectAsStateWithLifecycle()
     var showAddSheet by remember { mutableStateOf(value = false) }
+    var showOdometerDialog by remember { mutableStateOf(value = false) }
     var editingRecord by remember { mutableStateOf<MaintenanceRecord?>(null) }
 
     LaunchedEffect(autoOpenAddSheet) {
@@ -130,14 +135,43 @@ fun MaintenanceTimelineScreen(
     }
 
     MaintenanceTimelineContent(
-        records = records,
+        records = filteredRecords,
+        totalRecordCount = allRecords.size,
         unitSystem = unitSystem,
         currencySymbol = currencySymbol,
         receiptFileProvider = viewModel::receiptFileFor,
         onAddClicked = { editingRecord = null; showAddSheet = true },
+        onAddOdometerClicked = { showOdometerDialog = true },
         onEditRecord = { record -> editingRecord = record; showAddSheet = true },
         onDeleteRecord = viewModel::deleteRecord,
+        filterBar = {
+            TimelineFilterBar(
+                filter = filter,
+                shownCount = filteredRecords.size,
+                totalCount = allRecords.size,
+                onQueryChanged = viewModel::onQueryChanged,
+                onCategoryToggled = viewModel::onCategoryToggled,
+                onDateRangeSelected = viewModel::onDateRangeSelected,
+                onReceiptsOnlyToggled = viewModel::onReceiptsOnlyToggled,
+                onHideAutoEntriesToggled = viewModel::onHideAutoEntriesToggled,
+                onClearFilters = viewModel::clearFilters,
+                modifier = Modifier.padding(top = 4.dp),
+            )
+        },
+        onClearFilters = viewModel::clearFilters,
     )
+
+    if (showOdometerDialog) {
+        AddOdometerUpdateDialog(
+            onDismiss = { showOdometerDialog = false },
+            onSave = { record ->
+                viewModel.saveRecord(record)
+                showOdometerDialog = false
+            },
+            latestMileage = latestMileage,
+            unitSystem = unitSystem,
+        )
+    }
 
     if (showAddSheet) {
         AddEditMaintenanceRecordSheet(
@@ -161,24 +195,53 @@ fun MaintenanceTimelineScreen(
 private fun MaintenanceTimelineContent(
     records: List<MaintenanceRecord>,
     unitSystem: UnitSystem,
+    totalRecordCount: Int = records.size,
     currencySymbol: String = "$",
     receiptFileProvider: (String) -> File? = { null },
     onAddClicked: () -> Unit,
+    onAddOdometerClicked: () -> Unit,
     onEditRecord: (MaintenanceRecord) -> Unit,
     onDeleteRecord: (MaintenanceRecord) -> Unit,
+    filterBar: @Composable () -> Unit = {},
+    onClearFilters: () -> Unit = {},
 ) {
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         floatingActionButton = {
-            FloatingActionButton(onClick = onAddClicked) {
-                Icon(Icons.Filled.Add, contentDescription = "Add maintenance record")
+            Column(horizontalAlignment = Alignment.End) {
+                SmallFloatingActionButton(
+                    onClick = onAddOdometerClicked,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                ) {
+                    Icon(Icons.Filled.Speed, contentDescription = "Add odometer update")
+                }
+                FloatingActionButton(onClick = onAddClicked) {
+                    Icon(Icons.Filled.Add, contentDescription = "Add maintenance record")
+                }
             }
         },
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            if (records.isEmpty()) {
+            if (totalRecordCount == 0) {
                 EmptyState(message = "No maintenance logged yet.\nTap + to add your first record.")
             } else {
+                filterBar()
+            }
+            if (totalRecordCount > 0 && records.isEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(32.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(
+                        "No entries match your filters.",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    TextButton(onClick = onClearFilters) { Text("Clear filters") }
+                }
+            } else if (records.isNotEmpty()) {
                 val listState = rememberLazyListState()
                 LazyColumn(
                     state = listState,
@@ -361,7 +424,13 @@ internal fun AddEditMaintenanceRecordSheet(
         )
     }
     var cost by remember { mutableStateOf(initial?.cost?.toString().orEmpty()) }
-    var category by remember { mutableStateOf(initial?.category) }
+    var category by remember {
+        // Records logged before a built-in task moved out of OTHER (e.g. air filters -> FILTERS)
+        // are upgraded to the task's current category so its task picker/deferral options match.
+        val legacyUpgrade = initial?.takeIf { it.category == MaintenanceCategory.OTHER }
+            ?.taskName?.let(MaintenanceScheduleRules::categoryForTask)
+        mutableStateOf(legacyUpgrade ?: initial?.category)
+    }
     var categoryMenuExpanded by remember { mutableStateOf(value = false) }
     var taskName by remember { mutableStateOf(initial?.taskName) }
     var taskMenuExpanded by remember { mutableStateOf(value = false) }
@@ -843,7 +912,7 @@ internal fun AddEditMaintenanceRecordSheet(
     }
 }
 
-private fun openReceiptFile(context: Context, file: File) {
+internal fun openReceiptFile(context: Context, file: File) {
     try {
         val uri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
         val mimeType = if (file.extension.equals("pdf", ignoreCase = true)) "application/pdf" else "image/*"
@@ -865,8 +934,113 @@ private fun MaintenanceTimelineScreenPreview() {
             records = SampleData.tacomaMaintenanceRecords,
             unitSystem = UnitSystem.IMPERIAL,
             onAddClicked = {},
+            onAddOdometerClicked = {},
             onEditRecord = {},
             onDeleteRecord = {},
         )
     }
+}
+
+/**
+ * Lightweight dialog for logging a mileage-only reading on the timeline. Saved as a $0
+ * [MaintenanceRecord] (category OTHER, no taskName) so it feeds latestMileage without
+ * fulfilling any scheduled maintenance rule.
+ */
+@Composable
+internal fun AddOdometerUpdateDialog(
+    onDismiss: () -> Unit,
+    onSave: (record: MaintenanceRecord) -> Unit,
+    latestMileage: Int? = null,
+    unitSystem: UnitSystem = UnitSystem.IMPERIAL,
+) {
+    var mileage by remember {
+        mutableStateOf(latestMileage?.takeIf { it > 0 }?.let { UnitConverter.displayDistanceValue(it, unitSystem).toString() }.orEmpty())
+    }
+    var date by remember { mutableLongStateOf(System.currentTimeMillis()) }
+    var showDatePicker by remember { mutableStateOf(value = false) }
+    val focusManager = LocalFocusManager.current
+
+    if (showDatePicker) {
+        val datePickerState = rememberDatePickerState(initialSelectedDateMillis = date.toUtcDatePickerMillis())
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        datePickerState.selectedDateMillis?.let { utcMillis ->
+                            date = utcMillis.fromUtcDatePickerMillis()
+                        }
+                        showDatePicker = false
+                    }
+                ) { Text("OK") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDatePicker = false }) { Text("Cancel") }
+            },
+        ) { DatePicker(state = datePickerState) }
+    }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Odometer Update") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    OutlinedTextField(
+                        value = date.toDisplayDate(),
+                        onValueChange = {},
+                        readOnly = true,
+                        singleLine = true,
+                        label = { Text("Date") },
+                        trailingIcon = {
+                            IconButton(onClick = { showDatePicker = true }) {
+                                Icon(Icons.Filled.DateRange, contentDescription = "Select date")
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth().focusProperties { canFocus = false },
+                    )
+                    Box(modifier = Modifier.matchParentSize().clickable { showDatePicker = true })
+                }
+                
+                OutlinedTextField(
+                    value = mileage,
+                    onValueChange = { mileage = sanitizeMileageInput(it) },
+                    label = { Text("Mileage (${unitSystem.distanceUnit})") },
+                    singleLine = true,
+                    visualTransformation = ThousandsSeparatorVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Decimal,
+                        imeAction = ImeAction.Done,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { focusManager.clearFocus() },
+                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    val parsedDistance = mileage.parseToIntOrNull() ?: 0
+                    val baseMileage = UnitConverter.canonicalMilesFromInput(parsedDistance, unitSystem)
+                    val record = MaintenanceRecord(
+                        vehicleId = 0L, // will be replaced in viewModel
+                        date = date,
+                        mileage = baseMileage,
+                        description = ODOMETER_UPDATE_DESCRIPTION,
+                        cost = 0.0,
+                        category = MaintenanceCategory.OTHER,
+                    )
+                    onSave(record)
+                },
+                enabled = mileage.isNotBlank()
+            ) {
+                Text("Save")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text("Cancel") }
+        }
+    )
 }

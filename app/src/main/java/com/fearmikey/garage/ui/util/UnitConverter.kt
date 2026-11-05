@@ -19,11 +19,21 @@ enum class UnitSystem(
         volumeUnit = "L",
         fuelEconomyUnit = "L/100km",
         pricePerVolumeUnit = "$/L",
+    ),
+    UK_MIXED(
+        distanceUnit = "mi",
+        volumeUnit = "L",
+        fuelEconomyUnit = "mpg",
+        pricePerVolumeUnit = "$/L",
     );
 
     companion object {
         fun fromString(value: String?): UnitSystem =
-            if (value.equals("metric", ignoreCase = true)) METRIC else IMPERIAL
+            when {
+                value.equals("metric", ignoreCase = true) -> METRIC
+                value.equals("uk_mixed", ignoreCase = true) -> UK_MIXED
+                else -> IMPERIAL
+            }
     }
 }
 
@@ -31,6 +41,7 @@ object UnitConverter {
     const val KM_PER_MILE = 1.609344
     const val LITERS_PER_GALLON = 3.785411784
     const val MPG_TO_L100KM_FACTOR = 235.214583
+    const val US_MPG_TO_UK_MPG_FACTOR = 1.20095
 
     // Distance conversions
     fun milesToKm(miles: Int): Int = (miles * KM_PER_MILE).roundToInt()
@@ -40,13 +51,13 @@ object UnitConverter {
 
     /** Canonical mileage (stored in miles) -> Display mileage integer based on selected [UnitSystem]. */
     fun displayDistanceValue(miles: Int, unitSystem: UnitSystem): Int = when (unitSystem) {
-        UnitSystem.IMPERIAL -> miles
+        UnitSystem.IMPERIAL, UnitSystem.UK_MIXED -> miles
         UnitSystem.METRIC -> milesToKm(miles)
     }
 
     /** Display mileage input (user-entered in miles or km) -> Canonical miles integer for DB. */
     fun canonicalMilesFromInput(input: Int, unitSystem: UnitSystem): Int = when (unitSystem) {
-        UnitSystem.IMPERIAL -> input
+        UnitSystem.IMPERIAL, UnitSystem.UK_MIXED -> input
         UnitSystem.METRIC -> kmToMiles(input)
     }
 
@@ -63,13 +74,13 @@ object UnitConverter {
     /** Canonical volume (gallons) -> Display volume value based on [UnitSystem]. */
     fun displayVolumeValue(gallons: Double, unitSystem: UnitSystem): Double = when (unitSystem) {
         UnitSystem.IMPERIAL -> gallons
-        UnitSystem.METRIC -> gallonsToLiters(gallons)
+        UnitSystem.METRIC, UnitSystem.UK_MIXED -> gallonsToLiters(gallons)
     }
 
     /** Display volume input (user-entered in gallons or liters) -> Canonical gallons for DB. */
     fun canonicalGallonsFromInput(input: Double, unitSystem: UnitSystem): Double = when (unitSystem) {
         UnitSystem.IMPERIAL -> input
-        UnitSystem.METRIC -> litersToGallons(input)
+        UnitSystem.METRIC, UnitSystem.UK_MIXED -> litersToGallons(input)
     }
 
     /** Formats canonical volume (gallons) for display, e.g. "12.500 gal" or "47.318 L". */
@@ -81,7 +92,7 @@ object UnitConverter {
     /** Formats price per unit volume, given pricePerGallon. E.g. "$3.500/gal" or "€0.925/L". */
     fun formatPricePerVolume(pricePerGallon: Double, unitSystem: UnitSystem, currencySymbol: String = "$"): String = when (unitSystem) {
         UnitSystem.IMPERIAL -> "%s%.3f/gal".format(currencySymbol, pricePerGallon)
-        UnitSystem.METRIC -> "%s%.3f/L".format(currencySymbol, pricePerGallon / LITERS_PER_GALLON)
+        UnitSystem.METRIC, UnitSystem.UK_MIXED -> "%s%.3f/L".format(currencySymbol, pricePerGallon / LITERS_PER_GALLON)
     }
 
     // Fuel economy conversions
@@ -94,6 +105,7 @@ object UnitConverter {
         if (mpg == null || mpg <= 0.0) return "—"
         return when (unitSystem) {
             UnitSystem.IMPERIAL -> "%.1f mpg".format(mpg)
+            UnitSystem.UK_MIXED -> "%.1f mpg".format(mpg * US_MPG_TO_UK_MPG_FACTOR)
             UnitSystem.METRIC -> {
                 val l100km = mpgToLitersPer100Km(mpg)
                 if (l100km != null) "%.1f L/100km".format(l100km) else "—"
@@ -104,6 +116,7 @@ object UnitConverter {
     /** Formats segment fuel economy text, e.g. "28.5 mpg since last full tank" or "8.3 L/100km since last full tank". */
     fun formatSegmentFuelEconomy(mpg: Double, unitSystem: UnitSystem): String = when (unitSystem) {
         UnitSystem.IMPERIAL -> "%.1f mpg since last full tank".format(mpg)
+        UnitSystem.UK_MIXED -> "%.1f mpg since last full tank".format(mpg * US_MPG_TO_UK_MPG_FACTOR)
         UnitSystem.METRIC -> {
             val l100km = mpgToLitersPer100Km(mpg)
             if (l100km != null) "%.1f L/100km since last full tank".format(l100km)
@@ -116,7 +129,7 @@ object UnitConverter {
     fun formatWhPerMi(whPerMi: Double?, unitSystem: UnitSystem): String {
         if (whPerMi == null || whPerMi <= 0.0) return "—"
         return when (unitSystem) {
-            UnitSystem.IMPERIAL -> "%.0f Wh/mi".format(whPerMi)
+            UnitSystem.IMPERIAL, UnitSystem.UK_MIXED -> "%.0f Wh/mi".format(whPerMi)
             UnitSystem.METRIC -> "%.0f Wh/km".format(whPerMi / KM_PER_MILE)
         }
     }
@@ -125,7 +138,7 @@ object UnitConverter {
     fun formatKwhPer100Km(whPerMi: Double?, unitSystem: UnitSystem): String {
         if (whPerMi == null || whPerMi <= 0.0) return "—"
         return when (unitSystem) {
-            UnitSystem.IMPERIAL -> {
+            UnitSystem.IMPERIAL, UnitSystem.UK_MIXED -> {
                 val kwh100mi = (whPerMi * 100.0) / 1000.0
                 "%.1f kWh/100mi".format(kwh100mi)
             }
@@ -151,7 +164,7 @@ object UnitConverter {
         val numMatch = Regex("""\d+(?:[.,]\d+)?""").find(capacityStr)?.value?.parseToDoubleOrNull() ?: return capacityStr
         val hasLiters = capacityStr.contains("L", ignoreCase = true) && !capacityStr.contains("gal", ignoreCase = true)
         return when (unitSystem) {
-            UnitSystem.METRIC -> {
+            UnitSystem.METRIC, UnitSystem.UK_MIXED -> {
                 if (hasLiters) "%.1f L".format(numMatch)
                 else "%.1f L".format(numMatch * 0.946353)
             }
@@ -170,7 +183,7 @@ object UnitConverter {
         val hasBar = psiStr.contains("bar", ignoreCase = true)
         val hasKpa = psiStr.contains("kPa", ignoreCase = true)
         return when (unitSystem) {
-            UnitSystem.METRIC -> {
+            UnitSystem.METRIC, UnitSystem.UK_MIXED -> {
                 if (hasBar) "%.1f bar".format(numMatch)
                 else if (hasKpa) "${numMatch.roundToInt()} kPa"
                 else "%.1f bar".format(numMatch * 0.0689476)
@@ -191,7 +204,7 @@ object UnitConverter {
         val hasMm = sizeStr.contains("mm", ignoreCase = true)
         val hasCm = sizeStr.contains("cm", ignoreCase = true)
         return when (unitSystem) {
-            UnitSystem.METRIC -> {
+            UnitSystem.METRIC, UnitSystem.UK_MIXED -> {
                 if (hasMm) "${numMatch.roundToInt()} mm"
                 else if (hasCm) "${(numMatch * 10).roundToInt()} mm"
                 else "${(numMatch * 25.4).roundToInt()} mm"
@@ -211,7 +224,7 @@ object UnitConverter {
         val numMatch = Regex("""\d+(?:[.,]\d+)?""").find(gapStr)?.value?.parseToDoubleOrNull() ?: return gapStr
         val hasMm = gapStr.contains("mm", ignoreCase = true)
         return when (unitSystem) {
-            UnitSystem.METRIC -> {
+            UnitSystem.METRIC, UnitSystem.UK_MIXED -> {
                 if (hasMm) "%.1f mm".format(numMatch)
                 else "%.1f mm".format(numMatch * 25.4)
             }

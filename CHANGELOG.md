@@ -1,3 +1,13 @@
+## [1.3.7] - 2026-10-26
+
+### Added
+* **Updated Document Management:** Track custom vehicle documents, receipts, certificates, and files with dedicated document storage and management UI.
+* **Foreground Trip Tracking Service:** Dedicated background service for real-time trip and mileage tracking.
+* **Advanced Timeline Filtering:** Interactive timeline filter bar and category chips for filtering maintenance records and vehicle events.
+* **Customizable Vehicle Tabs & Smart Alerts:** Personalized vehicle tab configuration and dynamic tab notification badges.
+* **Database Migrations (Schemas 30-32):** Room database schema updates supporting custom documents and enhanced trip records.
+* **Expanded Test Suite:** Comprehensive unit test coverage for document expiration engines, trip repositories, and timeline filters.
+
 ## [1.3.6] - 2026-10-26
 
 ### Added

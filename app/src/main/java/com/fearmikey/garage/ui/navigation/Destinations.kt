@@ -17,6 +17,7 @@ object Destinations {
     )
 
     const val SETTINGS = "settings"
+    const val SETTINGS_USER_PREFERENCES = "settings/user_preferences"
     const val SETTINGS_APPEARANCE = "settings/appearance"
     const val SETTINGS_REMINDERS = "settings/reminders"
     const val SETTINGS_BACKUP = "settings/backup"
@@ -56,6 +57,12 @@ object Destinations {
     const val EDIT_PARTS_ROUTE = "vehicle/parts/edit?$VEHICLE_ID_ARG={$VEHICLE_ID_ARG}"
     fun editPartsRoute(vehicleId: Long) = "vehicle/parts/edit?$VEHICLE_ID_ARG=$vehicleId"
     val editPartsArgs = listOf(
+        navArgument(VEHICLE_ID_ARG) { type = NavType.LongType },
+    )
+
+    const val EDIT_DOCUMENTS_ROUTE = "vehicle/documents/edit?$VEHICLE_ID_ARG={$VEHICLE_ID_ARG}"
+    fun editDocumentsRoute(vehicleId: Long) = "vehicle/documents/edit?$VEHICLE_ID_ARG=$vehicleId"
+    val editDocumentsArgs = listOf(
         navArgument(VEHICLE_ID_ARG) { type = NavType.LongType },
     )
 

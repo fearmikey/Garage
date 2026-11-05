@@ -74,7 +74,7 @@ object ObdFormatter {
         ObdUnit.PERCENT_SIGNED -> String.format(Locale.getDefault(), "%+.1f%%", value)
         ObdUnit.RPM -> "${value.roundToInt()} rpm"
         ObdUnit.TEMPERATURE_C -> temperature(value, unitSystem)
-        ObdUnit.SPEED_KMH -> if (unitSystem == UnitSystem.IMPERIAL) {
+        ObdUnit.SPEED_KMH -> if (unitSystem == UnitSystem.IMPERIAL || unitSystem == UnitSystem.UK_MIXED) {
             "${(value / 1.609344).roundToInt()} mph"
         } else {
             "${value.roundToInt()} km/h"

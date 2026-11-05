@@ -1,0 +1,7 @@
+# Agent & Assistant Rules for Garage
+
+Before attempting any code modification, you must consult .agent_manifest.json to identify the architectural pattern and the specific files responsible for data flow. Do not guess file paths.
+
+At the end of each session where code files, features, or architectural patterns were added, modified, or deleted, update .agent_manifest.json to reflect the changes.
+
+Always maintain strict 100% FOSS compliance (no Google Play Services, Firebase, ML Kit, AdMob, or proprietary SDKs).

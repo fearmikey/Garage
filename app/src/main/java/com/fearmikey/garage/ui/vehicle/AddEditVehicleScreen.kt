@@ -35,6 +35,7 @@ import com.fearmikey.garage.ui.components.verticalScrollbar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AddAPhoto
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.QrCodeScanner
@@ -42,6 +43,8 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
@@ -50,6 +53,14 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
+import com.fearmikey.garage.ui.util.fromUtcDatePickerMillis
+import com.fearmikey.garage.ui.util.toDisplayDate
+import com.fearmikey.garage.ui.util.toUtcDatePickerMillis
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -101,7 +112,7 @@ fun AddEditVehicleScreen(
 
     val scanLauncher = rememberLauncherForActivityResult(ScanContract()) { result ->
         if (result.contents != null) {
-            viewModel.onVinChanged(result.contents)
+            viewModel.onVinScanned(result.contents)
         }
     }
 
@@ -109,9 +120,55 @@ fun AddEditVehicleScreen(
         if (uiState.saveComplete || uiState.deleteComplete) onDone()
     }
 
+    var showUnsavedChangesDialog by remember { mutableStateOf(false) }
+
+    val handleBack = {
+        if (viewModel.hasUnsavedChanges()) {
+            showUnsavedChangesDialog = true
+        } else {
+            onBack()
+        }
+    }
+
+    androidx.activity.compose.BackHandler(onBack = handleBack)
+
+    if (showUnsavedChangesDialog) {
+        AlertDialog(
+            onDismissRequest = { showUnsavedChangesDialog = false },
+            title = { Text("Unsaved Changes") },
+            text = { Text("You have unsaved changes. Do you want to save or discard them?") },
+            confirmButton = {
+                Row {
+                    TextButton(
+                        onClick = {
+                            showUnsavedChangesDialog = false
+                            onBack()
+                        },
+                        colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
+                    ) {
+                        Text("Discard")
+                    }
+                    Button(
+                        onClick = {
+                            showUnsavedChangesDialog = false
+                            viewModel.onSave()
+                        },
+                    ) {
+                        Text("Save")
+                    }
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showUnsavedChangesDialog = false }) {
+                    Text("Cancel")
+                }
+            },
+        )
+    }
+
     AddEditVehicleContent(
         uiState = uiState,
-        onBack = onBack,
+        onBack = handleBack,
         onVinChanged = viewModel::onVinChanged,
         onDecodeVinClicked = viewModel::onDecodeVinClicked,
         onScanVinClicked = {
@@ -132,6 +189,8 @@ fun AddEditVehicleScreen(
         onDrivetrainChanged = viewModel::onDrivetrainChanged,
         onFuelTypeChanged = viewModel::onFuelTypeChanged,
         onPurchasedNewChanged = viewModel::onPurchasedNewChanged,
+        onPurchasePriceChanged = viewModel::onPurchasePriceChanged,
+        onPurchaseDateChanged = viewModel::onPurchaseDateChanged,
         onInitialMileageChanged = viewModel::onInitialMileageChanged,
         onThemeColorChanged = viewModel::onThemeColorChanged,
         onImagesPicked = viewModel::onImagesPicked,
@@ -159,6 +218,8 @@ private fun AddEditVehicleContent(
     onDrivetrainChanged: (Drivetrain) -> Unit = {},
     onFuelTypeChanged: (String) -> Unit = {},
     onPurchasedNewChanged: (Boolean) -> Unit = {},
+    onPurchasePriceChanged: (String) -> Unit = {},
+    onPurchaseDateChanged: (Long?) -> Unit = {},
     onInitialMileageChanged: (String) -> Unit = {},
     onThemeColorChanged: (Int?) -> Unit = {},
     onImagesPicked: (List<Uri>) -> Unit = {},
@@ -186,6 +247,7 @@ private fun AddEditVehicleContent(
     }
 
     var showDeleteDialog by remember { mutableStateOf(value = false) }
+    var photoIndexToDelete by remember { mutableStateOf<Int?>(null) }
 
     Scaffold(
         topBar = {
@@ -339,7 +401,7 @@ private fun AddEditVehicleContent(
                                     )
                                 }
                                 IconButton(
-                                    onClick = { onRemovePhoto(currentPage) },
+                                    onClick = { photoIndexToDelete = currentPage },
                                 ) {
                                     Icon(
                                         Icons.Filled.Delete,
@@ -485,8 +547,14 @@ private fun AddEditVehicleContent(
                         }
                     }
                 },
-                supportingText = uiState.vinDecodeError?.let { error ->
-                    { Text(error, color = MaterialTheme.colorScheme.error) }
+                supportingText = when {
+                    uiState.vinDecodeError != null -> {
+                        { Text(uiState.vinDecodeError, color = MaterialTheme.colorScheme.error) }
+                    }
+                    uiState.vinDecodeWarning != null -> {
+                        { Text(uiState.vinDecodeWarning) }
+                    }
+                    else -> null
                 },
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -643,6 +711,62 @@ private fun AddEditVehicleContent(
                 }
             }
 
+            OutlinedTextField(
+                value = uiState.purchasePrice,
+                onValueChange = onPurchasePriceChanged,
+                label = { Text("Purchase Price") },
+                prefix = { Text(uiState.currencySymbol) },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            var showPurchaseDatePicker by remember { mutableStateOf(false) }
+
+            OutlinedTextField(
+                value = uiState.purchaseDate?.toDisplayDate().orEmpty(),
+                onValueChange = {},
+                readOnly = true,
+                label = { Text("Purchase Date") },
+                placeholder = { Text("Select Date") },
+                trailingIcon = {
+                    IconButton(onClick = { showPurchaseDatePicker = true }) {
+                        Icon(Icons.Default.CalendarToday, contentDescription = "Select Purchase Date")
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { showPurchaseDatePicker = true },
+            )
+
+            if (showPurchaseDatePicker) {
+                val datePickerState = rememberDatePickerState(
+                    initialSelectedDateMillis = uiState.purchaseDate?.toUtcDatePickerMillis(),
+                )
+                DatePickerDialog(
+                    onDismissRequest = { showPurchaseDatePicker = false },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                datePickerState.selectedDateMillis?.let { utcMillis ->
+                                    onPurchaseDateChanged(utcMillis.fromUtcDatePickerMillis())
+                                }
+                                showPurchaseDatePicker = false
+                            },
+                        ) {
+                            Text("OK")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { showPurchaseDatePicker = false }) {
+                            Text("Cancel")
+                        }
+                    },
+                ) {
+                    DatePicker(state = datePickerState)
+                }
+            }
+
             val initialLabel = if (uiState.unitSystem == com.fearmikey.garage.ui.util.UnitSystem.METRIC) "Initial Odometer (km)" else "Initial Mileage (mi)"
             OutlinedTextField(
                 value = uiState.initialMileage,
@@ -695,6 +819,30 @@ private fun AddEditVehicleContent(
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteDialog = false }) {
+                    Text("Cancel")
+                }
+            },
+        )
+    }
+
+    photoIndexToDelete?.let { index ->
+        AlertDialog(
+            onDismissRequest = { photoIndexToDelete = null },
+            title = { Text("Delete Photo?") },
+            text = { Text("Are you sure you want to delete this photo?") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        onRemovePhoto(index)
+                        photoIndexToDelete = null
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
+                ) {
+                    Text("Delete")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { photoIndexToDelete = null }) {
                     Text("Cancel")
                 }
             },

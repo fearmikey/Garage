@@ -287,14 +287,14 @@ private fun EditPartsContent(
             OutlinedTextField(
                 value = tirePsiFront,
                 onValueChange = { tirePsiFront = it },
-                label = { Text("Front tire PSI") },
+                label = { Text("Front tire pressure") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth(),
             )
             OutlinedTextField(
                 value = tirePsiRear,
                 onValueChange = { tirePsiRear = it },
-                label = { Text("Rear tire PSI") },
+                label = { Text("Rear tire pressure") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth(),
             )

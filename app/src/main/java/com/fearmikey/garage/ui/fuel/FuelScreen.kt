@@ -62,6 +62,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -117,8 +118,8 @@ fun FuelScreen(
     viewModel: FuelViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    var showAddFuelSheet by remember { mutableStateOf(false) }
-    var showAddChargingSheet by remember { mutableStateOf(false) }
+    var showAddFuelSheet by rememberSaveable { mutableStateOf(false) }
+    var showAddChargingSheet by rememberSaveable { mutableStateOf(false) }
     var editingFuelRecord by remember { mutableStateOf<FuelRecord?>(null) }
     var editingChargingRecord by remember { mutableStateOf<ChargingRecord?>(null) }
 
@@ -1231,7 +1232,7 @@ internal fun AddEditFuelRecordSheet(
             OutlinedTextField(
                 value = gallons,
                 onValueChange = { gallons = it.filter { c -> c.isDigit() || c == '.' || c == ',' } },
-                label = { Text(if (unitSystem == UnitSystem.METRIC) stringResource(R.string.fuel_liters) else stringResource(R.string.fuel_gallons)) },
+                label = { Text(if (unitSystem == UnitSystem.IMPERIAL) stringResource(R.string.fuel_gallons) else stringResource(R.string.fuel_liters)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Decimal,
@@ -1256,7 +1257,7 @@ internal fun AddEditFuelRecordSheet(
                 ),
                 supportingText = {
                     if ((gallonsValue != null) && (gallonsValue > 0.0) && (totalCostValue != null)) {
-                        val unitLabel = if (unitSystem == UnitSystem.METRIC) "L" else "gal"
+                        val unitLabel = unitSystem.volumeUnit
                         Text("%s%.3f / %s".format(currencySymbol, totalCostValue / gallonsValue, unitLabel))
                     }
                 },

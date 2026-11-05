@@ -8,6 +8,7 @@ import com.fearmikey.garage.GarageApplication
 import com.fearmikey.garage.data.fuel.FuelEconomyCalculator
 import com.fearmikey.garage.data.fuel.FuelEconomyEntry
 import com.fearmikey.garage.data.local.CloudBackupPreferencesManager
+import com.fearmikey.garage.data.local.entity.CustomDocument
 import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
 import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.data.local.entity.IgnoredMaintenanceRule
@@ -16,6 +17,7 @@ import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
 import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerCredentialsManager
 import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerSyncStatus
+import com.fearmikey.garage.data.repository.CustomDocumentRepository
 import com.fearmikey.garage.data.repository.CustomMaintenanceRuleRepository
 import com.fearmikey.garage.data.repository.FuelRepository
 import com.fearmikey.garage.data.repository.ImageStorageManager
@@ -93,6 +95,7 @@ class DashboardViewModel @Inject constructor(
     private val lubeLoggerCredentialsManager: LubeLoggerCredentialsManager,
     private val webDavBackupRepository: WebDavBackupRepository,
     private val cloudBackupPreferencesManager: CloudBackupPreferencesManager,
+    customDocumentRepository: CustomDocumentRepository? = null,
 ) : ViewModel() {
 
     private val _isRefreshing = MutableStateFlow(false)
@@ -163,6 +166,7 @@ class DashboardViewModel @Inject constructor(
                             maintenanceRepository.getIgnoredRulesForVehicle(vehicle.id),
                             preferencesRepository.maintenanceMileageWindow,
                             preferencesRepository.maintenanceDaysWindow,
+                            customDocumentRepository?.getDocumentsForVehicle(vehicle.id) ?: flowOf(emptyList<CustomDocument>()),
                         ) { flows: Array<Any?> ->
                             val mileage = flows[0] as? Int
                             val maintenanceRecords = (flows[1] as? List<*>)?.filterIsInstance<MaintenanceRecord>() ?: emptyList()
@@ -172,6 +176,7 @@ class DashboardViewModel @Inject constructor(
                             val ignoredRules = (flows[5] as? List<*>)?.filterIsInstance<IgnoredMaintenanceRule>() ?: emptyList()
                             val upcomingWindowMiles = flows[6] as? Int ?: 500
                             val upcomingWindowDays = flows[7] as? Int ?: 10
+                            val customDocuments = (flows[8] as? List<*>)?.filterIsInstance<CustomDocument>() ?: emptyList()
 
                             val fuelEntries = FuelEconomyCalculator.entriesFor(fuelRecords)
                             val avgMpg = FuelEconomyCalculator.averageMpg(fuelEntries)
@@ -186,12 +191,11 @@ class DashboardViewModel @Inject constructor(
                                 upcomingWindowDays = upcomingWindowDays,
                             )
 
-                            val docReminders = regIns?.let {
-                                DocumentExpirationEngine.checkExpirations(
-                                    record = it,
-                                    upcomingWindowDays = upcomingWindowDays,
-                                )
-                            } ?: emptyList()
+                            val docReminders = DocumentExpirationEngine.checkAll(
+                                record = regIns,
+                                customDocuments = customDocuments,
+                                upcomingWindowDays = upcomingWindowDays,
+                            )
 
                             val overdueCount = suggestions.count { it.status == ReminderStatus.OVERDUE } +
                                 docReminders.count { it.status == ReminderStatus.OVERDUE }

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fearmikey.garage.data.local.entity.Drivetrain
 import com.fearmikey.garage.data.local.entity.Vehicle
+import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
 import com.fearmikey.garage.data.local.entity.VehicleSpecs
 import com.fearmikey.garage.data.local.entity.VehicleType
 import com.fearmikey.garage.data.repository.ImageStorageManager
@@ -19,10 +20,13 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
+import com.fearmikey.garage.ui.util.parseToDoubleOrNull
 import com.fearmikey.garage.ui.util.parseToIntOrNull
+import com.fearmikey.garage.util.VinValidator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -45,12 +49,17 @@ data class AddEditVehicleUiState(
     val drivetrain: Drivetrain = Drivetrain.UNKNOWN,
     val fuelType: String = "",
     val purchasedNew: Boolean = false,
+    val purchasePrice: String = "",
+    val purchaseDate: Long? = null,
+    val currencySymbol: String = "$",
     val initialMileage: String = "",
     val themeColor: Int? = null,
     val unitSystem: UnitSystem = UnitSystem.IMPERIAL,
     val photos: List<VehiclePhotoItem> = emptyList(),
     val isDecodingVin: Boolean = false,
     val vinDecodeError: String? = null,
+    /** Non-fatal note from a successful-but-partial VIN decode (e.g. model year unknown). */
+    val vinDecodeWarning: String? = null,
     val isSaving: Boolean = false,
     val isEditing: Boolean = false,
     val saveComplete: Boolean = false,
@@ -78,20 +87,35 @@ class AddEditVehicleViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(AddEditVehicleUiState(isEditing = isEditing))
     val uiState: StateFlow<AddEditVehicleUiState> = _uiState.asStateFlow()
 
+    private var initialStateSnapshot: AddEditVehicleUiState? = null
+
     // The filenames the vehicle had on disk when this editing session started.
     // Deleting old photos is deferred until saved via onSave().
     private var originalImageFilenames: List<String> = emptyList()
 
+    // Per-vehicle tab visibility isn't edited on this screen, so it must be carried over on save.
+    private var originalHiddenTabs: String = ""
+
     init {
         viewModelScope.launch {
-            preferencesRepository.unitSystem.collect { system ->
-                _uiState.update { it.copy(unitSystem = system) }
+            combine(
+                preferencesRepository.unitSystem,
+                preferencesRepository.appCurrency,
+            ) { system, currency ->
+                Pair(system, currency)
+            }.collect { (system, currency) ->
+                _uiState.update { it.copy(unitSystem = system, currencySymbol = currency.symbol) }
+                if (!isEditing && initialStateSnapshot == null) {
+                    initialStateSnapshot = _uiState.value
+                }
             }
         }
         if (isEditing) {
             viewModelScope.launch {
                 val system = preferencesRepository.unitSystem.first()
+                val currency = preferencesRepository.appCurrency.first()
                 val specs = vehicleRepository.getVehicleSpecsOnce(vehicleId)
+                val reg = vehicleRepository.getRegistrationInsurance(vehicleId).first()
                 vehicleRepository.getVehicleByIdOnce(vehicleId)?.let { vehicle ->
                     val loadedPhotos = vehicle.photos.map { photo ->
                         VehiclePhotoItem(
@@ -101,9 +125,14 @@ class AddEditVehicleViewModel @Inject constructor(
                         )
                     }
                     originalImageFilenames = vehicle.photos.map { it.uri }
+                    originalHiddenTabs = vehicle.hiddenTabs
                     val displayInitial = vehicle.initialMileage?.let { UnitConverter.displayDistanceValue(it, system) }?.toString().orEmpty()
+                    val purchasePriceString = reg?.purchasePrice?.let {
+                        if (it % 1.0 == 0.0) "%.0f".format(it) else "%.2f".format(it)
+                    }.orEmpty()
+                    val purchaseDate = reg?.purchaseDate
                     _uiState.update {
-                        it.copy(
+                        val updated = it.copy(
                             vehicleType = vehicle.vehicleType,
                             vin = vehicle.vin,
                             year = vehicle.year?.toString().orEmpty(),
@@ -113,11 +142,16 @@ class AddEditVehicleViewModel @Inject constructor(
                             drivetrain = vehicle.drivetrain,
                             fuelType = specs?.fuelType.orEmpty(),
                             purchasedNew = vehicle.purchasedNew,
+                            purchasePrice = purchasePriceString,
+                            purchaseDate = purchaseDate,
                             initialMileage = displayInitial,
                             themeColor = vehicle.themeColor,
                             unitSystem = system,
+                            currencySymbol = currency.symbol,
                             photos = loadedPhotos,
                         )
+                        initialStateSnapshot = updated
+                        updated
                     }
                 }
             }
@@ -125,21 +159,50 @@ class AddEditVehicleViewModel @Inject constructor(
     }
 
     fun onVinChanged(vin: String) {
-        val normalized = vin.uppercase().take(17)
-        _uiState.update { it.copy(vin = normalized, vinDecodeError = null) }
-        if (normalized.length == 17) {
+        val normalized = VinValidator.normalize(vin).take(VinValidator.VIN_LENGTH)
+        val previous = _uiState.value.vin
+        _uiState.update { it.copy(vin = normalized, vinDecodeError = null, vinDecodeWarning = null) }
+        // Auto-decode once a full VIN is entered, but not when an edit (e.g. typing a stripped
+        // separator) left the VIN unchanged, to avoid duplicate API calls.
+        if ((normalized != previous) && VinValidator.isValidVin(normalized)) {
             decodeVin(normalized)
+        }
+    }
+
+    /** Handles raw barcode/QR scanner output, which may not actually contain a VIN. */
+    fun onVinScanned(contents: String) {
+        val vin = VinValidator.extractVinFromScan(contents)
+        if (vin != null) {
+            onVinChanged(vin)
+        } else {
+            // Keep whatever the user already typed; just explain why nothing happened.
+            _uiState.update {
+                it.copy(
+                    vinDecodeError = "The scanned code (\"${contents.take(20)}\") doesn't contain a VIN. " +
+                        "Try the VIN barcode, or type the VIN manually.",
+                    vinDecodeWarning = null,
+                )
+            }
         }
     }
 
     fun onDecodeVinClicked() {
         val vin = _uiState.value.vin
-        if (vin.isNotBlank()) decodeVin(vin)
+        if (VinValidator.isValidVin(vin)) {
+            decodeVin(vin)
+        } else {
+            _uiState.update {
+                it.copy(
+                    vinDecodeError = "A VIN must be ${VinValidator.VIN_LENGTH} characters (currently ${vin.length}).",
+                    vinDecodeWarning = null,
+                )
+            }
+        }
     }
 
     private fun decodeVin(vin: String) {
         viewModelScope.launch {
-            _uiState.update { it.copy(isDecodingVin = true, vinDecodeError = null) }
+            _uiState.update { it.copy(isDecodingVin = true, vinDecodeError = null, vinDecodeWarning = null) }
             when (val result = vehicleRepository.decodeVin(vin)) {
                 is VinLookupResult.Success -> _uiState.update {
                     it.copy(
@@ -156,6 +219,7 @@ class AddEditVehicleViewModel @Inject constructor(
                         },
                         fuelType = result.info.specs.fuelType?.ifBlank { it.fuelType } ?: it.fuelType,
                         pendingSpecs = result.info.specs,
+                        vinDecodeWarning = result.warning,
                     )
                 }
                 is VinLookupResult.Error -> _uiState.update {
@@ -179,6 +243,11 @@ class AddEditVehicleViewModel @Inject constructor(
     fun onDrivetrainChanged(drivetrain: Drivetrain) = _uiState.update { it.copy(drivetrain = drivetrain) }
     fun onFuelTypeChanged(fuelType: String) = _uiState.update { it.copy(fuelType = fuelType) }
     fun onPurchasedNewChanged(isNew: Boolean) = _uiState.update { it.copy(purchasedNew = isNew) }
+    fun onPurchasePriceChanged(price: String) {
+        val filtered = price.filter { c -> c.isDigit() || c == '.' || c == ',' }
+        _uiState.update { it.copy(purchasePrice = filtered) }
+    }
+    fun onPurchaseDateChanged(date: Long?) = _uiState.update { it.copy(purchaseDate = date) }
     fun onInitialMileageChanged(mileage: String) = _uiState.update { it.copy(initialMileage = com.fearmikey.garage.ui.util.sanitizeMileageInput(mileage)) }
     fun onThemeColorChanged(color: Int?) = _uiState.update { it.copy(themeColor = color) }
 
@@ -270,6 +339,12 @@ class AddEditVehicleViewModel @Inject constructor(
 
                 val inputInitial = state.initialMileage.parseToIntOrNull()
                 val canonicalInitial = inputInitial?.let { UnitConverter.canonicalMilesFromInput(it, state.unitSystem) }
+                val hiddenTabs = if (isEditing) {
+                    originalHiddenTabs
+                } else {
+                    // New vehicles start with the tab layout chosen during onboarding.
+                    VehicleTab.serializeHidden(VehicleTab.parseHidden(preferencesRepository.defaultHiddenTabs.first()))
+                }
 
                 val newOrUpdatedId = vehicleRepository.saveVehicle(
                     Vehicle(
@@ -290,6 +365,7 @@ class AddEditVehicleViewModel @Inject constructor(
                         imageUri3 = photo3?.filename,
                         imageOffsetY3 = photo3?.offsetY ?: 0f,
                         themeColor = state.themeColor,
+                        hiddenTabs = hiddenTabs,
                     ),
                 )
                 val targetVehicleId = if (isEditing) vehicleId else newOrUpdatedId
@@ -301,6 +377,26 @@ class AddEditVehicleViewModel @Inject constructor(
                     fuelType = state.fuelType.trim().takeIf { it.isNotBlank() },
                 )
                 vehicleRepository.saveVehicleSpecs(targetVehicleId, updatedSpecs)
+
+                val parsedPurchasePrice = state.purchasePrice.parseToDoubleOrNull()
+                val purchaseDate = state.purchaseDate
+                val existingReg = vehicleRepository.getRegistrationInsurance(targetVehicleId).first()
+                if (existingReg != null) {
+                    vehicleRepository.saveRegistrationInsurance(
+                        existingReg.copy(
+                            purchasePrice = parsedPurchasePrice,
+                            purchaseDate = purchaseDate,
+                        ),
+                    )
+                } else if (parsedPurchasePrice != null || purchaseDate != null) {
+                    vehicleRepository.saveRegistrationInsurance(
+                        VehicleRegistrationInsurance(
+                            vehicleId = targetVehicleId,
+                            purchasePrice = parsedPurchasePrice,
+                            purchaseDate = purchaseDate,
+                        ),
+                    )
+                }
 
                 val savedFilenames = state.photos.mapNotNull { it.filename }.toSet()
                 originalImageFilenames.filter { it !in savedFilenames }.forEach { oldFilename ->
@@ -329,5 +425,24 @@ class AddEditVehicleViewModel @Inject constructor(
             context?.let { WorkScheduler.triggerImmediateReminderCheck(it) }
             _uiState.update { it.copy(deleteComplete = true) }
         }
+    }
+
+    fun hasUnsavedChanges(): Boolean {
+        val initial = initialStateSnapshot ?: return false
+        val current = _uiState.value
+        return initial.vehicleType != current.vehicleType ||
+            initial.vin != current.vin ||
+            initial.year != current.year ||
+            initial.make != current.make ||
+            initial.model != current.model ||
+            initial.trim != current.trim ||
+            initial.drivetrain != current.drivetrain ||
+            initial.fuelType != current.fuelType ||
+            initial.purchasedNew != current.purchasedNew ||
+            initial.purchasePrice != current.purchasePrice ||
+            initial.purchaseDate != current.purchaseDate ||
+            initial.initialMileage != current.initialMileage ||
+            initial.themeColor != current.themeColor ||
+            initial.photos != current.photos
     }
 }

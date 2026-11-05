@@ -39,6 +39,12 @@ data class Vehicle(
     val themeColor: Int? = null,
     @ColumnInfo(defaultValue = "CAR")
     val vehicleType: VehicleType = VehicleType.CAR,
+    /**
+     * Comma-separated names of the Vehicle Detail tabs the user has chosen to hide for
+     * this vehicle (see `VehicleTab.parseHidden`). Empty means every tab is shown.
+     */
+    @ColumnInfo(defaultValue = "")
+    val hiddenTabs: String = "",
 ) {
     val isMotorcycle: Boolean
         get() = vehicleType == VehicleType.MOTORCYCLE

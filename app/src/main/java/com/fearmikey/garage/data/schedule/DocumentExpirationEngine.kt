@@ -1,5 +1,6 @@
 package com.fearmikey.garage.data.schedule
 
+import com.fearmikey.garage.data.local.entity.CustomDocument
 import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
 import com.fearmikey.garage.data.repository.ReminderStatus
 import java.util.concurrent.TimeUnit
@@ -47,6 +48,31 @@ object DocumentExpirationEngine {
                 DocumentExpirationReminder("drivers_license", "Driver's License Renewal", exp, statusFor(exp, windowMillis, now))
             },
         )
+    }
+
+    /**
+     * Expirations for a vehicle's fixed document sections ([record], may be null) plus its
+     * user-named [customDocuments].
+     */
+    fun checkAll(
+        record: VehicleRegistrationInsurance?,
+        customDocuments: List<CustomDocument>,
+        upcomingWindowDays: Int = 30,
+        now: Long = System.currentTimeMillis(),
+    ): List<DocumentExpirationReminder> {
+        val windowMillis = TimeUnit.DAYS.toMillis(upcomingWindowDays.coerceAtLeast(1).toLong())
+        val fixed = record?.let { checkExpirations(it, upcomingWindowDays, now) }.orEmpty()
+        val custom = customDocuments.mapNotNull { doc ->
+            doc.expiration?.let { exp ->
+                DocumentExpirationReminder(
+                    idKey = "custom_${doc.id}",
+                    title = "${doc.title.ifBlank { "Document" }} Renewal",
+                    expirationDate = exp,
+                    status = statusFor(exp, windowMillis, now),
+                )
+            }
+        }
+        return fixed + custom
     }
 
     private fun statusFor(expirationDate: Long, windowMillis: Long, now: Long): ReminderStatus {

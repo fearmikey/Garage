@@ -82,9 +82,17 @@ class AddEditVehicleViewModelTest {
     }
 
     private class FakeVehicleRegistrationDao : VehicleRegistrationDao {
-        override fun getByVehicleId(vehicleId: Long) = MutableStateFlow(null)
-        override suspend fun upsert(registrationInsurance: VehicleRegistrationInsurance) {}
-        override suspend fun deleteByVehicleId(vehicleId: Long) {}
+        var savedRegistration: VehicleRegistrationInsurance? = null
+        val registrationFlow = MutableStateFlow<VehicleRegistrationInsurance?>(null)
+        override fun getByVehicleId(vehicleId: Long): Flow<VehicleRegistrationInsurance?> = registrationFlow
+        override suspend fun upsert(registrationInsurance: VehicleRegistrationInsurance) {
+            savedRegistration = registrationInsurance
+            registrationFlow.value = registrationInsurance
+        }
+        override suspend fun deleteByVehicleId(vehicleId: Long) {
+            savedRegistration = null
+            registrationFlow.value = null
+        }
     }
 
     private class FakeVinDecoderApi : VinDecoderApi {
@@ -220,5 +228,40 @@ class AddEditVehicleViewModelTest {
         testDispatcher.scheduler.advanceUntilIdle()
 
         assertEquals("Diesel", fakeSpecsDao.savedSpecs?.fuelType)
+    }
+
+    @Test
+    fun `purchase price changes are loaded and saved to vehicle registration insurance`() = runTest {
+        val fakeDao = FakeVehicleDao()
+        val fakeRegDao = FakeVehicleRegistrationDao().apply {
+            savedRegistration = VehicleRegistrationInsurance(vehicleId = 1L, purchasePrice = 18500.0)
+            registrationFlow.value = savedRegistration
+        }
+        val vehicleRepository = VehicleRepository(
+            vehicleDao = fakeDao,
+            vehicleSpecsDao = FakeVehicleSpecsDao(),
+            vehiclePartsDao = FakeVehiclePartsDao(),
+            vehicleRegistrationDao = fakeRegDao,
+            vinDecoderApi = FakeVinDecoderApi(),
+        )
+
+        val viewModel = AddEditVehicleViewModel(
+            savedStateHandle = SavedStateHandle(mapOf(Destinations.VEHICLE_ID_ARG to 1L)),
+            vehicleRepository = vehicleRepository,
+            preferencesRepository = FakePreferencesRepository(),
+            imageStorageManager = FakeImageStorageManager(),
+        )
+
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals("18500", viewModel.uiState.value.purchasePrice)
+
+        viewModel.onPurchasePriceChanged("24999.99")
+        assertEquals("24999.99", viewModel.uiState.value.purchasePrice)
+
+        viewModel.onSave()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(24999.99, fakeRegDao.savedRegistration?.purchasePrice)
     }
 }

@@ -1,0 +1,1 @@
+Added custom document management, foreground trip tracking service, advanced timeline filtering, and database migrations for schemas 30-32.

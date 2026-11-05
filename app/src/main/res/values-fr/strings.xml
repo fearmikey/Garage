@@ -38,6 +38,13 @@
     <string name="tab_mods">Modifications</string>
     <string name="tab_documents">Documents</string>
     <string name="tab_recalls">Rappels constructeur</string>
+    <string name="customize_tabs">Personnaliser les onglets</string>
+    <string name="customize_tabs_description">Choisissez les onglets affichés pour ce véhicule.</string>
+    <string name="customize_tabs_always_shown">Toujours affiché</string>
+    <string name="customize_tabs_save">Enregistrer</string>
+    <string name="customize_tabs_cancel">Annuler</string>
+    <string name="tab_alert_overdue">%1$s, éléments en retard</string>
+    <string name="tab_alert_upcoming">%1$s, éléments bientôt dus</string>
 
     <!-- Maintenance Tasks -->
     <string name="task_engine_oil_change">Vidange huile moteur</string>
@@ -93,6 +100,72 @@
     <string name="startup_buy_coffee_button">Soutenir sur Buy Me a Coffee</string>
     <string name="startup_affiliate_title">Activer les liens d\'affiliation</string>
     <string name="startup_affiliate_subtitle">Autoriser l\'affichage de liens d\'affiliation Amazon optionnels pour soutenir le projet sans coût supplémentaire.</string>
+
+    <!-- Guided onboarding -->
+    <string name="onboarding_step_progress">Étape %1$d sur %2$d</string>
+    <string name="onboarding_skip">Passer</string>
+    <string name="onboarding_back">Retour</string>
+    <string name="onboarding_next">Suivant</string>
+    <string name="onboarding_lets_go">C\'est parti</string>
+    <string name="onboarding_step_welcome">Bienvenue</string>
+    <string name="onboarding_step_region">Région et unités</string>
+    <string name="onboarding_step_appearance">Apparence</string>
+    <string name="onboarding_step_screens">Vos écrans</string>
+    <string name="onboarding_step_permissions">Autorisations</string>
+    <string name="onboarding_step_finish">Terminé</string>
+    <string name="onboarding_welcome_subtitle">Votre carnet privé et hors ligne pour tous vos véhicules. Configurons votre garage, cela ne prend qu\'une minute.</string>
+    <string name="onboarding_feature_maintenance_title">Suivez l\'entretien</string>
+    <string name="onboarding_feature_maintenance_body">Enregistrez vos entretiens et obtenez des plannings suggérés pour votre véhicule.</string>
+    <string name="onboarding_feature_fuel_title">Carburant et dépenses</string>
+    <string name="onboarding_feature_fuel_body">Suivez l\'évolution de la consommation et le coût réel de possession.</string>
+    <string name="onboarding_feature_reminders_title">Ne manquez aucune échéance</string>
+    <string name="onboarding_feature_reminders_body">Rappels pour l\'entretien, l\'immatriculation et le renouvellement de l\'assurance.</string>
+    <string name="onboarding_feature_privacy_title">Confidentiel par conception</string>
+    <string name="onboarding_feature_privacy_body">Libre et open-source. Vos données restent sur votre appareil, sauf si vous choisissez de les sauvegarder.</string>
+    <string name="onboarding_region_title">Région et unités</string>
+    <string name="onboarding_region_subtitle">Définissez l\'affichage des nombres, des prix et de la langue dans l\'application.</string>
+    <string name="onboarding_appearance_title">Personnalisez-le</string>
+    <string name="onboarding_appearance_subtitle">Personnalisez votre garage avec des couleurs inspirées de l\'automobile et le mode sombre. Aperçu instantané.</string>
+    <string name="onboarding_theme_mode">Thème</string>
+    <string name="onboarding_theme_system">Système</string>
+    <string name="onboarding_theme_light">Clair</string>
+    <string name="onboarding_theme_dark">Sombre</string>
+    <string name="onboarding_dynamic_color_title">Couleurs dynamiques</string>
+    <string name="onboarding_dynamic_color_subtitle">Adapter les couleurs au fond d\'écran (Android 12+)</string>
+    <string name="onboarding_palette_title">Palette de couleurs d\'accent</string>
+    <string name="onboarding_amoled_title">Noir pur (AMOLED)</string>
+    <string name="onboarding_amoled_subtitle">Arrière-plans d\'un noir absolu en mode sombre</string>
+    <string name="onboarding_screens_title">Configurez vos écrans</string>
+    <string name="onboarding_screens_subtitle">Choisissez ce que vous voulez voir : l\'essentiel ou tout. Vous pourrez le modifier à tout moment.</string>
+    <string name="onboarding_dashboard_section">Tableau de bord</string>
+    <string name="onboarding_fuel_trend_title">Graphique de consommation</string>
+    <string name="onboarding_fuel_trend_subtitle">Afficher une mini-courbe de consommation sur chaque carte de véhicule</string>
+    <string name="onboarding_fleet_overview_title">Aperçu de la flotte</string>
+    <string name="onboarding_fleet_overview_subtitle">Afficher une carte récapitulative avec les moyennes de tous vos véhicules</string>
+    <string name="onboarding_vehicle_tabs_section">Onglets du véhicule</string>
+    <string name="onboarding_vehicle_tabs_subtitle">Onglets affichés à l\'ouverture d\'un véhicule nouvellement ajouté. Modifiables ensuite via le menu du véhicule → Personnaliser les onglets.</string>
+    <string name="onboarding_tabs_show_all">Tout afficher</string>
+    <string name="onboarding_tabs_essentials">L\'essentiel uniquement</string>
+    <string name="onboarding_tabs_visible_count">%1$d onglets visibles sur %2$d</string>
+    <string name="onboarding_permissions_optional">Toutes les autorisations sont facultatives. Vous pourrez les accorder plus tard dans les paramètres du système.</string>
+    <string name="onboarding_finish_title">Tout est prêt !</string>
+    <string name="onboarding_finish_subtitle">Ajoutez votre premier véhicule pour suivre l\'entretien, le carburant et les documents.</string>
+    <string name="onboarding_finish_subtitle_has_vehicles">Vos préférences sont enregistrées. Accédez à votre garage ou ajoutez un autre véhicule.</string>
+    <string name="onboarding_add_first_vehicle">Ajouter mon premier véhicule</string>
+    <string name="onboarding_add_another_vehicle">Ajouter un autre véhicule</string>
+    <string name="onboarding_go_to_dashboard">Aller à mon garage</string>
+    <string name="onboarding_explore_first">Je préfère explorer d\'abord</string>
+    <string name="onboarding_summary_title">Votre configuration</string>
+    <string name="onboarding_summary_units">Unités</string>
+    <string name="onboarding_summary_currency">Devise</string>
+    <string name="onboarding_summary_theme">Thème</string>
+    <string name="onboarding_summary_tabs">Onglets du véhicule</string>
+    <string name="onboarding_summary_edit">Modifier</string>
+    <string name="onboarding_tips_title">Astuces</string>
+    <string name="onboarding_tip_vin">Saisissez un VIN de 17 caractères lors de l\'ajout d\'un véhicule pour remplir automatiquement l\'année, la marque, le modèle et les caractéristiques.</string>
+    <string name="onboarding_tip_widgets">Ajoutez les widgets d\'écran d\'accueil ou les tuiles Réglages rapides pour enregistrer carburant et kilométrage en un geste.</string>
+    <string name="onboarding_tip_backup">Configurez des sauvegardes automatiques (locales ou WebDAV) dans Paramètres → Sauvegarde.</string>
+    <string name="onboarding_tip_rerun">Vous pouvez relancer cette configuration à tout moment depuis les Paramètres.</string>
 
     <!-- Notifications -->
     <string name="reminder_notification_channel_name">Rappels d\'entretien</string>
@@ -272,6 +345,8 @@
     <string name="cost_category_breakdown">Ventilation par catégorie</string>
     <string name="cost_total_title">Coût total de possession</string>
     <string name="cost_include_mods">Inclure les modifications</string>
+    <string name="cost_include_purchase">Inclure l\'achat</string>
+    <string name="cost_purchase_not_counted_in_period">Non comptabilisé dans cette période (date d\'achat hors plage ou non définie).</string>
     <string name="cost_per_distance">Coût / Distance</string>
     <string name="cost_per_day">Coût / Jour</string>
     <string name="time_filter_all_time">Tout</string>

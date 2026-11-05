@@ -29,6 +29,12 @@ data class VehicleRegistrationInsurance(
     val registrationFee: Double? = null,
     val registrationNotes: String? = null,
     val registrationImageUri: String? = null,
+    /**
+     * Optional second registration photo (back side / second page). Many European registration
+     * documents (e.g. Polish "dowód rejestracyjny", German "Zulassungsbescheinigung Teil I")
+     * are two-sided or folded booklets, so a single photo is not enough.
+     */
+    val registrationImageUri2: String? = null,
 
     // State Vehicle Inspection
     val inspectionExpiration: Long? = null,
@@ -66,7 +72,20 @@ data class VehicleRegistrationInsurance(
     val driversLicenseNumber: String? = null,
     val driversLicenseState: String? = null,
     val driversLicenseNotes: String? = null,
+
+    // Purchase / Bill of Sale
+    val purchasePrice: Double? = null,
+    val purchaseDate: Long? = null,
+    /** Dealer or private seller name. */
+    val purchaseSeller: String? = null,
+    val purchaseNotes: String? = null,
+    /** Photo of the bill of sale / purchase contract. */
+    val purchaseImageUri: String? = null,
 ) {
+    val hasPurchaseData: Boolean
+        get() = (purchasePrice != null) || (purchaseDate != null) || !purchaseSeller.isNullOrBlank() ||
+            !purchaseNotes.isNullOrBlank() || (purchaseImageUri != null)
+
     /** True when every field is null or blank, i.e. nothing worth displaying yet. */
     fun isEmpty(): Boolean = (listOf(
         licensePlate, registrationState, registrationNotes,
@@ -77,9 +96,11 @@ data class VehicleRegistrationInsurance(
         tollPassParkingAccount, tollPassParkingNotes,
         driversLicenseNumber, driversLicenseState, driversLicenseNotes,
     ).all { it.isNullOrBlank() }) &&
+        !hasPurchaseData &&
         registrationExpiration == null &&
         registrationFee == null &&
         registrationImageUri == null &&
+        registrationImageUri2 == null &&
         inspectionExpiration == null &&
         inspectionDate == null &&
         emissionsExpiration == null &&

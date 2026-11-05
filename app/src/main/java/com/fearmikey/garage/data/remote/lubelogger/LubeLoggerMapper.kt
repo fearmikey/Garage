@@ -237,7 +237,7 @@ internal fun splitLegacyTaskSuffix(description: String): Pair<String, String>? {
 }
 
 private fun knownCategoryFor(taskName: String): MaintenanceCategory? =
-    MaintenanceScheduleRules.rules.firstOrNull { it.taskName.equals(taskName, ignoreCase = true) }?.category
+    MaintenanceScheduleRules.categoryForTask(taskName)
 
 /** One-time repair of a record pulled by an older Garage version (see [splitLegacyTaskSuffix]). */
 fun MaintenanceRecord.cleanLegacyTaskSuffix(): MaintenanceRecord {
@@ -389,6 +389,12 @@ private fun parseMaintenanceRecord(
             if (categoryField == null) category = knownCategoryFor(legacyTask) ?: category
             isDeferred = isDeferred || description.trimEnd().endsWith("[Deferred]")
         }
+    }
+
+    // Older Garage versions (or other devices not yet updated) still tag built-in tasks that
+    // have since moved out of OTHER (air filters, spark plugs...) as OTHER; re-file them.
+    if (category == MaintenanceCategory.OTHER) {
+        task?.let(::knownCategoryFor)?.let { category = it }
     }
 
     return MaintenanceRecord(

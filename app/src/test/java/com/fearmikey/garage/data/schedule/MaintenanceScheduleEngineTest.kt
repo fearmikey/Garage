@@ -504,4 +504,39 @@ class MaintenanceScheduleEngineTest {
         val paintProtection = suggestions.first { it.rule.taskName == "Paint protection" }
         assertEquals(12_000, paintProtection.lastServiceMileage)
     }
+
+    @Test
+    fun `untagged record in a new fine-grained category matches by keyword but not across categories`() {
+        val records = listOf(
+            MaintenanceRecord(
+                vehicleId = fwdCivic.id,
+                date = 0,
+                mileage = 15_000,
+                description = "Replaced cabin air filter",
+                cost = 30.0,
+                category = MaintenanceCategory.FILTERS,
+            ),
+            // Same keywords, but BODY must not satisfy a FILTERS rule.
+            MaintenanceRecord(
+                vehicleId = fwdCivic.id,
+                date = 0,
+                mileage = 16_000,
+                description = "Engine air filter",
+                cost = 30.0,
+                category = MaintenanceCategory.BODY,
+            ),
+        )
+
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 16_100, records = records)
+
+        assertEquals(15_000, suggestions.first { it.rule.taskName == "Cabin air filter replacement" }.lastServiceMileage)
+        assertNull(suggestions.first { it.rule.taskName == "Engine air filter replacement" }.lastServiceMileage)
+    }
+
+    @Test
+    fun `categoryForTask resolves built-in tasks to their current category`() {
+        assertEquals(MaintenanceCategory.FILTERS, MaintenanceScheduleRules.categoryForTask("engine AIR filter replacement"))
+        assertEquals(MaintenanceCategory.ENGINE, MaintenanceScheduleRules.categoryForTask("Spark plug replacement"))
+        assertNull(MaintenanceScheduleRules.categoryForTask("Not a real task"))
+    }
 }

@@ -117,7 +117,7 @@ import android.net.Uri
 fun DashboardScreen(
     initialTab: Int = 0,
     onAddVehicle: () -> Unit,
-    onOpenVehicle: (vehicleId: Long, tab: Int) -> Unit,
+    onOpenVehicle: (vehicleId: Long, tab: Int, openAdd: Boolean) -> Unit,
     onOpenSettings: () -> Unit,
     onUpdateMileage: (vehicleId: Long) -> Unit,
     sharedTransitionScope: SharedTransitionScope,
@@ -171,7 +171,7 @@ private fun DashboardContent(
     onRefresh: () -> Unit,
     imageFileProvider: (String) -> File,
     onAddVehicle: () -> Unit,
-    onOpenVehicle: (vehicleId: Long, tab: Int) -> Unit,
+    onOpenVehicle: (vehicleId: Long, tab: Int, openAdd: Boolean) -> Unit,
     onOpenSettings: () -> Unit,
     onUpdateMileage: (vehicleId: Long) -> Unit,
     onSaveDriversLicense: (
@@ -267,7 +267,7 @@ private fun DashboardContent(
                                             unitSystem = unitSystem,
                                             onOpenOverdueReminders = {
                                                 vehicles.firstOrNull { (it.overdueReminderCount > 0) || (it.upcomingReminderCount > 0) }
-                                                    ?.let { onOpenVehicle(it.vehicle.id, VehicleTab.SCHEDULE.ordinal) }
+                                                    ?.let { onOpenVehicle(it.vehicle.id, VehicleTab.SCHEDULE.ordinal, false) }
                                             },
                                         )
                                     }
@@ -285,10 +285,11 @@ private fun DashboardContent(
                                         upcomingReminderCount = item.upcomingReminderCount,
                                         sharedTransitionScope = sharedTransitionScope,
                                         animatedVisibilityScope = animatedVisibilityScope,
-                                        onClick = { onOpenVehicle(item.vehicle.id, 0) },
-                                        onOpenReminders = { onOpenVehicle(item.vehicle.id, VehicleTab.SCHEDULE.ordinal) },
-                                        onFuelGraphClick = { onOpenVehicle(item.vehicle.id, VehicleTab.FUEL.ordinal) },
+                                        onClick = { onOpenVehicle(item.vehicle.id, 0, false) },
+                                        onOpenReminders = { onOpenVehicle(item.vehicle.id, VehicleTab.SCHEDULE.ordinal, false) },
+                                        onFuelGraphClick = { onOpenVehicle(item.vehicle.id, VehicleTab.FUEL.ordinal, false) },
                                         onUpdateMileage = { onUpdateMileage(item.vehicle.id) },
+                                        onOpenFuel = { onOpenVehicle(item.vehicle.id, VehicleTab.FUEL.ordinal, false) },
                                     )
                                 }
                             }
@@ -905,7 +906,7 @@ private fun DashboardScreenPreview() {
                         onRefresh = {},
                         imageFileProvider = { File("") },
                         onAddVehicle = {},
-                        onOpenVehicle = { _, _ -> },
+                        onOpenVehicle = { _, _, _ -> },
                         onOpenSettings = {},
                         onUpdateMileage = {},
                         onSaveDriversLicense = { _, _, _, _, _, _, _, _ -> },
@@ -940,7 +941,7 @@ private fun DashboardScreenEmptyPreview() {
                         onRefresh = {},
                         imageFileProvider = { File("") },
                         onAddVehicle = {},
-                        onOpenVehicle = { _, _ -> },
+                        onOpenVehicle = { _, _, _ -> },
                         onOpenSettings = {},
                         onUpdateMileage = {},
                         onSaveDriversLicense = { _, _, _, _, _, _, _, _ -> },

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
@@ -24,6 +25,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.PictureAsPdf
+import androidx.compose.material.icons.filled.Tune
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import com.fearmikey.garage.data.repository.ReminderStatus
 import androidx.compose.material.icons.outlined.DirectionsCar
 import androidx.compose.material.icons.outlined.TwoWheeler
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,7 +51,6 @@ import androidx.compose.ui.res.stringResource
 import com.fearmikey.garage.R
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -65,6 +76,7 @@ fun VehicleDetailScreen(
     onBack: () -> Unit,
     onEditVehicle: (Long) -> Unit,
     onEditParts: (Long) -> Unit = {},
+    onEditDocuments: (Long) -> Unit = {},
     onExportMaintenance: (Long) -> Unit = {},
     onOpenObd: (Long) -> Unit = {},
     sharedTransitionScope: SharedTransitionScope,
@@ -77,7 +89,26 @@ fun VehicleDetailScreen(
     val vehicleThemingEnabled by viewModel.vehicleThemingEnabled.collectAsStateWithLifecycle()
     val themeType by viewModel.themeType.collectAsStateWithLifecycle()
     val amoledDark by viewModel.amoledDark.collectAsStateWithLifecycle()
-    var selectedTab by remember { mutableIntStateOf(viewModel.initialTab) }
+    val hiddenTabs by viewModel.hiddenTabs.collectAsStateWithLifecycle()
+    val tabAlerts by viewModel.tabAlerts.collectAsStateWithLifecycle()
+    val tabOrder by viewModel.tabOrder.collectAsStateWithLifecycle()
+    var selectedTab by rememberSaveable { mutableStateOf(VehicleTab.fromOrdinal(viewModel.initialTab)) }
+    var showCustomizeTabs by rememberSaveable { mutableStateOf(false) }
+    val visibleTabs = remember(tabOrder, hiddenTabs, selectedTab) {
+        tabOrder.filter { it !in hiddenTabs || it == selectedTab }
+    }
+
+    if (showCustomizeTabs) {
+        CustomizeTabsDialog(
+            tabOrder = tabOrder,
+            hiddenTabs = hiddenTabs,
+            onDismiss = { showCustomizeTabs = false },
+            onSave = { orderedTabs, hiddenSet ->
+                viewModel.setTabCustomization(orderedTabs, hiddenSet)
+                showCustomizeTabs = false
+            },
+        )
+    }
 
     val systemInDark = isSystemInDarkTheme()
     val isDark = when (themeType) {
@@ -96,6 +127,164 @@ fun VehicleDetailScreen(
             )
         } else {
             null
+        }
+    }
+
+    val isLandscape = androidx.compose.ui.platform.LocalConfiguration.current.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
+
+    val vehicleImageHeader = @Composable {
+        with(sharedTransitionScope) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .then(if (isLandscape) Modifier.fillMaxSize() else Modifier.aspectRatio(21f / 9f))
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .sharedElement(
+                        rememberSharedContentState(key = "vehicle-image-${viewModel.vehicleId}"),
+                        animatedVisibilityScope = animatedVisibilityScope,
+                    ),
+                contentAlignment = Alignment.Center,
+            ) {
+                if (imageFiles.isNotEmpty()) {
+                    if (imageFiles.size == 1) {
+                        val singlePhoto = imageFiles.first()
+                        AsyncImage(
+                            model = singlePhoto.first,
+                            contentDescription = vehicle?.let { "${it.year ?: ""} ${it.make} ${it.model}".trim() },
+                            contentScale = ContentScale.Crop,
+                            alignment = BiasAlignment(0f, singlePhoto.second),
+                            modifier = Modifier.fillMaxSize(),
+                        )
+                    } else {
+                        val pagerState = rememberPagerState(pageCount = { imageFiles.size })
+                        HorizontalPager(
+                            state = pagerState,
+                            modifier = Modifier.fillMaxSize(),
+                        ) { page ->
+                            val photo = imageFiles[page]
+                            AsyncImage(
+                                model = photo.first,
+                                contentDescription = vehicle?.let { "${it.year ?: ""} ${it.make} ${it.model}".trim() },
+                                contentScale = ContentScale.Crop,
+                                alignment = BiasAlignment(0f, photo.second),
+                                modifier = Modifier.fillMaxSize(),
+                            )
+                        }
+                        Row(
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .padding(bottom = 8.dp)
+                                .background(
+                                    color = MaterialTheme.colorScheme.scrim.copy(alpha = 0.4f),
+                                    shape = CircleShape,
+                                )
+                                .padding(horizontal = 8.dp, vertical = 4.dp),
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            repeat(imageFiles.size) { iteration ->
+                                val color = if (pagerState.currentPage == iteration) {
+                                    MaterialTheme.colorScheme.primary
+                                } else {
+                                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                                }
+                                Box(
+                                    modifier = Modifier
+                                        .size(6.dp)
+                                        .background(color, shape = CircleShape)
+                                )
+                            }
+                        }
+                    }
+                } else {
+                    Icon(
+                        imageVector = if (vehicle?.isMotorcycle == true) {
+                            Icons.Outlined.TwoWheeler
+                        } else {
+                            Icons.Outlined.DirectionsCar
+                        },
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+        }
+    }
+
+    val vehicleTabsAndContent = @Composable {
+        Column(modifier = Modifier.fillMaxSize()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(TabRowDefaults.secondaryContainerColor),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                SecondaryScrollableTabRow(
+                    selectedTabIndex = visibleTabs.indexOf(selectedTab).coerceAtLeast(0),
+                    modifier = Modifier.weight(1f),
+                    divider = {},
+                ) {
+                    visibleTabs.forEach { tab ->
+                        val title = stringResource(tab.titleRes)
+                        val alert = tabAlerts[tab]
+                        val alertDescription = when (alert) {
+                            ReminderStatus.OVERDUE -> stringResource(R.string.tab_alert_overdue, title)
+                            ReminderStatus.UPCOMING -> stringResource(R.string.tab_alert_upcoming, title)
+                            else -> null
+                        }
+                        Tab(
+                            selected = selectedTab == tab,
+                            onClick = { selectedTab = tab },
+                            modifier = if (alertDescription != null) {
+                                Modifier.semantics { contentDescription = alertDescription }
+                            } else {
+                                Modifier
+                            },
+                            text = {
+                                BadgedBox(
+                                    badge = {
+                                        if (alert != null) {
+                                            Badge(
+                                                containerColor = if (alert == ReminderStatus.OVERDUE) {
+                                                    MaterialTheme.colorScheme.error
+                                                } else {
+                                                    MaterialTheme.colorScheme.tertiary
+                                                },
+                                                modifier = Modifier.offset(x = 6.dp, y = (-4).dp),
+                                            )
+                                        }
+                                    },
+                                ) {
+                                    Text(title, style = MaterialTheme.typography.labelLarge)
+                                }
+                            },
+                        )
+                    }
+                }
+                IconButton(onClick = { showCustomizeTabs = true }) {
+                    Icon(Icons.Filled.Tune, contentDescription = stringResource(R.string.customize_tabs))
+                }
+            }
+            HorizontalDivider()
+            when (selectedTab) {
+                VehicleTab.TIMELINE -> MaintenanceTimelineScreen(
+                    autoOpenAddSheet = shouldOpenAddSheet && (viewModel.initialTab == VehicleTab.TIMELINE.ordinal),
+                    onAddSheetConsumed = viewModel::consumeAddSheet,
+                )
+                VehicleTab.SCHEDULE -> MaintenanceSuggestionsScreen()
+                VehicleTab.FUEL -> FuelScreen(
+                    autoOpenAddSheet = shouldOpenAddSheet && (viewModel.initialTab == VehicleTab.FUEL.ordinal),
+                    onAddSheetConsumed = viewModel::consumeAddSheet,
+                )
+                VehicleTab.EXPENSES -> CostOfOwnershipScreen()
+                VehicleTab.SPECS -> VehicleSpecsScreen()
+                VehicleTab.PARTS -> PartsScreen(onEditParts = { onEditParts(viewModel.vehicleId) })
+                VehicleTab.MODS -> ModsScreen()
+                VehicleTab.DOCUMENTS -> RegistrationInsuranceScreen(onEditDocuments = { onEditDocuments(viewModel.vehicleId) })
+                VehicleTab.RECALLS -> RecallsScreen()
+                VehicleTab.KNOWLEDGE -> VehicleKnowledgeScreen()
+                VehicleTab.TRIPS -> TripLoggerScreen()
+            }
         }
     }
 
@@ -127,110 +316,19 @@ fun VehicleDetailScreen(
             )
         },
     ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
-            with(sharedTransitionScope) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(21f / 9f)
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .sharedElement(
-                            rememberSharedContentState(key = "vehicle-image-${viewModel.vehicleId}"),
-                            animatedVisibilityScope = animatedVisibilityScope,
-                        ),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    if (imageFiles.isNotEmpty()) {
-                        if (imageFiles.size == 1) {
-                            val singlePhoto = imageFiles.first()
-                            AsyncImage(
-                                model = singlePhoto.first,
-                                contentDescription = vehicle?.let { "${it.year ?: ""} ${it.make} ${it.model}".trim() },
-                                contentScale = ContentScale.Crop,
-                                alignment = BiasAlignment(0f, singlePhoto.second),
-                                modifier = Modifier.fillMaxSize(),
-                            )
-                        } else {
-                            val pagerState = rememberPagerState(pageCount = { imageFiles.size })
-                            HorizontalPager(
-                                state = pagerState,
-                                modifier = Modifier.fillMaxSize(),
-                            ) { page ->
-                                val photo = imageFiles[page]
-                                AsyncImage(
-                                    model = photo.first,
-                                    contentDescription = vehicle?.let { "${it.year ?: ""} ${it.make} ${it.model}".trim() },
-                                    contentScale = ContentScale.Crop,
-                                    alignment = BiasAlignment(0f, photo.second),
-                                    modifier = Modifier.fillMaxSize(),
-                                )
-                            }
-                            Row(
-                                modifier = Modifier
-                                    .align(Alignment.BottomCenter)
-                                    .padding(bottom = 8.dp)
-                                    .background(
-                                        color = MaterialTheme.colorScheme.scrim.copy(alpha = 0.4f),
-                                        shape = CircleShape,
-                                    )
-                                    .padding(horizontal = 8.dp, vertical = 4.dp),
-                                horizontalArrangement = Arrangement.spacedBy(6.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                repeat(imageFiles.size) { iteration ->
-                                    val color = if (pagerState.currentPage == iteration) {
-                                        MaterialTheme.colorScheme.primary
-                                    } else {
-                                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                                    }
-                                    Box(
-                                        modifier = Modifier
-                                            .size(6.dp)
-                                            .background(color, shape = CircleShape)
-                                    )
-                                }
-                            }
-                        }
-                    } else {
-                        Icon(
-                            imageVector = if (vehicle?.isMotorcycle == true) {
-                                Icons.Outlined.TwoWheeler
-                            } else {
-                                Icons.Outlined.DirectionsCar
-                            },
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    }
+        if (isLandscape) {
+            Row(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
+                Box(modifier = Modifier.weight(0.4f)) {
+                    vehicleImageHeader()
+                }
+                Box(modifier = Modifier.weight(0.6f)) {
+                    vehicleTabsAndContent()
                 }
             }
-            SecondaryScrollableTabRow(selectedTabIndex = selectedTab) {
-                VehicleTab.entries.forEachIndexed { index, tab ->
-                    Tab(
-                        selected = selectedTab == index,
-                        onClick = { selectedTab = index },
-                        text = { Text(stringResource(tab.titleRes), style = MaterialTheme.typography.labelLarge) },
-                    )
-                }
-            }
-            when (selectedTab) {
-                VehicleTab.TIMELINE.ordinal -> MaintenanceTimelineScreen(
-                    autoOpenAddSheet = shouldOpenAddSheet && (viewModel.initialTab == VehicleTab.TIMELINE.ordinal),
-                    onAddSheetConsumed = viewModel::consumeAddSheet,
-                )
-                VehicleTab.SCHEDULE.ordinal -> MaintenanceSuggestionsScreen()
-                VehicleTab.FUEL.ordinal -> FuelScreen(
-                    autoOpenAddSheet = shouldOpenAddSheet && (viewModel.initialTab == VehicleTab.FUEL.ordinal),
-                    onAddSheetConsumed = viewModel::consumeAddSheet,
-                )
-                VehicleTab.EXPENSES.ordinal -> CostOfOwnershipScreen()
-                VehicleTab.SPECS.ordinal -> VehicleSpecsScreen()
-                VehicleTab.PARTS.ordinal -> PartsScreen(onEditParts = { onEditParts(viewModel.vehicleId) })
-                VehicleTab.MODS.ordinal -> ModsScreen()
-                VehicleTab.DOCUMENTS.ordinal -> RegistrationInsuranceScreen()
-                VehicleTab.RECALLS.ordinal -> RecallsScreen()
-                VehicleTab.KNOWLEDGE.ordinal -> VehicleKnowledgeScreen()
-                VehicleTab.TRIPS.ordinal -> TripLoggerScreen()
+        } else {
+            Column(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
+                vehicleImageHeader()
+                vehicleTabsAndContent()
             }
         }
     }

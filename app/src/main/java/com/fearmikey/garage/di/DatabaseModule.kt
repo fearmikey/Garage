@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.fearmikey.garage.data.local.GARAGE_DATABASE_NAME
 import com.fearmikey.garage.data.local.GarageDatabase
 import com.fearmikey.garage.data.local.dao.ChargingDao
+import com.fearmikey.garage.data.local.dao.CustomDocumentDao
 import com.fearmikey.garage.data.local.dao.CustomMaintenanceRuleDao
 import com.fearmikey.garage.data.local.dao.FuelDao
 import com.fearmikey.garage.data.local.dao.IgnoredMaintenanceRuleDao
@@ -79,6 +80,10 @@ object DatabaseModule {
     @Provides
     fun provideKnowledgeDao(database: GarageDatabase): KnowledgeDao =
         database.knowledgeDao()
+
+    @Provides
+    fun provideCustomDocumentDao(database: GarageDatabase): CustomDocumentDao =
+        database.customDocumentDao()
 
     @Provides
     fun provideLubeLoggerPendingDeleteDao(database: GarageDatabase): com.fearmikey.garage.data.local.dao.LubeLoggerPendingDeleteDao =

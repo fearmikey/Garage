@@ -80,6 +80,7 @@ fun VehicleCard(
     onOpenReminders: (() -> Unit)? = null,
     onFuelGraphClick: (() -> Unit)? = null,
     onUpdateMileage: (() -> Unit)? = null,
+    onOpenFuel: (() -> Unit)? = null,
 ) {
     val effectiveImageFiles: List<Pair<File, Float>> = remember(imageFile, imageFiles, vehicle) {
         if (imageFiles.isNotEmpty()) imageFiles
@@ -90,8 +91,9 @@ fun VehicleCard(
     val accentColor = vehicle.themeColor?.let { Color(it) }
 
     Card(
-        onClick = onClick,
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
         border = accentColor?.let {
             BorderStroke(1.5.dp, it.copy(alpha = 0.5f))
         },
@@ -219,6 +221,7 @@ fun VehicleCard(
                             icon = Icons.Outlined.LocalGasStation,
                             containerColor = MaterialTheme.colorScheme.secondaryContainer,
                             contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                            onClick = onOpenFuel,
                         )
                     }
 
@@ -271,34 +274,50 @@ private fun StatChip(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
 ) {
-    val chipModifier = if (onClick != null) {
-        modifier.clickable { onClick() }
-    } else {
-        modifier
-    }
-    Surface(
-        color = containerColor,
-        contentColor = contentColor,
-        shape = MaterialTheme.shapes.extraSmall,
-        modifier = chipModifier,
-    ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
+    if (onClick != null) {
+        Surface(
+            onClick = onClick,
+            color = containerColor,
+            contentColor = contentColor,
+            shape = MaterialTheme.shapes.extraSmall,
+            modifier = modifier,
         ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                modifier = Modifier.size(14.dp),
-                tint = contentColor,
-            )
-            Text(
-                text = text,
-                style = MaterialTheme.typography.labelMedium,
-                fontWeight = FontWeight.Medium,
-            )
+            StatChipContent(text = text, icon = icon, contentColor = contentColor)
         }
+    } else {
+        Surface(
+            color = containerColor,
+            contentColor = contentColor,
+            shape = MaterialTheme.shapes.extraSmall,
+            modifier = modifier,
+        ) {
+            StatChipContent(text = text, icon = icon, contentColor = contentColor)
+        }
+    }
+}
+
+@Composable
+private fun StatChipContent(
+    text: String,
+    icon: ImageVector,
+    contentColor: Color,
+) {
+    Row(
+        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            modifier = Modifier.size(14.dp),
+            tint = contentColor,
+        )
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.Medium,
+        )
     }
 }
 

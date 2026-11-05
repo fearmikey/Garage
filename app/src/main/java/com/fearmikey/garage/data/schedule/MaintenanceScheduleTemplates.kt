@@ -52,7 +52,7 @@ object MaintenanceScheduleTemplates {
                 ),
                 MaintenanceTemplateRule(
                     taskName = "Chain Clean, Lube & Slack Check",
-                    category = MaintenanceCategory.OTHER,
+                    category = MaintenanceCategory.DRIVETRAIN,
                     intervalMiles = 500,
                     intervalMonths = 1,
                     notes = "More often after riding in rain or dirt.",
@@ -117,7 +117,7 @@ object MaintenanceScheduleTemplates {
                 ),
                 MaintenanceTemplateRule(
                     taskName = "Chassis Greasing & Ball Joints",
-                    category = MaintenanceCategory.OTHER,
+                    category = MaintenanceCategory.SUSPENSION,
                     intervalMiles = 10_000,
                     intervalMonths = 12,
                     notes = "Lube grease fittings, drive shaft U-joints, and suspension joints.",
@@ -154,21 +154,21 @@ object MaintenanceScheduleTemplates {
                 ),
                 MaintenanceTemplateRule(
                     taskName = "Cabin & Engine Air Filters",
-                    category = MaintenanceCategory.OTHER,
+                    category = MaintenanceCategory.FILTERS,
                     intervalMiles = 15_000,
                     intervalMonths = 12,
                     notes = "Replace both air filters annually for HVAC & engine efficiency.",
                 ),
                 MaintenanceTemplateRule(
                     taskName = "Wiper Blade Replacement",
-                    category = MaintenanceCategory.OTHER,
+                    category = MaintenanceCategory.BODY,
                     intervalMiles = 10_000,
                     intervalMonths = 6,
                     notes = "Replace wiper blades for clear visibility.",
                 ),
                 MaintenanceTemplateRule(
                     taskName = "Serpentine Belt Replacement",
-                    category = MaintenanceCategory.OTHER,
+                    category = MaintenanceCategory.ENGINE,
                     intervalMiles = 60_000,
                     intervalMonths = 60,
                     isDeferrable = true,
@@ -191,7 +191,7 @@ object MaintenanceScheduleTemplates {
             rules = listOf(
                 MaintenanceTemplateRule(
                     taskName = "Cabin Air Filter & HV Battery Duct Check",
-                    category = MaintenanceCategory.OTHER,
+                    category = MaintenanceCategory.FILTERS,
                     intervalMiles = 15_000,
                     intervalMonths = 12,
                     notes = "Clean/replace cabin air filter and check high-voltage battery cooling fan intake.",
@@ -242,14 +242,14 @@ object MaintenanceScheduleTemplates {
                 ),
                 MaintenanceTemplateRule(
                     taskName = "Ignition, Spark Plugs & Distributer",
-                    category = MaintenanceCategory.OTHER,
+                    category = MaintenanceCategory.ENGINE,
                     intervalMiles = 15_000,
                     intervalMonths = 12,
                     notes = "Inspect spark plugs, ignition wires, distributor cap, and rotor/points.",
                 ),
                 MaintenanceTemplateRule(
                     taskName = "V-Belts & Tensioner Check",
-                    category = MaintenanceCategory.OTHER,
+                    category = MaintenanceCategory.ENGINE,
                     intervalMiles = 10_000,
                     intervalMonths = 12,
                     isDeferrable = true,
@@ -257,7 +257,7 @@ object MaintenanceScheduleTemplates {
                 ),
                 MaintenanceTemplateRule(
                     taskName = "Chassis & Steering Greasing",
-                    category = MaintenanceCategory.OTHER,
+                    category = MaintenanceCategory.SUSPENSION,
                     intervalMiles = 3_000,
                     intervalMonths = 6,
                     notes = "Grease tie rod ends, ball joints, pitman arm, and suspension bushings.",

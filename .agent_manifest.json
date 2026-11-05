@@ -1,0 +1,384 @@
+{
+  "project": {
+    "name": "Garage",
+    "package_name": "com.fearmikey.garage",
+    "architecture_pattern": "MVVM with Repository Pattern, Clean Data Layer, and Hilt DI",
+    "tech_stack": {
+      "language": "Kotlin",
+      "ui_framework": "Jetpack Compose with Material 3",
+      "navigation": "Navigation Compose (GarageNavHost)",
+      "dependency_injection": "Hilt (Google Hilt)",
+      "local_database": "Room Database (GarageDatabase)",
+      "async": "Kotlin Coroutines & Flow (StateFlow / SharedFlow)",
+      "network": "Retrofit / OkHttp (FOSS-only APIs: NHTSA VIN & Recalls, LubeLogger REST API)",
+      "background_tasks": "WorkManager",
+      "widgets": "Glance Widgets",
+      "tiles": "Android Quick Settings TileService"
+    },
+    "compliance_constraints": [
+      "STRICT 100% FOSS Policy - Zero proprietary SDKs (No Google Play Services, Firebase, ML Kit, AdMob, Billing)",
+      "Offline-first, local-first data storage",
+      "Reproducible build compatibility for F-Droid distribution"
+    ]
+  },
+  "data_flow_pattern": {
+    "description": "Unidirectional Data Flow (UDF) via MVVM and Repository Pattern",
+    "layers": {
+      "ui": "Jetpack Compose screens/components in app/src/main/java/com/fearmikey/garage/ui/* observe StateFlow emitted by Hilt ViewModels.",
+      "viewmodel": "Hilt ViewModels in ui/* handle user events, request data from Repositories, and expose state via StateFlow/SharedFlow.",
+      "repository": "Repositories in data/repository/* encapsulate data operations, combining Room DAOs, PreferencesManager, and Remote APIs.",
+      "local_data": "Room DAOs in data/local/dao/* and Entities in data/local/entity/* backed by GarageDatabase in data/local/GarageDatabase.kt.",
+      "remote_data": "Retrofit APIs in data/remote/* (VinDecoderApi, RecallApi, LubeLoggerApiService).",
+      "background": "WorkManager Workers in notification/* and notification/lubelogger/* for scheduled reminders, backups, and syncs."
+    }
+  },
+  "core_entry_points": {
+    "application": "app/src/main/java/com/fearmikey/garage/GarageApplication.kt",
+    "main_activity": "app/src/main/java/com/fearmikey/garage/MainActivity.kt",
+    "navigation_host": "app/src/main/java/com/fearmikey/garage/ui/navigation/GarageNavHost.kt",
+    "navigation_destinations": "app/src/main/java/com/fearmikey/garage/ui/navigation/Destinations.kt",
+    "database": "app/src/main/java/com/fearmikey/garage/data/local/GarageDatabase.kt",
+    "di_modules": [
+      "app/src/main/java/com/fearmikey/garage/di/DatabaseModule.kt",
+      "app/src/main/java/com/fearmikey/garage/di/RepositoryModule.kt",
+      "app/src/main/java/com/fearmikey/garage/di/NetworkModule.kt"
+    ]
+  },
+  "feature_map": {
+    "vehicle_management": {
+      "description": "Adding, editing, displaying vehicles, specs, registrations, insurance, notes, and custom documents.",
+      "entities": [
+        "app/src/main/java/com/fearmikey/garage/data/local/entity/Vehicle.kt",
+        "app/src/main/java/com/fearmikey/garage/data/local/entity/VehicleSpecs.kt",
+        "app/src/main/java/com/fearmikey/garage/data/local/entity/VehicleRegistrationInsurance.kt",
+        "app/src/main/java/com/fearmikey/garage/data/local/entity/VehiclePartsInfo.kt",
+        "app/src/main/java/com/fearmikey/garage/data/local/entity/VehicleNote.kt"
+      ],
+      "daos": [
+        "app/src/main/java/com/fearmikey/garage/data/local/dao/VehicleDao.kt",
+        "app/src/main/java/com/fearmikey/garage/data/local/dao/VehicleSpecsDao.kt",
+        "app/src/main/java/com/fearmikey/garage/data/local/dao/VehicleRegistrationDao.kt",
+        "app/src/main/java/com/fearmikey/garage/data/local/dao/VehiclePartsDao.kt"
+      ],
+      "repositories": [
+        "app/src/main/java/com/fearmikey/garage/data/repository/VehicleRepository.kt"
+      ],
+      "view_models": [
+        "app/src/main/java/com/fearmikey/garage/ui/vehicle/AddEditVehicleViewModel.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/vehicle/VehicleDetailViewModel.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/vehicle/EditRegistrationInsuranceViewModel.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/vehicle/RegistrationInsuranceViewModel.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/vehicle/PartsViewModel.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/vehicle/VehicleSpecsViewModel.kt"
+      ],
+      "ui_components": [
+        "app/src/main/java/com/fearmikey/garage/ui/vehicle/AddEditVehicleScreen.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/vehicle/VehicleDetailScreen.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/vehicle/RegistrationInsuranceScreen.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/vehicle/EditRegistrationInsuranceScreen.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/vehicle/PartsScreen.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/vehicle/EditPartsScreen.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/vehicle/VehicleSpecsScreen.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/vehicle/CustomDocumentsUi.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/vehicle/PartsEstimator.kt"
+      ]
+    },
+    "dashboard": {
+      "description": "App home dashboard displaying fleet summary cards, recent activity, maintenance alerts, and fuel trends.",
+      "view_models": [
+        "app/src/main/java/com/fearmikey/garage/ui/dashboard/DashboardViewModel.kt"
+      ],
+      "ui_components": [
+        "app/src/main/java/com/fearmikey/garage/ui/dashboard/DashboardScreen.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/dashboard/FleetSummaryCard.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/dashboard/FuelTrendChart.kt"
+      ]
+    },
+    "fuel_and_charging": {
+      "description": "Logging gas fill-ups and EV charging sessions, calculating fuel economy / efficiency, and showing trend graphs.",
+      "entities": [
+        "app/src/main/java/com/fearmikey/garage/data/local/entity/FuelRecord.kt",
+        "app/src/main/java/com/fearmikey/garage/data/local/entity/ChargingRecord.kt"
+      ],
+      "daos": [
+        "app/src/main/java/com/fearmikey/garage/data/local/dao/FuelDao.kt",
+        "app/src/main/java/com/fearmikey/garage/data/local/dao/ChargingDao.kt"
+      ],
+      "repositories": [
+        "app/src/main/java/com/fearmikey/garage/data/repository/FuelRepository.kt",
+        "app/src/main/java/com/fearmikey/garage/data/repository/ChargingRepository.kt"
+      ],
+      "calculators": [
+        "app/src/main/java/com/fearmikey/garage/data/fuel/FuelEconomyCalculator.kt",
+        "app/src/main/java/com/fearmikey/garage/data/fuel/ChargingCalculator.kt",
+        "app/src/main/java/com/fearmikey/garage/data/fuel/TrendStats.kt"
+      ],
+      "view_models": [
+        "app/src/main/java/com/fearmikey/garage/ui/fuel/FuelViewModel.kt"
+      ],
+      "ui_components": [
+        "app/src/main/java/com/fearmikey/garage/ui/fuel/FuelScreen.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/fuel/FuelTrendCards.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/fuel/FuelTrends.kt"
+      ]
+    },
+    "maintenance_and_schedules": {
+      "description": "Maintenance logging, scheduled maintenance rules/engine, custom rules, suggestions, timeline filtering, and PDF export.",
+      "entities": [
+        "app/src/main/java/com/fearmikey/garage/data/local/entity/MaintenanceRecord.kt",
+        "app/src/main/java/com/fearmikey/garage/data/local/entity/MaintenanceCategory.kt",
+        "app/src/main/java/com/fearmikey/garage/data/local/entity/CustomMaintenanceRule.kt",
+        "app/src/main/java/com/fearmikey/garage/data/local/entity/IgnoredMaintenanceRule.kt"
+      ],
+      "daos": [
+        "app/src/main/java/com/fearmikey/garage/data/local/dao/MaintenanceDao.kt",
+        "app/src/main/java/com/fearmikey/garage/data/local/dao/CustomMaintenanceRuleDao.kt",
+        "app/src/main/java/com/fearmikey/garage/data/local/dao/IgnoredMaintenanceRuleDao.kt"
+      ],
+      "repositories": [
+        "app/src/main/java/com/fearmikey/garage/data/repository/MaintenanceRepository.kt",
+        "app/src/main/java/com/fearmikey/garage/data/repository/CustomMaintenanceRuleRepository.kt"
+      ],
+      "engine_and_rules": [
+        "app/src/main/java/com/fearmikey/garage/data/schedule/MaintenanceScheduleEngine.kt",
+        "app/src/main/java/com/fearmikey/garage/data/schedule/MaintenanceScheduleRules.kt",
+        "app/src/main/java/com/fearmikey/garage/data/schedule/MaintenanceScheduleTemplates.kt",
+        "app/src/main/java/com/fearmikey/garage/data/schedule/DocumentExpirationEngine.kt"
+      ],
+      "view_models": [
+        "app/src/main/java/com/fearmikey/garage/ui/maintenance/MaintenanceTimelineViewModel.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/maintenance/MaintenanceSuggestionsViewModel.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/maintenance/export/MaintenanceExportViewModel.kt"
+      ],
+      "ui_components": [
+        "app/src/main/java/com/fearmikey/garage/ui/maintenance/MaintenanceTimelineScreen.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/maintenance/MaintenanceSuggestionsScreen.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/maintenance/TimelineFilterBar.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/maintenance/ApplyTemplateSheet.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/maintenance/export/MaintenanceExportScreen.kt"
+      ]
+    },
+    "modifications": {
+      "description": "Tracking aftermarket modifications, upgrades, costs, and parts installed per vehicle.",
+      "entities": [
+        "app/src/main/java/com/fearmikey/garage/data/local/entity/ModificationRecord.kt",
+        "app/src/main/java/com/fearmikey/garage/data/local/entity/ModificationCategory.kt"
+      ],
+      "daos": [
+        "app/src/main/java/com/fearmikey/garage/data/local/dao/ModificationDao.kt"
+      ],
+      "repositories": [
+        "app/src/main/java/com/fearmikey/garage/data/repository/ModificationRepository.kt"
+      ],
+      "view_models": [
+        "app/src/main/java/com/fearmikey/garage/ui/mod/ModsViewModel.kt"
+      ],
+      "ui_components": [
+        "app/src/main/java/com/fearmikey/garage/ui/mod/ModsScreen.kt"
+      ]
+    },
+    "obd2_diagnostics": {
+      "description": "Bluetooth/Wi-Fi OBD-II scanner integration for reading real-time PID data, clearing DTC diagnostic trouble codes.",
+      "core_logic": [
+        "app/src/main/java/com/fearmikey/garage/obd/ObdConnectionManager.kt",
+        "app/src/main/java/com/fearmikey/garage/obd/ObdParser.kt",
+        "app/src/main/java/com/fearmikey/garage/obd/ObdResponseParser.kt",
+        "app/src/main/java/com/fearmikey/garage/obd/ObdPid.kt",
+        "app/src/main/java/com/fearmikey/garage/obd/ObdTransports.kt",
+        "app/src/main/java/com/fearmikey/garage/obd/DtcDescriptions.kt",
+        "app/src/main/java/com/fearmikey/garage/obd/ObdScanResult.kt"
+      ],
+      "view_models": [
+        "app/src/main/java/com/fearmikey/garage/ui/obd/ObdViewModel.kt"
+      ],
+      "ui_components": [
+        "app/src/main/java/com/fearmikey/garage/ui/obd/ObdScannerScreen.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/obd/ObdDevicePickerDialog.kt"
+      ]
+    },
+    "recalls": {
+      "description": "Fetching safety recall campaign data via NHTSA Recalls API.",
+      "entities": [
+        "app/src/main/java/com/fearmikey/garage/data/local/entity/RecallCampaignState.kt"
+      ],
+      "daos": [
+        "app/src/main/java/com/fearmikey/garage/data/local/dao/RecallCampaignStateDao.kt"
+      ],
+      "remote_api": [
+        "app/src/main/java/com/fearmikey/garage/data/remote/RecallApi.kt",
+        "app/src/main/java/com/fearmikey/garage/data/remote/dto/RecallResponse.kt"
+      ],
+      "repositories": [
+        "app/src/main/java/com/fearmikey/garage/data/repository/RecallRepository.kt",
+        "app/src/main/java/com/fearmikey/garage/data/repository/RecallStateRepository.kt"
+      ],
+      "view_models": [
+        "app/src/main/java/com/fearmikey/garage/ui/recall/RecallsViewModel.kt"
+      ],
+      "ui_components": [
+        "app/src/main/java/com/fearmikey/garage/ui/recall/RecallsScreen.kt"
+      ]
+    },
+    "cost_of_ownership": {
+      "description": "Total Cost of Ownership (TCO) analytics breaking down fuel, maintenance, mods, insurance, and per-distance metrics.",
+      "view_models": [
+        "app/src/main/java/com/fearmikey/garage/ui/cost/CostOfOwnershipViewModel.kt"
+      ],
+      "ui_components": [
+        "app/src/main/java/com/fearmikey/garage/ui/cost/CostOfOwnershipScreen.kt"
+      ]
+    },
+    "knowledge_base": {
+      "description": "Vehicle knowledge storage including torque specs, custom documents, fluid capacities, and reference guides.",
+      "entities": [
+        "app/src/main/java/com/fearmikey/garage/data/local/entity/TorqueSpec.kt",
+        "app/src/main/java/com/fearmikey/garage/data/local/entity/CustomDocument.kt"
+      ],
+      "daos": [
+        "app/src/main/java/com/fearmikey/garage/data/local/dao/KnowledgeDao.kt",
+        "app/src/main/java/com/fearmikey/garage/data/local/dao/CustomDocumentDao.kt"
+      ],
+      "repositories": [
+        "app/src/main/java/com/fearmikey/garage/data/repository/KnowledgeRepository.kt",
+        "app/src/main/java/com/fearmikey/garage/data/repository/CustomDocumentRepository.kt"
+      ],
+      "view_models": [
+        "app/src/main/java/com/fearmikey/garage/ui/knowledge/KnowledgeViewModel.kt"
+      ],
+      "ui_components": [
+        "app/src/main/java/com/fearmikey/garage/ui/knowledge/VehicleKnowledgeScreen.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/knowledge/KnowledgeAddDialogs.kt"
+      ]
+    },
+    "trip_logging": {
+      "description": "Manual and GPS service-assisted trip logging for mileage categorization (business vs. personal).",
+      "entities": [
+        "app/src/main/java/com/fearmikey/garage/data/local/entity/TripRecord.kt"
+      ],
+      "daos": [
+        "app/src/main/java/com/fearmikey/garage/data/local/dao/TripDao.kt"
+      ],
+      "repositories": [
+        "app/src/main/java/com/fearmikey/garage/data/repository/TripRepository.kt"
+      ],
+      "services": [
+        "app/src/main/java/com/fearmikey/garage/service/TripTrackingService.kt"
+      ],
+      "view_models": [
+        "app/src/main/java/com/fearmikey/garage/ui/trip/TripViewModel.kt"
+      ],
+      "ui_components": [
+        "app/src/main/java/com/fearmikey/garage/ui/trip/TripLoggerScreen.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/trip/TripAddDialogs.kt"
+      ]
+    },
+    "lubelogger_integration": {
+      "description": "Two-way REST API sync with self-hosted LubeLogger instance (vehicles, fuel, service, repairs, upgrades).",
+      "entities_and_daos": [
+        "app/src/main/java/com/fearmikey/garage/data/local/entity/LubeLoggerPendingDelete.kt",
+        "app/src/main/java/com/fearmikey/garage/data/local/dao/LubeLoggerPendingDeleteDao.kt"
+      ],
+      "remote_api": [
+        "app/src/main/java/com/fearmikey/garage/data/remote/lubelogger/LubeLoggerApiService.kt",
+        "app/src/main/java/com/fearmikey/garage/data/remote/lubelogger/LubeLoggerApiFactory.kt",
+        "app/src/main/java/com/fearmikey/garage/data/remote/lubelogger/LubeLoggerCredentialsManager.kt",
+        "app/src/main/java/com/fearmikey/garage/data/remote/lubelogger/LubeLoggerMapper.kt",
+        "app/src/main/java/com/fearmikey/garage/data/remote/lubelogger/LubeLoggerRecordSync.kt",
+        "app/src/main/java/com/fearmikey/garage/data/remote/lubelogger/LubeLoggerVehicleDetailsSync.kt"
+      ],
+      "workers": [
+        "app/src/main/java/com/fearmikey/garage/notification/lubelogger/LubeLoggerSyncWorker.kt"
+      ],
+      "view_models": [
+        "app/src/main/java/com/fearmikey/garage/ui/settings/LubeLoggerDuplicatesViewModel.kt"
+      ],
+      "ui_components": [
+        "app/src/main/java/com/fearmikey/garage/ui/settings/LubeLoggerConfigDialog.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/settings/LubeLoggerDuplicatesScreen.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/settings/LubeLoggerStatusItem.kt"
+      ]
+    },
+    "backup_and_cloud_sync": {
+      "description": "Local JSON/Database backup/restore, auto-backups, WebDAV remote cloud syncing, and image attachment storage.",
+      "repositories": [
+        "app/src/main/java/com/fearmikey/garage/data/repository/BackupRepository.kt",
+        "app/src/main/java/com/fearmikey/garage/data/repository/WebDavBackupRepository.kt",
+        "app/src/main/java/com/fearmikey/garage/data/repository/AutoBackupManager.kt",
+        "app/src/main/java/com/fearmikey/garage/data/repository/ImageStorageManager.kt"
+      ],
+      "preferences": [
+        "app/src/main/java/com/fearmikey/garage/data/local/CloudBackupPreferencesManager.kt"
+      ],
+      "workers": [
+        "app/src/main/java/com/fearmikey/garage/notification/CloudBackupWorker.kt",
+        "app/src/main/java/com/fearmikey/garage/notification/CloudBackupScheduler.kt"
+      ],
+      "ui_components": [
+        "app/src/main/java/com/fearmikey/garage/ui/settings/BackupSettingsScreen.kt"
+      ]
+    },
+    "settings_and_preferences": {
+      "description": "User preference persistence (units, currency, theme, reminders, developer options).",
+      "preferences": [
+        "app/src/main/java/com/fearmikey/garage/data/local/PreferencesManager.kt",
+        "app/src/main/java/com/fearmikey/garage/data/repository/PreferencesRepository.kt"
+      ],
+      "view_models": [
+        "app/src/main/java/com/fearmikey/garage/ui/settings/SettingsViewModel.kt"
+      ],
+      "ui_components": [
+        "app/src/main/java/com/fearmikey/garage/ui/settings/SettingsScreen.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/settings/AppearanceSettingsScreen.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/settings/RemindersSettingsScreen.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/settings/UserPreferencesSettingsScreen.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/settings/DeveloperFavoritesScreen.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/settings/SettingsComponents.kt"
+      ]
+    },
+    "widgets_and_tiles": {
+      "description": "Android Glance home screen widgets and Quick Settings status bar tiles.",
+      "widgets": [
+        "app/src/main/java/com/fearmikey/garage/widget/GarageWidget.kt",
+        "app/src/main/java/com/fearmikey/garage/widget/LogFuelWidget.kt",
+        "app/src/main/java/com/fearmikey/garage/widget/QuickActionsWidget.kt",
+        "app/src/main/java/com/fearmikey/garage/widget/UpdateOdometerWidget.kt",
+        "app/src/main/java/com/fearmikey/garage/widget/WidgetRefresher.kt"
+      ],
+      "tiles": [
+        "app/src/main/java/com/fearmikey/garage/service/LogFuelTileService.kt",
+        "app/src/main/java/com/fearmikey/garage/service/UpdateOdometerTileService.kt"
+      ]
+    }
+  },
+  "package_index": {
+    "data/fuel": "Calculators and helper classes for gas economy and EV charging stats.",
+    "data/local": "Room Database class, converters, and preference managers.",
+    "data/local/dao": "Room Data Access Objects (15 DAOs).",
+    "data/local/entity": "Room Database Entities (18 Entities).",
+    "data/remote": "Retrofit API interfaces (NHTSA VIN Decoder, NHTSA Recalls).",
+    "data/remote/lubelogger": "LubeLogger REST API client, DTOs, mappers, and sync engine.",
+    "data/repository": "Data repositories bridging DAOs, remote APIs, and UI ViewModels.",
+    "data/schedule": "Maintenance schedule engine, rule evaluations, and default templates.",
+    "di": "Hilt Dependency Injection modules (DatabaseModule, NetworkModule, RepositoryModule).",
+    "notification": "WorkManager workers and notification dispatchers for reminders and auto-backups.",
+    "obd": "OBD-II Bluetooth & Wi-Fi communication, PID definitions, and response parsing.",
+    "service": "Foreground services (TripTrackingService) and Quick Settings TileServices.",
+    "ui/components": "Reusable UI components (VehicleCard, TrendChart, Scrollbar, StatusChip, etc.).",
+    "ui/cost": "Cost of ownership analytics screen and ViewModel.",
+    "ui/dashboard": "Main fleet dashboard screen and components.",
+    "ui/fuel": "Fuel & charging logging screen, charts, and ViewModel.",
+    "ui/knowledge": "Vehicle knowledge base, documents, torque specs.",
+    "ui/maintenance": "Maintenance timeline, suggestion engine screen, and PDF exporter.",
+    "ui/mod": "Aftermarket modifications screen and ViewModel.",
+    "ui/navigation": "Navigation host and destination routes.",
+    "ui/obd": "OBD-II scanner screen and device picker dialog.",
+    "ui/recall": "Safety recall check screen and ViewModel.",
+    "ui/settings": "Settings sub-screens, LubeLogger sync dialogs, and ViewModel.",
+    "ui/startup": "Onboarding/startup flow screen and ViewModel.",
+    "ui/theme": "Material 3 color schemes, vehicle theme color palettes, and typography.",
+    "ui/trip": "Trip logger screen and dialogs.",
+    "ui/util": "Unit conversions, date/number formatters, currency definitions.",
+    "ui/vehicle": "Vehicle management, details, registration/insurance, parts estimator.",
+    "widget": "Android Glance home screen widgets and receivers."
+  }
+}

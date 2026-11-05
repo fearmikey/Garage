@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.AutoMigrationSpec
 import com.fearmikey.garage.data.local.dao.ChargingDao
+import com.fearmikey.garage.data.local.dao.CustomDocumentDao
 import com.fearmikey.garage.data.local.dao.CustomMaintenanceRuleDao
 import com.fearmikey.garage.data.local.dao.FuelDao
 import com.fearmikey.garage.data.local.dao.IgnoredMaintenanceRuleDao
@@ -21,6 +22,7 @@ import com.fearmikey.garage.data.local.dao.VehiclePartsDao
 import com.fearmikey.garage.data.local.dao.VehicleRegistrationDao
 import com.fearmikey.garage.data.local.dao.VehicleSpecsDao
 import com.fearmikey.garage.data.local.entity.ChargingRecord
+import com.fearmikey.garage.data.local.entity.CustomDocument
 import com.fearmikey.garage.data.local.entity.CustomMaintenanceRule
 import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.data.local.entity.IgnoredMaintenanceRule
@@ -43,7 +45,7 @@ const val GARAGE_DATABASE_NAME = "garage.db"
  * The current Room schema version, kept as a standalone constant so it can be
  * compared against a backup's on-disk schema version before restoring it.
  */
-const val GARAGE_DATABASE_VERSION = 29
+const val GARAGE_DATABASE_VERSION = 32
 
 @DeleteTable.Entries(value = [DeleteTable(tableName = "reminders")])
 class DeleteRemindersTableSpec : AutoMigrationSpec
@@ -53,7 +55,7 @@ class DeleteRemindersTableSpec : AutoMigrationSpec
         Vehicle::class, MaintenanceRecord::class, VehicleSpecs::class, FuelRecord::class,
         VehiclePartsInfo::class, CustomMaintenanceRule::class, ModificationRecord::class, VehicleRegistrationInsurance::class,
         ChargingRecord::class, IgnoredMaintenanceRule::class, RecallCampaignState::class, LubeLoggerPendingDelete::class,
-        TorqueSpec::class, VehicleNote::class, TripRecord::class,
+        TorqueSpec::class, VehicleNote::class, TripRecord::class, CustomDocument::class,
     ],
     version = GARAGE_DATABASE_VERSION,
     exportSchema = true,
@@ -104,6 +106,13 @@ class DeleteRemindersTableSpec : AutoMigrationSpec
         AutoMigration(from = 27, to = 28),
         // Additive: vehicleType added to vehicles table (car vs. motorcycle)
         AutoMigration(from = 28, to = 29),
+        // Additive: hiddenTabs added to vehicles table (per-vehicle tab visibility)
+        AutoMigration(from = 29, to = 30),
+        // Additive: registrationImageUri2 (back side / second page) added to vehicle_registration_insurance table
+        AutoMigration(from = 30, to = 31),
+        // Additive: purchase fields on vehicle_registration_insurance, custom_documents table.
+        // Data: re-files OTHER maintenance records/custom rules into the new finer categories.
+        AutoMigration(from = 31, to = 32, spec = MaintenanceCategorySplitSpec::class),
     ],
 )
 @TypeConverters(Converters::class)
@@ -122,4 +131,5 @@ abstract class GarageDatabase : RoomDatabase() {
     abstract fun lubeLoggerPendingDeleteDao(): LubeLoggerPendingDeleteDao
     abstract fun knowledgeDao(): KnowledgeDao
     abstract fun tripDao(): TripDao
+    abstract fun customDocumentDao(): CustomDocumentDao
 }
