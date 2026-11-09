@@ -1,16 +1,24 @@
 package com.fearmikey.garage.data.local.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
+
+/** A user-defined spec row (e.g. "Chain size" → "520"), shown in its own group on the Specs tab. */
+data class CustomSpec(
+    @SerializedName("label") val label: String = "",
+    @SerializedName("value") val value: String = "",
+)
 
 /**
- * Extended vehicle specs decoded from NHTSA's vPIC VIN decode API. Kept as a
- * separate 1:1 table (rather than more columns on [Vehicle]) since these
- * fields are decode-only "reference" data the user never edits directly, and
- * not every vehicle will have one (e.g. added manually without a VIN decode).
+ * Extended vehicle specs, initially decoded from NHTSA's vPIC VIN decode API and
+ * editable by the user from the Specs tab (the decode often comes back sparse,
+ * e.g. for motorcycles). Kept as a separate 1:1 table (rather than more columns
+ * on [Vehicle]); not every vehicle will have one.
  *
- * All fields are raw text as returned by NHTSA and displayed as-is; see
+ * Fields are free text, displayed mostly as-is; see
  * `VehicleRepository.cleanSpec` for how placeholder values like
  * "Not Applicable" are filtered out before being stored here.
  */
@@ -48,6 +56,8 @@ data class VehicleSpecs(
     val trailerUnbrakedCapacity: String? = null,
     val gcwr: String? = null,
     val curbWeight: String? = null,
+    @ColumnInfo(defaultValue = "[]")
+    val customSpecs: List<CustomSpec> = emptyList(),
 ) {
     /** True when every field is null/blank, i.e. nothing worth showing on the Specs tab. */
     fun isEmpty(): Boolean = listOf(
@@ -55,7 +65,7 @@ data class VehicleSpecs(
         transmissionStyle, transmissionSpeeds, bodyClass, doors, gvwr, series, vehicleType,
         plantCity, plantState, plantCountry, manufacturer, trailerBrakedCapacity,
         trailerUnbrakedCapacity, gcwr, curbWeight,
-    ).all { it.isNullOrBlank() }
+    ).all { it.isNullOrBlank() } && customSpecs.all { it.label.isBlank() && it.value.isBlank() }
 
     /** Evaluates whether this vehicle is an Electric Vehicle (EV), PHEV, or Hybrid. */
     fun isEvOrPhev(): Boolean {

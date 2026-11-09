@@ -435,7 +435,20 @@
     <string name="vehicle_card_no_mileage">Kilometre verisi yok</string>
 
     <!-- Vehicle Specs -->
-    <string name="specs_empty_message">Henüz teknik özellik yok.\nTüm teknik özellikleri görmek için bu aracın VIN numarasını Düzenle ekranında çözün.</string>
+    <string name="specs_empty_message">Henüz teknik özellik yok.\nEklemek için düzenle düğmesine dokunun veya VIN numarasını Düzenle ekranında çözün.</string>
+    <string name="specs_edit">Teknik özellikleri düzenle</string>
+    <string name="specs_edit_title">Teknik özellikleri düzenle</string>
+    <string name="specs_group_custom">Diğer özellikler</string>
+    <string name="specs_add_custom">Özellik ekle</string>
+    <string name="specs_custom_label">Ad</string>
+    <string name="specs_custom_value">Değer</string>
+    <string name="specs_remove_custom">Özelliği kaldır</string>
+    <string name="specs_plant_city">Fabrika şehri</string>
+    <string name="specs_plant_state">Fabrika eyaleti/bölgesi</string>
+    <string name="specs_plant_country">Fabrika ülkesi</string>
+    <string name="specs_save">Kaydet</string>
+    <string name="specs_cancel">İptal</string>
+    <string name="specs_edit_hint">Gizlemek için alanı boş bırakın.</string>
     <string name="specs_group_engine">Motor ve Şanzıman</string>
     <string name="specs_group_weights">Ağırlıklar ve Çekme Kapasitesi</string>
     <string name="specs_group_body">Gövde / Karoser</string>

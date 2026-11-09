@@ -437,7 +437,20 @@
     <string name="vehicle_card_no_mileage">Sin kilometraje</string>
 
     <!-- Vehicle Specs -->
-    <string name="specs_empty_message">No hay especificaciones aún.\nDecodifica el VIN de este vehículo en la pantalla Editar para ver sus datos completos.</string>
+    <string name="specs_empty_message">No hay especificaciones aún.\nToca el botón de editar para añadirlas o decodifica el VIN en la pantalla Editar.</string>
+    <string name="specs_edit">Editar especificaciones</string>
+    <string name="specs_edit_title">Editar especificaciones</string>
+    <string name="specs_group_custom">Otras especificaciones</string>
+    <string name="specs_add_custom">Añadir especificación</string>
+    <string name="specs_custom_label">Nombre</string>
+    <string name="specs_custom_value">Valor</string>
+    <string name="specs_remove_custom">Quitar especificación</string>
+    <string name="specs_plant_city">Ciudad de la planta</string>
+    <string name="specs_plant_state">Estado/región de la planta</string>
+    <string name="specs_plant_country">País de la planta</string>
+    <string name="specs_save">Guardar</string>
+    <string name="specs_cancel">Cancelar</string>
+    <string name="specs_edit_hint">Deja un campo vacío para ocultarlo.</string>
     <string name="specs_group_engine">Motor y Transmisión</string>
     <string name="specs_group_weights">Pesos y Remolque</string>
     <string name="specs_group_body">Carrocería</string>

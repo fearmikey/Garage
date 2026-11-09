@@ -1,6 +1,7 @@
 package com.fearmikey.garage.data.local
 
 import androidx.room.TypeConverter
+import com.fearmikey.garage.data.local.entity.CustomSpec
 import com.fearmikey.garage.data.local.entity.Drivetrain
 import com.fearmikey.garage.data.local.entity.LubeLoggerRecordType
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
@@ -65,4 +66,20 @@ class Converters {
     @TypeConverter
     fun toTripCategory(value: String): TripCategory =
         TripCategory.entries.firstOrNull { it.name == value } ?: TripCategory.OTHER
+
+    @TypeConverter
+    fun fromCustomSpecs(specs: List<CustomSpec>): String = gson.toJson(specs.toTypedArray())
+
+    @TypeConverter
+    fun toCustomSpecs(value: String?): List<CustomSpec> =
+        runCatching { gson.fromJson(value, Array<CustomSpec>::class.java) }
+            .getOrNull()
+            ?.filterNotNull()
+            // Gson bypasses Kotlin defaults, so guard against missing fields in stored JSON.
+            ?.map { CustomSpec(label = it.label.orEmpty(), value = it.value.orEmpty()) }
+            .orEmpty()
+
+    private companion object {
+        val gson = com.google.gson.Gson()
+    }
 }

@@ -45,7 +45,7 @@ const val GARAGE_DATABASE_NAME = "garage.db"
  * The current Room schema version, kept as a standalone constant so it can be
  * compared against a backup's on-disk schema version before restoring it.
  */
-const val GARAGE_DATABASE_VERSION = 32
+const val GARAGE_DATABASE_VERSION = 33
 
 @DeleteTable.Entries(value = [DeleteTable(tableName = "reminders")])
 class DeleteRemindersTableSpec : AutoMigrationSpec
@@ -113,6 +113,8 @@ class DeleteRemindersTableSpec : AutoMigrationSpec
         // Additive: purchase fields on vehicle_registration_insurance, custom_documents table.
         // Data: re-files OTHER maintenance records/custom rules into the new finer categories.
         AutoMigration(from = 31, to = 32, spec = MaintenanceCategorySplitSpec::class),
+        // Additive: customSpecs (user-defined spec rows, JSON) added to vehicle_specs table.
+        AutoMigration(from = 32, to = 33),
     ],
 )
 @TypeConverters(Converters::class)

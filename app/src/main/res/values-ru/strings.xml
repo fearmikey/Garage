@@ -439,7 +439,20 @@
     <string name="vehicle_card_no_mileage">Нет пробега</string>
 
     <!-- Vehicle Specs -->
-    <string name="specs_empty_message">Характеристики отсутствуют.\nРасшифруйте VIN этого автомобиля на экране редактирования, чтобы увидеть все данные.</string>
+    <string name="specs_empty_message">Характеристики отсутствуют.\nНажмите кнопку редактирования, чтобы добавить их, или расшифруйте VIN на экране редактирования.</string>
+    <string name="specs_edit">Изменить характеристики</string>
+    <string name="specs_edit_title">Изменить характеристики</string>
+    <string name="specs_group_custom">Другие характеристики</string>
+    <string name="specs_add_custom">Добавить характеристику</string>
+    <string name="specs_custom_label">Название</string>
+    <string name="specs_custom_value">Значение</string>
+    <string name="specs_remove_custom">Удалить характеристику</string>
+    <string name="specs_plant_city">Город завода</string>
+    <string name="specs_plant_state">Регион завода</string>
+    <string name="specs_plant_country">Страна завода</string>
+    <string name="specs_save">Сохранить</string>
+    <string name="specs_cancel">Отмена</string>
+    <string name="specs_edit_hint">Оставьте поле пустым, чтобы скрыть его.</string>
     <string name="specs_group_engine">Двигатель и Трансмиссия</string>
     <string name="specs_group_weights">Масса и Буксировка</string>
     <string name="specs_group_body">Кузов</string>

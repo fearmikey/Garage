@@ -46,7 +46,7 @@
   },
   "feature_map": {
     "vehicle_management": {
-      "description": "Adding, editing, displaying vehicles, specs, registrations, insurance, notes, and custom documents.",
+      "description": "Adding, editing, displaying vehicles, specs, registrations, insurance, notes, and custom documents. Specs (VehicleSpecs) are VIN-decoded and user-editable from the Specs tab (EditSpecsSheet in VehicleSpecsScreen.kt), including user-defined CustomSpec rows stored as JSON in vehicle_specs.customSpecs via Converters.",
       "entities": [
         "app/src/main/java/com/fearmikey/garage/data/local/entity/Vehicle.kt",
         "app/src/main/java/com/fearmikey/garage/data/local/entity/VehicleSpecs.kt",
@@ -363,7 +363,7 @@
     "notification": "WorkManager workers and notification dispatchers for reminders and auto-backups.",
     "obd": "OBD-II Bluetooth & Wi-Fi communication, PID definitions, and response parsing.",
     "service": "Foreground services (TripTrackingService) and Quick Settings TileServices.",
-    "ui/components": "Reusable UI components (VehicleCard, TrendChart, Scrollbar, StatusChip, etc.).",
+    "ui/components": "Reusable UI components (VehicleCard, TrendChart, Scrollbar, StatusChip, ScrollToTopOnInsert for keeping tab lists pinned to newly inserted top entries, etc.).",
     "ui/cost": "Cost of ownership analytics screen and ViewModel.",
     "ui/dashboard": "Main fleet dashboard screen and components.",
     "ui/fuel": "Fuel & charging logging screen, charts, and ViewModel.",

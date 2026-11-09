@@ -435,7 +435,20 @@
     <string name="vehicle_card_no_mileage">Kein Kilometerstand</string>
 
     <!-- Vehicle Specs -->
-    <string name="specs_empty_message">Noch keine Daten vorhanden.\nDekodieren Sie die FIN auf der Bearbeiten-Seite, um alle technischen Daten anzuzeigen.</string>
+    <string name="specs_empty_message">Noch keine Daten vorhanden.\nTippen Sie auf Bearbeiten, um Daten hinzuzufügen, oder dekodieren Sie die FIN auf der Bearbeiten-Seite.</string>
+    <string name="specs_edit">Technische Daten bearbeiten</string>
+    <string name="specs_edit_title">Technische Daten bearbeiten</string>
+    <string name="specs_group_custom">Weitere Daten</string>
+    <string name="specs_add_custom">Eintrag hinzufügen</string>
+    <string name="specs_custom_label">Bezeichnung</string>
+    <string name="specs_custom_value">Wert</string>
+    <string name="specs_remove_custom">Eintrag entfernen</string>
+    <string name="specs_plant_city">Werk (Stadt)</string>
+    <string name="specs_plant_state">Werk (Bundesland/Region)</string>
+    <string name="specs_plant_country">Werk (Land)</string>
+    <string name="specs_save">Speichern</string>
+    <string name="specs_cancel">Abbrechen</string>
+    <string name="specs_edit_hint">Lassen Sie ein Feld leer, um es auszublenden.</string>
     <string name="specs_group_engine">Motor &amp; Antrieb</string>
     <string name="specs_group_weights">Gewichte &amp; Anhängelast</string>
     <string name="specs_group_body">Karosserie</string>

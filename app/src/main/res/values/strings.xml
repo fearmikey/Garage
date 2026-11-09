@@ -439,7 +439,20 @@
     <string name="vehicle_card_no_mileage">No mileage</string>
 
     <!-- Vehicle Specs -->
-    <string name="specs_empty_message">No specs yet.\nDecode this vehicle\'s VIN on the Edit screen to see full specs.</string>
+    <string name="specs_empty_message">No specs yet.\nTap the edit button to add them, or decode this vehicle\'s VIN on the Edit screen.</string>
+    <string name="specs_edit">Edit specs</string>
+    <string name="specs_edit_title">Edit Specs</string>
+    <string name="specs_group_custom">Other specs</string>
+    <string name="specs_add_custom">Add spec</string>
+    <string name="specs_custom_label">Name</string>
+    <string name="specs_custom_value">Value</string>
+    <string name="specs_remove_custom">Remove spec</string>
+    <string name="specs_plant_city">Plant city</string>
+    <string name="specs_plant_state">Plant state/region</string>
+    <string name="specs_plant_country">Plant country</string>
+    <string name="specs_save">Save</string>
+    <string name="specs_cancel">Cancel</string>
+    <string name="specs_edit_hint">Leave a field blank to hide it.</string>
     <string name="specs_group_engine">Engine &amp; Drivetrain</string>
     <string name="specs_group_weights">Weights &amp; Towing</string>
     <string name="specs_group_body">Body</string>

@@ -435,7 +435,20 @@
     <string name="vehicle_card_no_mileage">Geen kilometerstand</string>
 
     <!-- Vehicle Specs -->
-    <string name="specs_empty_message">Nog geen specificaties.\nDecodeer het VIN van dit voertuig op het bewerkscherm om alle specificaties te zien.</string>
+    <string name="specs_empty_message">Nog geen specificaties.\nTik op de bewerkknop om ze toe te voegen, of decodeer het VIN op het bewerkscherm.</string>
+    <string name="specs_edit">Specificaties bewerken</string>
+    <string name="specs_edit_title">Specificaties bewerken</string>
+    <string name="specs_group_custom">Overige specificaties</string>
+    <string name="specs_add_custom">Specificatie toevoegen</string>
+    <string name="specs_custom_label">Naam</string>
+    <string name="specs_custom_value">Waarde</string>
+    <string name="specs_remove_custom">Specificatie verwijderen</string>
+    <string name="specs_plant_city">Fabriek (stad)</string>
+    <string name="specs_plant_state">Fabriek (provincie/regio)</string>
+    <string name="specs_plant_country">Fabriek (land)</string>
+    <string name="specs_save">Opslaan</string>
+    <string name="specs_cancel">Annuleren</string>
+    <string name="specs_edit_hint">Laat een veld leeg om het te verbergen.</string>
     <string name="specs_group_engine">Motor &amp; Aandrijflijn</string>
     <string name="specs_group_weights">Gewichten &amp; Trekkracht</string>
     <string name="specs_group_body">Carrosserie</string>
