@@ -6,7 +6,7 @@
 ### Fixed
 * **Recall Check HTTP 400:** NHTSA answers "no recalls for this year/make/model" (including makes it doesn't know, such as many non-US motorcycles) with HTTP 400. This is now shown as "no open recalls" instead of an error, and network/server failures get readable messages.
 * **Recall Error Flicker:** Pressing Retry no longer flashes the error message away before it can be read.
-* **Kilometre Round-Trips:** Distances are stored as fractional miles, so km values no longer come back ±1 km (DB v33 → v34). LubeLogger sync and deferred-maintenance reminders convert units correctly.
+* **Kilometer Round-Trips:** Distances are stored as fractional miles, so km values no longer come back ±1 km (DB v33 → v34). LubeLogger sync and deferred-maintenance reminders convert units correctly.
 * **Tire Pressure & Wiper Units:** The Parts edit screen now shows and saves values in your unit (bar/PSI, mm/in), matching the Parts list.
 * **GPS Trip Drift:** Trip logging ignores inaccurate or stale GPS fixes and jitter, saves the trip on Stop & Save (including from the notification), and shows distance in your configured unit.
 * **Tab Lists Scroll Position:** Lists jump back to the top when a new entry is added, instead of hiding it above the viewport.
