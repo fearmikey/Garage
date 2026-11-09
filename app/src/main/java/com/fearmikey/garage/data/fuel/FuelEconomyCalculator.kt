@@ -8,7 +8,7 @@ import com.fearmikey.garage.data.local.entity.FuelRecord
  */
 data class FuelEconomyEntry(
     val record: FuelRecord,
-    val milesDriven: Int,
+    val milesDriven: Double,
     val gallonsUsed: Double,
     /** Total spent on every fill-up in this segment (partials included), matching [gallonsUsed]. */
     val costUsed: Double = 0.0,

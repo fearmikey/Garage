@@ -31,7 +31,7 @@ class TimelineFilterTest {
         id = id,
         vehicleId = 1L,
         date = now - TimeUnit.DAYS.toMillis(daysAgo),
-        mileage = 1000,
+        mileage = 1000.0,
         description = description,
         cost = cost,
         category = category,

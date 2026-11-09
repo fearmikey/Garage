@@ -113,10 +113,10 @@ class DashboardViewModelTest {
     }
 
     private class FakeMaintenanceDao : MaintenanceDao {
-        val latestMileageFlow = MutableStateFlow<Int?>(null)
+        val latestMileageFlow = MutableStateFlow<Double?>(null)
         override fun getRecordsForVehicleByDate(vehicleId: Long): Flow<List<MaintenanceRecord>> = MutableStateFlow(emptyList())
         override fun getRecordsForVehicleByMileage(vehicleId: Long): Flow<List<MaintenanceRecord>> = MutableStateFlow(emptyList())
-        override fun getLatestMileageForVehicle(vehicleId: Long): Flow<Int?> = latestMileageFlow
+        override fun getLatestMileageForVehicle(vehicleId: Long): Flow<Double?> = latestMileageFlow
         override suspend fun upsert(record: MaintenanceRecord): Long = 1L
         override suspend fun update(record: MaintenanceRecord) {}
         override suspend fun delete(record: MaintenanceRecord) {}
@@ -266,16 +266,16 @@ class DashboardViewModelTest {
         assertEquals(null, viewModel.vehicles.value[0].latestMileage)
 
         // Simulate latest mileage updated from maintenance or fuel record to 45,000 miles
-        maintenanceDao.latestMileageFlow.value = 45000
+        maintenanceDao.latestMileageFlow.value = 45000.0
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(45000, viewModel.vehicles.value[0].latestMileage)
+        assertEquals(45000.0, viewModel.vehicles.value[0].latestMileage)
 
         // Simulate fuel update pushing latest mileage to 48,000 miles
-        maintenanceDao.latestMileageFlow.value = 48000
+        maintenanceDao.latestMileageFlow.value = 48000.0
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(48000, viewModel.vehicles.value[0].latestMileage)
+        assertEquals(48000.0, viewModel.vehicles.value[0].latestMileage)
 
         collectJob.cancel()
     }

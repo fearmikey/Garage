@@ -88,7 +88,7 @@ class MaintenanceSuggestionsViewModelTest {
         val recordsFlow = MutableStateFlow<List<MaintenanceRecord>>(emptyList())
         override fun getRecordsForVehicleByDate(vehicleId: Long): Flow<List<MaintenanceRecord>> = recordsFlow
         override fun getRecordsForVehicleByMileage(vehicleId: Long): Flow<List<MaintenanceRecord>> = recordsFlow
-        override fun getLatestMileageForVehicle(vehicleId: Long): Flow<Int?> =
+        override fun getLatestMileageForVehicle(vehicleId: Long): Flow<Double?> =
             recordsFlow.map { list -> list.maxOfOrNull { it.mileage } }
         override suspend fun upsert(record: MaintenanceRecord): Long {
             val current = recordsFlow.value.toMutableList()
@@ -177,7 +177,7 @@ class MaintenanceSuggestionsViewModelTest {
             id = 1,
             vehicleId = vehicleId,
             date = System.currentTimeMillis(),
-            mileage = 12000,
+            mileage = 12000.0,
             description = "Engine oil change",
             cost = 50.0,
             category = MaintenanceCategory.FLUIDS,
@@ -186,11 +186,11 @@ class MaintenanceSuggestionsViewModelTest {
         viewModel.logMaintenance(record)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(12000, viewModel.latestMileage.value)
+        assertEquals(12000.0, viewModel.latestMileage.value)
 
         val oilChangeSuggestion = viewModel.suggestions.value.find { it.rule.taskName == "Engine oil change" }
-        assertEquals(12000, oilChangeSuggestion?.lastServiceMileage)
-        assertEquals(17000, oilChangeSuggestion?.nextDueMileage)
+        assertEquals(12000.0, oilChangeSuggestion?.lastServiceMileage)
+        assertEquals(17000.0, oilChangeSuggestion?.nextDueMileage)
 
         collectJob1.cancel()
         collectJob2.cancel()

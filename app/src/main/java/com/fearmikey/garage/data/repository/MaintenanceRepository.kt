@@ -34,7 +34,7 @@ class MaintenanceRepository @Inject constructor(
         MaintenanceSortOrder.MILEAGE -> maintenanceDao.getRecordsForVehicleByMileage(vehicleId)
     }
 
-    fun getLatestMileageForVehicle(vehicleId: Long): Flow<Int?> =
+    fun getLatestMileageForVehicle(vehicleId: Long): Flow<Double?> =
         maintenanceDao.getLatestMileageForVehicle(vehicleId)
 
     fun getIgnoredRulesForVehicle(vehicleId: Long): Flow<List<IgnoredMaintenanceRule>> =

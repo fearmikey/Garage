@@ -119,7 +119,7 @@ class VehicleDetailViewModel @Inject constructor(
         val vehicle: Vehicle?,
         val isPureEv: Boolean,
         val records: List<com.fearmikey.garage.data.local.entity.MaintenanceRecord>,
-        val latestMileage: Int?,
+        val latestMileage: Double?,
     )
 
     val vehicleThemingEnabled: StateFlow<Boolean> = preferencesRepository.vehicleThemingEnabled

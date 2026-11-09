@@ -25,7 +25,7 @@ class LubeLoggerMapperTest {
             id = 1L,
             vehicleId = 5L,
             date = cal.timeInMillis,
-            mileage = 150000,
+            mileage = 150000.0,
             gallons = 12.5,
             totalCost = 45.0,
             pricePerGallon = 3.6,
@@ -57,7 +57,7 @@ class LubeLoggerMapperTest {
             id = 2L,
             vehicleId = 5L,
             date = cal.timeInMillis,
-            mileage = 152000,
+            mileage = 152000.0,
             description = "Oil Change",
             cost = 65.0,
             category = MaintenanceCategory.FLUIDS,
@@ -83,7 +83,7 @@ class LubeLoggerMapperTest {
     @Test
     fun `service record round trips category task and deferral`() {
         val original = MaintenanceRecord(
-            vehicleId = 5L, date = 0L, mileage = 1000, description = "Brake Pads (front)",
+            vehicleId = 5L, date = 0L, mileage = 1000.0, description = "Brake Pads (front)",
             cost = 12.5, category = MaintenanceCategory.BRAKES, taskName = "Brake pad replacement",
             isDeferred = true, lubeLoggerId = 7,
         )
@@ -126,7 +126,7 @@ class LubeLoggerMapperTest {
             id = 3L,
             vehicleId = 5L,
             date = cal.timeInMillis,
-            mileage = 155000,
+            mileage = 155000.0,
             description = "Brake Pads",
             cost = 0.0,
             category = MaintenanceCategory.BRAKES,
@@ -145,7 +145,7 @@ class LubeLoggerMapperTest {
     private fun checkIn(mileage: Int, description: String = "Odometer check-in") = MaintenanceRecord(
         vehicleId = 5L,
         date = Calendar.getInstance().apply { set(2026, Calendar.OCTOBER, 7, 12, 0, 0) }.timeInMillis,
-        mileage = mileage,
+        mileage = mileage.toDouble(),
         description = description,
         cost = 0.0,
         category = MaintenanceCategory.INSPECTION,
@@ -185,7 +185,7 @@ class LubeLoggerMapperTest {
         val record = dto.toOdometerCheckIn(localVehicleId = 5L)!!
 
         assertEquals(8, record.lubeLoggerId)
-        assertEquals(83200, record.mileage)
+        assertEquals(83200.0, record.mileage, 0.0)
         assertEquals("Odometer check-in", record.description)
         assertTrue(record.isOdometerCheckIn)
         val cal = Calendar.getInstance().apply { timeInMillis = record.date }
@@ -200,7 +200,7 @@ class LubeLoggerMapperTest {
         val record = dto.toOdometerCheckIn(localVehicleId = 5L)!!
 
         assertEquals(15, record.lubeLoggerId)
-        assertEquals(83300, record.mileage)
+        assertEquals(83300.0, record.mileage, 0.0)
         assertEquals("Trip", record.description)
     }
 
@@ -208,7 +208,7 @@ class LubeLoggerMapperTest {
     fun `metric odometer record is converted to miles`() {
         val dto = LubeLoggerOdometerRecordDto(id = "3", date = "2026-10-08", odometer = "160934")
         val record = dto.toOdometerCheckIn(localVehicleId = 5L, lubeLoggerUnitSystem = "metric")!!
-        assertEquals(100000, record.mileage)
+        assertEquals(100000.0, record.mileage, 0.5)
     }
 
     @Test
@@ -226,7 +226,7 @@ class LubeLoggerMapperTest {
         val dto = LubeLoggerGasRecordDto(id = 1, date = "10/07/2026", odometer = "82828", fuelConsumed = "18.2", cost = "4.44", isFillToFull = "False")
         val record = dto.toFuelRecord(5L)!!
         assertFalse(record.isFullTank)
-        assertEquals(82828, record.mileage)
+        assertEquals(82828.0, record.mileage, 0.0)
     }
 
     @Test
@@ -311,12 +311,12 @@ class LubeLoggerMapperTest {
 
         assertEquals("1GNDT13W6W2123456", result.vin)
         assertTrue(result.purchasedNew)
-        assertEquals(15, result.initialMileage)
+        assertEquals(15.0, result.initialMileage)
     }
 
     @Test
     fun `first sync keeps values already set in garage`() {
-        val local = blankLocal.copy(vin = "1GNDT13W6W2999999", purchasedNew = true, initialMileage = 40000)
+        val local = blankLocal.copy(vin = "1GNDT13W6W2999999", purchasedNew = true, initialMileage = 40000.0)
         val remote = remoteWith("Purchase Condition" to "Used", "Purchase Mileage" to "50000")
             .copy(licensePlate = "1GNDT13W6W2123456")
 
@@ -326,12 +326,12 @@ class LubeLoggerMapperTest {
     @Test
     fun `change made in garage wins and is pushed`() {
         val base = VehicleSyncDetails("", "New", "100")
-        val local = blankLocal.copy(purchasedNew = false, initialMileage = 200)
+        val local = blankLocal.copy(purchasedNew = false, initialMileage = 200.0)
         val remote = remoteWith("Purchase Condition" to "New", "Purchase Mileage" to "100")
 
         val result = merge(local, remote, base)
         assertEquals(false, result.purchasedNew)
-        assertEquals(200, result.initialMileage)
+        assertEquals(200.0, result.initialMileage)
 
         val update = remote.copy(year = 1998, make = "Chevy", model = "Blazer", licensePlate = "GASHURTS")
             .toUpdateDto(result.syncDetails(), "imperial")!!
@@ -343,13 +343,13 @@ class LubeLoggerMapperTest {
     @Test
     fun `change made in lubelogger is pulled`() {
         val base = VehicleSyncDetails("", "Used", "100")
-        val local = blankLocal.copy(purchasedNew = false, initialMileage = 100)
+        val local = blankLocal.copy(purchasedNew = false, initialMileage = 100.0)
         val remote = remoteWith("VIN" to "1GNDT13W6W2123456", "Purchase Condition" to "New", "Purchase Mileage" to "300")
 
         val result = merge(local, remote, base)
         assertEquals("1GNDT13W6W2123456", result.vin)
         assertTrue(result.purchasedNew)
-        assertEquals(300, result.initialMileage)
+        assertEquals(300.0, result.initialMileage)
     }
 
     @Test
@@ -391,7 +391,7 @@ class LubeLoggerMapperTest {
     fun `metric purchase mileage is converted both ways`() {
         val remote = remoteWith("Purchase Mileage" to "160934")
             .copy(year = 1998, make = "Chevy", model = "Blazer", licensePlate = "GASHURTS")
-        assertEquals(100000, merge(blankLocal, remote, null, "metric").initialMileage)
+        assertEquals(100000.0, merge(blankLocal, remote, null, "metric").initialMileage!!, 0.5)
 
         val update = remote.toUpdateDto(VehicleSyncDetails("", "Used", "50000"), "metric")!!
         assertEquals("80467", update.extraFields.first { it.name == "Purchase Mileage" }.value)
@@ -400,7 +400,7 @@ class LubeLoggerMapperTest {
     @Test
     fun `clearing a value in lubelogger clears it in garage`() {
         val base = VehicleSyncDetails("1GNDT13W6W2123456", "Used", "100")
-        val local = blankLocal.copy(vin = "1GNDT13W6W2123456", initialMileage = 100)
+        val local = blankLocal.copy(vin = "1GNDT13W6W2123456", initialMileage = 100.0)
         val remote = remoteWith("VIN" to "", "Purchase Condition" to "Used", "Purchase Mileage" to "")
 
         val result = merge(local, remote, base)
@@ -472,7 +472,7 @@ class LubeLoggerMapperTest {
         val dtoImperial = createLubeLoggerOdometerDto(
             lubeLoggerVehicleId = 42,
             dateMillis = dateMillis,
-            mileageMiles = 50000,
+            mileageMiles = 50000.0,
             notes = "Fuel fill-up",
             lubeLoggerUnitSystem = "imperial"
         )
@@ -485,7 +485,7 @@ class LubeLoggerMapperTest {
         val dtoMetric = createLubeLoggerOdometerDto(
             lubeLoggerVehicleId = 42,
             dateMillis = dateMillis,
-            mileageMiles = 50000,
+            mileageMiles = 50000.0,
             notes = "Oil Change",
             lubeLoggerUnitSystem = "metric"
         )
@@ -513,7 +513,7 @@ class LubeLoggerMapperTest {
         // Imperial unit system with latest mileage = 45000
         val dtoImperial = mod.toLubeLoggerUpgradeDto(
             lubeLoggerVehicleId = 99,
-            latestMileage = 45000,
+            latestMileage = 45000.0,
             lubeLoggerUnitSystem = "imperial",
         )
         assertEquals(99, dtoImperial.vehicleId)
@@ -526,7 +526,7 @@ class LubeLoggerMapperTest {
         // Metric unit system with latest mileage = 45000 (45000 mi -> 72420 km)
         val dtoMetric = mod.toLubeLoggerUpgradeDto(
             lubeLoggerVehicleId = 99,
-            latestMileage = 45000,
+            latestMileage = 45000.0,
             lubeLoggerUnitSystem = "metric",
         )
         assertEquals("72420", dtoMetric.odometer)
@@ -548,29 +548,29 @@ class LubeLoggerMapperTest {
         val cal3 = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { set(2024, Calendar.JANUARY, 1, 12, 0) }
 
         val readings = listOf(
-            cal1.timeInMillis to 10000,
-            cal2.timeInMillis to 15000,
-            cal3.timeInMillis to 25000,
+            cal1.timeInMillis to 10000.0,
+            cal2.timeInMillis to 15000.0,
+            cal3.timeInMillis to 25000.0,
         )
-        val initialMileage = 100
+        val initialMileage = 100.0
 
         // Before any reading -> returns initial mileage
         val dateBefore = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { set(2022, Calendar.JUNE, 1, 12, 0) }.timeInMillis
-        assertEquals(100, estimateMileageAtDate(dateBefore, readings, initialMileage))
+        assertEquals(100.0, estimateMileageAtDate(dateBefore, readings, initialMileage), 0.0)
 
         // Exact match of first reading
-        assertEquals(10000, estimateMileageAtDate(cal1.timeInMillis, readings, initialMileage))
+        assertEquals(10000.0, estimateMileageAtDate(cal1.timeInMillis, readings, initialMileage), 0.0)
 
         // Date between 1st and 2nd reading
         val dateMid1 = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { set(2023, Calendar.MARCH, 1, 12, 0) }.timeInMillis
-        assertEquals(10000, estimateMileageAtDate(dateMid1, readings, initialMileage))
+        assertEquals(10000.0, estimateMileageAtDate(dateMid1, readings, initialMileage), 0.0)
 
         // Date between 2nd and 3rd reading
         val dateMid2 = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { set(2023, Calendar.SEPTEMBER, 1, 12, 0) }.timeInMillis
-        assertEquals(15000, estimateMileageAtDate(dateMid2, readings, initialMileage))
+        assertEquals(15000.0, estimateMileageAtDate(dateMid2, readings, initialMileage), 0.0)
 
         // Date after all readings
         val dateAfter = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { set(2024, Calendar.MAY, 1, 12, 0) }.timeInMillis
-        assertEquals(25000, estimateMileageAtDate(dateAfter, readings, initialMileage))
+        assertEquals(25000.0, estimateMileageAtDate(dateAfter, readings, initialMileage), 0.0)
     }
 }

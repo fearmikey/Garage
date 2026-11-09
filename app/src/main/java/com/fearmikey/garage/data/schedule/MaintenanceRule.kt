@@ -21,7 +21,7 @@ import com.fearmikey.garage.data.local.entity.VehicleType
 data class MaintenanceRule(
     val taskName: String,
     val category: MaintenanceCategory,
-    val intervalMiles: Int? = null,
+    val intervalMiles: Double? = null,
     val intervalMonths: Int? = null,
     val makeMatch: String? = null,
     val modelMatch: String? = null,

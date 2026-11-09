@@ -115,7 +115,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun getLatestMileageForVehicle(vehicleId: Long): Flow<Int?> =
+    fun getLatestMileageForVehicle(vehicleId: Long): Flow<Double?> =
         maintenanceRepository.getLatestMileageForVehicle(vehicleId)
 
     fun onBuyMeACoffeeClicked() {
@@ -193,7 +193,7 @@ class MainViewModel @Inject constructor(
 
     fun insertOdometerRecord(
         vehicleId: Long,
-        canonicalMileage: Int,
+        canonicalMileage: Double,
         date: Long,
         notes: String,
         context: Context,

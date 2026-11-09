@@ -22,7 +22,7 @@ object MaintenanceScheduleEngine {
     fun suggestionsFor(
         vehicle: Vehicle,
         isPureEv: Boolean = false,
-        latestMileage: Int?,
+        latestMileage: Double?,
         records: List<MaintenanceRecord>,
         customRules: List<MaintenanceRule> = emptyList(),
         ignoredTaskNames: Set<String> = emptySet(),
@@ -69,7 +69,7 @@ object MaintenanceScheduleEngine {
 
     private fun toSuggestion(
         rule: MaintenanceRule,
-        latestMileage: Int?,
+        latestMileage: Double?,
         records: List<MaintenanceRecord>,
         now: Long,
         upcomingWindowMiles: Int,
@@ -115,9 +115,9 @@ object MaintenanceScheduleEngine {
     private fun calculateMileageDueAndStatus(
         rule: MaintenanceRule,
         lastService: MaintenanceRecord?,
-        latestMileage: Int?,
+        latestMileage: Double?,
         upcomingWindowMiles: Int,
-    ): Pair<Int?, ReminderStatus?> {
+    ): Pair<Double?, ReminderStatus?> {
         val interval = rule.intervalMiles ?: return Pair(null, null)
 
         val nextDueMileage = if (lastService != null) {

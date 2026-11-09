@@ -77,7 +77,7 @@ class MaintenanceTimelineViewModel @Inject constructor(
 
     fun clearFilters() = _filter.update { TimelineFilter() }
 
-    val latestMileage: StateFlow<Int?> = maintenanceRepository.getLatestMileageForVehicle(vehicleId)
+    val latestMileage: StateFlow<Double?> = maintenanceRepository.getLatestMileageForVehicle(vehicleId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     fun receiptFileFor(filename: String): File? = maintenanceRepository.imageFileFor(filename)

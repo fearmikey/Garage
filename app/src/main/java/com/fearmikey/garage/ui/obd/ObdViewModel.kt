@@ -383,13 +383,13 @@ class ObdViewModel @Inject constructor(
     private suspend fun logScanToTimeline(result: ObdScanResult) {
         if (vehicleId <= 0) return
         val description = ObdScanSummary.describe(result)
-        val odometerMiles = result.odometerKm?.let(UnitConverter::kmToMiles)
+        val odometerMiles = result.odometerKm?.let { UnitConverter.kmToMiles(it.toDouble()) }
         val latestMileage = maintenanceRepository.getLatestMileageForVehicle(vehicleId).first()
         val lastScan = maintenanceRepository.getRecordsForVehicle(vehicleId).first()
             .filter { it.taskName == ObdScanSummary.SCAN_TASK_NAME }
             .maxByOrNull { it.date }
 
-        val odometerAdvanced = (odometerMiles != null) && (odometerMiles > (latestMileage ?: -1))
+        val odometerAdvanced = (odometerMiles != null) && (odometerMiles > (latestMileage ?: -1.0))
         val changed = (lastScan == null) || (lastScan.description != description)
         if (!odometerAdvanced && !changed) {
             _uiState.update { it.copy(timelineLogResult = TimelineLogResult.UNCHANGED) }
@@ -397,14 +397,14 @@ class ObdViewModel @Inject constructor(
         }
 
         saveTimelineRecord(
-            mileage = odometerMiles ?: latestMileage ?: 0,
+            mileage = odometerMiles ?: latestMileage ?: 0.0,
             description = description,
             taskName = ObdScanSummary.SCAN_TASK_NAME,
         )
         _uiState.update { it.copy(timelineLogResult = TimelineLogResult.SAVED) }
     }
 
-    private suspend fun saveTimelineRecord(mileage: Int, description: String, taskName: String) {
+    private suspend fun saveTimelineRecord(mileage: Double, description: String, taskName: String) {
         maintenanceRepository.saveRecord(
             MaintenanceRecord(
                 vehicleId = vehicleId,
@@ -440,7 +440,7 @@ class ObdViewModel @Inject constructor(
                 }
                 if (vehicleId > 0 && _uiState.value.vinCheck != VinCheck.MISMATCH) {
                     val latestMileage = maintenanceRepository.getLatestMileageForVehicle(vehicleId).first()
-                    val mileage = previous?.odometerKm?.let(UnitConverter::kmToMiles) ?: latestMileage ?: 0
+                    val mileage = previous?.odometerKm?.let { UnitConverter.kmToMiles(it.toDouble()) } ?: latestMileage ?: 0.0
                     saveTimelineRecord(mileage, ObdScanSummary.describeClear(cleared), ObdScanSummary.CLEAR_TASK_NAME)
                 }
                 runScan(parser)

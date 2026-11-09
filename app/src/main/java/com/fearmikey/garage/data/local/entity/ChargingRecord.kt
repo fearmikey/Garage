@@ -38,7 +38,7 @@ data class ChargingRecord(
     val id: Long = 0,
     val vehicleId: Long,
     val date: Long,
-    val mileage: Int,
+    val mileage: Double,
     val kwhAdded: Double,
     val chargerSpeed: ChargerSpeed = ChargerSpeed.LEVEL_2,
     val batteryPercentStart: Int = 20,

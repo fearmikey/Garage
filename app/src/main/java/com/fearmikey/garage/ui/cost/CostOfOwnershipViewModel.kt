@@ -45,7 +45,7 @@ data class CostEntry(
     val date: Long,
     val title: String,
     val cost: Double,
-    val mileage: Int,
+    val mileage: Double,
     val detail: String? = null,
 )
 
@@ -259,7 +259,7 @@ class CostOfOwnershipViewModel @Inject constructor(
                     date = record.date,
                     title = record.title.ifBlank { record.category.displayName },
                     cost = record.cost,
-                    mileage = 0,
+                    mileage = 0.0,
                     detail = record.description.takeIf { it.isNotBlank() } ?: record.category.displayName,
                 )
             }.toList()
@@ -292,7 +292,7 @@ class CostOfOwnershipViewModel @Inject constructor(
                             date = purchaseDate ?: 0L,
                             title = "Purchase Price",
                             cost = purchaseTotal,
-                            mileage = 0,
+                            mileage = 0.0,
                             detail = documents?.purchaseSeller?.takeIf { it.isNotBlank() },
                         ),
                     ),

@@ -2,13 +2,15 @@ package com.fearmikey.garage.data.remote.lubelogger
 
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.ui.util.UnitConverter
+import kotlin.math.roundToInt
 
 /**
  * The vehicle details Garage keeps in sync with LubeLogger custom extra fields. Values are
  * normalized strings so they can be compared and stored as a sync snapshot:
  * - [vin]: uppercase VIN, or "" when unknown.
  * - [condition]: [CONDITION_NEW] / [CONDITION_USED].
- * - [purchaseMiles]: purchase odometer in *miles* (Garage's canonical unit), or "" when unknown.
+ * - [purchaseMiles]: purchase odometer in *miles* (Garage's canonical unit, see [formatSyncMiles]),
+ *   or "" when unknown.
  *
  * - [year] / [make] / [model]: the vehicle identity, synced to LubeLogger's own fields.
  * - [trim]: the `Trim` custom extra field.
@@ -35,10 +37,18 @@ data class VehicleSyncDetails(
 }
 
 /** [plate] comes from the vehicle's registration record; null leaves the plate out of the sync. */
+/**
+ * Canonical miles as a stable string for the details snapshot: whole values keep the pre-v34
+ * integer format ("2236") so existing snapshots still match, and fractional values (from km
+ * input) keep full precision so a km value round-trips through LubeLogger exactly.
+ */
+internal fun formatSyncMiles(miles: Double): String =
+    if (miles % 1.0 == 0.0) miles.toLong().toString() else miles.toString()
+
 fun Vehicle.syncDetails(plate: String? = null) = VehicleSyncDetails(
     vin = vin.trim().uppercase(),
     condition = if (purchasedNew) VehicleSyncDetails.CONDITION_NEW else VehicleSyncDetails.CONDITION_USED,
-    purchaseMiles = initialMileage?.toString().orEmpty(),
+    purchaseMiles = initialMileage?.let(::formatSyncMiles).orEmpty(),
     year = year?.toString().orEmpty(),
     make = make.trim(),
     model = model.trim(),
@@ -49,7 +59,7 @@ fun Vehicle.syncDetails(plate: String? = null) = VehicleSyncDetails(
 fun Vehicle.withSyncDetails(details: VehicleSyncDetails) = copy(
     vin = details.vin.orEmpty(),
     purchasedNew = details.condition == VehicleSyncDetails.CONDITION_NEW,
-    initialMileage = details.purchaseMiles?.toIntOrNull(),
+    initialMileage = details.purchaseMiles?.toDoubleOrNull(),
     // Never blank out Garage's identity fields: LubeLogger requires them, so a blank value only
     // means "unknown".
     year = details.year?.toIntOrNull() ?: year,
@@ -71,8 +81,8 @@ fun LubeLoggerVehicleDto.syncDetails(lubeLoggerUnitSystem: String): VehicleSyncD
             if (it) VehicleSyncDetails.CONDITION_NEW else VehicleSyncDetails.CONDITION_USED
         },
         purchaseMiles = findPurchaseOdometer()
-            ?.let { if (isMetric) UnitConverter.kmToMiles(it) else it }
-            ?.toString()
+            ?.let { if (isMetric) UnitConverter.kmToMiles(it.toDouble()) else it.toDouble() }
+            ?.let(::formatSyncMiles)
             ?: if (hasMileageField) "" else null,
         year = year?.toString(),
         make = make?.trim(),
@@ -145,8 +155,8 @@ private fun mergeField(local: String, remote: String?, base: String?, localIsUns
  */
 fun LubeLoggerVehicleDto.toUpdateDto(details: VehicleSyncDetails, lubeLoggerUnitSystem: String): LubeLoggerVehicleUpdateDto? {
     val isMetric = lubeLoggerUnitSystem.equals("metric", ignoreCase = true)
-    val serverMileage = details.purchaseMiles?.toIntOrNull()
-        ?.let { if (isMetric) UnitConverter.milesToKm(it) else it }
+    val serverMileage = details.purchaseMiles?.toDoubleOrNull()
+        ?.let { (if (isMetric) UnitConverter.milesToKm(it) else it).roundToInt() }
         ?.toString().orEmpty()
 
     var fields = extraFields.orEmpty()

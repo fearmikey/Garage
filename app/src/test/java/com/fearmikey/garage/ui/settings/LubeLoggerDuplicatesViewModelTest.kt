@@ -111,8 +111,8 @@ class LubeLoggerDuplicatesViewModelTest {
         // Two identical oil changes
         val date = 1_700_000_000_000L
         maintDao.recordsFlow.value = listOf(
-            MaintenanceRecord(id = 101L, vehicleId = 1L, date = date, mileage = 80000, description = "Oil Change", cost = 65.0, category = MaintenanceCategory.FLUIDS, lubeLoggerId = 12),
-            MaintenanceRecord(id = 102L, vehicleId = 1L, date = date, mileage = 80000, description = "Oil Change", cost = 65.0, category = MaintenanceCategory.FLUIDS, lubeLoggerId = 13),
+            MaintenanceRecord(id = 101L, vehicleId = 1L, date = date, mileage = 80000.0, description = "Oil Change", cost = 65.0, category = MaintenanceCategory.FLUIDS, lubeLoggerId = 12),
+            MaintenanceRecord(id = 102L, vehicleId = 1L, date = date, mileage = 80000.0, description = "Oil Change", cost = 65.0, category = MaintenanceCategory.FLUIDS, lubeLoggerId = 13),
         )
 
         val viewModel = LubeLoggerDuplicatesViewModel(vehicleRepo, fuelRepo, maintRepo, modRepo)

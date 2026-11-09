@@ -55,7 +55,7 @@ class CostOfOwnershipViewModelTest {
         val recordsFlow = MutableStateFlow<List<MaintenanceRecord>>(emptyList())
         override fun getRecordsForVehicleByDate(vehicleId: Long): Flow<List<MaintenanceRecord>> = recordsFlow
         override fun getRecordsForVehicleByMileage(vehicleId: Long): Flow<List<MaintenanceRecord>> = recordsFlow
-        override fun getLatestMileageForVehicle(vehicleId: Long): Flow<Int?> = MutableStateFlow(null)
+        override fun getLatestMileageForVehicle(vehicleId: Long): Flow<Double?> = MutableStateFlow(null)
         override suspend fun upsert(record: MaintenanceRecord): Long = 1L
         override suspend fun update(record: MaintenanceRecord) {}
         override suspend fun delete(record: MaintenanceRecord) {}
@@ -158,7 +158,7 @@ class CostOfOwnershipViewModelTest {
                 id = 1,
                 vehicleId = vehicleId,
                 date = now,
-                mileage = 10000,
+                mileage = 10000.0,
                 description = "Oil Change",
                 cost = 100.00,
                 category = MaintenanceCategory.FLUIDS,
@@ -167,7 +167,7 @@ class CostOfOwnershipViewModelTest {
                 id = 2,
                 vehicleId = vehicleId,
                 date = now,
-                mileage = 12000,
+                mileage = 12000.0,
                 description = "New Tires",
                 cost = 200.00,
                 category = MaintenanceCategory.TIRES,
@@ -179,7 +179,7 @@ class CostOfOwnershipViewModelTest {
                 id = 1,
                 vehicleId = vehicleId,
                 date = now,
-                mileage = 15000,
+                mileage = 15000.0,
                 gallons = 15.0,
                 totalCost = 50.00,
                 pricePerGallon = 3.333,
@@ -236,7 +236,7 @@ class CostOfOwnershipViewModelTest {
                 id = 1,
                 vehicleId = vehicleId,
                 date = now,
-                mileage = 10000,
+                mileage = 10000.0,
                 description = "Oil Change",
                 cost = 100.00,
                 category = MaintenanceCategory.FLUIDS,
@@ -304,7 +304,7 @@ class CostOfOwnershipViewModelTest {
                 id = 1,
                 vehicleId = vehicleId,
                 date = now,
-                mileage = 10000,
+                mileage = 10000.0,
                 description = "Recent Oil Change",
                 cost = 100.00,
                 category = MaintenanceCategory.FLUIDS,
@@ -313,7 +313,7 @@ class CostOfOwnershipViewModelTest {
                 id = 2,
                 vehicleId = vehicleId,
                 date = oldDate,
-                mileage = 5000,
+                mileage = 5000.0,
                 description = "Old Oil Change",
                 cost = 80.00,
                 category = MaintenanceCategory.FLUIDS,
@@ -355,7 +355,7 @@ class CostOfOwnershipViewModelTest {
                 id = 1,
                 vehicleId = vehicleId,
                 date = System.currentTimeMillis(),
-                mileage = 10000,
+                mileage = 10000.0,
                 description = "Oil Change",
                 cost = 100.00,
                 category = MaintenanceCategory.FLUIDS,

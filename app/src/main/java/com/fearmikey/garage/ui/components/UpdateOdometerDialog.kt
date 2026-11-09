@@ -46,10 +46,10 @@ private fun Vehicle.displayName(): String =
 fun UpdateOdometerDialog(
     vehicles: List<Vehicle>,
     initialVehicleId: Long?,
-    getLatestMileageFlow: (vehicleId: Long) -> Flow<Int?>,
+    getLatestMileageFlow: (vehicleId: Long) -> Flow<Double?>,
     unitSystem: UnitSystem,
     onDismiss: () -> Unit,
-    onSave: (vehicleId: Long, canonicalMileage: Int, date: Long, notes: String) -> Unit,
+    onSave: (vehicleId: Long, canonicalMileage: Double, date: Long, notes: String) -> Unit,
 ) {
     if (vehicles.isEmpty()) return
 

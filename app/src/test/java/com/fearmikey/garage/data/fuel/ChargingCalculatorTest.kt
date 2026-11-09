@@ -17,7 +17,7 @@ class ChargingCalculatorTest {
                 id = 1,
                 vehicleId = 1,
                 date = 1000L,
-                mileage = 10000,
+                mileage = 10000.0,
                 kwhAdded = 40.0,
             ),
         )
@@ -28,22 +28,22 @@ class ChargingCalculatorTest {
     @Test
     fun `entriesFor computes segment efficiency correctly`() {
         val records = listOf(
-            ChargingRecord(id = 1, vehicleId = 1, date = 1000L, mileage = 10000, kwhAdded = 40.0),
-            ChargingRecord(id = 2, vehicleId = 1, date = 2000L, mileage = 10200, kwhAdded = 50.0),
-            ChargingRecord(id = 3, vehicleId = 1, date = 3000L, mileage = 10450, kwhAdded = 60.0),
+            ChargingRecord(id = 1, vehicleId = 1, date = 1000L, mileage = 10000.0, kwhAdded = 40.0),
+            ChargingRecord(id = 2, vehicleId = 1, date = 2000L, mileage = 10200.0, kwhAdded = 50.0),
+            ChargingRecord(id = 3, vehicleId = 1, date = 3000L, mileage = 10450.0, kwhAdded = 60.0),
         )
 
         val entries = ChargingCalculator.entriesFor(records)
         assertEquals(2, entries.size)
 
         // Segment 1: 10000 -> 10200 (200 mi), 50 kWh added
-        assertEquals(200, entries[0].milesDriven)
+        assertEquals(200.0, entries[0].milesDriven, 0.0)
         assertEquals(50.0, entries[0].kwhUsed, 0.001)
         assertEquals(250.0, entries[0].whPerMi, 0.1) // (50 * 1000) / 200 = 250 Wh/mi
         assertEquals(134.8, entries[0].mpge, 0.1) // (200 / 50) * 33.7 = 134.8 MPGe
 
         // Segment 2: 10200 -> 10450 (250 mi), 60 kWh added
-        assertEquals(250, entries[1].milesDriven)
+        assertEquals(250.0, entries[1].milesDriven, 0.0)
         assertEquals(60.0, entries[1].kwhUsed, 0.001)
         assertEquals(240.0, entries[1].whPerMi, 0.1) // (60 * 1000) / 250 = 240 Wh/mi
         assertEquals(140.4, entries[1].mpge, 0.1) // (250 / 60) * 33.7 = 140.416 MPGe
@@ -52,9 +52,9 @@ class ChargingCalculatorTest {
     @Test
     fun `averageWhPerMi and averageMpge calculate weighted overall averages`() {
         val records = listOf(
-            ChargingRecord(id = 1, vehicleId = 1, date = 1000L, mileage = 10000, kwhAdded = 40.0),
-            ChargingRecord(id = 2, vehicleId = 1, date = 2000L, mileage = 10200, kwhAdded = 50.0),
-            ChargingRecord(id = 3, vehicleId = 1, date = 3000L, mileage = 10450, kwhAdded = 60.0),
+            ChargingRecord(id = 1, vehicleId = 1, date = 1000L, mileage = 10000.0, kwhAdded = 40.0),
+            ChargingRecord(id = 2, vehicleId = 1, date = 2000L, mileage = 10200.0, kwhAdded = 50.0),
+            ChargingRecord(id = 3, vehicleId = 1, date = 3000L, mileage = 10450.0, kwhAdded = 60.0),
         )
 
         val entries = ChargingCalculator.entriesFor(records)
@@ -79,7 +79,7 @@ class ChargingCalculatorTest {
                 id = 1,
                 vehicleId = 1,
                 date = 100000L,
-                mileage = 1000,
+                mileage = 1000.0,
                 kwhAdded = 45.0,
                 estimatedRangeAt100 = 300,
             ),
@@ -87,7 +87,7 @@ class ChargingCalculatorTest {
                 id = 2,
                 vehicleId = 1,
                 date = 200000L,
-                mileage = 15000,
+                mileage = 15000.0,
                 kwhAdded = 50.0,
                 estimatedRangeAt100 = 291,
             ),
@@ -95,7 +95,7 @@ class ChargingCalculatorTest {
                 id = 3,
                 vehicleId = 1,
                 date = 300000L,
-                mileage = 30000,
+                mileage = 30000.0,
                 kwhAdded = 52.0,
                 estimatedRangeAt100 = 285,
             ),

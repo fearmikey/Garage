@@ -84,7 +84,7 @@ class MainViewModelTest {
         val recordsFlow = MutableStateFlow<List<MaintenanceRecord>>(emptyList())
         override fun getRecordsForVehicleByDate(vehicleId: Long): Flow<List<MaintenanceRecord>> = recordsFlow
         override fun getRecordsForVehicleByMileage(vehicleId: Long): Flow<List<MaintenanceRecord>> = recordsFlow
-        override fun getLatestMileageForVehicle(vehicleId: Long): Flow<Int?> = MutableStateFlow(42000)
+        override fun getLatestMileageForVehicle(vehicleId: Long): Flow<Double?> = MutableStateFlow(42000.0)
         override suspend fun upsert(record: MaintenanceRecord): Long = 1L
         override suspend fun update(record: MaintenanceRecord) {}
         override suspend fun delete(record: MaintenanceRecord) {}

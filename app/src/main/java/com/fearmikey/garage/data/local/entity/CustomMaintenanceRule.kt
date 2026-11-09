@@ -35,7 +35,7 @@ data class CustomMaintenanceRule(
     val vehicleId: Long,
     val taskName: String,
     val category: MaintenanceCategory,
-    val intervalMiles: Int? = null,
+    val intervalMiles: Double? = null,
     val intervalMonths: Int? = null,
     @ColumnInfo(defaultValue = "0")
     val isDeferrable: Boolean = false,

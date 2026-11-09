@@ -599,8 +599,8 @@ private fun CostOfOwnershipPreview() {
                     percentage = 30.9f,
                     recordCount = 2,
                     entries = listOf(
-                        CostEntry(10, System.currentTimeMillis() - 400000000, "Cat-back Exhaust", 180.00, 0, "Performance Exhaust"),
-                        CostEntry(11, System.currentTimeMillis() - 800000000, "Cold Air Intake", 70.00, 0, "Air Intake Filter"),
+                        CostEntry(10, System.currentTimeMillis() - 400000000, "Cat-back Exhaust", 180.00, 0.0, "Performance Exhaust"),
+                        CostEntry(11, System.currentTimeMillis() - 800000000, "Cold Air Intake", 70.00, 0.0, "Air Intake Filter"),
                     ),
                 ),
                 CategoryCostItem(
@@ -610,8 +610,8 @@ private fun CostOfOwnershipPreview() {
                     percentage = 39.1f,
                     recordCount = 4,
                     entries = listOf(
-                        CostEntry(1, System.currentTimeMillis(), "Fuel Fill-Up", 62.48, 15230, "17.2 gal @ $3.63/gal"),
-                        CostEntry(2, System.currentTimeMillis() - 864000000, "Fuel Fill-Up", 34.03, 14890, "9.4 gal @ $3.62/gal"),
+                        CostEntry(1, System.currentTimeMillis(), "Fuel Fill-Up", 62.48, 15230.0, "17.2 gal @ $3.63/gal"),
+                        CostEntry(2, System.currentTimeMillis() - 864000000, "Fuel Fill-Up", 34.03, 14890.0, "9.4 gal @ $3.62/gal"),
                     ),
                 ),
                 CategoryCostItem(
@@ -621,7 +621,7 @@ private fun CostOfOwnershipPreview() {
                     percentage = 37.6f,
                     recordCount = 1,
                     entries = listOf(
-                        CostEntry(3, System.currentTimeMillis() - 17280000000, "Front Brake Pads", 210.50, 8000, "Replaced front brake pads"),
+                        CostEntry(3, System.currentTimeMillis() - 17280000000, "Front Brake Pads", 210.50, 8000.0, "Replaced front brake pads"),
                     ),
                     category = MaintenanceCategory.BRAKES,
                 ),
@@ -632,7 +632,7 @@ private fun CostOfOwnershipPreview() {
                     percentage = 16.1f,
                     recordCount = 1,
                     entries = listOf(
-                        CostEntry(4, System.currentTimeMillis() - 864000000, "Engine Oil Change", 89.99, 15230, "Full synthetic engine oil change + filter"),
+                        CostEntry(4, System.currentTimeMillis() - 864000000, "Engine Oil Change", 89.99, 15230.0, "Full synthetic engine oil change + filter"),
                     ),
                     category = MaintenanceCategory.FLUIDS,
                 ),
@@ -643,7 +643,7 @@ private fun CostOfOwnershipPreview() {
                     percentage = 7.2f,
                     recordCount = 1,
                     entries = listOf(
-                        CostEntry(5, System.currentTimeMillis() - 8208000000, "Rotation and Balance", 40.00, 12100, "Rotated tires, checked tread depth"),
+                        CostEntry(5, System.currentTimeMillis() - 8208000000, "Rotation and Balance", 40.00, 12100.0, "Rotated tires, checked tread depth"),
                     ),
                     category = MaintenanceCategory.TIRES,
                 ),

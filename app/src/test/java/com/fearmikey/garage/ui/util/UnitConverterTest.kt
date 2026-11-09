@@ -28,9 +28,9 @@ class UnitConverterTest {
         assertEquals(10000, UnitConverter.displayDistanceValue(miles, UnitSystem.UK_MIXED))
         assertEquals(16093, UnitConverter.displayDistanceValue(miles, UnitSystem.METRIC))
 
-        assertEquals(10000, UnitConverter.canonicalMilesFromInput(10000, UnitSystem.IMPERIAL))
-        assertEquals(10000, UnitConverter.canonicalMilesFromInput(10000, UnitSystem.UK_MIXED))
-        assertEquals(10000, UnitConverter.canonicalMilesFromInput(16093, UnitSystem.METRIC))
+        assertEquals(10000.0, UnitConverter.canonicalMilesFromInput(10000, UnitSystem.IMPERIAL), 0.0)
+        assertEquals(10000.0, UnitConverter.canonicalMilesFromInput(10000, UnitSystem.UK_MIXED), 0.0)
+        assertEquals(10000.0, UnitConverter.canonicalMilesFromInput(16093, UnitSystem.METRIC), 0.5)
 
         assertEquals("10,000 mi", UnitConverter.formatDistance(miles, UnitSystem.IMPERIAL))
         assertEquals("10,000 mi", UnitConverter.formatDistance(miles, UnitSystem.UK_MIXED))

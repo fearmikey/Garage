@@ -173,7 +173,7 @@ fun LubeLoggerDuplicatesScreen(
                                                         fontWeight = if (idx == 0) FontWeight.Bold else FontWeight.Normal,
                                                     )
                                                     val meta = buildString {
-                                                        if (item.mileage > 0) append("${item.mileage} mi · ")
+                                                        if (item.mileage > 0) append("${kotlin.math.round(item.mileage).toLong()} mi · ")
                                                         append("$${"%.2f".format(Locale.US, item.cost)}")
                                                         if (item.lubeLoggerId != null) append(" · Synced (#${item.lubeLoggerId})")
                                                     }

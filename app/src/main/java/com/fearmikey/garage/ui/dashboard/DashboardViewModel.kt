@@ -54,7 +54,7 @@ import javax.inject.Inject
 
 data class VehicleListItem(
     val vehicle: Vehicle,
-    val latestMileage: Int?,
+    val latestMileage: Double?,
     val imageFile: File? = null,
     val imageFiles: List<Pair<File, Float>> = emptyList(),
     val avgMpg: Double? = null,
@@ -168,7 +168,7 @@ class DashboardViewModel @Inject constructor(
                             preferencesRepository.maintenanceDaysWindow,
                             customDocumentRepository?.getDocumentsForVehicle(vehicle.id) ?: flowOf(emptyList<CustomDocument>()),
                         ) { flows: Array<Any?> ->
-                            val mileage = flows[0] as? Int
+                            val mileage = flows[0] as? Double
                             val maintenanceRecords = (flows[1] as? List<*>)?.filterIsInstance<MaintenanceRecord>() ?: emptyList()
                             val customRules = (flows[2] as? List<*>)?.filterIsInstance<CustomMaintenanceRule>() ?: emptyList()
                             val fuelRecords = (flows[3] as? List<*>)?.filterIsInstance<FuelRecord>() ?: emptyList()

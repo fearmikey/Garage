@@ -15,9 +15,9 @@ import com.fearmikey.garage.data.repository.ReminderStatus
  */
 data class MaintenanceSuggestion(
     val rule: MaintenanceRule,
-    val lastServiceMileage: Int?,
+    val lastServiceMileage: Double?,
     val lastServiceDate: Long?,
-    val nextDueMileage: Int?,
+    val nextDueMileage: Double?,
     val nextDueDate: Long?,
     /**
      * Reuses [ReminderStatus] so the UI can share [com.fearmikey.garage.ui.components.StatusChip].

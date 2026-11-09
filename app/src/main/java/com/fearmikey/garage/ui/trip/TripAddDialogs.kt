@@ -111,8 +111,8 @@ fun AddTripDialog(
                     vehicleId = initialTrip?.vehicleId ?: 0, // Assigned by ViewModel
                     startDate = initialTrip?.startDate ?: System.currentTimeMillis(),
                     endDate = initialTrip?.endDate ?: System.currentTimeMillis(),
-                    startOdometer = 0,
-                    endOdometer = 0,
+                    startOdometer = 0.0,
+                    endOdometer = 0.0,
                     calculatedDistance = dist,
                     category = category,
                     reimbursementRate = parseReimbursementRate(rate) ?: 0.0,

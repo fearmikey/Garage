@@ -105,9 +105,9 @@ private fun finalizeSeries(
     )
 }
 
-private fun distanceInDisplayUnits(miles: Int, unitSystem: UnitSystem): Double = when (unitSystem) {
-    UnitSystem.IMPERIAL, UnitSystem.UK_MIXED -> miles.toDouble()
-    UnitSystem.METRIC -> UnitConverter.milesToKm(miles.toDouble())
+private fun distanceInDisplayUnits(miles: Double, unitSystem: UnitSystem): Double = when (unitSystem) {
+    UnitSystem.IMPERIAL, UnitSystem.UK_MIXED -> miles
+    UnitSystem.METRIC -> UnitConverter.milesToKm(miles)
 }
 
 private fun money(currency: String, amount: Double) = "%s%.2f".format(currency, amount)

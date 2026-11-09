@@ -1,5 +1,6 @@
 package com.fearmikey.garage.ui.fuel
 
+import kotlin.math.roundToInt
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -893,7 +894,7 @@ internal fun AddEditChargingRecordSheet(
                             totalCost = finalTotalCost,
                             vendor = vendorName,
                             vendorType = vendorType,
-                            estimatedRangeAt100 = canonicalEstRange,
+                            estimatedRangeAt100 = canonicalEstRange?.roundToInt(),
                             lubeLoggerId = initial?.lubeLoggerId,
                             lubeLoggerSyncHash = initial?.lubeLoggerSyncHash,
                         )
@@ -1367,7 +1368,7 @@ private fun ChargingScreenPreview() {
                         id = 1,
                         vehicleId = 1,
                         date = System.currentTimeMillis() - 86400000L * 5,
-                        mileage = 12000,
+                        mileage = 12000.0,
                         kwhAdded = 48.5,
                         chargerSpeed = ChargerSpeed.LEVEL_2,
                         batteryPercentStart = 20,
@@ -1381,7 +1382,7 @@ private fun ChargingScreenPreview() {
                         id = 2,
                         vehicleId = 1,
                         date = System.currentTimeMillis(),
-                        mileage = 12220,
+                        mileage = 12220.0,
                         kwhAdded = 52.0,
                         chargerSpeed = ChargerSpeed.DC_FAST,
                         batteryPercentStart = 15,
@@ -1401,8 +1402,8 @@ private fun ChargingScreenPreview() {
                     capacityRetentionPercent = 98.3,
                     degradationPercent = 1.7,
                     history = listOf(
-                        BatteryHealthPoint(System.currentTimeMillis() - 86400000L * 5, 12000, 295),
-                        BatteryHealthPoint(System.currentTimeMillis(), 12220, 290),
+                        BatteryHealthPoint(System.currentTimeMillis() - 86400000L * 5, 12000.0, 295),
+                        BatteryHealthPoint(System.currentTimeMillis(), 12220.0, 290),
                     ),
                 ),
             ),

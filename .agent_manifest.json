@@ -377,7 +377,7 @@
     "ui/startup": "Onboarding/startup flow screen and ViewModel.",
     "ui/theme": "Material 3 color schemes, vehicle theme color palettes, and typography.",
     "ui/trip": "Trip logger screen and dialogs.",
-    "ui/util": "Unit conversions, date/number formatters, currency definitions.",
+    "ui/util": "Unit conversions, date/number formatters, currency definitions. Distances are stored as fractional canonical miles (Double; DB v34 REAL columns) and converted via UnitConverter.canonicalMilesFromInput/displayDistanceValue so km input round-trips exactly; LubeLogger boundary uses toLubeLoggerOdometer/fromLubeLoggerOdometer (whole numbers in the server unit).",
     "ui/vehicle": "Vehicle management, details, registration/insurance, parts estimator.",
     "widget": "Android Glance home screen widgets and receivers."
   }

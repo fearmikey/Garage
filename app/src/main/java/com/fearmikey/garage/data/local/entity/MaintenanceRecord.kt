@@ -31,7 +31,7 @@ data class MaintenanceRecord(
     val id: Long = 0,
     val vehicleId: Long,
     val date: Long,
-    val mileage: Int,
+    val mileage: Double,
     val description: String,
     val cost: Double,
     val category: MaintenanceCategory,
@@ -61,7 +61,7 @@ data class MaintenanceRecord(
     /**
      * If [isDeferred] is true, the number of miles until the next reminder.
      */
-    val deferredMiles: Int? = null,
+    val deferredMiles: Double? = null,
     /**
      * If [isDeferred] is true, the number of months until the next reminder.
      */

@@ -53,7 +53,7 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
         .map { it?.vehicleType ?: VehicleType.CAR }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), VehicleType.CAR)
 
-    val latestMileage: StateFlow<Int?> = maintenanceRepository.getLatestMileageForVehicle(vehicleId)
+    val latestMileage: StateFlow<Double?> = maintenanceRepository.getLatestMileageForVehicle(vehicleId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     val customRules: StateFlow<List<CustomMaintenanceRule>> =
@@ -77,7 +77,7 @@ class MaintenanceSuggestionsViewModel @Inject constructor(
         val vehicle = flows[0] as? Vehicle
         val specs = flows[1] as? VehicleSpecs
         val records = (flows[2] as? List<*>)?.filterIsInstance<MaintenanceRecord>() ?: emptyList()
-        val latestMileage = flows[3] as? Int
+        val latestMileage = flows[3] as? Double
         val customRules = (flows[4] as? List<*>)?.filterIsInstance<CustomMaintenanceRule>() ?: emptyList()
         val ignoredRules = (flows[5] as? List<*>)?.filterIsInstance<IgnoredMaintenanceRule>() ?: emptyList()
         val mileageWindow = (flows[6] as? Int) ?: 500

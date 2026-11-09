@@ -84,7 +84,7 @@ import java.io.File
 
 private data class FuelEntryItem(
     val date: Long,
-    val mileage: Int,
+    val mileage: Double,
     val type: String,
     val details: String,
     val cost: Double,

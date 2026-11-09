@@ -65,7 +65,7 @@ import com.fearmikey.garage.ui.dashboard.FuelTrendChart
 @Composable
 fun VehicleCard(
     vehicle: Vehicle,
-    latestMileage: Int?,
+    latestMileage: Double?,
     imageFile: File? = null,
     imageFiles: List<Pair<File, Float>> = emptyList(),
     unitSystem: UnitSystem = UnitSystem.IMPERIAL,

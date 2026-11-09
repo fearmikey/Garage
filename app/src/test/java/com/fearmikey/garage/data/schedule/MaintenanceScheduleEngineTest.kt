@@ -53,7 +53,7 @@ class MaintenanceScheduleEngineTest {
 
     @Test
     fun `car-only tasks are excluded for motorcycles`() {
-        val suggestions = MaintenanceScheduleEngine.suggestionsFor(motorcycle, latestMileage = 0, records = emptyList())
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(motorcycle, latestMileage = 0.0, records = emptyList())
 
         listOf(
             "Cabin air filter replacement",
@@ -68,27 +68,27 @@ class MaintenanceScheduleEngineTest {
 
     @Test
     fun `motorcycles get motorcycle-only tasks and overridden intervals`() {
-        val suggestions = MaintenanceScheduleEngine.suggestionsFor(motorcycle, latestMileage = 0, records = emptyList())
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(motorcycle, latestMileage = 0.0, records = emptyList())
 
         assertTrue(suggestions.any { it.rule.taskName == "Drive chain clean & lube" })
         assertTrue(suggestions.any { it.rule.taskName == "Fork oil change" })
         assertTrue(suggestions.any { it.rule.taskName == "Valve clearance check" })
         assertEquals(1, suggestions.count { it.rule.taskName == "Engine oil change" })
-        assertEquals(4_000, suggestions.first { it.rule.taskName == "Engine oil change" }.rule.intervalMiles)
+        assertEquals(4_000.0, suggestions.first { it.rule.taskName == "Engine oil change" }.rule.intervalMiles)
     }
 
     @Test
     fun `cars do not get motorcycle-only tasks`() {
-        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 0, records = emptyList())
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 0.0, records = emptyList())
 
         assertTrue(suggestions.none { it.rule.taskName == "Drive chain clean & lube" })
         assertTrue(suggestions.none { it.rule.taskName == "Fork oil change" })
-        assertEquals(5_000, suggestions.first { it.rule.taskName == "Engine oil change" }.rule.intervalMiles)
+        assertEquals(5_000.0, suggestions.first { it.rule.taskName == "Engine oil change" }.rule.intervalMiles)
     }
 
     @Test
     fun `generic rules apply to any vehicle`() {
-        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, isPureEv = false, latestMileage = 0, records = emptyList())
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, isPureEv = false, latestMileage = 0.0, records = emptyList())
 
         assertTrue(suggestions.any { it.rule.taskName == "Engine oil change" })
         assertTrue(suggestions.any { it.rule.taskName == "Rotation and Balance" })
@@ -99,7 +99,7 @@ class MaintenanceScheduleEngineTest {
     @Test
     fun `ICE rules are excluded for pure EVs`() {
         // pureEvModel is a Tesla Model 3
-        val suggestions = MaintenanceScheduleEngine.suggestionsFor(pureEvModel, isPureEv = true, latestMileage = 0, records = emptyList())
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(pureEvModel, isPureEv = true, latestMileage = 0.0, records = emptyList())
 
         // Included generic stuff
         assertTrue(suggestions.any { it.rule.taskName == "Rotation and Balance" })
@@ -118,7 +118,7 @@ class MaintenanceScheduleEngineTest {
     fun `ignored tasks are excluded from suggestions`() {
         val suggestions = MaintenanceScheduleEngine.suggestionsFor(
             vehicle = fwdCivic,
-            latestMileage = 0,
+            latestMileage = 0.0,
             records = emptyList(),
             ignoredTaskNames = setOf("Paint protection", "Rust prevention", "Wiper blade replacement"),
         )
@@ -139,14 +139,14 @@ class MaintenanceScheduleEngineTest {
 
     @Test
     fun `drivetrain-only rules are excluded for a vehicle without that drivetrain`() {
-        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 0, records = emptyList())
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 0.0, records = emptyList())
 
         assertTrue(suggestions.none { it.rule.taskName == "Transfer case fluid change" })
     }
 
     @Test
     fun `make and model specific rules only apply to matching vehicles`() {
-        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fourWdTacoma, latestMileage = 0, records = emptyList())
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fourWdTacoma, latestMileage = 0.0, records = emptyList())
 
         assertTrue(suggestions.any { it.rule.taskName == "Front differential fluid change" })
         assertTrue(suggestions.any { it.rule.taskName == "Rear differential fluid change" })
@@ -154,15 +154,15 @@ class MaintenanceScheduleEngineTest {
 
     @Test
     fun `front differential rule does not apply to a non-Tacoma 4WD truck`() {
-        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fourWdF150, latestMileage = 0, records = emptyList())
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fourWdF150, latestMileage = 0.0, records = emptyList())
 
         assertTrue(suggestions.none { it.rule.taskName == "Front differential fluid change" })
     }
 
     @Test
     fun `most specific rule wins when a generic and make-specific rule share a task name`() {
-        val tacomaSuggestions = MaintenanceScheduleEngine.suggestionsFor(fourWdTacoma, latestMileage = 0, records = emptyList())
-        val f150Suggestions = MaintenanceScheduleEngine.suggestionsFor(fourWdF150, latestMileage = 0, records = emptyList())
+        val tacomaSuggestions = MaintenanceScheduleEngine.suggestionsFor(fourWdTacoma, latestMileage = 0.0, records = emptyList())
+        val f150Suggestions = MaintenanceScheduleEngine.suggestionsFor(fourWdF150, latestMileage = 0.0, records = emptyList())
 
         // Both get exactly one "Transfer case fluid change" suggestion (no duplicates)...
         assertEquals(1, tacomaSuggestions.count { it.rule.taskName == "Transfer case fluid change" })
@@ -181,18 +181,18 @@ class MaintenanceScheduleEngineTest {
             MaintenanceRecord(
                 vehicleId = fwdCivic.id,
                 date = 0,
-                mileage = 20_000,
+                mileage = 20_000.0,
                 description = "Engine oil change",
                 cost = 50.0,
                 category = MaintenanceCategory.FLUIDS,
             ),
         )
 
-        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 20_200, records = records)
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 20_200.0, records = records)
         val oilChange = suggestions.first { it.rule.taskName == "Engine oil change" }
 
-        assertEquals(20_000, oilChange.lastServiceMileage)
-        assertEquals(25_000, oilChange.nextDueMileage)
+        assertEquals(20_000.0, oilChange.lastServiceMileage)
+        assertEquals(25_000.0, oilChange.nextDueMileage)
     }
 
     @Test
@@ -202,7 +202,7 @@ class MaintenanceScheduleEngineTest {
             MaintenanceRecord(
                 vehicleId = fwdCivic.id,
                 date = testNow,
-                mileage = 20_000,
+                mileage = 20_000.0,
                 description = "Engine oil change",
                 cost = 50.0,
                 category = MaintenanceCategory.FLUIDS,
@@ -211,13 +211,13 @@ class MaintenanceScheduleEngineTest {
 
         val suggestions = MaintenanceScheduleEngine.suggestionsFor(
             fwdCivic,
-            latestMileage = 24_700,
+            latestMileage = 24_700.0,
             records = records,
             now = testNow,
         )
         val oilChange = suggestions.first { it.rule.taskName == "Engine oil change" }
 
-        assertEquals(25_000, oilChange.nextDueMileage)
+        assertEquals(25_000.0, oilChange.nextDueMileage)
         assertEquals(ReminderStatus.UPCOMING, oilChange.status)
     }
 
@@ -228,7 +228,7 @@ class MaintenanceScheduleEngineTest {
             MaintenanceRecord(
                 vehicleId = fwdCivic.id,
                 date = testNow,
-                mileage = 20_000,
+                mileage = 20_000.0,
                 description = "Engine oil change",
                 cost = 50.0,
                 category = MaintenanceCategory.FLUIDS,
@@ -237,24 +237,24 @@ class MaintenanceScheduleEngineTest {
 
         val suggestions = MaintenanceScheduleEngine.suggestionsFor(
             fwdCivic,
-            latestMileage = 25_100,
+            latestMileage = 25_100.0,
             records = records,
             now = testNow,
         )
         val oilChange = suggestions.first { it.rule.taskName == "Engine oil change" }
 
-        assertEquals(25_000, oilChange.nextDueMileage)
+        assertEquals(25_000.0, oilChange.nextDueMileage)
         assertEquals(ReminderStatus.OVERDUE, oilChange.status)
     }
 
     @Test
     fun `next due mileage rolls forward past multiple missed intervals for a never-serviced task`() {
-        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 47_000, records = emptyList())
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 47_000.0, records = emptyList())
         val oilChange = suggestions.first { it.rule.taskName == "Engine oil change" }
 
         assertNull(oilChange.lastServiceMileage)
         // Interval is 5,000mi: 5k, 10k, ..., 45k are all <= 47k, so the next unpassed multiple is 50k.
-        assertEquals(50_000, oilChange.nextDueMileage)
+        assertEquals(50_000.0, oilChange.nextDueMileage)
         assertEquals(ReminderStatus.OK, oilChange.status)
     }
 
@@ -263,7 +263,7 @@ class MaintenanceScheduleEngineTest {
         val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = null, records = emptyList())
         val oilChange = suggestions.first { it.rule.taskName == "Engine oil change" }
 
-        assertEquals(5_000, oilChange.nextDueMileage)
+        assertEquals(5_000.0, oilChange.nextDueMileage)
         assertEquals(ReminderStatus.OK, oilChange.status)
     }
 
@@ -276,7 +276,7 @@ class MaintenanceScheduleEngineTest {
             MaintenanceRecord(
                 vehicleId = fourWdTacoma.id,
                 date = 0,
-                mileage = 20_000,
+                mileage = 20_000.0,
                 description = "Brake fluid flush",
                 cost = 100.0,
                 category = MaintenanceCategory.FLUIDS,
@@ -284,10 +284,10 @@ class MaintenanceScheduleEngineTest {
             )
         )
 
-        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fourWdTacoma, latestMileage = 20_100, records = records)
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fourWdTacoma, latestMileage = 20_100.0, records = records)
 
         val brakeFluid = suggestions.first { it.rule.taskName == "Brake fluid flush" }
-        assertEquals(20_000, brakeFluid.lastServiceMileage)
+        assertEquals(20_000.0, brakeFluid.lastServiceMileage)
 
         val coolant = suggestions.first { it.rule.taskName == "Coolant flush" }
         assertNull(coolant.lastServiceMileage)
@@ -302,7 +302,7 @@ class MaintenanceScheduleEngineTest {
             MaintenanceRecord(
                 vehicleId = fwdCivic.id,
                 date = 0,
-                mileage = 30_000,
+                mileage = 30_000.0,
                 description = "Flushed the coolant system at Joe's Garage",
                 cost = 120.0,
                 category = MaintenanceCategory.FLUIDS,
@@ -310,10 +310,10 @@ class MaintenanceScheduleEngineTest {
             )
         )
 
-        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 30_100, records = records)
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 30_100.0, records = records)
         val coolant = suggestions.first { it.rule.taskName == "Coolant flush" }
 
-        assertEquals(30_000, coolant.lastServiceMileage)
+        assertEquals(30_000.0, coolant.lastServiceMileage)
     }
 
     @Test
@@ -322,20 +322,20 @@ class MaintenanceScheduleEngineTest {
             MaintenanceRecord(
                 vehicleId = fwdCivic.id,
                 date = 0,
-                mileage = 15_000,
+                mileage = 15_000.0,
                 description = "Replaced cabin air filter",
                 cost = 30.0,
                 category = MaintenanceCategory.OTHER,
             )
         )
 
-        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 15_100, records = records)
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 15_100.0, records = records)
 
         val cabinFilter = suggestions.first { it.rule.taskName == "Cabin air filter replacement" }
         val engineFilter = suggestions.first { it.rule.taskName == "Engine air filter replacement" }
         val sparkPlugs = suggestions.first { it.rule.taskName == "Spark plug replacement" }
 
-        assertEquals(15_000, cabinFilter.lastServiceMileage)
+        assertEquals(15_000.0, cabinFilter.lastServiceMileage)
         assertNull(engineFilter.lastServiceMileage)
         assertNull(sparkPlugs.lastServiceMileage)
     }
@@ -346,7 +346,7 @@ class MaintenanceScheduleEngineTest {
             MaintenanceRecord(
                 vehicleId = fwdCivic.id,
                 date = 0,
-                mileage = 63_285,
+                mileage = 63_285.0,
                 description = "Replacing daytime running lights",
                 cost = 25.0,
                 category = MaintenanceCategory.OTHER,
@@ -354,7 +354,7 @@ class MaintenanceScheduleEngineTest {
             )
         )
 
-        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 63_300, records = records)
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 63_300.0, records = records)
 
         val sparkPlugs = suggestions.first { it.rule.taskName == "Spark plug replacement" }
         assertNull(sparkPlugs.lastServiceMileage)
@@ -370,7 +370,7 @@ class MaintenanceScheduleEngineTest {
             MaintenanceRecord(
                 vehicleId = fwdCivic.id,
                 date = testNow,
-                mileage = 12_000,
+                mileage = 12_000.0,
                 description = "Tire rotation",
                 cost = 40.0,
                 category = MaintenanceCategory.TIRES,
@@ -380,15 +380,15 @@ class MaintenanceScheduleEngineTest {
 
         val suggestions = MaintenanceScheduleEngine.suggestionsFor(
             fwdCivic,
-            latestMileage = 12_100,
+            latestMileage = 12_100.0,
             records = records,
             now = testNow,
         )
 
         val rotationAndBalance = suggestions.first { it.rule.taskName == "Rotation and Balance" }
 
-        assertEquals(12_000, rotationAndBalance.lastServiceMileage)
-        assertEquals(18_000, rotationAndBalance.nextDueMileage)
+        assertEquals(12_000.0, rotationAndBalance.lastServiceMileage)
+        assertEquals(18_000.0, rotationAndBalance.nextDueMileage)
         assertEquals(ReminderStatus.OK, rotationAndBalance.status)
     }
 
@@ -399,7 +399,7 @@ class MaintenanceScheduleEngineTest {
             MaintenanceRecord(
                 vehicleId = fwdCivic.id,
                 date = testNow,
-                mileage = 20_000,
+                mileage = 20_000.0,
                 description = "Engine oil change",
                 cost = 50.0,
                 category = MaintenanceCategory.FLUIDS,
@@ -410,7 +410,7 @@ class MaintenanceScheduleEngineTest {
         // With window = 250 miles: 300 > 250 -> OK
         val suggestionsOk = MaintenanceScheduleEngine.suggestionsFor(
             vehicle = fwdCivic,
-            latestMileage = 24_700,
+            latestMileage = 24_700.0,
             records = records,
             now = testNow,
             upcomingWindowMiles = 250,
@@ -421,7 +421,7 @@ class MaintenanceScheduleEngineTest {
         // With window = 500 miles: 300 <= 500 -> UPCOMING
         val suggestionsUpcoming = MaintenanceScheduleEngine.suggestionsFor(
             vehicle = fwdCivic,
-            latestMileage = 24_700,
+            latestMileage = 24_700.0,
             records = records,
             now = testNow,
             upcomingWindowMiles = 500,
@@ -444,7 +444,7 @@ class MaintenanceScheduleEngineTest {
             MaintenanceRecord(
                 vehicleId = fwdCivic.id,
                 date = sixMonthsAgoPlus15Days,
-                mileage = 10_000,
+                mileage = 10_000.0,
                 taskName = "Engine oil change",
                 description = "Oil change",
                 cost = 50.0,
@@ -455,7 +455,7 @@ class MaintenanceScheduleEngineTest {
         // With upcomingWindowDays = 7: due in 15 days > 7 days -> OK
         val suggestionsOk = MaintenanceScheduleEngine.suggestionsFor(
             vehicle = fwdCivic,
-            latestMileage = 10_000,
+            latestMileage = 10_000.0,
             records = records,
             now = testNow,
             upcomingWindowDays = 7,
@@ -466,7 +466,7 @@ class MaintenanceScheduleEngineTest {
         // With upcomingWindowDays = 20: due in 15 days <= 20 days -> UPCOMING
         val suggestionsUpcoming = MaintenanceScheduleEngine.suggestionsFor(
             vehicle = fwdCivic,
-            latestMileage = 10_000,
+            latestMileage = 10_000.0,
             records = records,
             now = testNow,
             upcomingWindowDays = 20,
@@ -481,7 +481,7 @@ class MaintenanceScheduleEngineTest {
             MaintenanceRecord(
                 vehicleId = fwdCivic.id,
                 date = 0,
-                mileage = 10_000,
+                mileage = 10_000.0,
                 description = "Applied rust proofing undercoat",
                 cost = 120.0,
                 category = MaintenanceCategory.OTHER,
@@ -489,20 +489,20 @@ class MaintenanceScheduleEngineTest {
             MaintenanceRecord(
                 vehicleId = fwdCivic.id,
                 date = 0,
-                mileage = 12_000,
+                mileage = 12_000.0,
                 description = "Paint protection ceramic coat",
                 cost = 200.0,
                 category = MaintenanceCategory.OTHER,
             )
         )
 
-        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 13_000, records = records)
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 13_000.0, records = records)
 
         val rustPrevention = suggestions.first { it.rule.taskName == "Rust prevention" }
-        assertEquals(10_000, rustPrevention.lastServiceMileage)
+        assertEquals(10_000.0, rustPrevention.lastServiceMileage)
 
         val paintProtection = suggestions.first { it.rule.taskName == "Paint protection" }
-        assertEquals(12_000, paintProtection.lastServiceMileage)
+        assertEquals(12_000.0, paintProtection.lastServiceMileage)
     }
 
     @Test
@@ -511,7 +511,7 @@ class MaintenanceScheduleEngineTest {
             MaintenanceRecord(
                 vehicleId = fwdCivic.id,
                 date = 0,
-                mileage = 15_000,
+                mileage = 15_000.0,
                 description = "Replaced cabin air filter",
                 cost = 30.0,
                 category = MaintenanceCategory.FILTERS,
@@ -520,16 +520,16 @@ class MaintenanceScheduleEngineTest {
             MaintenanceRecord(
                 vehicleId = fwdCivic.id,
                 date = 0,
-                mileage = 16_000,
+                mileage = 16_000.0,
                 description = "Engine air filter",
                 cost = 30.0,
                 category = MaintenanceCategory.BODY,
             ),
         )
 
-        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 16_100, records = records)
+        val suggestions = MaintenanceScheduleEngine.suggestionsFor(fwdCivic, latestMileage = 16_100.0, records = records)
 
-        assertEquals(15_000, suggestions.first { it.rule.taskName == "Cabin air filter replacement" }.lastServiceMileage)
+        assertEquals(15_000.0, suggestions.first { it.rule.taskName == "Cabin air filter replacement" }.lastServiceMileage)
         assertNull(suggestions.first { it.rule.taskName == "Engine air filter replacement" }.lastServiceMileage)
     }
 

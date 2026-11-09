@@ -124,7 +124,7 @@ class MaintenanceExportViewModelTest {
                     id = 10L,
                     vehicleId = 1L,
                     date = 1600000000000L,
-                    mileage = 15000,
+                    mileage = 15000.0,
                     description = "Oil Change & Filter",
                     cost = 75.0,
                     category = MaintenanceCategory.FLUIDS,
@@ -135,7 +135,7 @@ class MaintenanceExportViewModelTest {
 
         override fun getRecordsForVehicleByDate(vehicleId: Long): Flow<List<MaintenanceRecord>> = records
         override fun getRecordsForVehicleByMileage(vehicleId: Long): Flow<List<MaintenanceRecord>> = records
-        override fun getLatestMileageForVehicle(vehicleId: Long): Flow<Int?> = MutableStateFlow(15000)
+        override fun getLatestMileageForVehicle(vehicleId: Long): Flow<Double?> = MutableStateFlow(15000.0)
         override suspend fun upsert(record: MaintenanceRecord): Long = record.id
         override suspend fun update(record: MaintenanceRecord) {}
         override suspend fun delete(record: MaintenanceRecord) {}

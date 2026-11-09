@@ -22,7 +22,7 @@ class FuelTrendsTest {
             id = id,
             vehicleId = 1,
             date = now - daysAgo * day,
-            mileage = mileage,
+            mileage = mileage.toDouble(),
             gallons = gallons,
             totalCost = cost,
             pricePerGallon = cost / gallons,
@@ -120,7 +120,7 @@ class FuelTrendsTest {
                 id = i.toLong() + 1,
                 vehicleId = 1,
                 date = now - (50L - i * 10) * day,
-                mileage = 1_000 + i * 200,
+                mileage = 1_000.0 + i * 200,
                 kwhAdded = 50.0,
                 totalCost = 10.0,
             )

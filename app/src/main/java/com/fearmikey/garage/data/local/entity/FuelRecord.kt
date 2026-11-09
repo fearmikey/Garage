@@ -36,7 +36,7 @@ data class FuelRecord(
     val id: Long = 0,
     val vehicleId: Long,
     val date: Long,
-    val mileage: Int,
+    val mileage: Double,
     val gallons: Double,
     val totalCost: Double,
     /** Derived from [totalCost] / [gallons] at save time, kept alongside so the UI never has to recompute it. */

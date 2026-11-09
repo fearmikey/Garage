@@ -879,7 +879,7 @@ private fun DashboardScreenPreview() {
                             ),
                             VehicleListItem(
                                 vehicle = SampleData.civic,
-                                latestMileage = 42000,
+                                latestMileage = 42000.0,
                                 imageFile = null,
                                 avgMpg = 34.2,
                                 overdueReminderCount = 0,

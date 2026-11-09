@@ -49,7 +49,7 @@ internal fun parseLubeLoggerBoolean(value: String?): Boolean? =
 
 fun FuelRecord.toLubeLoggerDto(lubeLoggerVehicleId: Int, lubeLoggerUnitSystem: String = "imperial"): LubeLoggerGasRecordDto {
     val isMetric = lubeLoggerUnitSystem.equals("metric", ignoreCase = true)
-    val convertedOdometer = if (isMetric) UnitConverter.milesToKm(this.mileage) else this.mileage
+    val convertedOdometer = toLubeLoggerOdometer(this.mileage, isMetric)
     val convertedGallons = if (isMetric) UnitConverter.gallonsToLiters(this.gallons) else this.gallons
 
     return LubeLoggerGasRecordDto(
@@ -66,7 +66,7 @@ fun FuelRecord.toLubeLoggerDto(lubeLoggerVehicleId: Int, lubeLoggerUnitSystem: S
 
 fun MaintenanceRecord.toLubeLoggerDto(lubeLoggerVehicleId: Int, lubeLoggerUnitSystem: String = "imperial"): LubeLoggerServiceRecordDto {
     val isMetric = lubeLoggerUnitSystem.equals("metric", ignoreCase = true)
-    val convertedOdometer = if (isMetric) UnitConverter.milesToKm(this.mileage) else this.mileage
+    val convertedOdometer = toLubeLoggerOdometer(this.mileage, isMetric)
 
     val extraFields = mutableListOf<LubeLoggerExtraFieldDto>()
     extraFields.add(LubeLoggerExtraFieldDto(name = "Garage Category", value = this.category.name))
@@ -91,7 +91,7 @@ fun MaintenanceRecord.toLubeLoggerDto(lubeLoggerVehicleId: Int, lubeLoggerUnitSy
 
 fun MaintenanceRecord.toLubeLoggerRepairDto(lubeLoggerVehicleId: Int, lubeLoggerUnitSystem: String = "imperial"): LubeLoggerRepairRecordDto {
     val isMetric = lubeLoggerUnitSystem.equals("metric", ignoreCase = true)
-    val convertedOdometer = if (isMetric) UnitConverter.milesToKm(this.mileage) else this.mileage
+    val convertedOdometer = toLubeLoggerOdometer(this.mileage, isMetric)
 
     val extraFields = mutableListOf<LubeLoggerExtraFieldDto>()
     extraFields.add(LubeLoggerExtraFieldDto(name = "Garage Category", value = this.category.name))
@@ -116,12 +116,11 @@ fun MaintenanceRecord.toLubeLoggerRepairDto(lubeLoggerVehicleId: Int, lubeLogger
 
 fun ModificationRecord.toLubeLoggerUpgradeDto(
     lubeLoggerVehicleId: Int,
-    latestMileage: Int? = null,
+    latestMileage: Double? = null,
     lubeLoggerUnitSystem: String = "imperial",
 ): LubeLoggerUpgradeRecordDto {
     val isMetric = lubeLoggerUnitSystem.equals("metric", ignoreCase = true)
-    val mileageMiles = latestMileage ?: 0
-    val convertedOdometer = if (isMetric) UnitConverter.milesToKm(mileageMiles) else mileageMiles
+    val convertedOdometer = toLubeLoggerOdometer(latestMileage ?: 0.0, isMetric)
 
     return LubeLoggerUpgradeRecordDto(
         vehicleId = lubeLoggerVehicleId,
@@ -141,9 +140,9 @@ fun ModificationRecord.toLubeLoggerUpgradeDto(
  */
 fun estimateMileageAtDate(
     targetDate: Long,
-    readings: List<Pair<Long, Int>>,
-    initialMileage: Int? = null,
-): Int {
+    readings: List<Pair<Long, Double>>,
+    initialMileage: Double? = null,
+): Double {
     val beforeOrAt = readings.filter { it.first <= targetDate }
     if (beforeOrAt.isNotEmpty()) {
         return beforeOrAt.maxOf { it.second }
@@ -154,8 +153,21 @@ fun estimateMileageAtDate(
     if (readings.isNotEmpty()) {
         return readings.minOf { it.second }
     }
-    return 0
+    return 0.0
 }
+
+/**
+ * LubeLogger stores odometers as whole numbers in its own unit, while Garage stores fractional
+ * canonical miles. Converting with full precision both ways means a km value entered on either
+ * side survives the round trip unchanged.
+ */
+internal fun toLubeLoggerOdometer(miles: Double, isMetric: Boolean): Int =
+    (if (isMetric) UnitConverter.milesToKm(miles) else miles).roundToInt()
+
+internal fun fromLubeLoggerOdometer(odometer: Int, isMetric: Boolean): Double =
+    if (isMetric) UnitConverter.kmToMiles(odometer.toDouble()) else odometer.toDouble()
+
+private fun isMetricUnits(lubeLoggerUnitSystem: String) = lubeLoggerUnitSystem.equals("metric", ignoreCase = true)
 
 /*
  * Sync fingerprints: a stable string of the normalized fields both sides store. Dates are
@@ -164,7 +176,7 @@ fun estimateMileageAtDate(
  */
 fun ChargingRecord.toLubeLoggerDto(lubeLoggerVehicleId: Int, lubeLoggerUnitSystem: String = "imperial"): LubeLoggerGasRecordDto {
     val isMetric = lubeLoggerUnitSystem.equals("metric", ignoreCase = true)
-    val convertedOdometer = if (isMetric) UnitConverter.milesToKm(this.mileage) else this.mileage
+    val convertedOdometer = toLubeLoggerOdometer(this.mileage, isMetric)
 
     return LubeLoggerGasRecordDto(
         vehicleId = lubeLoggerVehicleId,
@@ -192,7 +204,7 @@ fun LubeLoggerGasRecordDto.toChargingRecord(localVehicleId: Long, lubeLoggerUnit
     val startSoc = parseLubeLoggerInt(startingSoc) ?: 20
     val endSoc = parseLubeLoggerInt(endingSoc) ?: 80
 
-    val parsedMileage = if (isMetric) UnitConverter.kmToMiles(rawMileage) else rawMileage
+    val parsedMileage = fromLubeLoggerOdometer(rawMileage, isMetric)
 
     return ChargingRecord(
         id = existing?.id ?: 0,
@@ -211,14 +223,19 @@ fun LubeLoggerGasRecordDto.toChargingRecord(localVehicleId: Long, lubeLoggerUnit
     )
 }
 
-fun ChargingRecord.syncFingerprint(): String =
-    "$date|$mileage|${"%.3f".format(Locale.US, kwhAdded)}|${"%.2f".format(Locale.US, totalCost)}|$batteryPercentStart|$batteryPercentEnd|${vendor.trim()}"
+/*
+ * Mileage is fingerprinted as the whole number LubeLogger itself stores (in its unit), so a
+ * mileage edit only counts as a change when it changes the server value. For imperial servers
+ * this is identical to the pre-v34 whole-mile format, so existing stored hashes stay valid.
+ */
+fun ChargingRecord.syncFingerprint(lubeLoggerUnitSystem: String = "imperial"): String =
+    "$date|${toLubeLoggerOdometer(mileage, isMetricUnits(lubeLoggerUnitSystem))}|${"%.3f".format(Locale.US, kwhAdded)}|${"%.2f".format(Locale.US, totalCost)}|$batteryPercentStart|$batteryPercentEnd|${vendor.trim()}"
 
-fun FuelRecord.syncFingerprint(): String =
-    "${formatDate(date)}|$mileage|${"%.2f".format(Locale.US, gallons)}|${"%.2f".format(Locale.US, totalCost)}|$isFullTank"
+fun FuelRecord.syncFingerprint(lubeLoggerUnitSystem: String = "imperial"): String =
+    "${formatDate(date)}|${toLubeLoggerOdometer(mileage, isMetricUnits(lubeLoggerUnitSystem))}|${"%.2f".format(Locale.US, gallons)}|${"%.2f".format(Locale.US, totalCost)}|$isFullTank"
 
-fun MaintenanceRecord.syncFingerprint(): String =
-    "${formatDate(date)}|$mileage|${description.trim()}|${"%.2f".format(Locale.US, cost)}|${category.name}|${taskName.orEmpty()}|$isDeferred"
+fun MaintenanceRecord.syncFingerprint(lubeLoggerUnitSystem: String = "imperial"): String =
+    "${formatDate(date)}|${toLubeLoggerOdometer(mileage, isMetricUnits(lubeLoggerUnitSystem))}|${description.trim()}|${"%.2f".format(Locale.US, cost)}|${category.name}|${taskName.orEmpty()}|$isDeferred"
 
 fun ModificationRecord.syncFingerprint(): String =
     "${formatDate(date)}|${title.trim()}|${description.trim()}|${"%.2f".format(Locale.US, cost)}"
@@ -252,7 +269,7 @@ fun MaintenanceRecord.cleanLegacyTaskSuffix(): MaintenanceRecord {
 
 fun MaintenanceRecord.toLubeLoggerOdometerDto(lubeLoggerVehicleId: Int, lubeLoggerUnitSystem: String = "imperial"): LubeLoggerOdometerRecordDto {
     val isMetric = lubeLoggerUnitSystem.equals("metric", ignoreCase = true)
-    val convertedOdometer = if (isMetric) UnitConverter.milesToKm(this.mileage) else this.mileage
+    val convertedOdometer = toLubeLoggerOdometer(this.mileage, isMetric)
 
     return LubeLoggerOdometerRecordDto(
         id = this.lubeLoggerId?.toString(),
@@ -266,12 +283,12 @@ fun MaintenanceRecord.toLubeLoggerOdometerDto(lubeLoggerVehicleId: Int, lubeLogg
 fun createLubeLoggerOdometerDto(
     lubeLoggerVehicleId: Int,
     dateMillis: Long,
-    mileageMiles: Int,
+    mileageMiles: Double,
     notes: String,
     lubeLoggerUnitSystem: String = "imperial",
 ): LubeLoggerOdometerRecordDto {
     val isMetric = lubeLoggerUnitSystem.equals("metric", ignoreCase = true)
-    val convertedOdometer = if (isMetric) UnitConverter.milesToKm(mileageMiles) else mileageMiles
+    val convertedOdometer = toLubeLoggerOdometer(mileageMiles, isMetric)
 
     return LubeLoggerOdometerRecordDto(
         vehicleId = lubeLoggerVehicleId.toString(),
@@ -291,7 +308,7 @@ fun LubeLoggerOdometerRecordDto.toOdometerCheckIn(localVehicleId: Long, lubeLogg
     val rawMileage = parseLubeLoggerInt(odometer)?.takeIf { it > 0 } ?: return null
     val parsedDate = parseDateToEpochMillisOrNull(date) ?: return null
     val isMetric = lubeLoggerUnitSystem.equals("metric", ignoreCase = true)
-    val parsedMileage = if (isMetric) UnitConverter.kmToMiles(rawMileage) else rawMileage
+    val parsedMileage = fromLubeLoggerOdometer(rawMileage, isMetric)
 
     return MaintenanceRecord(
         id = existing?.id ?: 0,
@@ -317,7 +334,7 @@ fun LubeLoggerGasRecordDto.toFuelRecord(localVehicleId: Long, lubeLoggerUnitSyst
     val parsedCost = parseLubeLoggerDouble(cost) ?: 0.0
     val parsedIsFillToFull = parseLubeLoggerBoolean(isFillToFull) ?: true
 
-    val parsedMileage = if (isMetric) UnitConverter.kmToMiles(rawMileage) else rawMileage
+    val parsedMileage = fromLubeLoggerOdometer(rawMileage, isMetric)
     val parsedGallons = if (isMetric) UnitConverter.litersToGallons(rawGallons) else rawGallons
     val ppg = if (parsedGallons > 0.0) parsedCost / parsedGallons else 0.0
 
@@ -401,7 +418,7 @@ private fun parseMaintenanceRecord(
         id = existing?.id ?: 0,
         vehicleId = localVehicleId,
         date = parseDateToEpochMillis(dateStr),
-        mileage = if (isMetric) UnitConverter.kmToMiles(rawMileage) else rawMileage,
+        mileage = fromLubeLoggerOdometer(rawMileage, isMetric),
         description = cleanDescription,
         cost = parseLubeLoggerDouble(cost) ?: 0.0,
         category = category,

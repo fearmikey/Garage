@@ -404,7 +404,7 @@ internal fun AddEditMaintenanceRecordSheet(
     onDismiss: () -> Unit,
     onSave: (record: MaintenanceRecord, pickedUri: Uri?, deleteExisting: Boolean) -> Unit,
     initial: MaintenanceRecord? = null,
-    latestMileage: Int? = null,
+    latestMileage: Double? = null,
     unitSystem: UnitSystem = UnitSystem.IMPERIAL,
     currencySymbol: String = "$",
     receiptFileProvider: (String) -> File? = { null },
@@ -440,7 +440,9 @@ internal fun AddEditMaintenanceRecordSheet(
     var showDatePicker by remember { mutableStateOf(value = false) }
 
     var isDeferred by remember { mutableStateOf(initial?.isDeferred == true) }
-    var deferredMiles by remember { mutableStateOf(initial?.deferredMiles?.toString().orEmpty()) }
+    var deferredMiles by remember {
+        mutableStateOf(initial?.deferredMiles?.let { UnitConverter.displayDistanceValue(it, unitSystem).toString() }.orEmpty())
+    }
     var deferredMonths by remember { mutableStateOf(initial?.deferredMonths?.toString().orEmpty()) }
 
     var pickedReceiptUri by remember { mutableStateOf<Uri?>(null) }
@@ -895,7 +897,7 @@ internal fun AddEditMaintenanceRecordSheet(
                             taskName = taskName,
                             receiptUri = initial?.receiptUri,
                             isDeferred = isDeferred,
-                            deferredMiles = deferredMiles.parseToIntOrNull(),
+                            deferredMiles = deferredMiles.parseToIntOrNull()?.let { UnitConverter.canonicalMilesFromInput(it, unitSystem) },
                             deferredMonths = deferredMonths.parseToIntOrNull(),
                             lubeLoggerId = initial?.lubeLoggerId,
                             lubeLoggerSyncHash = initial?.lubeLoggerSyncHash,
@@ -952,7 +954,7 @@ private fun MaintenanceTimelineScreenPreview() {
 internal fun AddOdometerUpdateDialog(
     onDismiss: () -> Unit,
     onSave: (record: MaintenanceRecord) -> Unit,
-    latestMileage: Int? = null,
+    latestMileage: Double? = null,
     unitSystem: UnitSystem = UnitSystem.IMPERIAL,
 ) {
     var mileage by remember {

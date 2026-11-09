@@ -69,7 +69,7 @@ class VehicleDetailViewModelTest {
     private class FakeMaintenanceDao : MaintenanceDao {
         override fun getRecordsForVehicleByDate(vehicleId: Long): Flow<List<MaintenanceRecord>> = MutableStateFlow(emptyList())
         override fun getRecordsForVehicleByMileage(vehicleId: Long): Flow<List<MaintenanceRecord>> = MutableStateFlow(emptyList())
-        override fun getLatestMileageForVehicle(vehicleId: Long): Flow<Int?> = MutableStateFlow(null)
+        override fun getLatestMileageForVehicle(vehicleId: Long): Flow<Double?> = MutableStateFlow(null)
         override suspend fun upsert(record: MaintenanceRecord): Long = 1L
         override suspend fun update(record: MaintenanceRecord) {}
         override suspend fun delete(record: MaintenanceRecord) {}

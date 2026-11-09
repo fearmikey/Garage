@@ -122,7 +122,7 @@ fun MaintenanceSuggestionsScreen(
             initial = MaintenanceRecord(
                 vehicleId = 0,
                 date = System.currentTimeMillis(),
-                mileage = latestMileage ?: 0,
+                mileage = latestMileage ?: 0.0,
                 description = suggestion.rule.taskName,
                 cost = 0.0,
                 category = suggestion.rule.category,

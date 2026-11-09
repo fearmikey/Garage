@@ -49,23 +49,39 @@ object UnitConverter {
     fun kmToMiles(km: Int): Int = (km / KM_PER_MILE).roundToInt()
     fun kmToMiles(km: Double): Double = km / KM_PER_MILE
 
+    /*
+     * Canonical distances are stored as (fractional) miles. Storing whole miles made km input
+     * lossy: 1 mi ≈ 1.6 km, so whole miles can't represent every whole km and values came back
+     * ±1 km after a round trip. Converting with full Double precision keeps km input exact.
+     */
+
     /** Canonical mileage (stored in miles) -> Display mileage integer based on selected [UnitSystem]. */
-    fun displayDistanceValue(miles: Int, unitSystem: UnitSystem): Int = when (unitSystem) {
-        UnitSystem.IMPERIAL, UnitSystem.UK_MIXED -> miles
-        UnitSystem.METRIC -> milesToKm(miles)
+    fun displayDistanceValue(miles: Double, unitSystem: UnitSystem): Int = when (unitSystem) {
+        UnitSystem.IMPERIAL, UnitSystem.UK_MIXED -> miles.roundToInt()
+        UnitSystem.METRIC -> milesToKm(miles).roundToInt()
     }
 
-    /** Display mileage input (user-entered in miles or km) -> Canonical miles integer for DB. */
-    fun canonicalMilesFromInput(input: Int, unitSystem: UnitSystem): Int = when (unitSystem) {
+    /** Whole-mile overload for fixed intervals defined in code (e.g. schedule templates). */
+    fun displayDistanceValue(miles: Int, unitSystem: UnitSystem): Int =
+        displayDistanceValue(miles.toDouble(), unitSystem)
+
+    /** Display mileage input (user-entered in miles or km) -> Canonical (fractional) miles for DB. */
+    fun canonicalMilesFromInput(input: Double, unitSystem: UnitSystem): Double = when (unitSystem) {
         UnitSystem.IMPERIAL, UnitSystem.UK_MIXED -> input
         UnitSystem.METRIC -> kmToMiles(input)
     }
 
+    fun canonicalMilesFromInput(input: Int, unitSystem: UnitSystem): Double =
+        canonicalMilesFromInput(input.toDouble(), unitSystem)
+
     /** Formats a canonical mileage (miles) with thousands separators and unit label, e.g. "15,230 mi" or "24,510 km". */
-    fun formatDistance(miles: Int, unitSystem: UnitSystem): String {
+    fun formatDistance(miles: Double, unitSystem: UnitSystem): String {
         val value = displayDistanceValue(miles, unitSystem)
         return "${value.toDisplayMileage()} ${unitSystem.distanceUnit}"
     }
+
+    fun formatDistance(miles: Int, unitSystem: UnitSystem): String =
+        formatDistance(miles.toDouble(), unitSystem)
 
     // Volume conversions
     fun gallonsToLiters(gallons: Double): Double = gallons * LITERS_PER_GALLON

@@ -313,7 +313,8 @@ class ObdViewModelTest {
         idle()
 
         assertEquals(12000, h.viewModel.uiState.value.scanResult!!.odometerKm)
-        assertEquals(7456, h.dao.records.value.single().mileage)
+        // 12000 km stored as exact fractional miles (not rounded to 7456), so it reads back as 12000 km.
+        assertEquals(7456.454, h.dao.records.value.single().mileage, 0.001)
     }
 
     @Test

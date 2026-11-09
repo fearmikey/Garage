@@ -28,7 +28,7 @@ interface MaintenanceDao {
         )
         """
     )
-    fun getLatestMileageForVehicle(vehicleId: Long): Flow<Int?>
+    fun getLatestMileageForVehicle(vehicleId: Long): Flow<Double?>
 
     @Upsert
     suspend fun upsert(record: MaintenanceRecord): Long

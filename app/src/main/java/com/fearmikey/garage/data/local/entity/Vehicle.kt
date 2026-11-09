@@ -35,7 +35,7 @@ data class Vehicle(
     val imageOffsetY3: Float = 0f,
     @ColumnInfo(defaultValue = "0")
     val purchasedNew: Boolean = false,
-    val initialMileage: Int? = null,
+    val initialMileage: Double? = null,
     val themeColor: Int? = null,
     @ColumnInfo(defaultValue = "CAR")
     val vehicleType: VehicleType = VehicleType.CAR,

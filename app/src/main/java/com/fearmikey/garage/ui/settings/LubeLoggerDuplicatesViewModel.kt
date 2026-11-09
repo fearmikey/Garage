@@ -28,7 +28,7 @@ data class DuplicateItem(
     val type: DuplicateRecordType,
     val localId: Long,
     val dateMillis: Long,
-    val mileage: Int,
+    val mileage: Double,
     val titleOrDescription: String,
     val cost: Double,
     val lubeLoggerId: Int?,
@@ -84,7 +84,7 @@ class LubeLoggerDuplicatesViewModel @Inject constructor(
                 // Fuel
                 val fuels = fuelRepository.getRecordsForVehicle(vehicle.id).first()
                 rawFuelRecords = rawFuelRecords + (vehicle.id to fuels)
-                val fuelGroups = fuels.groupBy { "${it.date / 86400000L}|${it.mileage}|${"%.2f".format(Locale.US, it.totalCost)}" }
+                val fuelGroups = fuels.groupBy { "${it.date / 86400000L}|${kotlin.math.round(it.mileage).toLong()}|${"%.2f".format(Locale.US, it.totalCost)}" }
                 for ((key, group) in fuelGroups) {
                     if (group.size > 1) {
                         duplicateGroups.add(
@@ -112,7 +112,7 @@ class LubeLoggerDuplicatesViewModel @Inject constructor(
                 // Maintenance
                 val maints = maintenanceRepository.getRecordsForVehicle(vehicle.id).first()
                 rawMaintenanceRecords = rawMaintenanceRecords + (vehicle.id to maints)
-                val maintGroups = maints.groupBy { "${it.date / 86400000L}|${it.mileage}|${it.description.trim().lowercase()}|${"%.2f".format(Locale.US, it.cost)}" }
+                val maintGroups = maints.groupBy { "${it.date / 86400000L}|${kotlin.math.round(it.mileage).toLong()}|${it.description.trim().lowercase()}|${"%.2f".format(Locale.US, it.cost)}" }
                 for ((key, group) in maintGroups) {
                     if (group.size > 1) {
                         duplicateGroups.add(
@@ -153,7 +153,7 @@ class LubeLoggerDuplicatesViewModel @Inject constructor(
                                         type = DuplicateRecordType.MODIFICATION,
                                         localId = record.id,
                                         dateMillis = record.date,
-                                        mileage = 0,
+                                        mileage = 0.0,
                                         titleOrDescription = record.title,
                                         cost = record.cost,
                                         lubeLoggerId = record.lubeLoggerId,

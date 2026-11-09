@@ -5,7 +5,7 @@ import com.fearmikey.garage.ui.util.UnitConverter
 
 data class ChargingEfficiencyEntry(
     val record: ChargingRecord,
-    val milesDriven: Int,
+    val milesDriven: Double,
     val kwhUsed: Double,
 ) {
     /** Efficiency in Watt-hours per mile. */
@@ -17,7 +17,7 @@ data class ChargingEfficiencyEntry(
 
 data class BatteryHealthPoint(
     val date: Long,
-    val mileage: Int,
+    val mileage: Double,
     val rangeAt100: Int,
 )
 

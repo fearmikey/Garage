@@ -197,7 +197,9 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
                         trim = remoteTrim,
                         vin = remoteVin,
                         purchasedNew = remotePurchasedNew,
-                        initialMileage = remoteInitialMileage,
+                        initialMileage = remoteInitialMileage?.let {
+                            com.fearmikey.garage.data.remote.lubelogger.fromLubeLoggerOdometer(it, credentialsManager.getUnitSystem().equals("metric", ignoreCase = true))
+                        },
                     )
                     val newLocalId = vehicleRepository.saveVehicle(newVehicle)
                     credentialsManager.saveVehicleMapping(newLocalId, remote.id)
@@ -275,8 +277,8 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
             getLubeLoggerId = { it.lubeLoggerId },
             getRemoteId = { it.id ?: 0 },
             getStoredHash = { it.lubeLoggerSyncHash },
-            getLocalFingerprint = { it.syncFingerprint() },
-            getRemoteFingerprint = { it.toFuelRecord(localVehicleId, unitSystem)?.syncFingerprint().orEmpty() },
+            getLocalFingerprint = { it.syncFingerprint(unitSystem) },
+            getRemoteFingerprint = { it.toFuelRecord(localVehicleId, unitSystem)?.syncFingerprint(unitSystem).orEmpty() },
             toDto = { it.toLubeLoggerDto(mappedId, unitSystem) },
             toLocal = { dto, existing -> dto.toFuelRecord(localVehicleId, unitSystem, existing) },
             isSameReadingAs = { local, remote ->
@@ -312,8 +314,8 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
             getLubeLoggerId = { it.lubeLoggerId },
             getRemoteId = { it.id ?: 0 },
             getStoredHash = { it.lubeLoggerSyncHash },
-            getLocalFingerprint = { it.syncFingerprint() },
-            getRemoteFingerprint = { it.toMaintenanceRecord(localVehicleId, unitSystem)?.syncFingerprint().orEmpty() },
+            getLocalFingerprint = { it.syncFingerprint(unitSystem) },
+            getRemoteFingerprint = { it.toMaintenanceRecord(localVehicleId, unitSystem)?.syncFingerprint(unitSystem).orEmpty() },
             toDto = { it.toLubeLoggerDto(mappedId, unitSystem) },
             toLocal = { dto, existing -> dto.toMaintenanceRecord(localVehicleId, unitSystem, existing) },
             isSameReadingAs = { local, remote ->
@@ -354,8 +356,8 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
             getLubeLoggerId = { it.lubeLoggerId },
             getRemoteId = { it.id ?: 0 },
             getStoredHash = { it.lubeLoggerSyncHash },
-            getLocalFingerprint = { it.syncFingerprint() },
-            getRemoteFingerprint = { it.toMaintenanceRecord(localVehicleId, unitSystem)?.syncFingerprint().orEmpty() },
+            getLocalFingerprint = { it.syncFingerprint(unitSystem) },
+            getRemoteFingerprint = { it.toMaintenanceRecord(localVehicleId, unitSystem)?.syncFingerprint(unitSystem).orEmpty() },
             toDto = { it.toLubeLoggerRepairDto(mappedId, unitSystem) },
             toLocal = { dto, existing -> dto.toMaintenanceRecord(localVehicleId, unitSystem, existing) },
             isSameReadingAs = { local, remote ->
@@ -455,7 +457,7 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
         val serviceRepairRecords = allMaintenance.filterNot { it.isOdometerCheckIn }.filter { it.mileage > 0 }
 
         // Gather all non-check-in local readings (Fuel, Service/Repair, Charging)
-        val nonCheckInReadings = mutableListOf<Triple<Int, Long, String>>() // (mileage, date, notes)
+        val nonCheckInReadings = mutableListOf<Triple<Double, Long, String>>() // (mileage, date, notes)
         fuelRecords.forEach { fuel ->
             nonCheckInReadings.add(Triple(fuel.mileage, fuel.date, "Fuel fill-up"))
         }
@@ -476,8 +478,8 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
             getLubeLoggerId = { it.lubeLoggerId },
             getRemoteId = { parseLubeLoggerInt(it.id) ?: 0 },
             getStoredHash = { it.lubeLoggerSyncHash },
-            getLocalFingerprint = { it.syncFingerprint() },
-            getRemoteFingerprint = { it.toOdometerCheckIn(localVehicleId, unitSystem)?.syncFingerprint().orEmpty() },
+            getLocalFingerprint = { it.syncFingerprint(unitSystem) },
+            getRemoteFingerprint = { it.toOdometerCheckIn(localVehicleId, unitSystem)?.syncFingerprint(unitSystem).orEmpty() },
             toDto = { it.toLubeLoggerOdometerDto(mappedId, unitSystem) },
             toLocal = { dto, existing -> dto.toOdometerCheckIn(localVehicleId, unitSystem, existing) },
             isSameReadingAs = { local, remote ->
@@ -561,7 +563,7 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
         val isMetric = unitSystem.equals("metric", ignoreCase = true)
         val firstOdometer = parseLubeLoggerInt(sorted.first().odometer) ?: 0
         val purchaseOdometer = vehicleRepository.getVehicleByIdOnce(localVehicleId)?.initialMileage
-            ?.let { if (isMetric) com.fearmikey.garage.ui.util.UnitConverter.milesToKm(it) else it }
+            ?.let { com.fearmikey.garage.data.remote.lubelogger.toLubeLoggerOdometer(it, isMetric) }
             ?.takeIf { it in 1..firstOdometer }
 
         var previous = purchaseOdometer ?: firstOdometer
@@ -599,8 +601,8 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
             getLubeLoggerId = { it.lubeLoggerId },
             getRemoteId = { it.id ?: 0 },
             getStoredHash = { it.lubeLoggerSyncHash },
-            getLocalFingerprint = { it.syncFingerprint() },
-            getRemoteFingerprint = { it.toChargingRecord(localVehicleId, unitSystem)?.syncFingerprint().orEmpty() },
+            getLocalFingerprint = { it.syncFingerprint(unitSystem) },
+            getRemoteFingerprint = { it.toChargingRecord(localVehicleId, unitSystem)?.syncFingerprint(unitSystem).orEmpty() },
             toDto = { it.toLubeLoggerDto(mappedId, unitSystem) },
             toLocal = { dto, existing -> dto.toChargingRecord(localVehicleId, unitSystem, existing) },
             isSameReadingAs = { local, remote ->
@@ -887,17 +889,17 @@ class LubeLoggerSyncWorker @AssistedInject constructor(
     private val Response<LubeLoggerOperationResponse>.isOperationSuccess: Boolean
         get() = isSuccessful && body()?.success == true
 
-    private fun isSameMaintReading(mileage: Int, date: Long, other: MaintenanceRecord?) =
+    private fun isSameMaintReading(mileage: Double, date: Long, other: MaintenanceRecord?) =
         other != null && isSameReading(mileage, date, other.mileage, other.date)
 
-    private fun isSameFuelReading(mileage: Int, date: Long, other: com.fearmikey.garage.data.local.entity.FuelRecord?) =
+    private fun isSameFuelReading(mileage: Double, date: Long, other: com.fearmikey.garage.data.local.entity.FuelRecord?) =
         other != null && isSameReading(mileage, date, other.mileage, other.date)
 
-    private fun isSameChargingReading(mileage: Int, date: Long, other: ChargingRecord?) =
+    private fun isSameChargingReading(mileage: Double, date: Long, other: ChargingRecord?) =
         other != null && isSameReading(mileage, date, other.mileage, other.date)
 
-    private fun isSameReading(mileageA: Int, dateA: Long, mileageB: Int, dateB: Long) =
-        abs(mileageA - mileageB) <= 1 && abs(dateA - dateB) <= 36 * 3600 * 1000L
+    private fun isSameReading(mileageA: Double, dateA: Long, mileageB: Double, dateB: Long) =
+        abs(mileageA - mileageB) <= 1.0 && abs(dateA - dateB) <= 36 * 3600 * 1000L
 
     companion object {
         /** Output-data key carrying a human-readable reason when the sync fails. */
