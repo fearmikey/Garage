@@ -75,6 +75,7 @@ import com.fearmikey.garage.ui.util.UnitSystem
 import com.fearmikey.garage.ui.util.formatTaskName
 import com.fearmikey.garage.ui.util.sanitizeMileageInput
 import com.fearmikey.garage.ui.util.toDisplayDate
+import com.fearmikey.garage.ui.components.ScrollToTopOnInsert
 
 @Composable
 fun MaintenanceSuggestionsScreen(
@@ -192,6 +193,7 @@ private fun MaintenanceSuggestionsContent(
             )
         } else {
             val listState = rememberLazyListState()
+            ScrollToTopOnInsert(listState, customRules.firstOrNull()?.id to suggestions.firstOrNull()?.rule?.taskName)
             LazyColumn(
                 state = listState,
                 modifier = Modifier

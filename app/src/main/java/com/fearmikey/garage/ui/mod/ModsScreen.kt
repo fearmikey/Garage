@@ -118,6 +118,7 @@ import com.fearmikey.garage.ui.util.fromUtcDatePickerMillis
 import com.fearmikey.garage.ui.util.toDisplayDate
 import com.fearmikey.garage.ui.util.toUtcDatePickerMillis
 import java.io.File
+import com.fearmikey.garage.ui.components.ScrollToTopOnInsert
 
 @Composable
 fun ModsScreen(
@@ -226,6 +227,7 @@ private fun ModsContent(
                 }
             } else {
                 val listState = rememberLazyListState()
+                ScrollToTopOnInsert(listState, uiState.mods.firstOrNull()?.id)
                 LazyColumn(
                     state = listState,
                     modifier = Modifier

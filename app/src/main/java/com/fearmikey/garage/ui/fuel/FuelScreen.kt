@@ -110,6 +110,7 @@ import com.fearmikey.garage.ui.util.sanitizeMileageInput
 import com.fearmikey.garage.ui.util.toDisplayDate
 import com.fearmikey.garage.ui.util.toUtcDatePickerMillis
 import kotlin.math.abs
+import com.fearmikey.garage.ui.components.ScrollToTopOnInsert
 
 @Composable
 fun FuelScreen(
@@ -273,6 +274,7 @@ private fun FuelContent(
                     )
                 } else {
                     val listState = rememberLazyListState()
+                    ScrollToTopOnInsert(listState, uiState.chargingRecords.firstOrNull()?.id)
                     LazyColumn(
                         state = listState,
                         modifier = Modifier.verticalScrollbar(listState),
@@ -324,6 +326,7 @@ private fun FuelContent(
                     )
                 } else {
                     val listState = rememberLazyListState()
+                    ScrollToTopOnInsert(listState, uiState.records.firstOrNull()?.id)
                     LazyColumn(
                         state = listState,
                         modifier = Modifier.verticalScrollbar(listState),

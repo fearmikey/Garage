@@ -119,6 +119,7 @@ import com.fearmikey.garage.ui.util.toDisplayDate
 import com.fearmikey.garage.ui.util.toUtcDatePickerMillis
 import java.io.File
 import java.util.concurrent.TimeUnit
+import com.fearmikey.garage.ui.components.ScrollToTopOnInsert
 
 @Composable
 fun RegistrationInsuranceScreen(
@@ -191,6 +192,7 @@ private fun RegistrationInsuranceContent(
                 )
             } else {
                 val listState = rememberLazyListState()
+                ScrollToTopOnInsert(listState, uiState.customDocuments.firstOrNull()?.id)
                 LazyColumn(
                     state = listState,
                     modifier = Modifier

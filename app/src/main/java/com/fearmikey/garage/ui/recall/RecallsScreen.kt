@@ -59,6 +59,7 @@ import com.fearmikey.garage.data.local.entity.RecallState
 import com.fearmikey.garage.ui.components.EmptyState
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.SampleData
+import com.fearmikey.garage.ui.components.ScrollToTopOnInsert
 
 @Composable
 fun RecallsScreen(
@@ -114,6 +115,7 @@ private fun RecallsContent(
                 )
                 else -> {
                     val listState = rememberLazyListState()
+                    ScrollToTopOnInsert(listState, uiState.recalls.firstOrNull()?.recall?.campaignNumber)
                     LazyColumn(
                         state = listState,
                         modifier = Modifier.verticalScrollbar(listState),
