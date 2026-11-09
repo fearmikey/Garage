@@ -111,6 +111,7 @@ private fun RecallsContent(
                 )
                 uiState.errorMessage != null -> RecallsErrorState(
                     message = uiState.errorMessage,
+                    isRetrying = uiState.isLoading,
                     onRetry = onRefresh,
                 )
                 else -> {
@@ -244,7 +245,7 @@ private fun VinRecallCard(
 }
 
 @Composable
-private fun RecallsErrorState(message: String, onRetry: () -> Unit) {
+private fun RecallsErrorState(message: String, isRetrying: Boolean, onRetry: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -259,7 +260,7 @@ private fun RecallsErrorState(message: String, onRetry: () -> Unit) {
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 16.dp),
         )
-        Button(onClick = onRetry) {
+        Button(onClick = onRetry, enabled = !isRetrying) {
             Text(stringResource(R.string.recalls_retry))
         }
     }

@@ -197,7 +197,7 @@
       ]
     },
     "recalls": {
-      "description": "Fetching safety recall campaign data via NHTSA Recalls API.",
+      "description": "Fetching safety recall campaign data via NHTSA Recalls API (year/make/model, not VIN). NHTSA answers no-match queries with HTTP 400 + an empty results body; RecallRepository maps that to an empty Success.",
       "entities": [
         "app/src/main/java/com/fearmikey/garage/data/local/entity/RecallCampaignState.kt"
       ],

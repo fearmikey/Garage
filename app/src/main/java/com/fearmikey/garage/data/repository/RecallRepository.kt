@@ -2,6 +2,8 @@ package com.fearmikey.garage.data.repository
 
 import com.fearmikey.garage.data.remote.RecallApi
 import com.fearmikey.garage.data.remote.dto.RecallDto
+import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -38,8 +40,21 @@ class RecallRepository @Inject constructor(
         return try {
             val response = recallApi.getRecalls(make = make, model = model, modelYear = year)
             RecallLookupResult.Success(response.results.mapNotNull { it.toVehicleRecallOrNull() })
+        } catch (e: HttpException) {
+            if (e.code() == HTTP_BAD_REQUEST) {
+                // NHTSA answers "no campaigns for this year/make/model" with HTTP 400 and a normal
+                // `{"Count":0,"results":[]}` body (also for makes/models it doesn't know, e.g.
+                // non-US motorcycles), so a 400 here means "no recalls", not a failure.
+                RecallLookupResult.Success(emptyList())
+            } else {
+                RecallLookupResult.Error(
+                    "NHTSA's recall service (api.nhtsa.gov) returned an error (HTTP ${e.code()}). Please try again later.",
+                )
+            }
+        } catch (e: IOException) {
+            RecallLookupResult.Error("Couldn't reach NHTSA's recall service (api.nhtsa.gov). Check your internet connection.")
         } catch (e: Exception) {
-            RecallLookupResult.Error(e.message ?: "Network error while checking for recalls.")
+            RecallLookupResult.Error(e.message ?: "Unexpected error while checking for recalls.")
         }
     }
 
@@ -56,5 +71,9 @@ class RecallRepository @Inject constructor(
             parkIt = parkIt,
             parkOutside = parkOutside,
         )
+    }
+
+    private companion object {
+        const val HTTP_BAD_REQUEST = 400
     }
 }

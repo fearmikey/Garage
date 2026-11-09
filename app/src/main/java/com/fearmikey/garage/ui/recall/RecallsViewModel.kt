@@ -68,7 +68,9 @@ class RecallsViewModel @Inject constructor(
 
     fun refresh() {
         viewModelScope.launch {
-            _internalUiState.value = _internalUiState.value.copy(isLoading = true, errorMessage = null)
+            // Keep any previous error on screen while retrying; clearing it here made the error
+            // state flash away to the (empty) list and back, so the message was barely readable.
+            _internalUiState.value = _internalUiState.value.copy(isLoading = true)
 
             val vehicle = vehicleRepository.getVehicleByIdOnce(vehicleId)
             val year = vehicle?.year
@@ -79,6 +81,7 @@ class RecallsViewModel @Inject constructor(
             if ((vehicle == null) || (year == null) || make.isBlank() || model.isBlank()) {
                 _internalUiState.value = _internalUiState.value.copy(
                     isLoading = false,
+                    errorMessage = null,
                     missingVehicleInfo = true,
                     rawRecalls = emptyList(),
                     vin = vin,
@@ -93,6 +96,7 @@ class RecallsViewModel @Inject constructor(
                 is RecallLookupResult.Success -> {
                     _internalUiState.value = _internalUiState.value.copy(
                         isLoading = false,
+                        errorMessage = null,
                         rawRecalls = result.recalls,
                         missingVehicleInfo = false,
                         vin = vin,
