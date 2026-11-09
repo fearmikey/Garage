@@ -212,6 +212,43 @@ object UnitConverter {
         }
     }
 
+    /** The unit tire pressures are entered and shown in for [unitSystem]. */
+    fun tirePressureUnit(unitSystem: UnitSystem): String = when (unitSystem) {
+        UnitSystem.METRIC, UnitSystem.UK_MIXED -> "bar"
+        UnitSystem.IMPERIAL -> "PSI"
+    }
+
+    /**
+     * Stored tire pressure text -> bare number in the user's unit for an edit field, so the
+     * edit screen matches what [formatTirePressure] shows in the list (e.g. "35 PSI" -> "2.4" for
+     * metric). Non-numeric text like "N/A (Electric)" is returned unchanged.
+     */
+    fun tirePressureForInput(stored: String?, unitSystem: UnitSystem): String {
+        if (stored.isNullOrBlank()) return ""
+        if (stored.contains("N/A", ignoreCase = true)) return stored
+        val num = Regex("""\d+(?:[.,]\d+)?""").find(stored)?.value?.parseToDoubleOrNull() ?: return stored
+        val psi = when {
+            stored.contains("bar", ignoreCase = true) -> num / 0.0689476
+            stored.contains("kPa", ignoreCase = true) -> num * 0.1450377
+            else -> num
+        }
+        return when (unitSystem) {
+            UnitSystem.METRIC, UnitSystem.UK_MIXED -> "%.1f".format(psi * 0.0689476)
+            UnitSystem.IMPERIAL -> psi.roundToInt().toString()
+        }
+    }
+
+    /**
+     * Edit-field text -> stored tire pressure. A bare number is tagged with the user's unit
+     * ("2.4" -> "2.4 bar") so it's never misread as PSI; text with its own unit is kept as typed.
+     */
+    fun tirePressureFromInput(input: String, unitSystem: UnitSystem): String? {
+        val trimmed = input.trim()
+        if (trimmed.isEmpty()) return null
+        if (trimmed.any(Char::isLetter)) return trimmed
+        return "$trimmed ${tirePressureUnit(unitSystem)}"
+    }
+
     /** Formats wiper blade sizes according to [UnitSystem] (e.g. "26 in" <-> "650 mm"). */
     fun formatWiperSize(sizeStr: String?, unitSystem: UnitSystem): String? {
         if (sizeStr.isNullOrBlank()) return null

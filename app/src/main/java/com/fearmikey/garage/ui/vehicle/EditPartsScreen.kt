@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.components.verticalScrollbar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.ui.text.input.KeyboardType
@@ -169,8 +170,11 @@ private fun EditPartsContent(
     var cabinAirFilterPartNumber by remember(effectiveInitial) { mutableStateOf(effectiveInitial.cabinAirFilterPartNumber.orEmpty()) }
     var tireSizeFront by remember(effectiveInitial) { mutableStateOf(effectiveInitial.tireSizeFront.orEmpty()) }
     var tireSizeRear by remember(effectiveInitial) { mutableStateOf(effectiveInitial.tireSizeRear.orEmpty()) }
-    var tirePsiFront by remember(effectiveInitial) { mutableStateOf(effectiveInitial.tirePsiFront.orEmpty()) }
-    var tirePsiRear by remember(effectiveInitial) { mutableStateOf(effectiveInitial.tirePsiRear.orEmpty()) }
+    // Tire pressures are edited as numbers in the user's unit (bar or PSI), matching the Parts list.
+    val unitSystem = uiState.unitSystem
+    val pressureUnit = UnitConverter.tirePressureUnit(unitSystem)
+    var tirePsiFront by remember(effectiveInitial, unitSystem) { mutableStateOf(UnitConverter.tirePressureForInput(effectiveInitial.tirePsiFront, unitSystem)) }
+    var tirePsiRear by remember(effectiveInitial, unitSystem) { mutableStateOf(UnitConverter.tirePressureForInput(effectiveInitial.tirePsiRear, unitSystem)) }
     var wiperBladeSizeDriver by remember(effectiveInitial) { mutableStateOf(effectiveInitial.wiperBladeSizeDriver.orEmpty()) }
     var wiperBladeSizePassenger by remember(effectiveInitial) { mutableStateOf(effectiveInitial.wiperBladeSizePassenger.orEmpty()) }
     var wiperBladeSizeRear by remember(effectiveInitial) { mutableStateOf(effectiveInitial.wiperBladeSizeRear.orEmpty()) }
@@ -185,8 +189,8 @@ private fun EditPartsContent(
         if (overwriteAll || sparkPlugGap.isBlank()) sparkPlugGap = estimates.sparkPlugGap.orEmpty()
         if (overwriteAll || engineAirFilterPartNumber.isBlank()) engineAirFilterPartNumber = estimates.engineAirFilterPartNumber.orEmpty()
         if (overwriteAll || cabinAirFilterPartNumber.isBlank()) cabinAirFilterPartNumber = estimates.cabinAirFilterPartNumber.orEmpty()
-        if (overwriteAll || tirePsiFront.isBlank()) tirePsiFront = estimates.tirePsiFront.orEmpty()
-        if (overwriteAll || tirePsiRear.isBlank()) tirePsiRear = estimates.tirePsiRear.orEmpty()
+        if (overwriteAll || tirePsiFront.isBlank()) tirePsiFront = UnitConverter.tirePressureForInput(estimates.tirePsiFront, unitSystem)
+        if (overwriteAll || tirePsiRear.isBlank()) tirePsiRear = UnitConverter.tirePressureForInput(estimates.tirePsiRear, unitSystem)
         if (overwriteAll || wiperBladeSizeDriver.isBlank()) wiperBladeSizeDriver = estimates.wiperBladeSizeDriver.orEmpty()
         if (overwriteAll || wiperBladeSizePassenger.isBlank()) wiperBladeSizePassenger = estimates.wiperBladeSizePassenger.orEmpty()
         if (overwriteAll || wiperBladeSizeRear.isBlank()) wiperBladeSizeRear = estimates.wiperBladeSizeRear.orEmpty()
@@ -288,6 +292,7 @@ private fun EditPartsContent(
                 value = tirePsiFront,
                 onValueChange = { tirePsiFront = it },
                 label = { Text("Front tire pressure") },
+                suffix = { Text(pressureUnit) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -295,6 +300,7 @@ private fun EditPartsContent(
                 value = tirePsiRear,
                 onValueChange = { tirePsiRear = it },
                 label = { Text("Rear tire pressure") },
+                suffix = { Text(pressureUnit) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -340,8 +346,8 @@ private fun EditPartsContent(
                             cabinAirFilterPartNumber = cabinAirFilterPartNumber.trim().ifBlank { null }?.takeUnless { isMotorcycle },
                             tireSizeFront = tireSizeFront.trim().ifBlank { null },
                             tireSizeRear = tireSizeRear.trim().ifBlank { null },
-                            tirePsiFront = tirePsiFront.trim().ifBlank { null },
-                            tirePsiRear = tirePsiRear.trim().ifBlank { null },
+                            tirePsiFront = UnitConverter.tirePressureFromInput(tirePsiFront, unitSystem),
+                            tirePsiRear = UnitConverter.tirePressureFromInput(tirePsiRear, unitSystem),
                             wiperBladeSizeDriver = wiperBladeSizeDriver.trim().ifBlank { null }?.takeUnless { isMotorcycle },
                             wiperBladeSizePassenger = wiperBladeSizePassenger.trim().ifBlank { null }?.takeUnless { isMotorcycle },
                             wiperBladeSizeRear = wiperBladeSizeRear.trim().ifBlank { null }?.takeUnless { isMotorcycle },
