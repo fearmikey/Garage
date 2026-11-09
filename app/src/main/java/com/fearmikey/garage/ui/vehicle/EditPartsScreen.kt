@@ -173,11 +173,12 @@ private fun EditPartsContent(
     // Tire pressures are edited as numbers in the user's unit (bar or PSI), matching the Parts list.
     val unitSystem = uiState.unitSystem
     val pressureUnit = UnitConverter.tirePressureUnit(unitSystem)
+    val wiperUnit = UnitConverter.wiperSizeUnit(unitSystem)
     var tirePsiFront by remember(effectiveInitial, unitSystem) { mutableStateOf(UnitConverter.tirePressureForInput(effectiveInitial.tirePsiFront, unitSystem)) }
     var tirePsiRear by remember(effectiveInitial, unitSystem) { mutableStateOf(UnitConverter.tirePressureForInput(effectiveInitial.tirePsiRear, unitSystem)) }
-    var wiperBladeSizeDriver by remember(effectiveInitial) { mutableStateOf(effectiveInitial.wiperBladeSizeDriver.orEmpty()) }
-    var wiperBladeSizePassenger by remember(effectiveInitial) { mutableStateOf(effectiveInitial.wiperBladeSizePassenger.orEmpty()) }
-    var wiperBladeSizeRear by remember(effectiveInitial) { mutableStateOf(effectiveInitial.wiperBladeSizeRear.orEmpty()) }
+    var wiperBladeSizeDriver by remember(effectiveInitial, unitSystem) { mutableStateOf(UnitConverter.wiperSizeForInput(effectiveInitial.wiperBladeSizeDriver, unitSystem)) }
+    var wiperBladeSizePassenger by remember(effectiveInitial, unitSystem) { mutableStateOf(UnitConverter.wiperSizeForInput(effectiveInitial.wiperBladeSizePassenger, unitSystem)) }
+    var wiperBladeSizeRear by remember(effectiveInitial, unitSystem) { mutableStateOf(UnitConverter.wiperSizeForInput(effectiveInitial.wiperBladeSizeRear, unitSystem)) }
 
     var showAutoFillWarningDialog by remember { mutableStateOf(value = false) }
     // Cabin air filters and wipers don't exist on motorcycles.
@@ -191,9 +192,9 @@ private fun EditPartsContent(
         if (overwriteAll || cabinAirFilterPartNumber.isBlank()) cabinAirFilterPartNumber = estimates.cabinAirFilterPartNumber.orEmpty()
         if (overwriteAll || tirePsiFront.isBlank()) tirePsiFront = UnitConverter.tirePressureForInput(estimates.tirePsiFront, unitSystem)
         if (overwriteAll || tirePsiRear.isBlank()) tirePsiRear = UnitConverter.tirePressureForInput(estimates.tirePsiRear, unitSystem)
-        if (overwriteAll || wiperBladeSizeDriver.isBlank()) wiperBladeSizeDriver = estimates.wiperBladeSizeDriver.orEmpty()
-        if (overwriteAll || wiperBladeSizePassenger.isBlank()) wiperBladeSizePassenger = estimates.wiperBladeSizePassenger.orEmpty()
-        if (overwriteAll || wiperBladeSizeRear.isBlank()) wiperBladeSizeRear = estimates.wiperBladeSizeRear.orEmpty()
+        if (overwriteAll || wiperBladeSizeDriver.isBlank()) wiperBladeSizeDriver = UnitConverter.wiperSizeForInput(estimates.wiperBladeSizeDriver, unitSystem)
+        if (overwriteAll || wiperBladeSizePassenger.isBlank()) wiperBladeSizePassenger = UnitConverter.wiperSizeForInput(estimates.wiperBladeSizePassenger, unitSystem)
+        if (overwriteAll || wiperBladeSizeRear.isBlank()) wiperBladeSizeRear = UnitConverter.wiperSizeForInput(estimates.wiperBladeSizeRear, unitSystem)
     }
 
     Scaffold(
@@ -311,6 +312,7 @@ private fun EditPartsContent(
                     value = wiperBladeSizeDriver,
                     onValueChange = { wiperBladeSizeDriver = it },
                     label = { Text("Driver wiper size") },
+                    suffix = { Text(wiperUnit) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -318,6 +320,7 @@ private fun EditPartsContent(
                     value = wiperBladeSizePassenger,
                     onValueChange = { wiperBladeSizePassenger = it },
                     label = { Text("Passenger wiper size") },
+                    suffix = { Text(wiperUnit) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -325,6 +328,7 @@ private fun EditPartsContent(
                     value = wiperBladeSizeRear,
                     onValueChange = { wiperBladeSizeRear = it },
                     label = { Text("Rear wiper size") },
+                    suffix = { Text(wiperUnit) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -348,9 +352,9 @@ private fun EditPartsContent(
                             tireSizeRear = tireSizeRear.trim().ifBlank { null },
                             tirePsiFront = UnitConverter.tirePressureFromInput(tirePsiFront, unitSystem),
                             tirePsiRear = UnitConverter.tirePressureFromInput(tirePsiRear, unitSystem),
-                            wiperBladeSizeDriver = wiperBladeSizeDriver.trim().ifBlank { null }?.takeUnless { isMotorcycle },
-                            wiperBladeSizePassenger = wiperBladeSizePassenger.trim().ifBlank { null }?.takeUnless { isMotorcycle },
-                            wiperBladeSizeRear = wiperBladeSizeRear.trim().ifBlank { null }?.takeUnless { isMotorcycle },
+                            wiperBladeSizeDriver = UnitConverter.wiperSizeFromInput(wiperBladeSizeDriver, unitSystem)?.takeUnless { isMotorcycle },
+                            wiperBladeSizePassenger = UnitConverter.wiperSizeFromInput(wiperBladeSizePassenger, unitSystem)?.takeUnless { isMotorcycle },
+                            wiperBladeSizeRear = UnitConverter.wiperSizeFromInput(wiperBladeSizeRear, unitSystem)?.takeUnless { isMotorcycle },
                         )
                     )
                 },

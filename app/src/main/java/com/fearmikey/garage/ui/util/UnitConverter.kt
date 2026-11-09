@@ -1,5 +1,6 @@
 package com.fearmikey.garage.ui.util
 
+import kotlin.math.abs
 import kotlin.math.roundToInt
 
 enum class UnitSystem(
@@ -268,6 +269,49 @@ object UnitConverter {
                 else "${numMatch.roundToInt()} in"
             }
         }
+    }
+
+    /** The unit wiper blade sizes are entered and shown in for [unitSystem]. */
+    fun wiperSizeUnit(unitSystem: UnitSystem): String = when (unitSystem) {
+        UnitSystem.METRIC, UnitSystem.UK_MIXED -> "mm"
+        UnitSystem.IMPERIAL -> "in"
+    }
+
+    /**
+     * Stored wiper size text -> bare number in the user's unit for an edit field, matching what
+     * [formatWiperSize] shows in the list (e.g. "26 in" -> "660" for metric). Non-numeric text is
+     * returned unchanged.
+     */
+    fun wiperSizeForInput(stored: String?, unitSystem: UnitSystem): String {
+        if (stored.isNullOrBlank()) return ""
+        if (stored.contains("N/A", ignoreCase = true)) return stored
+        val num = Regex("""\d+(?:[.,]\d+)?""").find(stored)?.value?.parseToDoubleOrNull() ?: return stored
+        val inches = when {
+            stored.contains("mm", ignoreCase = true) -> num / 25.4
+            stored.contains("cm", ignoreCase = true) -> num * 10 / 25.4
+            else -> num
+        }
+        return when (unitSystem) {
+            UnitSystem.METRIC, UnitSystem.UK_MIXED -> (inches * 25.4).roundToInt().toString()
+            UnitSystem.IMPERIAL -> {
+                val rounded = inches.roundToInt()
+                val enteredInInches = inches == num
+                // Converted metric sizes round to whole inches like the list does (650 mm -> 26);
+                // sizes entered in inches keep half sizes like 16.5.
+                if (!enteredInInches || abs(inches - rounded) < 0.05) rounded.toString() else "%.1f".format(inches)
+            }
+        }
+    }
+
+    /**
+     * Edit-field text -> stored wiper size. A bare number is tagged with the user's unit
+     * ("650" -> "650 mm") so it's never misread as inches; text with its own unit is kept.
+     */
+    fun wiperSizeFromInput(input: String, unitSystem: UnitSystem): String? {
+        val trimmed = input.trim()
+        if (trimmed.isEmpty()) return null
+        if (trimmed.any(Char::isLetter)) return trimmed
+        return "$trimmed ${wiperSizeUnit(unitSystem)}"
     }
 
     /** Formats spark plug gap according to [UnitSystem] (e.g. "0.040 in" <-> "1.0 mm"). */
