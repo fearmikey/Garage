@@ -1,0 +1,1 @@
+Recall check no longer shows HTTP 400 when NHTSA has no recalls for a vehicle. Specs are now editable with custom rows. Kilometre distances, tire pressures and wiper sizes now round-trip exactly in metric units. GPS trip logging filters drift and saves trips on Stop & Save.
