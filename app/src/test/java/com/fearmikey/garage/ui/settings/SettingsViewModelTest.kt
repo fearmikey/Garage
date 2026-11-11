@@ -331,7 +331,7 @@ class SettingsViewModelTest {
         }
 
         val backupRepo = BackupRepository(context, dummyDb, ImageStorageManager(context), cloudPrefs)
-        val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs)
+        val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs, okhttp3.OkHttpClient())
         val lubeLoggerCredsManager = TestLubeLoggerCredentialsManager(context)
         val autoBackupManager = AutoBackupManager(context, dummyDb, backupRepo, cloudPrefs, lubeLoggerCredsManager)
         val notifier = ReminderNotifier(context)
@@ -427,7 +427,7 @@ class SettingsViewModelTest {
             override fun clearAllTables() {}
         }
         val backupRepo = BackupRepository(context, dummyDb, ImageStorageManager(context), cloudPrefs)
-        val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs)
+        val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs, okhttp3.OkHttpClient())
         val lubeLoggerCredsManager = TestLubeLoggerCredentialsManager(context)
         val autoBackupManager = AutoBackupManager(context, dummyDb, backupRepo, cloudPrefs, lubeLoggerCredsManager)
         val notifier = ReminderNotifier(context)
@@ -557,7 +557,7 @@ class SettingsViewModelTest {
             override fun clearAllTables() {}
         }
         val backupRepo = BackupRepository(context, dummyDb, ImageStorageManager(context), cloudPrefs)
-        val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs)
+        val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs, okhttp3.OkHttpClient())
         val lubeLoggerCredsManager = TestLubeLoggerCredentialsManager(context)
         val autoBackupManager = AutoBackupManager(context, dummyDb, backupRepo, cloudPrefs, lubeLoggerCredsManager)
         val notifier = ReminderNotifier(context)
@@ -659,7 +659,7 @@ class SettingsViewModelTest {
         }
 
         val backupRepo = BackupRepository(context, dummyDb, ImageStorageManager(context), cloudPrefs)
-        val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs)
+        val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs, okhttp3.OkHttpClient())
         val lubeLoggerCredsManager = TestLubeLoggerCredentialsManager(context)
         val autoBackupManager = AutoBackupManager(context, dummyDb, backupRepo, cloudPrefs, lubeLoggerCredsManager)
         val notifier = ReminderNotifier(context)
@@ -775,7 +775,7 @@ class SettingsViewModelTest {
         }
 
         val backupRepo = BackupRepository(context, dummyDb, ImageStorageManager(context), cloudPrefs)
-        val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs)
+        val webDavRepo = WebDavBackupRepository(context, backupRepo, cloudPrefs, okhttp3.OkHttpClient())
         val lubeLoggerCredsManager = TestLubeLoggerCredentialsManager(context)
         val autoBackupManager = AutoBackupManager(context, dummyDb, backupRepo, cloudPrefs, lubeLoggerCredsManager)
         val notifier = ReminderNotifier(context)

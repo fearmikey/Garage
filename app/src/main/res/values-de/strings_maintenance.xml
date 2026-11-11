@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="maint_cd_add_odometer">Kilometerstand erfassen</string>
+    <string name="maint_cd_add_record">Wartungseintrag hinzufügen</string>
+    <string name="maint_cd_edit_record">Eintrag bearbeiten</string>
+    <string name="maint_cd_delete_record">Eintrag löschen</string>
+    <string name="maint_empty">Noch keine Wartung erfasst.\nTippen Sie auf +, um den ersten Eintrag hinzuzufügen.</string>
+    <string name="maint_no_matches">Keine Einträge entsprechen Ihren Filtern.</string>
+    <string name="maint_clear_filters">Filter zurücksetzen</string>
+    <string name="maint_delete_title">Eintrag löschen</string>
+    <string name="maint_delete_message">Möchten Sie diesen Eintrag wirklich löschen?</string>
+    <string name="maint_receipt_invoice">Beleg / Rechnung</string>
+    <string name="maint_receipt_image">Belegbild</string>
+    <string name="maint_pdf_receipt">PDF-Beleg</string>
+    <string name="maint_open_with_app">Mit App öffnen</string>
+    <string name="maint_add_title">Wartungseintrag hinzufügen</string>
+    <string name="maint_date">Datum</string>
+    <string name="maint_task_other">Sonstiges / eigene</string>
+    <string name="maint_specific_task">Konkrete Arbeit</string>
+    <string name="maint_description">Beschreibung</string>
+    <string name="maint_mileage_unit">Kilometerstand (%1$s)</string>
+    <string name="maint_cost_unit">Kosten (%1$s)</string>
+    <string name="maint_inspected_only">Nur geprüft (Austausch verschieben)</string>
+    <string name="maint_remind_in_distance">Erinnern in (%1$s) *</string>
+    <string name="maint_remind_in_months">Erinnern in (Monaten) *</string>
+    <string name="maint_attached_pdf">Angehängter PDF-Beleg</string>
+    <string name="maint_pdf_document">PDF-Dokument</string>
+    <string name="maint_change_attachment">Anhang ändern</string>
+    <string name="maint_remove_attachment">Anhang entfernen</string>
+    <string name="maint_attach_receipt">Beleg / Rechnung anhängen (Bild oder PDF)</string>
+    <string name="maint_open_receipt">Beleg öffnen</string>
+    <string name="maint_open_file_failed">Datei konnte nicht geöffnet werden</string>
+    <string name="maint_odometer_update">Kilometerstand aktualisieren</string>
+    <string name="maint_search_placeholder">Beschreibung oder Arbeit suchen</string>
+    <string name="maint_close_search">Suche schließen</string>
+    <string name="maint_search">Suchen</string>
+    <string name="maint_has_receipt">Mit Beleg</string>
+    <string name="maint_hide_auto">Kilometerstände &amp; Scans ausblenden</string>
+    <string name="maint_showing_count">%1$d von %2$d angezeigt</string>
+    <plurals name="maint_categories_count">
+        <item quantity="one">%d Kategorie</item>
+        <item quantity="other">%d Kategorien</item>
+    </plurals>
+    <string name="template_title">Vorlagen für Wartungspläne</string>
+    <string name="template_subtitle">Wählen Sie eine Vorlage, um passende Wartungsintervalle für dieses Fahrzeug hinzuzufügen.</string>
+    <string name="template_included_rules">Enthaltene Regeln (%1$d):</string>
+    <plurals name="template_months">
+        <item quantity="one">%d Monat</item>
+        <item quantity="other">%d Monate</item>
+    </plurals>
+    <string name="template_interval_or">%1$s oder %2$s</string>
+    <string name="template_every">Alle %1$s</string>
+    <string name="template_apply">Vorlage „%1$s“ anwenden</string>
+</resources>

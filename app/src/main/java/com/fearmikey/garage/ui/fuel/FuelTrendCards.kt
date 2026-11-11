@@ -22,6 +22,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -38,6 +40,20 @@ import com.fearmikey.garage.ui.components.TrendHeadline
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.SampleData
 import com.fearmikey.garage.ui.util.UnitSystem
+
+@Composable
+private fun FuelTrendMetric.label(unitSystem: UnitSystem): String = when (this) {
+    FuelTrendMetric.ECONOMY -> stringResource(R.string.trend_metric_economy)
+    FuelTrendMetric.COST_PER_DISTANCE -> stringResource(R.string.trend_metric_cost_per, unitSystem.distanceUnit)
+    FuelTrendMetric.PRICE_PER_VOLUME -> stringResource(R.string.trend_metric_price_per, unitSystem.volumeUnit)
+}
+
+@Composable
+private fun ChargingTrendMetric.label(unitSystem: UnitSystem): String = when (this) {
+    ChargingTrendMetric.EFFICIENCY -> stringResource(R.string.trend_metric_efficiency)
+    ChargingTrendMetric.COST_PER_DISTANCE -> stringResource(R.string.trend_metric_cost_per, unitSystem.distanceUnit)
+    ChargingTrendMetric.PRICE_PER_KWH -> stringResource(R.string.trend_metric_price_per, "kWh")
+}
 
 /** Interactive fuel trend card: metric + range selectors, tooltip, tap-to-edit. */
 @Composable
@@ -57,14 +73,14 @@ internal fun FuelTrendCard(
     val recordsById = remember(records) { records.associateBy { it.id } }
 
     TrendCard(
-        title = "Fuel Trends",
+        title = stringResource(R.string.trend_fuel_title),
         metricLabels = FuelTrendMetric.entries.map { it.label(unitSystem) },
         selectedMetricIndex = metric.ordinal,
         onMetricSelected = { metric = FuelTrendMetric.entries[it] },
         range = range,
         onRangeSelected = { range = it },
         series = series,
-        rollingLabel = "3-fill avg",
+        rollingLabel = stringResource(R.string.trend_rolling_fuel),
         onPointClick = { id -> recordsById[id]?.let(onEditRecord) },
         modifier = modifier,
     )
@@ -88,14 +104,14 @@ internal fun ChargingTrendCard(
     val recordsById = remember(records) { records.associateBy { it.id } }
 
     TrendCard(
-        title = "Charging Trends",
+        title = stringResource(R.string.trend_charging_title),
         metricLabels = ChargingTrendMetric.entries.map { it.label(unitSystem) },
         selectedMetricIndex = metric.ordinal,
         onMetricSelected = { metric = ChargingTrendMetric.entries[it] },
         range = range,
         onRangeSelected = { range = it },
         series = series,
-        rollingLabel = "3-session avg",
+        rollingLabel = stringResource(R.string.trend_rolling_charging),
         onPointClick = { id -> recordsById[id]?.let(onEditRecord) },
         modifier = modifier,
     )
@@ -151,7 +167,7 @@ private fun TrendCard(
                     FilterChip(
                         selected = option == range,
                         onClick = { onRangeSelected(option) },
-                        label = { Text(option.label) },
+                        label = { Text(stringResource(option.labelRes)) },
                     )
                 }
             }
@@ -162,6 +178,14 @@ private fun TrendCard(
                 val latestText = series.formatValue(series.points.last().value)
                 // A rolling average over 3 is only informative once there are a few more points than the window.
                 val showRolling = series.points.size >= MIN_POINTS_FOR_ROLLING
+                val chartDescription = stringResource(R.string.trend_chart_cd, title, series.points.size, latestText)
+                val legend = listOfNotNull(
+                    if (showRolling) stringResource(R.string.trend_legend_rolling, rollingLabel) else null,
+                    stringResource(R.string.trend_legend_average),
+                    stringResource(
+                        if (series.outlierCount > 0) R.string.trend_legend_outliers else R.string.trend_legend_inspect
+                    ),
+                ).joinToString(" · ")
                 TrendChart(
                     points = series.points,
                     formatValue = series.formatValue,
@@ -173,34 +197,24 @@ private fun TrendCard(
                         .fillMaxWidth()
                         .height(170.dp)
                         .semantics {
-                            contentDescription =
-                                "$title chart, ${series.points.size} points, latest $latestText. " +
-                                    "Tap or drag to inspect points."
+                            contentDescription = chartDescription
                         },
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 TrendFooter(
                     startDate = series.points.first().date,
                     endDate = series.points.last().date,
-                    centerText = series.average?.let { "avg ${series.formatValue(it)}" },
+                    centerText = series.average?.let { stringResource(R.string.trend_avg, series.formatValue(it)) },
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = buildString {
-                        if (showRolling) append("Faint line: $rollingLabel · ")
-                        append("Dashed: average")
-                        if (series.outlierCount > 0) {
-                            append(" · Hollow dots: unusual readings, tap to review")
-                        } else {
-                            append(" · Tap or drag to inspect")
-                        }
-                    },
+                    text = legend,
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             } else {
                 Text(
-                    text = "Not enough data in this range yet. Try a wider range.",
+                    text = stringResource(R.string.trend_not_enough_data),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(vertical = 24.dp),

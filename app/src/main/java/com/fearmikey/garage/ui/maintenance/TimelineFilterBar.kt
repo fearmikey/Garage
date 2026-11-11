@@ -37,6 +37,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
+import com.fearmikey.garage.ui.util.label
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -68,14 +72,14 @@ internal fun TimelineFilterBar(
             OutlinedTextField(
                 value = filter.query,
                 onValueChange = onQueryChanged,
-                placeholder = { Text("Search description or task") },
+                placeholder = { Text(stringResource(R.string.maint_search_placeholder)) },
                 leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
                 trailingIcon = {
                     IconButton(onClick = {
                         onQueryChanged("")
                         searchVisible = false
                     }) {
-                        Icon(Icons.Filled.Clear, contentDescription = "Close search")
+                        Icon(Icons.Filled.Clear, contentDescription = stringResource(R.string.maint_close_search))
                     }
                 },
                 singleLine = true,
@@ -98,7 +102,7 @@ internal fun TimelineFilterBar(
                 FilterChip(
                     selected = false,
                     onClick = { searchVisible = true },
-                    label = { Text("Search") },
+                    label = { Text(stringResource(R.string.maint_search)) },
                     leadingIcon = { ChipIcon(Icons.Filled.Search) },
                 )
             }
@@ -107,13 +111,13 @@ internal fun TimelineFilterBar(
             FilterChip(
                 selected = filter.receiptsOnly,
                 onClick = onReceiptsOnlyToggled,
-                label = { Text("Has receipt") },
+                label = { Text(stringResource(R.string.maint_has_receipt)) },
                 leadingIcon = { ChipIcon(Icons.Filled.Receipt) },
             )
             FilterChip(
                 selected = filter.hideAutoEntries,
                 onClick = onHideAutoEntriesToggled,
-                label = { Text("Hide odometer & scans") },
+                label = { Text(stringResource(R.string.maint_hide_auto)) },
                 leadingIcon = { ChipIcon(Icons.Filled.VisibilityOff) },
             )
         }
@@ -127,14 +131,14 @@ internal fun TimelineFilterBar(
                 verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
             ) {
                 Text(
-                    "Showing $shownCount of $totalCount",
+                    stringResource(R.string.maint_showing_count, shownCount, totalCount),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 TextButton(onClick = {
                     onClearFilters()
                     searchVisible = false
-                }) { Text("Clear filters") }
+                }) { Text(stringResource(R.string.maint_clear_filters)) }
             }
         }
     }
@@ -147,9 +151,9 @@ private fun CategoryFilterChip(
 ) {
     var expanded by remember { mutableStateOf(false) }
     val label = when (selected.size) {
-        0 -> "Category"
-        1 -> selected.first().displayName
-        else -> "${selected.size} categories"
+        0 -> stringResource(R.string.mods_category_label)
+        1 -> selected.first().label()
+        else -> pluralStringResource(R.plurals.maint_categories_count, selected.size, selected.size)
     }
     Box {
         FilterChip(
@@ -162,7 +166,7 @@ private fun CategoryFilterChip(
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             MaintenanceCategory.entries.forEach { category ->
                 DropdownMenuItem(
-                    text = { Text(category.displayName) },
+                    text = { Text(category.label()) },
                     leadingIcon = {
                         Checkbox(checked = category in selected, onCheckedChange = null)
                     },
@@ -184,14 +188,14 @@ private fun DateRangeFilterChip(
         FilterChip(
             selected = selected != TimelineDateRange.ALL,
             onClick = { expanded = true },
-            label = { Text(if (selected == TimelineDateRange.ALL) "Date" else selected.displayName) },
+            label = { Text(if (selected == TimelineDateRange.ALL) stringResource(R.string.maint_date) else selected.label()) },
             leadingIcon = { ChipIcon(Icons.Filled.DateRange) },
             trailingIcon = { ChipIcon(Icons.Filled.ArrowDropDown) },
         )
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             TimelineDateRange.entries.forEach { range ->
                 DropdownMenuItem(
-                    text = { Text(range.displayName) },
+                    text = { Text(range.label()) },
                     leadingIcon = { RadioButton(selected = range == selected, onClick = null) },
                     onClick = {
                         onDateRangeSelected(range)

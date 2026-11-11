@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="common_cancel">Отмена</string>
+    <string name="common_save">Сохранить</string>
+    <string name="common_delete">Удалить</string>
+    <string name="common_ok">ОК</string>
+    <string name="common_back">Назад</string>
+    <string name="common_discard">Не сохранять</string>
+    <string name="common_edit">Изменить</string>
+    <string name="common_close">Закрыть</string>
+    <string name="common_saving">Сохранение…</string>
+    <string name="common_unsaved_title">Несохранённые изменения</string>
+    <string name="common_unsaved_message">У вас есть несохранённые изменения. Сохранить их или отменить?</string>
+    <string name="scan_vin_prompt">Сканировать штрихкод VIN</string>
+
+    <string name="vehicle_type_car">Легковой / Пикап</string>
+    <string name="vehicle_type_motorcycle">Мотоцикл</string>
+    <string name="drivetrain_unknown">Неизвестно</string>
+
+    <string name="mod_category_performance">Производительность</string>
+    <string name="mod_category_suspension">Подвеска и рулевое</string>
+    <string name="mod_category_exterior">Экстерьер и кузов</string>
+    <string name="mod_category_interior">Салон и комфорт</string>
+    <string name="mod_category_lighting">Освещение</string>
+    <string name="mod_category_wheels_tires">Диски и шины</string>
+    <string name="mod_category_audio_electrical">Аудио и электрика</string>
+    <string name="mod_category_exhaust">Выхлоп</string>
+    <string name="mod_category_other">Другое</string>
+
+    <string name="maint_category_fluids">Жидкости</string>
+    <string name="maint_category_filters">Фильтры</string>
+    <string name="maint_category_tires">Шины</string>
+    <string name="maint_category_brakes">Тормоза</string>
+    <string name="maint_category_battery">Аккумулятор</string>
+    <string name="maint_category_engine">Двигатель и зажигание</string>
+    <string name="maint_category_drivetrain">Трансмиссия и цепь</string>
+    <string name="maint_category_suspension">Подвеска и рулевое</string>
+    <string name="maint_category_electrical">Электрика и освещение</string>
+    <string name="maint_category_hvac">Кондиционер и отопление</string>
+    <string name="maint_category_body">Кузов, стёкла и дворники</string>
+    <string name="maint_category_inspection">Техосмотр</string>
+    <string name="maint_category_repair">Ремонт</string>
+    <string name="maint_category_other">Другое</string>
+
+    <string name="charger_speed_level_1">Уровень 1 (120 В)</string>
+    <string name="charger_speed_level_2">Уровень 2 (240 В)</string>
+    <string name="charger_speed_dc_fast">Быстрая зарядка DC</string>
+    <string name="charger_vendor_home">Дом</string>
+    <string name="charger_vendor_public">Общественная</string>
+
+    <string name="date_range_all">За всё время</string>
+    <string name="date_range_last_30_days">Последние 30 дней</string>
+    <string name="date_range_last_12_months">Последние 12 месяцев</string>
+    <string name="date_range_this_year">Этот год</string>
+    <string name="date_range_last_year">Прошлый год</string>
+
+    <string name="vehicle_add_title">Добавить транспорт</string>
+    <string name="vehicle_edit_title">Изменить транспорт</string>
+    <string name="vehicle_delete">Удалить транспорт</string>
+    <string name="vehicle_photo_cd">Фото транспорта %1$d</string>
+    <string name="vehicle_photo_position_multi">Фото %1$d из %2$d · Перетащите вверх/вниз для настройки</string>
+    <string name="vehicle_photo_position_single">Перетащите фото вверх/вниз, чтобы настроить положение</string>
+    <string name="vehicle_add_photo">Добавить фото</string>
+    <string name="vehicle_change_photo">Заменить фото</string>
+    <string name="vehicle_remove_photo">Удалить фото</string>
+    <string name="vehicle_add_photos">Добавить фото (до 3)</string>
+    <string name="vehicle_theme_color">Цвет транспорта</string>
+    <string name="vehicle_color_extracted">Взят из фото</string>
+    <string name="vehicle_color_custom">Свой цвет</string>
+    <string name="vehicle_color_default">Тема приложения по умолчанию</string>
+    <string name="vehicle_color_customize">Настроить</string>
+    <string name="vehicle_decode">Расшифровать</string>
+    <string name="vehicle_year">Год</string>
+    <string name="vehicle_make">Марка</string>
+    <string name="vehicle_model">Модель</string>
+    <string name="vehicle_trim">Комплектация</string>
+    <string name="vehicle_drivetrain">Привод</string>
+    <string name="vehicle_condition_new">Новый</string>
+    <string name="vehicle_condition_used">С пробегом</string>
+    <string name="vehicle_purchased_condition">Состояние при покупке</string>
+    <string name="vehicle_purchase_price">Цена покупки</string>
+    <string name="vehicle_purchase_date">Дата покупки</string>
+    <string name="vehicle_select_purchase_date">Выбрать дату покупки</string>
+    <string name="vehicle_initial_odometer_km">Начальный пробег (км)</string>
+    <string name="vehicle_initial_mileage_mi">Начальный пробег (mi)</string>
+    <string name="vehicle_this_vehicle">этот транспорт</string>
+    <string name="vehicle_delete_title">Удалить транспорт?</string>
+    <string name="vehicle_delete_message">Удалить %1$s? Транспорт будет удалён из приложения вместе со всеми записями обслуживания, заправками и напоминаниями.</string>
+    <string name="photo_delete_title">Удалить фото?</string>
+    <string name="photo_delete_message">Удалить это фото?</string>
+    <string name="vehicle_color_dialog_title">Выберите цвет транспорта</string>
+    <string name="vehicle_color_dialog_message">Сведения о транспорте, вкладки и карточки на главном экране будут окрашены в этот цвет.</string>
+    <string name="vehicle_color_reset">Сбросить</string>
+
+    <string name="color_racing_red">Гоночный красный</string>
+    <string name="color_sunset_orange">Закатный оранжевый</string>
+    <string name="color_speed_yellow">Скоростной жёлтый</string>
+    <string name="color_british_racing_green">Британский гоночный зелёный</string>
+    <string name="color_electric_cyan">Электрический циан</string>
+    <string name="color_daytona_blue">Синий Daytona</string>
+    <string name="color_midnight_navy">Полночный синий</string>
+    <string name="color_midnight_purple">Полночный фиолетовый</string>
+    <string name="color_silver_slate">Серебро / сланец</string>
+    <string name="color_charcoal_graphite">Графит</string>
+    <string name="color_bronze_brown">Бронза / коричневый</string>
+    <string name="color_pure_black">Чистый чёрный</string>
+</resources>

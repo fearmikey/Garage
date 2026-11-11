@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mods_cd_add">Modificatie toevoegen</string>
+    <plurals name="mods_count">
+        <item quantity="one">%d modificatie</item>
+        <item quantity="other">%d modificaties</item>
+    </plurals>
+    <string name="mods_total_spent">Totaal uitgegeven: %1$s</string>
+    <string name="mods_cd_list_view">Naar lijstweergave</string>
+    <string name="mods_cd_grid_view">Naar rasterweergave</string>
+    <string name="mods_product_link">Productlink</string>
+    <string name="mods_add_title">Modificatie toevoegen</string>
+    <string name="mods_edit_title">Modificatie bewerken</string>
+    <string name="mods_photo_cd">Modificatiefoto %1$d</string>
+    <string name="mods_photo_position">Foto %1$d van %2$d</string>
+    <string name="mods_photo_single">Foto</string>
+    <string name="mods_add_photos">Foto\'s toevoegen (max. 6)</string>
+    <string name="mods_title_placeholder">bijv. 5 cm liftkit, koudeluchtinlaat</string>
+    <string name="mods_desc_placeholder">Details, onderdeelnummers, montagenotities…</string>
+    <string name="mods_url_placeholder">bijv. https://example.com/parts/lift-kit</string>
+    <string name="mods_title_short">Titel</string>
+    <string name="mods_installed">Gemonteerd: %1$s</string>
+</resources>

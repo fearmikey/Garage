@@ -10,7 +10,10 @@
       "dependency_injection": "Hilt (Google Hilt)",
       "local_database": "Room Database (GarageDatabase)",
       "async": "Kotlin Coroutines & Flow (StateFlow / SharedFlow)",
-      "network": "Retrofit / OkHttp (FOSS-only APIs: NHTSA VIN & Recalls, LubeLogger REST API)",
+      "network": "Retrofit / OkHttp 5 (FOSS-only APIs: NHTSA VIN & Recalls, LubeLogger REST API). NetworkModule provides one @Singleton OkHttpClient; LubeLoggerApiFactory and WebDavBackupRepository derive from it via newBuilder().",
+      "min_sdk": "33 (Android 13). Guard API 34+ calls with SDK_INT checks (e.g. service/TileLaunch.kt).",
+      "view_theming": "No appcompat / Material Components. Theme.Garage extends android:Theme.Material.*; the only View-based screen is ui/vehicle/scan/CustomScannerActivity (ComponentActivity + zxing DecoratedBarcodeView, <merge> layout, Theme.Garage.Scanner with black window background).",
+      "lint": "app/lint.xml suppresses only verified false positives (brand emblem VectorPath, app-name Typos, PluralsCandidate on total-count strings, AGP/Gradle version nags). Lint is expected to be clean (0 errors, 0 warnings).",
       "background_tasks": "WorkManager",
       "widgets": "Glance Widgets",
       "tiles": "Android Quick Settings TileService"
@@ -41,8 +44,19 @@
     "di_modules": [
       "app/src/main/java/com/fearmikey/garage/di/DatabaseModule.kt",
       "app/src/main/java/com/fearmikey/garage/di/RepositoryModule.kt",
-      "app/src/main/java/com/fearmikey/garage/di/NetworkModule.kt"
-    ]
+      "app/src/main/java/com/fearmikey/garage/di/NetworkModule.kt",
+      "app/src/main/java/com/fearmikey/garage/di/CoroutineScopeModule.kt"
+    ],
+    "backup_and_network_policy": {
+      "data_extraction_rules": "app/src/main/res/xml/data_extraction_rules.xml (allowBackup=false; Google cloud backup excludes everything; device transfer excludes the EncryptedSharedPreferences files listed in SecurePreferences.kt)",
+      "network_security_config": "app/src/main/res/xml/network_security_config.xml (cleartext allowed by default for self-hosted LubeLogger/WebDAV; NHTSA hosts pinned to HTTPS)"
+    },
+    "localization": {
+      "locales": "values (en), values-de, -fr, -es, -it, -pt, -nl, -pl, -ru, -tr. Every user-visible string must exist in all 10; check parity of <string>/<plurals> names across values*/strings*.xml.",
+      "string_files": "strings.xml (original) plus per-area files: strings_common, strings_documents, strings_settings, strings_fuel, strings_mods, strings_misc, strings_maintenance, strings_more (suggestions/cost/trips), strings_screens (knowledge/dashboard/recalls/widgets), strings_export. Add new keys to the matching area file in every locale.",
+      "enum_labels": "app/src/main/java/com/fearmikey/garage/ui/util/EnumLabels.kt: labelRes/label() for VehicleType, Drivetrain, MaintenanceCategory, ModificationCategory, ChargerSpeed, ChargerVendorType, TimelineDateRange, TimeFilter, AppThemePalette, TripCategory. Enum displayName stays stable English (search/CSV/tests); UI must use label().",
+      "rules": "Tone per locale: de formal 'Sie', fr 'vous', ru 'вы', tr 'siz'; es/it/pt/nl/pl informal. Keep segmented-button labels short (~9 chars; e.g. ru 'Цена/%1$s'). Dates: always use toDisplayDate() (locale-aware FormatStyle.MEDIUM), never hard-coded patterns. Composables: stringResource/pluralStringResource; capture strings in vals before non-composable lambdas. Toasts in composables: LocalResources.current.getString (lint flags LocalContext getString). ViewModels/widgets/non-UI: context.getString. Stored data stays English: fuel type values, maintenance task names, 'Odometer check-in' (LubeLoggerMapper marker), knowledge note 'General' category, schedule template catalog. Not yet translated: the PDF body drawn in MaintenanceExportScreen (fixed-width English canvas layout)."
+    }
   },
   "feature_map": {
     "vehicle_management": {
@@ -307,7 +321,8 @@
         "app/src/main/java/com/fearmikey/garage/data/repository/ImageStorageManager.kt"
       ],
       "preferences": [
-        "app/src/main/java/com/fearmikey/garage/data/local/CloudBackupPreferencesManager.kt"
+        "app/src/main/java/com/fearmikey/garage/data/local/CloudBackupPreferencesManager.kt",
+        "app/src/main/java/com/fearmikey/garage/data/local/SecurePreferences.kt"
       ],
       "workers": [
         "app/src/main/java/com/fearmikey/garage/notification/CloudBackupWorker.kt",
@@ -346,20 +361,21 @@
       ],
       "tiles": [
         "app/src/main/java/com/fearmikey/garage/service/LogFuelTileService.kt",
-        "app/src/main/java/com/fearmikey/garage/service/UpdateOdometerTileService.kt"
+        "app/src/main/java/com/fearmikey/garage/service/UpdateOdometerTileService.kt",
+        "app/src/main/java/com/fearmikey/garage/service/TileLaunch.kt"
       ]
     }
   },
   "package_index": {
     "data/fuel": "Calculators and helper classes for gas economy and EV charging stats.",
-    "data/local": "Room Database class, converters, and preference managers.",
+    "data/local": "Room Database class, converters, and preference managers. SecurePreferences opens EncryptedSharedPreferences files (LubeLogger credentials, WebDAV password) and resets them if their Keystore key is gone.",
     "data/local/dao": "Room Data Access Objects (15 DAOs).",
     "data/local/entity": "Room Database Entities (18 Entities).",
     "data/remote": "Retrofit API interfaces (NHTSA VIN Decoder, NHTSA Recalls).",
     "data/remote/lubelogger": "LubeLogger REST API client, DTOs, mappers, and sync engine.",
     "data/repository": "Data repositories bridging DAOs, remote APIs, and UI ViewModels.",
     "data/schedule": "Maintenance schedule engine, rule evaluations, and default templates.",
-    "di": "Hilt Dependency Injection modules (DatabaseModule, NetworkModule, RepositoryModule).",
+    "di": "Hilt Dependency Injection modules (DatabaseModule, NetworkModule, RepositoryModule, CoroutineScopeModule providing the @ApplicationScope CoroutineScope).",
     "notification": "WorkManager workers and notification dispatchers for reminders and auto-backups.",
     "obd": "OBD-II Bluetooth & Wi-Fi communication, PID definitions, and response parsing.",
     "service": "Foreground services (TripTrackingService) and Quick Settings TileServices.",
@@ -377,7 +393,7 @@
     "ui/startup": "Onboarding/startup flow screen and ViewModel.",
     "ui/theme": "Material 3 color schemes, vehicle theme color palettes, and typography.",
     "ui/trip": "Trip logger screen and dialogs.",
-    "ui/util": "Unit conversions, date/number formatters, currency definitions. Distances are stored as fractional canonical miles (Double; DB v34 REAL columns) and converted via UnitConverter.canonicalMilesFromInput/displayDistanceValue so km input round-trips exactly; LubeLogger boundary uses toLubeLoggerOdometer/fromLubeLoggerOdometer (whole numbers in the server unit).",
+    "ui/util": "EnumLabels.kt (localized enum labels, see core_entry_points.localization). AppCurrency.localizedName uses java.util.Currency display names. Unit conversions, date/number formatters, currency definitions. Distances are stored as fractional canonical miles (Double; DB v34 REAL columns) and converted via UnitConverter.canonicalMilesFromInput/displayDistanceValue so km input round-trips exactly; LubeLogger boundary uses toLubeLoggerOdometer/fromLubeLoggerOdometer (whole numbers in the server unit).",
     "ui/vehicle": "Vehicle management, details, registration/insurance, parts estimator.",
     "widget": "Android Glance home screen widgets and receivers."
   }

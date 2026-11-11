@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fuel_cd_add_charging">Добавить зарядку</string>
+    <string name="fuel_cd_add_fillup">Добавить заправку</string>
+    <string name="fuel_cd_delete_charging">Удалить зарядку</string>
+    <string name="fuel_cd_delete_fillup">Удалить заправку</string>
+    <string name="fuel_empty_charging">Зарядок пока нет.\nНажмите +, чтобы добавить первую.</string>
+    <string name="fuel_empty_fuel">Заправок пока нет.\nНажмите +, чтобы добавить первую.</string>
+    <string name="fuel_charging_efficiency">Эффективность зарядки</string>
+    <string name="fuel_total_charging_spent">Всего потрачено на зарядку</string>
+    <string name="fuel_battery_health_card">Состояние и износ батареи</string>
+    <string name="fuel_health_percent">Состояние %1$.1f%%</string>
+    <string name="fuel_soc_trend" formatted="false">Динамика запаса хода при 100% заряда</string>
+    <string name="fuel_at_mileage">при %1$s</string>
+    <string name="fuel_total_line">%1$s всего · %2$s</string>
+    <string name="fuel_est_range_chip">Оценка запаса хода при 100%%: %1$s</string>
+    <string name="fuel_economy_title">Расход топлива</string>
+    <string name="fuel_best">Лучший</string>
+    <string name="fuel_average">Средний</string>
+    <string name="fuel_worst">Худший</string>
+    <string name="fuel_total_spent">Всего потрачено</string>
+    <string name="fuel_partial">Неполная</string>
+    <string name="fuel_since_full_tank">%1$s с последней полной заправки</string>
+    <string name="fuel_full_tank_hint">Выключите, если бак заправлен не полностью</string>
+
+    <string name="trend_fuel_title">Динамика расхода</string>
+    <string name="trend_charging_title">Динамика зарядок</string>
+    <string name="trend_rolling_fuel">ср. за 3 заправки</string>
+    <string name="trend_rolling_charging">ср. за 3 зарядки</string>
+    <string name="trend_metric_economy">Расход</string>
+    <string name="trend_metric_efficiency">Расход</string>
+    <string name="trend_metric_cost_per">Цена/%1$s</string>
+    <string name="trend_metric_price_per">Цена/%1$s</string>
+    <string name="trend_range_last_10">Последние 10</string>
+    <string name="trend_range_6_months">6 мес.</string>
+    <string name="trend_range_1_year">1 год</string>
+    <string name="trend_range_all">Все</string>
+    <string name="trend_chart_cd">График «%1$s», точек: %2$d, последнее %3$s. Нажмите или проведите, чтобы просмотреть точки.</string>
+    <string name="trend_avg">ср. %1$s</string>
+    <string name="trend_legend_rolling">Светлая линия: %1$s</string>
+    <string name="trend_legend_average">Пунктир: среднее</string>
+    <string name="trend_legend_outliers">Пустые точки: необычные значения, нажмите для проверки</string>
+    <string name="trend_legend_inspect">Нажмите или проведите для просмотра</string>
+    <string name="trend_not_enough_data">Недостаточно данных за этот период. Выберите период шире.</string>
+</resources>

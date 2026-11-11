@@ -17,9 +17,7 @@
     <string name="language_selection">Taal</string>
 
     <!-- Startup / Onboarding -->
-    <string name="startup_get_started">Aan de slag</string>
     <string name="startup_welcome_title">Welkom bij Garage</string>
-    <string name="startup_welcome_subtitle">Stel je voorkeuren in om te beginnen.</string>
     <string name="startup_measurement_system_title">Meetsysteem</string>
     <string name="startup_measurement_system_subtitle">Kies hoe afstanden, brandstofvolume en verbruik worden weergegeven.</string>
     <string name="startup_metric_title">Metrisch systeem</string>
@@ -122,7 +120,6 @@
     <string name="settings_currency">Valuta</string>
     <string name="settings_theme">Thema</string>
     <string name="settings_default_vehicle">Standaardvoertuig</string>
-    <string name="settings_reminders_expirations">Herinneringen &amp; verlopen</string>
 
     <!-- Tabs -->
     <string name="tab_my_vehicles">Mijn voertuigen</string>
@@ -137,6 +134,8 @@
     <string name="tab_mods">Aanpassingen</string>
     <string name="tab_documents">Documenten</string>
     <string name="tab_recalls">Terugroepacties</string>
+    <string name="tab_knowledge">Kennis</string>
+    <string name="tab_trips">Ritten</string>
     <string name="customize_tabs">Tabbladen aanpassen</string>
     <string name="customize_tabs_description">Kies welke tabbladen voor dit voertuig worden getoond.</string>
     <string name="customize_tabs_always_shown">Altijd zichtbaar</string>
@@ -337,7 +336,7 @@
     <string name="license_number_placeholder">bijv. 1234567890</string>
     <string name="license_state_label">Afgifte-instantie / Land</string>
     <string name="license_state_placeholder">bijv. NL</string>
-    <string name="license_notes_placeholder">Rijbewijs B, code 95, opmerkingen...</string>
+    <string name="license_notes_placeholder">Rijbewijs B, code 95, opmerkingen…</string>
     <string name="license_front_photo">Voorkant rijbewijs</string>
     <string name="license_back_photo">Achterkant rijbewijs</string>
     <string name="license_save">Rijbewijs opslaan</string>
@@ -349,8 +348,6 @@
     <string name="cost_include_mods">Inclusief aanpassingen</string>
     <string name="cost_include_purchase">Inclusief aankoop</string>
     <string name="cost_purchase_not_counted_in_period">Niet meegeteld in deze periode (aankoopdatum valt buiten het bereik of is niet ingesteld).</string>
-    <string name="cost_per_distance">Kosten / Afstand</string>
-    <string name="cost_per_day">Kosten / Dag</string>
     <string name="time_filter_all_time">Gehele periode</string>
     <string name="time_filter_this_year">Dit jaar</string>
     <string name="time_filter_last_year">Vorig jaar</string>
@@ -360,8 +357,8 @@
     <!-- Fuel & Charging -->
     <string name="fuel_tab_charging">Laden</string>
     <string name="fuel_tab_fuel">Brandstof</string>
-    <string name="fuel_est_range_100">Huidige geschatte 100% actieradius</string>
-    <string name="fuel_initial_range_100">Oorspronkelijke geschatte 100% actieradius</string>
+    <string name="fuel_est_range_100" formatted="false">Huidige geschatte 100% actieradius</string>
+    <string name="fuel_initial_range_100" formatted="false">Oorspronkelijke geschatte 100% actieradius</string>
     <string name="fuel_delete_charging_title">Laadsessie verwijderen?</string>
     <string name="fuel_delete_charging_msg">Weet je zeker dat je deze laadsessie wilt verwijderen?</string>
     <string name="fuel_log_charging">Laadsessie registreren</string>
@@ -370,12 +367,12 @@
     <string name="fuel_charger_speed">Laadsnelheid</string>
     <string name="fuel_location_vendor">Locatie / Aanbieder</string>
     <string name="fuel_vendor_placeholder">Aanbieder (optioneel, bijv. Fastned)</string>
-    <string name="fuel_battery_start">% Accu Begin</string>
-    <string name="fuel_battery_end">% Accu Einde</string>
+    <string name="fuel_battery_start" formatted="false">% Accu Begin</string>
+    <string name="fuel_battery_end" formatted="false">% Accu Einde</string>
     <string name="fuel_total_cost">Totale kosten</string>
     <string name="fuel_odometer_reading">Kilometerstand (%1$s)</string>
     <string name="fuel_battery_health_title">Accugezondheid (Optioneel)</string>
-    <string name="fuel_est_range_soc">Gersch. actieradius bij 100% (%1$s)</string>
+    <string name="fuel_est_range_soc">Gesch. actieradius bij 100%% (%1$s)</string>
     <string name="fuel_est_range_end">Gesch. actieradius einde laadsessie</string>
     <string name="fuel_auto_calculate">Automatisch berekenen</string>
     <string name="fuel_save_charging">Laadsessie opslaan</string>
@@ -421,7 +418,7 @@
     <string name="doc_toll_notes_label">Opmerkingen / Zone</string>
     <string name="doc_delete_toll_btn">Tol- / Parkeergegevens verwijderen</string>
     <string name="doc_save_docs_btn">Voertuigdocumenten opslaan</string>
-    <string name="doc_saving_btn">Opslaan...</string>
+    <string name="doc_saving_btn">Opslaan…</string>
     <!-- Fleet Summary -->
     <string name="fleet_overview_title">Wagenparkoverzicht</string>
     <string name="fleet_vehicles">Voertuigen</string>
@@ -512,7 +509,6 @@
     <string name="mods_delete_confirm_msg">Weet je zeker dat je \'%1$s\' wilt verwijderen? Dit kan niet ongedaan worden gemaakt.</string>
 
     <!-- Recalls -->
-    <string name="recalls_empty_message">Geen terugroepacties gevonden voor dit voertuig.\nInformatie is afkomstig van de NHTSA.</string>
     <string name="recalls_nhtsa_check">Controleer VIN op NHTSA.gov</string>
     <string name="recalls_retry">Opnieuw proberen</string>
     <string name="recalls_park_it">Niet meer rijden</string>

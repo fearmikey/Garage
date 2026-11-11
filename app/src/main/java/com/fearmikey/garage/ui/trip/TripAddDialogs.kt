@@ -19,12 +19,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.entity.TripCategory
+import com.fearmikey.garage.ui.util.label
 import com.fearmikey.garage.data.local.entity.TripRecord
 import com.fearmikey.garage.ui.settings.parseReimbursementRate
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,7 +47,7 @@ fun AddTripDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(if (initialTrip == null) "Log Trip" else "Edit Trip") },
+        title = { Text(stringResource(if (initialTrip == null) R.string.trip_log_title else R.string.trip_edit_title)) },
         text = {
             Column(modifier = Modifier.fillMaxWidth()) {
                 ExposedDropdownMenuBox(
@@ -53,10 +55,10 @@ fun AddTripDialog(
                     onExpandedChange = { categoryDropdownExpanded = it },
                 ) {
                     OutlinedTextField(
-                        value = category.name.lowercase().replaceFirstChar { it.titlecase(Locale.getDefault()) },
+                        value = category.label(),
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Category") },
+                        label = { Text(stringResource(R.string.mods_category_label)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = categoryDropdownExpanded) },
                         colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
                         modifier = Modifier.menuAnchor(
@@ -70,7 +72,7 @@ fun AddTripDialog(
                     ) {
                         TripCategory.entries.forEach { cat ->
                             DropdownMenuItem(
-                                text = { Text(cat.name.lowercase().replaceFirstChar { it.titlecase(Locale.getDefault()) }) },
+                                text = { Text(cat.label()) },
                                 onClick = {
                                     category = cat
                                     categoryDropdownExpanded = false
@@ -83,14 +85,14 @@ fun AddTripDialog(
                 OutlinedTextField(
                     value = distance,
                     onValueChange = { distance = it },
-                    label = { Text("Distance ($distanceUnit)") },
+                    label = { Text(stringResource(R.string.trip_distance, distanceUnit)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
                 )
                 OutlinedTextField(
                     value = rate,
                     onValueChange = { rate = it },
-                    label = { Text("Reimbursement Rate ($currencySymbol/$distanceUnit)") },
+                    label = { Text(stringResource(R.string.trip_rate, currencySymbol, distanceUnit)) },
                     prefix = { Text(currencySymbol) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
@@ -98,7 +100,7 @@ fun AddTripDialog(
                 OutlinedTextField(
                     value = notes,
                     onValueChange = { notes = it },
-                    label = { Text("Notes (Destination, Purpose)") },
+                    label = { Text(stringResource(R.string.trip_notes)) },
                     modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
                 )
             }
@@ -123,12 +125,12 @@ fun AddTripDialog(
                 )
                 onSave(trip)
             }) {
-                Text("Save")
+                Text(stringResource(R.string.common_save))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(R.string.common_cancel))
             }
         }
     )

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="parts_edit_title">Modifica ricambi e fluidi</string>
+    <string name="parts_autofill">Compila con valori stimati</string>
+    <string name="parts_autofill_msg">Le capacità dei fluidi e i dati dei ricambi compilati automaticamente sono stimati dal VIN decodificato e dai dati del motore.\n\nVerifica tutti i valori sul libretto di uso e manutenzione prima di acquistare fluidi o eseguire interventi.</string>
+    <string name="parts_apply_understand">Ho capito, applica</string>
+    <string name="vehicle_cd_obd">Scanner OBD2</string>
+    <string name="vehicle_cd_export">Esporta registro manutenzione</string>
+    <string name="vehicle_unnamed">Veicolo senza nome</string>
+    <string name="tabs_cd_reorder">Riordina scheda</string>
+    <string name="currency_select_title">Scegli valuta</string>
+    <string name="currency_search">Cerca valute…</string>
+    <string name="currency_none_found">Nessuna valuta trovata.</string>
+    <string name="bmac_title">Sostieni Garage</string>
+    <string name="bmac_message">Ti piace Garage? Se l\'app ti è utile, valuta di sostenerne lo sviluppo open source!</string>
+    <string name="bmac_dont_ask">Non chiedere più</string>
+    <string name="bmac_later">Forse più tardi</string>
+    <string name="status_overdue">Scaduto</string>
+    <string name="status_upcoming">In arrivo</string>
+    <string name="status_on_track">In regola</string>
+    <string name="status_done">Fatto</string>
+    <string name="odo_vehicle">Veicolo</string>
+    <string name="odo_current">Attuale: %1$s</string>
+    <string name="odo_new_reading">Nuova lettura contachilometri (%1$s)</string>
+    <string name="odo_notes_optional">Note (facoltative)</string>
+    <string name="odo_notes_placeholder">es. registrazione settimanale</string>
+    <string name="trend_tap_to_edit">Tocca per modificare</string>
+    <string name="trend_unusual_reading">Valore insolito</string>
+    <string name="url_invalid">URL non valido</string>
+    <string name="url_open_failed">Impossibile aprire il link</string>
+</resources>

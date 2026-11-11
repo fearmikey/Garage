@@ -33,6 +33,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
+import com.fearmikey.garage.ui.util.label
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -71,12 +75,12 @@ fun ApplyTemplateSheet(
                 .imePadding(),
         ) {
             Text(
-                text = "Preset Schedule Templates",
+                text = stringResource(R.string.template_title),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
             )
             Text(
-                text = "Choose a preset to add tailored maintenance intervals to this vehicle.",
+                text = stringResource(R.string.template_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(top = 4.dp, bottom = 12.dp),
@@ -124,7 +128,7 @@ fun ApplyTemplateSheet(
                 )
 
                 Text(
-                    text = "Included Rules (${selectedTemplate.rules.size}):",
+                    text = stringResource(R.string.template_included_rules, selectedTemplate.rules.size),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.primary,
@@ -139,7 +143,7 @@ fun ApplyTemplateSheet(
                     ) {
                         Column(modifier = Modifier.padding(12.dp)) {
                             Text(
-                                text = rule.category.displayName,
+                                text = rule.category.label(),
                                 style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.primary,
                             )
@@ -149,13 +153,16 @@ fun ApplyTemplateSheet(
                                 fontWeight = FontWeight.SemiBold,
                             )
 
-                            val intervalParts = listOfNotNull(
-                                rule.intervalMiles?.let { UnitConverter.formatDistance(it, unitSystem) },
-                                rule.intervalMonths?.let { "$it months" },
-                            ).joinToString(" or ")
+                            val distanceText = rule.intervalMiles?.let { UnitConverter.formatDistance(it, unitSystem) }
+                            val monthsText = rule.intervalMonths?.let { pluralStringResource(R.plurals.template_months, it, it) }
+                            val intervalParts = if (distanceText != null && monthsText != null) {
+                                stringResource(R.string.template_interval_or, distanceText, monthsText)
+                            } else {
+                                distanceText ?: monthsText.orEmpty()
+                            }
 
                             Text(
-                                text = "Every $intervalParts",
+                                text = stringResource(R.string.template_every, intervalParts),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
@@ -182,7 +189,7 @@ fun ApplyTemplateSheet(
                 },
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text("Apply ${selectedTemplate.title} Preset")
+                Text(stringResource(R.string.template_apply, selectedTemplate.title))
             }
         }
     }

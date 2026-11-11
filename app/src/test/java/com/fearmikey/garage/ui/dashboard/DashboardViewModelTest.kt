@@ -204,7 +204,8 @@ class DashboardViewModelTest {
             imageStorageManager = FakeImageStorageManager(),
             cloudBackupPreferencesManager = cloudBackupPreferencesManager,
         ),
-        cloudBackupPreferencesManager = cloudBackupPreferencesManager
+        cloudBackupPreferencesManager = cloudBackupPreferencesManager,
+        baseClient = okhttp3.OkHttpClient(),
     ) {
         var syncNowCalled = false
         override suspend fun syncNow(): BackupResult {

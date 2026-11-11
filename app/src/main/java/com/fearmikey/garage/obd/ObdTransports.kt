@@ -9,6 +9,7 @@ import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattDescriptor
 import android.bluetooth.BluetoothProfile
 import android.bluetooth.BluetoothSocket
+import android.bluetooth.BluetoothStatusCodes
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -299,7 +300,7 @@ internal class BleTransport private constructor() : ObdTransport {
                             BluetoothGattDescriptor.ENABLE_INDICATION_VALUE
                         }
                         cb.descriptorWritten = CompletableDeferred()
-                        if (gatt.writeDescriptor(cccd, value) == BluetoothGatt.GATT_SUCCESS) {
+                        if (gatt.writeDescriptor(cccd, value) == BluetoothStatusCodes.SUCCESS) {
                             withTimeoutOrNull(2_000) { cb.descriptorWritten!!.await() }
                         }
                     }

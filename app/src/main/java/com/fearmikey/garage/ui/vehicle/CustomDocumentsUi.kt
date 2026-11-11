@@ -61,6 +61,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -126,7 +128,7 @@ internal fun CustomDocumentCard(
                     modifier = Modifier.weight(1f),
                 )
                 IconButton(onClick = onEdit) {
-                    Icon(Icons.Default.Edit, contentDescription = "Edit ${document.title}")
+                    Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.common_edit_item, document.title))
                 }
             }
 
@@ -143,7 +145,7 @@ internal fun CustomDocumentCard(
             document.expiration?.let { exp ->
                 InfoRow(
                     icon = Icons.Default.CalendarToday,
-                    label = "Expiration",
+                    label = stringResource(R.string.custom_doc_expiration),
                     value = exp.toDisplayDate(),
                     isCopyable = false,
                 )
@@ -151,14 +153,14 @@ internal fun CustomDocumentCard(
             if (!document.referenceNumber.isNullOrBlank()) {
                 InfoRow(
                     icon = Icons.Default.ConfirmationNumber,
-                    label = "Reference / Policy #",
+                    label = stringResource(R.string.custom_doc_reference_short),
                     value = document.referenceNumber,
                 )
             }
             document.cost?.let { cost ->
                 InfoRow(
                     icon = Icons.Default.Payments,
-                    label = "Cost",
+                    label = stringResource(R.string.common_cost),
                     value = "%s%.2f".format(currencySymbol, cost),
                     isCopyable = false,
                 )
@@ -166,7 +168,7 @@ internal fun CustomDocumentCard(
             if (!document.notes.isNullOrBlank()) {
                 InfoRow(
                     icon = Icons.AutoMirrored.Filled.Notes,
-                    label = "Notes",
+                    label = stringResource(R.string.common_notes),
                     value = document.notes,
                 )
             }
@@ -174,7 +176,7 @@ internal fun CustomDocumentCard(
                 Spacer(modifier = Modifier.height(4.dp))
                 AssistChip(
                     onClick = { if (isPdf) openReceiptFile(context, attachment) else onImageClicked(attachment) },
-                    label = { Text(if (isPdf) "View PDF" else "View Photo") },
+                    label = { Text(stringResource(if (isPdf) R.string.custom_doc_view_pdf else R.string.custom_doc_view_photo)) },
                     leadingIcon = {
                         Icon(
                             imageVector = if (isPdf) Icons.Default.PictureAsPdf else Icons.Default.Image,
@@ -238,15 +240,15 @@ internal fun AddEditCustomDocumentSheet(
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Text(
-                text = if (initial == null) "Add Document" else "Edit Document",
+                text = stringResource(if (initial == null) R.string.custom_doc_add_title else R.string.custom_doc_edit_title),
                 style = MaterialTheme.typography.titleLarge,
             )
 
             OutlinedTextField(
                 value = title,
                 onValueChange = { title = it },
-                label = { Text("Document name *") },
-                placeholder = { Text("e.g., Extended Warranty, Roadside Assistance, Title") },
+                label = { Text(stringResource(R.string.custom_doc_name_label)) },
+                placeholder = { Text(stringResource(R.string.custom_doc_name_placeholder)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
                 modifier = Modifier.fillMaxWidth(),
@@ -255,7 +257,7 @@ internal fun AddEditCustomDocumentSheet(
             OutlinedTextField(
                 value = referenceNumber,
                 onValueChange = { referenceNumber = it },
-                label = { Text("Reference / Policy / Contract #") },
+                label = { Text(stringResource(R.string.custom_doc_reference_label)) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -265,16 +267,16 @@ internal fun AddEditCustomDocumentSheet(
                     value = expiration?.toDisplayDate().orEmpty(),
                     onValueChange = {},
                     readOnly = true,
-                    label = { Text("Expiration (optional)") },
+                    label = { Text(stringResource(R.string.custom_doc_expiration_optional)) },
                     trailingIcon = {
                         Row {
                             if (expiration != null) {
                                 IconButton(onClick = { expiration = null }) {
-                                    Icon(Icons.Default.Delete, contentDescription = "Clear expiration")
+                                    Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.custom_doc_clear_expiration))
                                 }
                             }
                             IconButton(onClick = { showDatePicker = true }) {
-                                Icon(Icons.Default.CalendarToday, contentDescription = "Select expiration")
+                                Icon(Icons.Default.CalendarToday, contentDescription = stringResource(R.string.doc_select_expiration_date))
                             }
                         }
                     },
@@ -292,7 +294,7 @@ internal fun AddEditCustomDocumentSheet(
             OutlinedTextField(
                 value = cost,
                 onValueChange = { value -> cost = value.filter { it.isDigit() || it == '.' || it == ',' } },
-                label = { Text("Cost (optional)") },
+                label = { Text(stringResource(R.string.common_cost_optional)) },
                 prefix = { Text(currencySymbol) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
@@ -302,8 +304,8 @@ internal fun AddEditCustomDocumentSheet(
             OutlinedTextField(
                 value = notes,
                 onValueChange = { notes = it },
-                label = { Text("Notes") },
-                placeholder = { Text("Provider, coverage, phone number...") },
+                label = { Text(stringResource(R.string.common_notes)) },
+                placeholder = { Text(stringResource(R.string.custom_doc_notes_placeholder)) },
                 minLines = 2,
                 maxLines = 4,
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
@@ -321,7 +323,7 @@ internal fun AddEditCustomDocumentSheet(
                 ) {
                     Icon(Icons.Default.AttachFile, contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(if (hasAttachment) "Replace Photo / PDF" else "Attach Photo / PDF")
+                    Text(stringResource(if (hasAttachment) R.string.custom_doc_replace_attachment else R.string.custom_doc_attach))
                 }
                 if (hasAttachment) {
                     TextButton(
@@ -330,7 +332,7 @@ internal fun AddEditCustomDocumentSheet(
                             removeAttachment = true
                         },
                         colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
-                    ) { Text("Remove") }
+                    ) { Text(stringResource(R.string.common_remove)) }
                 }
             }
 
@@ -347,7 +349,7 @@ internal fun AddEditCustomDocumentSheet(
                 },
                 enabled = title.isNotBlank(),
                 modifier = Modifier.fillMaxWidth(),
-            ) { Text("Save Document") }
+            ) { Text(stringResource(R.string.custom_doc_save)) }
 
             if (initial != null) {
                 OutlinedButton(
@@ -357,7 +359,7 @@ internal fun AddEditCustomDocumentSheet(
                 ) {
                     Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Delete Document")
+                    Text(stringResource(R.string.custom_doc_delete))
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
@@ -372,17 +374,17 @@ internal fun AddEditCustomDocumentSheet(
                 TextButton(onClick = {
                     datePickerState.selectedDateMillis?.let { expiration = it.fromUtcDatePickerMillis() }
                     showDatePicker = false
-                }) { Text("OK") }
+                }) { Text(stringResource(R.string.common_ok)) }
             },
-            dismissButton = { TextButton(onClick = { showDatePicker = false }) { Text("Cancel") } },
+            dismissButton = { TextButton(onClick = { showDatePicker = false }) { Text(stringResource(R.string.common_cancel)) } },
         ) { DatePicker(state = datePickerState) }
     }
 
     if (showDeleteConfirm && (initial != null)) {
         AlertDialog(
             onDismissRequest = { showDeleteConfirm = false },
-            title = { Text("Delete ${initial.title}?") },
-            text = { Text("This document and its attachment will be permanently removed.") },
+            title = { Text(stringResource(R.string.custom_doc_delete_title, initial.title)) },
+            text = { Text(stringResource(R.string.custom_doc_delete_message)) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -390,9 +392,9 @@ internal fun AddEditCustomDocumentSheet(
                         onDelete(initial)
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
-                ) { Text("Delete") }
+                ) { Text(stringResource(R.string.common_delete)) }
             },
-            dismissButton = { TextButton(onClick = { showDeleteConfirm = false }) { Text("Cancel") } },
+            dismissButton = { TextButton(onClick = { showDeleteConfirm = false }) { Text(stringResource(R.string.common_cancel)) } },
         )
     }
 }

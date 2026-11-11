@@ -86,6 +86,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
@@ -196,7 +197,7 @@ private fun DashboardContent(
                 title = { Text("Garage") },
                 actions = {
                     IconButton(onClick = onOpenSettings) {
-                        Icon(Icons.Filled.Settings, contentDescription = "Settings")
+                        Icon(Icons.Filled.Settings, contentDescription = stringResource(R.string.settings_title))
                     }
                 },
             )
@@ -204,7 +205,7 @@ private fun DashboardContent(
         floatingActionButton = {
             if (selectedTab == 0) {
                 FloatingActionButton(onClick = onAddVehicle) {
-                    Icon(Icons.Filled.Add, contentDescription = "Add vehicle")
+                    Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.vehicle_add_title))
                 }
             }
         },
@@ -247,7 +248,7 @@ private fun DashboardContent(
                                 contentAlignment = Alignment.Center,
                             ) {
                                 EmptyState(
-                                    message = "No vehicles yet.\nTap + to add your first one.",
+                                    message = stringResource(R.string.dash_empty),
                                 )
                             }
                         } else {
@@ -640,7 +641,7 @@ private fun EditDriversLicenseSheet(
                 placeholder = { Text(stringResource(com.fearmikey.garage.R.string.license_select_exp_date)) },
                 trailingIcon = {
                     IconButton(onClick = { showDatePicker = true }) {
-                        Icon(Icons.Default.CalendarToday, contentDescription = "Select Expiration Date")
+                        Icon(Icons.Default.CalendarToday, contentDescription = stringResource(R.string.doc_select_expiration_date))
                     }
                 },
                 modifier = Modifier
@@ -703,7 +704,7 @@ private fun EditDriversLicenseSheet(
             )
 
             com.fearmikey.garage.ui.vehicle.ImagePickerBox(
-                title = "Back of License",
+                title = stringResource(R.string.dash_license_back),
                 pickedUri = pickedBackUri,
                 existingFilename = existingBackFilename,
                 imageFileProvider = imageFileProvider,
@@ -757,12 +758,12 @@ private fun EditDriversLicenseSheet(
                         showDatePicker = false
                     },
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.common_ok))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDatePicker = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         ) {
@@ -811,7 +812,7 @@ private fun InfoRow(
         if (isCopyable) {
             Icon(
                 imageVector = Icons.Default.ContentCopy,
-                contentDescription = "Copy $label",
+                contentDescription = stringResource(R.string.common_copy_label, label),
                 tint = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
                 modifier = Modifier.size(16.dp),
             )
@@ -827,9 +828,9 @@ private fun ExpirationStatusChip(expirationDate: Long?) {
     val daysLeft = TimeUnit.MILLISECONDS.toDays(expirationDate - now)
 
     val (label, color) = when {
-        daysLeft < 0 -> "Expired (%d d ago)".format(-daysLeft) to StatusOverdue
-        daysLeft <= 30 -> "Expires in %d d".format(daysLeft) to StatusUpcoming
-        else -> "Active (%d d left)".format(daysLeft) to StatusOk
+        daysLeft < 0 -> stringResource(R.string.doc_status_expired, -daysLeft) to StatusOverdue
+        daysLeft <= 30 -> stringResource(R.string.doc_status_expires_in, daysLeft) to StatusUpcoming
+        else -> stringResource(R.string.doc_status_active, daysLeft) to StatusOk
     }
 
     AssistChip(
@@ -855,7 +856,7 @@ private fun copyToClipboard(context: Context, label: String, text: String) {
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clip = ClipData.newPlainText(label, text)
     clipboard.setPrimaryClip(clip)
-    Toast.makeText(context, "$label copied to clipboard", Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, context.getString(R.string.common_copied_to_clipboard, label), Toast.LENGTH_SHORT).show()
 }
 
 @OptIn(ExperimentalSharedTransitionApi::class)

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="parts_edit_title">Изменить запчасти и жидкости</string>
+    <string name="parts_autofill">Заполнить расчётными значениями</string>
+    <string name="parts_autofill_msg">Автоматически заполненные объёмы жидкостей и данные запчастей рассчитаны по расшифрованному VIN и данным двигателя.\n\nПроверьте все значения по руководству владельца, прежде чем покупать жидкости или обслуживать автомобиль.</string>
+    <string name="parts_apply_understand">Понятно, применить</string>
+    <string name="vehicle_cd_obd">OBD2-сканер</string>
+    <string name="vehicle_cd_export">Экспорт журнала обслуживания</string>
+    <string name="vehicle_unnamed">Автомобиль без названия</string>
+    <string name="tabs_cd_reorder">Переместить вкладку</string>
+    <string name="currency_select_title">Выбор валюты</string>
+    <string name="currency_search">Поиск валют…</string>
+    <string name="currency_none_found">Подходящих валют не найдено.</string>
+    <string name="bmac_title">Поддержите Garage</string>
+    <string name="bmac_message">Нравится Garage? Если приложение полезно, поддержите его открытую разработку!</string>
+    <string name="bmac_dont_ask">Больше не спрашивать</string>
+    <string name="bmac_later">Может, позже</string>
+    <string name="status_overdue">Просрочено</string>
+    <string name="status_upcoming">Скоро</string>
+    <string name="status_on_track">По графику</string>
+    <string name="status_done">Выполнено</string>
+    <string name="odo_vehicle">Автомобиль</string>
+    <string name="odo_current">Сейчас: %1$s</string>
+    <string name="odo_new_reading">Новое показание одометра (%1$s)</string>
+    <string name="odo_notes_optional">Заметки (необязательно)</string>
+    <string name="odo_notes_placeholder">например, еженедельная запись</string>
+    <string name="trend_tap_to_edit">Нажмите, чтобы изменить</string>
+    <string name="trend_unusual_reading">Необычное значение</string>
+    <string name="url_invalid">Недопустимый URL</string>
+    <string name="url_open_failed">Не удалось открыть ссылку</string>
+</resources>

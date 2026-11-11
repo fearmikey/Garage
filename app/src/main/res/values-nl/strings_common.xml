@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="common_cancel">Annuleren</string>
+    <string name="common_save">Opslaan</string>
+    <string name="common_delete">Verwijderen</string>
+    <string name="common_ok">OK</string>
+    <string name="common_back">Terug</string>
+    <string name="common_discard">Negeren</string>
+    <string name="common_edit">Bewerken</string>
+    <string name="common_close">Sluiten</string>
+    <string name="common_saving">Opslaan…</string>
+    <string name="common_unsaved_title">Niet-opgeslagen wijzigingen</string>
+    <string name="common_unsaved_message">Je hebt niet-opgeslagen wijzigingen. Wil je ze opslaan of negeren?</string>
+    <string name="scan_vin_prompt">VIN-barcode scannen</string>
+
+    <string name="vehicle_type_car">Auto / Bestelwagen</string>
+    <string name="vehicle_type_motorcycle">Motor</string>
+    <string name="drivetrain_unknown">Onbekend</string>
+
+    <string name="mod_category_performance">Prestaties</string>
+    <string name="mod_category_suspension">Vering &amp; besturing</string>
+    <string name="mod_category_exterior">Exterieur &amp; carrosserie</string>
+    <string name="mod_category_interior">Interieur &amp; comfort</string>
+    <string name="mod_category_lighting">Verlichting</string>
+    <string name="mod_category_wheels_tires">Velgen &amp; banden</string>
+    <string name="mod_category_audio_electrical">Audio &amp; elektra</string>
+    <string name="mod_category_exhaust">Uitlaat</string>
+    <string name="mod_category_other">Overig</string>
+
+    <string name="maint_category_fluids">Vloeistoffen</string>
+    <string name="maint_category_filters">Filters</string>
+    <string name="maint_category_tires">Banden</string>
+    <string name="maint_category_brakes">Remmen</string>
+    <string name="maint_category_battery">Accu</string>
+    <string name="maint_category_engine">Motor &amp; ontsteking</string>
+    <string name="maint_category_drivetrain">Aandrijving &amp; ketting</string>
+    <string name="maint_category_suspension">Vering &amp; besturing</string>
+    <string name="maint_category_electrical">Elektra &amp; verlichting</string>
+    <string name="maint_category_hvac">Airco &amp; verwarming</string>
+    <string name="maint_category_body">Carrosserie, ruiten &amp; wissers</string>
+    <string name="maint_category_inspection">Keuring</string>
+    <string name="maint_category_repair">Reparatie</string>
+    <string name="maint_category_other">Overig</string>
+
+    <string name="charger_speed_level_1">Level 1 (120 V)</string>
+    <string name="charger_speed_level_2">Level 2 (240 V)</string>
+    <string name="charger_speed_dc_fast">DC-snelladen</string>
+    <string name="charger_vendor_home">Thuis</string>
+    <string name="charger_vendor_public">Openbaar</string>
+
+    <string name="date_range_all">Altijd</string>
+    <string name="date_range_last_30_days">Afgelopen 30 dagen</string>
+    <string name="date_range_last_12_months">Afgelopen 12 maanden</string>
+    <string name="date_range_this_year">Dit jaar</string>
+    <string name="date_range_last_year">Vorig jaar</string>
+
+    <string name="vehicle_add_title">Voertuig toevoegen</string>
+    <string name="vehicle_edit_title">Voertuig bewerken</string>
+    <string name="vehicle_delete">Voertuig verwijderen</string>
+    <string name="vehicle_photo_cd">Voertuigfoto %1$d</string>
+    <string name="vehicle_photo_position_multi">Foto %1$d van %2$d · Sleep omhoog/omlaag om aan te passen</string>
+    <string name="vehicle_photo_position_single">Sleep de foto omhoog/omlaag om de positie aan te passen</string>
+    <string name="vehicle_add_photo">Foto toevoegen</string>
+    <string name="vehicle_change_photo">Foto wijzigen</string>
+    <string name="vehicle_remove_photo">Foto verwijderen</string>
+    <string name="vehicle_add_photos">Foto\'s toevoegen (max. 3)</string>
+    <string name="vehicle_theme_color">Voertuigkleur</string>
+    <string name="vehicle_color_extracted">Uit foto gehaald</string>
+    <string name="vehicle_color_custom">Eigen kleur</string>
+    <string name="vehicle_color_default">Standaard app-thema</string>
+    <string name="vehicle_color_customize">Aanpassen</string>
+    <string name="vehicle_decode">Decoderen</string>
+    <string name="vehicle_year">Bouwjaar</string>
+    <string name="vehicle_make">Merk</string>
+    <string name="vehicle_model">Model</string>
+    <string name="vehicle_trim">Uitvoering</string>
+    <string name="vehicle_drivetrain">Aandrijving</string>
+    <string name="vehicle_condition_new">Nieuw</string>
+    <string name="vehicle_condition_used">Gebruikt</string>
+    <string name="vehicle_purchased_condition">Staat bij aankoop</string>
+    <string name="vehicle_purchase_price">Aankoopprijs</string>
+    <string name="vehicle_purchase_date">Aankoopdatum</string>
+    <string name="vehicle_select_purchase_date">Aankoopdatum kiezen</string>
+    <string name="vehicle_initial_odometer_km">Begin-kilometerstand (km)</string>
+    <string name="vehicle_initial_mileage_mi">Begin-mijlenstand (mi)</string>
+    <string name="vehicle_this_vehicle">dit voertuig</string>
+    <string name="vehicle_delete_title">Voertuig verwijderen?</string>
+    <string name="vehicle_delete_message">Weet je zeker dat je %1$s wilt verwijderen? Dit voertuig en al zijn onderhoudsrecords, tankbeurten en herinneringen worden uit de app verwijderd.</string>
+    <string name="photo_delete_title">Foto verwijderen?</string>
+    <string name="photo_delete_message">Weet je zeker dat je deze foto wilt verwijderen?</string>
+    <string name="vehicle_color_dialog_title">Voertuigkleur kiezen</string>
+    <string name="vehicle_color_dialog_message">Voertuigdetails, tabbladen en dashboardkaarten krijgen deze kleur.</string>
+    <string name="vehicle_color_reset">Standaard herstellen</string>
+
+    <string name="color_racing_red">Racerood</string>
+    <string name="color_sunset_orange">Zonsondergangoranje</string>
+    <string name="color_speed_yellow">Speedgeel</string>
+    <string name="color_british_racing_green">British Racing Green</string>
+    <string name="color_electric_cyan">Elektrisch cyaan</string>
+    <string name="color_daytona_blue">Daytonablauw</string>
+    <string name="color_midnight_navy">Middernachtblauw</string>
+    <string name="color_midnight_purple">Middernachtpaars</string>
+    <string name="color_silver_slate">Zilver / leisteen</string>
+    <string name="color_charcoal_graphite">Antraciet</string>
+    <string name="color_bronze_brown">Brons / bruin</string>
+    <string name="color_pure_black">Diepzwart</string>
+</resources>

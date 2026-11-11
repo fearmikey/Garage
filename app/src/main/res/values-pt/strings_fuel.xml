@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fuel_cd_add_charging">Adicionar recarga</string>
+    <string name="fuel_cd_add_fillup">Adicionar abastecimento</string>
+    <string name="fuel_cd_delete_charging">Excluir recarga</string>
+    <string name="fuel_cd_delete_fillup">Excluir abastecimento</string>
+    <string name="fuel_empty_charging">Nenhuma recarga registrada ainda.\nToque em + para registrar a primeira.</string>
+    <string name="fuel_empty_fuel">Nenhum abastecimento registrado ainda.\nToque em + para registrar o primeiro.</string>
+    <string name="fuel_charging_efficiency">Eficiência de recarga</string>
+    <string name="fuel_total_charging_spent">Total gasto com recargas</string>
+    <string name="fuel_battery_health_card">Saúde e degradação da bateria</string>
+    <string name="fuel_health_percent">%1$.1f%% de saúde</string>
+    <string name="fuel_soc_trend" formatted="false">Tendência de autonomia com 100% de carga</string>
+    <string name="fuel_at_mileage">em %1$s</string>
+    <string name="fuel_total_line">%1$s no total · %2$s</string>
+    <string name="fuel_est_range_chip">Autonomia estimada com 100%%: %1$s</string>
+    <string name="fuel_economy_title">Consumo</string>
+    <string name="fuel_best">Melhor</string>
+    <string name="fuel_average">Média</string>
+    <string name="fuel_worst">Pior</string>
+    <string name="fuel_total_spent">Total gasto</string>
+    <string name="fuel_partial">Parcial</string>
+    <string name="fuel_since_full_tank">%1$s desde o último tanque cheio</string>
+    <string name="fuel_full_tank_hint">Desative se você não completou o tanque</string>
+
+    <string name="trend_fuel_title">Tendências de combustível</string>
+    <string name="trend_charging_title">Tendências de recarga</string>
+    <string name="trend_rolling_fuel">média de 3 abastecimentos</string>
+    <string name="trend_rolling_charging">média de 3 recargas</string>
+    <string name="trend_metric_economy">Consumo</string>
+    <string name="trend_metric_efficiency">Eficiência</string>
+    <string name="trend_metric_cost_per">Custo/%1$s</string>
+    <string name="trend_metric_price_per">Preço/%1$s</string>
+    <string name="trend_range_last_10">Últimos 10</string>
+    <string name="trend_range_6_months">6 meses</string>
+    <string name="trend_range_1_year">1 ano</string>
+    <string name="trend_range_all">Tudo</string>
+    <string name="trend_chart_cd">Gráfico de %1$s, %2$d pontos, último %3$s. Toque ou arraste para ver os pontos.</string>
+    <string name="trend_avg">média %1$s</string>
+    <string name="trend_legend_rolling">Linha clara: %1$s</string>
+    <string name="trend_legend_average">Tracejada: média</string>
+    <string name="trend_legend_outliers">Pontos vazados: leituras incomuns, toque para revisar</string>
+    <string name="trend_legend_inspect">Toque ou arraste para inspecionar</string>
+    <string name="trend_not_enough_data">Ainda não há dados suficientes neste período. Tente um período maior.</string>
+</resources>

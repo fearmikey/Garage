@@ -75,7 +75,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.ui.util.label
 import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.ModificationCategory
@@ -260,9 +262,9 @@ private fun TotalCostCard(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 CostSubStat(
-                    title = if (uiState.includeModsInCost) "Maintenance" else "Maintenance & Repairs",
+                    title = stringResource(if (uiState.includeModsInCost) R.string.cost_maintenance else R.string.cost_maintenance_repairs),
                     amount = uiState.maintenanceCost,
-                    countText = "${uiState.maintenanceRecordCount} records",
+                    countText = pluralStringResource(R.plurals.cost_records, uiState.maintenanceRecordCount, uiState.maintenanceRecordCount),
                     icon = Icons.Default.Handyman,
                     currencySymbol = uiState.currencySymbol,
                     modifier = Modifier
@@ -271,9 +273,9 @@ private fun TotalCostCard(
                 )
 
                 CostSubStat(
-                    title = "Fuel Spent",
+                    title = stringResource(R.string.cost_fuel_spent),
                     amount = uiState.fuelCost,
-                    countText = "${uiState.fuelRecordCount} fill-ups",
+                    countText = pluralStringResource(R.plurals.cost_fillups, uiState.fuelRecordCount, uiState.fuelRecordCount),
                     icon = Icons.Default.LocalGasStation,
                     currencySymbol = uiState.currencySymbol,
                     modifier = Modifier
@@ -283,9 +285,9 @@ private fun TotalCostCard(
 
                 if (uiState.includeModsInCost) {
                     CostSubStat(
-                        title = "Mods",
+                        title = stringResource(R.string.tab_mods),
                         amount = uiState.modCost,
-                        countText = "${uiState.modRecordCount} mods",
+                        countText = pluralStringResource(R.plurals.mods_count, uiState.modRecordCount, uiState.modRecordCount),
                         icon = Icons.Default.Build,
                         currencySymbol = uiState.currencySymbol,
                         modifier = Modifier
@@ -304,8 +306,8 @@ private fun CostSubStat(
     amount: Double,
     countText: String,
     icon: ImageVector,
-    currencySymbol: String = "$",
     modifier: Modifier = Modifier,
+    currencySymbol: String = "$",
 ) {
     Surface(
         modifier = modifier,
@@ -435,12 +437,19 @@ private fun CategoryCostCard(
 
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = category.title,
+                        text = category.category?.label()
+                            ?: category.titleRes?.let { stringResource(it) }
+                            ?: category.title,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                     )
                     Text(
-                        text = "${category.recordCount} ${if (category.recordCount == 1) "entry" else "entries"} · %.1f%% of total".format(category.percentage),
+                        text = pluralStringResource(
+                            R.plurals.cost_entries_share,
+                            category.recordCount,
+                            category.recordCount,
+                            "%.1f".format(category.percentage),
+                        ),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -457,7 +466,7 @@ private fun CategoryCostCard(
 
                 Icon(
                     imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                    contentDescription = if (isExpanded) "Collapse" else "Expand",
+                    contentDescription = stringResource(if (isExpanded) R.string.cost_collapse else R.string.cost_expand),
                     tint = MaterialTheme.colorScheme.outline,
                 )
             }
@@ -504,7 +513,9 @@ private fun CostEntryRow(
     ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = entry.title,
+                text = entry.titleRes?.let { res ->
+                    entry.titleArgRes?.let { stringResource(res, stringResource(it)) } ?: stringResource(res)
+                } ?: entry.title,
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium,
             )
@@ -522,9 +533,10 @@ private fun CostEntryRow(
                     color = MaterialTheme.colorScheme.outline,
                 )
             }
-            if (!entry.detail.isNullOrBlank()) {
+            val detailText = entry.detail?.takeIf { it.isNotBlank() } ?: entry.modCategory?.label()
+            if (detailText != null) {
                 Text(
-                    text = entry.detail,
+                    text = detailText,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

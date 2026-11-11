@@ -29,9 +29,11 @@ open class WebDavBackupRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val backupRepository: BackupRepository,
     private val cloudBackupPreferencesManager: CloudBackupPreferencesManager,
+    baseClient: OkHttpClient,
 ) {
 
-    private val client = OkHttpClient.Builder()
+    // Backup zips can be large, so allow longer reads/writes than the shared default.
+    private val client = baseClient.newBuilder()
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(60, TimeUnit.SECONDS)
         .writeTimeout(60, TimeUnit.SECONDS)

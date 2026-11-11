@@ -1,19 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-   Sample data extraction rules file; uncomment and customize as necessary.
-   See https://developer.android.com/about/versions/12/backup-restore#xml-changes
-   for details.
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Backup / transfer rules (Android 12+; minSdk is 34, so this is the only file that applies).
+
+    cloud-backup: nothing is uploaded. Garage keeps user data on the device or syncs it only
+    through protocols the user configures (WebDAV, LubeLogger, local backup folder); Google
+    cloud backup isn't one of those. android:allowBackup="false" already disables it, and the
+    excludes below keep it disabled even if that flag is ever flipped.
+
+    device-transfer: a direct phone-to-phone transfer keeps the database, photos and settings,
+    but leaves out the EncryptedSharedPreferences files. Their encryption key lives in the
+    Android Keystore and never leaves the device, so on the new phone they'd be unreadable.
+    The user re-enters WebDAV / LubeLogger credentials after a transfer.
+    Keep these names in sync with SecurePreferences.kt.
 -->
 <data-extraction-rules>
     <cloud-backup>
-        <!-- TODO: Use <include> and <exclude> to control what is backed up.
-        <include .../>
-        <exclude .../>
-        -->
+        <exclude domain="root" path="." />
+        <exclude domain="file" path="." />
+        <exclude domain="database" path="." />
+        <exclude domain="sharedpref" path="." />
+        <exclude domain="external" path="." />
+        <exclude domain="device_root" path="." />
+        <exclude domain="device_file" path="." />
+        <exclude domain="device_database" path="." />
+        <exclude domain="device_sharedpref" path="." />
     </cloud-backup>
-    <!--
     <device-transfer>
-        <include .../>
-        <exclude .../>
+        <exclude domain="sharedpref" path="lubelogger_credentials.xml" />
+        <exclude domain="sharedpref" path="cloud_backup_secure_prefs.xml" />
     </device-transfer>
-    -->
 </data-extraction-rules>

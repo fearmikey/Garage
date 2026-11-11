@@ -130,16 +130,6 @@ object UnitConverter {
         }
     }
 
-    /** Formats segment fuel economy text, e.g. "28.5 mpg since last full tank" or "8.3 L/100km since last full tank". */
-    fun formatSegmentFuelEconomy(mpg: Double, unitSystem: UnitSystem): String = when (unitSystem) {
-        UnitSystem.IMPERIAL -> "%.1f mpg since last full tank".format(mpg)
-        UnitSystem.UK_MIXED -> "%.1f mpg since last full tank".format(mpg * US_MPG_TO_UK_MPG_FACTOR)
-        UnitSystem.METRIC -> {
-            val l100km = mpgToLitersPer100Km(mpg)
-            if (l100km != null) "%.1f L/100km since last full tank".format(l100km)
-            else "—"
-        }
-    }
 
     // EV Charging efficiency conversions
     /** Formats Wh/mi (or Wh/km) according to [UnitSystem]. */

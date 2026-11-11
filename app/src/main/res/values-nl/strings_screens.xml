@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="kb_add_torque">Aanhaalmoment toevoegen</string>
+    <string name="kb_edit_torque">Aanhaalmoment bewerken</string>
+    <string name="kb_add_note">Reparatienotitie toevoegen</string>
+    <string name="kb_edit_note">Reparatienotitie bewerken</string>
+    <string name="kb_cd_add">Toevoegen</string>
+    <string name="kb_empty">Geen aanhaalmomenten of notities.\nTik op + om er een toe te voegen.</string>
+    <string name="kb_torque_specs">Aanhaalmomenten</string>
+    <string name="kb_repair_notes">Reparatienotities</string>
+    <string name="kb_component">Onderdeel (bijv. wielmoeren)</string>
+    <string name="kb_torque_unit">Koppel (%1$s)</string>
+    <string name="kb_content">Inhoud (Markdown ondersteund)</string>
+    <string name="dash_empty">Nog geen voertuigen.\nTik op + om je eerste toe te voegen.</string>
+    <string name="dash_license_back">Achterkant rijbewijs</string>
+    <string name="dash_fuel_trend">Verbruikstrend</string>
+    <string name="dash_fuel_trend_cd">Verbruikstrend over de laatste %1$d tankbeurten. Laatste: %2$s.</string>
+    <string name="recalls_vin_copied">VIN (%1$s) gekopieerd naar klembord</string>
+    <string name="recalls_missing_info">Voeg bouwjaar, merk en model toe op het bewerkscherm om terugroepacties te controleren.</string>
+    <string name="recalls_ymm_title">Acties per bouwjaar / merk / model</string>
+    <string name="recalls_ymm_subtitle">Algemene veiligheidsterugroepacties voor %1$s:</string>
+    <string name="recalls_none_for_model">Geen openstaande terugroepacties gemeld voor %1$s.</string>
+    <string name="recalls_none">Geen openstaande terugroepacties voor dit voertuig.</string>
+    <string name="recalls_vin_title">Officiële VIN-controle</string>
+    <string name="recalls_vin_desc">Controleer openstaande terugroepacties voor VIN %1$s rechtstreeks op NHTSA.gov. (Je VIN wordt automatisch naar het klembord gekopieerd zodat je het op de NHTSA-site kunt plakken.)</string>
+    <string name="recalls_no_vin">Geen VIN opgeslagen voor dit voertuig. Voeg een VIN toe op het bewerkscherm om op NHTSA.gov te controleren.</string>
+    <string name="recalls_campaign">Actie #%1$s</string>
+    <string name="recalls_state_open">Open</string>
+    <string name="recalls_state_serviced">Uitgevoerd</string>
+    <string name="recalls_state_not_affected">Niet van toepassing</string>
+    <string name="recalls_state_serviced_long">Uitgevoerd / afgerond</string>
+    <string name="recalls_state_not_affected_long">Niet van toepassing op dit voertuig</string>
+    <string name="recalls_reported">Gemeld op %1$s</string>
+    <string name="recalls_consequence">Gevolg: %1$s</string>
+    <string name="recalls_remedy">Oplossing: %1$s</string>
+    <string name="widget_recent_tank">Laatste tankbeurt: %1$s</string>
+    <string name="widget_recent">Recent: %1$s</string>
+    <string name="widget_all_caught_up">Alles bijgewerkt!</string>
+    <string name="widget_log_fuel">Tanken</string>
+    <string name="widget_odometer">Kilometerstand</string>
+    <string name="widget_log_service">Onderhoud</string>
+    <string name="widget_due">Te doen</string>
+    <string name="widget_no_mileage">Geen kilometerstand</string>
+    <string name="widget_update">Bijwerken</string>
+</resources>

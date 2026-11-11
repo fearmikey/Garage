@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="maint_cd_add_odometer">Kilometre güncellemesi ekle</string>
+    <string name="maint_cd_add_record">Bakım kaydı ekle</string>
+    <string name="maint_cd_edit_record">Kaydı düzenle</string>
+    <string name="maint_cd_delete_record">Kaydı sil</string>
+    <string name="maint_empty">Henüz bakım kaydı yok.\nİlk kaydı eklemek için + simgesine dokunun.</string>
+    <string name="maint_no_matches">Filtrelerinizle eşleşen kayıt yok.</string>
+    <string name="maint_clear_filters">Filtreleri temizle</string>
+    <string name="maint_delete_title">Kaydı sil</string>
+    <string name="maint_delete_message">Bu kaydı silmek istediğinizden emin misiniz?</string>
+    <string name="maint_receipt_invoice">Fiş / Fatura</string>
+    <string name="maint_receipt_image">Fiş görüntüsü</string>
+    <string name="maint_pdf_receipt">PDF fiş</string>
+    <string name="maint_open_with_app">Uygulamayla aç</string>
+    <string name="maint_add_title">Bakım kaydı ekle</string>
+    <string name="maint_date">Tarih</string>
+    <string name="maint_task_other">Diğer / özel</string>
+    <string name="maint_specific_task">Belirli işlem</string>
+    <string name="maint_description">Açıklama</string>
+    <string name="maint_mileage_unit">Kilometre (%1$s)</string>
+    <string name="maint_cost_unit">Maliyet (%1$s)</string>
+    <string name="maint_inspected_only">Yalnızca kontrol edildi (değişim ertelendi)</string>
+    <string name="maint_remind_in_distance">Hatırlatma aralığı (%1$s) *</string>
+    <string name="maint_remind_in_months">Hatırlatma aralığı (ay) *</string>
+    <string name="maint_attached_pdf">Ekli PDF fiş</string>
+    <string name="maint_pdf_document">PDF belgesi</string>
+    <string name="maint_change_attachment">Eki değiştir</string>
+    <string name="maint_remove_attachment">Eki kaldır</string>
+    <string name="maint_attach_receipt">Fiş / fatura ekle (görüntü veya PDF)</string>
+    <string name="maint_open_receipt">Fişi aç</string>
+    <string name="maint_open_file_failed">Dosya açılamadı</string>
+    <string name="maint_odometer_update">Kilometre güncellemesi</string>
+    <string name="maint_search_placeholder">Açıklama veya işlem ara</string>
+    <string name="maint_close_search">Aramayı kapat</string>
+    <string name="maint_search">Ara</string>
+    <string name="maint_has_receipt">Fişli</string>
+    <string name="maint_hide_auto">Kilometre ve taramaları gizle</string>
+    <string name="maint_showing_count">%2$d kayıttan %1$d tanesi gösteriliyor</string>
+    <plurals name="maint_categories_count">
+        <item quantity="one">%d kategori</item>
+        <item quantity="other">%d kategori</item>
+    </plurals>
+    <string name="template_title">Hazır bakım planı şablonları</string>
+    <string name="template_subtitle">Bu araca uygun bakım aralıkları eklemek için bir şablon seçin.</string>
+    <string name="template_included_rules">Dahil edilen kurallar (%1$d):</string>
+    <plurals name="template_months">
+        <item quantity="one">%d ay</item>
+        <item quantity="other">%d ay</item>
+    </plurals>
+    <string name="template_interval_or">%1$s veya %2$s</string>
+    <string name="template_every">Her %1$s</string>
+    <string name="template_apply">“%1$s” şablonunu uygula</string>
+</resources>

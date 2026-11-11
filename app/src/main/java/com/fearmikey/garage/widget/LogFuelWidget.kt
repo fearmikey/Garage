@@ -26,6 +26,7 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.fearmikey.garage.MainActivity
+import com.fearmikey.garage.R
 import com.fearmikey.garage.data.fuel.FuelEconomyCalculator
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.ui.util.UnitConverter
@@ -47,7 +48,7 @@ class LogFuelWidget : GlanceAppWidget() {
 
         val vehicleLabel = targetVehicle?.let {
             listOfNotNull(it.year?.toString(), it.make, it.model).joinToString(" ").ifBlank { it.vin }
-        } ?: "Garage"
+        } ?: context.getString(R.string.app_name)
 
         val recentMpgText = if (targetVehicle != null) {
             val fuelRecords = fuelRepository.getRecordsForVehicle(targetVehicle.id).first()
@@ -92,14 +93,14 @@ private fun LogFuelWidgetContent(
             )
             recentMpgText?.let { mpg ->
                 Text(
-                    text = "Recent: $mpg",
+                    text = context.getString(R.string.widget_recent, mpg),
                     style = TextStyle(fontSize = 11.sp, color = GlanceTheme.colors.onSurfaceVariant),
                 )
             }
         }
         Spacer(modifier = GlanceModifier.width(8.dp))
         Button(
-            text = "Log Fuel",
+            text = context.getString(R.string.widget_log_fuel),
             onClick = actionStartActivity(
                 Intent(context, MainActivity::class.java).apply {
                     action = MainActivity.ACTION_LOG_FUEL

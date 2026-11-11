@@ -2,7 +2,7 @@ package com.fearmikey.garage.config
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
+import androidx.core.net.toUri
 
 /**
  * Configuration utilities for the Garage application.
@@ -14,7 +14,7 @@ object FlavorConfig {
     const val isVinScannerSupported = true
 
     fun launchOssLicenses(context: Context) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/fearmikey/Garage/blob/master/LICENSE"))
+        val intent = Intent(Intent.ACTION_VIEW, "https://github.com/fearmikey/Garage/blob/master/LICENSE".toUri())
         context.startActivity(intent)
     }
 }

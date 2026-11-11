@@ -38,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -94,7 +95,7 @@ fun RemindersSettingsScreen(
                 title = { Text(stringResource(R.string.settings_reminders_notifications)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))
                     }
                 },
             )
@@ -109,12 +110,12 @@ fun RemindersSettingsScreen(
                 .verticalScrollbar(listState),
         ) {
             item {
-                SettingsCategoryHeader("Document Expirations")
+                SettingsCategoryHeader(stringResource(R.string.reminders_header_documents))
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Document Renewal Reminders") },
-                    supportingContent = { Text("Notify for expiring vehicle registrations, smog tests, inspections, insurance, permits, and driver's licenses.") },
+                    headlineContent = { Text(stringResource(R.string.reminders_doc_title)) },
+                    supportingContent = { Text(stringResource(R.string.reminders_doc_summary)) },
                     leadingContent = { Icon(Icons.Filled.Badge, contentDescription = null) },
                     trailingContent = {
                         Switch(
@@ -129,10 +130,11 @@ fun RemindersSettingsScreen(
             }
             if (uiState.documentExpirationRemindersEnabled) {
                 item {
-                    val daysText = if (uiState.documentExpirationDaysWindow == 1) "1 day" else "${uiState.documentExpirationDaysWindow} days"
+                    val days = uiState.documentExpirationDaysWindow
+                    val daysText = pluralStringResource(R.plurals.common_days, days, days)
                     ListItem(
-                        headlineContent = { Text("Document Expiration Notice Window") },
-                        supportingContent = { Text("Notify when document expiration is due within $daysText") },
+                        headlineContent = { Text(stringResource(R.string.settings_doc_window_title)) },
+                        supportingContent = { Text(stringResource(R.string.reminders_doc_window_summary, daysText)) },
                         leadingContent = { Icon(Icons.Filled.CalendarToday, contentDescription = null) },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -144,14 +146,14 @@ fun RemindersSettingsScreen(
             item { HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp)) }
 
             item {
-                SettingsCategoryHeader("Service Reminders")
+                SettingsCategoryHeader(stringResource(R.string.reminders_header_service))
             }
             item {
                 val unitSystem = UnitSystem.fromString(uiState.units)
                 val distanceText = UnitConverter.formatDistance(uiState.maintenanceMileageWindow, unitSystem)
                 ListItem(
-                    headlineContent = { Text("Maintenance Mileage Notice Window") },
-                    supportingContent = { Text("Notify when service is due within $distanceText") },
+                    headlineContent = { Text(stringResource(R.string.reminders_mileage_title)) },
+                    supportingContent = { Text(stringResource(R.string.reminders_service_due_within, distanceText)) },
                     leadingContent = { Icon(Icons.Filled.Straighten, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -159,10 +161,11 @@ fun RemindersSettingsScreen(
                 )
             }
             item {
-                val daysText = if (uiState.maintenanceDaysWindow == 1) "1 day" else "${uiState.maintenanceDaysWindow} days"
+                val days = uiState.maintenanceDaysWindow
+                val daysText = pluralStringResource(R.plurals.common_days, days, days)
                 ListItem(
-                    headlineContent = { Text("Maintenance Time Notice Window") },
-                    supportingContent = { Text("Notify when service is due within $daysText") },
+                    headlineContent = { Text(stringResource(R.string.reminders_time_title)) },
+                    supportingContent = { Text(stringResource(R.string.reminders_service_due_within, daysText)) },
                     leadingContent = { Icon(Icons.Filled.Schedule, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -173,18 +176,20 @@ fun RemindersSettingsScreen(
             item { HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp)) }
 
             item {
-                SettingsCategoryHeader("Push Notifications")
+                SettingsCategoryHeader(stringResource(R.string.reminders_header_push))
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Notification Permission") },
+                    headlineContent = { Text(stringResource(R.string.reminders_permission_title)) },
                     supportingContent = {
                         Text(
-                            if (uiState.notificationPermissionGranted) {
-                                "Granted — reminders and expiration alerts can be delivered."
-                            } else {
-                                "Not granted — tap to allow Garage to send notifications."
-                            }
+                            stringResource(
+                                if (uiState.notificationPermissionGranted) {
+                                    R.string.reminders_permission_granted
+                                } else {
+                                    R.string.reminders_permission_denied
+                                }
+                            )
                         )
                     },
                     leadingContent = { Icon(Icons.Filled.Notifications, contentDescription = null) },
@@ -204,8 +209,8 @@ fun RemindersSettingsScreen(
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Send Test Notification") },
-                    supportingContent = { Text("Send a sample notification to verify push notifications are working correctly.") },
+                    headlineContent = { Text(stringResource(R.string.reminders_test_title)) },
+                    supportingContent = { Text(stringResource(R.string.reminders_test_summary)) },
                     leadingContent = { Icon(Icons.Filled.NotificationsActive, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()

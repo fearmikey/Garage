@@ -25,6 +25,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -68,17 +70,17 @@ fun VehicleKnowledgeScreen(
                         onDismissRequest = { showMenu = false }
                     ) {
                         DropdownMenuItem(
-                            text = { Text("Add Torque Spec") },
+                            text = { Text(stringResource(R.string.kb_add_torque)) },
                             onClick = { showMenu = false; showAddSpec = true }
                         )
                         DropdownMenuItem(
-                            text = { Text("Add Repair Note") },
+                            text = { Text(stringResource(R.string.kb_add_note)) },
                             onClick = { showMenu = false; showAddNote = true }
                         )
                     }
                 }
                 FloatingActionButton(onClick = { showMenu = true }) {
-                    Icon(Icons.Filled.Add, contentDescription = "Add")
+                    Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.kb_cd_add))
                 }
             }
         },
@@ -114,7 +116,7 @@ fun VehicleKnowledgeScreen(
 
         if (torqueSpecs.isEmpty() && vehicleNotes.isEmpty()) {
             EmptyState(
-                message = "No torque specs or notes found.\nTap the + button to add one.",
+                message = stringResource(R.string.kb_empty),
                 modifier = Modifier.padding(innerPadding)
             )
         } else {
@@ -132,21 +134,21 @@ fun VehicleKnowledgeScreen(
                             FilterChip(
                                 selected = selectedFilter == "All",
                                 onClick = { selectedFilter = "All" },
-                                label = { Text("All") }
+                                label = { Text(stringResource(R.string.trend_range_all)) }
                             )
                         }
                         item {
                             FilterChip(
                                 selected = selectedFilter == "Torque Specs",
                                 onClick = { selectedFilter = "Torque Specs" },
-                                label = { Text("Torque Specs") }
+                                label = { Text(stringResource(R.string.kb_torque_specs)) }
                             )
                         }
                         item {
                             FilterChip(
                                 selected = selectedFilter == "Notes",
                                 onClick = { selectedFilter = "Notes" },
-                                label = { Text("Notes") }
+                                label = { Text(stringResource(R.string.common_notes)) }
                             )
                         }
                     }
@@ -155,7 +157,7 @@ fun VehicleKnowledgeScreen(
                 if (torqueSpecs.isNotEmpty() && (selectedFilter == "All" || selectedFilter == "Torque Specs")) {
                     item {
                         Text(
-                            text = "Torque Specs",
+                            text = stringResource(R.string.kb_torque_specs),
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.padding(vertical = 8.dp)
                         )
@@ -172,7 +174,7 @@ fun VehicleKnowledgeScreen(
                 if (vehicleNotes.isNotEmpty() && (selectedFilter == "All" || selectedFilter == "Notes")) {
                     item {
                         Text(
-                            text = "Repair Notes",
+                            text = stringResource(R.string.kb_repair_notes),
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.padding(vertical = 8.dp)
                         )
@@ -210,21 +212,21 @@ private fun TorqueSpecCard(
                 Text(text = spec.component, style = MaterialTheme.typography.titleSmall)
                 Box {
                     IconButton(onClick = { expanded = true }) {
-                        Icon(Icons.Filled.MoreVert, contentDescription = "More options")
+                        Icon(Icons.Filled.MoreVert, contentDescription = stringResource(R.string.trip_cd_more))
                     }
                     DropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false }
                     ) {
                         DropdownMenuItem(
-                            text = { Text("Edit") },
+                            text = { Text(stringResource(R.string.common_edit)) },
                             onClick = { 
                                 expanded = false
                                 onEdit()
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Delete") },
+                            text = { Text(stringResource(R.string.common_delete)) },
                             onClick = { 
                                 expanded = false
                                 onDelete()
@@ -273,21 +275,21 @@ private fun VehicleNoteCard(
                 Text(text = note.title, style = MaterialTheme.typography.titleSmall)
                 Box {
                     IconButton(onClick = { expanded = true }) {
-                        Icon(Icons.Filled.MoreVert, contentDescription = "More options")
+                        Icon(Icons.Filled.MoreVert, contentDescription = stringResource(R.string.trip_cd_more))
                     }
                     DropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false }
                     ) {
                         DropdownMenuItem(
-                            text = { Text("Edit") },
+                            text = { Text(stringResource(R.string.common_edit)) },
                             onClick = { 
                                 expanded = false
                                 onEdit()
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Delete") },
+                            text = { Text(stringResource(R.string.common_delete)) },
                             onClick = { 
                                 expanded = false
                                 onDelete()

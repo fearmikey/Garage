@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="kb_add_torque">Añadir par de apriete</string>
+    <string name="kb_edit_torque">Editar par de apriete</string>
+    <string name="kb_add_note">Añadir nota de reparación</string>
+    <string name="kb_edit_note">Editar nota de reparación</string>
+    <string name="kb_cd_add">Añadir</string>
+    <string name="kb_empty">No hay pares de apriete ni notas.\nToca + para añadir uno.</string>
+    <string name="kb_torque_specs">Pares de apriete</string>
+    <string name="kb_repair_notes">Notas de reparación</string>
+    <string name="kb_component">Componente (p. ej., tuercas de rueda)</string>
+    <string name="kb_torque_unit">Par (%1$s)</string>
+    <string name="kb_content">Contenido (admite Markdown)</string>
+    <string name="dash_empty">Aún no hay vehículos.\nToca + para añadir el primero.</string>
+    <string name="dash_license_back">Reverso del permiso</string>
+    <string name="dash_fuel_trend">Tendencia de consumo</string>
+    <string name="dash_fuel_trend_cd">Tendencia de consumo de los últimos %1$d repostajes. Último: %2$s.</string>
+    <string name="recalls_vin_copied">VIN (%1$s) copiado al portapapeles</string>
+    <string name="recalls_missing_info">Añade el año, la marca y el modelo en la pantalla de edición para buscar llamadas a revisión.</string>
+    <string name="recalls_ymm_title">Campañas por año / marca / modelo</string>
+    <string name="recalls_ymm_subtitle">Llamadas a revisión de seguridad para %1$s:</string>
+    <string name="recalls_none_for_model">No hay llamadas a revisión abiertas para %1$s.</string>
+    <string name="recalls_none">No hay llamadas a revisión abiertas para este vehículo.</string>
+    <string name="recalls_vin_title">Comprobación oficial por VIN</string>
+    <string name="recalls_vin_desc">Comprueba las llamadas a revisión pendientes del VIN %1$s directamente en NHTSA.gov. (Tu VIN se copia automáticamente al portapapeles para pegarlo en la web de la NHTSA).</string>
+    <string name="recalls_no_vin">No hay ningún VIN guardado para este vehículo. Añade un VIN en la pantalla de edición para comprobarlo en NHTSA.gov.</string>
+    <string name="recalls_campaign">Campaña n.º %1$s</string>
+    <string name="recalls_state_open">Abierta</string>
+    <string name="recalls_state_serviced">Realizada</string>
+    <string name="recalls_state_not_affected">No afecta</string>
+    <string name="recalls_state_serviced_long">Realizada / completada</string>
+    <string name="recalls_state_not_affected_long">No afecta a este vehículo</string>
+    <string name="recalls_reported">Notificada el %1$s</string>
+    <string name="recalls_consequence">Consecuencia: %1$s</string>
+    <string name="recalls_remedy">Solución: %1$s</string>
+    <string name="widget_recent_tank">Último repostaje: %1$s</string>
+    <string name="widget_recent">Reciente: %1$s</string>
+    <string name="widget_all_caught_up">¡Todo al día!</string>
+    <string name="widget_log_fuel">Repostar</string>
+    <string name="widget_odometer">Kilometraje</string>
+    <string name="widget_log_service">Mantenimiento</string>
+    <string name="widget_due">Pendiente</string>
+    <string name="widget_no_mileage">Sin kilometraje</string>
+    <string name="widget_update">Actualizar</string>
+</resources>

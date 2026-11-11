@@ -27,6 +27,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.fearmikey.garage.ui.util.AppCurrency
@@ -46,6 +48,7 @@ fun CurrencySelectionDialog(
             AppCurrency.SUPPORTED_CURRENCIES.filter { currency ->
                 currency.code.contains(searchQuery, ignoreCase = true) ||
                     currency.name.contains(searchQuery, ignoreCase = true) ||
+                    currency.localizedName.contains(searchQuery, ignoreCase = true) ||
                     currency.symbol.contains(searchQuery, ignoreCase = true)
             }
         }
@@ -53,13 +56,13 @@ fun CurrencySelectionDialog(
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text("Select Currency") },
+        title = { Text(stringResource(R.string.currency_select_title)) },
         text = {
             Column {
                 OutlinedTextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
-                    placeholder = { Text("Search currencies...") },
+                    placeholder = { Text(stringResource(R.string.currency_search)) },
                     leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
@@ -78,7 +81,7 @@ fun CurrencySelectionDialog(
                     if (filteredCurrencies.isEmpty()) {
                         item {
                             Text(
-                                text = "No matching currencies found.",
+                                text = stringResource(R.string.currency_none_found),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.padding(vertical = 16.dp),
@@ -112,7 +115,7 @@ fun CurrencySelectionDialog(
                                         fontWeight = FontWeight.SemiBold,
                                     )
                                     Text(
-                                        text = currency.name,
+                                        text = currency.localizedName,
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
@@ -125,7 +128,7 @@ fun CurrencySelectionDialog(
         },
         confirmButton = {
             TextButton(onClick = onDismissRequest) {
-                Text("Cancel")
+                Text(stringResource(R.string.common_cancel))
             }
         },
     )

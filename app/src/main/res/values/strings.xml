@@ -22,10 +22,9 @@
     <string name="settings_currency">Currency</string>
     <string name="settings_theme">Theme</string>
     <string name="settings_default_vehicle">Default Vehicle</string>
-    <string name="settings_reminders_expirations">Reminders &amp; Expirations</string>
-    <string name="settings_appearance_theme" translatable="false">Appearance &amp; Theme</string>
-    <string name="settings_reminders_notifications" translatable="false">Reminders &amp; Notifications</string>
-    <string name="settings_data_sync" translatable="false">Data, Backup &amp; Sync</string>
+    <string name="settings_appearance_theme">Appearance &amp; Theme</string>
+    <string name="settings_reminders_notifications">Reminders &amp; Notifications</string>
+    <string name="settings_data_sync">Data, Backup &amp; Sync</string>
 
     <!-- Tabs -->
     <string name="tab_my_vehicles">My Vehicles</string>
@@ -77,9 +76,7 @@
     <string name="task_clutch_throttle_cable">Clutch &amp; throttle cable adjustment</string>
 
     <!-- Startup / Onboarding -->
-    <string name="startup_get_started">Get Started</string>
     <string name="startup_welcome_title">Welcome to Garage</string>
-    <string name="startup_welcome_subtitle">Configure your preferences to get started.</string>
     <string name="startup_measurement_system_title">Measurement System</string>
     <string name="startup_measurement_system_subtitle">Choose how distances, fuel volume, and fuel economy are displayed throughout the app.</string>
     <string name="startup_metric_title">Metric System</string>
@@ -341,7 +338,7 @@
     <string name="license_number_placeholder">e.g., D1234567</string>
     <string name="license_state_label">Issuing State</string>
     <string name="license_state_placeholder">e.g., CA</string>
-    <string name="license_notes_placeholder">Class C, motorcycle endorsement, REAL ID notes...</string>
+    <string name="license_notes_placeholder">Class C, motorcycle endorsement, REAL ID notes…</string>
     <string name="license_front_photo">Front of License</string>
     <string name="license_back_photo">Back of License</string>
     <string name="license_save">Save Driver\'s License</string>
@@ -353,8 +350,6 @@
     <string name="cost_include_mods">Include mods</string>
     <string name="cost_include_purchase">Include purchase</string>
     <string name="cost_purchase_not_counted_in_period">Not counted in this period (purchase date outside the range or not set).</string>
-    <string name="cost_per_distance">Cost / Distance</string>
-    <string name="cost_per_day">Cost / Day</string>
     <string name="time_filter_all_time">All Time</string>
     <string name="time_filter_this_year">This Year</string>
     <string name="time_filter_last_year">Last Year</string>
@@ -364,8 +359,8 @@
     <!-- Fuel & Charging -->
     <string name="fuel_tab_charging">Charging</string>
     <string name="fuel_tab_fuel">Fuel</string>
-    <string name="fuel_est_range_100">Current Est. 100% Range</string>
-    <string name="fuel_initial_range_100">Initial Est. 100% Range</string>
+    <string name="fuel_est_range_100" formatted="false">Current Est. 100% Range</string>
+    <string name="fuel_initial_range_100" formatted="false">Initial Est. 100% Range</string>
     <string name="fuel_delete_charging_title">Delete Charging Session</string>
     <string name="fuel_delete_charging_msg">Are you sure you want to delete this charging record?</string>
     <string name="fuel_log_charging">Log Charging Session</string>
@@ -374,12 +369,12 @@
     <string name="fuel_charger_speed">Charger Speed</string>
     <string name="fuel_location_vendor">Location / Vendor</string>
     <string name="fuel_vendor_placeholder">Vendor name (optional, e.g. Electrify America)</string>
-    <string name="fuel_battery_start">Battery % Start</string>
-    <string name="fuel_battery_end">Battery % End</string>
+    <string name="fuel_battery_start" formatted="false">Battery % Start</string>
+    <string name="fuel_battery_end" formatted="false">Battery % End</string>
     <string name="fuel_total_cost">Total cost</string>
     <string name="fuel_odometer_reading">Odometer reading (%1$s)</string>
     <string name="fuel_battery_health_title">Battery Health (Optional)</string>
-    <string name="fuel_est_range_soc">Est. Range @ 100% SoC (%1$s)</string>
+    <string name="fuel_est_range_soc">Est. Range @ 100%% SoC (%1$s)</string>
     <string name="fuel_est_range_end">Est. Range at charge end</string>
     <string name="fuel_auto_calculate">Auto-Calculate</string>
     <string name="fuel_save_charging">Save Charging Session</string>
@@ -425,7 +420,7 @@
     <string name="doc_toll_notes_label">Notes / Provider Details</string>
     <string name="doc_delete_toll_btn">Delete Toll Pass &amp; Parking Info</string>
     <string name="doc_save_docs_btn">Save Vehicle Documents</string>
-    <string name="doc_saving_btn">Saving...</string>
+    <string name="doc_saving_btn">Saving…</string>
     <!-- Fleet Summary -->
     <string name="fleet_overview_title">Fleet Overview</string>
     <string name="fleet_vehicles">Vehicles</string>
@@ -516,7 +511,6 @@
     <string name="mods_delete_confirm_msg">Are you sure you want to delete \'%1$s\'? This action cannot be undone.</string>
 
     <!-- Recalls -->
-    <string name="recalls_empty_message">No safety recalls found for this vehicle.\nSafety recall information is provided by NHTSA.</string>
     <string name="recalls_nhtsa_check">Check VIN on NHTSA.gov</string>
     <string name="recalls_retry">Retry</string>
     <string name="recalls_park_it">Park it</string>

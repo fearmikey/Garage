@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mods_cd_add">Umbau hinzufügen</string>
+    <plurals name="mods_count">
+        <item quantity="one">%d Umbau</item>
+        <item quantity="other">%d Umbauten</item>
+    </plurals>
+    <string name="mods_total_spent">Gesamtausgaben: %1$s</string>
+    <string name="mods_cd_list_view">Zur Listenansicht wechseln</string>
+    <string name="mods_cd_grid_view">Zur Rasteransicht wechseln</string>
+    <string name="mods_product_link">Produktlink</string>
+    <string name="mods_add_title">Umbau hinzufügen</string>
+    <string name="mods_edit_title">Umbau bearbeiten</string>
+    <string name="mods_photo_cd">Umbaufoto %1$d</string>
+    <string name="mods_photo_position">Foto %1$d von %2$d</string>
+    <string name="mods_photo_single">Foto</string>
+    <string name="mods_add_photos">Fotos hinzufügen (bis zu 6)</string>
+    <string name="mods_title_placeholder">z. B. 5-cm-Höherlegung, Sportluftfilter</string>
+    <string name="mods_desc_placeholder">Details, Teilenummern, Einbauhinweise…</string>
+    <string name="mods_url_placeholder">z. B. https://example.com/parts/lift-kit</string>
+    <string name="mods_title_short">Titel</string>
+    <string name="mods_installed">Eingebaut: %1$s</string>
+</resources>

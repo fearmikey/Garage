@@ -49,6 +49,7 @@ object BrandEmblems {
     private fun carEmblem(normalized: String): Int? {
         return when (normalized) {
             "acura" -> R.drawable.brand_acura
+            "alfaromeo", "alfa" -> R.drawable.brand_alfaromeo
             "astonmartin", "aston" -> R.drawable.brand_astonmartin
             "audi" -> R.drawable.brand_audi
             "autozone" -> R.drawable.brand_autozone
@@ -74,6 +75,7 @@ object BrandEmblems {
             "hyundai" -> R.drawable.brand_hyundai
             "infiniti" -> R.drawable.brand_infiniti
             "iveco" -> R.drawable.brand_iveco
+            "jaguar" -> R.drawable.brand_jaguar
             "jcb" -> R.drawable.brand_jcb
             "jeep" -> R.drawable.brand_jeep
             "johndeere", "deere" -> R.drawable.brand_johndeere
@@ -81,6 +83,7 @@ object BrandEmblems {
             "koenigsegg" -> R.drawable.brand_koenigsegg
             "ktm" -> R.drawable.brand_ktm
             "lamborghini", "lambo" -> R.drawable.brand_lamborghini
+            "landrover", "rangerover" -> R.drawable.brand_landrover
             "lucid", "lucidmotors" -> R.drawable.brand_lucid
             "mahindra" -> R.drawable.brand_mahindra
             "man" -> R.drawable.brand_man

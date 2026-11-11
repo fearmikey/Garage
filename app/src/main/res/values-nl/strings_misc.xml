@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="parts_edit_title">Onderdelen &amp; vloeistoffen bewerken</string>
+    <string name="parts_autofill">Geschatte waarden invullen</string>
+    <string name="parts_autofill_msg">Automatisch ingevulde vloeistofinhouden en onderdeelgegevens worden geschat op basis van het gedecodeerde VIN en motorgegevens.\n\nControleer alle waarden in het instructieboekje voordat je vloeistoffen koopt of onderhoud uitvoert.</string>
+    <string name="parts_apply_understand">Begrepen, toepassen</string>
+    <string name="vehicle_cd_obd">OBD2-scanner</string>
+    <string name="vehicle_cd_export">Onderhoudslog exporteren</string>
+    <string name="vehicle_unnamed">Naamloos voertuig</string>
+    <string name="tabs_cd_reorder">Tabblad verplaatsen</string>
+    <string name="currency_select_title">Valuta kiezen</string>
+    <string name="currency_search">Valuta zoeken…</string>
+    <string name="currency_none_found">Geen overeenkomende valuta gevonden.</string>
+    <string name="bmac_title">Steun Garage</string>
+    <string name="bmac_message">Vind je Garage handig? Overweeg dan de opensource-ontwikkeling te steunen!</string>
+    <string name="bmac_dont_ask">Niet meer vragen</string>
+    <string name="bmac_later">Misschien later</string>
+    <string name="status_overdue">Achterstallig</string>
+    <string name="status_upcoming">Binnenkort</string>
+    <string name="status_on_track">Op schema</string>
+    <string name="status_done">Klaar</string>
+    <string name="odo_vehicle">Voertuig</string>
+    <string name="odo_current">Huidig: %1$s</string>
+    <string name="odo_new_reading">Nieuwe kilometerstand (%1$s)</string>
+    <string name="odo_notes_optional">Notities (optioneel)</string>
+    <string name="odo_notes_placeholder">bijv. wekelijkse registratie</string>
+    <string name="trend_tap_to_edit">Tik om te bewerken</string>
+    <string name="trend_unusual_reading">Ongebruikelijke waarde</string>
+    <string name="url_invalid">Ongeldige URL</string>
+    <string name="url_open_failed">Kan link niet openen</string>
+</resources>

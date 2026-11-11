@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fearmikey.garage.GarageApplication
 import com.fearmikey.garage.data.fuel.FuelEconomyCalculator
 import com.fearmikey.garage.data.fuel.FuelEconomyEntry
 import com.fearmikey.garage.data.local.CloudBackupPreferencesManager
@@ -309,7 +308,7 @@ class DashboardViewModel @Inject constructor(
                 imageBack = finalBackFilename,
             )
             try {
-                WorkScheduler.triggerImmediateReminderCheck(GarageApplication.instance)
+                WorkScheduler.triggerImmediateReminderCheck(context)
             } catch (_: Exception) {}
         }
     }
@@ -318,7 +317,7 @@ class DashboardViewModel @Inject constructor(
         viewModelScope.launch {
             preferencesRepository.setDriversLicense(null, null, null, null, null, null)
             try {
-                WorkScheduler.triggerImmediateReminderCheck(GarageApplication.instance)
+                WorkScheduler.triggerImmediateReminderCheck(context)
             } catch (_: Exception) {}
         }
     }

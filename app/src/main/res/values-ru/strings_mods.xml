@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mods_cd_add">Добавить доработку</string>
+    <plurals name="mods_count">
+        <item quantity="one">%d доработка</item>
+        <item quantity="few">%d доработки</item>
+        <item quantity="many">%d доработок</item>
+        <item quantity="other">%d доработки</item>
+    </plurals>
+    <string name="mods_total_spent">Всего потрачено: %1$s</string>
+    <string name="mods_cd_list_view">Показать списком</string>
+    <string name="mods_cd_grid_view">Показать сеткой</string>
+    <string name="mods_product_link">Ссылка на товар</string>
+    <string name="mods_add_title">Добавить доработку</string>
+    <string name="mods_edit_title">Изменить доработку</string>
+    <string name="mods_photo_cd">Фото доработки %1$d</string>
+    <string name="mods_photo_position">Фото %1$d из %2$d</string>
+    <string name="mods_photo_single">Фото</string>
+    <string name="mods_add_photos">Добавить фото (до 6)</string>
+    <string name="mods_title_placeholder">например, лифт-комплект 5 см, холодный впуск</string>
+    <string name="mods_desc_placeholder">Подробности, номера деталей, заметки по установке…</string>
+    <string name="mods_url_placeholder">например, https://example.com/parts/lift-kit</string>
+    <string name="mods_title_short">Название</string>
+    <string name="mods_installed">Установлено: %1$s</string>
+</resources>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="parts_edit_title">Edytuj części i płyny</string>
+    <string name="parts_autofill">Uzupełnij szacowanymi danymi</string>
+    <string name="parts_autofill_msg">Automatycznie uzupełnione pojemności płynów i dane części są szacowane na podstawie zdekodowanego numeru VIN i danych silnika.\n\nSprawdź wszystkie wartości w instrukcji obsługi przed zakupem płynów lub serwisem pojazdu.</string>
+    <string name="parts_apply_understand">Rozumiem, zastosuj</string>
+    <string name="vehicle_cd_obd">Skaner OBD2</string>
+    <string name="vehicle_cd_export">Eksportuj dziennik serwisowy</string>
+    <string name="vehicle_unnamed">Pojazd bez nazwy</string>
+    <string name="tabs_cd_reorder">Zmień kolejność karty</string>
+    <string name="currency_select_title">Wybierz walutę</string>
+    <string name="currency_search">Szukaj walut…</string>
+    <string name="currency_none_found">Nie znaleziono pasujących walut.</string>
+    <string name="bmac_title">Wesprzyj Garage</string>
+    <string name="bmac_message">Podoba Ci się Garage? Jeśli aplikacja jest pomocna, rozważ wsparcie jej otwartego rozwoju!</string>
+    <string name="bmac_dont_ask">Nie pytaj ponownie</string>
+    <string name="bmac_later">Może później</string>
+    <string name="status_overdue">Zaległe</string>
+    <string name="status_upcoming">Wkrótce</string>
+    <string name="status_on_track">W terminie</string>
+    <string name="status_done">Gotowe</string>
+    <string name="odo_vehicle">Pojazd</string>
+    <string name="odo_current">Obecnie: %1$s</string>
+    <string name="odo_new_reading">Nowy stan licznika (%1$s)</string>
+    <string name="odo_notes_optional">Notatki (opcjonalnie)</string>
+    <string name="odo_notes_placeholder">np. cotygodniowy odczyt</string>
+    <string name="trend_tap_to_edit">Dotknij, aby edytować</string>
+    <string name="trend_unusual_reading">Nietypowy odczyt</string>
+    <string name="url_invalid">Nieprawidłowy adres URL</string>
+    <string name="url_open_failed">Nie można otworzyć linku</string>
+</resources>

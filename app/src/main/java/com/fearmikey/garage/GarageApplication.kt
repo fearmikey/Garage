@@ -5,11 +5,13 @@ import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.fearmikey.garage.data.local.CloudBackupPreferencesManager
 import com.fearmikey.garage.data.repository.AutoBackupManager
+import com.fearmikey.garage.di.ApplicationScope
 import com.fearmikey.garage.notification.CloudBackupScheduler
 import com.fearmikey.garage.notification.WorkScheduler
 import dagger.hilt.android.HiltAndroidApp
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -31,6 +33,10 @@ class GarageApplication : Application(), Configuration.Provider {
     @Inject
     lateinit var autoBackupManager: AutoBackupManager
 
+    @Inject
+    @ApplicationScope
+    lateinit var applicationScope: CoroutineScope
+
     override val workManagerConfiguration: Configuration
         get() = Configuration.Builder()
             .setWorkerFactory(workerFactory)
@@ -38,16 +44,13 @@ class GarageApplication : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
-        instance = this
         WorkScheduler.scheduleReminderChecks(this)
         WorkScheduler.scheduleLubeLoggerSync(this)
         WorkScheduler.triggerImmediateLubeLoggerSync(this)
-        val cloudSyncEnabled = runBlocking { cloudBackupPreferencesManager.cloudSyncEnabled.first() }
-        CloudBackupScheduler.scheduleOrCancel(this, enabled = cloudSyncEnabled)
-    }
-
-    companion object {
-        lateinit var instance: GarageApplication
-            private set
+        // Reading DataStore does disk I/O; don't block cold start on it.
+        applicationScope.launch {
+            val cloudSyncEnabled = cloudBackupPreferencesManager.cloudSyncEnabled.first()
+            CloudBackupScheduler.scheduleOrCancel(this@GarageApplication, enabled = cloudSyncEnabled)
+        }
     }
 }

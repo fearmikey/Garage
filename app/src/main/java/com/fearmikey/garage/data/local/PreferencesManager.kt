@@ -71,7 +71,7 @@ class PreferencesManager(private val context: Context) {
 
     val unitsType: Flow<String> = context.dataStore.data
         .map { preferences ->
-            preferences[UNITS_KEY] ?: "metric"
+            preferences[UNITS_KEY] ?: "imperial"
         }
 
     val unitSystem: Flow<UnitSystem> = unitsType.map { UnitSystem.fromString(it) }

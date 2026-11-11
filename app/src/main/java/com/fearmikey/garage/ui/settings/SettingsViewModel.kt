@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import android.content.Intent
+import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.CloudBackupPreferencesManager
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerSyncStatus
@@ -121,11 +122,11 @@ class SettingsViewModel @Inject constructor(
                     when (status) {
                         is LubeLoggerSyncStatus.Success -> {
                             awaitingManualLubeLoggerSync = false
-                            showMessage("LubeLogger sync completed.")
+                            showMessage(context.getString(R.string.msg_ll_sync_done))
                         }
                         is LubeLoggerSyncStatus.Failed -> {
                             awaitingManualLubeLoggerSync = false
-                            showMessage("LubeLogger sync failed: ${status.message}")
+                            showMessage(context.getString(R.string.msg_ll_sync_failed, status.message))
                         }
                         else -> Unit
                     }
@@ -289,9 +290,9 @@ class SettingsViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 message = if (sent) {
-                    "Test notification sent."
+                    context.getString(R.string.msg_test_sent)
                 } else {
-                    "Notifications are disabled for Garage. Enable them to receive test notifications and reminders."
+                    context.getString(R.string.msg_notifications_disabled)
                 },
             )
         }
@@ -443,7 +444,7 @@ class SettingsViewModel @Inject constructor(
             } catch (e: CancellationException) {
                 throw e
             } catch (_: Exception) {
-                _uiState.update { it.copy(message = "Bluetooth LE scan failed. Make sure Bluetooth is on.") }
+                _uiState.update { it.copy(message = context.getString(R.string.msg_ble_scan_failed)) }
             } finally {
                 _uiState.update { it.copy(isObdBleScanning = false) }
             }
@@ -461,10 +462,10 @@ class SettingsViewModel @Inject constructor(
             _uiState.update { it.copy(isBusy = true, message = null) }
             when (val result = backupRepository.exportBackup(destination)) {
                 BackupResult.Success -> _uiState.update {
-                    it.copy(isBusy = false, message = "Backup exported successfully.")
+                    it.copy(isBusy = false, message = context.getString(R.string.msg_export_ok))
                 }
                 is BackupResult.Failure -> _uiState.update {
-                    it.copy(isBusy = false, message = "Export failed: ${result.message}")
+                    it.copy(isBusy = false, message = context.getString(R.string.msg_export_failed, result.message))
                 }
             }
         }
@@ -478,7 +479,7 @@ class SettingsViewModel @Inject constructor(
                     it.copy(isBusy = false, importSucceeded = true)
                 }
                 is BackupResult.Failure -> _uiState.update {
-                    it.copy(isBusy = false, message = "Import failed: ${result.message}")
+                    it.copy(isBusy = false, message = context.getString(R.string.msg_import_failed, result.message))
                 }
             }
         }
@@ -500,10 +501,10 @@ class SettingsViewModel @Inject constructor(
             
             when (val result = backupRepository.clearAllData()) {
                 BackupResult.Success -> _uiState.update {
-                    it.copy(isBusy = false, message = "All data cleared successfully.")
+                    it.copy(isBusy = false, message = context.getString(R.string.msg_cleared))
                 }
                 is BackupResult.Failure -> _uiState.update {
-                    it.copy(isBusy = false, message = "Failed to clear data: ${result.message}")
+                    it.copy(isBusy = false, message = context.getString(R.string.msg_clear_failed, result.message))
                 }
             }
         }
@@ -544,10 +545,10 @@ class SettingsViewModel @Inject constructor(
             _uiState.update { it.copy(isBusy = true, message = null) }
             when (val result = autoBackupManager.performAutoBackup()) {
                 BackupResult.Success -> _uiState.update {
-                    it.copy(isBusy = false, message = "Local backup saved successfully.")
+                    it.copy(isBusy = false, message = context.getString(R.string.msg_local_ok))
                 }
                 is BackupResult.Failure -> _uiState.update {
-                    it.copy(isBusy = false, message = "Local backup failed: ${result.message}")
+                    it.copy(isBusy = false, message = context.getString(R.string.msg_local_failed, result.message))
                 }
             }
         }
@@ -627,10 +628,10 @@ class SettingsViewModel @Inject constructor(
             _uiState.update { it.copy(isSyncing = true, message = null) }
             when (val result = webDavBackupRepository.syncNow()) {
                 BackupResult.Success -> _uiState.update {
-                    it.copy(isSyncing = false, message = "Cloud sync completed successfully.")
+                    it.copy(isSyncing = false, message = context.getString(R.string.msg_cloud_ok))
                 }
                 is BackupResult.Failure -> _uiState.update {
-                    it.copy(isSyncing = false, message = "Cloud sync failed: ${result.message}")
+                    it.copy(isSyncing = false, message = context.getString(R.string.msg_cloud_failed, result.message))
                 }
             }
         }
@@ -641,10 +642,10 @@ class SettingsViewModel @Inject constructor(
             _uiState.update { it.copy(isBusy = true, message = null) }
             when (val result = webDavBackupRepository.testConnection(url, username, password)) {
                 BackupResult.Success -> _uiState.update {
-                    it.copy(isBusy = false, message = "Connection successful.")
+                    it.copy(isBusy = false, message = context.getString(R.string.msg_connection_ok))
                 }
                 is BackupResult.Failure -> _uiState.update {
-                    it.copy(isBusy = false, message = "Connection failed: ${result.message}")
+                    it.copy(isBusy = false, message = context.getString(R.string.msg_connection_failed, result.message))
                 }
             }
         }

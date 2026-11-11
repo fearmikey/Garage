@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mods_cd_add">Add modification</string>
+    <plurals name="mods_count">
+        <item quantity="one">%d Modification</item>
+        <item quantity="other">%d Modifications</item>
+    </plurals>
+    <string name="mods_total_spent">Total Spent: %1$s</string>
+    <string name="mods_cd_list_view">Switch to list view</string>
+    <string name="mods_cd_grid_view">Switch to grid view</string>
+    <string name="mods_product_link">Product Link</string>
+    <string name="mods_add_title">Add Modification</string>
+    <string name="mods_edit_title">Edit Modification</string>
+    <string name="mods_photo_cd">Modification photo %1$d</string>
+    <string name="mods_photo_position">Photo %1$d of %2$d</string>
+    <string name="mods_photo_single">Photo</string>
+    <string name="mods_add_photos">Add Photos (up to 6)</string>
+    <string name="mods_title_placeholder">e.g., 2-inch Lift Kit, Cold Air Intake</string>
+    <string name="mods_desc_placeholder">Details, part numbers, installation notes…</string>
+    <string name="mods_url_placeholder">e.g. https://example.com/parts/lift-kit</string>
+    <string name="mods_title_short">Title</string>
+    <string name="mods_installed">Installed: %1$s</string>
+</resources>

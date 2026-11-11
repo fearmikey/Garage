@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="export_title">Relatório para venda</string>
+    <string name="export_book_title">Livro de manutenção e histórico</string>
+    <string name="export_book_desc">Gere um relatório completo e bem formatado que destaca o investimento em cuidados, o registro de manutenção, as peças trocadas e a situação de segurança do seu veículo para maximizar o valor de revenda.</string>
+    <string name="export_summary_preview">PRÉVIA DO RESUMO</string>
+    <string name="export_vin">VIN: %1$s</string>
+    <string name="export_total_investment">Investimento total:</string>
+    <string name="export_service_records">Registros de manutenção:</string>
+    <string name="export_upgrades_colon">Melhorias e modificações:</string>
+    <string name="export_recall_status">Recalls de segurança:</string>
+    <string name="export_checking">Verificando…</string>
+    <string name="export_clear_serviced">Nenhum aberto (0 abertos / %1$d realizados)</string>
+    <string name="export_clear">Nenhum aberto</string>
+    <string name="export_open_total">%1$d abertos / %2$d no total</string>
+    <string name="export_included_sections">SEÇÕES INCLUÍDAS</string>
+    <string name="export_upgrades">Melhorias e modificações</string>
+    <string name="export_upgrades_desc">Incluir peças, melhorias e acessórios personalizados</string>
+    <string name="export_parts">Peças e fluidos</string>
+    <string name="export_parts_desc">Incluir viscosidade do óleo, velas, medida dos pneus e palhetas</string>
+    <string name="export_recalls">Recalls de segurança</string>
+    <string name="export_recalls_desc">Incluir a verificação oficial de recalls da NHTSA</string>
+    <string name="export_select_open">Selecione as campanhas abertas (%1$d no total):</string>
+    <string name="export_all_serviced">Todos realizados</string>
+    <string name="export_all_open">Todos abertos</string>
+    <string name="export_open_unaddressed">ABERTO / PENDENTE</string>
+    <string name="export_serviced_clear">REALIZADO</string>
+    <string name="export_component">Componente: %1$s</string>
+    <string name="export_fuel">Abastecimentos e recargas</string>
+    <string name="export_fuel_desc">Incluir abastecimentos e recargas</string>
+    <string name="export_generate">Gerar livro de manutenção (PDF)</string>
+</resources>

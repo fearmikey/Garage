@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Knowledge (torque specs & repair notes) -->
+    <string name="kb_add_torque">Add Torque Spec</string>
+    <string name="kb_edit_torque">Edit Torque Spec</string>
+    <string name="kb_add_note">Add Repair Note</string>
+    <string name="kb_edit_note">Edit Repair Note</string>
+    <string name="kb_cd_add">Add</string>
+    <string name="kb_empty">No torque specs or notes found.\nTap the + button to add one.</string>
+    <string name="kb_torque_specs">Torque Specs</string>
+    <string name="kb_repair_notes">Repair Notes</string>
+    <string name="kb_component">Component (e.g. Lug Nuts)</string>
+    <string name="kb_torque_unit">Torque (%1$s)</string>
+    <string name="kb_content">Content (Markdown supported)</string>
+
+    <!-- Dashboard -->
+    <string name="dash_empty">No vehicles yet.\nTap + to add your first one.</string>
+    <string name="dash_license_back">Back of License</string>
+    <string name="dash_fuel_trend">Fuel Trend</string>
+    <string name="dash_fuel_trend_cd">Fuel trend over last %1$d fill-ups. Latest %2$s.</string>
+
+    <!-- Recalls -->
+    <string name="recalls_vin_copied">VIN (%1$s) copied to clipboard for easy pasting</string>
+    <string name="recalls_missing_info">Add this vehicle\'s year, make and model on the Edit screen to check for recalls.</string>
+    <string name="recalls_ymm_title">Year / Make / Model Campaigns</string>
+    <string name="recalls_ymm_subtitle">General safety recalls applicable to %1$s:</string>
+    <string name="recalls_none_for_model">No open safety recalls reported for general %1$s.</string>
+    <string name="recalls_none">No open safety recalls found for this vehicle.</string>
+    <string name="recalls_vin_title">Official VIN Recall Check</string>
+    <string name="recalls_vin_desc">Verify exact uncompleted recall records for VIN %1$s directly on NHTSA.gov. (Your VIN is automatically copied to your clipboard so you can easily paste it on NHTSA\'s website).</string>
+    <string name="recalls_no_vin">No VIN saved for this vehicle. Add a VIN on the Edit screen to verify exact VIN recall status directly on NHTSA.gov.</string>
+    <string name="recalls_campaign">Campaign #%1$s</string>
+    <string name="recalls_state_open">Open</string>
+    <string name="recalls_state_serviced">Serviced</string>
+    <string name="recalls_state_not_affected">Not Affected</string>
+    <string name="recalls_state_serviced_long">Serviced / Completed</string>
+    <string name="recalls_state_not_affected_long">Does Not Affect Vehicle</string>
+    <string name="recalls_reported">Reported %1$s</string>
+    <string name="recalls_consequence">Consequence: %1$s</string>
+    <string name="recalls_remedy">Remedy: %1$s</string>
+
+    <!-- Home screen widgets -->
+    <string name="widget_recent_tank">Recent Tank: %1$s</string>
+    <string name="widget_recent">Recent: %1$s</string>
+    <string name="widget_all_caught_up">All caught up!</string>
+    <string name="widget_log_fuel">Log Fuel</string>
+    <string name="widget_odometer">Odometer</string>
+    <string name="widget_log_service">Log Service</string>
+    <string name="widget_due">Due</string>
+    <string name="widget_no_mileage">No mileage</string>
+    <string name="widget_update">Update</string>
+</resources>

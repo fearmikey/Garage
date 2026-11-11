@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Maintenance schedule / suggestions -->
+    <string name="sugg_cd_add_rule">Add custom rule</string>
+    <string name="sugg_empty">No suggestions yet.\nLog some maintenance and mileage to see what\'s due.</string>
+    <string name="sugg_custom_rules">Your custom rules</string>
+    <string name="sugg_ignored_tasks">Ignored tasks (%1$d)</string>
+    <string name="sugg_months_short">%1$d mo</string>
+    <string name="sugg_cd_edit_rule">Edit rule</string>
+    <string name="sugg_cd_delete_rule">Delete custom rule</string>
+    <string name="sugg_last_done_at">last done at %1$s</string>
+    <string name="sugg_due_at">due at %1$s</string>
+    <string name="sugg_due_by">due by %1$s</string>
+    <string name="sugg_ignore">Ignore</string>
+    <string name="sugg_log_now">Log now</string>
+    <string name="sugg_ignored_for_vehicle">Ignored for this vehicle</string>
+    <string name="sugg_restore">Restore</string>
+    <string name="sugg_edit_title">Edit Service Interval</string>
+    <string name="sugg_add_title">Add Custom Rule</string>
+    <string name="sugg_presets">Schedule Presets</string>
+    <string name="sugg_presets_desc">Apply pre-built maintenance templates (Towing, EV, Commuter, Classic).</string>
+    <string name="sugg_task_name">Task name</string>
+    <string name="sugg_interval_distance">Interval (%1$s)</string>
+    <string name="sugg_interval_months">Interval (months)</string>
+
+    <!-- Cost of ownership -->
+    <string name="cost_fuel_fillup">Fuel Fill-Up</string>
+    <string name="cost_fuel">Fuel</string>
+    <string name="cost_charging_session">Charging Session (%1$s)</string>
+    <string name="cost_ev_charging">EV Charging</string>
+    <string name="cost_modifications">Modifications</string>
+    <string name="cost_vehicle_purchase">Vehicle Purchase</string>
+    <string name="cost_maintenance">Maintenance</string>
+    <string name="cost_maintenance_repairs">Maintenance &amp; Repairs</string>
+    <string name="cost_fuel_spent">Fuel Spent</string>
+    <string name="cost_collapse">Collapse</string>
+    <string name="cost_expand">Expand</string>
+    <plurals name="cost_records">
+        <item quantity="one">%d record</item>
+        <item quantity="other">%d records</item>
+    </plurals>
+    <plurals name="cost_fillups">
+        <item quantity="one">%d fill-up</item>
+        <item quantity="other">%d fill-ups</item>
+    </plurals>
+    <plurals name="cost_entries_share">
+        <item quantity="one">%1$d entry · %2$s%% of total</item>
+        <item quantity="other">%1$d entries · %2$s%% of total</item>
+    </plurals>
+
+    <!-- Trips -->
+    <string name="trip_cat_business">Business</string>
+    <string name="trip_cat_personal">Personal</string>
+    <string name="trip_cat_commute">Commute</string>
+    <string name="trip_cat_medical">Medical</string>
+    <string name="trip_cat_charity">Charity</string>
+    <string name="trip_cat_other">Other</string>
+    <string name="trip_cd_add">Add trip</string>
+    <string name="trip_cd_more">More options</string>
+    <string name="trip_empty">No trips logged yet.\nTap \'Start GPS Trip\' or the + button to add one.</string>
+    <string name="trip_deduction">Deduction: %1$s</string>
+    <string name="trip_start_gps">Start GPS Trip</string>
+    <string name="trip_paused">Trip Paused</string>
+    <string name="trip_tracking">Tracking Trip…</string>
+    <string name="trip_resume">Resume</string>
+    <string name="trip_pause">Pause</string>
+    <string name="trip_stop_save">Stop &amp; Save</string>
+    <string name="trip_log_title">Log Trip</string>
+    <string name="trip_edit_title">Edit Trip</string>
+    <string name="trip_distance">Distance (%1$s)</string>
+    <string name="trip_rate">Reimbursement Rate (%1$s/%2$s)</string>
+    <string name="trip_notes">Notes (Destination, Purpose)</string>
+</resources>

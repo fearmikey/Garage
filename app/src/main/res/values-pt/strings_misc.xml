@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="parts_edit_title">Editar peças e fluidos</string>
+    <string name="parts_autofill">Preencher com valores estimados</string>
+    <string name="parts_autofill_msg">As capacidades de fluidos e os dados de peças preenchidos automaticamente são estimados a partir do VIN decodificado e dos dados do motor.\n\nConfira todos os valores no manual do proprietário antes de comprar fluidos ou fazer manutenção.</string>
+    <string name="parts_apply_understand">Entendi, aplicar</string>
+    <string name="vehicle_cd_obd">Scanner OBD2</string>
+    <string name="vehicle_cd_export">Exportar registro de manutenção</string>
+    <string name="vehicle_unnamed">Veículo sem nome</string>
+    <string name="tabs_cd_reorder">Reordenar aba</string>
+    <string name="currency_select_title">Escolher moeda</string>
+    <string name="currency_search">Buscar moedas…</string>
+    <string name="currency_none_found">Nenhuma moeda encontrada.</string>
+    <string name="bmac_title">Apoie o Garage</string>
+    <string name="bmac_message">Gostando do Garage? Se o app for útil para você, considere apoiar o desenvolvimento de código aberto!</string>
+    <string name="bmac_dont_ask">Não perguntar novamente</string>
+    <string name="bmac_later">Talvez mais tarde</string>
+    <string name="status_overdue">Atrasado</string>
+    <string name="status_upcoming">Em breve</string>
+    <string name="status_on_track">Em dia</string>
+    <string name="status_done">Concluído</string>
+    <string name="odo_vehicle">Veículo</string>
+    <string name="odo_current">Atual: %1$s</string>
+    <string name="odo_new_reading">Nova leitura do hodômetro (%1$s)</string>
+    <string name="odo_notes_optional">Observações (opcional)</string>
+    <string name="odo_notes_placeholder">ex.: registro semanal</string>
+    <string name="trend_tap_to_edit">Toque para editar</string>
+    <string name="trend_unusual_reading">Leitura incomum</string>
+    <string name="url_invalid">URL inválido</string>
+    <string name="url_open_failed">Não foi possível abrir o link</string>
+</resources>

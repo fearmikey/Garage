@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="maint_cd_add_odometer">Dodaj stan licznika</string>
+    <string name="maint_cd_add_record">Dodaj wpis serwisowy</string>
+    <string name="maint_cd_edit_record">Edytuj wpis</string>
+    <string name="maint_cd_delete_record">Usuń wpis</string>
+    <string name="maint_empty">Brak zapisanych serwisów.\nDotknij +, aby dodać pierwszy wpis.</string>
+    <string name="maint_no_matches">Żaden wpis nie pasuje do filtrów.</string>
+    <string name="maint_clear_filters">Wyczyść filtry</string>
+    <string name="maint_delete_title">Usuń wpis</string>
+    <string name="maint_delete_message">Czy na pewno chcesz usunąć ten wpis?</string>
+    <string name="maint_receipt_invoice">Paragon / Faktura</string>
+    <string name="maint_receipt_image">Zdjęcie paragonu</string>
+    <string name="maint_pdf_receipt">Paragon PDF</string>
+    <string name="maint_open_with_app">Otwórz w aplikacji</string>
+    <string name="maint_add_title">Dodaj wpis serwisowy</string>
+    <string name="maint_date">Data</string>
+    <string name="maint_task_other">Inne / własne</string>
+    <string name="maint_specific_task">Konkretna czynność</string>
+    <string name="maint_description">Opis</string>
+    <string name="maint_mileage_unit">Przebieg (%1$s)</string>
+    <string name="maint_cost_unit">Koszt (%1$s)</string>
+    <string name="maint_inspected_only">Tylko sprawdzono (wymiana później)</string>
+    <string name="maint_remind_in_distance">Przypomnij za (%1$s) *</string>
+    <string name="maint_remind_in_months">Przypomnij za (miesiące) *</string>
+    <string name="maint_attached_pdf">Załączony paragon PDF</string>
+    <string name="maint_pdf_document">Dokument PDF</string>
+    <string name="maint_change_attachment">Zmień załącznik</string>
+    <string name="maint_remove_attachment">Usuń załącznik</string>
+    <string name="maint_attach_receipt">Załącz paragon / fakturę (zdjęcie lub PDF)</string>
+    <string name="maint_open_receipt">Otwórz paragon</string>
+    <string name="maint_open_file_failed">Nie można otworzyć pliku</string>
+    <string name="maint_odometer_update">Aktualizacja licznika</string>
+    <string name="maint_search_placeholder">Szukaj opisu lub czynności</string>
+    <string name="maint_close_search">Zamknij wyszukiwanie</string>
+    <string name="maint_search">Szukaj</string>
+    <string name="maint_has_receipt">Z paragonem</string>
+    <string name="maint_hide_auto">Ukryj odczyty licznika i skany</string>
+    <string name="maint_showing_count">Wyświetlono %1$d z %2$d</string>
+    <plurals name="maint_categories_count">
+        <item quantity="one">%d kategoria</item>
+        <item quantity="few">%d kategorie</item>
+        <item quantity="many">%d kategorii</item>
+        <item quantity="other">%d kategorii</item>
+    </plurals>
+    <string name="template_title">Szablony harmonogramu serwisu</string>
+    <string name="template_subtitle">Wybierz szablon, aby dodać dopasowane interwały serwisowe dla tego pojazdu.</string>
+    <string name="template_included_rules">Zawarte reguły (%1$d):</string>
+    <plurals name="template_months">
+        <item quantity="one">%d miesiąc</item>
+        <item quantity="few">%d miesiące</item>
+        <item quantity="many">%d miesięcy</item>
+        <item quantity="other">%d miesiąca</item>
+    </plurals>
+    <string name="template_interval_or">%1$s lub %2$s</string>
+    <string name="template_every">Co %1$s</string>
+    <string name="template_apply">Zastosuj szablon „%1$s”</string>
+</resources>

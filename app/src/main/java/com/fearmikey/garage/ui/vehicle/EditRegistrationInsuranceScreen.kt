@@ -219,10 +219,10 @@ fun EditRegistrationInsuranceScreenContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Edit Documents") },
+                title = { Text(stringResource(R.string.doc_edit_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))
                     }
                 },
             )
@@ -245,13 +245,13 @@ fun EditRegistrationInsuranceScreenContent(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 val tabTitles = listOf(
-                    "Tag & Reg",
-                    "Insurance",
-                    "Inspection",
-                    "Smog / Emissions",
-                    "Stickers",
-                    "Toll / Parking",
-                    "Purchase",
+                    stringResource(R.string.doc_tab_registration),
+                    stringResource(R.string.doc_tab_insurance),
+                    stringResource(R.string.doc_tab_inspection),
+                    stringResource(R.string.doc_tab_emissions),
+                    stringResource(R.string.doc_tab_stickers),
+                    stringResource(R.string.doc_tab_toll),
+                    stringResource(R.string.doc_tab_purchase),
                 )
                 tabTitles.forEachIndexed { index, title ->
                     Tab(
@@ -298,7 +298,7 @@ fun EditRegistrationInsuranceScreenContent(
                         placeholder = { Text(stringResource(R.string.doc_select_date)) },
                         trailingIcon = {
                             IconButton(onClick = { showRegDatePicker = true }) {
-                                Icon(Icons.Default.CalendarToday, contentDescription = "Select Expiration Date")
+                                Icon(Icons.Default.CalendarToday, contentDescription = stringResource(R.string.doc_select_expiration_date))
                             }
                         },
                         modifier = Modifier
@@ -320,7 +320,7 @@ fun EditRegistrationInsuranceScreenContent(
                         value = uiState.registrationNotes,
                         onValueChange = onRegistrationNotesChanged,
                         label = { Text(stringResource(R.string.doc_reg_notes_label)) },
-                        placeholder = { Text("VIN on title, registration office notes...") },
+                        placeholder = { Text(stringResource(R.string.doc_reg_notes_placeholder)) },
                         minLines = 2,
                         maxLines = 3,
                         keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
@@ -328,7 +328,7 @@ fun EditRegistrationInsuranceScreenContent(
                     )
 
                     ImagePickerBox(
-                        title = "Registration Card – Front / Page 1",
+                        title = stringResource(R.string.doc_reg_card_front),
                         pickedUri = uiState.pickedRegistrationImageUri,
                         existingFilename = uiState.registrationImageFilename,
                         imageFileProvider = imageFileProvider,
@@ -341,7 +341,7 @@ fun EditRegistrationInsuranceScreenContent(
                     )
 
                     ImagePickerBox(
-                        title = "Registration Card – Back / Page 2",
+                        title = stringResource(R.string.doc_reg_card_back),
                         pickedUri = uiState.pickedRegistrationImageUri2,
                         existingFilename = uiState.registrationImageFilename2,
                         imageFileProvider = imageFileProvider,
@@ -376,7 +376,7 @@ fun EditRegistrationInsuranceScreenContent(
                         placeholder = { Text(stringResource(R.string.license_select_exp_date)) },
                         trailingIcon = {
                             IconButton(onClick = { showInspExpDatePicker = true }) {
-                                Icon(Icons.Default.CalendarToday, contentDescription = "Select Inspection Expiration")
+                                Icon(Icons.Default.CalendarToday, contentDescription = stringResource(R.string.doc_select_expiration_date))
                             }
                         },
                         modifier = Modifier
@@ -392,7 +392,7 @@ fun EditRegistrationInsuranceScreenContent(
                         placeholder = { Text(stringResource(R.string.doc_select_date)) },
                         trailingIcon = {
                             IconButton(onClick = { showInspDateDatePicker = true }) {
-                                Icon(Icons.Default.CalendarToday, contentDescription = "Select Last Inspected Date")
+                                Icon(Icons.Default.CalendarToday, contentDescription = stringResource(R.string.doc_select_date))
                             }
                         },
                         modifier = Modifier
@@ -414,7 +414,7 @@ fun EditRegistrationInsuranceScreenContent(
                         value = uiState.inspectionNotes,
                         onValueChange = onInspectionNotesChanged,
                         label = { Text(stringResource(R.string.doc_insp_notes_label)) },
-                        placeholder = { Text("Station name, certificate #...") },
+                        placeholder = { Text(stringResource(R.string.doc_insp_notes_placeholder)) },
                         minLines = 2,
                         maxLines = 3,
                         keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
@@ -440,11 +440,11 @@ fun EditRegistrationInsuranceScreenContent(
                         value = uiState.emissionsExpiration?.toDisplayDate().orEmpty(),
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Emissions Expiration / Due Date") },
-                        placeholder = { Text("Select due date") },
+                        label = { Text(stringResource(R.string.doc_emissions_exp_label)) },
+                        placeholder = { Text(stringResource(R.string.doc_select_due_date)) },
                         trailingIcon = {
                             IconButton(onClick = { showEmissionsExpDatePicker = true }) {
-                                Icon(Icons.Default.CalendarToday, contentDescription = "Select Emissions Expiration")
+                                Icon(Icons.Default.CalendarToday, contentDescription = stringResource(R.string.doc_select_expiration_date))
                             }
                         },
                         modifier = Modifier
@@ -456,11 +456,11 @@ fun EditRegistrationInsuranceScreenContent(
                         value = uiState.emissionsDate?.toDisplayDate().orEmpty(),
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Last Smog Test Date") },
-                        placeholder = { Text("Select date tested") },
+                        label = { Text(stringResource(R.string.doc_last_smog_label)) },
+                        placeholder = { Text(stringResource(R.string.doc_select_date_tested)) },
                         trailingIcon = {
                             IconButton(onClick = { showEmissionsDateDatePicker = true }) {
-                                Icon(Icons.Default.CalendarToday, contentDescription = "Select Last Smog Test Date")
+                                Icon(Icons.Default.CalendarToday, contentDescription = stringResource(R.string.doc_select_date))
                             }
                         },
                         modifier = Modifier
@@ -471,8 +471,8 @@ fun EditRegistrationInsuranceScreenContent(
                     OutlinedTextField(
                         value = uiState.emissionsResult,
                         onValueChange = onEmissionsResultChanged,
-                        label = { Text("Test Result") },
-                        placeholder = { Text("e.g., Passed, Failed, Exempt") },
+                        label = { Text(stringResource(R.string.doc_emissions_result_label)) },
+                        placeholder = { Text(stringResource(R.string.doc_emissions_result_placeholder)) },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
                         modifier = Modifier.fillMaxWidth(),
@@ -481,8 +481,8 @@ fun EditRegistrationInsuranceScreenContent(
                     OutlinedTextField(
                         value = uiState.emissionsNotes,
                         onValueChange = onEmissionsNotesChanged,
-                        label = { Text("Emissions Notes / Station Details") },
-                        placeholder = { Text("Station location, certificate #, notes...") },
+                        label = { Text(stringResource(R.string.doc_emissions_notes_label)) },
+                        placeholder = { Text(stringResource(R.string.doc_emissions_notes_placeholder)) },
                         minLines = 2,
                         maxLines = 3,
                         keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
@@ -498,7 +498,7 @@ fun EditRegistrationInsuranceScreenContent(
                         ) {
                             Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text("Delete Emissions & Smog Info")
+                            Text(stringResource(R.string.doc_delete_emissions_btn))
                         }
                     }
                 }
@@ -508,11 +508,11 @@ fun EditRegistrationInsuranceScreenContent(
                         value = uiState.inspectionStickerExpiration?.toDisplayDate().orEmpty(),
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Sticker Renewal / Expiration Date") },
-                        placeholder = { Text("Select expiration date") },
+                        label = { Text(stringResource(R.string.doc_sticker_exp_label)) },
+                        placeholder = { Text(stringResource(R.string.doc_select_expiration_date)) },
                         trailingIcon = {
                             IconButton(onClick = { showStickerExpDatePicker = true }) {
-                                Icon(Icons.Default.CalendarToday, contentDescription = "Select Sticker Expiration")
+                                Icon(Icons.Default.CalendarToday, contentDescription = stringResource(R.string.doc_select_expiration_date))
                             }
                         },
                         modifier = Modifier
@@ -523,8 +523,8 @@ fun EditRegistrationInsuranceScreenContent(
                     OutlinedTextField(
                         value = uiState.inspectionStickerNumber,
                         onValueChange = onInspectionStickerNumberChanged,
-                        label = { Text("Sticker / Decal Number") },
-                        placeholder = { Text("e.g., STK-2025-9988") },
+                        label = { Text(stringResource(R.string.doc_sticker_number_label)) },
+                        placeholder = { Text(stringResource(R.string.doc_sticker_number_placeholder)) },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters),
                         modifier = Modifier.fillMaxWidth(),
@@ -533,8 +533,8 @@ fun EditRegistrationInsuranceScreenContent(
                     OutlinedTextField(
                         value = uiState.inspectionStickerNotes,
                         onValueChange = onInspectionStickerNotesChanged,
-                        label = { Text("Sticker Notes / Location") },
-                        placeholder = { Text("e.g., Windshield bottom left, local county decal...") },
+                        label = { Text(stringResource(R.string.doc_sticker_notes_label)) },
+                        placeholder = { Text(stringResource(R.string.doc_sticker_notes_placeholder)) },
                         minLines = 2,
                         maxLines = 3,
                         keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
@@ -550,7 +550,7 @@ fun EditRegistrationInsuranceScreenContent(
                         ) {
                             Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text("Delete Inspection Sticker Info")
+                            Text(stringResource(R.string.doc_delete_sticker_btn))
                         }
                     }
                 }
@@ -559,8 +559,8 @@ fun EditRegistrationInsuranceScreenContent(
                     OutlinedTextField(
                         value = uiState.insuranceProvider,
                         onValueChange = onInsuranceProviderChanged,
-                        label = { Text("Insurance Company / Provider") },
-                        placeholder = { Text("e.g., Geico, State Farm, Progressive") },
+                        label = { Text(stringResource(R.string.doc_insur_provider_label)) },
+                        placeholder = { Text(stringResource(R.string.doc_insur_provider_placeholder)) },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
                         modifier = Modifier.fillMaxWidth(),
@@ -569,8 +569,8 @@ fun EditRegistrationInsuranceScreenContent(
                     OutlinedTextField(
                         value = uiState.policyNumber,
                         onValueChange = onPolicyNumberChanged,
-                        label = { Text("Insurance Policy Number") },
-                        placeholder = { Text("e.g., POL-987654321") },
+                        label = { Text(stringResource(R.string.doc_insur_policy_num_label)) },
+                        placeholder = { Text(stringResource(R.string.doc_insur_policy_placeholder)) },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters),
                         modifier = Modifier.fillMaxWidth(),
@@ -580,11 +580,11 @@ fun EditRegistrationInsuranceScreenContent(
                         value = uiState.insuranceExpiration?.toDisplayDate().orEmpty(),
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Policy Expiration") },
-                        placeholder = { Text("Select date") },
+                        label = { Text(stringResource(R.string.doc_insur_exp_label)) },
+                        placeholder = { Text(stringResource(R.string.doc_select_date)) },
                         trailingIcon = {
                             IconButton(onClick = { showInsDatePicker = true }) {
-                                Icon(Icons.Default.CalendarToday, contentDescription = "Select Policy Expiration Date")
+                                Icon(Icons.Default.CalendarToday, contentDescription = stringResource(R.string.doc_select_expiration_date))
                             }
                         },
                         modifier = Modifier
@@ -595,7 +595,7 @@ fun EditRegistrationInsuranceScreenContent(
                     OutlinedTextField(
                         value = uiState.insurancePremium,
                         onValueChange = onInsurancePremiumChanged,
-                        label = { Text("Premium / Cost (Optional)") },
+                        label = { Text(stringResource(R.string.doc_insur_premium_label)) },
                         prefix = { Text(uiState.currencySymbol) },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
@@ -605,8 +605,8 @@ fun EditRegistrationInsuranceScreenContent(
                     OutlinedTextField(
                         value = uiState.insuranceAgentContact,
                         onValueChange = onInsuranceAgentContactChanged,
-                        label = { Text("Agent / Claims Contact Info") },
-                        placeholder = { Text("e.g., John Smith 555-0199 or 1-800-CLAIM") },
+                        label = { Text(stringResource(R.string.doc_insur_contact_label)) },
+                        placeholder = { Text(stringResource(R.string.doc_insur_contact_placeholder)) },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
                         modifier = Modifier.fillMaxWidth(),
@@ -615,8 +615,8 @@ fun EditRegistrationInsuranceScreenContent(
                     OutlinedTextField(
                         value = uiState.insuranceNotes,
                         onValueChange = onInsuranceNotesChanged,
-                        label = { Text("Policy Notes / Coverages") },
-                        placeholder = { Text("Deductibles, roadside assistance, coverages...") },
+                        label = { Text(stringResource(R.string.doc_insur_notes_label)) },
+                        placeholder = { Text(stringResource(R.string.doc_insur_notes_placeholder)) },
                         minLines = 2,
                         maxLines = 3,
                         keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
@@ -624,7 +624,7 @@ fun EditRegistrationInsuranceScreenContent(
                     )
 
                     ImagePickerBox(
-                        title = "Insurance Card Photo",
+                        title = stringResource(R.string.doc_insur_card_photo),
                         pickedUri = uiState.pickedInsuranceImageUri,
                         existingFilename = uiState.insuranceImageFilename,
                         imageFileProvider = imageFileProvider,
@@ -645,7 +645,7 @@ fun EditRegistrationInsuranceScreenContent(
                         ) {
                             Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text("Delete Insurance Policy Info")
+                            Text(stringResource(R.string.doc_delete_insur_btn))
                         }
                     }
                 }
@@ -655,11 +655,11 @@ fun EditRegistrationInsuranceScreenContent(
                         value = uiState.tollPassParkingExpiration?.toDisplayDate().orEmpty(),
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Pass / Permit Expiration Date") },
-                        placeholder = { Text("Select expiration date") },
+                        label = { Text(stringResource(R.string.doc_toll_exp_label)) },
+                        placeholder = { Text(stringResource(R.string.doc_select_expiration_date)) },
                         trailingIcon = {
                             IconButton(onClick = { showTollParkingExpDatePicker = true }) {
-                                Icon(Icons.Default.CalendarToday, contentDescription = "Select Toll Pass Expiration")
+                                Icon(Icons.Default.CalendarToday, contentDescription = stringResource(R.string.doc_select_expiration_date))
                             }
                         },
                         modifier = Modifier
@@ -670,8 +670,8 @@ fun EditRegistrationInsuranceScreenContent(
                     OutlinedTextField(
                         value = uiState.tollPassParkingAccount,
                         onValueChange = onTollPassParkingAccountChanged,
-                        label = { Text("Account / Tag / Permit #") },
-                        placeholder = { Text("e.g., EZPass #1234567, Resident Permit #88") },
+                        label = { Text(stringResource(R.string.doc_toll_account_label)) },
+                        placeholder = { Text(stringResource(R.string.doc_toll_account_placeholder)) },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters),
                         modifier = Modifier.fillMaxWidth(),
@@ -680,8 +680,8 @@ fun EditRegistrationInsuranceScreenContent(
                     OutlinedTextField(
                         value = uiState.tollPassParkingNotes,
                         onValueChange = onTollPassParkingNotesChanged,
-                        label = { Text("Notes / Provider Details") },
-                        placeholder = { Text("Transponder serial, parking spot #, zone notes...") },
+                        label = { Text(stringResource(R.string.doc_toll_notes_label)) },
+                        placeholder = { Text(stringResource(R.string.doc_toll_notes_placeholder)) },
                         minLines = 2,
                         maxLines = 3,
                         keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
@@ -697,7 +697,7 @@ fun EditRegistrationInsuranceScreenContent(
                         ) {
                             Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text("Delete Toll Pass & Parking Info")
+                            Text(stringResource(R.string.doc_delete_toll_btn))
                         }
                     }
                 }
@@ -706,7 +706,7 @@ fun EditRegistrationInsuranceScreenContent(
                     OutlinedTextField(
                         value = uiState.purchasePrice,
                         onValueChange = onPurchasePriceChanged,
-                        label = { Text("Purchase Price") },
+                        label = { Text(stringResource(R.string.vehicle_purchase_price)) },
                         prefix = { Text(uiState.currencySymbol) },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
@@ -717,11 +717,11 @@ fun EditRegistrationInsuranceScreenContent(
                         value = uiState.purchaseDate?.toDisplayDate().orEmpty(),
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Purchase Date") },
+                        label = { Text(stringResource(R.string.vehicle_purchase_date)) },
                         placeholder = { Text(stringResource(R.string.doc_select_date)) },
                         trailingIcon = {
                             IconButton(onClick = { showPurchaseDatePicker = true }) {
-                                Icon(Icons.Default.CalendarToday, contentDescription = "Select Purchase Date")
+                                Icon(Icons.Default.CalendarToday, contentDescription = stringResource(R.string.vehicle_select_purchase_date))
                             }
                         },
                         modifier = Modifier
@@ -732,8 +732,8 @@ fun EditRegistrationInsuranceScreenContent(
                     OutlinedTextField(
                         value = uiState.purchaseSeller,
                         onValueChange = onPurchaseSellerChanged,
-                        label = { Text("Seller / Dealer") },
-                        placeholder = { Text("e.g., Main Street Toyota, private sale") },
+                        label = { Text(stringResource(R.string.doc_seller_label)) },
+                        placeholder = { Text(stringResource(R.string.doc_seller_placeholder)) },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
                         modifier = Modifier.fillMaxWidth(),
@@ -742,8 +742,8 @@ fun EditRegistrationInsuranceScreenContent(
                     OutlinedTextField(
                         value = uiState.purchaseNotes,
                         onValueChange = onPurchaseNotesChanged,
-                        label = { Text("Purchase Notes") },
-                        placeholder = { Text("Trade-in, financing, taxes & fees...") },
+                        label = { Text(stringResource(R.string.doc_purchase_notes_label)) },
+                        placeholder = { Text(stringResource(R.string.doc_purchase_notes_placeholder)) },
                         minLines = 2,
                         maxLines = 3,
                         keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
@@ -751,7 +751,7 @@ fun EditRegistrationInsuranceScreenContent(
                     )
 
                     ImagePickerBox(
-                        title = "Bill of Sale",
+                        title = stringResource(R.string.doc_bill_of_sale),
                         pickedUri = uiState.pickedPurchaseImageUri,
                         existingFilename = uiState.purchaseImageFilename,
                         imageFileProvider = imageFileProvider,
@@ -772,7 +772,7 @@ fun EditRegistrationInsuranceScreenContent(
                         ) {
                             Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text("Delete Purchase Info")
+                            Text(stringResource(R.string.doc_delete_purchase_btn))
                         }
                     }
                 }
@@ -785,7 +785,7 @@ fun EditRegistrationInsuranceScreenContent(
                 enabled = !uiState.isSaving,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(if (uiState.isSaving) "Saving..." else "Save Vehicle Documents")
+                Text(stringResource(if (uiState.isSaving) R.string.doc_saving_btn else R.string.doc_save_docs_btn))
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -807,12 +807,12 @@ fun EditRegistrationInsuranceScreenContent(
                         showRegDatePicker = false
                     },
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.common_ok))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showRegDatePicker = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         ) {
@@ -835,12 +835,12 @@ fun EditRegistrationInsuranceScreenContent(
                         showInspExpDatePicker = false
                     },
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.common_ok))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showInspExpDatePicker = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         ) {
@@ -863,12 +863,12 @@ fun EditRegistrationInsuranceScreenContent(
                         showInspDateDatePicker = false
                     },
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.common_ok))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showInspDateDatePicker = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         ) {
@@ -891,12 +891,12 @@ fun EditRegistrationInsuranceScreenContent(
                         showEmissionsExpDatePicker = false
                     },
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.common_ok))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showEmissionsExpDatePicker = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         ) {
@@ -919,12 +919,12 @@ fun EditRegistrationInsuranceScreenContent(
                         showEmissionsDateDatePicker = false
                     },
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.common_ok))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showEmissionsDateDatePicker = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         ) {
@@ -947,12 +947,12 @@ fun EditRegistrationInsuranceScreenContent(
                         showStickerExpDatePicker = false
                     },
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.common_ok))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showStickerExpDatePicker = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         ) {
@@ -975,12 +975,12 @@ fun EditRegistrationInsuranceScreenContent(
                         showInsDatePicker = false
                     },
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.common_ok))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showInsDatePicker = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         ) {
@@ -1003,12 +1003,12 @@ fun EditRegistrationInsuranceScreenContent(
                         showTollParkingExpDatePicker = false
                     },
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.common_ok))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showTollParkingExpDatePicker = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         ) {
@@ -1019,8 +1019,8 @@ fun EditRegistrationInsuranceScreenContent(
     if (showDeleteRegConfirmDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteRegConfirmDialog = false },
-            title = { Text("Delete Tag & Registration Info?") },
-            text = { Text("Are you sure you want to delete tag and registration details for this vehicle?") },
+            title = { Text(stringResource(R.string.doc_delete_reg_title)) },
+            text = { Text(stringResource(R.string.doc_delete_reg_message)) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -1029,12 +1029,12 @@ fun EditRegistrationInsuranceScreenContent(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                 ) {
-                    Text("Delete")
+                    Text(stringResource(R.string.common_delete))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteRegConfirmDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         )
@@ -1043,8 +1043,8 @@ fun EditRegistrationInsuranceScreenContent(
     if (showDeleteInspConfirmDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteInspConfirmDialog = false },
-            title = { Text("Delete State Inspection Info?") },
-            text = { Text("Are you sure you want to delete state inspection details for this vehicle?") },
+            title = { Text(stringResource(R.string.doc_delete_insp_title)) },
+            text = { Text(stringResource(R.string.doc_delete_insp_message)) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -1053,12 +1053,12 @@ fun EditRegistrationInsuranceScreenContent(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                 ) {
-                    Text("Delete")
+                    Text(stringResource(R.string.common_delete))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteInspConfirmDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         )
@@ -1067,8 +1067,8 @@ fun EditRegistrationInsuranceScreenContent(
     if (showDeleteEmissionsConfirmDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteEmissionsConfirmDialog = false },
-            title = { Text("Delete Emissions & Smog Info?") },
-            text = { Text("Are you sure you want to delete emissions / smog test details for this vehicle?") },
+            title = { Text(stringResource(R.string.doc_delete_emissions_title)) },
+            text = { Text(stringResource(R.string.doc_delete_emissions_message)) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -1077,12 +1077,12 @@ fun EditRegistrationInsuranceScreenContent(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                 ) {
-                    Text("Delete")
+                    Text(stringResource(R.string.common_delete))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteEmissionsConfirmDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         )
@@ -1091,8 +1091,8 @@ fun EditRegistrationInsuranceScreenContent(
     if (showDeleteStickerConfirmDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteStickerConfirmDialog = false },
-            title = { Text("Delete Inspection Sticker Info?") },
-            text = { Text("Are you sure you want to delete inspection sticker details for this vehicle?") },
+            title = { Text(stringResource(R.string.doc_delete_sticker_title)) },
+            text = { Text(stringResource(R.string.doc_delete_sticker_message)) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -1101,12 +1101,12 @@ fun EditRegistrationInsuranceScreenContent(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                 ) {
-                    Text("Delete")
+                    Text(stringResource(R.string.common_delete))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteStickerConfirmDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         )
@@ -1115,8 +1115,8 @@ fun EditRegistrationInsuranceScreenContent(
     if (showDeleteInsConfirmDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteInsConfirmDialog = false },
-            title = { Text("Delete Insurance Policy Info?") },
-            text = { Text("Are you sure you want to delete insurance policy details for this vehicle?") },
+            title = { Text(stringResource(R.string.doc_delete_insur_title)) },
+            text = { Text(stringResource(R.string.doc_delete_insur_message)) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -1125,12 +1125,12 @@ fun EditRegistrationInsuranceScreenContent(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                 ) {
-                    Text("Delete")
+                    Text(stringResource(R.string.common_delete))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteInsConfirmDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         )
@@ -1151,12 +1151,12 @@ fun EditRegistrationInsuranceScreenContent(
                         showPurchaseDatePicker = false
                     },
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.common_ok))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showPurchaseDatePicker = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         ) {
@@ -1167,8 +1167,8 @@ fun EditRegistrationInsuranceScreenContent(
     if (showDeletePurchaseConfirmDialog) {
         AlertDialog(
             onDismissRequest = { showDeletePurchaseConfirmDialog = false },
-            title = { Text("Delete Purchase Info?") },
-            text = { Text("Are you sure you want to delete the purchase details for this vehicle?") },
+            title = { Text(stringResource(R.string.doc_delete_purchase_title)) },
+            text = { Text(stringResource(R.string.doc_delete_purchase_message)) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -1177,12 +1177,12 @@ fun EditRegistrationInsuranceScreenContent(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                 ) {
-                    Text("Delete")
+                    Text(stringResource(R.string.common_delete))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeletePurchaseConfirmDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         )
@@ -1191,8 +1191,8 @@ fun EditRegistrationInsuranceScreenContent(
     if (showDeleteTollParkingConfirmDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteTollParkingConfirmDialog = false },
-            title = { Text("Delete Toll Pass & Parking Info?") },
-            text = { Text("Are you sure you want to delete toll pass and parking permit details for this vehicle?") },
+            title = { Text(stringResource(R.string.doc_delete_toll_title)) },
+            text = { Text(stringResource(R.string.doc_delete_toll_message)) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -1201,12 +1201,12 @@ fun EditRegistrationInsuranceScreenContent(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                 ) {
-                    Text("Delete")
+                    Text(stringResource(R.string.common_delete))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteTollParkingConfirmDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         )

@@ -545,16 +545,16 @@ private fun RegionStep(
         subtitle = stringResource(R.string.startup_measurement_system_subtitle),
     ) {
         UnitOptionCard(
-            title = stringResource(R.string.startup_metric_title),
-            subtitle = stringResource(R.string.startup_metric_subtitle),
-            isSelected = uiState.selectedUnits == "metric",
-            onClick = { actions.onSelectUnits("metric") },
-        )
-        UnitOptionCard(
             title = stringResource(R.string.startup_imperial_title),
             subtitle = stringResource(R.string.startup_imperial_subtitle),
             isSelected = uiState.selectedUnits == "imperial",
             onClick = { actions.onSelectUnits("imperial") },
+        )
+        UnitOptionCard(
+            title = stringResource(R.string.startup_metric_title),
+            subtitle = stringResource(R.string.startup_metric_subtitle),
+            isSelected = uiState.selectedUnits == "metric",
+            onClick = { actions.onSelectUnits("metric") },
         )
     }
 
@@ -568,9 +568,7 @@ private fun RegionStep(
         val context = LocalContext.current
         val localeManager = remember {
             try {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-                    context.getSystemService(LocaleManager::class.java)
-                } else null
+                context.getSystemService(LocaleManager::class.java)
             } catch (_: Throwable) {
                 null
             }

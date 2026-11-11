@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="kb_add_torque">Sıkma torku ekle</string>
+    <string name="kb_edit_torque">Sıkma torkunu düzenle</string>
+    <string name="kb_add_note">Onarım notu ekle</string>
+    <string name="kb_edit_note">Onarım notunu düzenle</string>
+    <string name="kb_cd_add">Ekle</string>
+    <string name="kb_empty">Tork değeri veya not yok.\nEklemek için + simgesine dokunun.</string>
+    <string name="kb_torque_specs">Sıkma torkları</string>
+    <string name="kb_repair_notes">Onarım notları</string>
+    <string name="kb_component">Parça (örn. bijon somunları)</string>
+    <string name="kb_torque_unit">Tork (%1$s)</string>
+    <string name="kb_content">İçerik (Markdown desteklenir)</string>
+    <string name="dash_empty">Henüz araç yok.\nİlkini eklemek için + simgesine dokunun.</string>
+    <string name="dash_license_back">Ehliyetin arka yüzü</string>
+    <string name="dash_fuel_trend">Yakıt eğilimi</string>
+    <string name="dash_fuel_trend_cd">Son %1$d yakıt alımındaki tüketim eğilimi. En son: %2$s.</string>
+    <string name="recalls_vin_copied">VIN (%1$s) panoya kopyalandı</string>
+    <string name="recalls_missing_info">Geri çağırmaları kontrol etmek için düzenleme ekranında yıl, marka ve modeli ekleyin.</string>
+    <string name="recalls_ymm_title">Yıl / marka / model kampanyaları</string>
+    <string name="recalls_ymm_subtitle">%1$s için genel güvenlik geri çağırmaları:</string>
+    <string name="recalls_none_for_model">%1$s için açık güvenlik geri çağırması bildirilmedi.</string>
+    <string name="recalls_none">Bu araç için açık güvenlik geri çağırması bulunamadı.</string>
+    <string name="recalls_vin_title">Resmi VIN geri çağırma kontrolü</string>
+    <string name="recalls_vin_desc">%1$s VIN numarası için tamamlanmamış geri çağırmaları doğrudan NHTSA.gov üzerinde kontrol edin. (VIN numaranız NHTSA sitesine yapıştırabilmeniz için otomatik olarak panoya kopyalanır.)</string>
+    <string name="recalls_no_vin">Bu araç için kayıtlı VIN yok. NHTSA.gov üzerinde kontrol etmek için düzenleme ekranında VIN ekleyin.</string>
+    <string name="recalls_campaign">Kampanya #%1$s</string>
+    <string name="recalls_state_open">Açık</string>
+    <string name="recalls_state_serviced">Yapıldı</string>
+    <string name="recalls_state_not_affected">Etkilenmiyor</string>
+    <string name="recalls_state_serviced_long">Yapıldı / tamamlandı</string>
+    <string name="recalls_state_not_affected_long">Bu aracı etkilemiyor</string>
+    <string name="recalls_reported">Bildirildi: %1$s</string>
+    <string name="recalls_consequence">Sonuç: %1$s</string>
+    <string name="recalls_remedy">Çözüm: %1$s</string>
+    <string name="widget_recent_tank">Son depo: %1$s</string>
+    <string name="widget_recent">Son: %1$s</string>
+    <string name="widget_all_caught_up">Her şey güncel!</string>
+    <string name="widget_log_fuel">Yakıt</string>
+    <string name="widget_odometer">Kilometre</string>
+    <string name="widget_log_service">Bakım</string>
+    <string name="widget_due">Zamanı geldi</string>
+    <string name="widget_no_mileage">Kilometre yok</string>
+    <string name="widget_update">Güncelle</string>
+</resources>

@@ -575,7 +575,6 @@ class ObdViewModel @Inject constructor(
     }
 
     override fun onCleared() {
-        super.onCleared()
         bleScanJob?.cancel()
         liveJob?.cancel()
         scanJob?.cancel()

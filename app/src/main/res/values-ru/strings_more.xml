@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sugg_cd_add_rule">Добавить своё правило</string>
+    <string name="sugg_empty">Рекомендаций пока нет.\nЗаписывайте обслуживание и пробег, чтобы видеть, что пора сделать.</string>
+    <string name="sugg_custom_rules">Ваши правила</string>
+    <string name="sugg_ignored_tasks">Игнорируемые работы (%1$d)</string>
+    <string name="sugg_months_short">%1$d мес.</string>
+    <string name="sugg_cd_edit_rule">Изменить правило</string>
+    <string name="sugg_cd_delete_rule">Удалить правило</string>
+    <string name="sugg_last_done_at">последний раз при %1$s</string>
+    <string name="sugg_due_at">срок при %1$s</string>
+    <string name="sugg_due_by">срок до %1$s</string>
+    <string name="sugg_ignore">Игнорировать</string>
+    <string name="sugg_log_now">Записать</string>
+    <string name="sugg_ignored_for_vehicle">Игнорируется для этого автомобиля</string>
+    <string name="sugg_restore">Восстановить</string>
+    <string name="sugg_edit_title">Изменить интервал обслуживания</string>
+    <string name="sugg_add_title">Добавить своё правило</string>
+    <string name="sugg_presets">Шаблоны графика</string>
+    <string name="sugg_presets_desc">Применить готовые шаблоны обслуживания (буксировка, электромобиль, поездки на работу, классика).</string>
+    <string name="sugg_task_name">Название работы</string>
+    <string name="sugg_interval_distance">Интервал (%1$s)</string>
+    <string name="sugg_interval_months">Интервал (месяцы)</string>
+    <string name="cost_fuel_fillup">Заправка</string>
+    <string name="cost_fuel">Топливо</string>
+    <string name="cost_charging_session">Зарядка (%1$s)</string>
+    <string name="cost_ev_charging">Зарядка электромобиля</string>
+    <string name="cost_modifications">Доработки</string>
+    <string name="cost_vehicle_purchase">Покупка автомобиля</string>
+    <string name="cost_maintenance">Обслуживание</string>
+    <string name="cost_maintenance_repairs">Обслуживание и ремонт</string>
+    <string name="cost_fuel_spent">Расходы на топливо</string>
+    <string name="cost_collapse">Свернуть</string>
+    <string name="cost_expand">Развернуть</string>
+    <plurals name="cost_records">
+        <item quantity="one">%d запись</item>
+        <item quantity="few">%d записи</item>
+        <item quantity="many">%d записей</item>
+        <item quantity="other">%d записи</item>
+    </plurals>
+    <plurals name="cost_fillups">
+        <item quantity="one">%d заправка</item>
+        <item quantity="few">%d заправки</item>
+        <item quantity="many">%d заправок</item>
+        <item quantity="other">%d заправки</item>
+    </plurals>
+    <plurals name="cost_entries_share">
+        <item quantity="one">%1$d запись · %2$s%% от общей суммы</item>
+        <item quantity="few">%1$d записи · %2$s%% от общей суммы</item>
+        <item quantity="many">%1$d записей · %2$s%% от общей суммы</item>
+        <item quantity="other">%1$d записи · %2$s%% от общей суммы</item>
+    </plurals>
+    <string name="trip_cat_business">Работа</string>
+    <string name="trip_cat_personal">Личное</string>
+    <string name="trip_cat_commute">Дорога на работу</string>
+    <string name="trip_cat_medical">Медицина</string>
+    <string name="trip_cat_charity">Благотворительность</string>
+    <string name="trip_cat_other">Другое</string>
+    <string name="trip_cd_add">Добавить поездку</string>
+    <string name="trip_cd_more">Другие действия</string>
+    <string name="trip_empty">Поездок пока нет.\nНажмите «Начать GPS-поездку» или +, чтобы добавить.</string>
+    <string name="trip_deduction">Вычет: %1$s</string>
+    <string name="trip_start_gps">Начать GPS-поездку</string>
+    <string name="trip_paused">Поездка приостановлена</string>
+    <string name="trip_tracking">Запись поездки…</string>
+    <string name="trip_resume">Продолжить</string>
+    <string name="trip_pause">Пауза</string>
+    <string name="trip_stop_save">Остановить и сохранить</string>
+    <string name="trip_log_title">Записать поездку</string>
+    <string name="trip_edit_title">Изменить поездку</string>
+    <string name="trip_distance">Расстояние (%1$s)</string>
+    <string name="trip_rate">Ставка компенсации (%1$s/%2$s)</string>
+    <string name="trip_notes">Заметки (куда, зачем)</string>
+</resources>

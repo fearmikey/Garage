@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Shared -->
+    <string name="common_notes">Notes</string>
+    <string name="common_cost">Cost</string>
+    <string name="common_cost_optional">Cost (optional)</string>
+    <string name="common_remove">Remove</string>
+    <string name="common_edit_item">Edit %1$s</string>
+    <string name="common_copy_label">Copy %1$s</string>
+    <string name="common_copied_to_clipboard">%1$s copied to clipboard</string>
+
+    <!-- Vehicle documents: edit screen -->
+    <string name="doc_edit_title">Edit Documents</string>
+    <string name="doc_tab_registration">Tag &amp; Reg</string>
+    <string name="doc_tab_insurance">Insurance</string>
+    <string name="doc_tab_inspection">Inspection</string>
+    <string name="doc_tab_emissions">Smog / Emissions</string>
+    <string name="doc_tab_stickers">Stickers</string>
+    <string name="doc_tab_toll">Toll / Parking</string>
+    <string name="doc_tab_purchase">Purchase</string>
+    <string name="doc_select_expiration_date">Select expiration date</string>
+    <string name="doc_select_due_date">Select due date</string>
+    <string name="doc_select_date_tested">Select date tested</string>
+    <string name="doc_reg_notes_placeholder">VIN on title, registration office notes…</string>
+    <string name="doc_reg_card_front">Registration Card – Front / Page 1</string>
+    <string name="doc_reg_card_back">Registration Card – Back / Page 2</string>
+    <string name="doc_insp_notes_placeholder">Station name, certificate #…</string>
+    <string name="doc_emissions_notes_placeholder">Station location, certificate #, notes…</string>
+    <string name="doc_sticker_exp_label">Sticker Renewal / Expiration Date</string>
+    <string name="doc_sticker_number_label">Sticker / Decal Number</string>
+    <string name="doc_sticker_number_placeholder">e.g., STK-2025-9988</string>
+    <string name="doc_sticker_notes_label">Sticker Notes / Location</string>
+    <string name="doc_sticker_notes_placeholder">e.g., Windshield bottom left, local county decal…</string>
+    <string name="doc_delete_sticker_btn">Delete Inspection Sticker Info</string>
+    <string name="doc_insur_provider_placeholder">e.g., Geico, State Farm, Progressive</string>
+    <string name="doc_insur_policy_placeholder">e.g., POL-987654321</string>
+    <string name="doc_insur_contact_placeholder">e.g., John Smith 555-0199 or 1-800-CLAIM</string>
+    <string name="doc_insur_notes_placeholder">Deductibles, roadside assistance, coverages…</string>
+    <string name="doc_insur_card_photo">Insurance Card Photo</string>
+    <string name="doc_toll_account_placeholder">e.g., EZPass #1234567, Resident Permit #88</string>
+    <string name="doc_toll_notes_placeholder">Transponder serial, parking spot #, zone notes…</string>
+    <string name="doc_seller_label">Seller / Dealer</string>
+    <string name="doc_seller_placeholder">e.g., Main Street Toyota, private sale</string>
+    <string name="doc_purchase_notes_label">Purchase Notes</string>
+    <string name="doc_purchase_notes_placeholder">Trade-in, financing, taxes &amp; fees…</string>
+    <string name="doc_bill_of_sale">Bill of Sale</string>
+    <string name="doc_delete_purchase_btn">Delete Purchase Info</string>
+    <string name="doc_delete_reg_title">Delete Tag &amp; Registration Info?</string>
+    <string name="doc_delete_reg_message">Are you sure you want to delete tag and registration details for this vehicle?</string>
+    <string name="doc_delete_insp_title">Delete State Inspection Info?</string>
+    <string name="doc_delete_insp_message">Are you sure you want to delete state inspection details for this vehicle?</string>
+    <string name="doc_delete_emissions_title">Delete Emissions &amp; Smog Info?</string>
+    <string name="doc_delete_emissions_message">Are you sure you want to delete emissions / smog test details for this vehicle?</string>
+    <string name="doc_delete_sticker_title">Delete Inspection Sticker Info?</string>
+    <string name="doc_delete_sticker_message">Are you sure you want to delete inspection sticker details for this vehicle?</string>
+    <string name="doc_delete_insur_title">Delete Insurance Policy Info?</string>
+    <string name="doc_delete_insur_message">Are you sure you want to delete insurance policy details for this vehicle?</string>
+    <string name="doc_delete_purchase_title">Delete Purchase Info?</string>
+    <string name="doc_delete_purchase_message">Are you sure you want to delete the purchase details for this vehicle?</string>
+    <string name="doc_delete_toll_title">Delete Toll Pass &amp; Parking Info?</string>
+    <string name="doc_delete_toll_message">Are you sure you want to delete toll pass and parking permit details for this vehicle?</string>
+
+    <!-- Vehicle documents: view screen -->
+    <string name="doc_add_other">Add other document</string>
+    <string name="doc_edit_details">Edit details</string>
+    <string name="doc_add_documents">Add vehicle documents</string>
+    <string name="doc_empty_message">No vehicle documents added yet.\nTap + to track registration, inspection, emissions, stickers, insurance, toll passes, or purchase details.\nUse the small button to add any other document (warranty, title, roadside assistance…).</string>
+    <string name="doc_other_documents">Other Documents</string>
+    <string name="doc_section_registration">Vehicle &amp; Tag Registration</string>
+    <string name="doc_license_plate">License plate</string>
+    <string name="doc_no_plate">NO PLATE</string>
+    <string name="doc_renewal_fee">Renewal Fee</string>
+    <string name="doc_reg_document">Registration Document / Card</string>
+    <string name="doc_reg_photo_cd">Registration document photo %1$d</string>
+    <string name="doc_section_inspection">State Vehicle Inspection</string>
+    <string name="doc_station_notes">Notes / Station Info</string>
+    <string name="doc_section_emissions">Emissions &amp; Smog Testing</string>
+    <string name="doc_section_stickers">State &amp; Local Inspection Stickers</string>
+    <string name="doc_section_insurance">Insurance Policy</string>
+    <string name="doc_insurance_provider">Insurance provider</string>
+    <string name="doc_policy_number">Policy Number</string>
+    <string name="doc_premium">Premium / Cost</string>
+    <string name="doc_agent_contact">Agent / Contact</string>
+    <string name="doc_insur_document">Insurance Card / Document</string>
+    <string name="doc_section_toll">Toll Pass &amp; Parking Permits</string>
+    <string name="doc_status_expired">Expired (%1$d d ago)</string>
+    <string name="doc_status_expires_in">Expires in %1$d d</string>
+    <string name="doc_status_active">Active (%1$d d left)</string>
+    <string name="doc_add_item">Add %1$s</string>
+    <string name="doc_close_preview">Close preview</string>
+    <string name="doc_preview">Document preview</string>
+
+    <!-- Custom ("other") documents -->
+    <string name="custom_doc_expiration">Expiration</string>
+    <string name="custom_doc_reference_short">Reference / Policy #</string>
+    <string name="custom_doc_view_pdf">View PDF</string>
+    <string name="custom_doc_view_photo">View Photo</string>
+    <string name="custom_doc_add_title">Add Document</string>
+    <string name="custom_doc_edit_title">Edit Document</string>
+    <string name="custom_doc_name_label">Document name *</string>
+    <string name="custom_doc_name_placeholder">e.g., Extended Warranty, Roadside Assistance, Title</string>
+    <string name="custom_doc_reference_label">Reference / Policy / Contract #</string>
+    <string name="custom_doc_expiration_optional">Expiration (optional)</string>
+    <string name="custom_doc_clear_expiration">Clear expiration</string>
+    <string name="custom_doc_notes_placeholder">Provider, coverage, phone number…</string>
+    <string name="custom_doc_replace_attachment">Replace Photo / PDF</string>
+    <string name="custom_doc_attach">Attach Photo / PDF</string>
+    <string name="custom_doc_save">Save Document</string>
+    <string name="custom_doc_delete">Delete Document</string>
+    <string name="custom_doc_delete_title">Delete %1$s?</string>
+    <string name="custom_doc_delete_message">This document and its attachment will be permanently removed.</string>
+</resources>

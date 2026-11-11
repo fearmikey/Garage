@@ -9,6 +9,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,13 +57,14 @@ fun FuelTrendChart(
 
     val latestText = series.formatValue(points.last().value)
 
+    val chartDescription = stringResource(R.string.dash_fuel_trend_cd, points.size, latestText)
     Column(
         modifier = modifier.semantics {
-            contentDescription = "Fuel trend over last ${points.size} fill-ups. Latest $latestText."
+            contentDescription = chartDescription
         },
     ) {
         TrendHeadline(
-            title = "Fuel Trend",
+            title = stringResource(R.string.dash_fuel_trend),
             latestText = latestText,
             delta = series.deltaFromPrevious,
             higherIsBetter = series.higherIsBetter,
@@ -80,7 +83,7 @@ fun FuelTrendChart(
         TrendFooter(
             startDate = points.first().date,
             endDate = points.last().date,
-            centerText = series.average?.let { "avg ${series.formatValue(it)}" },
+            centerText = series.average?.let { stringResource(R.string.trend_avg, series.formatValue(it)) },
         )
     }
 }

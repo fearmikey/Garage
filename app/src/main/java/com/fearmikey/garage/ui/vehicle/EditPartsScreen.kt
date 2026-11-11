@@ -37,7 +37,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.fearmikey.garage.R
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -135,10 +137,10 @@ private fun EditPartsContent(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text("Edit Parts & Fluids") },
+                    title = { Text(stringResource(R.string.parts_edit_title)) },
                     navigationIcon = {
                         IconButton(onClick = onBack) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))
                         }
                     },
                 )
@@ -200,10 +202,10 @@ private fun EditPartsContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Edit Parts & Fluids") },
+                title = { Text(stringResource(R.string.parts_edit_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))
                     }
                 },
             )
@@ -223,76 +225,76 @@ private fun EditPartsContent(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Icon(Icons.Filled.AutoAwesome, contentDescription = null, modifier = Modifier.padding(end = 8.dp))
-                Text("Auto-fill estimated specs")
+                Text(stringResource(R.string.parts_autofill))
             }
 
-            Text("Oil", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+            Text(stringResource(R.string.parts_group_oil), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
             OutlinedTextField(
                 value = oilViscosity,
                 onValueChange = { oilViscosity = it },
-                label = { Text("Oil viscosity") },
+                label = { Text(stringResource(R.string.parts_oil_viscosity)) },
                 modifier = Modifier.fillMaxWidth(),
             )
             OutlinedTextField(
                 value = oilCapacity,
                 onValueChange = { oilCapacity = it },
-                label = { Text("Oil capacity") },
+                label = { Text(stringResource(R.string.parts_oil_capacity)) },
                 modifier = Modifier.fillMaxWidth(),
             )
             OutlinedTextField(
                 value = oilFilterPartNumber,
                 onValueChange = { oilFilterPartNumber = it },
-                label = { Text("Oil filter part #") },
+                label = { Text(stringResource(R.string.parts_oil_filter_num)) },
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            Text("Ignition", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+            Text(stringResource(R.string.parts_group_ignition), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
             OutlinedTextField(
                 value = sparkPlugPartNumber,
                 onValueChange = { sparkPlugPartNumber = it },
-                label = { Text("Spark plug part #") },
+                label = { Text(stringResource(R.string.parts_spark_plug_num)) },
                 modifier = Modifier.fillMaxWidth(),
             )
             OutlinedTextField(
                 value = sparkPlugGap,
                 onValueChange = { sparkPlugGap = it },
-                label = { Text("Spark plug gap") },
+                label = { Text(stringResource(R.string.parts_spark_plug_gap)) },
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            Text("Filters", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+            Text(stringResource(R.string.parts_group_filters), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
             OutlinedTextField(
                 value = engineAirFilterPartNumber,
                 onValueChange = { engineAirFilterPartNumber = it },
-                label = { Text("Engine air filter part #") },
+                label = { Text(stringResource(R.string.parts_engine_air_filter_num)) },
                 modifier = Modifier.fillMaxWidth(),
             )
             if (!isMotorcycle) {
                 OutlinedTextField(
                     value = cabinAirFilterPartNumber,
                     onValueChange = { cabinAirFilterPartNumber = it },
-                    label = { Text("Cabin air filter part #") },
+                    label = { Text(stringResource(R.string.parts_cabin_air_filter_num)) },
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
 
-            Text("Tires", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+            Text(stringResource(R.string.parts_group_tires), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
             OutlinedTextField(
                 value = tireSizeFront,
                 onValueChange = { tireSizeFront = it },
-                label = { Text("Front tire size") },
+                label = { Text(stringResource(R.string.parts_front_tire_size)) },
                 modifier = Modifier.fillMaxWidth(),
             )
             OutlinedTextField(
                 value = tireSizeRear,
                 onValueChange = { tireSizeRear = it },
-                label = { Text("Rear tire size") },
+                label = { Text(stringResource(R.string.parts_rear_tire_size)) },
                 modifier = Modifier.fillMaxWidth(),
             )
             OutlinedTextField(
                 value = tirePsiFront,
                 onValueChange = { tirePsiFront = it },
-                label = { Text("Front tire pressure") },
+                label = { Text(stringResource(R.string.parts_front_tire_psi)) },
                 suffix = { Text(pressureUnit) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth(),
@@ -300,18 +302,18 @@ private fun EditPartsContent(
             OutlinedTextField(
                 value = tirePsiRear,
                 onValueChange = { tirePsiRear = it },
-                label = { Text("Rear tire pressure") },
+                label = { Text(stringResource(R.string.parts_rear_tire_psi)) },
                 suffix = { Text(pressureUnit) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth(),
             )
 
             if (!isMotorcycle) {
-                Text("Wipers", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                Text(stringResource(R.string.parts_group_wipers), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                 OutlinedTextField(
                     value = wiperBladeSizeDriver,
                     onValueChange = { wiperBladeSizeDriver = it },
-                    label = { Text("Driver wiper size") },
+                    label = { Text(stringResource(R.string.parts_driver_wiper)) },
                     suffix = { Text(wiperUnit) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     modifier = Modifier.fillMaxWidth(),
@@ -319,7 +321,7 @@ private fun EditPartsContent(
                 OutlinedTextField(
                     value = wiperBladeSizePassenger,
                     onValueChange = { wiperBladeSizePassenger = it },
-                    label = { Text("Passenger wiper size") },
+                    label = { Text(stringResource(R.string.parts_passenger_wiper)) },
                     suffix = { Text(wiperUnit) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     modifier = Modifier.fillMaxWidth(),
@@ -327,7 +329,7 @@ private fun EditPartsContent(
                 OutlinedTextField(
                     value = wiperBladeSizeRear,
                     onValueChange = { wiperBladeSizeRear = it },
-                    label = { Text("Rear wiper size") },
+                    label = { Text(stringResource(R.string.parts_rear_wiper)) },
                     suffix = { Text(wiperUnit) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     modifier = Modifier.fillMaxWidth(),
@@ -360,7 +362,7 @@ private fun EditPartsContent(
                 },
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text("Save")
+                Text(stringResource(R.string.common_save))
             }
         }
     }
@@ -375,11 +377,10 @@ private fun EditPartsContent(
                     tint = MaterialTheme.colorScheme.primary,
                 )
             },
-            title = { Text("Verify with Owner's Manual") },
+            title = { Text(stringResource(R.string.parts_verify_title)) },
             text = {
                 Text(
-                    "Auto-filled fluid capacities and part specs are estimated using decoded VIN and engine data.\n\n" +
-                        "Please double-check all values with your official owner's manual to ensure accuracy before purchasing fluids or servicing your vehicle.",
+                    stringResource(R.string.parts_autofill_msg),
                     style = MaterialTheme.typography.bodyMedium,
                 )
             },
@@ -390,12 +391,12 @@ private fun EditPartsContent(
                         applyEstimates(onGetEstimates(), overwriteAll = true)
                     },
                 ) {
-                    Text("Apply & Understand")
+                    Text(stringResource(R.string.parts_apply_understand))
                 }
             },
             dismissButton = {
                 OutlinedButton(onClick = { showAutoFillWarningDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         )

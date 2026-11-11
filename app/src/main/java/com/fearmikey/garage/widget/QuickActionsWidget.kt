@@ -21,6 +21,7 @@ import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.padding
 import androidx.glance.layout.width
 import com.fearmikey.garage.MainActivity
+import com.fearmikey.garage.R
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.flow.first
 
@@ -60,7 +61,7 @@ private fun QuickActionsWidgetContent(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Button(
-            text = "Log Fuel",
+            text = context.getString(R.string.widget_log_fuel),
             onClick = actionStartActivity(
                 actionIntent(context, MainActivity.ACTION_LOG_FUEL, targetVehicleId),
             ),
@@ -68,7 +69,7 @@ private fun QuickActionsWidgetContent(
         )
         Spacer(modifier = GlanceModifier.width(4.dp))
         Button(
-            text = "Odometer",
+            text = context.getString(R.string.widget_odometer),
             onClick = actionStartActivity(
                 actionIntent(context, MainActivity.ACTION_UPDATE_ODOMETER, targetVehicleId),
             ),
@@ -76,7 +77,7 @@ private fun QuickActionsWidgetContent(
         )
         Spacer(modifier = GlanceModifier.width(4.dp))
         Button(
-            text = "Log Service",
+            text = context.getString(R.string.widget_log_service),
             onClick = actionStartActivity(
                 actionIntent(context, MainActivity.ACTION_LOG_SERVICE, targetVehicleId),
             ),

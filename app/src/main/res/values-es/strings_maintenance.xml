@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="maint_cd_add_odometer">Añadir lectura del cuentakilómetros</string>
+    <string name="maint_cd_add_record">Añadir registro de mantenimiento</string>
+    <string name="maint_cd_edit_record">Editar registro</string>
+    <string name="maint_cd_delete_record">Eliminar registro</string>
+    <string name="maint_empty">Aún no hay mantenimiento registrado.\nToca + para añadir el primer registro.</string>
+    <string name="maint_no_matches">Ningún registro coincide con los filtros.</string>
+    <string name="maint_clear_filters">Borrar filtros</string>
+    <string name="maint_delete_title">Eliminar registro</string>
+    <string name="maint_delete_message">¿Seguro que quieres eliminar este registro?</string>
+    <string name="maint_receipt_invoice">Recibo / Factura</string>
+    <string name="maint_receipt_image">Imagen del recibo</string>
+    <string name="maint_pdf_receipt">Recibo PDF</string>
+    <string name="maint_open_with_app">Abrir con una app</string>
+    <string name="maint_add_title">Añadir registro de mantenimiento</string>
+    <string name="maint_date">Fecha</string>
+    <string name="maint_task_other">Otro / personalizado</string>
+    <string name="maint_specific_task">Tarea concreta</string>
+    <string name="maint_description">Descripción</string>
+    <string name="maint_mileage_unit">Kilometraje (%1$s)</string>
+    <string name="maint_cost_unit">Coste (%1$s)</string>
+    <string name="maint_inspected_only">Solo revisado (aplazar sustitución)</string>
+    <string name="maint_remind_in_distance">Recordar en (%1$s) *</string>
+    <string name="maint_remind_in_months">Recordar en (meses) *</string>
+    <string name="maint_attached_pdf">Recibo PDF adjunto</string>
+    <string name="maint_pdf_document">Documento PDF</string>
+    <string name="maint_change_attachment">Cambiar adjunto</string>
+    <string name="maint_remove_attachment">Quitar adjunto</string>
+    <string name="maint_attach_receipt">Adjuntar recibo / factura (imagen o PDF)</string>
+    <string name="maint_open_receipt">Abrir recibo</string>
+    <string name="maint_open_file_failed">No se pudo abrir el archivo</string>
+    <string name="maint_odometer_update">Lectura del cuentakilómetros</string>
+    <string name="maint_search_placeholder">Buscar descripción o tarea</string>
+    <string name="maint_close_search">Cerrar búsqueda</string>
+    <string name="maint_search">Buscar</string>
+    <string name="maint_has_receipt">Con recibo</string>
+    <string name="maint_hide_auto">Ocultar lecturas y escaneos</string>
+    <string name="maint_showing_count">Mostrando %1$d de %2$d</string>
+    <plurals name="maint_categories_count">
+        <item quantity="one">%d categoría</item>
+        <item quantity="many">%d categorías</item>
+        <item quantity="other">%d categorías</item>
+    </plurals>
+    <string name="template_title">Plantillas de mantenimiento</string>
+    <string name="template_subtitle">Elige una plantilla para añadir intervalos de mantenimiento adaptados a este vehículo.</string>
+    <string name="template_included_rules">Reglas incluidas (%1$d):</string>
+    <plurals name="template_months">
+        <item quantity="one">%d mes</item>
+        <item quantity="many">%d meses</item>
+        <item quantity="other">%d meses</item>
+    </plurals>
+    <string name="template_interval_or">%1$s o %2$s</string>
+    <string name="template_every">Cada %1$s</string>
+    <string name="template_apply">Aplicar plantilla «%1$s»</string>
+</resources>

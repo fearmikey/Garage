@@ -1,3 +1,24 @@
+## [1.3.9] - 2026-11-10
+
+### Added
+* **Android 13 Support:** Garage now installs on Android 13 (API 33) as well as Android 14 and newer. The Quick Settings tiles use the launch method each version supports.
+* **More Brand Emblems:** Alfa Romeo, Jaguar and Land Rover vehicles now show their logos (the artwork was bundled but never connected).
+
+### Changed
+* **Privacy: No Google Cloud Backup:** Garage data is no longer uploaded to Google's Android backup. Use the built-in local backup or WebDAV sync instead. Direct phone-to-phone transfers still copy your data, but saved WebDAV and LubeLogger passwords must be re-entered afterwards.
+* **HTTPS for NHTSA:** VIN decoding and recall lookups can only use HTTPS. Plain HTTP stays available for self-hosted LubeLogger/WebDAV servers.
+* **Leaner App:** Removed the AppCompat and Material Components libraries (the VIN scanner now uses plain Android views), shared one HTTP client across all network features, and updated libraries (OkHttp 5, AndroidX Core, DataStore, Room, WorkManager, Compose, and others).
+* **Full Translations:** Roughly 600 pieces of on-screen text that were hard-coded in English are now translated into all 10 supported languages (English, German, French, Spanish, Italian, Portuguese, Dutch, Polish, Russian, Turkish). This covers Settings, Add/Edit Vehicle, Documents, Fuel & Charging (including trend charts), Mods, Parts, the Maintenance timeline, filters, schedule and templates, Cost of Ownership, Trips, Knowledge, Recalls, the Dashboard, home-screen widgets, dialogs, toasts and accessibility labels.
+* **Translated Labels:** Vehicle types, drivetrain, maintenance and mod categories, charger types, trip categories, accent colors, theme and unit choices now show in your language (saved data is unchanged). Currency names use the system's localized names, and counts such as "1 day / 5 days" use proper plural forms (including Polish and Russian).
+* **Localized Dates:** Dates follow your language's format (e.g. "10.11.2026" in German, "10 нояб. 2026 г." in Russian) instead of always using the US "Nov 10, 2026" order. The "since last full tank" fuel badge is translated too.
+* **German Tone:** All German text now consistently uses the formal "Sie", matching the onboarding screens.
+* **Translations (earlier):** Added missing "Knowledge" and "Trips" tab names in all languages and the missing French onboarding text.
+
+### Fixed
+* **EV Charging Form Crash:** Opening the charging form no longer crashes in English, French, Spanish, Portuguese, Italian, Russian and Turkish (a stray `%` in the "Est. Range @ 100% SoC" label).
+* **Startup Hang:** App start no longer blocks on reading cloud-backup settings.
+* **Credential Restore Crash:** If saved WebDAV/LubeLogger credentials can't be decrypted (for example after restoring from an old backup), they're reset instead of crashing the app.
+
 ## [1.3.8] - 2026-11-08
 
 ### Added

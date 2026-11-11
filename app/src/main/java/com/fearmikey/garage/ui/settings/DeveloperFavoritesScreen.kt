@@ -31,6 +31,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -298,7 +300,7 @@ fun DeveloperFavoritesContent() {
         item {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Tools and parts recommended by the developer (FearMikey). Purchasing through these Amazon affiliate links helps support the project at no extra cost to you. Usually these links earn FearMikey 2-5% of your Amazon purchase. Thank you!",
+                text = stringResource(R.string.settings_favorites_intro),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(bottom = 8.dp)
@@ -385,7 +387,7 @@ private fun ProductCard(
             
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.OpenInNew,
-                contentDescription = "Open Link",
+                contentDescription = stringResource(R.string.common_open_link),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(start = 16.dp)
             )

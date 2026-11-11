@@ -101,7 +101,7 @@ fun SettingsScreen(
                 title = { Text(stringResource(R.string.settings_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))
                     }
                 },
             )
@@ -122,7 +122,7 @@ fun SettingsScreen(
             item {
                 ListItem(
                     headlineContent = { Text(stringResource(R.string.settings_user_preferences)) },
-                    supportingContent = { Text("Language, units, currency, default vehicle, OBD") },
+                    supportingContent = { Text(stringResource(R.string.settings_user_prefs_summary)) },
                     leadingContent = { Icon(Icons.Filled.Language, contentDescription = null) },
                     trailingContent = { Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null) },
                     modifier = Modifier
@@ -135,12 +135,12 @@ fun SettingsScreen(
 
             // Appearance & Customization
             item {
-                SettingsCategoryHeader("Appearance & Customization")
+                SettingsCategoryHeader(stringResource(R.string.settings_header_appearance))
             }
             item {
                 ListItem(
                     headlineContent = { Text(stringResource(R.string.settings_appearance_theme)) },
-                    supportingContent = { Text("App theme, Pure Black AMOLED, Dynamic Color, accent colors, and vehicle tinting") },
+                    supportingContent = { Text(stringResource(R.string.settings_appearance_summary)) },
                     leadingContent = { Icon(Icons.Filled.Palette, contentDescription = null) },
                     trailingContent = { Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null) },
                     modifier = Modifier
@@ -153,12 +153,12 @@ fun SettingsScreen(
 
             // Reminders & Notifications
             item {
-                SettingsCategoryHeader("Reminders & Notifications")
+                SettingsCategoryHeader(stringResource(R.string.settings_reminders_notifications))
             }
             item {
                 ListItem(
                     headlineContent = { Text(stringResource(R.string.settings_reminders_notifications)) },
-                    supportingContent = { Text("Document expirations, maintenance notice windows, and notification permissions") },
+                    supportingContent = { Text(stringResource(R.string.settings_reminders_summary)) },
                     leadingContent = { Icon(Icons.Filled.Notifications, contentDescription = null) },
                     trailingContent = { Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null) },
                     modifier = Modifier
@@ -171,12 +171,12 @@ fun SettingsScreen(
 
             // Data & Synchronization
             item {
-                SettingsCategoryHeader("Data & Synchronization")
+                SettingsCategoryHeader(stringResource(R.string.settings_header_data))
             }
             item {
                 ListItem(
                     headlineContent = { Text(stringResource(R.string.settings_data_sync)) },
-                    supportingContent = { Text("Export/import backups, local auto-backup, WebDAV cloud sync, LubeLogger, clear data") },
+                    supportingContent = { Text(stringResource(R.string.settings_data_summary)) },
                     leadingContent = { Icon(Icons.Filled.CloudSync, contentDescription = null) },
                     trailingContent = { Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null) },
                     modifier = Modifier
@@ -189,12 +189,12 @@ fun SettingsScreen(
 
             // App Information Section
             item {
-                SettingsCategoryHeader("App Information")
+                SettingsCategoryHeader(stringResource(R.string.settings_header_app_info))
             }
             item {
                 ListItem(
-                    headlineContent = { Text("About Garage") },
-                    supportingContent = { Text("Version ${BuildConfig.VERSION_NAME}") },
+                    headlineContent = { Text(stringResource(R.string.settings_about_title)) },
+                    supportingContent = { Text(stringResource(R.string.settings_version, BuildConfig.VERSION_NAME)) },
                     leadingContent = { Icon(Icons.Filled.Info, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -203,8 +203,8 @@ fun SettingsScreen(
             }
             item {
                 ListItem(
-                    headlineContent = { Text("License") },
-                    supportingContent = { Text("MIT License") },
+                    headlineContent = { Text(stringResource(R.string.settings_license)) },
+                    supportingContent = { Text(stringResource(R.string.settings_license_mit)) },
                     leadingContent = { Icon(Icons.Filled.Code, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -215,8 +215,8 @@ fun SettingsScreen(
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Report a Bug / Feedback") },
-                    supportingContent = { Text("Report issues or share feedback on GitHub.") },
+                    headlineContent = { Text(stringResource(R.string.settings_report_bug)) },
+                    supportingContent = { Text(stringResource(R.string.settings_report_bug_summary)) },
                     leadingContent = { Icon(Icons.Filled.BugReport, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -228,12 +228,12 @@ fun SettingsScreen(
 
             // Support & Legal Section
             item {
-                SettingsCategoryHeader("Support & Legal")
+                SettingsCategoryHeader(stringResource(R.string.settings_header_support))
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Buy Me a Coffee") },
-                    supportingContent = { Text("Support development: buymeacoffee.com/XimW7nXI1j") },
+                    headlineContent = { Text(stringResource(R.string.settings_bmac)) },
+                    supportingContent = { Text(stringResource(R.string.settings_bmac_summary, "buymeacoffee.com/XimW7nXI1j")) },
                     leadingContent = { Icon(Icons.Filled.LocalCafe, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -242,8 +242,8 @@ fun SettingsScreen(
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Enable Affiliate Links") },
-                    supportingContent = { Text("Show optional Amazon affiliate links for tools/parts to help support the project.") },
+                    headlineContent = { Text(stringResource(R.string.settings_affiliate_title)) },
+                    supportingContent = { Text(stringResource(R.string.settings_affiliate_summary)) },
                     leadingContent = { Icon(Icons.Filled.AttachMoney, contentDescription = null) },
                     trailingContent = {
                         Switch(
@@ -258,8 +258,8 @@ fun SettingsScreen(
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Help / FAQ") },
-                    supportingContent = { Text("Get help with using the app and common questions.") },
+                    headlineContent = { Text(stringResource(R.string.settings_help)) },
+                    supportingContent = { Text(stringResource(R.string.settings_help_summary)) },
                     leadingContent = { Icon(Icons.AutoMirrored.Filled.Help, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -268,8 +268,8 @@ fun SettingsScreen(
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Re-run Setup") },
-                    supportingContent = { Text("Re-configure app permissions and measurement units") },
+                    headlineContent = { Text(stringResource(R.string.settings_rerun_setup)) },
+                    supportingContent = { Text(stringResource(R.string.settings_rerun_setup_summary)) },
                     leadingContent = { Icon(Icons.Filled.School, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -285,23 +285,23 @@ fun SettingsScreen(
     if (showAboutDialog) {
         AlertDialog(
             onDismissRequest = { showAboutDialog = false },
-            title = { Text("About Garage") },
+            title = { Text(stringResource(R.string.settings_about_title)) },
             text = {
                 Column {
                     Text(text = "Garage", style = MaterialTheme.typography.titleMedium)
                     Spacer(modifier = Modifier.padding(top = 4.dp))
-                    Text(text = "Version ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")
+                    Text(text = stringResource(R.string.settings_version_full, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE))
                     Spacer(modifier = Modifier.padding(top = 12.dp))
-                    Text(text = "A simple, powerful vehicle management app to track maintenance, service history, fuel economy, and reminders.")
+                    Text(text = stringResource(R.string.settings_about_description))
                     Spacer(modifier = Modifier.padding(top = 12.dp))
-                    Text(text = "Licensed under the MIT License", style = MaterialTheme.typography.bodySmall)
+                    Text(text = stringResource(R.string.settings_about_license), style = MaterialTheme.typography.bodySmall)
                     Spacer(modifier = Modifier.padding(top = 4.dp))
-                    Text(text = "Developed by fearmikey", style = MaterialTheme.typography.bodySmall)
+                    Text(text = stringResource(R.string.settings_about_developer), style = MaterialTheme.typography.bodySmall)
                 }
             },
             confirmButton = {
                 TextButton(onClick = { showAboutDialog = false }) {
-                    Text("Close")
+                    Text(stringResource(R.string.common_close))
                 }
             }
         )
@@ -310,10 +310,10 @@ fun SettingsScreen(
     if (showBugReportFeedbackDialog) {
         AlertDialog(
             onDismissRequest = { showBugReportFeedbackDialog = false },
-            title = { Text("Report a Bug / Feedback") },
+            title = { Text(stringResource(R.string.settings_report_bug)) },
             text = {
                 Column {
-                    Text("Select an option below to open GitHub in your browser:")
+                    Text(stringResource(R.string.settings_feedback_prompt))
                     Spacer(modifier = Modifier.height(16.dp))
                     OutlinedButton(
                         onClick = {
@@ -327,7 +327,7 @@ fun SettingsScreen(
                             contentDescription = null,
                             modifier = Modifier.padding(end = 8.dp)
                         )
-                        Text("Report an Issue")
+                        Text(stringResource(R.string.settings_report_issue))
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     OutlinedButton(
@@ -342,13 +342,13 @@ fun SettingsScreen(
                             contentDescription = null,
                             modifier = Modifier.padding(end = 8.dp)
                         )
-                        Text("Share Feedback")
+                        Text(stringResource(R.string.settings_share_feedback))
                     }
                 }
             },
             confirmButton = {
                 TextButton(onClick = { showBugReportFeedbackDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             }
         )

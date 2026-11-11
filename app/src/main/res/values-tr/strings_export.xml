@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="export_title">Satış raporu oluşturucu</string>
+    <string name="export_book_title">Araç servis ve geçmiş defteri</string>
+    <string name="export_book_desc">Aracınızın bakım yatırımını, bakım kaydını, değiştirilen parçaları ve güvenlik durumunu öne çıkaran, ikinci el değerini artırmaya yönelik kapsamlı ve düzenli bir rapor oluşturun.</string>
+    <string name="export_summary_preview">RAPOR ÖZETİ ÖNİZLEMESİ</string>
+    <string name="export_vin">VIN: %1$s</string>
+    <string name="export_total_investment">Toplam bakım yatırımı:</string>
+    <string name="export_service_records">Servis kayıtları:</string>
+    <string name="export_upgrades_colon">Yükseltmeler ve modifikasyonlar:</string>
+    <string name="export_recall_status">Güvenlik geri çağırma durumu:</string>
+    <string name="export_checking">Kontrol ediliyor…</string>
+    <string name="export_clear_serviced">Açık yok (0 açık / %1$d yapıldı)</string>
+    <string name="export_clear">Açık yok</string>
+    <string name="export_open_total">%1$d açık / toplam %2$d</string>
+    <string name="export_included_sections">DAHİL EDİLEN BÖLÜMLER</string>
+    <string name="export_upgrades">Yükseltmeler ve modifikasyonlar</string>
+    <string name="export_upgrades_desc">Özel parça, yükseltme ve aksesuar listesini ekle</string>
+    <string name="export_parts">Parça ve sıvı bilgileri</string>
+    <string name="export_parts_desc">Yağ viskozitesi, buji, lastik ölçüsü ve silecek bilgilerini ekle</string>
+    <string name="export_recalls">Güvenlik geri çağırma durumu</string>
+    <string name="export_recalls_desc">Resmi NHTSA geri çağırma doğrulamasını ekle</string>
+    <string name="export_select_open">Açık kampanyaları seçin (toplam %1$d):</string>
+    <string name="export_all_serviced">Tümü yapıldı</string>
+    <string name="export_all_open">Tümü açık</string>
+    <string name="export_open_unaddressed">AÇIK / YAPILMADI</string>
+    <string name="export_serviced_clear">YAPILDI</string>
+    <string name="export_component">Parça: %1$s</string>
+    <string name="export_fuel">Yakıt ve şarj kayıtları</string>
+    <string name="export_fuel_desc">Yakıt alımlarını ve şarj oturumlarını ekle</string>
+    <string name="export_generate">Servis defterini oluştur (PDF)</string>
+</resources>

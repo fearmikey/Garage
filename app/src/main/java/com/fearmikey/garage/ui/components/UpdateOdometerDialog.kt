@@ -95,7 +95,7 @@ fun UpdateOdometerDialog(
                             value = selectedVehicle.displayName(),
                             onValueChange = {},
                             readOnly = true,
-                            label = { Text("Vehicle") },
+                            label = { Text(stringResource(R.string.odo_vehicle)) },
                             trailingIcon = {
                                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = vehicleDropdownExpanded)
                             },
@@ -123,7 +123,7 @@ fun UpdateOdometerDialog(
 
                 currentMileage?.let { miles ->
                     Text(
-                        text = "Current: ${UnitConverter.formatDistance(miles, unitSystem)}",
+                        text = stringResource(R.string.odo_current, UnitConverter.formatDistance(miles, unitSystem)),
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.primary,
@@ -134,7 +134,7 @@ fun UpdateOdometerDialog(
                 OutlinedTextField(
                     value = mileageInput,
                     onValueChange = { mileageInput = sanitizeMileageInput(it) },
-                    label = { Text("New Odometer Reading (${unitSystem.distanceUnit})") },
+                    label = { Text(stringResource(R.string.odo_new_reading, unitSystem.distanceUnit)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     visualTransformation = com.fearmikey.garage.ui.util.ThousandsSeparatorVisualTransformation(),
                     singleLine = true,
@@ -146,8 +146,8 @@ fun UpdateOdometerDialog(
                 OutlinedTextField(
                     value = notesInput,
                     onValueChange = { notesInput = it },
-                    label = { Text("Notes (optional)") },
-                    placeholder = { Text("e.g. Weekly odometer log") },
+                    label = { Text(stringResource(R.string.odo_notes_optional)) },
+                    placeholder = { Text(stringResource(R.string.odo_notes_placeholder)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -155,7 +155,7 @@ fun UpdateOdometerDialog(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Date: ${selectedDate.toDisplayDate()}",
+                    text = stringResource(R.string.dup_date, selectedDate.toDisplayDate()),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 4.dp),
@@ -171,17 +171,18 @@ fun UpdateOdometerDialog(
                         selectedVehicle.id,
                         canonicalMileage,
                         selectedDate,
+                        // Stays English: LubeLoggerMapper uses this exact text to recognise odometer check-ins.
                         notesInput.ifBlank { "Odometer check-in" },
                     )
                 },
                 enabled = canSave,
             ) {
-                Text("Save")
+                Text(stringResource(R.string.common_save))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(R.string.common_cancel))
             }
         },
     )

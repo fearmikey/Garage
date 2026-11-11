@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sugg_cd_add_rule">Añadir regla personalizada</string>
+    <string name="sugg_empty">Aún no hay sugerencias.\nRegistra mantenimientos y kilometraje para ver qué toca.</string>
+    <string name="sugg_custom_rules">Tus reglas personalizadas</string>
+    <string name="sugg_ignored_tasks">Tareas ignoradas (%1$d)</string>
+    <string name="sugg_months_short">%1$d meses</string>
+    <string name="sugg_cd_edit_rule">Editar regla</string>
+    <string name="sugg_cd_delete_rule">Eliminar regla personalizada</string>
+    <string name="sugg_last_done_at">última vez a %1$s</string>
+    <string name="sugg_due_at">toca a %1$s</string>
+    <string name="sugg_due_by">antes del %1$s</string>
+    <string name="sugg_ignore">Ignorar</string>
+    <string name="sugg_log_now">Registrar</string>
+    <string name="sugg_ignored_for_vehicle">Ignorada para este vehículo</string>
+    <string name="sugg_restore">Restaurar</string>
+    <string name="sugg_edit_title">Editar intervalo de mantenimiento</string>
+    <string name="sugg_add_title">Añadir regla personalizada</string>
+    <string name="sugg_presets">Plantillas de plan</string>
+    <string name="sugg_presets_desc">Aplica plantillas de mantenimiento predefinidas (remolque, eléctrico, diario, clásico).</string>
+    <string name="sugg_task_name">Nombre de la tarea</string>
+    <string name="sugg_interval_distance">Intervalo (%1$s)</string>
+    <string name="sugg_interval_months">Intervalo (meses)</string>
+    <string name="cost_fuel_fillup">Repostaje</string>
+    <string name="cost_fuel">Combustible</string>
+    <string name="cost_charging_session">Sesión de carga (%1$s)</string>
+    <string name="cost_ev_charging">Carga eléctrica</string>
+    <string name="cost_modifications">Modificaciones</string>
+    <string name="cost_vehicle_purchase">Compra del vehículo</string>
+    <string name="cost_maintenance">Mantenimiento</string>
+    <string name="cost_maintenance_repairs">Mantenimiento y reparaciones</string>
+    <string name="cost_fuel_spent">Gasto en combustible</string>
+    <string name="cost_collapse">Contraer</string>
+    <string name="cost_expand">Expandir</string>
+    <plurals name="cost_records">
+        <item quantity="one">%d registro</item>
+        <item quantity="many">%d registros</item>
+        <item quantity="other">%d registros</item>
+    </plurals>
+    <plurals name="cost_fillups">
+        <item quantity="one">%d repostaje</item>
+        <item quantity="many">%d repostajes</item>
+        <item quantity="other">%d repostajes</item>
+    </plurals>
+    <plurals name="cost_entries_share">
+        <item quantity="one">%1$d registro · %2$s %% del total</item>
+        <item quantity="many">%1$d registros · %2$s %% del total</item>
+        <item quantity="other">%1$d registros · %2$s %% del total</item>
+    </plurals>
+    <string name="trip_cat_business">Trabajo</string>
+    <string name="trip_cat_personal">Personal</string>
+    <string name="trip_cat_commute">Desplazamiento diario</string>
+    <string name="trip_cat_medical">Médico</string>
+    <string name="trip_cat_charity">Voluntariado</string>
+    <string name="trip_cat_other">Otro</string>
+    <string name="trip_cd_add">Añadir viaje</string>
+    <string name="trip_cd_more">Más opciones</string>
+    <string name="trip_empty">Aún no hay viajes.\nToca «Iniciar viaje GPS» o + para añadir uno.</string>
+    <string name="trip_deduction">Deducción: %1$s</string>
+    <string name="trip_start_gps">Iniciar viaje GPS</string>
+    <string name="trip_paused">Viaje en pausa</string>
+    <string name="trip_tracking">Registrando viaje…</string>
+    <string name="trip_resume">Reanudar</string>
+    <string name="trip_pause">Pausar</string>
+    <string name="trip_stop_save">Detener y guardar</string>
+    <string name="trip_log_title">Registrar viaje</string>
+    <string name="trip_edit_title">Editar viaje</string>
+    <string name="trip_distance">Distancia (%1$s)</string>
+    <string name="trip_rate">Tarifa de reembolso (%1$s/%2$s)</string>
+    <string name="trip_notes">Notas (destino, motivo)</string>
+</resources>

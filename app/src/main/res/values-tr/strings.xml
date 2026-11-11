@@ -17,9 +17,7 @@
     <string name="language_selection">Dil</string>
 
     <!-- Startup / Onboarding -->
-    <string name="startup_get_started">Başla</string>
     <string name="startup_welcome_title">Garage\'a Hoş Geldiniz</string>
-    <string name="startup_welcome_subtitle">Başlamak için tercihlerinizi yapılandırın.</string>
     <string name="startup_measurement_system_title">Ölçü Sistemi</string>
     <string name="startup_measurement_system_subtitle">Mesafe, yakıt hacmi ve tüketimin nasıl gösterileceğini seçin.</string>
     <string name="startup_metric_title">Metrik Sistem</string>
@@ -122,7 +120,6 @@
     <string name="settings_currency">Para Birimi</string>
     <string name="settings_theme">Tema</string>
     <string name="settings_default_vehicle">Varsayılan Araç</string>
-    <string name="settings_reminders_expirations">Hatırlatıcılar ve Süreler</string>
 
     <!-- Tabs -->
     <string name="tab_my_vehicles">Araçlarım</string>
@@ -137,6 +134,8 @@
     <string name="tab_mods">Modifikasyonlar</string>
     <string name="tab_documents">Belgeler</string>
     <string name="tab_recalls">Geri Çağırmalar</string>
+    <string name="tab_knowledge">Bilgi</string>
+    <string name="tab_trips">Seyahatler</string>
     <string name="customize_tabs">Sekmeleri özelleştir</string>
     <string name="customize_tabs_description">Bu araç için hangi sekmelerin gösterileceğini seçin.</string>
     <string name="customize_tabs_always_shown">Her zaman gösterilir</string>
@@ -337,7 +336,7 @@
     <string name="license_number_placeholder">örn. 123456</string>
     <string name="license_state_label">Düzenleyen İl / Makam</string>
     <string name="license_state_placeholder">örn. TR</string>
-    <string name="license_notes_placeholder">B sınıfı, A2 ehliyet notları...</string>
+    <string name="license_notes_placeholder">B sınıfı, A2 ehliyet notları…</string>
     <string name="license_front_photo">Ehliyet Ön Yüzü</string>
     <string name="license_back_photo">Ehliyet Arka Yüzü</string>
     <string name="license_save">Sürücü Belgesini Kaydet</string>
@@ -349,8 +348,6 @@
     <string name="cost_include_mods">Modifikasyonları dahil et</string>
     <string name="cost_include_purchase">Satın almayı dahil et</string>
     <string name="cost_purchase_not_counted_in_period">Bu dönemde hesaba katılmadı (satın alma tarihi aralık dışında veya ayarlanmamış).</string>
-    <string name="cost_per_distance">Maliyet / Mesafe</string>
-    <string name="cost_per_day">Maliyet / Gün</string>
     <string name="time_filter_all_time">Tüm Zamanlar</string>
     <string name="time_filter_this_year">Bu Yıl</string>
     <string name="time_filter_last_year">Geçen Yıl</string>
@@ -360,8 +357,8 @@
     <!-- Fuel & Charging -->
     <string name="fuel_tab_charging">Şarj</string>
     <string name="fuel_tab_fuel">Yakıt</string>
-    <string name="fuel_est_range_100">Mevcut Tahmini %100 Menzil</string>
-    <string name="fuel_initial_range_100">İlk Tahmini %100 Menzil</string>
+    <string name="fuel_est_range_100" formatted="false">Mevcut Tahmini %100 Menzil</string>
+    <string name="fuel_initial_range_100" formatted="false">İlk Tahmini %100 Menzil</string>
     <string name="fuel_delete_charging_title">Şarj Oturumunu Sil?</string>
     <string name="fuel_delete_charging_msg">Bu şarj kaydını silmek istediğinizden emin misiniz?</string>
     <string name="fuel_log_charging">Şarj Kaydı Ekle</string>
@@ -370,12 +367,12 @@
     <string name="fuel_charger_speed">Şarj Hızı</string>
     <string name="fuel_location_vendor">Konum / İstasyon</string>
     <string name="fuel_vendor_placeholder">İstasyon adı (isteğe bağlı, örn. ZES)</string>
-    <string name="fuel_battery_start">% Batarya Başlangıç</string>
-    <string name="fuel_battery_end">% Batarya Bitiş</string>
+    <string name="fuel_battery_start" formatted="false">% Batarya Başlangıç</string>
+    <string name="fuel_battery_end" formatted="false">% Batarya Bitiş</string>
     <string name="fuel_total_cost">Toplam maliyet</string>
     <string name="fuel_odometer_reading">Kilometre değeri (%1$s)</string>
     <string name="fuel_battery_health_title">Batarya Sağlığı (İsteğe bağlı)</string>
-    <string name="fuel_est_range_soc">%100 Şarjda Tahmini Menzil (%1$s)</string>
+    <string name="fuel_est_range_soc">%%100 Şarjda Tahmini Menzil (%1$s)</string>
     <string name="fuel_est_range_end">Şarj sonunda tahmini menzil</string>
     <string name="fuel_auto_calculate">Otomatik Hesapla</string>
     <string name="fuel_save_charging">Şarj Kaydını Kaydet</string>
@@ -421,7 +418,7 @@
     <string name="doc_toll_notes_label">Notlar / Geçiş Detayları</string>
     <string name="doc_delete_toll_btn">HGS ve Park Bilgilerini Sil</string>
     <string name="doc_save_docs_btn">Araç Belgelerini Kaydet</string>
-    <string name="doc_saving_btn">Kaydediliyor...</string>
+    <string name="doc_saving_btn">Kaydediliyor…</string>
     <!-- Fleet Summary -->
     <string name="fleet_overview_title">Filo Genel Bakış</string>
     <string name="fleet_vehicles">Araçlar</string>
@@ -512,7 +509,6 @@
     <string name="mods_delete_confirm_msg">\'%1$s\' modifikasyonunu silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</string>
 
     <!-- Recalls -->
-    <string name="recalls_empty_message">Bu araç için güvenlik geri çağırması bulunamadı.\nGeri çağırma bilgileri NHTSA tarafından sağlanmaktadır.</string>
     <string name="recalls_nhtsa_check">VIN Numarasını NHTSA.gov Üzerinden Kontrol Et</string>
     <string name="recalls_retry">Yeniden Deneyin</string>
     <string name="recalls_park_it">Kullanmayın</string>

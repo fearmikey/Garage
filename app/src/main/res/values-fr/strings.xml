@@ -23,7 +23,6 @@
     <string name="settings_currency">Devise</string>
     <string name="settings_theme">Thème</string>
     <string name="settings_default_vehicle">Véhicule par défaut</string>
-    <string name="settings_reminders_expirations">Rappels &amp; Échéances</string>
 
     <!-- Tabs -->
     <string name="tab_my_vehicles">Mes véhicules</string>
@@ -38,6 +37,8 @@
     <string name="tab_mods">Modifications</string>
     <string name="tab_documents">Documents</string>
     <string name="tab_recalls">Rappels constructeur</string>
+    <string name="tab_knowledge">Connaissances</string>
+    <string name="tab_trips">Trajets</string>
     <string name="customize_tabs">Personnaliser les onglets</string>
     <string name="customize_tabs_description">Choisissez les onglets affichés pour ce véhicule.</string>
     <string name="customize_tabs_always_shown">Toujours affiché</string>
@@ -73,9 +74,7 @@
     <string name="task_clutch_throttle_cable">Réglage des câbles d\'embrayage et d\'accélérateur</string>
 
     <!-- Startup / Onboarding -->
-    <string name="startup_get_started">Commencer</string>
     <string name="startup_welcome_title">Bienvenue sur Garage</string>
-    <string name="startup_welcome_subtitle">Configurez vos préférences pour commencer.</string>
     <string name="startup_measurement_system_title">Système de mesure</string>
     <string name="startup_measurement_system_subtitle">Choisissez l\'affichage des distances, volumes de carburant et consommation.</string>
     <string name="startup_metric_title">Système métrique</string>
@@ -92,6 +91,10 @@
     <string name="startup_reminders_subtitle">Soyez notifié lorsque l\'entretien de votre véhicule arrive à échéance.</string>
     <string name="startup_vin_title">Scanner de VIN</string>
     <string name="startup_vin_subtitle">Scannez le code-barres du VIN pour importer rapidement votre véhicule.</string>
+    <string name="startup_location_title">Suivi des trajets par GPS</string>
+    <string name="startup_location_subtitle">Suivez automatiquement le kilométrage et les itinéraires de vos véhicules grâce aux services de localisation.</string>
+    <string name="startup_bluetooth_title">Bluetooth OBD-II</string>
+    <string name="startup_bluetooth_subtitle">Connectez-vous à des adaptateurs OBD-II sans fil pour un diagnostic en temps réel et l\'effacement des codes défaut.</string>
     <string name="startup_permission_granted">Autorisation accordée</string>
     <string name="startup_grant_permission">Accorder l\'autorisation</string>
     <string name="startup_support_title">Soutenir le développement</string>
@@ -335,7 +338,7 @@
     <string name="license_number_placeholder">ex., D1234567</string>
     <string name="license_state_label">État de délivrance</string>
     <string name="license_state_placeholder">ex., CA</string>
-    <string name="license_notes_placeholder">Catégorie B, mentions particulières...</string>
+    <string name="license_notes_placeholder">Catégorie B, mentions particulières…</string>
     <string name="license_front_photo">Recto du permis</string>
     <string name="license_back_photo">Verso du permis</string>
     <string name="license_save">Enregistrer le permis</string>
@@ -347,8 +350,6 @@
     <string name="cost_include_mods">Inclure les modifications</string>
     <string name="cost_include_purchase">Inclure l\'achat</string>
     <string name="cost_purchase_not_counted_in_period">Non comptabilisé dans cette période (date d\'achat hors plage ou non définie).</string>
-    <string name="cost_per_distance">Coût / Distance</string>
-    <string name="cost_per_day">Coût / Jour</string>
     <string name="time_filter_all_time">Tout</string>
     <string name="time_filter_this_year">Cette année</string>
     <string name="time_filter_last_year">L\'année dernière</string>
@@ -358,8 +359,8 @@
     <!-- Fuel & Charging -->
     <string name="fuel_tab_charging">Recharge</string>
     <string name="fuel_tab_fuel">Carburant</string>
-    <string name="fuel_est_range_100">Autonomie estimée à 100%</string>
-    <string name="fuel_initial_range_100">Autonomie initiale à 100%</string>
+    <string name="fuel_est_range_100" formatted="false">Autonomie estimée à 100%</string>
+    <string name="fuel_initial_range_100" formatted="false">Autonomie initiale à 100%</string>
     <string name="fuel_delete_charging_title">Supprimer la session de recharge ?</string>
     <string name="fuel_delete_charging_msg">Voulez-vous vraiment supprimer cet enregistrement de recharge ?</string>
     <string name="fuel_log_charging">Enregistrer une recharge</string>
@@ -368,12 +369,12 @@
     <string name="fuel_charger_speed">Vitesse de charge</string>
     <string name="fuel_location_vendor">Emplacement / Fournisseur</string>
     <string name="fuel_vendor_placeholder">Nom du fournisseur (optionnel)</string>
-    <string name="fuel_battery_start">% Batterie Début</string>
-    <string name="fuel_battery_end">% Batterie Fin</string>
+    <string name="fuel_battery_start" formatted="false">% Batterie Début</string>
+    <string name="fuel_battery_end" formatted="false">% Batterie Fin</string>
     <string name="fuel_total_cost">Coût total</string>
     <string name="fuel_odometer_reading">Relevé du compteur (%1$s)</string>
     <string name="fuel_battery_health_title">Santé de la batterie (Optionnel)</string>
-    <string name="fuel_est_range_soc">Autonomie est. à 100% SoC (%1$s)</string>
+    <string name="fuel_est_range_soc">Autonomie est. à 100%% SoC (%1$s)</string>
     <string name="fuel_est_range_end">Autonomie est. fin de charge</string>
     <string name="fuel_auto_calculate">Calcul automatique</string>
     <string name="fuel_save_charging">Enregistrer la recharge</string>
@@ -419,7 +420,7 @@
     <string name="doc_toll_notes_label">Notes / Détails fournisseur</string>
     <string name="doc_delete_toll_btn">Supprimer le badge de péage / stationnement</string>
     <string name="doc_save_docs_btn">Enregistrer les documents</string>
-    <string name="doc_saving_btn">Enregistrement en cours...</string>
+    <string name="doc_saving_btn">Enregistrement en cours…</string>
     <!-- Fleet Summary -->
     <string name="fleet_overview_title">Aperçu de la flotte</string>
     <string name="fleet_vehicles">Véhicules</string>
@@ -510,7 +511,6 @@
     <string name="mods_delete_confirm_msg">Voulez-vous vraiment supprimer \'%1$s\' ? Cette action est irréversible.</string>
 
     <!-- Recalls -->
-    <string name="recalls_empty_message">Aucun rappel de sécurité trouvé pour ce véhicule.\nLes informations de rappel sont fournies par la NHTSA.</string>
     <string name="recalls_nhtsa_check">Vérifier le VIN sur NHTSA.gov</string>
     <string name="recalls_retry">Réessayer</string>
     <string name="recalls_park_it">Ne pas conduire</string>

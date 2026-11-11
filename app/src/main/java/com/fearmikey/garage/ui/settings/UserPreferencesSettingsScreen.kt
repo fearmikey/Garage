@@ -85,7 +85,7 @@ fun UserPreferencesSettingsScreen(
                 title = { Text(stringResource(R.string.settings_user_preferences)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))
                     }
                 },
             )
@@ -102,9 +102,7 @@ fun UserPreferencesSettingsScreen(
             item {
                 val currentLocales = remember(showLanguageDialog) {
                     try {
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-                            context.getSystemService(android.app.LocaleManager::class.java)?.applicationLocales
-                        } else null
+                        context.getSystemService(android.app.LocaleManager::class.java)?.applicationLocales
                     } catch (_: Throwable) {
                         null
                     }
@@ -134,10 +132,7 @@ fun UserPreferencesSettingsScreen(
                 )
             }
             item {
-                val unitLabel = when (uiState.units) {
-                    "uk_mixed" -> "UK (Mixed)"
-                    else -> uiState.units.replaceFirstChar { it.uppercase() }
-                }
+                val unitLabel = unitsLabel(uiState.units)
                 ListItem(
                     headlineContent = { Text(stringResource(R.string.settings_units)) },
                     supportingContent = { Text(unitLabel) },
@@ -160,13 +155,10 @@ fun UserPreferencesSettingsScreen(
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Mileage Reimbursement Rate") },
+                    headlineContent = { Text(stringResource(R.string.prefs_mileage_rate_title)) },
                     supportingContent = {
-                        Text(
-                            "Default for new trips: $currencySymbol${
-                                uiState.mileageReimbursementRate.toBigDecimal().stripTrailingZeros().toPlainString()
-                            }/$distanceUnit"
-                        )
+                        val rate = uiState.mileageReimbursementRate.toBigDecimal().stripTrailingZeros().toPlainString()
+                        Text(stringResource(R.string.prefs_mileage_rate_summary, "$currencySymbol$rate/$distanceUnit"))
                     },
                     leadingContent = { Icon(Icons.Filled.Commute, contentDescription = null) },
                     modifier = Modifier
@@ -179,11 +171,11 @@ fun UserPreferencesSettingsScreen(
                     listOfNotNull(vehicle.year?.toString(), vehicle.make, vehicle.model)
                         .joinToString(" ")
                         .ifBlank { vehicle.vin }
-                } ?: "First vehicle added (default)"
+                } ?: stringResource(R.string.settings_default_vehicle_first)
 
                 ListItem(
                     headlineContent = { Text(stringResource(R.string.settings_default_vehicle)) },
-                    supportingContent = { Text("Used for widget shortcuts ($selectedVehicleName)") },
+                    supportingContent = { Text(stringResource(R.string.prefs_default_vehicle_summary, selectedVehicleName)) },
                     leadingContent = { Icon(Icons.Filled.DirectionsCar, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -217,9 +209,7 @@ fun UserPreferencesSettingsScreen(
     if (showLanguageDialog) {
         val currentLocales = remember {
             try {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-                    context.getSystemService(android.app.LocaleManager::class.java)?.applicationLocales
-                } else null
+                context.getSystemService(android.app.LocaleManager::class.java)?.applicationLocales
             } catch (_: Throwable) {
                 null
             }
@@ -230,10 +220,8 @@ fun UserPreferencesSettingsScreen(
             selectedLangCode = currentLang,
             onLanguageSelected = { langCode ->
                 try {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-                        val localeManager = context.getSystemService(android.app.LocaleManager::class.java)
-                        localeManager?.applicationLocales = LocaleListCompat.forLanguageTags(langCode).unwrap() as android.os.LocaleList
-                    }
+                    val localeManager = context.getSystemService(android.app.LocaleManager::class.java)
+                    localeManager?.applicationLocales = LocaleListCompat.forLanguageTags(langCode).unwrap() as android.os.LocaleList
                 } catch (_: Throwable) {
                     // Ignore if unsupported
                 }
@@ -245,11 +233,12 @@ fun UserPreferencesSettingsScreen(
 
     if (showUnitsDialog) {
         SingleChoiceDialog(
-            title = "Units of Measurement",
+            title = stringResource(R.string.settings_units),
             options = listOf("metric", "imperial", "uk_mixed"),
             selectedOption = uiState.units,
             onOptionSelected = { viewModel.setUnits(it) },
-            onDismissRequest = { showUnitsDialog = false }
+            onDismissRequest = { showUnitsDialog = false },
+            optionLabel = { unitsLabel(it) },
         )
     }
 
@@ -333,24 +322,23 @@ internal fun MileageRateDialog(
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text("Mileage Reimbursement Rate") },
+        title = { Text(stringResource(R.string.prefs_mileage_rate_title)) },
         text = {
             Column {
                 Text(
-                    "Default rate prefilled when logging a new trip, in your selected currency " +
-                        "and distance unit. Existing trips keep the rate they were saved with.",
+                    stringResource(R.string.prefs_rate_description),
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
                     value = text,
                     onValueChange = { text = it },
-                    label = { Text("Rate ($currencySymbol/$distanceUnit)") },
+                    label = { Text(stringResource(R.string.prefs_rate_label, currencySymbol, distanceUnit)) },
                     prefix = { Text(currencySymbol) },
                     suffix = { Text("/$distanceUnit") },
                     isError = parsed == null,
                     supportingText = if (parsed == null) {
-                        { Text("Enter a valid non-negative number") }
+                        { Text(stringResource(R.string.prefs_rate_invalid)) }
                     } else {
                         null
                     },
@@ -365,12 +353,12 @@ internal fun MileageRateDialog(
                 onClick = { parsed?.let(onSave) },
                 enabled = parsed != null,
             ) {
-                Text("Save")
+                Text(stringResource(R.string.common_save))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text("Cancel")
+                Text(stringResource(R.string.common_cancel))
             }
         },
     )

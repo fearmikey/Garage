@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Parts & fluids editor -->
+    <string name="parts_edit_title">Edit Parts &amp; Fluids</string>
+    <string name="parts_autofill">Auto-fill estimated specs</string>
+    <string name="parts_autofill_msg">Auto-filled fluid capacities and part specs are estimated using decoded VIN and engine data.\n\nPlease double-check all values with your official owner\'s manual to ensure accuracy before purchasing fluids or servicing your vehicle.</string>
+    <string name="parts_apply_understand">Apply &amp; Understand</string>
+
+    <!-- Vehicle detail toolbar -->
+    <string name="vehicle_cd_obd">OBD2 Scanner</string>
+    <string name="vehicle_cd_export">Export Maintenance Log</string>
+    <string name="vehicle_unnamed">Unnamed vehicle</string>
+    <string name="tabs_cd_reorder">Reorder tab</string>
+
+    <!-- Shared components -->
+    <string name="currency_select_title">Select Currency</string>
+    <string name="currency_search">Search currencies…</string>
+    <string name="currency_none_found">No matching currencies found.</string>
+    <string name="bmac_title">Support Garage</string>
+    <string name="bmac_message">Enjoying Garage? If you find the app helpful, consider supporting its open-source development!</string>
+    <string name="bmac_dont_ask">Don\'t ask again</string>
+    <string name="bmac_later">Maybe later</string>
+    <string name="status_overdue">Overdue</string>
+    <string name="status_upcoming">Upcoming</string>
+    <string name="status_on_track">On track</string>
+    <string name="status_done">Done</string>
+    <string name="odo_vehicle">Vehicle</string>
+    <string name="odo_current">Current: %1$s</string>
+    <string name="odo_new_reading">New Odometer Reading (%1$s)</string>
+    <string name="odo_notes_optional">Notes (optional)</string>
+    <string name="odo_notes_placeholder">e.g. Weekly odometer log</string>
+    <string name="trend_tap_to_edit">Tap to edit</string>
+    <string name="trend_unusual_reading">Unusual reading</string>
+    <string name="url_invalid">Invalid URL</string>
+    <string name="url_open_failed">Could not open link</string>
+</resources>

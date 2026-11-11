@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="maint_cd_add_odometer">Ajouter un relevé du compteur</string>
+    <string name="maint_cd_add_record">Ajouter un entretien</string>
+    <string name="maint_cd_edit_record">Modifier l\'entrée</string>
+    <string name="maint_cd_delete_record">Supprimer l\'entrée</string>
+    <string name="maint_empty">Aucun entretien enregistré.\nTouchez + pour ajouter la première entrée.</string>
+    <string name="maint_no_matches">Aucune entrée ne correspond à vos filtres.</string>
+    <string name="maint_clear_filters">Effacer les filtres</string>
+    <string name="maint_delete_title">Supprimer l\'entrée</string>
+    <string name="maint_delete_message">Voulez-vous vraiment supprimer cette entrée ?</string>
+    <string name="maint_receipt_invoice">Reçu / Facture</string>
+    <string name="maint_receipt_image">Image du reçu</string>
+    <string name="maint_pdf_receipt">Reçu PDF</string>
+    <string name="maint_open_with_app">Ouvrir avec une app</string>
+    <string name="maint_add_title">Ajouter un entretien</string>
+    <string name="maint_date">Date</string>
+    <string name="maint_task_other">Autre / personnalisé</string>
+    <string name="maint_specific_task">Tâche précise</string>
+    <string name="maint_description">Description</string>
+    <string name="maint_mileage_unit">Kilométrage (%1$s)</string>
+    <string name="maint_cost_unit">Coût (%1$s)</string>
+    <string name="maint_inspected_only">Contrôlé seulement (remplacement reporté)</string>
+    <string name="maint_remind_in_distance">Rappeler dans (%1$s) *</string>
+    <string name="maint_remind_in_months">Rappeler dans (mois) *</string>
+    <string name="maint_attached_pdf">Reçu PDF joint</string>
+    <string name="maint_pdf_document">Document PDF</string>
+    <string name="maint_change_attachment">Changer la pièce jointe</string>
+    <string name="maint_remove_attachment">Retirer la pièce jointe</string>
+    <string name="maint_attach_receipt">Joindre un reçu / une facture (image ou PDF)</string>
+    <string name="maint_open_receipt">Ouvrir le reçu</string>
+    <string name="maint_open_file_failed">Impossible d\'ouvrir le fichier</string>
+    <string name="maint_odometer_update">Relevé du compteur</string>
+    <string name="maint_search_placeholder">Rechercher une description ou une tâche</string>
+    <string name="maint_close_search">Fermer la recherche</string>
+    <string name="maint_search">Rechercher</string>
+    <string name="maint_has_receipt">Avec reçu</string>
+    <string name="maint_hide_auto">Masquer relevés et scans</string>
+    <string name="maint_showing_count">%1$d sur %2$d affichées</string>
+    <plurals name="maint_categories_count">
+        <item quantity="one">%d catégorie</item>
+        <item quantity="many">%d catégories</item>
+        <item quantity="other">%d catégories</item>
+    </plurals>
+    <string name="template_title">Modèles de plans d\'entretien</string>
+    <string name="template_subtitle">Choisissez un modèle pour ajouter des intervalles d\'entretien adaptés à ce véhicule.</string>
+    <string name="template_included_rules">Règles incluses (%1$d) :</string>
+    <plurals name="template_months">
+        <item quantity="one">%d mois</item>
+        <item quantity="many">%d mois</item>
+        <item quantity="other">%d mois</item>
+    </plurals>
+    <string name="template_interval_or">%1$s ou %2$s</string>
+    <string name="template_every">Tous les %1$s</string>
+    <string name="template_apply">Appliquer le modèle « %1$s »</string>
+</resources>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="common_cancel">İptal</string>
+    <string name="common_save">Kaydet</string>
+    <string name="common_delete">Sil</string>
+    <string name="common_ok">Tamam</string>
+    <string name="common_back">Geri</string>
+    <string name="common_discard">Vazgeç</string>
+    <string name="common_edit">Düzenle</string>
+    <string name="common_close">Kapat</string>
+    <string name="common_saving">Kaydediliyor…</string>
+    <string name="common_unsaved_title">Kaydedilmemiş değişiklikler</string>
+    <string name="common_unsaved_message">Kaydedilmemiş değişiklikleriniz var. Kaydetmek mi yoksa vazgeçmek mi istersiniz?</string>
+    <string name="scan_vin_prompt">VIN barkodunu tara</string>
+
+    <string name="vehicle_type_car">Otomobil / Kamyonet</string>
+    <string name="vehicle_type_motorcycle">Motosiklet</string>
+    <string name="drivetrain_unknown">Bilinmiyor</string>
+
+    <string name="mod_category_performance">Performans</string>
+    <string name="mod_category_suspension">Süspansiyon ve direksiyon</string>
+    <string name="mod_category_exterior">Dış görünüm ve kaporta</string>
+    <string name="mod_category_interior">İç mekân ve konfor</string>
+    <string name="mod_category_lighting">Aydınlatma</string>
+    <string name="mod_category_wheels_tires">Jant ve lastikler</string>
+    <string name="mod_category_audio_electrical">Ses ve elektrik</string>
+    <string name="mod_category_exhaust">Egzoz</string>
+    <string name="mod_category_other">Diğer</string>
+
+    <string name="maint_category_fluids">Sıvılar</string>
+    <string name="maint_category_filters">Filtreler</string>
+    <string name="maint_category_tires">Lastikler</string>
+    <string name="maint_category_brakes">Frenler</string>
+    <string name="maint_category_battery">Akü</string>
+    <string name="maint_category_engine">Motor ve ateşleme</string>
+    <string name="maint_category_drivetrain">Aktarma ve zincir</string>
+    <string name="maint_category_suspension">Süspansiyon ve direksiyon</string>
+    <string name="maint_category_electrical">Elektrik ve aydınlatma</string>
+    <string name="maint_category_hvac">Klima ve ısıtma</string>
+    <string name="maint_category_body">Kaporta, cam ve silecekler</string>
+    <string name="maint_category_inspection">Muayene</string>
+    <string name="maint_category_repair">Onarım</string>
+    <string name="maint_category_other">Diğer</string>
+
+    <string name="charger_speed_level_1">Seviye 1 (120 V)</string>
+    <string name="charger_speed_level_2">Seviye 2 (240 V)</string>
+    <string name="charger_speed_dc_fast">DC hızlı şarj</string>
+    <string name="charger_vendor_home">Ev</string>
+    <string name="charger_vendor_public">Halka açık</string>
+
+    <string name="date_range_all">Tüm zamanlar</string>
+    <string name="date_range_last_30_days">Son 30 gün</string>
+    <string name="date_range_last_12_months">Son 12 ay</string>
+    <string name="date_range_this_year">Bu yıl</string>
+    <string name="date_range_last_year">Geçen yıl</string>
+
+    <string name="vehicle_add_title">Araç ekle</string>
+    <string name="vehicle_edit_title">Aracı düzenle</string>
+    <string name="vehicle_delete">Aracı sil</string>
+    <string name="vehicle_photo_cd">Araç fotoğrafı %1$d</string>
+    <string name="vehicle_photo_position_multi">Fotoğraf %1$d / %2$d · Ayarlamak için yukarı/aşağı sürükleyin</string>
+    <string name="vehicle_photo_position_single">Konumu ayarlamak için fotoğrafı yukarı/aşağı sürükleyin</string>
+    <string name="vehicle_add_photo">Fotoğraf ekle</string>
+    <string name="vehicle_change_photo">Fotoğrafı değiştir</string>
+    <string name="vehicle_remove_photo">Fotoğrafı kaldır</string>
+    <string name="vehicle_add_photos">Fotoğraf ekle (en fazla 3)</string>
+    <string name="vehicle_theme_color">Araç rengi</string>
+    <string name="vehicle_color_extracted">Fotoğraftan alındı</string>
+    <string name="vehicle_color_custom">Özel renk</string>
+    <string name="vehicle_color_default">Varsayılan uygulama teması</string>
+    <string name="vehicle_color_customize">Özelleştir</string>
+    <string name="vehicle_decode">Çözümle</string>
+    <string name="vehicle_year">Yıl</string>
+    <string name="vehicle_make">Marka</string>
+    <string name="vehicle_model">Model</string>
+    <string name="vehicle_trim">Donanım</string>
+    <string name="vehicle_drivetrain">Çekiş</string>
+    <string name="vehicle_condition_new">Sıfır</string>
+    <string name="vehicle_condition_used">İkinci el</string>
+    <string name="vehicle_purchased_condition">Satın alma durumu</string>
+    <string name="vehicle_purchase_price">Satın alma fiyatı</string>
+    <string name="vehicle_purchase_date">Satın alma tarihi</string>
+    <string name="vehicle_select_purchase_date">Satın alma tarihini seç</string>
+    <string name="vehicle_initial_odometer_km">Başlangıç kilometresi (km)</string>
+    <string name="vehicle_initial_mileage_mi">Başlangıç mil değeri (mi)</string>
+    <string name="vehicle_this_vehicle">bu araç</string>
+    <string name="vehicle_delete_title">Araç silinsin mi?</string>
+    <string name="vehicle_delete_message">%1$s silinsin mi? Bu araç ve tüm bakım kayıtları, yakıt kayıtları ve hatırlatıcıları uygulamadan kaldırılacak.</string>
+    <string name="photo_delete_title">Fotoğraf silinsin mi?</string>
+    <string name="photo_delete_message">Bu fotoğrafı silmek istediğinizden emin misiniz?</string>
+    <string name="vehicle_color_dialog_title">Araç rengini seçin</string>
+    <string name="vehicle_color_dialog_message">Araç ayrıntıları, sekmeler ve pano kartları bu renkle renklendirilecek.</string>
+    <string name="vehicle_color_reset">Varsayılana sıfırla</string>
+
+    <string name="color_racing_red">Yarış kırmızısı</string>
+    <string name="color_sunset_orange">Gün batımı turuncusu</string>
+    <string name="color_speed_yellow">Hız sarısı</string>
+    <string name="color_british_racing_green">İngiliz yarış yeşili</string>
+    <string name="color_electric_cyan">Elektrik camgöbeği</string>
+    <string name="color_daytona_blue">Daytona mavisi</string>
+    <string name="color_midnight_navy">Gece laciverti</string>
+    <string name="color_midnight_purple">Gece moru</string>
+    <string name="color_silver_slate">Gümüş / arduvaz</string>
+    <string name="color_charcoal_graphite">Grafit</string>
+    <string name="color_bronze_brown">Bronz / kahverengi</string>
+    <string name="color_pure_black">Saf siyah</string>
+</resources>

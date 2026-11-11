@@ -2,6 +2,7 @@ package com.fearmikey.garage.ui.settings
 
 import android.content.Context
 import android.net.Uri
+import androidx.core.net.toUri
 import android.text.format.DateUtils
 import androidx.documentfile.provider.DocumentFile
 import androidx.compose.foundation.background
@@ -34,7 +35,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Slider
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -48,6 +48,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -57,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.ui.theme.AppThemePalette
+import com.fearmikey.garage.ui.util.label
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
 import kotlin.math.abs
@@ -96,7 +98,7 @@ fun DefaultVehicleDialog(
                         onClick = { onVehicleSelected(null) },
                     )
                     Spacer(modifier = Modifier.padding(start = 8.dp))
-                    Text(text = "First vehicle added (default)")
+                    Text(text = stringResource(R.string.settings_default_vehicle_first))
                 }
 
                 vehicles.forEach { vehicle ->
@@ -196,6 +198,22 @@ fun LanguageSelectionDialog(
     )
 }
 
+/** Localized name for a stored theme value ("light" / "dark" / "system"). */
+@Composable
+fun themeLabel(theme: String): String = when (theme) {
+    "light" -> stringResource(R.string.onboarding_theme_light)
+    "dark" -> stringResource(R.string.onboarding_theme_dark)
+    else -> stringResource(R.string.onboarding_theme_system)
+}
+
+/** Localized name for a stored unit system value ("metric" / "imperial" / "uk_mixed"). */
+@Composable
+fun unitsLabel(units: String): String = when (units) {
+    "imperial" -> stringResource(R.string.units_imperial)
+    "uk_mixed" -> stringResource(R.string.units_uk_mixed)
+    else -> stringResource(R.string.units_metric)
+}
+
 @Composable
 fun SingleChoiceDialog(
     title: String,
@@ -203,6 +221,7 @@ fun SingleChoiceDialog(
     selectedOption: String,
     onOptionSelected: (String) -> Unit,
     onDismissRequest: () -> Unit,
+    optionLabel: @Composable (String) -> String = { it },
 ) {
     AlertDialog(
         onDismissRequest = onDismissRequest,
@@ -228,11 +247,7 @@ fun SingleChoiceDialog(
                             }
                         )
                         Spacer(modifier = Modifier.padding(start = 8.dp))
-                        val displayText = when (option) {
-                            "uk_mixed" -> "UK (Mixed)"
-                            else -> option.replaceFirstChar { it.uppercase() }
-                        }
-                        Text(text = displayText)
+                        Text(text = optionLabel(option))
                     }
                 }
             }
@@ -273,9 +288,9 @@ fun CloudBackupConfigDialog(
     if (showHttpWarning) {
         AlertDialog(
             onDismissRequest = { showHttpWarning = false },
-            title = { Text("Insecure Connection Warning") },
+            title = { Text(stringResource(R.string.settings_insecure_title)) },
             text = {
-                Text("You are connecting over an unencrypted HTTP connection. To keep your cloud backup credentials and data secure, ensure you are using a secure private VPN connection (such as Tailscale or WireGuard) to your server.")
+                Text(stringResource(R.string.settings_insecure_webdav_message))
             },
             confirmButton = {
                 TextButton(
@@ -284,7 +299,7 @@ fun CloudBackupConfigDialog(
                         doSave()
                     }
                 ) {
-                    Text("Continue")
+                    Text(stringResource(R.string.common_continue))
                 }
             },
             dismissButton = {
@@ -297,13 +312,13 @@ fun CloudBackupConfigDialog(
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text("Auto-Backup Configuration") },
+        title = { Text(stringResource(R.string.settings_webdav_config_title)) },
         text = {
             Column {
                 OutlinedTextField(
                     value = url,
                     onValueChange = { url = it },
-                    label = { Text("Server URL") },
+                    label = { Text(stringResource(R.string.common_server_url)) },
                     placeholder = { Text("https://cloud.example.com/remote.php/dav/files/user/") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
@@ -312,7 +327,7 @@ fun CloudBackupConfigDialog(
                 OutlinedTextField(
                     value = username,
                     onValueChange = { username = it },
-                    label = { Text("Username") },
+                    label = { Text(stringResource(R.string.common_username)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -320,7 +335,13 @@ fun CloudBackupConfigDialog(
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
-                    label = { Text(if (uiState.webdavPasswordSet) "Password (unchanged)" else "Password") },
+                    label = {
+                        Text(
+                            stringResource(
+                                if (uiState.webdavPasswordSet) R.string.settings_password_unchanged else R.string.common_password
+                            )
+                        )
+                    },
                     singleLine = true,
                     visualTransformation = PasswordVisualTransformation(),
                     modifier = Modifier.fillMaxWidth(),
@@ -330,7 +351,7 @@ fun CloudBackupConfigDialog(
                     onClick = { onTestConnection(url, username, password) },
                     enabled = url.isNotBlank() && username.isNotBlank(),
                 ) {
-                    Text("Test connection")
+                    Text(stringResource(R.string.settings_test_connection))
                 }
             }
         },
@@ -339,7 +360,7 @@ fun CloudBackupConfigDialog(
                 onClick = ::handleSaveClick,
                 enabled = url.isNotBlank() && username.isNotBlank(),
             ) {
-                Text("Save")
+                Text(stringResource(R.string.common_save))
             }
         },
         dismissButton = {
@@ -360,16 +381,16 @@ fun LocalBackupConfigDialog(
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text("Local Folder Auto-Backup") },
+        title = { Text(stringResource(R.string.settings_local_backup_title)) },
         text = {
             Column {
                 Text(
-                    text = "Automatically saves a backup zip (garage-backup.zip) to a folder on your phone whenever changes are made in Garage. You can sync this folder with custom or 3rd-party cloud storage apps.",
+                    text = stringResource(R.string.settings_local_backup_description),
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Backup Folder:",
+                    text = stringResource(R.string.settings_backup_folder_label),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary,
                 )
@@ -383,16 +404,20 @@ fun LocalBackupConfigDialog(
                     onClick = onSelectFolder,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Text(if (uiState.localBackupFolderUri.isBlank()) "Select Folder" else "Change Folder")
+                    Text(
+                        stringResource(
+                            if (uiState.localBackupFolderUri.isBlank()) R.string.settings_select_folder else R.string.settings_change_folder
+                        )
+                    )
                 }
-                val status = uiState.lastLocalBackupError?.let { "Status: $it" }
+                val status = uiState.lastLocalBackupError?.let { stringResource(R.string.settings_status_error, it) }
                     ?: uiState.lastLocalBackupTimestamp?.let {
                         val relative = DateUtils.getRelativeTimeSpanString(
                             it,
                             System.currentTimeMillis(),
                             DateUtils.MINUTE_IN_MILLIS
                         )
-                        "Last saved: $relative"
+                        stringResource(R.string.settings_last_saved, relative)
                     }
                 if (status != null) {
                     Spacer(modifier = Modifier.height(12.dp))
@@ -406,7 +431,7 @@ fun LocalBackupConfigDialog(
         },
         confirmButton = {
             TextButton(onClick = onDismissRequest) {
-                Text("Close")
+                Text(stringResource(R.string.common_close))
             }
         },
     )
@@ -429,9 +454,9 @@ fun MaintenanceMileageDialog(
         listOf(
             UnitConverter.kmToMiles(250) to "250 km",
             UnitConverter.kmToMiles(500) to "500 km",
-            UnitConverter.kmToMiles(800) to "800 km (~500 mi equivalent)",
+            UnitConverter.kmToMiles(800) to "800 km (~500 mi)",
             UnitConverter.kmToMiles(1000) to "1,000 km",
-            UnitConverter.kmToMiles(1600) to "1,600 km (~1,000 mi equivalent)",
+            UnitConverter.kmToMiles(1600) to "1,600 km (~1,000 mi)",
         )
     }
 
@@ -439,11 +464,11 @@ fun MaintenanceMileageDialog(
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text("Maintenance Mileage Notification") },
+        title = { Text(stringResource(R.string.settings_maint_mileage_title)) },
         text = {
             Column {
                 Text(
-                    text = "Notify when maintenance is due within:",
+                    text = stringResource(R.string.settings_notify_due_within),
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -489,16 +514,16 @@ fun MaintenanceDaysDialog(
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text("Maintenance Time Notification") },
+        title = { Text(stringResource(R.string.settings_maint_time_title)) },
         text = {
             Column {
                 Text(
-                    text = "Notify when maintenance is due within:",
+                    text = stringResource(R.string.settings_notify_due_within),
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 val currentDaysInt = selectedDays.roundToInt()
-                val daysLabel = if (currentDaysInt == 1) "1 day" else "$currentDaysInt days"
+                val daysLabel = pluralStringResource(R.plurals.common_days, currentDaysInt, currentDaysInt)
                 Text(
                     text = daysLabel,
                     style = MaterialTheme.typography.titleMedium,
@@ -522,7 +547,7 @@ fun MaintenanceDaysDialog(
                     onDismissRequest()
                 }
             ) {
-                Text("Save")
+                Text(stringResource(R.string.common_save))
             }
         },
         dismissButton = {
@@ -542,11 +567,11 @@ fun DocumentDaysDialog(
     val options = listOf(7, 14, 30, 60, 90)
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text("Document Expiration Notice Window") },
+        title = { Text(stringResource(R.string.settings_doc_window_title)) },
         text = {
             Column {
                 options.forEach { days ->
-                    val label = if (days == 1) "1 day before" else "$days days before"
+                    val label = pluralStringResource(R.plurals.settings_days_before, days, days)
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -589,7 +614,7 @@ fun PaletteSelectionDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text("Select Accent Color") },
+        title = { Text(stringResource(R.string.settings_select_accent)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 AppThemePalette.entries.forEach { palette ->
@@ -619,7 +644,7 @@ fun PaletteSelectionDialog(
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
-                            text = palette.displayName,
+                            text = palette.label(),
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
                         )
@@ -635,43 +660,11 @@ fun PaletteSelectionDialog(
     )
 }
 
-fun cloudBackupStatusText(uiState: SettingsUiState): String {
-    val configured = uiState.webdavUrl.isNotBlank() && uiState.webdavUsername.isNotBlank()
-    if (!configured) return "Not configured"
-    if (!uiState.cloudSyncEnabled) return "Disabled (configured)"
-    val error = uiState.lastSyncError
-    if (error != null) return "Connected — sync failed: $error"
-    val lastSync = uiState.lastSyncTimestamp
-    return if (lastSync != null) {
-        val relative = DateUtils.getRelativeTimeSpanString(lastSync, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS)
-        "Connected — last synced $relative"
-    } else {
-        "Connected — not yet synced"
-    }
-}
-
-fun localBackupStatusText(uiState: SettingsUiState, context: Context): String {
-    if (uiState.localBackupFolderUri.isBlank()) return "Not configured — no folder selected"
-    val folderName = formatFolderUriForDisplay(context, uiState.localBackupFolderUri)
-    if (!uiState.localBackupEnabled) return "Disabled — Folder: $folderName"
-    val error = uiState.lastLocalBackupError
-    if (error != null) return "Folder: $folderName — Failed: $error"
-    val lastBackup = uiState.lastLocalBackupTimestamp
-    return if (lastBackup != null) {
-        val relative = DateUtils.getRelativeTimeSpanString(
-            lastBackup,
-            System.currentTimeMillis(),
-            DateUtils.MINUTE_IN_MILLIS
-        )
-        "Folder: $folderName — Last saved $relative"
-    } else {
-        "Folder: $folderName — Not yet backed up"
-    }
-}
-
+/** "just now" for the last minute, otherwise the platform's localized relative time ("5 minutes ago"). */
+@Composable
 fun relativeTimeText(at: Long, now: Long = System.currentTimeMillis()): String =
     if (now - at < DateUtils.MINUTE_IN_MILLIS) {
-        "just now"
+        stringResource(R.string.common_just_now)
     } else {
         DateUtils.getRelativeTimeSpanString(at, now, DateUtils.MINUTE_IN_MILLIS).toString().lowercase()
     }
@@ -688,16 +681,20 @@ fun WebDavStatusItem(
     val successColor = Color(0xFF2E7D32)
 
     val (statusText, iconColor) = when {
-        !configured -> "Not configured" to MaterialTheme.colorScheme.onSurfaceVariant
-        !syncEnabled -> "Disabled (configured)" to MaterialTheme.colorScheme.onSurfaceVariant
-        uiState.isSyncing -> "Syncing\u2026" to MaterialTheme.colorScheme.primary
-        uiState.lastSyncError != null -> "Sync failed \u00b7 ${uiState.lastSyncTimestamp?.let { relativeTimeText(it, now) } ?: "recently"}" to MaterialTheme.colorScheme.error
-        uiState.lastSyncTimestamp != null -> "Connected \u00b7 last synced ${relativeTimeText(uiState.lastSyncTimestamp, now)}" to successColor
-        else -> "Connected \u00b7 not yet synced" to successColor
+        !configured -> stringResource(R.string.sync_not_configured) to MaterialTheme.colorScheme.onSurfaceVariant
+        !syncEnabled -> stringResource(R.string.sync_disabled_configured) to MaterialTheme.colorScheme.onSurfaceVariant
+        uiState.isSyncing -> stringResource(R.string.sync_syncing) to MaterialTheme.colorScheme.primary
+        uiState.lastSyncError != null -> stringResource(
+            R.string.sync_failed_at,
+            uiState.lastSyncTimestamp?.let { relativeTimeText(it, now) } ?: stringResource(R.string.sync_recently),
+        ) to MaterialTheme.colorScheme.error
+        uiState.lastSyncTimestamp != null ->
+            stringResource(R.string.sync_connected_last, relativeTimeText(uiState.lastSyncTimestamp, now)) to successColor
+        else -> stringResource(R.string.sync_connected_never) to successColor
     }
 
     ListItem(
-        headlineContent = { Text("WebDAV Cloud Sync") },
+        headlineContent = { Text(stringResource(R.string.webdav_title)) },
         supportingContent = {
             Column {
                 Text(statusText, color = if (configured && syncEnabled) iconColor else MaterialTheme.colorScheme.onSurfaceVariant)
@@ -711,13 +708,16 @@ fun WebDavStatusItem(
         },
         leadingContent = {
             when {
-                !configured || !syncEnabled -> Icon(Icons.Filled.CloudOff, contentDescription = "WebDAV disabled", tint = iconColor)
-                uiState.isSyncing -> CircularProgressIndicator(
-                    modifier = Modifier.size(24.dp).semantics { contentDescription = "Syncing" },
-                    strokeWidth = 2.dp,
-                )
-                uiState.lastSyncError != null -> Icon(Icons.Filled.Error, contentDescription = "Sync failed", tint = iconColor)
-                else -> Icon(Icons.Filled.CheckCircle, contentDescription = "Connected", tint = iconColor)
+                !configured || !syncEnabled -> Icon(Icons.Filled.CloudOff, contentDescription = stringResource(R.string.webdav_disabled_cd), tint = iconColor)
+                uiState.isSyncing -> {
+                    val syncingCd = stringResource(R.string.sync_syncing)
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp).semantics { contentDescription = syncingCd },
+                        strokeWidth = 2.dp,
+                    )
+                }
+                uiState.lastSyncError != null -> Icon(Icons.Filled.Error, contentDescription = stringResource(R.string.sync_failed), tint = iconColor)
+                else -> Icon(Icons.Filled.CheckCircle, contentDescription = stringResource(R.string.sync_connected), tint = iconColor)
             }
         },
         modifier = modifier
@@ -740,31 +740,33 @@ fun LocalBackupStatusItem(
     val folderName = formatFolderUriForDisplay(context, uiState.localBackupFolderUri)
 
     val (statusText, iconColor) = when {
-        !configured -> "Not configured — no folder selected" to MaterialTheme.colorScheme.onSurfaceVariant
-        !syncEnabled -> "Disabled — Folder: $folderName" to MaterialTheme.colorScheme.onSurfaceVariant
-        uiState.lastLocalBackupError != null -> "Auto-backup failed" to MaterialTheme.colorScheme.error
-        uiState.lastLocalBackupTimestamp != null -> "Active \u00b7 last saved ${relativeTimeText(uiState.lastLocalBackupTimestamp, now)}" to successColor
-        else -> "Active \u00b7 not yet saved" to successColor
+        !configured -> stringResource(R.string.local_not_configured) to MaterialTheme.colorScheme.onSurfaceVariant
+        !syncEnabled -> stringResource(R.string.local_disabled_folder, folderName) to MaterialTheme.colorScheme.onSurfaceVariant
+        uiState.lastLocalBackupError != null -> stringResource(R.string.local_failed) to MaterialTheme.colorScheme.error
+        uiState.lastLocalBackupTimestamp != null ->
+            stringResource(R.string.local_active_last, relativeTimeText(uiState.lastLocalBackupTimestamp, now)) to successColor
+        else -> stringResource(R.string.local_active_never) to successColor
     }
+    val folderLine = stringResource(R.string.local_folder, folderName)
 
     ListItem(
-        headlineContent = { Text("Local Folder Auto-Backup") },
+        headlineContent = { Text(stringResource(R.string.settings_local_backup_title)) },
         supportingContent = {
             Column {
                 Text(statusText, color = if (configured && syncEnabled) iconColor else MaterialTheme.colorScheme.onSurfaceVariant)
                 if (configured && syncEnabled && uiState.lastLocalBackupError != null) {
-                    Text("Folder: $folderName", style = MaterialTheme.typography.bodySmall)
+                    Text(folderLine, style = MaterialTheme.typography.bodySmall)
                     Text(uiState.lastLocalBackupError, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
                 } else if (configured && syncEnabled && uiState.lastLocalBackupTimestamp != null) {
-                    Text("Folder: $folderName", style = MaterialTheme.typography.bodySmall)
+                    Text(folderLine, style = MaterialTheme.typography.bodySmall)
                 }
             }
         },
         leadingContent = {
             when {
-                !configured || !syncEnabled -> Icon(Icons.Filled.FolderZip, contentDescription = "Local backup disabled", tint = iconColor)
-                uiState.lastLocalBackupError != null -> Icon(Icons.Filled.Error, contentDescription = "Backup failed", tint = iconColor)
-                else -> Icon(Icons.Filled.CheckCircle, contentDescription = "Active", tint = iconColor)
+                !configured || !syncEnabled -> Icon(Icons.Filled.FolderZip, contentDescription = stringResource(R.string.local_disabled_cd), tint = iconColor)
+                uiState.lastLocalBackupError != null -> Icon(Icons.Filled.Error, contentDescription = stringResource(R.string.local_backup_failed_cd), tint = iconColor)
+                else -> Icon(Icons.Filled.CheckCircle, contentDescription = stringResource(R.string.local_active), tint = iconColor)
             }
         },
         modifier = modifier
@@ -774,9 +776,9 @@ fun LocalBackupStatusItem(
 }
 
 fun formatFolderUriForDisplay(context: Context, uriString: String): String {
-    if (uriString.isBlank()) return "No folder selected"
+    if (uriString.isBlank()) return context.getString(R.string.folder_none)
     return try {
-        val uri = Uri.parse(uriString)
+        val uri = uriString.toUri()
         val docFile = DocumentFile.fromTreeUri(context, uri)
         val name = docFile?.name
         if (!name.isNullOrBlank()) {
@@ -787,10 +789,10 @@ fun formatFolderUriForDisplay(context: Context, uriString: String): String {
             if (treePart.isNotBlank() && treePart != uriString) {
                 treePart
             } else {
-                "Selected Folder"
+                context.getString(R.string.folder_selected)
             }
         }
     } catch (_: Exception) {
-        "Selected Folder"
+        context.getString(R.string.folder_selected)
     }
 }

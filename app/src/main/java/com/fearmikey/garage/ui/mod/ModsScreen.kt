@@ -98,6 +98,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -108,6 +109,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.entity.ModificationCategory
@@ -115,6 +117,7 @@ import com.fearmikey.garage.data.local.entity.ModificationRecord
 import com.fearmikey.garage.ui.components.EmptyState
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.fromUtcDatePickerMillis
+import com.fearmikey.garage.ui.util.label
 import com.fearmikey.garage.ui.util.toDisplayDate
 import com.fearmikey.garage.ui.util.toUtcDatePickerMillis
 import java.io.File
@@ -180,7 +183,7 @@ private fun ModsContent(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Add modification")
+                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.mods_cd_add))
             }
         },
     ) { innerPadding ->
@@ -314,13 +317,13 @@ private fun ModsSummaryHeader(
         ) {
             Column {
                 Text(
-                    text = "$count Modifications",
+                    text = pluralStringResource(R.plurals.mods_count, count, count),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                 )
                 if (totalCost > 0) {
                     Text(
-                        text = "Total Spent: %s%.2f".format(currencySymbol, totalCost),
+                        text = stringResource(R.string.mods_total_spent, "%s%.2f".format(currencySymbol, totalCost)),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.SemiBold,
@@ -331,7 +334,7 @@ private fun ModsSummaryHeader(
             IconButton(onClick = { onToggleViewMode(!isGridView) }) {
                 Icon(
                     imageVector = if (isGridView) Icons.AutoMirrored.Filled.ViewList else Icons.Default.GridView,
-                    contentDescription = if (isGridView) "Switch to list view" else "Switch to grid view",
+                    contentDescription = stringResource(if (isGridView) R.string.mods_cd_list_view else R.string.mods_cd_grid_view),
                 )
             }
         }
@@ -455,7 +458,7 @@ private fun ModGridCard(
                     onClick = onClick,
                     label = {
                         Text(
-                            text = mod.category.displayName,
+                            text = mod.category.label(),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             style = MaterialTheme.typography.labelSmall,
@@ -649,7 +652,7 @@ private fun ModCard(
                             modifier = Modifier.size(14.dp),
                         )
                         Text(
-                            text = "Product Link",
+                            text = stringResource(R.string.mods_product_link),
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.primary,
                         )
@@ -716,7 +719,7 @@ private fun AddEditModSheet(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Text(
-                text = if (uiState.editingModId != null) "Edit Modification" else "Add Modification",
+                text = stringResource(if (uiState.editingModId != null) R.string.mods_edit_title else R.string.mods_add_title),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
             )
@@ -743,7 +746,7 @@ private fun AddEditModSheet(
                             if (photoItem.file?.exists() == true) {
                                 AsyncImage(
                                     model = photoItem.file,
-                                    contentDescription = "Modification photo ${page + 1}",
+                                    contentDescription = stringResource(R.string.mods_photo_cd, page + 1),
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier.fillMaxSize(),
                                 )
@@ -787,7 +790,11 @@ private fun AddEditModSheet(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            if (uiState.photos.size > 1) "Photo ${currentPage + 1} of ${uiState.photos.size}" else "Photo",
+                            if (uiState.photos.size > 1) {
+                                stringResource(R.string.mods_photo_position, currentPage + 1, uiState.photos.size)
+                            } else {
+                                stringResource(R.string.mods_photo_single)
+                            },
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -803,7 +810,7 @@ private fun AddEditModSheet(
                                 ) {
                                     Icon(
                                         Icons.Default.AddAPhoto,
-                                        contentDescription = "Add photo",
+                                        contentDescription = stringResource(R.string.vehicle_add_photo),
                                         tint = MaterialTheme.colorScheme.primary,
                                     )
                                 }
@@ -818,7 +825,7 @@ private fun AddEditModSheet(
                             ) {
                                 Icon(
                                     Icons.Default.Edit,
-                                    contentDescription = "Change photo",
+                                    contentDescription = stringResource(R.string.vehicle_change_photo),
                                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                             }
@@ -827,7 +834,7 @@ private fun AddEditModSheet(
                             ) {
                                 Icon(
                                     Icons.Default.Delete,
-                                    contentDescription = "Remove photo",
+                                    contentDescription = stringResource(R.string.vehicle_remove_photo),
                                     tint = MaterialTheme.colorScheme.error,
                                 )
                             }
@@ -861,7 +868,7 @@ private fun AddEditModSheet(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "Add Photos (up to 6)",
+                            text = stringResource(R.string.mods_add_photos),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -873,7 +880,7 @@ private fun AddEditModSheet(
                 value = uiState.title,
                 onValueChange = onTitleChanged,
                 label = { Text(stringResource(R.string.mods_title_label)) },
-                placeholder = { Text("e.g., 2-inch Lift Kit, Cold Air Intake") },
+                placeholder = { Text(stringResource(R.string.mods_title_placeholder)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
                 modifier = Modifier.fillMaxWidth(),
@@ -885,7 +892,7 @@ private fun AddEditModSheet(
                 onExpandedChange = { categoryExpanded = it },
             ) {
                 OutlinedTextField(
-                    value = uiState.category.displayName,
+                    value = uiState.category.label(),
                     onValueChange = {},
                     readOnly = true,
                     label = { Text(stringResource(R.string.mods_category_label)) },
@@ -908,7 +915,7 @@ private fun AddEditModSheet(
                 ) {
                     ModificationCategory.entries.forEach { category ->
                         DropdownMenuItem(
-                            text = { Text(category.displayName) },
+                            text = { Text(category.label()) },
                             leadingIcon = {
                                 Icon(
                                     imageVector = category.icon(),
@@ -929,7 +936,7 @@ private fun AddEditModSheet(
                 value = uiState.description,
                 onValueChange = onDescriptionChanged,
                 label = { Text(stringResource(R.string.mods_desc_label)) },
-                placeholder = { Text("Details, part numbers, installation notes...") },
+                placeholder = { Text(stringResource(R.string.mods_desc_placeholder)) },
                 minLines = 3,
                 maxLines = 5,
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
@@ -943,7 +950,7 @@ private fun AddEditModSheet(
                 label = { Text(stringResource(R.string.mods_date_label)) },
                 trailingIcon = {
                     IconButton(onClick = { showDatePickerDialog = true }) {
-                        Icon(Icons.Default.CalendarToday, contentDescription = "Select Date")
+                        Icon(Icons.Default.CalendarToday, contentDescription = stringResource(R.string.doc_select_date))
                     }
                 },
                 modifier = Modifier
@@ -965,7 +972,7 @@ private fun AddEditModSheet(
                 value = uiState.productUrl,
                 onValueChange = onProductUrlChanged,
                 label = { Text(stringResource(R.string.mods_url_label)) },
-                placeholder = { Text("e.g. https://example.com/parts/lift-kit") },
+                placeholder = { Text(stringResource(R.string.mods_url_placeholder)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Uri,
@@ -1015,7 +1022,7 @@ private fun AddEditModSheet(
                         showDatePickerDialog = false
                     },
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.common_ok))
                 }
             },
             dismissButton = {
@@ -1080,12 +1087,20 @@ private fun ViewModSheet(
     val clipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
 
+    val resources = LocalResources.current
     fun copyToClipboard(label: String, text: String) {
         if (text.isNotBlank()) {
             clipboardManager.setText(AnnotatedString(text))
-            Toast.makeText(context, "$label copied to clipboard", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, resources.getString(R.string.common_copied_to_clipboard, label), Toast.LENGTH_SHORT).show()
         }
     }
+    val titleLabel = stringResource(R.string.mods_title_short)
+    val categoryLabel = stringResource(R.string.mods_category_label)
+    val categoryName = mod.category.label()
+    val costLabel = stringResource(R.string.common_cost)
+    val dateLabel = stringResource(R.string.mods_date_label)
+    val linkLabel = stringResource(R.string.mods_product_link)
+    val descriptionLabel = stringResource(R.string.mods_desc_label)
 
     val imageFiles = remember(mod.imageUris) {
         mod.imageUris.mapNotNull { uri ->
@@ -1114,7 +1129,7 @@ private fun ViewModSheet(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { copyToClipboard("Title", mod.title) },
+                    .clickable { copyToClipboard(titleLabel, mod.title) },
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -1127,7 +1142,7 @@ private fun ViewModSheet(
                 IconButton(onClick = { onEdit(mod) }) {
                     Icon(
                         imageVector = Icons.Default.Edit,
-                        contentDescription = "Edit Modification",
+                        contentDescription = stringResource(R.string.mods_edit_title),
                         tint = MaterialTheme.colorScheme.primary,
                     )
                 }
@@ -1196,8 +1211,8 @@ private fun ViewModSheet(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 AssistChip(
-                    onClick = { copyToClipboard("Category", mod.category.displayName) },
-                    label = { Text(mod.category.displayName) },
+                    onClick = { copyToClipboard(categoryLabel, categoryName) },
+                    label = { Text(categoryName) },
                     leadingIcon = {
                         Icon(
                             imageVector = mod.category.icon(),
@@ -1214,7 +1229,7 @@ private fun ViewModSheet(
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.clickable { copyToClipboard("Cost", costText) },
+                        modifier = Modifier.clickable { copyToClipboard(costLabel, costText) },
                     )
                 }
             }
@@ -1222,7 +1237,7 @@ private fun ViewModSheet(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.clickable { copyToClipboard("Installation date", mod.date.toDisplayDate()) },
+                modifier = Modifier.clickable { copyToClipboard(dateLabel, mod.date.toDisplayDate()) },
             ) {
                 Icon(
                     imageVector = Icons.Default.CalendarToday,
@@ -1231,7 +1246,7 @@ private fun ViewModSheet(
                     modifier = Modifier.size(18.dp),
                 )
                 Text(
-                    text = "Installed: ${mod.date.toDisplayDate()}",
+                    text = stringResource(R.string.mods_installed, mod.date.toDisplayDate()),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -1276,12 +1291,12 @@ private fun ViewModSheet(
                     }
 
                     IconButton(
-                        onClick = { copyToClipboard("Product link", formattedUrl) },
+                        onClick = { copyToClipboard(linkLabel, formattedUrl) },
                         modifier = Modifier.size(32.dp),
                     ) {
                         Icon(
                             imageVector = Icons.Default.ContentCopy,
-                            contentDescription = "Copy Product Link",
+                            contentDescription = stringResource(R.string.common_copy_label, linkLabel),
                             tint = MaterialTheme.colorScheme.outline,
                             modifier = Modifier.size(16.dp),
                         )
@@ -1292,10 +1307,10 @@ private fun ViewModSheet(
             if (mod.description.isNotBlank()) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(4.dp),
-                    modifier = Modifier.clickable { copyToClipboard("Description", mod.description) },
+                    modifier = Modifier.clickable { copyToClipboard(descriptionLabel, mod.description) },
                 ) {
                     Text(
-                        text = "Notes / Description",
+                        text = descriptionLabel,
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.outline,
                     )
@@ -1319,7 +1334,7 @@ private fun ViewModSheet(
                 ) {
                     Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Delete")
+                    Text(stringResource(R.string.common_delete))
                 }
 
                 Button(
@@ -1328,7 +1343,7 @@ private fun ViewModSheet(
                 ) {
                     Icon(Icons.Default.Edit, contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Edit")
+                    Text(stringResource(R.string.common_edit))
                 }
             }
 
@@ -1339,8 +1354,8 @@ private fun ViewModSheet(
     if (showDeleteConfirmDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteConfirmDialog = false },
-            title = { Text("Delete Modification?") },
-            text = { Text("Are you sure you want to delete '${mod.title}'? This action cannot be undone.") },
+            title = { Text(stringResource(R.string.mods_delete_confirm_title)) },
+            text = { Text(stringResource(R.string.mods_delete_confirm_msg, mod.title)) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -1349,12 +1364,12 @@ private fun ViewModSheet(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                 ) {
-                    Text("Delete")
+                    Text(stringResource(R.string.common_delete))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteConfirmDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         )

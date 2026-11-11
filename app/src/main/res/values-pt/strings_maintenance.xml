@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="maint_cd_add_odometer">Adicionar leitura do hodômetro</string>
+    <string name="maint_cd_add_record">Adicionar registro de manutenção</string>
+    <string name="maint_cd_edit_record">Editar registro</string>
+    <string name="maint_cd_delete_record">Excluir registro</string>
+    <string name="maint_empty">Nenhuma manutenção registrada ainda.\nToque em + para adicionar o primeiro registro.</string>
+    <string name="maint_no_matches">Nenhum registro corresponde aos filtros.</string>
+    <string name="maint_clear_filters">Limpar filtros</string>
+    <string name="maint_delete_title">Excluir registro</string>
+    <string name="maint_delete_message">Tem certeza de que deseja excluir este registro?</string>
+    <string name="maint_receipt_invoice">Recibo / Nota fiscal</string>
+    <string name="maint_receipt_image">Imagem do recibo</string>
+    <string name="maint_pdf_receipt">Recibo em PDF</string>
+    <string name="maint_open_with_app">Abrir com app</string>
+    <string name="maint_add_title">Adicionar registro de manutenção</string>
+    <string name="maint_date">Data</string>
+    <string name="maint_task_other">Outro / personalizado</string>
+    <string name="maint_specific_task">Serviço específico</string>
+    <string name="maint_description">Descrição</string>
+    <string name="maint_mileage_unit">Quilometragem (%1$s)</string>
+    <string name="maint_cost_unit">Custo (%1$s)</string>
+    <string name="maint_inspected_only">Apenas inspecionado (adiar troca)</string>
+    <string name="maint_remind_in_distance">Lembrar em (%1$s) *</string>
+    <string name="maint_remind_in_months">Lembrar em (meses) *</string>
+    <string name="maint_attached_pdf">Recibo em PDF anexado</string>
+    <string name="maint_pdf_document">Documento PDF</string>
+    <string name="maint_change_attachment">Trocar anexo</string>
+    <string name="maint_remove_attachment">Remover anexo</string>
+    <string name="maint_attach_receipt">Anexar recibo / nota fiscal (imagem ou PDF)</string>
+    <string name="maint_open_receipt">Abrir recibo</string>
+    <string name="maint_open_file_failed">Não foi possível abrir o arquivo</string>
+    <string name="maint_odometer_update">Leitura do hodômetro</string>
+    <string name="maint_search_placeholder">Buscar descrição ou serviço</string>
+    <string name="maint_close_search">Fechar busca</string>
+    <string name="maint_search">Buscar</string>
+    <string name="maint_has_receipt">Com recibo</string>
+    <string name="maint_hide_auto">Ocultar leituras e diagnósticos</string>
+    <string name="maint_showing_count">Mostrando %1$d de %2$d</string>
+    <plurals name="maint_categories_count">
+        <item quantity="one">%d categoria</item>
+        <item quantity="many">%d categorias</item>
+        <item quantity="other">%d categorias</item>
+    </plurals>
+    <string name="template_title">Modelos de plano de manutenção</string>
+    <string name="template_subtitle">Escolha um modelo para adicionar intervalos de manutenção adequados a este veículo.</string>
+    <string name="template_included_rules">Regras incluídas (%1$d):</string>
+    <plurals name="template_months">
+        <item quantity="one">%d mês</item>
+        <item quantity="many">%d meses</item>
+        <item quantity="other">%d meses</item>
+    </plurals>
+    <string name="template_interval_or">%1$s ou %2$s</string>
+    <string name="template_every">A cada %1$s</string>
+    <string name="template_apply">Aplicar modelo “%1$s”</string>
+</resources>

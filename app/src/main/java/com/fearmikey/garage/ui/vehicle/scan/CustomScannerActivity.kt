@@ -7,23 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.fearmikey.garage.R
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.CaptureManager
 import com.journeyapps.barcodescanner.DecoratedBarcodeView
 
-class CustomScannerActivity : AppCompatActivity() {
+class CustomScannerActivity : ComponentActivity() {
 
     private lateinit var capture: CaptureManager
     private lateinit var barcodeScannerView: DecoratedBarcodeView
-    private lateinit var btnTorch: FloatingActionButton
-    private lateinit var btnBack: FloatingActionButton
+    private lateinit var btnTorch: ImageButton
+    private lateinit var btnBack: ImageButton
     private lateinit var btnShutter: ImageButton
     private var isTorchOn = false
 
@@ -32,6 +31,9 @@ class CustomScannerActivity : AppCompatActivity() {
         setContentView(R.layout.custom_barcode_scanner)
 
         barcodeScannerView = findViewById(R.id.zxing_barcode_scanner)
+        // ZXing's own prompt sits at the very bottom edge, under the gesture bar, and duplicates
+        // our instruction chip (tv_instruction), so hide it.
+        barcodeScannerView.statusView.visibility = View.GONE
 
         capture = CaptureManager(this, barcodeScannerView)
         capture.initializeFromIntent(intent, savedInstanceState)

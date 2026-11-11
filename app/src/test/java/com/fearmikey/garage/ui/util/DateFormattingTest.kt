@@ -7,6 +7,8 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.util.Locale
 
 class DateFormattingTest {
 
@@ -22,6 +24,23 @@ class DateFormattingTest {
         assertEquals(selectedDate, dateInUtc)
 
         val restoredLocalMillis = utcPickerMillis.fromUtcDatePickerMillis()
-        assertEquals(selectedDate.format(DateTimeFormatter.ofPattern("MMM d, yyyy")), restoredLocalMillis.toDisplayDate())
+        assertEquals(
+            selectedDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.getDefault())),
+            restoredLocalMillis.toDisplayDate(),
+        )
+    }
+
+    @Test
+    fun `toDisplayDate follows the current locale`() {
+        val millis = LocalDate.of(2026, 11, 10).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        val original = Locale.getDefault()
+        try {
+            Locale.setDefault(Locale.GERMANY)
+            assertEquals("10.11.2026", millis.toDisplayDate())
+            Locale.setDefault(Locale.US)
+            assertEquals("Nov 10, 2026", millis.toDisplayDate())
+        } finally {
+            Locale.setDefault(original)
+        }
     }
 }

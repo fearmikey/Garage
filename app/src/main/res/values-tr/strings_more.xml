@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sugg_cd_add_rule">Özel kural ekle</string>
+    <string name="sugg_empty">Henüz öneri yok.\nNe zaman bakım gerektiğini görmek için bakım ve kilometre kaydedin.</string>
+    <string name="sugg_custom_rules">Özel kurallarınız</string>
+    <string name="sugg_ignored_tasks">Yok sayılan işlemler (%1$d)</string>
+    <string name="sugg_months_short">%1$d ay</string>
+    <string name="sugg_cd_edit_rule">Kuralı düzenle</string>
+    <string name="sugg_cd_delete_rule">Özel kuralı sil</string>
+    <string name="sugg_last_done_at">son yapılan: %1$s</string>
+    <string name="sugg_due_at">gereken: %1$s</string>
+    <string name="sugg_due_by">son tarih: %1$s</string>
+    <string name="sugg_ignore">Yok say</string>
+    <string name="sugg_log_now">Şimdi kaydet</string>
+    <string name="sugg_ignored_for_vehicle">Bu araç için yok sayıldı</string>
+    <string name="sugg_restore">Geri yükle</string>
+    <string name="sugg_edit_title">Bakım aralığını düzenle</string>
+    <string name="sugg_add_title">Özel kural ekle</string>
+    <string name="sugg_presets">Plan şablonları</string>
+    <string name="sugg_presets_desc">Hazır bakım şablonları uygulayın (çekme, elektrikli, günlük kullanım, klasik).</string>
+    <string name="sugg_task_name">İşlem adı</string>
+    <string name="sugg_interval_distance">Aralık (%1$s)</string>
+    <string name="sugg_interval_months">Aralık (ay)</string>
+    <string name="cost_fuel_fillup">Yakıt alımı</string>
+    <string name="cost_fuel">Yakıt</string>
+    <string name="cost_charging_session">Şarj oturumu (%1$s)</string>
+    <string name="cost_ev_charging">Elektrikli şarj</string>
+    <string name="cost_modifications">Modifikasyonlar</string>
+    <string name="cost_vehicle_purchase">Araç alımı</string>
+    <string name="cost_maintenance">Bakım</string>
+    <string name="cost_maintenance_repairs">Bakım ve onarım</string>
+    <string name="cost_fuel_spent">Yakıt harcaması</string>
+    <string name="cost_collapse">Daralt</string>
+    <string name="cost_expand">Genişlet</string>
+    <plurals name="cost_records">
+        <item quantity="one">%d kayıt</item>
+        <item quantity="other">%d kayıt</item>
+    </plurals>
+    <plurals name="cost_fillups">
+        <item quantity="one">%d yakıt alımı</item>
+        <item quantity="other">%d yakıt alımı</item>
+    </plurals>
+    <plurals name="cost_entries_share">
+        <item quantity="one">%1$d kayıt · toplamın %%%2$s kadarı</item>
+        <item quantity="other">%1$d kayıt · toplamın %%%2$s kadarı</item>
+    </plurals>
+    <string name="trip_cat_business">İş</string>
+    <string name="trip_cat_personal">Kişisel</string>
+    <string name="trip_cat_commute">İşe gidiş</string>
+    <string name="trip_cat_medical">Sağlık</string>
+    <string name="trip_cat_charity">Gönüllü</string>
+    <string name="trip_cat_other">Diğer</string>
+    <string name="trip_cd_add">Yolculuk ekle</string>
+    <string name="trip_cd_more">Diğer seçenekler</string>
+    <string name="trip_empty">Henüz yolculuk kaydedilmedi.\nEklemek için “GPS yolculuğu başlat”a veya +’ya dokunun.</string>
+    <string name="trip_deduction">İndirim: %1$s</string>
+    <string name="trip_start_gps">GPS yolculuğu başlat</string>
+    <string name="trip_paused">Yolculuk duraklatıldı</string>
+    <string name="trip_tracking">Yolculuk izleniyor…</string>
+    <string name="trip_resume">Devam et</string>
+    <string name="trip_pause">Duraklat</string>
+    <string name="trip_stop_save">Durdur ve kaydet</string>
+    <string name="trip_log_title">Yolculuk kaydet</string>
+    <string name="trip_edit_title">Yolculuğu düzenle</string>
+    <string name="trip_distance">Mesafe (%1$s)</string>
+    <string name="trip_rate">Geri ödeme oranı (%1$s/%2$s)</string>
+    <string name="trip_notes">Notlar (varış yeri, amaç)</string>
+</resources>

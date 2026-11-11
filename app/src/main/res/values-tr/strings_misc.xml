@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="parts_edit_title">Parçaları ve sıvıları düzenle</string>
+    <string name="parts_autofill">Tahmini değerlerle doldur</string>
+    <string name="parts_autofill_msg">Otomatik doldurulan sıvı kapasiteleri ve parça bilgileri, çözülen VIN ve motor verilerine göre tahmin edilir.\n\nSıvı satın almadan veya bakım yapmadan önce tüm değerleri kullanım kılavuzundan kontrol edin.</string>
+    <string name="parts_apply_understand">Anladım, uygula</string>
+    <string name="vehicle_cd_obd">OBD2 tarayıcı</string>
+    <string name="vehicle_cd_export">Bakım kaydını dışa aktar</string>
+    <string name="vehicle_unnamed">Adsız araç</string>
+    <string name="tabs_cd_reorder">Sekmeyi yeniden sırala</string>
+    <string name="currency_select_title">Para birimi seç</string>
+    <string name="currency_search">Para birimi ara…</string>
+    <string name="currency_none_found">Eşleşen para birimi bulunamadı.</string>
+    <string name="bmac_title">Garage\'ı destekleyin</string>
+    <string name="bmac_message">Garage\'ı beğendiniz mi? Uygulama işinize yarıyorsa açık kaynak geliştirmesini desteklemeyi düşünün!</string>
+    <string name="bmac_dont_ask">Tekrar sorma</string>
+    <string name="bmac_later">Belki sonra</string>
+    <string name="status_overdue">Gecikmiş</string>
+    <string name="status_upcoming">Yaklaşıyor</string>
+    <string name="status_on_track">Zamanında</string>
+    <string name="status_done">Tamamlandı</string>
+    <string name="odo_vehicle">Araç</string>
+    <string name="odo_current">Şu an: %1$s</string>
+    <string name="odo_new_reading">Yeni kilometre sayacı değeri (%1$s)</string>
+    <string name="odo_notes_optional">Notlar (isteğe bağlı)</string>
+    <string name="odo_notes_placeholder">örn. haftalık kayıt</string>
+    <string name="trend_tap_to_edit">Düzenlemek için dokunun</string>
+    <string name="trend_unusual_reading">Olağan dışı değer</string>
+    <string name="url_invalid">Geçersiz URL</string>
+    <string name="url_open_failed">Bağlantı açılamadı</string>
+</resources>

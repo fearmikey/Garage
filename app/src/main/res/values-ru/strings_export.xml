@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="export_title">Отчёт для продажи</string>
+    <string name="export_book_title">Сервисная книжка и история</string>
+    <string name="export_book_desc">Создайте полный, аккуратно оформленный отчёт о затратах на уход, журнале обслуживания, заменённых деталях и состоянии безопасности автомобиля, чтобы повысить его стоимость при продаже.</string>
+    <string name="export_summary_preview">ПРЕДПРОСМОТР СВОДКИ</string>
+    <string name="export_vin">VIN: %1$s</string>
+    <string name="export_total_investment">Всего вложено в уход:</string>
+    <string name="export_service_records">Записи об обслуживании:</string>
+    <string name="export_upgrades_colon">Улучшения и доработки:</string>
+    <string name="export_recall_status">Отзывные кампании:</string>
+    <string name="export_checking">Проверка…</string>
+    <string name="export_clear_serviced">Открытых нет (0 открыто / %1$d выполнено)</string>
+    <string name="export_clear">Открытых нет</string>
+    <string name="export_open_total">Открыто: %1$d / всего: %2$d</string>
+    <string name="export_included_sections">ВКЛЮЧЁННЫЕ РАЗДЕЛЫ</string>
+    <string name="export_upgrades">Улучшения и доработки</string>
+    <string name="export_upgrades_desc">Включить список деталей, улучшений и аксессуаров</string>
+    <string name="export_parts">Запчасти и жидкости</string>
+    <string name="export_parts_desc">Включить вязкость масла, свечи, размер шин и щётки</string>
+    <string name="export_recalls">Отзывные кампании</string>
+    <string name="export_recalls_desc">Включить официальную проверку отзывов NHTSA</string>
+    <string name="export_select_open">Выберите открытые кампании (всего: %1$d):</string>
+    <string name="export_all_serviced">Все выполнены</string>
+    <string name="export_all_open">Все открыты</string>
+    <string name="export_open_unaddressed">ОТКРЫТ / НЕ ВЫПОЛНЕН</string>
+    <string name="export_serviced_clear">ВЫПОЛНЕН</string>
+    <string name="export_component">Деталь: %1$s</string>
+    <string name="export_fuel">Заправки и зарядки</string>
+    <string name="export_fuel_desc">Включить заправки и зарядки</string>
+    <string name="export_generate">Создать сервисную книжку (PDF)</string>
+</resources>

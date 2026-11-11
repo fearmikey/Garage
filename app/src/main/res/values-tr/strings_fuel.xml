@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fuel_cd_add_charging">Şarj oturumu ekle</string>
+    <string name="fuel_cd_add_fillup">Yakıt alımı ekle</string>
+    <string name="fuel_cd_delete_charging">Şarj oturumunu sil</string>
+    <string name="fuel_cd_delete_fillup">Yakıt alımını sil</string>
+    <string name="fuel_empty_charging">Henüz şarj oturumu kaydedilmedi.\nİlkini kaydetmek için + simgesine dokunun.</string>
+    <string name="fuel_empty_fuel">Henüz yakıt alımı kaydedilmedi.\nİlkini kaydetmek için + simgesine dokunun.</string>
+    <string name="fuel_charging_efficiency">Şarj verimliliği</string>
+    <string name="fuel_total_charging_spent">Toplam şarj harcaması</string>
+    <string name="fuel_battery_health_card">Batarya sağlığı ve yıpranma</string>
+    <string name="fuel_health_percent">%%%1$.1f sağlık</string>
+    <string name="fuel_soc_trend" formatted="false">%100 şarjda menzil eğilimi</string>
+    <string name="fuel_at_mileage">%1$s</string>
+    <string name="fuel_total_line">Toplam %1$s · %2$s</string>
+    <string name="fuel_est_range_chip">%%100 şarjda tahmini menzil: %1$s</string>
+    <string name="fuel_economy_title">Yakıt tüketimi</string>
+    <string name="fuel_best">En iyi</string>
+    <string name="fuel_average">Ortalama</string>
+    <string name="fuel_worst">En kötü</string>
+    <string name="fuel_total_spent">Toplam harcama</string>
+    <string name="fuel_partial">Kısmi</string>
+    <string name="fuel_since_full_tank">Son tam depodan beri %1$s</string>
+    <string name="fuel_full_tank_hint">Depoyu tamamen doldurmadıysanız kapatın</string>
+
+    <string name="trend_fuel_title">Yakıt eğilimleri</string>
+    <string name="trend_charging_title">Şarj eğilimleri</string>
+    <string name="trend_rolling_fuel">3 dolum ort.</string>
+    <string name="trend_rolling_charging">3 oturum ort.</string>
+    <string name="trend_metric_economy">Tüketim</string>
+    <string name="trend_metric_efficiency">Verimlilik</string>
+    <string name="trend_metric_cost_per">Maliyet/%1$s</string>
+    <string name="trend_metric_price_per">Fiyat/%1$s</string>
+    <string name="trend_range_last_10">Son 10</string>
+    <string name="trend_range_6_months">6 ay</string>
+    <string name="trend_range_1_year">1 yıl</string>
+    <string name="trend_range_all">Tümü</string>
+    <string name="trend_chart_cd">%1$s grafiği, %2$d nokta, en son %3$s. Noktaları incelemek için dokunun veya sürükleyin.</string>
+    <string name="trend_avg">ort. %1$s</string>
+    <string name="trend_legend_rolling">Soluk çizgi: %1$s</string>
+    <string name="trend_legend_average">Kesikli: ortalama</string>
+    <string name="trend_legend_outliers">İçi boş noktalar: olağan dışı değerler, incelemek için dokunun</string>
+    <string name="trend_legend_inspect">İncelemek için dokunun veya sürükleyin</string>
+    <string name="trend_not_enough_data">Bu aralıkta henüz yeterli veri yok. Daha geniş bir aralık deneyin.</string>
+</resources>

@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit
 class LubeLoggerApiFactory @Inject constructor(
     private val credentialsManager: LubeLoggerCredentialsManager,
     private val gson: Gson,
+    private val baseClient: OkHttpClient,
 ) {
     fun createApiService(): LubeLoggerApiService? {
         val serverUrl = credentialsManager.getServerUrl()
@@ -31,7 +32,7 @@ class LubeLoggerApiFactory @Inject constructor(
         // Ensure URL ends with a slash
         val baseUrl = if (serverUrl.endsWith("/")) serverUrl else "$serverUrl/"
 
-        val clientBuilder = OkHttpClient.Builder()
+        val clientBuilder = baseClient.newBuilder()
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
 

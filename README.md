@@ -1,8 +1,8 @@
 # Garage
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.3.8-blue.svg)](CHANGELOG.md)
-[![Android Min SDK](https://img.shields.io/badge/Min%20SDK-34-brightgreen.svg)](https://developer.android.com/about/versions/14)
+[![Version](https://img.shields.io/badge/Version-1.3.9-blue.svg)](CHANGELOG.md)
+[![Android Min SDK](https://img.shields.io/badge/Min%20SDK-33-brightgreen.svg)](https://developer.android.com/about/versions/13)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4-purple.svg?logo=kotlin)](https://kotlinlang.org/)
 [![Compose](https://img.shields.io/badge/Jetpack%20Compose-Material3-4285F4.svg?logo=android)](https://developer.android.com/jetpack/compose)
 
@@ -160,8 +160,8 @@ Garage/
 ### Prerequisites
 
 * **Android Studio:** Ladybug (2024.2.1) or newer recommended
-* **JDK:** Java 11 or higher
-* **Android SDK:** Min SDK 34 (Android 14) / Target SDK 37
+* **JDK:** Java 17 or higher
+* **Android SDK:** Min SDK 33 (Android 13) / Target SDK 37
 
 ### Installation
 
@@ -175,7 +175,7 @@ Garage/
 3. **Sync Gradle**
    Allow Gradle to download dependencies and sync project files.
 4. **Run the Application**
-   Select a connected device or emulator running Android 14+ (API 34+) and click **Run** (`Shift + F10`).
+   Select a connected device or emulator running Android 13+ (API 33+) and click **Run** (`Shift + F10`).
 
 ---
 

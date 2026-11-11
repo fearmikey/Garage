@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.widget.Toast
+import androidx.core.net.toUri
+import com.fearmikey.garage.R
 import java.net.URI
 
 object UrlLauncher {
@@ -21,7 +23,7 @@ object UrlLauncher {
         } catch (_: Exception) {
             null
         } ?: try {
-            Uri.parse(url).host?.lowercase()
+            url.toUri().host?.lowercase()
         } catch (_: Exception) {
             null
         } ?: url.lowercase()
@@ -36,9 +38,9 @@ object UrlLauncher {
      */
     fun openUrl(context: Context, url: String) {
         val uri = try {
-            Uri.parse(url)
+            url.toUri()
         } catch (_: Exception) {
-            Toast.makeText(context, "Invalid URL", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.url_invalid), Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -83,7 +85,7 @@ object UrlLauncher {
             }
             context.startActivity(intent)
         } catch (_: Exception) {
-            Toast.makeText(context, "Could not open link", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.url_open_failed), Toast.LENGTH_SHORT).show()
         }
     }
 }

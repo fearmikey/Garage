@@ -1,6 +1,8 @@
 package com.fearmikey.garage.ui.cost
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
+import com.fearmikey.garage.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fearmikey.garage.data.local.entity.ChargingRecord
@@ -20,6 +22,7 @@ import com.fearmikey.garage.ui.navigation.Destinations
 import com.fearmikey.garage.ui.util.AppCurrency
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
+import com.fearmikey.garage.ui.util.labelRes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -47,6 +50,11 @@ data class CostEntry(
     val cost: Double,
     val mileage: Double,
     val detail: String? = null,
+    /** When set, the UI shows this localized title instead of [title]; [titleArgRes] fills its %1$s. */
+    @param:StringRes val titleRes: Int? = null,
+    @param:StringRes val titleArgRes: Int? = null,
+    /** Shown (localized) when [detail] is blank. */
+    val modCategory: ModificationCategory? = null,
 )
 
 data class CategoryCostItem(
@@ -58,6 +66,8 @@ data class CategoryCostItem(
     val entries: List<CostEntry>,
     val category: MaintenanceCategory? = null,
     val modificationCategory: ModificationCategory? = null,
+    /** Localized title for the non-maintenance groups (fuel, charging, mods, purchase). */
+    @param:StringRes val titleRes: Int? = null,
 )
 
 data class CostOfOwnershipUiState(
@@ -206,6 +216,7 @@ class CostOfOwnershipViewModel @Inject constructor(
                     id = record.id,
                     date = record.date,
                     title = "Fuel Fill-Up",
+                    titleRes = R.string.cost_fuel_fillup,
                     cost = record.totalCost,
                     mileage = record.mileage,
                     detail = "%.1f %s @ %s%.2f/%s".format(displayVolume, volumeUnit, currency.symbol, displayPrice, volumeUnit),
@@ -215,6 +226,7 @@ class CostOfOwnershipViewModel @Inject constructor(
                 CategoryCostItem(
                     key = "FUEL",
                     title = "Fuel",
+                    titleRes = R.string.cost_fuel,
                     totalCost = gasTotal,
                     percentage = pct,
                     recordCount = filteredFuel.size,
@@ -232,6 +244,8 @@ class CostOfOwnershipViewModel @Inject constructor(
                     id = record.id,
                     date = record.date,
                     title = "Charging Session (${record.chargerSpeed.displayName})",
+                    titleRes = R.string.cost_charging_session,
+                    titleArgRes = record.chargerSpeed.labelRes,
                     cost = record.totalCost,
                     mileage = record.mileage,
                     detail = "%.1f kWh · %d%% → %d%%".format(record.kwhAdded, record.batteryPercentStart, record.batteryPercentEnd),
@@ -241,6 +255,7 @@ class CostOfOwnershipViewModel @Inject constructor(
                 CategoryCostItem(
                     key = "CHARGING",
                     title = "EV Charging",
+                    titleRes = R.string.cost_ev_charging,
                     totalCost = chargeTotal,
                     percentage = pct,
                     recordCount = filteredCharging.size,
@@ -260,13 +275,15 @@ class CostOfOwnershipViewModel @Inject constructor(
                     title = record.title.ifBlank { record.category.displayName },
                     cost = record.cost,
                     mileage = 0.0,
-                    detail = record.description.takeIf { it.isNotBlank() } ?: record.category.displayName,
+                    detail = record.description.takeIf { it.isNotBlank() },
+                    modCategory = record.category,
                 )
             }.toList()
             categoryItems.add(
                 CategoryCostItem(
                     key = "MODIFICATIONS",
                     title = "Modifications",
+                    titleRes = R.string.cost_modifications,
                     totalCost = modTotalCost,
                     percentage = pct,
                     recordCount = filteredMods.size,
@@ -283,6 +300,7 @@ class CostOfOwnershipViewModel @Inject constructor(
                 CategoryCostItem(
                     key = PURCHASE_KEY,
                     title = "Vehicle Purchase",
+                    titleRes = R.string.cost_vehicle_purchase,
                     totalCost = purchaseTotal,
                     percentage = pct,
                     recordCount = 1,
@@ -291,6 +309,7 @@ class CostOfOwnershipViewModel @Inject constructor(
                             id = 0L,
                             date = purchaseDate ?: 0L,
                             title = "Purchase Price",
+                            titleRes = R.string.vehicle_purchase_price,
                             cost = purchaseTotal,
                             mileage = 0.0,
                             detail = documents?.purchaseSeller?.takeIf { it.isNotBlank() },

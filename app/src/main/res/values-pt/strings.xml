@@ -17,9 +17,7 @@
     <string name="language_selection">Idioma</string>
 
     <!-- Startup / Onboarding -->
-    <string name="startup_get_started">Começar</string>
     <string name="startup_welcome_title">Bem-vindo ao Garage</string>
-    <string name="startup_welcome_subtitle">Configure suas preferências para começar.</string>
     <string name="startup_measurement_system_title">Sistema de medição</string>
     <string name="startup_measurement_system_subtitle">Escolha como distâncias, volume de combustível e consumo são exibidos.</string>
     <string name="startup_metric_title">Sistema Métrico</string>
@@ -122,7 +120,6 @@
     <string name="settings_currency">Moeda</string>
     <string name="settings_theme">Tema</string>
     <string name="settings_default_vehicle">Veículo padrão</string>
-    <string name="settings_reminders_expirations">Lembretes e vencimentos</string>
 
     <!-- Tabs -->
     <string name="tab_my_vehicles">Meus veículos</string>
@@ -137,6 +134,8 @@
     <string name="tab_mods">Modificações</string>
     <string name="tab_documents">Documentos</string>
     <string name="tab_recalls">Recalls</string>
+    <string name="tab_knowledge">Conhecimento</string>
+    <string name="tab_trips">Viagens</string>
     <string name="customize_tabs">Personalizar abas</string>
     <string name="customize_tabs_description">Escolha quais abas são exibidas para este veículo.</string>
     <string name="customize_tabs_always_shown">Sempre visível</string>
@@ -339,7 +338,7 @@
     <string name="license_number_placeholder">ex., 123456789</string>
     <string name="license_state_label">Estado emissor</string>
     <string name="license_state_placeholder">ex., SP</string>
-    <string name="license_notes_placeholder">Categoria B, EAR, observações...</string>
+    <string name="license_notes_placeholder">Categoria B, EAR, observações…</string>
     <string name="license_front_photo">Frente do documento</string>
     <string name="license_back_photo">Verso do documento</string>
     <string name="license_save">Salvar carteira</string>
@@ -351,8 +350,6 @@
     <string name="cost_include_mods">Incluir modificações</string>
     <string name="cost_include_purchase">Incluir compra</string>
     <string name="cost_purchase_not_counted_in_period">Não contabilizado neste período (data de compra fora do intervalo ou não definida).</string>
-    <string name="cost_per_distance">Custo / Distância</string>
-    <string name="cost_per_day">Custo / Dia</string>
     <string name="time_filter_all_time">Todo o período</string>
     <string name="time_filter_this_year">Este ano</string>
     <string name="time_filter_last_year">Ano passado</string>
@@ -362,8 +359,8 @@
     <!-- Fuel & Charging -->
     <string name="fuel_tab_charging">Recarga</string>
     <string name="fuel_tab_fuel">Combustível</string>
-    <string name="fuel_est_range_100">Autonomia est. atual a 100%</string>
-    <string name="fuel_initial_range_100">Autonomia est. inicial a 100%</string>
+    <string name="fuel_est_range_100" formatted="false">Autonomia est. atual a 100%</string>
+    <string name="fuel_initial_range_100" formatted="false">Autonomia est. inicial a 100%</string>
     <string name="fuel_delete_charging_title">Excluir sessão de recarga?</string>
     <string name="fuel_delete_charging_msg">Tem certeza de que deseja excluir este registro de recarga?</string>
     <string name="fuel_log_charging">Registrar recarga</string>
@@ -372,12 +369,12 @@
     <string name="fuel_charger_speed">Velocidade de recarga</string>
     <string name="fuel_location_vendor">Local / Posto</string>
     <string name="fuel_vendor_placeholder">Nome do posto ou rede (opcional)</string>
-    <string name="fuel_battery_start">% Bateria Início</string>
-    <string name="fuel_battery_end">% Bateria Fim</string>
+    <string name="fuel_battery_start" formatted="false">% Bateria Início</string>
+    <string name="fuel_battery_end" formatted="false">% Bateria Fim</string>
     <string name="fuel_total_cost">Custo total</string>
     <string name="fuel_odometer_reading">Leitura do odômetro (%1$s)</string>
     <string name="fuel_battery_health_title">Saúde da bateria (Opcional)</string>
-    <string name="fuel_est_range_soc">Autonomia est. a 100% SoC (%1$s)</string>
+    <string name="fuel_est_range_soc">Autonomia est. a 100%% SoC (%1$s)</string>
     <string name="fuel_est_range_end">Autonomia est. no fim da recarga</string>
     <string name="fuel_auto_calculate">Cálculo automático</string>
     <string name="fuel_save_charging">Salvar sessão de recarga</string>
@@ -423,7 +420,7 @@
     <string name="doc_toll_notes_label">Observações / Operadora</string>
     <string name="doc_delete_toll_btn">Excluir dados de pedágio / estacionamento</string>
     <string name="doc_save_docs_btn">Salvar documentos do veículo</string>
-    <string name="doc_saving_btn">Salvando...</string>
+    <string name="doc_saving_btn">Salvando…</string>
     <!-- Fleet Summary -->
     <string name="fleet_overview_title">Visão geral da frota</string>
     <string name="fleet_vehicles">Veículos</string>
@@ -514,7 +511,6 @@
     <string name="mods_delete_confirm_msg">Tem certeza de que deseja excluir \'%1$s\'? Esta ação não pode ser desfeita.</string>
 
     <!-- Recalls -->
-    <string name="recalls_empty_message">Nenhum recall de segurança encontrado para este veículo.\nInformações fornecidas pela NHTSA.</string>
     <string name="recalls_nhtsa_check">Verificar VIN no NHTSA.gov</string>
     <string name="recalls_retry">Tentar novamente</string>
     <string name="recalls_park_it">Não dirigir</string>

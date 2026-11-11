@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="common_cancel">Anuluj</string>
+    <string name="common_save">Zapisz</string>
+    <string name="common_delete">Usuń</string>
+    <string name="common_ok">OK</string>
+    <string name="common_back">Wstecz</string>
+    <string name="common_discard">Odrzuć</string>
+    <string name="common_edit">Edytuj</string>
+    <string name="common_close">Zamknij</string>
+    <string name="common_saving">Zapisywanie…</string>
+    <string name="common_unsaved_title">Niezapisane zmiany</string>
+    <string name="common_unsaved_message">Masz niezapisane zmiany. Chcesz je zapisać czy odrzucić?</string>
+    <string name="scan_vin_prompt">Zeskanuj kod kreskowy VIN</string>
+
+    <string name="vehicle_type_car">Samochód / Pickup</string>
+    <string name="vehicle_type_motorcycle">Motocykl</string>
+    <string name="drivetrain_unknown">Nieznany</string>
+
+    <string name="mod_category_performance">Osiągi</string>
+    <string name="mod_category_suspension">Zawieszenie i układ kierowniczy</string>
+    <string name="mod_category_exterior">Nadwozie i wygląd</string>
+    <string name="mod_category_interior">Wnętrze i komfort</string>
+    <string name="mod_category_lighting">Oświetlenie</string>
+    <string name="mod_category_wheels_tires">Felgi i opony</string>
+    <string name="mod_category_audio_electrical">Audio i elektryka</string>
+    <string name="mod_category_exhaust">Układ wydechowy</string>
+    <string name="mod_category_other">Inne</string>
+
+    <string name="maint_category_fluids">Płyny</string>
+    <string name="maint_category_filters">Filtry</string>
+    <string name="maint_category_tires">Opony</string>
+    <string name="maint_category_brakes">Hamulce</string>
+    <string name="maint_category_battery">Akumulator</string>
+    <string name="maint_category_engine">Silnik i zapłon</string>
+    <string name="maint_category_drivetrain">Napęd i łańcuch</string>
+    <string name="maint_category_suspension">Zawieszenie i układ kierowniczy</string>
+    <string name="maint_category_electrical">Elektryka i oświetlenie</string>
+    <string name="maint_category_hvac">Klimatyzacja i ogrzewanie</string>
+    <string name="maint_category_body">Nadwozie, szyby i wycieraczki</string>
+    <string name="maint_category_inspection">Przegląd</string>
+    <string name="maint_category_repair">Naprawa</string>
+    <string name="maint_category_other">Inne</string>
+
+    <string name="charger_speed_level_1">Poziom 1 (120 V)</string>
+    <string name="charger_speed_level_2">Poziom 2 (240 V)</string>
+    <string name="charger_speed_dc_fast">Szybkie ładowanie DC</string>
+    <string name="charger_vendor_home">Dom</string>
+    <string name="charger_vendor_public">Publiczna</string>
+
+    <string name="date_range_all">Cały okres</string>
+    <string name="date_range_last_30_days">Ostatnie 30 dni</string>
+    <string name="date_range_last_12_months">Ostatnie 12 miesięcy</string>
+    <string name="date_range_this_year">Ten rok</string>
+    <string name="date_range_last_year">Zeszły rok</string>
+
+    <string name="vehicle_add_title">Dodaj pojazd</string>
+    <string name="vehicle_edit_title">Edytuj pojazd</string>
+    <string name="vehicle_delete">Usuń pojazd</string>
+    <string name="vehicle_photo_cd">Zdjęcie pojazdu %1$d</string>
+    <string name="vehicle_photo_position_multi">Zdjęcie %1$d z %2$d · Przeciągnij w górę/dół, aby dopasować</string>
+    <string name="vehicle_photo_position_single">Przeciągnij zdjęcie w górę/dół, aby dopasować położenie</string>
+    <string name="vehicle_add_photo">Dodaj zdjęcie</string>
+    <string name="vehicle_change_photo">Zmień zdjęcie</string>
+    <string name="vehicle_remove_photo">Usuń zdjęcie</string>
+    <string name="vehicle_add_photos">Dodaj zdjęcia (maks. 3)</string>
+    <string name="vehicle_theme_color">Kolor pojazdu</string>
+    <string name="vehicle_color_extracted">Pobrany ze zdjęcia</string>
+    <string name="vehicle_color_custom">Własny kolor</string>
+    <string name="vehicle_color_default">Domyślny motyw aplikacji</string>
+    <string name="vehicle_color_customize">Dostosuj</string>
+    <string name="vehicle_decode">Dekoduj</string>
+    <string name="vehicle_year">Rok</string>
+    <string name="vehicle_make">Marka</string>
+    <string name="vehicle_model">Model</string>
+    <string name="vehicle_trim">Wersja</string>
+    <string name="vehicle_drivetrain">Napęd</string>
+    <string name="vehicle_condition_new">Nowy</string>
+    <string name="vehicle_condition_used">Używany</string>
+    <string name="vehicle_purchased_condition">Stan przy zakupie</string>
+    <string name="vehicle_purchase_price">Cena zakupu</string>
+    <string name="vehicle_purchase_date">Data zakupu</string>
+    <string name="vehicle_select_purchase_date">Wybierz datę zakupu</string>
+    <string name="vehicle_initial_odometer_km">Początkowy przebieg (km)</string>
+    <string name="vehicle_initial_mileage_mi">Początkowy przebieg (mi)</string>
+    <string name="vehicle_this_vehicle">ten pojazd</string>
+    <string name="vehicle_delete_title">Usunąć pojazd?</string>
+    <string name="vehicle_delete_message">Czy na pewno chcesz usunąć: %1$s? Pojazd zostanie usunięty z aplikacji wraz ze wszystkimi wpisami serwisowymi, tankowaniami i przypomnieniami.</string>
+    <string name="photo_delete_title">Usunąć zdjęcie?</string>
+    <string name="photo_delete_message">Czy na pewno chcesz usunąć to zdjęcie?</string>
+    <string name="vehicle_color_dialog_title">Wybierz kolor pojazdu</string>
+    <string name="vehicle_color_dialog_message">Szczegóły pojazdu, karty i kafelki panelu zostaną zabarwione tym kolorem.</string>
+    <string name="vehicle_color_reset">Przywróć domyślny</string>
+
+    <string name="color_racing_red">Wyścigowa czerwień</string>
+    <string name="color_sunset_orange">Pomarańcz zachodu</string>
+    <string name="color_speed_yellow">Żółty speed</string>
+    <string name="color_british_racing_green">Brytyjska zieleń wyścigowa</string>
+    <string name="color_electric_cyan">Elektryczny cyjan</string>
+    <string name="color_daytona_blue">Błękit Daytona</string>
+    <string name="color_midnight_navy">Granat nocy</string>
+    <string name="color_midnight_purple">Fiolet nocy</string>
+    <string name="color_silver_slate">Srebrny / łupkowy</string>
+    <string name="color_charcoal_graphite">Grafitowy</string>
+    <string name="color_bronze_brown">Brąz / brązowy</string>
+    <string name="color_pure_black">Głęboka czerń</string>
+</resources>

@@ -36,6 +36,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -63,10 +66,10 @@ fun LubeLoggerDuplicatesScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Review Duplicates") },
+                title = { Text(stringResource(R.string.dup_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))
                     }
                 },
             )
@@ -85,7 +88,7 @@ fun LubeLoggerDuplicatesScreen(
                     ) {
                         Icon(Icons.Filled.Delete, contentDescription = null)
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Delete $totalSelected Duplicate Record(s)")
+                        Text(pluralStringResource(R.plurals.dup_delete_button, totalSelected, totalSelected))
                     }
                 }
             }
@@ -109,13 +112,13 @@ fun LubeLoggerDuplicatesScreen(
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Text(
-                            text = "No duplicate records found!",
+                            text = stringResource(R.string.dup_none_title),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "Your local records match cleanly.",
+                            text = stringResource(R.string.dup_none_message),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -143,7 +146,7 @@ fun LubeLoggerDuplicatesScreen(
                                             fontWeight = FontWeight.Bold,
                                         )
                                         Text(
-                                            text = "Date: ${group.displayDate}",
+                                            text = stringResource(R.string.dup_date, group.displayDate),
                                             style = MaterialTheme.typography.bodySmall,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         )
@@ -172,10 +175,13 @@ fun LubeLoggerDuplicatesScreen(
                                                         style = MaterialTheme.typography.bodyMedium,
                                                         fontWeight = if (idx == 0) FontWeight.Bold else FontWeight.Normal,
                                                     )
+                                                    val syncedLabel = item.lubeLoggerId?.let {
+                                                        stringResource(R.string.dup_synced, it.toString())
+                                                    }
                                                     val meta = buildString {
                                                         if (item.mileage > 0) append("${kotlin.math.round(item.mileage).toLong()} mi · ")
                                                         append("$${"%.2f".format(Locale.US, item.cost)}")
-                                                        if (item.lubeLoggerId != null) append(" · Synced (#${item.lubeLoggerId})")
+                                                        if (syncedLabel != null) append(" · $syncedLabel")
                                                     }
                                                     Text(
                                                         text = meta,
@@ -185,14 +191,14 @@ fun LubeLoggerDuplicatesScreen(
                                                 }
                                                 if (idx == 0) {
                                                     Text(
-                                                        text = "Original",
+                                                        text = stringResource(R.string.dup_original),
                                                         style = MaterialTheme.typography.labelSmall,
                                                         color = MaterialTheme.colorScheme.primary,
                                                         modifier = Modifier.padding(start = 8.dp),
                                                     )
                                                 } else {
                                                     Text(
-                                                        text = "Duplicate",
+                                                        text = stringResource(R.string.dup_duplicate),
                                                         style = MaterialTheme.typography.labelSmall,
                                                         color = MaterialTheme.colorScheme.error,
                                                         modifier = Modifier.padding(start = 8.dp),

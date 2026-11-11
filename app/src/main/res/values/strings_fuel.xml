@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Fuel & charging screen -->
+    <string name="fuel_cd_add_charging">Add charging session</string>
+    <string name="fuel_cd_add_fillup">Add fuel fill-up</string>
+    <string name="fuel_cd_delete_charging">Delete charging session</string>
+    <string name="fuel_cd_delete_fillup">Delete fill-up</string>
+    <string name="fuel_empty_charging">No charging sessions logged yet.\nTap + to log your first session.</string>
+    <string name="fuel_empty_fuel">No fuel fill-ups logged yet.\nTap + to log your first one.</string>
+    <string name="fuel_charging_efficiency">Charging Efficiency</string>
+    <string name="fuel_total_charging_spent">Total Charging Spent</string>
+    <string name="fuel_battery_health_card">Battery Health &amp; Degradation</string>
+    <string name="fuel_health_percent">%1$.1f%% Health</string>
+    <string name="fuel_soc_trend" formatted="false">100% State of Charge Range Trend</string>
+    <string name="fuel_at_mileage">at %1$s</string>
+    <string name="fuel_total_line">%1$s total · %2$s</string>
+    <string name="fuel_est_range_chip">Est. 100%% SoC Range: %1$s</string>
+    <string name="fuel_economy_title">Fuel Economy</string>
+    <string name="fuel_best">Best</string>
+    <string name="fuel_average">Average</string>
+    <string name="fuel_worst">Worst</string>
+    <string name="fuel_total_spent">Total Spent</string>
+    <string name="fuel_partial">Partial</string>
+    <string name="fuel_since_full_tank">%1$s since last full tank</string>
+    <string name="fuel_full_tank_hint">Turn off if you didn\'t top off the tank</string>
+
+    <!-- Trend charts -->
+    <string name="trend_fuel_title">Fuel Trends</string>
+    <string name="trend_charging_title">Charging Trends</string>
+    <string name="trend_rolling_fuel">3-fill avg</string>
+    <string name="trend_rolling_charging">3-session avg</string>
+    <string name="trend_metric_economy">Economy</string>
+    <string name="trend_metric_efficiency">Efficiency</string>
+    <string name="trend_metric_cost_per">Cost/%1$s</string>
+    <string name="trend_metric_price_per">Price/%1$s</string>
+    <string name="trend_range_last_10">Last 10</string>
+    <string name="trend_range_6_months">6 mo</string>
+    <string name="trend_range_1_year">1 yr</string>
+    <string name="trend_range_all">All</string>
+    <string name="trend_chart_cd">%1$s chart, %2$d points, latest %3$s. Tap or drag to inspect points.</string>
+    <string name="trend_avg">avg %1$s</string>
+    <string name="trend_legend_rolling">Faint line: %1$s</string>
+    <string name="trend_legend_average">Dashed: average</string>
+    <string name="trend_legend_outliers">Hollow dots: unusual readings, tap to review</string>
+    <string name="trend_legend_inspect">Tap or drag to inspect</string>
+    <string name="trend_not_enough_data">Not enough data in this range yet. Try a wider range.</string>
+</resources>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Project lint configuration: suppress only checked false positives, with the reason. -->
+<lint>
+    <!-- Brand emblems are small vector logos traced from official artwork; long paths are expected. -->
+    <issue id="VectorPath">
+        <ignore path="src/main/res/drawable/brand_*.xml" />
+    </issue>
+
+    <!-- "Garage" is the app's name (not Spanish "garaje"), "Seit dem letzten Scan" is correct German,
+         and "ABC1D23" is an example licence plate. -->
+    <issue id="Typos">
+        <ignore regexp="&quot;Garage&quot;" />
+        <ignore regexp="&quot;Seit dem&quot;" />
+        <ignore regexp="ABC1" />
+        <ignore regexp="&quot;garage&quot; is a common misspelling" />
+    </issue>
+
+    <!-- "%1$d of %2$d tabs visible" / "%1$d/%2$d monitors complete" agree with the total (never 1),
+         "%1$d Overdue" / "%1$d Due Soon" / "%1$d Open / %2$d Total" use the word as an adjective, and
+         trend charts only render with 2+ points / fill-ups. -->
+    <issue id="PluralsCandidate">
+        <ignore regexp="&quot;(tabs|monitors|Overdue|Due|Open|Serviced|total|points|fill)&quot;" />
+    </issue>
+
+    <!-- Document placeholders show example IDs ("STK-2025-9988", "POL-987654321"); those are hyphens,
+         not dashes. -->
+    <issue id="TypographyDashes">
+        <ignore path="src/main/res/values*/strings_documents.xml" />
+    </issue>
+
+    <!-- Toolchain upgrades (AGP minor versions, Gradle wrapper) are done deliberately per release,
+         since F-Droid reproducible builds pin the toolchain. -->
+    <issue id="AndroidGradlePluginVersion" severity="ignore" />
+</lint>

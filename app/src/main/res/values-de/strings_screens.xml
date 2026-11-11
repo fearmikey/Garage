@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="kb_add_torque">Anzugsmoment hinzufügen</string>
+    <string name="kb_edit_torque">Anzugsmoment bearbeiten</string>
+    <string name="kb_add_note">Reparaturnotiz hinzufügen</string>
+    <string name="kb_edit_note">Reparaturnotiz bearbeiten</string>
+    <string name="kb_cd_add">Hinzufügen</string>
+    <string name="kb_empty">Keine Anzugsmomente oder Notizen vorhanden.\nTippen Sie auf +, um etwas hinzuzufügen.</string>
+    <string name="kb_torque_specs">Anzugsmomente</string>
+    <string name="kb_repair_notes">Reparaturnotizen</string>
+    <string name="kb_component">Bauteil (z. B. Radmuttern)</string>
+    <string name="kb_torque_unit">Drehmoment (%1$s)</string>
+    <string name="kb_content">Inhalt (Markdown möglich)</string>
+    <string name="dash_empty">Noch keine Fahrzeuge.\nTippen Sie auf +, um das erste hinzuzufügen.</string>
+    <string name="dash_license_back">Rückseite des Führerscheins</string>
+    <string name="dash_fuel_trend">Verbrauchstrend</string>
+    <string name="dash_fuel_trend_cd">Verbrauchstrend der letzten %1$d Tankungen. Zuletzt %2$s.</string>
+    <string name="recalls_vin_copied">FIN (%1$s) zum Einfügen in die Zwischenablage kopiert</string>
+    <string name="recalls_missing_info">Tragen Sie Baujahr, Marke und Modell im Bearbeiten-Bildschirm ein, um nach Rückrufen zu suchen.</string>
+    <string name="recalls_ymm_title">Rückrufe für Baujahr / Marke / Modell</string>
+    <string name="recalls_ymm_subtitle">Allgemeine Sicherheitsrückrufe für %1$s:</string>
+    <string name="recalls_none_for_model">Keine offenen Sicherheitsrückrufe für %1$s gemeldet.</string>
+    <string name="recalls_none">Keine offenen Sicherheitsrückrufe für dieses Fahrzeug gefunden.</string>
+    <string name="recalls_vin_title">Offizielle FIN-Rückrufprüfung</string>
+    <string name="recalls_vin_desc">Prüfen Sie offene Rückrufe für die FIN %1$s direkt auf NHTSA.gov. (Ihre FIN wird automatisch in die Zwischenablage kopiert, damit Sie sie auf der NHTSA-Website einfügen können.)</string>
+    <string name="recalls_no_vin">Für dieses Fahrzeug ist keine FIN gespeichert. Tragen Sie im Bearbeiten-Bildschirm eine FIN ein, um den Rückrufstatus auf NHTSA.gov zu prüfen.</string>
+    <string name="recalls_campaign">Aktion #%1$s</string>
+    <string name="recalls_state_open">Offen</string>
+    <string name="recalls_state_serviced">Erledigt</string>
+    <string name="recalls_state_not_affected">Nicht betroffen</string>
+    <string name="recalls_state_serviced_long">Durchgeführt / erledigt</string>
+    <string name="recalls_state_not_affected_long">Betrifft dieses Fahrzeug nicht</string>
+    <string name="recalls_reported">Gemeldet %1$s</string>
+    <string name="recalls_consequence">Folge: %1$s</string>
+    <string name="recalls_remedy">Abhilfe: %1$s</string>
+    <string name="widget_recent_tank">Letzte Tankung: %1$s</string>
+    <string name="widget_recent">Zuletzt: %1$s</string>
+    <string name="widget_all_caught_up">Alles erledigt!</string>
+    <string name="widget_log_fuel">Tanken</string>
+    <string name="widget_odometer">Kilometerstand</string>
+    <string name="widget_log_service">Wartung</string>
+    <string name="widget_due">Fällig</string>
+    <string name="widget_no_mileage">Kein Kilometerstand</string>
+    <string name="widget_update">Aktualisieren</string>
+</resources>

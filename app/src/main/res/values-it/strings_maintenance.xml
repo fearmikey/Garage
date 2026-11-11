@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="maint_cd_add_odometer">Aggiungi lettura contachilometri</string>
+    <string name="maint_cd_add_record">Aggiungi intervento</string>
+    <string name="maint_cd_edit_record">Modifica voce</string>
+    <string name="maint_cd_delete_record">Elimina voce</string>
+    <string name="maint_empty">Nessuna manutenzione registrata.\nTocca + per aggiungere la prima voce.</string>
+    <string name="maint_no_matches">Nessuna voce corrisponde ai filtri.</string>
+    <string name="maint_clear_filters">Cancella filtri</string>
+    <string name="maint_delete_title">Elimina voce</string>
+    <string name="maint_delete_message">Eliminare davvero questa voce?</string>
+    <string name="maint_receipt_invoice">Ricevuta / Fattura</string>
+    <string name="maint_receipt_image">Immagine ricevuta</string>
+    <string name="maint_pdf_receipt">Ricevuta PDF</string>
+    <string name="maint_open_with_app">Apri con un\'app</string>
+    <string name="maint_add_title">Aggiungi intervento</string>
+    <string name="maint_date">Data</string>
+    <string name="maint_task_other">Altro / personalizzato</string>
+    <string name="maint_specific_task">Intervento specifico</string>
+    <string name="maint_description">Descrizione</string>
+    <string name="maint_mileage_unit">Chilometraggio (%1$s)</string>
+    <string name="maint_cost_unit">Costo (%1$s)</string>
+    <string name="maint_inspected_only">Solo controllato (sostituzione rinviata)</string>
+    <string name="maint_remind_in_distance">Ricorda tra (%1$s) *</string>
+    <string name="maint_remind_in_months">Ricorda tra (mesi) *</string>
+    <string name="maint_attached_pdf">Ricevuta PDF allegata</string>
+    <string name="maint_pdf_document">Documento PDF</string>
+    <string name="maint_change_attachment">Cambia allegato</string>
+    <string name="maint_remove_attachment">Rimuovi allegato</string>
+    <string name="maint_attach_receipt">Allega ricevuta / fattura (immagine o PDF)</string>
+    <string name="maint_open_receipt">Apri ricevuta</string>
+    <string name="maint_open_file_failed">Impossibile aprire il file</string>
+    <string name="maint_odometer_update">Lettura contachilometri</string>
+    <string name="maint_search_placeholder">Cerca descrizione o intervento</string>
+    <string name="maint_close_search">Chiudi ricerca</string>
+    <string name="maint_search">Cerca</string>
+    <string name="maint_has_receipt">Con ricevuta</string>
+    <string name="maint_hide_auto">Nascondi letture e scansioni</string>
+    <string name="maint_showing_count">%1$d di %2$d visualizzate</string>
+    <plurals name="maint_categories_count">
+        <item quantity="one">%d categoria</item>
+        <item quantity="many">%d categorie</item>
+        <item quantity="other">%d categorie</item>
+    </plurals>
+    <string name="template_title">Modelli di piano di manutenzione</string>
+    <string name="template_subtitle">Scegli un modello per aggiungere intervalli di manutenzione adatti a questo veicolo.</string>
+    <string name="template_included_rules">Regole incluse (%1$d):</string>
+    <plurals name="template_months">
+        <item quantity="one">%d mese</item>
+        <item quantity="many">%d mesi</item>
+        <item quantity="other">%d mesi</item>
+    </plurals>
+    <string name="template_interval_or">%1$s o %2$s</string>
+    <string name="template_every">Ogni %1$s</string>
+    <string name="template_apply">Applica il modello «%1$s»</string>
+</resources>

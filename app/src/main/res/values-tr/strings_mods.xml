@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mods_cd_add">Modifikasyon ekle</string>
+    <plurals name="mods_count">
+        <item quantity="one">%d modifikasyon</item>
+        <item quantity="other">%d modifikasyon</item>
+    </plurals>
+    <string name="mods_total_spent">Toplam harcama: %1$s</string>
+    <string name="mods_cd_list_view">Liste görünümüne geç</string>
+    <string name="mods_cd_grid_view">Izgara görünümüne geç</string>
+    <string name="mods_product_link">Ürün bağlantısı</string>
+    <string name="mods_add_title">Modifikasyon ekle</string>
+    <string name="mods_edit_title">Modifikasyonu düzenle</string>
+    <string name="mods_photo_cd">Modifikasyon fotoğrafı %1$d</string>
+    <string name="mods_photo_position">Fotoğraf %1$d / %2$d</string>
+    <string name="mods_photo_single">Fotoğraf</string>
+    <string name="mods_add_photos">Fotoğraf ekle (en fazla 6)</string>
+    <string name="mods_title_placeholder">örn. 5 cm yükseltme kiti, soğuk hava emişi</string>
+    <string name="mods_desc_placeholder">Ayrıntılar, parça numaraları, montaj notları…</string>
+    <string name="mods_url_placeholder">örn. https://example.com/parts/lift-kit</string>
+    <string name="mods_title_short">Başlık</string>
+    <string name="mods_installed">Takıldı: %1$s</string>
+</resources>

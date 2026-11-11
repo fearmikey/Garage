@@ -20,6 +20,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -57,9 +59,9 @@ fun LubeLoggerConfigDialog(
     if (showHttpWarning) {
         AlertDialog(
             onDismissRequest = { showHttpWarning = false },
-            title = { Text("Insecure Connection Warning") },
+            title = { Text(stringResource(R.string.settings_insecure_title)) },
             text = {
-                Text("You are connecting over an unencrypted HTTP connection. To keep your login credentials and vehicle data secure, ensure you are using a secure private VPN connection (such as Tailscale or WireGuard) to your server.")
+                Text(stringResource(R.string.settings_insecure_lubelogger_message))
             },
             confirmButton = {
                 TextButton(
@@ -68,12 +70,12 @@ fun LubeLoggerConfigDialog(
                         doSave()
                     }
                 ) {
-                    Text("Continue")
+                    Text(stringResource(R.string.common_continue))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showHttpWarning = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             }
         )
@@ -81,22 +83,22 @@ fun LubeLoggerConfigDialog(
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text("LubeLogger Connection") },
+        title = { Text(stringResource(R.string.ll_config_title)) },
         text = {
             Column {
-                Text("Connect Garage to your self-hosted LubeLogger instance to automatically sync records.")
+                Text(stringResource(R.string.ll_config_description))
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
                     value = url,
                     onValueChange = { url = it },
-                    label = { Text("Server URL") },
+                    label = { Text(stringResource(R.string.common_server_url)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
                     modifier = Modifier.fillMaxWidth(),
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "LubeLogger Server Units",
+                    text = stringResource(R.string.ll_server_units),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -107,19 +109,19 @@ fun LubeLoggerConfigDialog(
                         onClick = { unitSystem = "imperial" },
                         shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2)
                     ) {
-                        Text("Imperial (Mi/Gal)")
+                        Text(stringResource(R.string.ll_units_imperial))
                     }
                     SegmentedButton(
                         selected = unitSystem.equals("metric", ignoreCase = true),
                         onClick = { unitSystem = "metric" },
                         shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2)
                     ) {
-                        Text("Metric (KM/L)")
+                        Text(stringResource(R.string.ll_units_metric))
                     }
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "Authentication (Provide either Username/Password OR an API Key)",
+                    text = stringResource(R.string.ll_auth_label),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -127,7 +129,7 @@ fun LubeLoggerConfigDialog(
                 OutlinedTextField(
                     value = username,
                     onValueChange = { username = it },
-                    label = { Text("Username") },
+                    label = { Text(stringResource(R.string.common_username)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -135,7 +137,7 @@ fun LubeLoggerConfigDialog(
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
-                    label = { Text("Password") },
+                    label = { Text(stringResource(R.string.common_password)) },
                     singleLine = true,
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -145,7 +147,7 @@ fun LubeLoggerConfigDialog(
                 OutlinedTextField(
                     value = apiKey,
                     onValueChange = { apiKey = it },
-                    label = { Text("API Key (Optional)") },
+                    label = { Text(stringResource(R.string.ll_api_key_optional)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -156,12 +158,12 @@ fun LubeLoggerConfigDialog(
                 onClick = ::handleSaveClick,
                 enabled = url.isNotBlank() && (apiKey.isNotBlank() || username.isNotBlank()),
             ) {
-                Text("Save")
+                Text(stringResource(R.string.common_save))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text("Cancel")
+                Text(stringResource(R.string.common_cancel))
             }
         },
     )

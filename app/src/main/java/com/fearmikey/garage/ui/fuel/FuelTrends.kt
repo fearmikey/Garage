@@ -1,5 +1,7 @@
 package com.fearmikey.garage.ui.fuel
 
+import androidx.annotation.StringRes
+import com.fearmikey.garage.R
 import com.fearmikey.garage.data.fuel.ChargingEfficiencyEntry
 import com.fearmikey.garage.data.fuel.FuelEconomyEntry
 import com.fearmikey.garage.data.fuel.TrendStats
@@ -12,11 +14,11 @@ import com.fearmikey.garage.ui.util.UnitSystem
 private const val DAY_MS = 86_400_000L
 
 /** Time window applied to a trend chart. */
-enum class TrendRange(val label: String) {
-    LAST_10("Last 10"),
-    SIX_MONTHS("6 mo"),
-    ONE_YEAR("1 yr"),
-    ALL("All"),
+enum class TrendRange(@param:StringRes val labelRes: Int) {
+    LAST_10(R.string.trend_range_last_10),
+    SIX_MONTHS(R.string.trend_range_6_months),
+    ONE_YEAR(R.string.trend_range_1_year),
+    ALL(R.string.trend_range_all),
     ;
 
     /** Filters [items] (oldest first) to this range. */
@@ -32,26 +34,12 @@ enum class FuelTrendMetric {
     ECONOMY,
     COST_PER_DISTANCE,
     PRICE_PER_VOLUME,
-    ;
-
-    fun label(unitSystem: UnitSystem): String = when (this) {
-        ECONOMY -> "Economy"
-        COST_PER_DISTANCE -> "Cost/${unitSystem.distanceUnit}"
-        PRICE_PER_VOLUME -> "Price/${unitSystem.volumeUnit}"
-    }
 }
 
 enum class ChargingTrendMetric {
     EFFICIENCY,
     COST_PER_DISTANCE,
     PRICE_PER_KWH,
-    ;
-
-    fun label(unitSystem: UnitSystem): String = when (this) {
-        EFFICIENCY -> "Efficiency"
-        COST_PER_DISTANCE -> "Cost/${unitSystem.distanceUnit}"
-        PRICE_PER_KWH -> "Price/kWh"
-    }
 }
 
 /** Everything a trend card needs to render one metric over one range. */

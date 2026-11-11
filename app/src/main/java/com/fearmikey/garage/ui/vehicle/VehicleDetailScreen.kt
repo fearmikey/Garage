@@ -297,19 +297,19 @@ fun VehicleDetailScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))
                     }
                 },
                 actions = {
                     vehicle?.let {
                         IconButton(onClick = { onOpenObd(it.id) }) {
-                            Icon(Icons.Filled.CarRepair, contentDescription = "OBD2 Scanner")
+                            Icon(Icons.Filled.CarRepair, contentDescription = stringResource(R.string.vehicle_cd_obd))
                         }
                         IconButton(onClick = { onExportMaintenance(it.id) }) {
-                            Icon(Icons.Filled.PictureAsPdf, contentDescription = "Export Maintenance Log")
+                            Icon(Icons.Filled.PictureAsPdf, contentDescription = stringResource(R.string.vehicle_cd_export))
                         }
                         IconButton(onClick = { onEditVehicle(it.id) }) {
-                            Icon(Icons.Filled.Edit, contentDescription = "Edit vehicle")
+                            Icon(Icons.Filled.Edit, contentDescription = stringResource(R.string.vehicle_edit_title))
                         }
                     }
                 },

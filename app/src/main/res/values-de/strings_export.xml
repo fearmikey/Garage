@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="export_title">Verkaufsbericht erstellen</string>
+    <string name="export_book_title">Service- &amp; Fahrzeughistorie</string>
+    <string name="export_book_desc">Erstellen Sie einen umfassenden, ansprechend gestalteten Bericht, der Pflegeaufwand, Wartungsprotokoll, getauschte Teile und Sicherheitsstatus Ihres Fahrzeugs zeigt – für einen besseren Wiederverkaufswert.</string>
+    <string name="export_summary_preview">VORSCHAU DER ZUSAMMENFASSUNG</string>
+    <string name="export_vin">FIN: %1$s</string>
+    <string name="export_total_investment">Gesamter Pflegeaufwand:</string>
+    <string name="export_service_records">Serviceeinträge:</string>
+    <string name="export_upgrades_colon">Upgrades &amp; Umbauten:</string>
+    <string name="export_recall_status">Rückrufstatus:</string>
+    <string name="export_checking">Wird geprüft…</string>
+    <string name="export_clear_serviced">Keine offenen (0 offen / %1$d erledigt)</string>
+    <string name="export_clear">Keine offenen (0 offen)</string>
+    <string name="export_open_total">%1$d offen / %2$d gesamt</string>
+    <string name="export_included_sections">ENTHALTENE ABSCHNITTE</string>
+    <string name="export_upgrades">Upgrades &amp; Umbauten</string>
+    <string name="export_upgrades_desc">Liste mit eigenen Teilen, Upgrades und Zubehör einfügen</string>
+    <string name="export_parts">Teile- &amp; Flüssigkeitsangaben</string>
+    <string name="export_parts_desc">Übersicht zu Ölviskosität, Zündkerzen, Reifengröße &amp; Wischern einfügen</string>
+    <string name="export_recalls">Rückrufstatus</string>
+    <string name="export_recalls_desc">Offiziellen NHTSA-Rückrufstatus einfügen</string>
+    <string name="export_select_open">Offene / aktive Aktionen wählen (%1$d gesamt):</string>
+    <string name="export_all_serviced">Alle erledigt</string>
+    <string name="export_all_open">Alle offen</string>
+    <string name="export_open_unaddressed">OFFEN / UNBEARBEITET</string>
+    <string name="export_serviced_clear">ERLEDIGT</string>
+    <string name="export_component">Bauteil: %1$s</string>
+    <string name="export_fuel">Tank- &amp; Ladeprotokolle</string>
+    <string name="export_fuel_desc">Tank- und Ladevorgänge einfügen</string>
+    <string name="export_generate">Servicebuch erstellen (PDF)</string>
+</resources>

@@ -25,6 +25,7 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.fearmikey.garage.MainActivity
+import com.fearmikey.garage.R
 import com.fearmikey.garage.ui.util.UnitConverter
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.flow.first
@@ -44,13 +45,13 @@ class UpdateOdometerWidget : GlanceAppWidget() {
 
         val vehicleLabel = targetVehicle?.let {
             listOfNotNull(it.year?.toString(), it.make, it.model).joinToString(" ").ifBlank { it.vin }
-        } ?: "Garage"
+        } ?: context.getString(R.string.app_name)
 
         val currentMileageText = if (targetVehicle != null) {
             val mileage = maintenanceRepository.getLatestMileageForVehicle(targetVehicle.id).first()
-            mileage?.let { UnitConverter.formatDistance(it, unitSystem) } ?: "No mileage"
+            mileage?.let { UnitConverter.formatDistance(it, unitSystem) } ?: context.getString(R.string.widget_no_mileage)
         } else {
-            "No mileage"
+            context.getString(R.string.widget_no_mileage)
         }
 
         provideContent {
@@ -93,7 +94,7 @@ private fun UpdateOdometerWidgetContent(
         }
         Spacer(modifier = GlanceModifier.width(8.dp))
         Button(
-            text = "Update",
+            text = context.getString(R.string.widget_update),
             onClick = actionStartActivity(
                 Intent(context, MainActivity::class.java).apply {
                     action = MainActivity.ACTION_UPDATE_ODOMETER

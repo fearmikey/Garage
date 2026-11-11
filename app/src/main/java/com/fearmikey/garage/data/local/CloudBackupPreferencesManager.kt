@@ -10,7 +10,6 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -45,7 +44,6 @@ open class CloudBackupPreferencesManager @Inject constructor(
         val LAST_LOCAL_BACKUP_TIMESTAMP_KEY = longPreferencesKey("last_local_backup_timestamp")
         val LAST_LOCAL_BACKUP_ERROR_KEY = stringPreferencesKey("last_local_backup_error")
 
-        private const val ENCRYPTED_PREFS_NAME = "cloud_backup_secure_prefs"
         private const val WEBDAV_PASSWORD_KEY = "webdav_password"
     }
 
@@ -147,18 +145,8 @@ open class CloudBackupPreferencesManager @Inject constructor(
 
     open fun getWebdavPassword(): String? = encryptedPrefs().getString(WEBDAV_PASSWORD_KEY, null)
 
-    private fun encryptedPrefs(): SharedPreferences {
-        val masterKey = MasterKey.Builder(context)
-            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-            .build()
-        return EncryptedSharedPreferences.create(
-            context,
-            ENCRYPTED_PREFS_NAME,
-            masterKey,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
-        )
-    }
+    private fun encryptedPrefs(): SharedPreferences =
+        SecurePreferences.open(context, SecurePreferences.CLOUD_BACKUP_SECURE_PREFS)
 
     open suspend fun clearAll() = withContext(Dispatchers.IO) {
         context.cloudBackupDataStore.edit { it.clear() }

@@ -136,7 +136,7 @@ private fun PartsContent(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         floatingActionButton = {
             FloatingActionButton(onClick = onEditClicked) {
-                Icon(Icons.Filled.Edit, contentDescription = "Edit parts & fluids")
+                Icon(Icons.Filled.Edit, contentDescription = stringResource(R.string.parts_edit_title))
             }
         },
     ) { innerPadding ->

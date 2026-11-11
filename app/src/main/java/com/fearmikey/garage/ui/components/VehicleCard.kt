@@ -66,6 +66,10 @@ import com.fearmikey.garage.ui.dashboard.FuelTrendChart
 fun VehicleCard(
     vehicle: Vehicle,
     latestMileage: Double?,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedContentScope,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     imageFile: File? = null,
     imageFiles: List<Pair<File, Float>> = emptyList(),
     unitSystem: UnitSystem = UnitSystem.IMPERIAL,
@@ -73,10 +77,6 @@ fun VehicleCard(
     fuelEntries: List<FuelEconomyEntry> = emptyList(),
     overdueReminderCount: Int = 0,
     upcomingReminderCount: Int = 0,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedVisibilityScope: AnimatedContentScope,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
     onOpenReminders: (() -> Unit)? = null,
     onFuelGraphClick: (() -> Unit)? = null,
     onUpdateMileage: (() -> Unit)? = null,
@@ -321,10 +321,11 @@ private fun StatChipContent(
     }
 }
 
-private fun vehicleLabel(vehicle: Vehicle): String =
-    listOfNotNull(vehicle.year?.toString(), vehicle.make, vehicle.model)
-        .joinToString(" ")
-        .ifBlank { vehicle.vin.ifBlank { "Unnamed vehicle" } }
+@Composable
+private fun vehicleLabel(vehicle: Vehicle): String {
+    val name = listOfNotNull(vehicle.year?.toString(), vehicle.make, vehicle.model).joinToString(" ")
+    return name.ifBlank { vehicle.vin }.ifBlank { stringResource(R.string.vehicle_unnamed) }
+}
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Preview(showBackground = true)

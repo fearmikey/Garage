@@ -49,6 +49,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
+import com.fearmikey.garage.ui.util.label
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.platform.LocalFocusManager
@@ -182,13 +185,13 @@ private fun MaintenanceSuggestionsContent(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         floatingActionButton = {
             FloatingActionButton(onClick = onAddCustomRule) {
-                Icon(Icons.Filled.Add, contentDescription = "Add custom rule")
+                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.sugg_cd_add_rule))
             }
         },
     ) { innerPadding ->
         if (suggestions.isEmpty() && customRules.isEmpty() && ignoredRules.isEmpty()) {
             EmptyState(
-                message = "No suggestions yet.\nLog some maintenance and mileage to see what's due.",
+                message = stringResource(R.string.sugg_empty),
                 modifier = Modifier.padding(innerPadding),
             )
         } else {
@@ -205,7 +208,7 @@ private fun MaintenanceSuggestionsContent(
                 if (customRules.isNotEmpty()) {
                     item(key = "custom_rules_header") {
                         Text(
-                            text = "Your custom rules",
+                            text = stringResource(R.string.sugg_custom_rules),
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
                         )
@@ -244,7 +247,7 @@ private fun MaintenanceSuggestionsContent(
                 if (ignoredRules.isNotEmpty()) {
                     item(key = "ignored_rules_header") {
                         Text(
-                            text = "Ignored tasks (${ignoredRules.size})",
+                            text = stringResource(R.string.sugg_ignored_tasks, ignoredRules.size),
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(top = 12.dp, bottom = 4.dp),
@@ -279,14 +282,14 @@ private fun CustomMaintenanceRuleRow(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(rule.category.displayName, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                Text(rule.category.label(), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                 Text(formatTaskName(rule.taskName), style = MaterialTheme.typography.titleMedium)
 
                 val interval = listOfNotNull(
                     rule.intervalMiles?.let { UnitConverter.formatDistance(it, unitSystem) },
-                    rule.intervalMonths?.let { "$it mo" },
+                    rule.intervalMonths?.let { stringResource(R.string.sugg_months_short, it) },
                 ).joinToString(" / ")
-                Text("Every $interval", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.template_every, interval), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
                 rule.notes?.let {
                     Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -294,10 +297,10 @@ private fun CustomMaintenanceRuleRow(
             }
             Row {
                 IconButton(onClick = onEdit) {
-                    Icon(Icons.Filled.Edit, contentDescription = "Edit rule")
+                    Icon(Icons.Filled.Edit, contentDescription = stringResource(R.string.sugg_cd_edit_rule))
                 }
                 IconButton(onClick = onDelete) {
-                    Icon(Icons.Filled.Delete, contentDescription = "Delete custom rule")
+                    Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.sugg_cd_delete_rule))
                 }
             }
         }
@@ -321,21 +324,21 @@ private fun MaintenanceSuggestionRow(
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Top) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        suggestion.rule.category.displayName,
+                        suggestion.rule.category.label(),
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.primary,
                     )
                     Text(formatTaskName(suggestion.rule.taskName), style = MaterialTheme.typography.titleMedium)
                 }
                 IconButton(onClick = onEdit) {
-                    Icon(Icons.Filled.Edit, contentDescription = "Edit rule")
+                    Icon(Icons.Filled.Edit, contentDescription = stringResource(R.string.sugg_cd_edit_rule))
                 }
             }
 
             val details = listOfNotNull(
-                suggestion.lastServiceMileage?.let { "last done at ${UnitConverter.formatDistance(it, unitSystem)}" },
-                suggestion.nextDueMileage?.let { "due at ${UnitConverter.formatDistance(it, unitSystem)}" },
-                suggestion.nextDueDate?.let { "due by ${it.toDisplayDate()}" },
+                suggestion.lastServiceMileage?.let { stringResource(R.string.sugg_last_done_at, UnitConverter.formatDistance(it, unitSystem)) },
+                suggestion.nextDueMileage?.let { stringResource(R.string.sugg_due_at, UnitConverter.formatDistance(it, unitSystem)) },
+                suggestion.nextDueDate?.let { stringResource(R.string.sugg_due_by, it.toDisplayDate()) },
             ).joinToString(" · ")
             Text(details, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
@@ -353,11 +356,11 @@ private fun MaintenanceSuggestionRow(
                 StatusChip(status = suggestion.status)
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     TextButton(onClick = onIgnore) {
-                        Text("Ignore", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(stringResource(R.string.sugg_ignore), color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     Spacer(modifier = Modifier.width(4.dp))
                     Button(onClick = onLogNow) {
-                        Text("Log now")
+                        Text(stringResource(R.string.sugg_log_now))
                     }
                 }
             }
@@ -383,13 +386,13 @@ private fun IgnoredRuleRow(
             Column(modifier = Modifier.weight(1f)) {
                 Text(rule.taskName, style = MaterialTheme.typography.titleSmall)
                 Text(
-                    "Ignored for this vehicle",
+                    stringResource(R.string.sugg_ignored_for_vehicle),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
             TextButton(onClick = onRestore) {
-                Text("Restore")
+                Text(stringResource(R.string.sugg_restore))
             }
         }
     }
@@ -433,7 +436,7 @@ private fun AddCustomMaintenanceRuleSheet(
                 .verticalScrollbar(sheetScrollState),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text(if (initialRule != null) "Edit Service Interval" else "Add Custom Rule", style = MaterialTheme.typography.titleLarge)
+            Text(stringResource(if (initialRule != null) R.string.sugg_edit_title else R.string.sugg_add_title), style = MaterialTheme.typography.titleLarge)
 
             if (initialRule == null) {
                 Card(
@@ -452,12 +455,12 @@ private fun AddCustomMaintenanceRuleSheet(
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = "Schedule Presets",
+                                text = stringResource(R.string.sugg_presets),
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.SemiBold,
                             )
                             Text(
-                                text = "Apply pre-built maintenance templates (Towing, EV, Commuter, Classic).",
+                                text = stringResource(R.string.sugg_presets_desc),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
@@ -475,7 +478,7 @@ private fun AddCustomMaintenanceRuleSheet(
             OutlinedTextField(
                 value = taskName,
                 onValueChange = { taskName = it },
-                label = { Text("Task name") },
+                label = { Text(stringResource(R.string.sugg_task_name)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 keyboardActions = KeyboardActions(
@@ -489,11 +492,11 @@ private fun AddCustomMaintenanceRuleSheet(
                 onExpandedChange = { categoryMenuExpanded = it },
             ) {
                 OutlinedTextField(
-                    value = category.displayName,
+                    value = category.label(),
                     onValueChange = {},
                     readOnly = true,
                     singleLine = true,
-                    label = { Text("Category") },
+                    label = { Text(stringResource(R.string.mods_category_label)) },
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = categoryMenuExpanded) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -506,7 +509,7 @@ private fun AddCustomMaintenanceRuleSheet(
                 ) {
                     MaintenanceCategory.entries.forEach { entry ->
                         DropdownMenuItem(
-                            text = { Text(entry.displayName) },
+                            text = { Text(entry.label()) },
                             onClick = {
                                 category = entry
                                 categoryMenuExpanded = false
@@ -519,7 +522,7 @@ private fun AddCustomMaintenanceRuleSheet(
             OutlinedTextField(
                 value = intervalMiles,
                 onValueChange = { intervalMiles = sanitizeMileageInput(it) },
-                label = { Text("Interval (${unitSystem.distanceUnit})") },
+                label = { Text(stringResource(R.string.sugg_interval_distance, unitSystem.distanceUnit)) },
                 singleLine = true,
                 visualTransformation = ThousandsSeparatorVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
@@ -534,7 +537,7 @@ private fun AddCustomMaintenanceRuleSheet(
             OutlinedTextField(
                 value = intervalMonths,
                 onValueChange = { intervalMonths = it.filter(Char::isDigit) },
-                label = { Text("Interval (months)") },
+                label = { Text(stringResource(R.string.sugg_interval_months)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
@@ -548,7 +551,7 @@ private fun AddCustomMaintenanceRuleSheet(
             OutlinedTextField(
                 value = notes,
                 onValueChange = { notes = it },
-                label = { Text("Notes") },
+                label = { Text(stringResource(R.string.common_notes)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(
@@ -575,7 +578,7 @@ private fun AddCustomMaintenanceRuleSheet(
                 enabled = canSave,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text("Save")
+                Text(stringResource(R.string.common_save))
             }
         }
     }

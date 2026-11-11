@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fuel_cd_add_charging">Laadsessie toevoegen</string>
+    <string name="fuel_cd_add_fillup">Tankbeurt toevoegen</string>
+    <string name="fuel_cd_delete_charging">Laadsessie verwijderen</string>
+    <string name="fuel_cd_delete_fillup">Tankbeurt verwijderen</string>
+    <string name="fuel_empty_charging">Nog geen laadsessies vastgelegd.\nTik op + om je eerste vast te leggen.</string>
+    <string name="fuel_empty_fuel">Nog geen tankbeurten vastgelegd.\nTik op + om je eerste vast te leggen.</string>
+    <string name="fuel_charging_efficiency">Laadefficiëntie</string>
+    <string name="fuel_total_charging_spent">Totaal uitgegeven aan laden</string>
+    <string name="fuel_battery_health_card">Accugezondheid &amp; degradatie</string>
+    <string name="fuel_health_percent">%1$.1f%% gezondheid</string>
+    <string name="fuel_soc_trend" formatted="false">Trend van bereik bij 100% lading</string>
+    <string name="fuel_at_mileage">bij %1$s</string>
+    <string name="fuel_total_line">%1$s totaal · %2$s</string>
+    <string name="fuel_est_range_chip">Geschat bereik bij 100%%: %1$s</string>
+    <string name="fuel_economy_title">Verbruik</string>
+    <string name="fuel_best">Beste</string>
+    <string name="fuel_average">Gemiddeld</string>
+    <string name="fuel_worst">Slechtste</string>
+    <string name="fuel_total_spent">Totaal uitgegeven</string>
+    <string name="fuel_partial">Gedeeltelijk</string>
+    <string name="fuel_since_full_tank">%1$s sinds de laatste volle tank</string>
+    <string name="fuel_full_tank_hint">Uitzetten als je de tank niet helemaal hebt gevuld</string>
+
+    <string name="trend_fuel_title">Brandstoftrends</string>
+    <string name="trend_charging_title">Laadtrends</string>
+    <string name="trend_rolling_fuel">gem. 3 tankbeurten</string>
+    <string name="trend_rolling_charging">gem. 3 laadsessies</string>
+    <string name="trend_metric_economy">Verbruik</string>
+    <string name="trend_metric_efficiency">Verbruik</string>
+    <string name="trend_metric_cost_per">Kosten/%1$s</string>
+    <string name="trend_metric_price_per">Prijs/%1$s</string>
+    <string name="trend_range_last_10">Laatste 10</string>
+    <string name="trend_range_6_months">6 mnd</string>
+    <string name="trend_range_1_year">1 jr</string>
+    <string name="trend_range_all">Alles</string>
+    <string name="trend_chart_cd">Grafiek %1$s, %2$d punten, laatste %3$s. Tik of sleep om punten te bekijken.</string>
+    <string name="trend_avg">gem. %1$s</string>
+    <string name="trend_legend_rolling">Lichte lijn: %1$s</string>
+    <string name="trend_legend_average">Gestippeld: gemiddelde</string>
+    <string name="trend_legend_outliers">Holle punten: ongebruikelijke waarden, tik om te controleren</string>
+    <string name="trend_legend_inspect">Tik of sleep om te bekijken</string>
+    <string name="trend_not_enough_data">Nog niet genoeg gegevens in deze periode. Probeer een langere periode.</string>
+</resources>

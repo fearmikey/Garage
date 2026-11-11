@@ -34,6 +34,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
+import com.fearmikey.garage.ui.util.label
+import com.fearmikey.garage.ui.util.toDisplayDate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -49,8 +53,6 @@ import com.fearmikey.garage.service.TripTrackingService
 import com.fearmikey.garage.data.local.entity.TripRecord
 import com.fearmikey.garage.data.local.entity.TripCategory
 import com.fearmikey.garage.ui.components.EmptyState
-import java.text.SimpleDateFormat
-import java.util.Date
 
 @Composable
 fun TripLoggerScreen(
@@ -79,7 +81,7 @@ fun TripLoggerScreen(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         floatingActionButton = {
             FloatingActionButton(onClick = { showAddDialog = true }) {
-                Icon(Icons.Filled.Add, contentDescription = "Add Trip")
+                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.trip_cd_add))
             }
         },
     ) { innerPadding ->
@@ -120,18 +122,14 @@ fun TripLoggerScreen(
                             FilterChip(
                                 selected = selectedFilter == null,
                                 onClick = { selectedFilter = null },
-                                label = { Text("All") }
+                                label = { Text(stringResource(R.string.trend_range_all)) }
                             )
                         }
                         items(TripCategory.entries) { category ->
-                            val currentLocale = androidx.compose.ui.text.intl.Locale.current.platformLocale
                             FilterChip(
                                 selected = selectedFilter == category,
                                 onClick = { selectedFilter = category },
-                                label = { 
-                                    Text(category.name.lowercase()
-                                        .replaceFirstChar { it.titlecase(currentLocale) }) 
-                                }
+                                label = { Text(category.label()) }
                             )
                         }
                     }
@@ -155,7 +153,7 @@ fun TripLoggerScreen(
             } else {
                 item {
                     EmptyState(
-                        message = "No trips logged yet.\nTap 'Start GPS Trip' or the + button to add one.",
+                        message = stringResource(R.string.trip_empty),
                         modifier = Modifier.fillMaxWidth().padding(top = 32.dp)
                     )
                 }
@@ -174,7 +172,6 @@ private fun TripRecordCard(
 ) {
     var expanded by remember { mutableStateOf(value = false) }
     val currentLocale = androidx.compose.ui.text.intl.Locale.current.platformLocale
-    val dateFormat = remember(currentLocale) { SimpleDateFormat("MMM dd, yyyy", currentLocale) }
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -187,32 +184,32 @@ private fun TripRecordCard(
             ) {
                 Column {
                     Text(
-                        text = trip.category.name, 
+                        text = trip.category.label(),
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.primary
                     )
                     Text(
-                        text = "${dateFormat.format(Date(trip.startDate))} - ${trip.calculatedDistance} $distanceUnit", 
+                        text = "${trip.startDate.toDisplayDate()} · ${trip.calculatedDistance} $distanceUnit",
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
                 Column {
                     IconButton(onClick = { expanded = true }) {
-                        Icon(Icons.Filled.MoreVert, contentDescription = "More options")
+                        Icon(Icons.Filled.MoreVert, contentDescription = stringResource(R.string.trip_cd_more))
                     }
                     DropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false }
                     ) {
                         DropdownMenuItem(
-                            text = { Text("Edit") },
+                            text = { Text(stringResource(R.string.common_edit)) },
                             onClick = { 
                                 expanded = false
                                 onEdit()
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Delete") },
+                            text = { Text(stringResource(R.string.common_delete)) },
                             onClick = { 
                                 expanded = false
                                 onDelete()
@@ -230,7 +227,10 @@ private fun TripRecordCard(
             }
             if (trip.reimbursementRate > 0) {
                 Text(
-                    text = "Deduction: $currencySymbol${String.format(currentLocale, "%.2f", trip.calculatedDistance * trip.reimbursementRate)}",
+                    text = stringResource(
+                        R.string.trip_deduction,
+                        currencySymbol + String.format(currentLocale, "%.2f", trip.calculatedDistance * trip.reimbursementRate),
+                    ),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier.padding(top = 4.dp)
@@ -293,7 +293,7 @@ private fun ActiveTripCard(
                 },
                 modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
             ) {
-                Text("Start GPS Trip")
+                Text(stringResource(R.string.trip_start_gps))
             }
         }
         is TripTrackingService.TripState.Active -> {
@@ -308,7 +308,7 @@ private fun ActiveTripCard(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = if (state.isPaused) "Trip Paused" else "Tracking Trip...",
+                        text = stringResource(if (state.isPaused) R.string.trip_paused else R.string.trip_tracking),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
@@ -326,13 +326,13 @@ private fun ActiveTripCard(
                             Button(onClick = {
                                 context.startService(Intent(context, TripTrackingService::class.java).apply { action = TripTrackingService.ACTION_RESUME })
                             }) {
-                                Text("Resume")
+                                Text(stringResource(R.string.trip_resume))
                             }
                         } else {
                             OutlinedButton(onClick = {
                                 context.startService(Intent(context, TripTrackingService::class.java).apply { action = TripTrackingService.ACTION_PAUSE })
                             }) {
-                                Text("Pause")
+                                Text(stringResource(R.string.trip_pause))
                             }
                         }
                         
@@ -340,7 +340,7 @@ private fun ActiveTripCard(
                             // The service saves the trip; the screen then opens it for editing.
                             context.startService(Intent(context, TripTrackingService::class.java).apply { action = TripTrackingService.ACTION_STOP })
                         }) {
-                            Text("Stop & Save")
+                            Text(stringResource(R.string.trip_stop_save))
                         }
                     }
                 }

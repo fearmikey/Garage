@@ -26,6 +26,8 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -90,7 +92,7 @@ fun TrendChart(
     interactive: Boolean = false,
     showYAxisLabels: Boolean = true,
     onPointClick: ((TrendPoint) -> Unit)? = null,
-    pointClickLabel: String = "Tap to edit",
+    pointClickLabel: String = stringResource(R.string.trend_tap_to_edit),
     lineColor: Color = MaterialTheme.colorScheme.primary,
     backgroundColor: Color = MaterialTheme.colorScheme.surfaceContainerHighest,
 ) {
@@ -207,7 +209,7 @@ fun TrendChart(
                     }
                     if (point.isOutlier) {
                         Text(
-                            text = "Unusual reading",
+                            text = stringResource(R.string.trend_unusual_reading),
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.errorContainer,

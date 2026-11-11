@@ -41,6 +41,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fearmikey.garage.R
 import com.fearmikey.garage.ui.components.verticalScrollbar
 import com.fearmikey.garage.ui.theme.AppThemePalette
+import com.fearmikey.garage.ui.util.label
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,7 +68,7 @@ fun AppearanceSettingsScreen(
                 title = { Text(stringResource(R.string.settings_appearance_theme)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))
                     }
                 },
             )
@@ -82,12 +83,12 @@ fun AppearanceSettingsScreen(
                 .verticalScrollbar(listState),
         ) {
             item {
-                SettingsCategoryHeader("Theme & Color Scheme")
+                SettingsCategoryHeader(stringResource(R.string.appearance_header_theme))
             }
             item {
                 ListItem(
                     headlineContent = { Text(stringResource(R.string.settings_theme)) },
-                    supportingContent = { Text(uiState.theme.replaceFirstChar { it.uppercase() }) },
+                    supportingContent = { Text(themeLabel(uiState.theme)) },
                     leadingContent = { Icon(Icons.Filled.Palette, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -96,8 +97,8 @@ fun AppearanceSettingsScreen(
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Pure Black (AMOLED)") },
-                    supportingContent = { Text("True black background for OLED screens in dark mode") },
+                    headlineContent = { Text(stringResource(R.string.appearance_amoled)) },
+                    supportingContent = { Text(stringResource(R.string.appearance_amoled_summary)) },
                     leadingContent = { Icon(Icons.Filled.DarkMode, contentDescription = null) },
                     trailingContent = {
                         Switch(
@@ -110,8 +111,8 @@ fun AppearanceSettingsScreen(
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Dynamic Color") },
-                    supportingContent = { Text("Match colors to system wallpaper (Android 12+)") },
+                    headlineContent = { Text(stringResource(R.string.appearance_dynamic)) },
+                    supportingContent = { Text(stringResource(R.string.appearance_dynamic_summary)) },
                     leadingContent = { Icon(Icons.Filled.AutoAwesome, contentDescription = null) },
                     trailingContent = {
                         Switch(
@@ -126,8 +127,8 @@ fun AppearanceSettingsScreen(
                 item {
                     val currentPalette = AppThemePalette.fromId(uiState.appPalette)
                     ListItem(
-                        headlineContent = { Text("Accent Color") },
-                        supportingContent = { Text(currentPalette.displayName) },
+                        headlineContent = { Text(stringResource(R.string.appearance_accent)) },
+                        supportingContent = { Text(currentPalette.label()) },
                         leadingContent = {
                             Box(
                                 modifier = Modifier
@@ -145,12 +146,12 @@ fun AppearanceSettingsScreen(
             item { HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp)) }
 
             item {
-                SettingsCategoryHeader("Display & Vehicle Cards")
+                SettingsCategoryHeader(stringResource(R.string.appearance_header_display))
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Tint Vehicle Screens") },
-                    supportingContent = { Text("Use individual car colors for their detail pages") },
+                    headlineContent = { Text(stringResource(R.string.appearance_tint)) },
+                    supportingContent = { Text(stringResource(R.string.appearance_tint_summary)) },
                     leadingContent = { Icon(Icons.Filled.DirectionsCar, contentDescription = null) },
                     trailingContent = {
                         Switch(
@@ -163,8 +164,8 @@ fun AppearanceSettingsScreen(
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Show Fuel Trend Graph") },
-                    supportingContent = { Text("Display the fuel trend sparkline graph on vehicle cards") },
+                    headlineContent = { Text(stringResource(R.string.appearance_fuel_graph)) },
+                    supportingContent = { Text(stringResource(R.string.appearance_fuel_graph_summary)) },
                     leadingContent = { Icon(Icons.AutoMirrored.Filled.TrendingUp, contentDescription = null) },
                     trailingContent = {
                         Switch(
@@ -179,8 +180,8 @@ fun AppearanceSettingsScreen(
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Show Fleet Overview") },
-                    supportingContent = { Text("Display the summary card with fleet averages on the dashboard") },
+                    headlineContent = { Text(stringResource(R.string.appearance_fleet)) },
+                    supportingContent = { Text(stringResource(R.string.appearance_fleet_summary)) },
                     leadingContent = { Icon(Icons.Filled.DirectionsCar, contentDescription = null) },
                     trailingContent = {
                         Switch(
@@ -198,11 +199,12 @@ fun AppearanceSettingsScreen(
 
     if (showThemeDialog) {
         SingleChoiceDialog(
-            title = "Theme",
+            title = stringResource(R.string.settings_theme),
             options = listOf("light", "dark", "system"),
             selectedOption = uiState.theme,
             onOptionSelected = { viewModel.setTheme(it) },
-            onDismissRequest = { showThemeDialog = false }
+            onDismissRequest = { showThemeDialog = false },
+            optionLabel = { themeLabel(it) },
         )
     }
 

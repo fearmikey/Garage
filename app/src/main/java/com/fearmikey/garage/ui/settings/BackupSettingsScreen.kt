@@ -89,7 +89,7 @@ fun BackupSettingsScreen(
                 title = { Text(stringResource(R.string.settings_data_sync)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))
                     }
                 },
             )
@@ -104,12 +104,12 @@ fun BackupSettingsScreen(
                 .verticalScrollbar(listState),
         ) {
             item {
-                SettingsCategoryHeader("Local Backups")
+                SettingsCategoryHeader(stringResource(R.string.backup_header_local))
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Export backup") },
-                    supportingContent = { Text("Save all vehicles, maintenance history, reminders and photos to a zip file.") },
+                    headlineContent = { Text(stringResource(R.string.backup_export)) },
+                    supportingContent = { Text(stringResource(R.string.backup_export_summary)) },
                     leadingContent = { Icon(Icons.Filled.FileDownload, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -118,8 +118,8 @@ fun BackupSettingsScreen(
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Import backup") },
-                    supportingContent = { Text("Restore vehicles, maintenance history, reminders and photos from a backup zip. This replaces all current data.") },
+                    headlineContent = { Text(stringResource(R.string.backup_import)) },
+                    supportingContent = { Text(stringResource(R.string.backup_import_summary)) },
                     leadingContent = { Icon(Icons.Filled.FileUpload, contentDescription = null) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -135,8 +135,8 @@ fun BackupSettingsScreen(
             if (uiState.localBackupFolderUri.isNotBlank()) {
                 item {
                     ListItem(
-                        headlineContent = { Text("Enable Local Auto-Backup") },
-                        supportingContent = { Text("Automatically save backups to your selected local folder.") },
+                        headlineContent = { Text(stringResource(R.string.backup_local_enable)) },
+                        supportingContent = { Text(stringResource(R.string.backup_local_enable_summary)) },
                         trailingContent = {
                             Switch(
                                 checked = uiState.localBackupEnabled,
@@ -150,8 +150,8 @@ fun BackupSettingsScreen(
                 }
                 item {
                     ListItem(
-                        headlineContent = { Text("Backup to folder now") },
-                        supportingContent = { Text("Manually save a backup zip to your local folder.") },
+                        headlineContent = { Text(stringResource(R.string.backup_local_now)) },
+                        supportingContent = { Text(stringResource(R.string.backup_local_now_summary)) },
                         leadingContent = { Icon(Icons.Filled.FolderZip, contentDescription = null) },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -163,7 +163,7 @@ fun BackupSettingsScreen(
             item { HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp)) }
 
             item {
-                SettingsCategoryHeader("Cloud Synchronization")
+                SettingsCategoryHeader(stringResource(R.string.backup_header_cloud))
             }
             item {
                 WebDavStatusItem(
@@ -175,8 +175,8 @@ fun BackupSettingsScreen(
             if (webDavConfigured) {
                 item {
                     ListItem(
-                        headlineContent = { Text("Enable WebDAV Cloud Sync") },
-                        supportingContent = { Text("Automatically upload backups to your WebDAV server.") },
+                        headlineContent = { Text(stringResource(R.string.backup_webdav_enable)) },
+                        supportingContent = { Text(stringResource(R.string.backup_webdav_enable_summary)) },
                         trailingContent = {
                             Switch(
                                 checked = uiState.cloudSyncEnabled,
@@ -191,8 +191,8 @@ fun BackupSettingsScreen(
                 item {
                     val cloudSyncReady = uiState.cloudSyncEnabled && uiState.webdavPasswordSet
                     ListItem(
-                        headlineContent = { Text("Sync WebDAV now") },
-                        supportingContent = { Text("Manually upload a backup to your WebDAV server.") },
+                        headlineContent = { Text(stringResource(R.string.backup_webdav_now)) },
+                        supportingContent = { Text(stringResource(R.string.backup_webdav_now_summary)) },
                         leadingContent = { Icon(Icons.Filled.CloudSync, contentDescription = null) },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -206,7 +206,7 @@ fun BackupSettingsScreen(
             item { HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp)) }
 
             item {
-                SettingsCategoryHeader("Integrations")
+                SettingsCategoryHeader(stringResource(R.string.backup_header_integrations))
             }
             item {
                 LubeLoggerStatusItem(
@@ -220,8 +220,8 @@ fun BackupSettingsScreen(
             if (uiState.lubeLoggerConfigured) {
                 item {
                     ListItem(
-                        headlineContent = { Text("Enable LubeLogger Sync") },
-                        supportingContent = { Text("Automatically exchange records with your LubeLogger server.") },
+                        headlineContent = { Text(stringResource(R.string.backup_ll_enable)) },
+                        supportingContent = { Text(stringResource(R.string.backup_ll_enable_summary)) },
                         trailingContent = {
                             Switch(
                                 checked = uiState.lubeLoggerSyncEnabled,
@@ -236,11 +236,12 @@ fun BackupSettingsScreen(
                 item {
                     val syncing = uiState.lubeLoggerStatus is LubeLoggerSyncStatus.Syncing
                     ListItem(
-                        headlineContent = { Text(if (syncing) "Syncing with LubeLogger…" else "Sync LubeLogger now") },
+                        headlineContent = { Text(stringResource(if (syncing) R.string.backup_ll_syncing else R.string.backup_ll_now)) },
                         supportingContent = {
                             Text(
-                                if (syncing) "Exchanging records with your LubeLogger server."
-                                else "Manually trigger a sync with your LubeLogger server.",
+                                stringResource(
+                                    if (syncing) R.string.backup_ll_syncing_summary else R.string.backup_ll_now_summary
+                                ),
                             )
                         },
                         leadingContent = {
@@ -257,8 +258,8 @@ fun BackupSettingsScreen(
                 }
                 item {
                     ListItem(
-                        headlineContent = { Text("Find duplicate records") },
-                        supportingContent = { Text("Review and remove identical fuel or maintenance records.") },
+                        headlineContent = { Text(stringResource(R.string.backup_duplicates)) },
+                        supportingContent = { Text(stringResource(R.string.backup_duplicates_summary)) },
                         leadingContent = { Icon(Icons.Filled.DeleteForever, contentDescription = null) },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -270,12 +271,12 @@ fun BackupSettingsScreen(
             item { HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp)) }
 
             item {
-                SettingsCategoryHeader("Danger Zone")
+                SettingsCategoryHeader(stringResource(R.string.backup_header_danger))
             }
             item {
                 ListItem(
-                    headlineContent = { Text("Clear All Data") },
-                    supportingContent = { Text("Permanently delete all vehicles, records, reminders, and photos.") },
+                    headlineContent = { Text(stringResource(R.string.backup_clear)) },
+                    supportingContent = { Text(stringResource(R.string.backup_clear_summary)) },
                     leadingContent = {
                         Icon(
                             Icons.Filled.DeleteForever,
@@ -337,8 +338,8 @@ fun BackupSettingsScreen(
     if (showClearDataDialog) {
         AlertDialog(
             onDismissRequest = { showClearDataDialog = false },
-            title = { Text("Clear All Data?") },
-            text = { Text("This will permanently delete all vehicles, maintenance records, reminders, and photos stored in Garage. This action cannot be undone.") },
+            title = { Text(stringResource(R.string.backup_clear_title)) },
+            text = { Text(stringResource(R.string.backup_clear_message)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -346,12 +347,12 @@ fun BackupSettingsScreen(
                         viewModel.clearAllData()
                     }
                 ) {
-                    Text("Delete Everything", color = MaterialTheme.colorScheme.error)
+                    Text(stringResource(R.string.backup_clear_confirm), color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showClearDataDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             }
         )
@@ -360,11 +361,11 @@ fun BackupSettingsScreen(
     if (uiState.importSucceeded) {
         AlertDialog(
             onDismissRequest = {},
-            title = { Text("Restart required") },
-            text = { Text("Your data has been restored. Garage needs to restart to load it.") },
+            title = { Text(stringResource(R.string.backup_restart_title)) },
+            text = { Text(stringResource(R.string.backup_restart_message)) },
             confirmButton = {
                 TextButton(onClick = { AppRestarter.restart(context) }) {
-                    Text("Restart now")
+                    Text(stringResource(R.string.backup_restart_now))
                 }
             },
         )

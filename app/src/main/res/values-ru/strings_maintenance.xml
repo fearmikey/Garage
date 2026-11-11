@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="maint_cd_add_odometer">Добавить показание одометра</string>
+    <string name="maint_cd_add_record">Добавить запись об обслуживании</string>
+    <string name="maint_cd_edit_record">Изменить запись</string>
+    <string name="maint_cd_delete_record">Удалить запись</string>
+    <string name="maint_empty">Записей об обслуживании пока нет.\nНажмите +, чтобы добавить первую.</string>
+    <string name="maint_no_matches">Нет записей, подходящих под фильтры.</string>
+    <string name="maint_clear_filters">Сбросить фильтры</string>
+    <string name="maint_delete_title">Удалить запись</string>
+    <string name="maint_delete_message">Удалить эту запись?</string>
+    <string name="maint_receipt_invoice">Чек / Счёт</string>
+    <string name="maint_receipt_image">Фото чека</string>
+    <string name="maint_pdf_receipt">Чек в PDF</string>
+    <string name="maint_open_with_app">Открыть в приложении</string>
+    <string name="maint_add_title">Добавить запись об обслуживании</string>
+    <string name="maint_date">Дата</string>
+    <string name="maint_task_other">Другое / своё</string>
+    <string name="maint_specific_task">Конкретная работа</string>
+    <string name="maint_description">Описание</string>
+    <string name="maint_mileage_unit">Пробег (%1$s)</string>
+    <string name="maint_cost_unit">Стоимость (%1$s)</string>
+    <string name="maint_inspected_only">Только осмотр (замена позже)</string>
+    <string name="maint_remind_in_distance">Напомнить через (%1$s) *</string>
+    <string name="maint_remind_in_months">Напомнить через (мес.) *</string>
+    <string name="maint_attached_pdf">Прикреплённый чек в PDF</string>
+    <string name="maint_pdf_document">Документ PDF</string>
+    <string name="maint_change_attachment">Заменить вложение</string>
+    <string name="maint_remove_attachment">Удалить вложение</string>
+    <string name="maint_attach_receipt">Прикрепить чек / счёт (фото или PDF)</string>
+    <string name="maint_open_receipt">Открыть чек</string>
+    <string name="maint_open_file_failed">Не удалось открыть файл</string>
+    <string name="maint_odometer_update">Показание одометра</string>
+    <string name="maint_search_placeholder">Поиск по описанию или работе</string>
+    <string name="maint_close_search">Закрыть поиск</string>
+    <string name="maint_search">Поиск</string>
+    <string name="maint_has_receipt">С чеком</string>
+    <string name="maint_hide_auto">Скрыть пробег и сканы</string>
+    <string name="maint_showing_count">Показано %1$d из %2$d</string>
+    <plurals name="maint_categories_count">
+        <item quantity="one">%d категория</item>
+        <item quantity="few">%d категории</item>
+        <item quantity="many">%d категорий</item>
+        <item quantity="other">%d категории</item>
+    </plurals>
+    <string name="template_title">Шаблоны графика обслуживания</string>
+    <string name="template_subtitle">Выберите шаблон, чтобы добавить подходящие интервалы обслуживания для этого автомобиля.</string>
+    <string name="template_included_rules">Включённые правила (%1$d):</string>
+    <plurals name="template_months">
+        <item quantity="one">%d месяц</item>
+        <item quantity="few">%d месяца</item>
+        <item quantity="many">%d месяцев</item>
+        <item quantity="other">%d месяца</item>
+    </plurals>
+    <string name="template_interval_or">%1$s или %2$s</string>
+    <string name="template_every">Каждые %1$s</string>
+    <string name="template_apply">Применить шаблон «%1$s»</string>
+</resources>

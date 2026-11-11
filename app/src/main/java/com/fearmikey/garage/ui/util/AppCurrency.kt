@@ -8,7 +8,14 @@ data class AppCurrency(
     val symbol: String,
     val name: String,
 ) {
-    val displayName: String get() = "$code — $name ($symbol)"
+    /** Currency name in the app's current language (from the JDK's locale data), falling back to [name]. */
+    val localizedName: String
+        get() = runCatching { Currency.getInstance(code).getDisplayName(Locale.getDefault()) }
+            .getOrNull()
+            ?.takeUnless { it.isBlank() || it == code }
+            ?: name
+
+    val displayName: String get() = "$code — $localizedName ($symbol)"
 
     companion object {
         val USD = AppCurrency("USD", "$", "US Dollar")

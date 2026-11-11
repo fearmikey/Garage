@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="export_title">Raport do sprzedaży</string>
+    <string name="export_book_title">Książka serwisowa i historia</string>
+    <string name="export_book_desc">Utwórz kompletny, estetyczny raport pokazujący nakłady na utrzymanie, dziennik serwisowy, wymienione części i stan bezpieczeństwa pojazdu, aby zwiększyć jego wartość przy sprzedaży.</string>
+    <string name="export_summary_preview">PODGLĄD PODSUMOWANIA</string>
+    <string name="export_vin">VIN: %1$s</string>
+    <string name="export_total_investment">Łączne nakłady:</string>
+    <string name="export_service_records">Wpisy serwisowe:</string>
+    <string name="export_upgrades_colon">Ulepszenia i modyfikacje:</string>
+    <string name="export_recall_status">Akcje bezpieczeństwa:</string>
+    <string name="export_checking">Sprawdzanie…</string>
+    <string name="export_clear_serviced">Brak otwartych (0 otwartych / %1$d wykonanych)</string>
+    <string name="export_clear">Brak otwartych</string>
+    <string name="export_open_total">Otwarte: %1$d / łącznie: %2$d</string>
+    <string name="export_included_sections">UWZGLĘDNIONE SEKCJE</string>
+    <string name="export_upgrades">Ulepszenia i modyfikacje</string>
+    <string name="export_upgrades_desc">Dołącz listę własnych części, ulepszeń i akcesoriów</string>
+    <string name="export_parts">Części i płyny</string>
+    <string name="export_parts_desc">Dołącz lepkość oleju, świece, rozmiar opon i wycieraczki</string>
+    <string name="export_recalls">Akcje bezpieczeństwa</string>
+    <string name="export_recalls_desc">Dołącz oficjalną weryfikację akcji NHTSA</string>
+    <string name="export_select_open">Wybierz otwarte akcje (łącznie: %1$d):</string>
+    <string name="export_all_serviced">Wszystkie wykonane</string>
+    <string name="export_all_open">Wszystkie otwarte</string>
+    <string name="export_open_unaddressed">OTWARTA / NIEWYKONANA</string>
+    <string name="export_serviced_clear">WYKONANA</string>
+    <string name="export_component">Element: %1$s</string>
+    <string name="export_fuel">Tankowania i ładowania</string>
+    <string name="export_fuel_desc">Dołącz tankowania i sesje ładowania</string>
+    <string name="export_generate">Utwórz książkę serwisową (PDF)</string>
+</resources>

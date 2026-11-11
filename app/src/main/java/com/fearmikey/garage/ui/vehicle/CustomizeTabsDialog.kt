@@ -149,7 +149,7 @@ fun CustomizeTabsDialog(
                         }
                         Icon(
                             imageVector = Icons.Default.DragHandle,
-                            contentDescription = "Reorder tab",
+                            contentDescription = stringResource(R.string.tabs_cd_reorder),
                             tint = if (isDragging) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier
                                 .padding(8.dp)

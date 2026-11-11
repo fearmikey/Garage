@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Maintenance timeline -->
+    <string name="maint_cd_add_odometer">Add odometer update</string>
+    <string name="maint_cd_add_record">Add maintenance record</string>
+    <string name="maint_cd_edit_record">Edit record</string>
+    <string name="maint_cd_delete_record">Delete record</string>
+    <string name="maint_empty">No maintenance logged yet.\nTap + to add your first record.</string>
+    <string name="maint_no_matches">No entries match your filters.</string>
+    <string name="maint_clear_filters">Clear filters</string>
+    <string name="maint_delete_title">Delete Record</string>
+    <string name="maint_delete_message">Are you sure you want to delete this entry?</string>
+    <string name="maint_receipt_invoice">Receipt / Invoice</string>
+    <string name="maint_receipt_image">Receipt Image</string>
+    <string name="maint_pdf_receipt">PDF Receipt</string>
+    <string name="maint_open_with_app">Open with app</string>
+    <string name="maint_add_title">Add Maintenance Record</string>
+    <string name="maint_date">Date</string>
+    <string name="maint_task_other">Other / custom</string>
+    <string name="maint_specific_task">Specific task</string>
+    <string name="maint_description">Description</string>
+    <string name="maint_mileage_unit">Mileage (%1$s)</string>
+    <string name="maint_cost_unit">Cost (%1$s)</string>
+    <string name="maint_inspected_only">Inspected only (defer replacement)</string>
+    <string name="maint_remind_in_distance">Remind in (%1$s) *</string>
+    <string name="maint_remind_in_months">Remind in (months) *</string>
+    <string name="maint_attached_pdf">Attached PDF Receipt</string>
+    <string name="maint_pdf_document">PDF Document</string>
+    <string name="maint_change_attachment">Change Attachment</string>
+    <string name="maint_remove_attachment">Remove Attachment</string>
+    <string name="maint_attach_receipt">Attach Receipt / Invoice (Image or PDF)</string>
+    <string name="maint_open_receipt">Open Receipt</string>
+    <string name="maint_open_file_failed">Could not open file</string>
+    <string name="maint_odometer_update">Odometer Update</string>
+
+    <!-- Timeline filters -->
+    <string name="maint_search_placeholder">Search description or task</string>
+    <string name="maint_close_search">Close search</string>
+    <string name="maint_search">Search</string>
+    <string name="maint_has_receipt">Has receipt</string>
+    <string name="maint_hide_auto">Hide odometer &amp; scans</string>
+    <string name="maint_showing_count">Showing %1$d of %2$d</string>
+    <plurals name="maint_categories_count">
+        <item quantity="one">%d category</item>
+        <item quantity="other">%d categories</item>
+    </plurals>
+
+    <!-- Schedule templates -->
+    <string name="template_title">Preset Schedule Templates</string>
+    <string name="template_subtitle">Choose a preset to add tailored maintenance intervals to this vehicle.</string>
+    <string name="template_included_rules">Included Rules (%1$d):</string>
+    <plurals name="template_months">
+        <item quantity="one">%d month</item>
+        <item quantity="other">%d months</item>
+    </plurals>
+    <string name="template_interval_or">%1$s or %2$s</string>
+    <string name="template_every">Every %1$s</string>
+    <string name="template_apply">Apply %1$s Preset</string>
+</resources>

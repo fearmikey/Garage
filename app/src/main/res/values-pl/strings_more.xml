@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sugg_cd_add_rule">Dodaj własną regułę</string>
+    <string name="sugg_empty">Brak sugestii.\nZapisuj serwisy i przebieg, aby zobaczyć, co trzeba zrobić.</string>
+    <string name="sugg_custom_rules">Twoje własne reguły</string>
+    <string name="sugg_ignored_tasks">Ignorowane czynności (%1$d)</string>
+    <string name="sugg_months_short">%1$d mies.</string>
+    <string name="sugg_cd_edit_rule">Edytuj regułę</string>
+    <string name="sugg_cd_delete_rule">Usuń własną regułę</string>
+    <string name="sugg_last_done_at">ostatnio przy %1$s</string>
+    <string name="sugg_due_at">termin przy %1$s</string>
+    <string name="sugg_due_by">termin do %1$s</string>
+    <string name="sugg_ignore">Ignoruj</string>
+    <string name="sugg_log_now">Zapisz teraz</string>
+    <string name="sugg_ignored_for_vehicle">Ignorowane dla tego pojazdu</string>
+    <string name="sugg_restore">Przywróć</string>
+    <string name="sugg_edit_title">Edytuj interwał serwisowy</string>
+    <string name="sugg_add_title">Dodaj własną regułę</string>
+    <string name="sugg_presets">Szablony harmonogramu</string>
+    <string name="sugg_presets_desc">Zastosuj gotowe szablony serwisowe (holowanie, EV, dojazdy, klasyk).</string>
+    <string name="sugg_task_name">Nazwa czynności</string>
+    <string name="sugg_interval_distance">Interwał (%1$s)</string>
+    <string name="sugg_interval_months">Interwał (miesiące)</string>
+    <string name="cost_fuel_fillup">Tankowanie</string>
+    <string name="cost_fuel">Paliwo</string>
+    <string name="cost_charging_session">Ładowanie (%1$s)</string>
+    <string name="cost_ev_charging">Ładowanie EV</string>
+    <string name="cost_modifications">Modyfikacje</string>
+    <string name="cost_vehicle_purchase">Zakup pojazdu</string>
+    <string name="cost_maintenance">Serwis</string>
+    <string name="cost_maintenance_repairs">Serwis i naprawy</string>
+    <string name="cost_fuel_spent">Wydatki na paliwo</string>
+    <string name="cost_collapse">Zwiń</string>
+    <string name="cost_expand">Rozwiń</string>
+    <plurals name="cost_records">
+        <item quantity="one">%d wpis</item>
+        <item quantity="few">%d wpisy</item>
+        <item quantity="many">%d wpisów</item>
+        <item quantity="other">%d wpisu</item>
+    </plurals>
+    <plurals name="cost_fillups">
+        <item quantity="one">%d tankowanie</item>
+        <item quantity="few">%d tankowania</item>
+        <item quantity="many">%d tankowań</item>
+        <item quantity="other">%d tankowania</item>
+    </plurals>
+    <plurals name="cost_entries_share">
+        <item quantity="one">%1$d wpis · %2$s%% całości</item>
+        <item quantity="few">%1$d wpisy · %2$s%% całości</item>
+        <item quantity="many">%1$d wpisów · %2$s%% całości</item>
+        <item quantity="other">%1$d wpisu · %2$s%% całości</item>
+    </plurals>
+    <string name="trip_cat_business">Służbowy</string>
+    <string name="trip_cat_personal">Prywatny</string>
+    <string name="trip_cat_commute">Dojazd do pracy</string>
+    <string name="trip_cat_medical">Medyczny</string>
+    <string name="trip_cat_charity">Wolontariat</string>
+    <string name="trip_cat_other">Inny</string>
+    <string name="trip_cd_add">Dodaj przejazd</string>
+    <string name="trip_cd_more">Więcej opcji</string>
+    <string name="trip_empty">Brak zapisanych przejazdów.\nDotknij „Rozpocznij przejazd GPS” lub +, aby dodać.</string>
+    <string name="trip_deduction">Do odliczenia: %1$s</string>
+    <string name="trip_start_gps">Rozpocznij przejazd GPS</string>
+    <string name="trip_paused">Przejazd wstrzymany</string>
+    <string name="trip_tracking">Rejestrowanie przejazdu…</string>
+    <string name="trip_resume">Wznów</string>
+    <string name="trip_pause">Wstrzymaj</string>
+    <string name="trip_stop_save">Zatrzymaj i zapisz</string>
+    <string name="trip_log_title">Zapisz przejazd</string>
+    <string name="trip_edit_title">Edytuj przejazd</string>
+    <string name="trip_distance">Dystans (%1$s)</string>
+    <string name="trip_rate">Stawka zwrotu (%1$s/%2$s)</string>
+    <string name="trip_notes">Notatki (cel, powód)</string>
+</resources>

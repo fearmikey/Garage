@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sugg_cd_add_rule">Eigen regel toevoegen</string>
+    <string name="sugg_empty">Nog geen suggesties.\nLeg onderhoud en kilometerstanden vast om te zien wat er moet gebeuren.</string>
+    <string name="sugg_custom_rules">Je eigen regels</string>
+    <string name="sugg_ignored_tasks">Genegeerde taken (%1$d)</string>
+    <string name="sugg_months_short">%1$d mnd</string>
+    <string name="sugg_cd_edit_rule">Regel bewerken</string>
+    <string name="sugg_cd_delete_rule">Eigen regel verwijderen</string>
+    <string name="sugg_last_done_at">laatst bij %1$s</string>
+    <string name="sugg_due_at">nodig bij %1$s</string>
+    <string name="sugg_due_by">uiterlijk %1$s</string>
+    <string name="sugg_ignore">Negeren</string>
+    <string name="sugg_log_now">Nu vastleggen</string>
+    <string name="sugg_ignored_for_vehicle">Genegeerd voor dit voertuig</string>
+    <string name="sugg_restore">Herstellen</string>
+    <string name="sugg_edit_title">Onderhoudsinterval bewerken</string>
+    <string name="sugg_add_title">Eigen regel toevoegen</string>
+    <string name="sugg_presets">Schemasjablonen</string>
+    <string name="sugg_presets_desc">Kant-en-klare onderhoudssjablonen toepassen (trekken, EV, woon-werk, klassieker).</string>
+    <string name="sugg_task_name">Taaknaam</string>
+    <string name="sugg_interval_distance">Interval (%1$s)</string>
+    <string name="sugg_interval_months">Interval (maanden)</string>
+    <string name="cost_fuel_fillup">Tankbeurt</string>
+    <string name="cost_fuel">Brandstof</string>
+    <string name="cost_charging_session">Laadsessie (%1$s)</string>
+    <string name="cost_ev_charging">Elektrisch laden</string>
+    <string name="cost_modifications">Modificaties</string>
+    <string name="cost_vehicle_purchase">Aankoop voertuig</string>
+    <string name="cost_maintenance">Onderhoud</string>
+    <string name="cost_maintenance_repairs">Onderhoud &amp; reparaties</string>
+    <string name="cost_fuel_spent">Brandstofkosten</string>
+    <string name="cost_collapse">Inklappen</string>
+    <string name="cost_expand">Uitklappen</string>
+    <plurals name="cost_records">
+        <item quantity="one">%d record</item>
+        <item quantity="other">%d records</item>
+    </plurals>
+    <plurals name="cost_fillups">
+        <item quantity="one">%d tankbeurt</item>
+        <item quantity="other">%d tankbeurten</item>
+    </plurals>
+    <plurals name="cost_entries_share">
+        <item quantity="one">%1$d record · %2$s%% van totaal</item>
+        <item quantity="other">%1$d records · %2$s%% van totaal</item>
+    </plurals>
+    <string name="trip_cat_business">Zakelijk</string>
+    <string name="trip_cat_personal">Privé</string>
+    <string name="trip_cat_commute">Woon-werk</string>
+    <string name="trip_cat_medical">Medisch</string>
+    <string name="trip_cat_charity">Vrijwilligerswerk</string>
+    <string name="trip_cat_other">Overig</string>
+    <string name="trip_cd_add">Rit toevoegen</string>
+    <string name="trip_cd_more">Meer opties</string>
+    <string name="trip_empty">Nog geen ritten vastgelegd.\nTik op ‘GPS-rit starten’ of + om er een toe te voegen.</string>
+    <string name="trip_deduction">Aftrekbaar: %1$s</string>
+    <string name="trip_start_gps">GPS-rit starten</string>
+    <string name="trip_paused">Rit gepauzeerd</string>
+    <string name="trip_tracking">Rit wordt gevolgd…</string>
+    <string name="trip_resume">Hervatten</string>
+    <string name="trip_pause">Pauzeren</string>
+    <string name="trip_stop_save">Stoppen &amp; opslaan</string>
+    <string name="trip_log_title">Rit vastleggen</string>
+    <string name="trip_edit_title">Rit bewerken</string>
+    <string name="trip_distance">Afstand (%1$s)</string>
+    <string name="trip_rate">Vergoedingstarief (%1$s/%2$s)</string>
+    <string name="trip_notes">Notities (bestemming, doel)</string>
+</resources>

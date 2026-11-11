@@ -4,12 +4,17 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.util.Locale
 
-private val DISPLAY_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy")
-
-/** Formats an epoch-millis timestamp (as stored on entities) for display, e.g. "Jan 5, 2024". */
+/**
+ * Formats an epoch-millis timestamp (as stored on entities) for display in the app's current language,
+ * e.g. "Jan 5, 2024" (English), "05.01.2024" (German), "5 янв. 2024 г." (Russian). The locale is read on
+ * every call so an in-app language change takes effect immediately.
+ */
 fun Long.toDisplayDate(): String =
-    Instant.ofEpochMilli(this).atZone(ZoneId.systemDefault()).toLocalDate().format(DISPLAY_FORMATTER)
+    Instant.ofEpochMilli(this).atZone(ZoneId.systemDefault()).toLocalDate()
+        .format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.getDefault()))
 
 /**
  * Converts a local epoch-millis timestamp to UTC epoch-millis at start of day in UTC,

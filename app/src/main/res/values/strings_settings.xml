@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Shared -->
+    <string name="common_continue">Continue</string>
+    <string name="common_username">Username</string>
+    <string name="common_password">Password</string>
+    <string name="common_server_url">Server URL</string>
+    <string name="common_just_now">just now</string>
+    <string name="common_open_link">Open link</string>
+    <plurals name="common_days">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+
+    <!-- Settings: main screen -->
+    <string name="settings_user_prefs_summary">Language, units, currency, default vehicle, OBD</string>
+    <string name="settings_header_appearance">Appearance &amp; Customization</string>
+    <string name="settings_appearance_summary">App theme, Pure Black AMOLED, Dynamic Color, accent colors, and vehicle tinting</string>
+    <string name="settings_reminders_summary">Document expirations, maintenance notice windows, and notification permissions</string>
+    <string name="settings_header_data">Data &amp; Synchronization</string>
+    <string name="settings_data_summary">Export/import backups, local auto-backup, WebDAV cloud sync, LubeLogger, clear data</string>
+    <string name="settings_header_app_info">App Information</string>
+    <string name="settings_about_title">About Garage</string>
+    <string name="settings_version">Version %1$s</string>
+    <string name="settings_version_full">Version %1$s (%2$d)</string>
+    <string name="settings_license">License</string>
+    <string name="settings_license_mit">MIT License</string>
+    <string name="settings_report_bug">Report a Bug / Feedback</string>
+    <string name="settings_report_bug_summary">Report issues or share feedback on GitHub.</string>
+    <string name="settings_header_support">Support &amp; Legal</string>
+    <string name="settings_bmac">Buy Me a Coffee</string>
+    <string name="settings_bmac_summary">Support development: %1$s</string>
+    <string name="settings_affiliate_title">Enable Affiliate Links</string>
+    <string name="settings_affiliate_summary">Show optional Amazon affiliate links for tools/parts to help support the project.</string>
+    <string name="settings_help">Help / FAQ</string>
+    <string name="settings_help_summary">Get help with using the app and common questions.</string>
+    <string name="settings_rerun_setup">Re-run Setup</string>
+    <string name="settings_rerun_setup_summary">Re-configure app permissions and measurement units</string>
+    <string name="settings_about_description">A simple, powerful vehicle management app to track maintenance, service history, fuel economy, and reminders.</string>
+    <string name="settings_about_license">Licensed under the MIT License</string>
+    <string name="settings_about_developer">Developed by fearmikey</string>
+    <string name="settings_feedback_prompt">Select an option below to open GitHub in your browser:</string>
+    <string name="settings_report_issue">Report an Issue</string>
+    <string name="settings_share_feedback">Share Feedback</string>
+    <string name="settings_favorites_intro" formatted="false">Tools and parts recommended by the developer (FearMikey). Purchasing through these Amazon affiliate links helps support the project at no extra cost to you. Usually these links earn FearMikey 2–5% of your Amazon purchase. Thank you!</string>
+
+    <!-- Settings: shared dialogs -->
+    <string name="settings_default_vehicle_first">First vehicle added (default)</string>
+    <string name="units_metric">Metric</string>
+    <string name="units_imperial">Imperial</string>
+    <string name="units_uk_mixed">UK (Mixed)</string>
+    <string name="settings_insecure_title">Insecure Connection Warning</string>
+    <string name="settings_insecure_webdav_message">You are connecting over an unencrypted HTTP connection. To keep your cloud backup credentials and data secure, ensure you are using a secure private VPN connection (such as Tailscale or WireGuard) to your server.</string>
+    <string name="settings_insecure_lubelogger_message">You are connecting over an unencrypted HTTP connection. To keep your login credentials and vehicle data secure, ensure you are using a secure private VPN connection (such as Tailscale or WireGuard) to your server.</string>
+    <string name="settings_webdav_config_title">Auto-Backup Configuration</string>
+    <string name="settings_password_unchanged">Password (unchanged)</string>
+    <string name="settings_test_connection">Test connection</string>
+    <string name="settings_local_backup_title">Local Folder Auto-Backup</string>
+    <string name="settings_local_backup_description">Automatically saves a backup zip (garage-backup.zip) to a folder on your phone whenever changes are made in Garage. You can sync this folder with custom or 3rd-party cloud storage apps.</string>
+    <string name="settings_backup_folder_label">Backup Folder:</string>
+    <string name="settings_select_folder">Select Folder</string>
+    <string name="settings_change_folder">Change Folder</string>
+    <string name="settings_status_error">Status: %1$s</string>
+    <string name="settings_last_saved">Last saved: %1$s</string>
+    <string name="settings_maint_mileage_title">Maintenance Mileage Notification</string>
+    <string name="settings_notify_due_within">Notify when maintenance is due within:</string>
+    <string name="settings_maint_time_title">Maintenance Time Notification</string>
+    <plurals name="settings_days_before">
+        <item quantity="one">%d day before</item>
+        <item quantity="other">%d days before</item>
+    </plurals>
+    <string name="settings_doc_window_title">Document Expiration Notice Window</string>
+    <string name="settings_select_accent">Select Accent Color</string>
+    <string name="palette_garage_blue">Garage Blue</string>
+    <string name="palette_racing_red">Racing Red</string>
+    <string name="palette_racing_green">Racing Green</string>
+    <string name="palette_tuner_amber">Tuner Amber</string>
+    <string name="palette_stealth_slate">Stealth Slate</string>
+    <string name="palette_midnight_purple">Midnight Purple</string>
+
+    <!-- Settings: sync status rows -->
+    <string name="sync_not_configured">Not configured</string>
+    <string name="sync_disabled_configured">Disabled (configured)</string>
+    <string name="sync_disabled_paired">Disabled (paired)</string>
+    <string name="sync_syncing">Syncing…</string>
+    <string name="sync_failed">Sync failed</string>
+    <string name="sync_failed_at">Sync failed · %1$s</string>
+    <string name="sync_recently">recently</string>
+    <string name="sync_connected">Connected</string>
+    <string name="sync_connected_last">Connected · last synced %1$s</string>
+    <string name="sync_connected_never">Connected · not yet synced</string>
+    <string name="sync_connection_failed">Connection failed</string>
+    <string name="sync_connection_failed_at">Connection failed · %1$s</string>
+    <string name="sync_not_connected_yet">Not connected yet · tap Sync now to test</string>
+    <string name="sync_last_success">Last successful sync %1$s</string>
+    <string name="webdav_title">WebDAV Cloud Sync</string>
+    <string name="webdav_disabled_cd">WebDAV disabled</string>
+    <string name="lubelogger_title">LubeLogger Sync</string>
+    <string name="lubelogger_disabled_cd">LubeLogger disabled</string>
+    <string name="local_not_configured">Not configured — no folder selected</string>
+    <string name="local_disabled_folder">Disabled — Folder: %1$s</string>
+    <string name="local_failed">Auto-backup failed</string>
+    <string name="local_active">Active</string>
+    <string name="local_active_last">Active · last saved %1$s</string>
+    <string name="local_active_never">Active · not yet saved</string>
+    <string name="local_folder">Folder: %1$s</string>
+    <string name="local_disabled_cd">Local backup disabled</string>
+    <string name="local_backup_failed_cd">Backup failed</string>
+    <string name="folder_none">No folder selected</string>
+    <string name="folder_selected">Selected Folder</string>
+
+    <!-- Settings: appearance -->
+    <string name="appearance_header_theme">Theme &amp; Color Scheme</string>
+    <string name="appearance_amoled">Pure Black (AMOLED)</string>
+    <string name="appearance_amoled_summary">True black background for OLED screens in dark mode</string>
+    <string name="appearance_dynamic">Dynamic Color</string>
+    <string name="appearance_dynamic_summary">Match colors to system wallpaper (Android 12+)</string>
+    <string name="appearance_accent">Accent Color</string>
+    <string name="appearance_header_display">Display &amp; Vehicle Cards</string>
+    <string name="appearance_tint">Tint Vehicle Screens</string>
+    <string name="appearance_tint_summary">Use individual car colors for their detail pages</string>
+    <string name="appearance_fuel_graph">Show Fuel Trend Graph</string>
+    <string name="appearance_fuel_graph_summary">Display the fuel trend sparkline graph on vehicle cards</string>
+    <string name="appearance_fleet">Show Fleet Overview</string>
+    <string name="appearance_fleet_summary">Display the summary card with fleet averages on the dashboard</string>
+
+    <!-- Settings: reminders -->
+    <string name="reminders_header_documents">Document Expirations</string>
+    <string name="reminders_doc_title">Document Renewal Reminders</string>
+    <string name="reminders_doc_summary">Notify for expiring vehicle registrations, smog tests, inspections, insurance, permits, and driver\'s licenses.</string>
+    <string name="reminders_doc_window_summary">Notify when document expiration is due within %1$s</string>
+    <string name="reminders_header_service">Service Reminders</string>
+    <string name="reminders_mileage_title">Maintenance Mileage Notice Window</string>
+    <string name="reminders_service_due_within">Notify when service is due within %1$s</string>
+    <string name="reminders_time_title">Maintenance Time Notice Window</string>
+    <string name="reminders_header_push">Push Notifications</string>
+    <string name="reminders_permission_title">Notification Permission</string>
+    <string name="reminders_permission_granted">Granted — reminders and expiration alerts can be delivered.</string>
+    <string name="reminders_permission_denied">Not granted — tap to allow Garage to send notifications.</string>
+    <string name="reminders_test_title">Send Test Notification</string>
+    <string name="reminders_test_summary">Send a sample notification to verify push notifications are working correctly.</string>
+
+    <!-- Settings: user preferences -->
+    <string name="prefs_mileage_rate_title">Mileage Reimbursement Rate</string>
+    <string name="prefs_mileage_rate_summary">Default for new trips: %1$s</string>
+    <string name="prefs_default_vehicle_summary">Used for widget shortcuts (%1$s)</string>
+    <string name="prefs_rate_description">Default rate prefilled when logging a new trip, in your selected currency and distance unit. Existing trips keep the rate they were saved with.</string>
+    <string name="prefs_rate_label">Rate (%1$s/%2$s)</string>
+    <string name="prefs_rate_invalid">Enter a valid non-negative number</string>
+
+    <!-- Settings: data, backup & sync -->
+    <string name="backup_header_local">Local Backups</string>
+    <string name="backup_export">Export backup</string>
+    <string name="backup_export_summary">Save all vehicles, maintenance history, reminders and photos to a zip file.</string>
+    <string name="backup_import">Import backup</string>
+    <string name="backup_import_summary">Restore vehicles, maintenance history, reminders and photos from a backup zip. This replaces all current data.</string>
+    <string name="backup_local_enable">Enable Local Auto-Backup</string>
+    <string name="backup_local_enable_summary">Automatically save backups to your selected local folder.</string>
+    <string name="backup_local_now">Backup to folder now</string>
+    <string name="backup_local_now_summary">Manually save a backup zip to your local folder.</string>
+    <string name="backup_header_cloud">Cloud Synchronization</string>
+    <string name="backup_webdav_enable">Enable WebDAV Cloud Sync</string>
+    <string name="backup_webdav_enable_summary">Automatically upload backups to your WebDAV server.</string>
+    <string name="backup_webdav_now">Sync WebDAV now</string>
+    <string name="backup_webdav_now_summary">Manually upload a backup to your WebDAV server.</string>
+    <string name="backup_header_integrations">Integrations</string>
+    <string name="backup_ll_enable">Enable LubeLogger Sync</string>
+    <string name="backup_ll_enable_summary">Automatically exchange records with your LubeLogger server.</string>
+    <string name="backup_ll_syncing">Syncing with LubeLogger…</string>
+    <string name="backup_ll_now">Sync LubeLogger now</string>
+    <string name="backup_ll_syncing_summary">Exchanging records with your LubeLogger server.</string>
+    <string name="backup_ll_now_summary">Manually trigger a sync with your LubeLogger server.</string>
+    <string name="backup_duplicates">Find duplicate records</string>
+    <string name="backup_duplicates_summary">Review and remove identical fuel or maintenance records.</string>
+    <string name="backup_header_danger">Danger Zone</string>
+    <string name="backup_clear">Clear All Data</string>
+    <string name="backup_clear_summary">Permanently delete all vehicles, records, reminders, and photos.</string>
+    <string name="backup_clear_title">Clear All Data?</string>
+    <string name="backup_clear_message">This will permanently delete all vehicles, maintenance records, reminders, and photos stored in Garage. This action cannot be undone.</string>
+    <string name="backup_clear_confirm">Delete Everything</string>
+    <string name="backup_restart_title">Restart required</string>
+    <string name="backup_restart_message">Your data has been restored. Garage needs to restart to load it.</string>
+    <string name="backup_restart_now">Restart now</string>
+
+    <!-- Settings: LubeLogger -->
+    <string name="ll_config_title">LubeLogger Connection</string>
+    <string name="ll_config_description">Connect Garage to your self-hosted LubeLogger instance to automatically sync records.</string>
+    <string name="ll_server_units">LubeLogger Server Units</string>
+    <string name="ll_units_imperial">Imperial (mi/gal)</string>
+    <string name="ll_units_metric">Metric (km/L)</string>
+    <string name="ll_auth_label">Authentication (provide either username/password OR an API key)</string>
+    <string name="ll_api_key_optional">API Key (optional)</string>
+    <string name="dup_title">Review Duplicates</string>
+    <plurals name="dup_delete_button">
+        <item quantity="one">Delete %d duplicate record</item>
+        <item quantity="other">Delete %d duplicate records</item>
+    </plurals>
+    <string name="dup_none_title">No duplicate records found!</string>
+    <string name="dup_none_message">Your local records match cleanly.</string>
+    <string name="dup_date">Date: %1$s</string>
+    <string name="dup_synced">Synced (#%1$s)</string>
+    <string name="dup_original">Original</string>
+    <string name="dup_duplicate">Duplicate</string>
+
+    <!-- Settings: snackbar messages -->
+    <string name="msg_ll_sync_done">LubeLogger sync completed.</string>
+    <string name="msg_ll_sync_failed">LubeLogger sync failed: %1$s</string>
+    <string name="msg_test_sent">Test notification sent.</string>
+    <string name="msg_notifications_disabled">Notifications are disabled for Garage. Enable them to receive test notifications and reminders.</string>
+    <string name="msg_ble_scan_failed">Bluetooth LE scan failed. Make sure Bluetooth is on.</string>
+    <string name="msg_export_ok">Backup exported successfully.</string>
+    <string name="msg_export_failed">Export failed: %1$s</string>
+    <string name="msg_import_failed">Import failed: %1$s</string>
+    <string name="msg_cleared">All data cleared successfully.</string>
+    <string name="msg_clear_failed">Failed to clear data: %1$s</string>
+    <string name="msg_local_ok">Local backup saved successfully.</string>
+    <string name="msg_local_failed">Local backup failed: %1$s</string>
+    <string name="msg_cloud_ok">Cloud sync completed successfully.</string>
+    <string name="msg_cloud_failed">Cloud sync failed: %1$s</string>
+    <string name="msg_connection_ok">Connection successful.</string>
+    <string name="msg_connection_failed">Connection failed: %1$s</string>
+</resources>

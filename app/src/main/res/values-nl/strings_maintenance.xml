@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="maint_cd_add_odometer">Kilometerstand toevoegen</string>
+    <string name="maint_cd_add_record">Onderhoudsrecord toevoegen</string>
+    <string name="maint_cd_edit_record">Record bewerken</string>
+    <string name="maint_cd_delete_record">Record verwijderen</string>
+    <string name="maint_empty">Nog geen onderhoud vastgelegd.\nTik op + om je eerste record toe te voegen.</string>
+    <string name="maint_no_matches">Geen records komen overeen met je filters.</string>
+    <string name="maint_clear_filters">Filters wissen</string>
+    <string name="maint_delete_title">Record verwijderen</string>
+    <string name="maint_delete_message">Weet je zeker dat je dit record wilt verwijderen?</string>
+    <string name="maint_receipt_invoice">Bon / Factuur</string>
+    <string name="maint_receipt_image">Afbeelding van bon</string>
+    <string name="maint_pdf_receipt">PDF-bon</string>
+    <string name="maint_open_with_app">Openen met app</string>
+    <string name="maint_add_title">Onderhoudsrecord toevoegen</string>
+    <string name="maint_date">Datum</string>
+    <string name="maint_task_other">Overig / aangepast</string>
+    <string name="maint_specific_task">Specifieke taak</string>
+    <string name="maint_description">Omschrijving</string>
+    <string name="maint_mileage_unit">Kilometerstand (%1$s)</string>
+    <string name="maint_cost_unit">Kosten (%1$s)</string>
+    <string name="maint_inspected_only">Alleen gecontroleerd (vervanging uitstellen)</string>
+    <string name="maint_remind_in_distance">Herinneren over (%1$s) *</string>
+    <string name="maint_remind_in_months">Herinneren over (maanden) *</string>
+    <string name="maint_attached_pdf">Bijgevoegde PDF-bon</string>
+    <string name="maint_pdf_document">PDF-document</string>
+    <string name="maint_change_attachment">Bijlage wijzigen</string>
+    <string name="maint_remove_attachment">Bijlage verwijderen</string>
+    <string name="maint_attach_receipt">Bon / factuur bijvoegen (afbeelding of PDF)</string>
+    <string name="maint_open_receipt">Bon openen</string>
+    <string name="maint_open_file_failed">Kan bestand niet openen</string>
+    <string name="maint_odometer_update">Kilometerstand bijwerken</string>
+    <string name="maint_search_placeholder">Zoek omschrijving of taak</string>
+    <string name="maint_close_search">Zoeken sluiten</string>
+    <string name="maint_search">Zoeken</string>
+    <string name="maint_has_receipt">Met bon</string>
+    <string name="maint_hide_auto">Kilometerstanden &amp; scans verbergen</string>
+    <string name="maint_showing_count">%1$d van %2$d getoond</string>
+    <plurals name="maint_categories_count">
+        <item quantity="one">%d categorie</item>
+        <item quantity="other">%d categorieën</item>
+    </plurals>
+    <string name="template_title">Sjablonen voor onderhoudsschema\'s</string>
+    <string name="template_subtitle">Kies een sjabloon om passende onderhoudsintervallen aan dit voertuig toe te voegen.</string>
+    <string name="template_included_rules">Inbegrepen regels (%1$d):</string>
+    <plurals name="template_months">
+        <item quantity="one">%d maand</item>
+        <item quantity="other">%d maanden</item>
+    </plurals>
+    <string name="template_interval_or">%1$s of %2$s</string>
+    <string name="template_every">Elke %1$s</string>
+    <string name="template_apply">Sjabloon ‘%1$s’ toepassen</string>
+</resources>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="kb_add_torque">Добавить момент затяжки</string>
+    <string name="kb_edit_torque">Изменить момент затяжки</string>
+    <string name="kb_add_note">Добавить заметку о ремонте</string>
+    <string name="kb_edit_note">Изменить заметку о ремонте</string>
+    <string name="kb_cd_add">Добавить</string>
+    <string name="kb_empty">Моментов затяжки и заметок нет.\nНажмите +, чтобы добавить.</string>
+    <string name="kb_torque_specs">Моменты затяжки</string>
+    <string name="kb_repair_notes">Заметки о ремонте</string>
+    <string name="kb_component">Деталь (например, колёсные гайки)</string>
+    <string name="kb_torque_unit">Момент (%1$s)</string>
+    <string name="kb_content">Текст (поддерживается Markdown)</string>
+    <string name="dash_empty">Автомобилей пока нет.\nНажмите +, чтобы добавить первый.</string>
+    <string name="dash_license_back">Обратная сторона прав</string>
+    <string name="dash_fuel_trend">Динамика расхода</string>
+    <string name="dash_fuel_trend_cd">Динамика расхода за последние заправки (%1$d). Последнее: %2$s.</string>
+    <string name="recalls_vin_copied">VIN (%1$s) скопирован в буфер обмена</string>
+    <string name="recalls_missing_info">Укажите год, марку и модель на экране редактирования, чтобы проверить отзывы.</string>
+    <string name="recalls_ymm_title">Кампании по году / марке / модели</string>
+    <string name="recalls_ymm_subtitle">Общие отзывные кампании для %1$s:</string>
+    <string name="recalls_none_for_model">Открытых отзывных кампаний для %1$s нет.</string>
+    <string name="recalls_none">Открытых отзывных кампаний для этого автомобиля нет.</string>
+    <string name="recalls_vin_title">Официальная проверка по VIN</string>
+    <string name="recalls_vin_desc">Проверьте невыполненные отзывы для VIN %1$s на сайте NHTSA.gov. (VIN автоматически копируется в буфер обмена, чтобы вставить его на сайте NHTSA.)</string>
+    <string name="recalls_no_vin">VIN для этого автомобиля не сохранён. Добавьте VIN на экране редактирования, чтобы проверить его на NHTSA.gov.</string>
+    <string name="recalls_campaign">Кампания № %1$s</string>
+    <string name="recalls_state_open">Открыт</string>
+    <string name="recalls_state_serviced">Выполнен</string>
+    <string name="recalls_state_not_affected">Не касается</string>
+    <string name="recalls_state_serviced_long">Выполнен / завершён</string>
+    <string name="recalls_state_not_affected_long">Не касается этого автомобиля</string>
+    <string name="recalls_reported">Опубликован %1$s</string>
+    <string name="recalls_consequence">Последствия: %1$s</string>
+    <string name="recalls_remedy">Устранение: %1$s</string>
+    <string name="widget_recent_tank">Последняя заправка: %1$s</string>
+    <string name="widget_recent">Недавно: %1$s</string>
+    <string name="widget_all_caught_up">Всё в порядке!</string>
+    <string name="widget_log_fuel">Заправка</string>
+    <string name="widget_odometer">Одометр</string>
+    <string name="widget_log_service">Обслуживание</string>
+    <string name="widget_due">Срок</string>
+    <string name="widget_no_mileage">Нет пробега</string>
+    <string name="widget_update">Обновить</string>
+</resources>

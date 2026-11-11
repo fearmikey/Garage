@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="export_title">Informe para la venta</string>
+    <string name="export_book_title">Libro de mantenimiento e historial</string>
+    <string name="export_book_desc">Genera un informe completo y bien presentado que destaca la inversión en cuidados, el registro de mantenimiento, las piezas sustituidas y el estado de seguridad de tu vehículo para maximizar su valor de reventa.</string>
+    <string name="export_summary_preview">VISTA PREVIA DEL RESUMEN</string>
+    <string name="export_vin">VIN: %1$s</string>
+    <string name="export_total_investment">Inversión total en cuidados:</string>
+    <string name="export_service_records">Registros de mantenimiento:</string>
+    <string name="export_upgrades_colon">Mejoras y modificaciones:</string>
+    <string name="export_recall_status">Llamadas a revisión:</string>
+    <string name="export_checking">Comprobando…</string>
+    <string name="export_clear_serviced">Sin pendientes (0 abiertas / %1$d realizadas)</string>
+    <string name="export_clear">Sin pendientes</string>
+    <string name="export_open_total">%1$d abiertas / %2$d en total</string>
+    <string name="export_included_sections">SECCIONES INCLUIDAS</string>
+    <string name="export_upgrades">Mejoras y modificaciones</string>
+    <string name="export_upgrades_desc">Incluir piezas, mejoras y accesorios personalizados</string>
+    <string name="export_parts">Piezas y fluidos</string>
+    <string name="export_parts_desc">Incluir viscosidad del aceite, bujías, medida de neumáticos y escobillas</string>
+    <string name="export_recalls">Llamadas a revisión</string>
+    <string name="export_recalls_desc">Incluir la verificación oficial de la NHTSA</string>
+    <string name="export_select_open">Selecciona las campañas abiertas (%1$d en total):</string>
+    <string name="export_all_serviced">Todas realizadas</string>
+    <string name="export_all_open">Todas abiertas</string>
+    <string name="export_open_unaddressed">ABIERTA / PENDIENTE</string>
+    <string name="export_serviced_clear">REALIZADA</string>
+    <string name="export_component">Componente: %1$s</string>
+    <string name="export_fuel">Combustible y cargas</string>
+    <string name="export_fuel_desc">Incluir repostajes y sesiones de carga</string>
+    <string name="export_generate">Generar libro de mantenimiento (PDF)</string>
+</resources>

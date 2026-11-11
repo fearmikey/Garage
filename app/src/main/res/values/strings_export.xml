@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Seller report (PDF export) screen. The PDF itself is still generated in English. -->
+    <string name="export_title">Seller Report Generator</string>
+    <string name="export_book_title">Vehicle Service &amp; History Book</string>
+    <string name="export_book_desc">Generate a comprehensive, beautifully formatted report designed to highlight your vehicle\'s care investment, maintenance log, parts replaced, and safety status to maximize resale value.</string>
+    <string name="export_summary_preview">REPORT SUMMARY PREVIEW</string>
+    <string name="export_vin">VIN: %1$s</string>
+    <string name="export_total_investment">Total Care Investment:</string>
+    <string name="export_service_records">Service Records:</string>
+    <string name="export_upgrades_colon">Upgrades &amp; Modifications:</string>
+    <string name="export_recall_status">Safety Recall Status:</string>
+    <string name="export_checking">Checking…</string>
+    <string name="export_clear_serviced">Clear (0 Open / %1$d Serviced)</string>
+    <string name="export_clear">Clear (0 Open)</string>
+    <string name="export_open_total">%1$d Open / %2$d Total</string>
+    <string name="export_included_sections">INCLUDED SECTIONS</string>
+    <string name="export_upgrades">Upgrades &amp; Modifications</string>
+    <string name="export_upgrades_desc">Include list of custom parts, upgrades, and accessories</string>
+    <string name="export_parts">Parts &amp; Fluid Specifications</string>
+    <string name="export_parts_desc">Include oil viscosity, spark plug, tire size &amp; wiper cheat sheet</string>
+    <string name="export_recalls">Safety Recalls Status</string>
+    <string name="export_recalls_desc">Include NHTSA official safety recall verification status</string>
+    <string name="export_select_open">Select Open / Active Campaigns (%1$d total):</string>
+    <string name="export_all_serviced">All Serviced</string>
+    <string name="export_all_open">All Open</string>
+    <string name="export_open_unaddressed">OPEN / UNADDRESSED</string>
+    <string name="export_serviced_clear">SERVICED / CLEAR</string>
+    <string name="export_component">Component: %1$s</string>
+    <string name="export_fuel">Fuel &amp; Charging Logs</string>
+    <string name="export_fuel_desc">Include fuel fill-ups and charging session records</string>
+    <string name="export_generate">Generate Vehicle Service Book (PDF)</string>
+</resources>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sugg_cd_add_rule">Eigene Regel hinzufügen</string>
+    <string name="sugg_empty">Noch keine Vorschläge.\nErfassen Sie Wartungen und Kilometerstände, um zu sehen, was fällig ist.</string>
+    <string name="sugg_custom_rules">Ihre eigenen Regeln</string>
+    <string name="sugg_ignored_tasks">Ignorierte Arbeiten (%1$d)</string>
+    <string name="sugg_months_short">%1$d Mon.</string>
+    <string name="sugg_cd_edit_rule">Regel bearbeiten</string>
+    <string name="sugg_cd_delete_rule">Eigene Regel löschen</string>
+    <string name="sugg_last_done_at">zuletzt bei %1$s</string>
+    <string name="sugg_due_at">fällig bei %1$s</string>
+    <string name="sugg_due_by">fällig bis %1$s</string>
+    <string name="sugg_ignore">Ignorieren</string>
+    <string name="sugg_log_now">Jetzt erfassen</string>
+    <string name="sugg_ignored_for_vehicle">Für dieses Fahrzeug ignoriert</string>
+    <string name="sugg_restore">Wiederherstellen</string>
+    <string name="sugg_edit_title">Wartungsintervall bearbeiten</string>
+    <string name="sugg_add_title">Eigene Regel hinzufügen</string>
+    <string name="sugg_presets">Planvorlagen</string>
+    <string name="sugg_presets_desc">Fertige Wartungsvorlagen anwenden (Anhänger, E-Auto, Pendler, Oldtimer).</string>
+    <string name="sugg_task_name">Name der Arbeit</string>
+    <string name="sugg_interval_distance">Intervall (%1$s)</string>
+    <string name="sugg_interval_months">Intervall (Monate)</string>
+    <string name="cost_fuel_fillup">Tankvorgang</string>
+    <string name="cost_fuel">Kraftstoff</string>
+    <string name="cost_charging_session">Ladevorgang (%1$s)</string>
+    <string name="cost_ev_charging">E-Auto laden</string>
+    <string name="cost_modifications">Umbauten</string>
+    <string name="cost_vehicle_purchase">Fahrzeugkauf</string>
+    <string name="cost_maintenance">Wartung</string>
+    <string name="cost_maintenance_repairs">Wartung &amp; Reparaturen</string>
+    <string name="cost_fuel_spent">Kraftstoffkosten</string>
+    <string name="cost_collapse">Einklappen</string>
+    <string name="cost_expand">Ausklappen</string>
+    <plurals name="cost_records">
+        <item quantity="one">%d Eintrag</item>
+        <item quantity="other">%d Einträge</item>
+    </plurals>
+    <plurals name="cost_fillups">
+        <item quantity="one">%d Tankung</item>
+        <item quantity="other">%d Tankungen</item>
+    </plurals>
+    <plurals name="cost_entries_share">
+        <item quantity="one">%1$d Eintrag · %2$s %% der Gesamtkosten</item>
+        <item quantity="other">%1$d Einträge · %2$s %% der Gesamtkosten</item>
+    </plurals>
+    <string name="trip_cat_business">Geschäftlich</string>
+    <string name="trip_cat_personal">Privat</string>
+    <string name="trip_cat_commute">Arbeitsweg</string>
+    <string name="trip_cat_medical">Medizinisch</string>
+    <string name="trip_cat_charity">Ehrenamt</string>
+    <string name="trip_cat_other">Sonstiges</string>
+    <string name="trip_cd_add">Fahrt hinzufügen</string>
+    <string name="trip_cd_more">Weitere Optionen</string>
+    <string name="trip_empty">Noch keine Fahrten erfasst.\nTippen Sie auf „GPS-Fahrt starten“ oder +, um eine hinzuzufügen.</string>
+    <string name="trip_deduction">Absetzbar: %1$s</string>
+    <string name="trip_start_gps">GPS-Fahrt starten</string>
+    <string name="trip_paused">Fahrt pausiert</string>
+    <string name="trip_tracking">Fahrt wird aufgezeichnet…</string>
+    <string name="trip_resume">Fortsetzen</string>
+    <string name="trip_pause">Pause</string>
+    <string name="trip_stop_save">Stoppen &amp; speichern</string>
+    <string name="trip_log_title">Fahrt erfassen</string>
+    <string name="trip_edit_title">Fahrt bearbeiten</string>
+    <string name="trip_distance">Strecke (%1$s)</string>
+    <string name="trip_rate">Erstattungssatz (%1$s/%2$s)</string>
+    <string name="trip_notes">Notizen (Ziel, Zweck)</string>
+</resources>

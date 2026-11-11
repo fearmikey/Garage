@@ -70,6 +70,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -110,6 +111,7 @@ import com.fearmikey.garage.ui.util.parseToIntOrNull
 import com.fearmikey.garage.ui.util.sanitizeMileageInput
 import com.fearmikey.garage.ui.util.toDisplayDate
 import com.fearmikey.garage.ui.util.toUtcDatePickerMillis
+import com.fearmikey.garage.ui.util.label
 import kotlin.math.abs
 import com.fearmikey.garage.ui.components.ScrollToTopOnInsert
 
@@ -224,19 +226,19 @@ private fun FuelContent(
                 // PHEV: can add either charging or fuel
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     FloatingActionButton(onClick = onAddChargingClicked, containerColor = MaterialTheme.colorScheme.secondaryContainer) {
-                        Icon(Icons.Filled.EvStation, contentDescription = "Add charging session")
+                        Icon(Icons.Filled.EvStation, contentDescription = stringResource(R.string.fuel_cd_add_charging))
                     }
                     FloatingActionButton(onClick = onAddFuelClicked) {
-                        Icon(Icons.Filled.LocalGasStation, contentDescription = "Add fuel fill-up")
+                        Icon(Icons.Filled.LocalGasStation, contentDescription = stringResource(R.string.fuel_cd_add_fillup))
                     }
                 }
             } else if (uiState.isPureEv) {
                 FloatingActionButton(onClick = onAddChargingClicked) {
-                    Icon(Icons.Filled.Add, contentDescription = "Add charging session")
+                    Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.fuel_cd_add_charging))
                 }
             } else {
                 FloatingActionButton(onClick = onAddFuelClicked) {
-                    Icon(Icons.Filled.Add, contentDescription = "Add fuel fill-up")
+                    Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.fuel_cd_add_fillup))
                 }
             }
         },
@@ -271,7 +273,7 @@ private fun FuelContent(
             if (showChargingView) {
                 if (uiState.chargingRecords.isEmpty()) {
                     EmptyState(
-                        message = "No charging sessions logged yet.\nTap + to log your first session.",
+                        message = stringResource(R.string.fuel_empty_charging),
                     )
                 } else {
                     val listState = rememberLazyListState()
@@ -323,7 +325,7 @@ private fun FuelContent(
             } else {
                 if (uiState.records.isEmpty()) {
                     EmptyState(
-                        message = "No fuel fill-ups logged yet.\nTap + to log your first one.",
+                        message = stringResource(R.string.fuel_empty_fuel),
                     )
                 } else {
                     val listState = rememberLazyListState()
@@ -385,7 +387,7 @@ private fun ChargingSummaryCard(
     Card(modifier = modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = "Charging Efficiency",
+                text = stringResource(R.string.fuel_charging_efficiency),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary,
@@ -429,7 +431,7 @@ private fun ChargingSummaryCard(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = "Total Charging Spent",
+                    text = stringResource(R.string.fuel_total_charging_spent),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -463,7 +465,7 @@ private fun BatteryHealthCard(
                         tint = MaterialTheme.colorScheme.primary,
                     )
                     Text(
-                        text = "Battery Health & Degradation",
+                        text = stringResource(R.string.fuel_battery_health_card),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.primary,
@@ -476,7 +478,7 @@ private fun BatteryHealthCard(
                         shape = RoundedCornerShape(8.dp),
                     ) {
                         Text(
-                            text = "%.1f%% Health".format(retention),
+                            text = stringResource(R.string.fuel_health_percent, retention),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
@@ -492,7 +494,7 @@ private fun BatteryHealthCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Column {
-                    Text("Current Est. 100% Range", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.fuel_est_range_100), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Text(
                         text = summary.currentRangeAt100?.let { UnitConverter.formatDistance(it, unitSystem) } ?: "—",
                         style = MaterialTheme.typography.titleMedium,
@@ -500,7 +502,7 @@ private fun BatteryHealthCard(
                     )
                 }
                 Column(horizontalAlignment = Alignment.End) {
-                    Text("Initial Est. 100% Range", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.fuel_initial_range_100), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Text(
                         text = summary.initialRangeAt100?.let { UnitConverter.formatDistance(it, unitSystem) } ?: "—",
                         style = MaterialTheme.typography.titleMedium,
@@ -512,18 +514,22 @@ private fun BatteryHealthCard(
             if (summary.history.size >= 2) {
                 HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
                 Text(
-                    text = "100% State of Charge Range Trend",
+                    text = stringResource(R.string.fuel_soc_trend),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(bottom = 8.dp),
                 )
+                val resources = LocalResources.current
                 val points = remember(summary.history, unitSystem) {
                     summary.history.mapIndexed { index, point ->
                         TrendPoint(
                             id = index.toLong(),
                             date = point.date,
                             value = UnitConverter.displayDistanceValue(point.rangeAt100, unitSystem).toDouble(),
-                            detail = "at ${UnitConverter.formatDistance(point.mileage, unitSystem)}",
+                            detail = resources.getString(
+                                R.string.fuel_at_mileage,
+                                UnitConverter.formatDistance(point.mileage, unitSystem),
+                            ),
                         )
                     }
                 }
@@ -555,8 +561,8 @@ private fun ChargingRecordRow(
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text("Delete Charging Session") },
-            text = { Text("Are you sure you want to delete this charging record?") },
+            title = { Text(stringResource(R.string.fuel_delete_charging_title)) },
+            text = { Text(stringResource(R.string.fuel_delete_charging_msg)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -564,12 +570,12 @@ private fun ChargingRecordRow(
                         onDelete()
                     },
                 ) {
-                    Text("Delete")
+                    Text(stringResource(R.string.common_delete))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         )
@@ -589,12 +595,12 @@ private fun ChargingRecordRow(
                     AssistChip(
                         onClick = {},
                         enabled = false,
-                        label = { Text(record.chargerSpeed.displayName) },
+                        label = { Text(record.chargerSpeed.label()) },
                     )
                     AssistChip(
                         onClick = {},
                         enabled = false,
-                        label = { Text(record.vendor.ifBlank { record.vendorType.displayName }) },
+                        label = { Text(record.vendor.ifBlank { record.vendorType.label() }) },
                     )
                 }
                 Text(
@@ -603,7 +609,11 @@ private fun ChargingRecordRow(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(
-                    "%s%.2f total · %d%% → %d%%".format(currencySymbol, record.totalCost, record.batteryPercentStart, record.batteryPercentEnd),
+                    stringResource(
+                        R.string.fuel_total_line,
+                        "%s%.2f".format(currencySymbol, record.totalCost),
+                        "%d%% → %d%%".format(record.batteryPercentStart, record.batteryPercentEnd),
+                    ),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -615,7 +625,7 @@ private fun ChargingRecordRow(
                         modifier = Modifier.padding(top = 6.dp),
                     ) {
                         Text(
-                            text = "Est. 100%% SoC Range: %s".format(UnitConverter.formatDistance(range, unitSystem)),
+                            text = stringResource(R.string.fuel_est_range_chip, UnitConverter.formatDistance(range, unitSystem)),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
@@ -624,7 +634,7 @@ private fun ChargingRecordRow(
                 }
             }
             IconButton(onClick = { showDeleteDialog = true }) {
-                Icon(Icons.Filled.Delete, contentDescription = "Delete charging session")
+                Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.fuel_cd_delete_charging))
             }
         }
     }
@@ -683,12 +693,12 @@ internal fun AddEditChargingRecordSheet(
                         showDatePicker = false
                     }
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.common_ok))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDatePicker = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             }
         ) {
@@ -724,7 +734,7 @@ internal fun AddEditChargingRecordSheet(
                     label = { Text(stringResource(R.string.doc_select_date)) },
                     trailingIcon = {
                         IconButton(onClick = { showDatePicker = true }) {
-                            Icon(Icons.Filled.DateRange, contentDescription = "Select date")
+                            Icon(Icons.Filled.DateRange, contentDescription = stringResource(R.string.doc_select_date))
                         }
                     },
                     modifier = Modifier
@@ -759,7 +769,7 @@ internal fun AddEditChargingRecordSheet(
                     FilterChip(
                         selected = chargerSpeed == speed,
                         onClick = { chargerSpeed = speed },
-                        label = { Text(speed.displayName) },
+                        label = { Text(speed.label()) },
                     )
                 }
             }
@@ -770,7 +780,7 @@ internal fun AddEditChargingRecordSheet(
                     FilterChip(
                         selected = vendorType == type,
                         onClick = { vendorType = type },
-                        label = { Text(type.displayName) },
+                        label = { Text(type.label()) },
                     )
                 }
             }
@@ -945,7 +955,7 @@ private fun FuelSummaryCard(
     Card(modifier = modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = "Fuel Economy",
+                text = stringResource(R.string.fuel_economy_title),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary,
@@ -961,21 +971,21 @@ private fun FuelSummaryCard(
                 val (worstBg, worstFg) = worstMpgColors()
 
                 MpgStatBox(
-                    label = "Best",
+                    label = stringResource(R.string.fuel_best),
                     value = UnitConverter.formatFuelEconomy(bestMpg, unitSystem),
                     containerColor = bestBg,
                     contentColor = bestFg,
                     modifier = Modifier.weight(1f),
                 )
                 MpgStatBox(
-                    label = "Average",
+                    label = stringResource(R.string.fuel_average),
                     value = UnitConverter.formatFuelEconomy(averageMpg, unitSystem),
                     containerColor = avgBg,
                     contentColor = avgFg,
                     modifier = Modifier.weight(1f),
                 )
                 MpgStatBox(
-                    label = "Worst",
+                    label = stringResource(R.string.fuel_worst),
                     value = UnitConverter.formatFuelEconomy(worstMpg, unitSystem),
                     containerColor = worstBg,
                     contentColor = worstFg,
@@ -991,7 +1001,7 @@ private fun FuelSummaryCard(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = "Total Spent",
+                    text = stringResource(R.string.fuel_total_spent),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -1054,8 +1064,8 @@ private fun FuelRecordRow(
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text("Delete Fill-Up") },
-            text = { Text("Are you sure you want to delete this fuel record?") },
+            title = { Text(stringResource(R.string.fuel_delete_fillup_title)) },
+            text = { Text(stringResource(R.string.fuel_delete_fillup_msg)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -1063,14 +1073,14 @@ private fun FuelRecordRow(
                         onDelete()
                     },
                 ) {
-                    Text("Delete")
+                    Text(stringResource(R.string.common_delete))
                 }
             },
             dismissButton = {
                 TextButton(
                     onClick = { showDeleteDialog = false },
                 ) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         )
@@ -1088,7 +1098,7 @@ private fun FuelRecordRow(
                         style = MaterialTheme.typography.titleMedium,
                     )
                     if (!record.isFullTank) {
-                        AssistChip(onClick = {}, enabled = false, label = { Text("Partial") })
+                        AssistChip(onClick = {}, enabled = false, label = { Text(stringResource(R.string.fuel_partial)) })
                     }
                 }
                 Text(
@@ -1097,7 +1107,11 @@ private fun FuelRecordRow(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(
-                    "%s%.2f total · %s".format(currencySymbol, record.totalCost, UnitConverter.formatPricePerVolume(record.pricePerGallon, unitSystem, currencySymbol)),
+                    stringResource(
+                        R.string.fuel_total_line,
+                        "%s%.2f".format(currencySymbol, record.totalCost),
+                        UnitConverter.formatPricePerVolume(record.pricePerGallon, unitSystem, currencySymbol),
+                    ),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -1116,7 +1130,10 @@ private fun FuelRecordRow(
                         modifier = Modifier.padding(top = 6.dp),
                     ) {
                         Text(
-                            text = UnitConverter.formatSegmentFuelEconomy(mpg, unitSystem),
+                            text = stringResource(
+                                R.string.fuel_since_full_tank,
+                                UnitConverter.formatFuelEconomy(mpg, unitSystem),
+                            ),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
@@ -1125,7 +1142,7 @@ private fun FuelRecordRow(
                 }
             }
             IconButton(onClick = { showDeleteDialog = true }) {
-                Icon(Icons.Filled.Delete, contentDescription = "Delete fill-up")
+                Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.fuel_cd_delete_fillup))
             }
         }
     }
@@ -1178,12 +1195,12 @@ internal fun AddEditFuelRecordSheet(
                         showDatePicker = false
                     }
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.common_ok))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDatePicker = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             }
         ) {
@@ -1219,7 +1236,7 @@ internal fun AddEditFuelRecordSheet(
                     label = { Text(stringResource(R.string.doc_select_date)) },
                     trailingIcon = {
                         IconButton(onClick = { showDatePicker = true }) {
-                            Icon(Icons.Filled.DateRange, contentDescription = "Select date")
+                            Icon(Icons.Filled.DateRange, contentDescription = stringResource(R.string.doc_select_date))
                         }
                     },
                     modifier = Modifier
@@ -1295,7 +1312,7 @@ internal fun AddEditFuelRecordSheet(
                 Column {
                     Text(stringResource(R.string.fuel_filled_full), style = MaterialTheme.typography.bodyLarge)
                     Text(
-                        "Turn off if you didn't top off the tank",
+                        stringResource(R.string.fuel_full_tank_hint),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -1328,7 +1345,7 @@ internal fun AddEditFuelRecordSheet(
                 enabled = canSave,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text("Save")
+                Text(stringResource(R.string.common_save))
             }
         }
     }

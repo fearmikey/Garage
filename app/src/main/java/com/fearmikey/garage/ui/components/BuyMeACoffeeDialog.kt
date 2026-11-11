@@ -18,6 +18,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
@@ -38,7 +40,7 @@ fun BuyMeACoffeeDialog(
         },
         title = {
             Text(
-                text = "Support Garage",
+                text = stringResource(R.string.bmac_title),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -46,7 +48,7 @@ fun BuyMeACoffeeDialog(
         text = {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    text = "Enjoying Garage? If you find the app helpful, consider supporting its open-source development!",
+                    text = stringResource(R.string.bmac_message),
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth(),
@@ -61,7 +63,7 @@ fun BuyMeACoffeeDialog(
                         contentDescription = null,
                         modifier = Modifier.padding(end = 8.dp),
                     )
-                    Text("Buy Me a Coffee")
+                    Text(stringResource(R.string.settings_bmac))
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
@@ -69,10 +71,10 @@ fun BuyMeACoffeeDialog(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     TextButton(onClick = onDontAskAgainClicked) {
-                        Text("Don't ask again")
+                        Text(stringResource(R.string.bmac_dont_ask))
                     }
                     TextButton(onClick = onMaybeLaterClicked) {
-                        Text("Maybe later")
+                        Text(stringResource(R.string.bmac_later))
                     }
                 }
             }

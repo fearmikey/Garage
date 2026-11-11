@@ -46,6 +46,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -67,6 +68,7 @@ fun RecallsScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val resources = LocalResources.current
 
     RecallsContent(
         uiState = uiState,
@@ -79,7 +81,7 @@ fun RecallsScreen(
             clipboard?.setPrimaryClip(ClipData.newPlainText("Vehicle VIN", trimmedVin))
             Toast.makeText(
                 context,
-                "VIN ($trimmedVin) copied to clipboard for easy pasting",
+                resources.getString(R.string.recalls_vin_copied, trimmedVin),
                 Toast.LENGTH_LONG,
             ).show()
         }
@@ -107,7 +109,7 @@ private fun RecallsContent(
         ) {
             when {
                 uiState.missingVehicleInfo -> EmptyState(
-                    message = "Add this vehicle's year, make and model on the Edit screen to check for recalls.",
+                    message = stringResource(R.string.recalls_missing_info),
                 )
                 uiState.errorMessage != null -> RecallsErrorState(
                     message = uiState.errorMessage,
@@ -134,12 +136,12 @@ private fun RecallsContent(
                         val titleSuffix = formatVehicleLabel(uiState.year, uiState.make, uiState.model)
                         Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                             Text(
-                                text = "Year / Make / Model Campaigns",
+                                text = stringResource(R.string.recalls_ymm_title),
                                 style = MaterialTheme.typography.titleMedium,
                             )
                             if (titleSuffix.isNotBlank()) {
                                 Text(
-                                    text = "General safety recalls applicable to $titleSuffix:",
+                                    text = stringResource(R.string.recalls_ymm_subtitle, titleSuffix),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
@@ -157,9 +159,9 @@ private fun RecallsContent(
                             ) {
                                 val vehicleLabel = formatVehicleLabel(uiState.year, uiState.make, uiState.model)
                                 val emptyMsg = if (vehicleLabel.isNotBlank()) {
-                                    "No open safety recalls reported for general $vehicleLabel."
+                                    stringResource(R.string.recalls_none_for_model, vehicleLabel)
                                 } else {
-                                    "No open safety recalls found for this vehicle."
+                                    stringResource(R.string.recalls_none)
                                 }
                                 Text(
                                     text = emptyMsg,
@@ -213,14 +215,14 @@ private fun VinRecallCard(
                     tint = MaterialTheme.colorScheme.primary,
                 )
                 Text(
-                    text = "Official VIN Recall Check",
+                    text = stringResource(R.string.recalls_vin_title),
                     style = MaterialTheme.typography.titleMedium,
                 )
             }
 
             if (vin.isNotBlank()) {
                 Text(
-                    text = "Verify exact uncompleted recall records for VIN $vin directly on NHTSA.gov. (Your VIN is automatically copied to your clipboard so you can easily paste it on NHTSA's website).",
+                    text = stringResource(R.string.recalls_vin_desc, vin),
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Button(
@@ -236,7 +238,7 @@ private fun VinRecallCard(
                 }
             } else {
                 Text(
-                    text = "No VIN saved for this vehicle. Add a VIN on the Edit screen to verify exact VIN recall status directly on NHTSA.gov.",
+                    text = stringResource(R.string.recalls_no_vin),
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }
@@ -298,7 +300,7 @@ private fun RecallCard(
                     verticalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     Text(
-                        text = "Campaign #${recall.campaignNumber}",
+                        text = stringResource(R.string.recalls_campaign, recall.campaignNumber),
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.primary,
                     )
@@ -306,7 +308,7 @@ private fun RecallCard(
                         AssistChip(
                             onClick = {},
                             enabled = false,
-                            label = { Text(if (recall.parkIt) "Park it" else "Park outside") },
+                            label = { Text(stringResource(if (recall.parkIt) R.string.recalls_park_it else R.string.recalls_park_outside)) },
                             leadingIcon = { Icon(Icons.Filled.Warning, contentDescription = null) },
                             colors = AssistChipDefaults.assistChipColors(
                                 disabledLabelColor = MaterialTheme.colorScheme.error,
@@ -321,9 +323,9 @@ private fun RecallCard(
                     onExpandedChange = { expanded = it },
                 ) {
                     val labelText = when (recallItem.state) {
-                        RecallState.OPEN -> "Open"
-                        RecallState.SERVICED -> "Serviced"
-                        RecallState.DOES_NOT_AFFECT -> "Not Affected"
+                        RecallState.OPEN -> stringResource(R.string.recalls_state_open)
+                        RecallState.SERVICED -> stringResource(R.string.recalls_state_serviced)
+                        RecallState.DOES_NOT_AFFECT -> stringResource(R.string.recalls_state_not_affected)
                     }
                     val (chipContainerColor, chipContentColor) = when (recallItem.state) {
                         RecallState.OPEN -> MaterialTheme.colorScheme.errorContainer to MaterialTheme.colorScheme.onErrorContainer
@@ -361,9 +363,9 @@ private fun RecallCard(
                     ) {
                         RecallState.entries.forEach { state ->
                             val itemLabel = when (state) {
-                                RecallState.OPEN -> "Open"
-                                RecallState.SERVICED -> "Serviced / Completed"
-                                RecallState.DOES_NOT_AFFECT -> "Does Not Affect Vehicle"
+                                RecallState.OPEN -> stringResource(R.string.recalls_state_open)
+                                RecallState.SERVICED -> stringResource(R.string.recalls_state_serviced_long)
+                                RecallState.DOES_NOT_AFFECT -> stringResource(R.string.recalls_state_not_affected_long)
                             }
                             DropdownMenuItem(
                                 text = { Text(itemLabel) },
@@ -379,7 +381,7 @@ private fun RecallCard(
             Text(recall.component, style = MaterialTheme.typography.titleMedium)
             recall.reportedDate?.let {
                 Text(
-                    "Reported $it",
+                    stringResource(R.string.recalls_reported, it),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -389,14 +391,14 @@ private fun RecallCard(
             }
             if (recall.consequence.isNotBlank()) {
                 Text(
-                    "Consequence: ${recall.consequence}",
+                    stringResource(R.string.recalls_consequence, recall.consequence),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
             if (recall.remedy.isNotBlank()) {
                 Text(
-                    "Remedy: ${recall.remedy}",
+                    stringResource(R.string.recalls_remedy, recall.remedy),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

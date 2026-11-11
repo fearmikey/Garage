@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="export_title">Rapport pour la revente</string>
+    <string name="export_book_title">Carnet d\'entretien et historique</string>
+    <string name="export_book_desc">Générez un rapport complet et soigné qui met en valeur l\'investissement d\'entretien, le carnet d\'entretien, les pièces remplacées et l\'état de sécurité de votre véhicule pour en optimiser la revente.</string>
+    <string name="export_summary_preview">APERÇU DU RÉSUMÉ</string>
+    <string name="export_vin">VIN : %1$s</string>
+    <string name="export_total_investment">Investissement total :</string>
+    <string name="export_service_records">Entrées d\'entretien :</string>
+    <string name="export_upgrades_colon">Améliorations et modifications :</string>
+    <string name="export_recall_status">Rappels de sécurité :</string>
+    <string name="export_checking">Vérification…</string>
+    <string name="export_clear_serviced">Aucun ouvert (0 ouvert / %1$d effectués)</string>
+    <string name="export_clear">Aucun ouvert</string>
+    <string name="export_open_total">%1$d ouvert(s) / %2$d au total</string>
+    <string name="export_included_sections">SECTIONS INCLUSES</string>
+    <string name="export_upgrades">Améliorations et modifications</string>
+    <string name="export_upgrades_desc">Inclure la liste des pièces, améliorations et accessoires</string>
+    <string name="export_parts">Pièces et fluides</string>
+    <string name="export_parts_desc">Inclure viscosité d\'huile, bougies, taille des pneus et balais d\'essuie-glace</string>
+    <string name="export_recalls">Rappels de sécurité</string>
+    <string name="export_recalls_desc">Inclure la vérification officielle des rappels NHTSA</string>
+    <string name="export_select_open">Sélectionnez les campagnes ouvertes (%1$d au total) :</string>
+    <string name="export_all_serviced">Tous effectués</string>
+    <string name="export_all_open">Tous ouverts</string>
+    <string name="export_open_unaddressed">OUVERT / NON TRAITÉ</string>
+    <string name="export_serviced_clear">EFFECTUÉ</string>
+    <string name="export_component">Pièce : %1$s</string>
+    <string name="export_fuel">Carburant et recharges</string>
+    <string name="export_fuel_desc">Inclure les pleins et les recharges</string>
+    <string name="export_generate">Générer le carnet d\'entretien (PDF)</string>
+</resources>

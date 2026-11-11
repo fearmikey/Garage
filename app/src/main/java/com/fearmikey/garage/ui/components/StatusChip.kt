@@ -12,6 +12,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fearmikey.garage.data.repository.ReminderStatus
@@ -24,10 +26,10 @@ import com.fearmikey.garage.ui.theme.StatusUpcoming
 @Composable
 fun StatusChip(status: ReminderStatus, modifier: Modifier = Modifier) {
     val (label, color) = when (status) {
-        ReminderStatus.OVERDUE -> "Overdue" to StatusOverdue
-        ReminderStatus.UPCOMING -> "Upcoming" to StatusUpcoming
-        ReminderStatus.OK -> "On track" to StatusOk
-        ReminderStatus.COMPLETED -> "Done" to MaterialTheme.colorScheme.outline
+        ReminderStatus.OVERDUE -> stringResource(R.string.status_overdue) to StatusOverdue
+        ReminderStatus.UPCOMING -> stringResource(R.string.status_upcoming) to StatusUpcoming
+        ReminderStatus.OK -> stringResource(R.string.status_on_track) to StatusOk
+        ReminderStatus.COMPLETED -> stringResource(R.string.status_done) to MaterialTheme.colorScheme.outline
     }
     AssistChip(
         onClick = {},

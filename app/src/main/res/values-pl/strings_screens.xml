@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="kb_add_torque">Dodaj moment dokręcenia</string>
+    <string name="kb_edit_torque">Edytuj moment dokręcenia</string>
+    <string name="kb_add_note">Dodaj notatkę naprawczą</string>
+    <string name="kb_edit_note">Edytuj notatkę naprawczą</string>
+    <string name="kb_cd_add">Dodaj</string>
+    <string name="kb_empty">Brak momentów dokręcenia i notatek.\nDotknij +, aby dodać.</string>
+    <string name="kb_torque_specs">Momenty dokręcenia</string>
+    <string name="kb_repair_notes">Notatki naprawcze</string>
+    <string name="kb_component">Element (np. nakrętki kół)</string>
+    <string name="kb_torque_unit">Moment (%1$s)</string>
+    <string name="kb_content">Treść (obsługa Markdown)</string>
+    <string name="dash_empty">Brak pojazdów.\nDotknij +, aby dodać pierwszy.</string>
+    <string name="dash_license_back">Tył prawa jazdy</string>
+    <string name="dash_fuel_trend">Trend spalania</string>
+    <string name="dash_fuel_trend_cd">Trend spalania z ostatnich tankowań: %1$d. Ostatnio: %2$s.</string>
+    <string name="recalls_vin_copied">Skopiowano VIN (%1$s) do schowka</string>
+    <string name="recalls_missing_info">Dodaj rok, markę i model na ekranie edycji, aby sprawdzić akcje serwisowe.</string>
+    <string name="recalls_ymm_title">Akcje dla roku / marki / modelu</string>
+    <string name="recalls_ymm_subtitle">Ogólne akcje bezpieczeństwa dla %1$s:</string>
+    <string name="recalls_none_for_model">Brak otwartych akcji bezpieczeństwa dla %1$s.</string>
+    <string name="recalls_none">Brak otwartych akcji bezpieczeństwa dla tego pojazdu.</string>
+    <string name="recalls_vin_title">Oficjalne sprawdzenie po VIN</string>
+    <string name="recalls_vin_desc">Sprawdź niewykonane akcje serwisowe dla VIN %1$s bezpośrednio na NHTSA.gov. (VIN jest automatycznie kopiowany do schowka, aby wkleić go na stronie NHTSA.)</string>
+    <string name="recalls_no_vin">Brak zapisanego numeru VIN. Dodaj VIN na ekranie edycji, aby sprawdzić go na NHTSA.gov.</string>
+    <string name="recalls_campaign">Akcja nr %1$s</string>
+    <string name="recalls_state_open">Otwarta</string>
+    <string name="recalls_state_serviced">Wykonana</string>
+    <string name="recalls_state_not_affected">Nie dotyczy</string>
+    <string name="recalls_state_serviced_long">Wykonana / zakończona</string>
+    <string name="recalls_state_not_affected_long">Nie dotyczy tego pojazdu</string>
+    <string name="recalls_reported">Zgłoszono %1$s</string>
+    <string name="recalls_consequence">Skutek: %1$s</string>
+    <string name="recalls_remedy">Rozwiązanie: %1$s</string>
+    <string name="widget_recent_tank">Ostatnie tankowanie: %1$s</string>
+    <string name="widget_recent">Ostatnio: %1$s</string>
+    <string name="widget_all_caught_up">Wszystko na bieżąco!</string>
+    <string name="widget_log_fuel">Tankowanie</string>
+    <string name="widget_odometer">Licznik</string>
+    <string name="widget_log_service">Serwis</string>
+    <string name="widget_due">Termin</string>
+    <string name="widget_no_mileage">Brak przebiegu</string>
+    <string name="widget_update">Aktualizuj</string>
+</resources>

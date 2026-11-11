@@ -60,6 +60,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -118,10 +120,10 @@ fun MaintenanceExportScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Seller Report Generator") },
+                title = { Text(stringResource(R.string.export_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))
                     }
                 },
             )
@@ -167,13 +169,13 @@ fun MaintenanceExportScreen(
                         Spacer(modifier = Modifier.width(16.dp))
                         Column {
                             Text(
-                                text = "Vehicle Service & History Book",
+                                text = stringResource(R.string.export_book_title),
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
-                                text = "Generate a comprehensive, beautifully formatted report designed to highlight your vehicle's care investment, maintenance log, parts replaced, and safety status to maximize resale value.",
+                                text = stringResource(R.string.export_book_desc),
                                 style = MaterialTheme.typography.bodyMedium,
                             )
                         }
@@ -187,7 +189,7 @@ fun MaintenanceExportScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         Text(
-                            text = "REPORT SUMMARY PREVIEW",
+                            text = stringResource(R.string.export_summary_preview),
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold,
@@ -199,7 +201,7 @@ fun MaintenanceExportScreen(
                         )
                         if (vehicle.vin.isNotBlank()) {
                             Text(
-                                text = "VIN: ${vehicle.vin}",
+                                text = stringResource(R.string.export_vin, vehicle.vin),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
@@ -211,7 +213,7 @@ fun MaintenanceExportScreen(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
                         ) {
-                            Text("Total Care Investment:", style = MaterialTheme.typography.bodyMedium)
+                            Text(stringResource(R.string.export_total_investment), style = MaterialTheme.typography.bodyMedium)
                             Text(
                                 text = "%s%.2f".format(uiState.currencySymbol, uiState.totalCareInvestment),
                                 style = MaterialTheme.typography.bodyMedium,
@@ -224,7 +226,7 @@ fun MaintenanceExportScreen(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
                         ) {
-                            Text("Service Records:", style = MaterialTheme.typography.bodyMedium)
+                            Text(stringResource(R.string.export_service_records), style = MaterialTheme.typography.bodyMedium)
                             Text(
                                 text = "${uiState.maintenanceRecords.size} logged",
                                 style = MaterialTheme.typography.bodyMedium,
@@ -237,7 +239,7 @@ fun MaintenanceExportScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                             ) {
-                                Text("Upgrades & Modifications:", style = MaterialTheme.typography.bodyMedium)
+                                Text(stringResource(R.string.export_upgrades_colon), style = MaterialTheme.typography.bodyMedium)
                                 Text(
                                     text = "${uiState.modificationRecords.size} items (%s%.2f)".format(uiState.currencySymbol, uiState.totalModificationCost),
                                     style = MaterialTheme.typography.bodyMedium,
@@ -252,12 +254,12 @@ fun MaintenanceExportScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
-                                Text("Safety Recall Status:", style = MaterialTheme.typography.bodyMedium)
+                                Text(stringResource(R.string.export_recall_status), style = MaterialTheme.typography.bodyMedium)
                                 if (uiState.isCheckingRecalls) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         CircularProgressIndicator(modifier = Modifier.size(14.dp), strokeWidth = 2.dp)
                                         Spacer(modifier = Modifier.width(6.dp))
-                                        Text("Checking...", style = MaterialTheme.typography.bodySmall)
+                                        Text(stringResource(R.string.export_checking), style = MaterialTheme.typography.bodySmall)
                                     }
                                 } else if (uiState.openRecalls.isEmpty()) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -269,7 +271,11 @@ fun MaintenanceExportScreen(
                                         )
                                         Spacer(modifier = Modifier.width(4.dp))
                                         Text(
-                                            text = if (uiState.recalls.isNotEmpty()) "Clear (0 Open / ${uiState.recalls.size} Serviced)" else "Clear (0 Open)",
+                                            text = if (uiState.recalls.isNotEmpty()) {
+                                                stringResource(R.string.export_clear_serviced, uiState.recalls.size)
+                                            } else {
+                                                stringResource(R.string.export_clear)
+                                            },
                                             style = MaterialTheme.typography.bodyMedium,
                                             fontWeight = FontWeight.Bold,
                                         )
@@ -284,7 +290,7 @@ fun MaintenanceExportScreen(
                                         )
                                         Spacer(modifier = Modifier.width(4.dp))
                                         Text(
-                                            "${uiState.openRecalls.size} Open / ${uiState.recalls.size} Total",
+                                            stringResource(R.string.export_open_total, uiState.openRecalls.size, uiState.recalls.size),
                                             style = MaterialTheme.typography.bodyMedium,
                                             color = MaterialTheme.colorScheme.error,
                                             fontWeight = FontWeight.Bold,
@@ -303,7 +309,7 @@ fun MaintenanceExportScreen(
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
                         Text(
-                            text = "INCLUDED SECTIONS",
+                            text = stringResource(R.string.export_included_sections),
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold,
@@ -315,8 +321,8 @@ fun MaintenanceExportScreen(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Column(modifier = Modifier.weight(1f)) {
-                                Text("Upgrades & Modifications", style = MaterialTheme.typography.bodyLarge)
-                                Text("Include list of custom parts, upgrades, and accessories", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(stringResource(R.string.export_upgrades), style = MaterialTheme.typography.bodyLarge)
+                                Text(stringResource(R.string.export_upgrades_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                             Switch(
                                 checked = uiState.includeMods,
@@ -332,8 +338,8 @@ fun MaintenanceExportScreen(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Column(modifier = Modifier.weight(1f)) {
-                                Text("Parts & Fluid Specifications", style = MaterialTheme.typography.bodyLarge)
-                                Text("Include oil viscosity, spark plug, tire size & wiper cheat sheet", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(stringResource(R.string.export_parts), style = MaterialTheme.typography.bodyLarge)
+                                Text(stringResource(R.string.export_parts_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                             Switch(
                                 checked = uiState.includePartsSpecs,
@@ -350,8 +356,8 @@ fun MaintenanceExportScreen(
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Column(modifier = Modifier.weight(1f)) {
-                                    Text("Safety Recalls Status", style = MaterialTheme.typography.bodyLarge)
-                                    Text("Include NHTSA official safety recall verification status", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                    Text(stringResource(R.string.export_recalls), style = MaterialTheme.typography.bodyLarge)
+                                    Text(stringResource(R.string.export_recalls_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 }
                                 Switch(
                                     checked = uiState.includeRecalls,
@@ -374,7 +380,7 @@ fun MaintenanceExportScreen(
                                         verticalAlignment = Alignment.CenterVertically,
                                     ) {
                                         Text(
-                                            text = "Select Open / Active Campaigns (${uiState.recalls.size} total):",
+                                            text = stringResource(R.string.export_select_open, uiState.recalls.size),
                                             style = MaterialTheme.typography.labelSmall,
                                             fontWeight = FontWeight.Bold,
                                             color = MaterialTheme.colorScheme.primary,
@@ -384,13 +390,13 @@ fun MaintenanceExportScreen(
                                                 onClick = viewModel::markAllRecallsResolved,
                                                 contentPadding = PaddingValues(horizontal = 8.dp),
                                             ) {
-                                                Text("All Serviced", style = MaterialTheme.typography.labelSmall)
+                                                Text(stringResource(R.string.export_all_serviced), style = MaterialTheme.typography.labelSmall)
                                             }
                                             TextButton(
                                                 onClick = viewModel::markAllRecallsOpen,
                                                 contentPadding = PaddingValues(horizontal = 8.dp),
                                             ) {
-                                                Text("All Open", style = MaterialTheme.typography.labelSmall)
+                                                Text(stringResource(R.string.export_all_open), style = MaterialTheme.typography.labelSmall)
                                             }
                                         }
                                     }
@@ -426,19 +432,19 @@ fun MaintenanceExportScreen(
                                                         horizontalArrangement = Arrangement.SpaceBetween,
                                                     ) {
                                                         Text(
-                                                            text = "Campaign #${recall.campaignNumber}",
+                                                            text = stringResource(R.string.recalls_campaign, recall.campaignNumber),
                                                             style = MaterialTheme.typography.bodyMedium,
                                                             fontWeight = FontWeight.Bold,
                                                         )
                                                         Text(
-                                                            text = if (isOpen) "OPEN / UNADDRESSED" else "SERVICED / CLEAR",
+                                                            text = stringResource(if (isOpen) R.string.export_open_unaddressed else R.string.export_serviced_clear),
                                                             style = MaterialTheme.typography.labelSmall,
                                                             fontWeight = FontWeight.Bold,
                                                             color = if (isOpen) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
                                                         )
                                                     }
                                                     Text(
-                                                        text = "Component: ${recall.component}",
+                                                        text = stringResource(R.string.export_component, recall.component),
                                                         style = MaterialTheme.typography.bodySmall,
                                                         fontWeight = FontWeight.Medium,
                                                     )
@@ -467,8 +473,8 @@ fun MaintenanceExportScreen(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Column(modifier = Modifier.weight(1f)) {
-                                Text("Fuel & Charging Logs", style = MaterialTheme.typography.bodyLarge)
-                                Text("Include fuel fill-ups and charging session records", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(stringResource(R.string.export_fuel), style = MaterialTheme.typography.bodyLarge)
+                                Text(stringResource(R.string.export_fuel_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                             Switch(
                                 checked = uiState.includeFuel,
@@ -489,7 +495,7 @@ fun MaintenanceExportScreen(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Icon(Icons.Filled.PictureAsPdf, contentDescription = null, modifier = Modifier.padding(end = 8.dp))
-                    Text("Generate Vehicle Service Book (PDF)")
+                    Text(stringResource(R.string.export_generate))
                 }
             }
         }

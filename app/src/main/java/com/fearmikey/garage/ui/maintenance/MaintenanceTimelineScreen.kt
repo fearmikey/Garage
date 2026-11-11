@@ -77,6 +77,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
+import com.fearmikey.garage.ui.util.label
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.focusProperties
@@ -214,17 +217,17 @@ private fun MaintenanceTimelineContent(
                     onClick = onAddOdometerClicked,
                     modifier = Modifier.padding(bottom = 8.dp)
                 ) {
-                    Icon(Icons.Filled.Speed, contentDescription = "Add odometer update")
+                    Icon(Icons.Filled.Speed, contentDescription = stringResource(R.string.maint_cd_add_odometer))
                 }
                 FloatingActionButton(onClick = onAddClicked) {
-                    Icon(Icons.Filled.Add, contentDescription = "Add maintenance record")
+                    Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.maint_cd_add_record))
                 }
             }
         },
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             if (totalRecordCount == 0) {
-                EmptyState(message = "No maintenance logged yet.\nTap + to add your first record.")
+                EmptyState(message = stringResource(R.string.maint_empty))
             } else {
                 filterBar()
             }
@@ -236,11 +239,11 @@ private fun MaintenanceTimelineContent(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
-                        "No entries match your filters.",
+                        stringResource(R.string.maint_no_matches),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
-                    TextButton(onClick = onClearFilters) { Text("Clear filters") }
+                    TextButton(onClick = onClearFilters) { Text(stringResource(R.string.maint_clear_filters)) }
                 }
             } else if (records.isNotEmpty()) {
                 val listState = rememberLazyListState()
@@ -290,8 +293,8 @@ private fun MaintenanceRecordRow(
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text("Delete Record") },
-            text = { Text("Are you sure you want to delete this entry?") },
+            title = { Text(stringResource(R.string.maint_delete_title)) },
+            text = { Text(stringResource(R.string.maint_delete_message)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -299,14 +302,14 @@ private fun MaintenanceRecordRow(
                         onDelete()
                     },
                 ) {
-                    Text("Delete")
+                    Text(stringResource(R.string.common_delete))
                 }
             },
             dismissButton = {
                 TextButton(
                     onClick = { showDeleteDialog = false },
                 ) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         )
@@ -315,7 +318,7 @@ private fun MaintenanceRecordRow(
     if ((showImagePreviewDialog && (receiptFile != null)) && !isPdf) {
         AlertDialog(
             onDismissRequest = { showImagePreviewDialog = false },
-            title = { Text("Receipt / Invoice") },
+            title = { Text(stringResource(R.string.maint_receipt_invoice)) },
             text = {
                 Box(
                     modifier = Modifier
@@ -327,7 +330,7 @@ private fun MaintenanceRecordRow(
                 ) {
                     AsyncImage(
                         model = receiptFile,
-                        contentDescription = "Receipt",
+                        contentDescription = stringResource(R.string.maint_receipt_image),
                         contentScale = ContentScale.Fit,
                         modifier = Modifier.fillMaxSize(),
                     )
@@ -340,12 +343,12 @@ private fun MaintenanceRecordRow(
                         openReceiptFile(context, receiptFile)
                     },
                 ) {
-                    Text("Open with app")
+                    Text(stringResource(R.string.maint_open_with_app))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showImagePreviewDialog = false }) {
-                    Text("Close")
+                    Text(stringResource(R.string.common_close))
                 }
             },
         )
@@ -357,7 +360,7 @@ private fun MaintenanceRecordRow(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(record.category.displayName, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                Text(record.category.label(), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                 Text(record.description, style = MaterialTheme.typography.titleMedium)
                 Text(
                     "${record.date.toDisplayDate()} · ${UnitConverter.formatDistance(record.mileage, unitSystem)} · %s%s".format(currencySymbol, "%.2f".format(record.cost)),
@@ -375,7 +378,7 @@ private fun MaintenanceRecordRow(
                                 showImagePreviewDialog = true
                             }
                         },
-                        label = { Text(if (isPdf) "PDF Receipt" else "Receipt Image") },
+                        label = { Text(stringResource(if (isPdf) R.string.maint_pdf_receipt else R.string.maint_receipt_image)) },
                         leadingIcon = {
                             Icon(
                                 imageVector = if (isPdf) Icons.Filled.PictureAsPdf else Icons.Filled.Receipt,
@@ -388,10 +391,10 @@ private fun MaintenanceRecordRow(
             }
             Row {
                 IconButton(onClick = onEdit) {
-                    Icon(Icons.Filled.Edit, contentDescription = "Edit record")
+                    Icon(Icons.Filled.Edit, contentDescription = stringResource(R.string.maint_cd_edit_record))
                 }
                 IconButton(onClick = { showDeleteDialog = true }) {
-                    Icon(Icons.Filled.Delete, contentDescription = "Delete record")
+                    Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.maint_cd_delete_record))
                 }
             }
         }
@@ -502,12 +505,12 @@ internal fun AddEditMaintenanceRecordSheet(
                         showDatePicker = false
                     }
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.common_ok))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDatePicker = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         ) {
@@ -532,7 +535,7 @@ internal fun AddEditMaintenanceRecordSheet(
                 .verticalScrollbar(sheetScrollState),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text("Add Maintenance Record", style = MaterialTheme.typography.titleLarge)
+            Text(stringResource(R.string.maint_add_title), style = MaterialTheme.typography.titleLarge)
 
             Box(modifier = Modifier.fillMaxWidth()) {
                 OutlinedTextField(
@@ -540,10 +543,10 @@ internal fun AddEditMaintenanceRecordSheet(
                     onValueChange = {},
                     readOnly = true,
                     singleLine = true,
-                    label = { Text("Date") },
+                    label = { Text(stringResource(R.string.maint_date)) },
                     trailingIcon = {
                         IconButton(onClick = { showDatePicker = true }) {
-                            Icon(Icons.Filled.DateRange, contentDescription = "Select date")
+                            Icon(Icons.Filled.DateRange, contentDescription = stringResource(R.string.doc_select_date))
                         }
                     },
                     modifier = Modifier
@@ -562,11 +565,11 @@ internal fun AddEditMaintenanceRecordSheet(
                 onExpandedChange = { categoryMenuExpanded = it },
             ) {
                 OutlinedTextField(
-                    value = category?.displayName ?: "",
+                    value = category?.label() ?: "",
                     onValueChange = {},
                     readOnly = true,
                     singleLine = true,
-                    label = { Text("Category") },
+                    label = { Text(stringResource(R.string.mods_category_label)) },
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = categoryMenuExpanded) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -579,7 +582,7 @@ internal fun AddEditMaintenanceRecordSheet(
                 ) {
                     MaintenanceCategory.entries.forEach { entry ->
                         DropdownMenuItem(
-                            text = { Text(entry.displayName) },
+                            text = { Text(entry.label()) },
                             onClick = {
                                 category = entry
                                 taskName = null
@@ -596,11 +599,11 @@ internal fun AddEditMaintenanceRecordSheet(
                     onExpandedChange = { taskMenuExpanded = it },
                 ) {
                     OutlinedTextField(
-                        value = taskName ?: "Other / custom",
+                        value = taskName ?: stringResource(R.string.maint_task_other),
                         onValueChange = {},
                         readOnly = true,
                         singleLine = true,
-                        label = { Text("Specific task") },
+                        label = { Text(stringResource(R.string.maint_specific_task)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = taskMenuExpanded) },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -612,7 +615,7 @@ internal fun AddEditMaintenanceRecordSheet(
                         onDismissRequest = { taskMenuExpanded = false },
                     ) {
                         DropdownMenuItem(
-                            text = { Text("Other / custom") },
+                            text = { Text(stringResource(R.string.maint_task_other)) },
                             onClick = {
                                 taskName = null
                                 taskMenuExpanded = false
@@ -654,7 +657,7 @@ internal fun AddEditMaintenanceRecordSheet(
             OutlinedTextField(
                 value = description,
                 onValueChange = { description = it },
-                label = { Text("Description") },
+                label = { Text(stringResource(R.string.maint_description)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 keyboardActions = KeyboardActions(
@@ -665,7 +668,7 @@ internal fun AddEditMaintenanceRecordSheet(
             OutlinedTextField(
                 value = mileage,
                 onValueChange = { mileage = sanitizeMileageInput(it) },
-                label = { Text("Mileage (${unitSystem.distanceUnit})") },
+                label = { Text(stringResource(R.string.maint_mileage_unit, unitSystem.distanceUnit)) },
                 singleLine = true,
                 visualTransformation = ThousandsSeparatorVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
@@ -680,7 +683,7 @@ internal fun AddEditMaintenanceRecordSheet(
             OutlinedTextField(
                 value = cost,
                 onValueChange = { cost = it.filter { c -> c.isDigit() || c == '.' || c == ',' } },
-                label = { Text("Cost ($currencySymbol)") },
+                label = { Text(stringResource(R.string.maint_cost_unit, currencySymbol)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Decimal,
@@ -720,7 +723,7 @@ internal fun AddEditMaintenanceRecordSheet(
                         onCheckedChange = toggleDeferred
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Inspected only (defer replacement)")
+                    Text(stringResource(R.string.maint_inspected_only))
                 }
 
                 if (isDeferred) {
@@ -731,7 +734,7 @@ internal fun AddEditMaintenanceRecordSheet(
                         OutlinedTextField(
                             value = deferredMiles,
                             onValueChange = { deferredMiles = sanitizeMileageInput(it) },
-                            label = { Text("Remind in (${unitSystem.distanceUnit}) *") },
+                            label = { Text(stringResource(R.string.maint_remind_in_distance, unitSystem.distanceUnit)) },
                             isError = deferredMiles.isBlank(),
                             singleLine = true,
                             keyboardOptions = KeyboardOptions(
@@ -746,7 +749,7 @@ internal fun AddEditMaintenanceRecordSheet(
                         OutlinedTextField(
                             value = deferredMonths,
                             onValueChange = { deferredMonths = sanitizeMileageInput(it) },
-                            label = { Text("Remind in (months) *") },
+                            label = { Text(stringResource(R.string.maint_remind_in_months)) },
                             isError = deferredMonths.isBlank(),
                             singleLine = true,
                             keyboardOptions = KeyboardOptions(
@@ -763,7 +766,7 @@ internal fun AddEditMaintenanceRecordSheet(
             }
 
             // Receipt / Invoice section
-            Text("Receipt / Invoice", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.maint_receipt_invoice), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
 
             if (hasReceipt) {
                 Column {
@@ -790,12 +793,12 @@ internal fun AddEditMaintenanceRecordSheet(
                                 Spacer(modifier = Modifier.width(12.dp))
                                 Column {
                                     Text(
-                                        "Attached PDF Receipt",
+                                        stringResource(R.string.maint_attached_pdf),
                                         style = MaterialTheme.typography.titleSmall,
                                         fontWeight = FontWeight.Bold,
                                     )
                                     Text(
-                                        "PDF Document",
+                                        stringResource(R.string.maint_pdf_document),
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
@@ -813,7 +816,7 @@ internal fun AddEditMaintenanceRecordSheet(
                         ) {
                             AsyncImage(
                                 model = pickedReceiptUri ?: receiptFile,
-                                contentDescription = "Receipt Image",
+                                contentDescription = stringResource(R.string.maint_receipt_image),
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier.fillMaxSize(),
                             )
@@ -832,7 +835,7 @@ internal fun AddEditMaintenanceRecordSheet(
                                 documentPickerLauncher.launch(arrayOf("image/*", "application/pdf"))
                             },
                         ) {
-                            Text("Change Attachment")
+                            Text(stringResource(R.string.maint_change_attachment))
                         }
 
                         TextButton(
@@ -842,7 +845,7 @@ internal fun AddEditMaintenanceRecordSheet(
                             },
                             colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
                         ) {
-                            Text("Remove Attachment")
+                            Text(stringResource(R.string.maint_remove_attachment))
                         }
                     }
                 }
@@ -871,7 +874,7 @@ internal fun AddEditMaintenanceRecordSheet(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = "Attach Receipt / Invoice (Image or PDF)",
+                            text = stringResource(R.string.maint_attach_receipt),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -910,7 +913,7 @@ internal fun AddEditMaintenanceRecordSheet(
                 enabled = canSave,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text("Save")
+                Text(stringResource(R.string.common_save))
             }
         }
     }
@@ -924,9 +927,9 @@ internal fun openReceiptFile(context: Context, file: File) {
             setDataAndType(uri, mimeType)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
-        context.startActivity(Intent.createChooser(intent, "Open Receipt"))
+        context.startActivity(Intent.createChooser(intent, context.getString(R.string.maint_open_receipt)))
     } catch (_: Exception) {
-        Toast.makeText(context, "Could not open file", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, context.getString(R.string.maint_open_file_failed), Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -976,17 +979,17 @@ internal fun AddOdometerUpdateDialog(
                         }
                         showDatePicker = false
                     }
-                ) { Text("OK") }
+                ) { Text(stringResource(R.string.common_ok)) }
             },
             dismissButton = {
-                TextButton(onClick = { showDatePicker = false }) { Text("Cancel") }
+                TextButton(onClick = { showDatePicker = false }) { Text(stringResource(R.string.common_cancel)) }
             },
         ) { DatePicker(state = datePickerState) }
     }
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Odometer Update") },
+        title = { Text(stringResource(R.string.maint_odometer_update)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Box(modifier = Modifier.fillMaxWidth()) {
@@ -995,10 +998,10 @@ internal fun AddOdometerUpdateDialog(
                         onValueChange = {},
                         readOnly = true,
                         singleLine = true,
-                        label = { Text("Date") },
+                        label = { Text(stringResource(R.string.maint_date)) },
                         trailingIcon = {
                             IconButton(onClick = { showDatePicker = true }) {
-                                Icon(Icons.Filled.DateRange, contentDescription = "Select date")
+                                Icon(Icons.Filled.DateRange, contentDescription = stringResource(R.string.doc_select_date))
                             }
                         },
                         modifier = Modifier.fillMaxWidth().focusProperties { canFocus = false },
@@ -1009,7 +1012,7 @@ internal fun AddOdometerUpdateDialog(
                 OutlinedTextField(
                     value = mileage,
                     onValueChange = { mileage = sanitizeMileageInput(it) },
-                    label = { Text("Mileage (${unitSystem.distanceUnit})") },
+                    label = { Text(stringResource(R.string.maint_mileage_unit, unitSystem.distanceUnit)) },
                     singleLine = true,
                     visualTransformation = ThousandsSeparatorVisualTransformation(),
                     keyboardOptions = KeyboardOptions(
@@ -1040,11 +1043,11 @@ internal fun AddOdometerUpdateDialog(
                 },
                 enabled = mileage.isNotBlank()
             ) {
-                Text("Save")
+                Text(stringResource(R.string.common_save))
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancel") }
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) }
         }
     )
 }

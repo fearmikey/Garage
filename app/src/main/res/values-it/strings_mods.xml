@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mods_cd_add">Aggiungi modifica</string>
+    <plurals name="mods_count">
+        <item quantity="one">%d modifica</item>
+        <item quantity="many">%d modifiche</item>
+        <item quantity="other">%d modifiche</item>
+    </plurals>
+    <string name="mods_total_spent">Spesa totale: %1$s</string>
+    <string name="mods_cd_list_view">Passa alla vista elenco</string>
+    <string name="mods_cd_grid_view">Passa alla vista griglia</string>
+    <string name="mods_product_link">Link al prodotto</string>
+    <string name="mods_add_title">Aggiungi modifica</string>
+    <string name="mods_edit_title">Aggiorna modifica</string>
+    <string name="mods_photo_cd">Foto della modifica %1$d</string>
+    <string name="mods_photo_position">Foto %1$d di %2$d</string>
+    <string name="mods_photo_single">Foto</string>
+    <string name="mods_add_photos">Aggiungi foto (fino a 6)</string>
+    <string name="mods_title_placeholder">es. kit rialzo 5 cm, aspirazione aria fredda</string>
+    <string name="mods_desc_placeholder">Dettagli, codici ricambio, note di installazione…</string>
+    <string name="mods_url_placeholder">es. https://example.com/parts/lift-kit</string>
+    <string name="mods_title_short">Titolo</string>
+    <string name="mods_installed">Installata: %1$s</string>
+</resources>

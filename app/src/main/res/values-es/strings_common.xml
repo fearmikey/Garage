@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="common_cancel">Cancelar</string>
+    <string name="common_save">Guardar</string>
+    <string name="common_delete">Eliminar</string>
+    <string name="common_ok">Aceptar</string>
+    <string name="common_back">Atrás</string>
+    <string name="common_discard">Descartar</string>
+    <string name="common_edit">Editar</string>
+    <string name="common_close">Cerrar</string>
+    <string name="common_saving">Guardando…</string>
+    <string name="common_unsaved_title">Cambios sin guardar</string>
+    <string name="common_unsaved_message">Tienes cambios sin guardar. ¿Quieres guardarlos o descartarlos?</string>
+    <string name="scan_vin_prompt">Escanear código de barras del VIN</string>
+
+    <string name="vehicle_type_car">Coche / Camioneta</string>
+    <string name="vehicle_type_motorcycle">Motocicleta</string>
+    <string name="drivetrain_unknown">Desconocida</string>
+
+    <string name="mod_category_performance">Rendimiento</string>
+    <string name="mod_category_suspension">Suspensión y dirección</string>
+    <string name="mod_category_exterior">Exterior y carrocería</string>
+    <string name="mod_category_interior">Interior y confort</string>
+    <string name="mod_category_lighting">Iluminación</string>
+    <string name="mod_category_wheels_tires">Llantas y neumáticos</string>
+    <string name="mod_category_audio_electrical">Audio y electricidad</string>
+    <string name="mod_category_exhaust">Escape</string>
+    <string name="mod_category_other">Otros</string>
+
+    <string name="maint_category_fluids">Fluidos</string>
+    <string name="maint_category_filters">Filtros</string>
+    <string name="maint_category_tires">Neumáticos</string>
+    <string name="maint_category_brakes">Frenos</string>
+    <string name="maint_category_battery">Batería</string>
+    <string name="maint_category_engine">Motor y encendido</string>
+    <string name="maint_category_drivetrain">Transmisión y cadena</string>
+    <string name="maint_category_suspension">Suspensión y dirección</string>
+    <string name="maint_category_electrical">Electricidad e iluminación</string>
+    <string name="maint_category_hvac">A/A y calefacción</string>
+    <string name="maint_category_body">Carrocería, cristales y limpiaparabrisas</string>
+    <string name="maint_category_inspection">Inspección</string>
+    <string name="maint_category_repair">Reparación</string>
+    <string name="maint_category_other">Otros</string>
+
+    <string name="charger_speed_level_1">Nivel 1 (120 V)</string>
+    <string name="charger_speed_level_2">Nivel 2 (240 V)</string>
+    <string name="charger_speed_dc_fast">Carga rápida CC</string>
+    <string name="charger_vendor_home">Casa</string>
+    <string name="charger_vendor_public">Pública</string>
+
+    <string name="date_range_all">Todo el tiempo</string>
+    <string name="date_range_last_30_days">Últimos 30 días</string>
+    <string name="date_range_last_12_months">Últimos 12 meses</string>
+    <string name="date_range_this_year">Este año</string>
+    <string name="date_range_last_year">Año pasado</string>
+
+    <string name="vehicle_add_title">Añadir vehículo</string>
+    <string name="vehicle_edit_title">Editar vehículo</string>
+    <string name="vehicle_delete">Eliminar vehículo</string>
+    <string name="vehicle_photo_cd">Foto del vehículo %1$d</string>
+    <string name="vehicle_photo_position_multi">Foto %1$d de %2$d · Arrastra arriba/abajo para ajustar</string>
+    <string name="vehicle_photo_position_single">Arrastra la foto arriba/abajo para ajustar la posición</string>
+    <string name="vehicle_add_photo">Añadir foto</string>
+    <string name="vehicle_change_photo">Cambiar foto</string>
+    <string name="vehicle_remove_photo">Quitar foto</string>
+    <string name="vehicle_add_photos">Añadir fotos (hasta 3)</string>
+    <string name="vehicle_theme_color">Color del vehículo</string>
+    <string name="vehicle_color_extracted">Extraído de la foto</string>
+    <string name="vehicle_color_custom">Color personalizado</string>
+    <string name="vehicle_color_default">Tema predeterminado de la app</string>
+    <string name="vehicle_color_customize">Personalizar</string>
+    <string name="vehicle_decode">Decodificar</string>
+    <string name="vehicle_year">Año</string>
+    <string name="vehicle_make">Marca</string>
+    <string name="vehicle_model">Modelo</string>
+    <string name="vehicle_trim">Versión</string>
+    <string name="vehicle_drivetrain">Tracción</string>
+    <string name="vehicle_condition_new">Nuevo</string>
+    <string name="vehicle_condition_used">Usado</string>
+    <string name="vehicle_purchased_condition">Estado al comprar</string>
+    <string name="vehicle_purchase_price">Precio de compra</string>
+    <string name="vehicle_purchase_date">Fecha de compra</string>
+    <string name="vehicle_select_purchase_date">Seleccionar fecha de compra</string>
+    <string name="vehicle_initial_odometer_km">Odómetro inicial (km)</string>
+    <string name="vehicle_initial_mileage_mi">Millaje inicial (mi)</string>
+    <string name="vehicle_this_vehicle">este vehículo</string>
+    <string name="vehicle_delete_title">¿Eliminar vehículo?</string>
+    <string name="vehicle_delete_message">¿Seguro que quieres eliminar %1$s? Se eliminarán de la app este vehículo y todos sus registros de mantenimiento, repostajes y recordatorios.</string>
+    <string name="photo_delete_title">¿Eliminar foto?</string>
+    <string name="photo_delete_message">¿Seguro que quieres eliminar esta foto?</string>
+    <string name="vehicle_color_dialog_title">Elegir color del vehículo</string>
+    <string name="vehicle_color_dialog_message">Los detalles del vehículo, las pestañas y las tarjetas del panel se teñirán con este color.</string>
+    <string name="vehicle_color_reset">Restablecer</string>
+
+    <string name="color_racing_red">Rojo carreras</string>
+    <string name="color_sunset_orange">Naranja atardecer</string>
+    <string name="color_speed_yellow">Amarillo velocidad</string>
+    <string name="color_british_racing_green">Verde británico de carreras</string>
+    <string name="color_electric_cyan">Cian eléctrico</string>
+    <string name="color_daytona_blue">Azul Daytona</string>
+    <string name="color_midnight_navy">Azul medianoche</string>
+    <string name="color_midnight_purple">Morado medianoche</string>
+    <string name="color_silver_slate">Plata / pizarra</string>
+    <string name="color_charcoal_graphite">Gris grafito</string>
+    <string name="color_bronze_brown">Bronce / marrón</string>
+    <string name="color_pure_black">Negro puro</string>
+</resources>

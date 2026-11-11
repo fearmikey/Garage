@@ -165,7 +165,7 @@ private fun RegistrationInsuranceContent(
                     },
                     modifier = Modifier.padding(bottom = 8.dp),
                 ) {
-                    Icon(Icons.AutoMirrored.Filled.NoteAdd, contentDescription = "Add other document")
+                    Icon(Icons.AutoMirrored.Filled.NoteAdd, contentDescription = stringResource(R.string.doc_add_other))
                 }
                 FloatingActionButton(
                     onClick = onEditDocuments,
@@ -174,7 +174,7 @@ private fun RegistrationInsuranceContent(
                 ) {
                     Icon(
                         imageVector = if (hasRecordData) Icons.Default.Edit else Icons.Default.Add,
-                        contentDescription = if (hasRecordData) "Edit details" else "Add vehicle documents",
+                        contentDescription = stringResource(if (hasRecordData) R.string.doc_edit_details else R.string.doc_add_documents),
                     )
                 }
             }
@@ -187,7 +187,7 @@ private fun RegistrationInsuranceContent(
         ) {
             if (!hasData) {
                 EmptyState(
-                    message = "No vehicle documents added yet.\nTap + to track registration, inspection, emissions, stickers, insurance, toll passes, or purchase details.\nUse the small button to add any other document (warranty, title, roadside assistance...).",
+                    message = stringResource(R.string.doc_empty_message),
                     icon = Icons.AutoMirrored.Filled.Assignment,
                 )
             } else {
@@ -255,7 +255,7 @@ private fun RegistrationInsuranceContent(
                     if (uiState.customDocuments.isNotEmpty()) {
                         item {
                             Text(
-                                text = "Other Documents",
+                                text = stringResource(R.string.doc_other_documents),
                                 style = MaterialTheme.typography.titleSmall,
                                 color = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.padding(top = 4.dp),
@@ -366,7 +366,7 @@ private fun RegistrationCard(
                     }
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = "Vehicle & Tag Registration",
+                        text = stringResource(R.string.doc_section_registration),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                     )
@@ -385,12 +385,13 @@ private fun RegistrationCard(
                     record.licensePlate?.uppercase()?.takeIf { it.isNotBlank() },
                 ).joinToString(" ")
                 val context = LocalContext.current
+                val plateLabel = stringResource(R.string.doc_license_plate)
 
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
                         .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .clickable { copyToClipboard(context, "License Plate", plateText) }
+                        .clickable { copyToClipboard(context, plateLabel, plateText) }
                         .padding(horizontal = 16.dp, vertical = 8.dp),
                 ) {
                     Row(
@@ -413,7 +414,7 @@ private fun RegistrationCard(
                             }
                         }
                         Text(
-                            text = record.licensePlate?.uppercase() ?: "NO PLATE",
+                            text = record.licensePlate?.uppercase() ?: stringResource(R.string.doc_no_plate),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.ExtraBold,
                             fontFamily = FontFamily.Monospace,
@@ -422,7 +423,7 @@ private fun RegistrationCard(
                         )
                         Icon(
                             imageVector = Icons.Default.ContentCopy,
-                            contentDescription = "Copy License Plate",
+                            contentDescription = stringResource(R.string.common_copy_label, plateLabel),
                             tint = MaterialTheme.colorScheme.outline.copy(alpha = 0.6f),
                             modifier = Modifier.size(16.dp),
                         )
@@ -434,7 +435,7 @@ private fun RegistrationCard(
             record.registrationExpiration?.let { exp ->
                 InfoRow(
                     icon = Icons.Default.CalendarToday,
-                    label = "Registration Expiration",
+                    label = stringResource(R.string.doc_reg_exp_label),
                     value = exp.toDisplayDate(),
                     isCopyable = false,
                 )
@@ -443,7 +444,7 @@ private fun RegistrationCard(
             record.registrationFee?.let { fee ->
                 InfoRow(
                     icon = Icons.Default.CreditCard,
-                    label = "Renewal Fee",
+                    label = stringResource(R.string.doc_renewal_fee),
                     value = "%s%.2f".format(currencySymbol, fee),
                     isCopyable = false,
                 )
@@ -452,7 +453,7 @@ private fun RegistrationCard(
             if (!record.registrationNotes.isNullOrBlank()) {
                 InfoRow(
                     icon = Icons.AutoMirrored.Filled.Notes,
-                    label = "Notes",
+                    label = stringResource(R.string.common_notes),
                     value = record.registrationNotes,
                 )
             }
@@ -460,7 +461,7 @@ private fun RegistrationCard(
             if (regImageFiles.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "Registration Document / Card",
+                    text = stringResource(R.string.doc_reg_document),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.outline,
                 )
@@ -481,7 +482,7 @@ private fun RegistrationCard(
                         ) {
                             AsyncImage(
                                 model = file,
-                                contentDescription = "Registration document photo ${index + 1}",
+                                contentDescription = stringResource(R.string.doc_reg_photo_cd, index + 1),
                                 contentScale = ContentScale.Fit,
                                 modifier = Modifier.fillMaxSize(),
                             )
@@ -538,7 +539,7 @@ private fun InspectionCard(
                     }
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = "State Vehicle Inspection",
+                        text = stringResource(R.string.doc_section_inspection),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                     )
@@ -554,7 +555,7 @@ private fun InspectionCard(
             record.inspectionExpiration?.let { exp ->
                 InfoRow(
                     icon = Icons.Default.CalendarToday,
-                    label = "Inspection Due / Expiration",
+                    label = stringResource(R.string.doc_insp_exp_label),
                     value = exp.toDisplayDate(),
                     isCopyable = false,
                 )
@@ -563,7 +564,7 @@ private fun InspectionCard(
             record.inspectionDate?.let { date ->
                 InfoRow(
                     icon = Icons.Default.CalendarToday,
-                    label = "Last Inspected Date",
+                    label = stringResource(R.string.doc_last_inspected_label),
                     value = date.toDisplayDate(),
                     isCopyable = false,
                 )
@@ -572,7 +573,7 @@ private fun InspectionCard(
             if (!record.inspectionResult.isNullOrBlank()) {
                 InfoRow(
                     icon = Icons.AutoMirrored.Filled.Assignment,
-                    label = "Inspection Result",
+                    label = stringResource(R.string.doc_insp_result_label),
                     value = record.inspectionResult,
                 )
             }
@@ -580,7 +581,7 @@ private fun InspectionCard(
             if (!record.inspectionNotes.isNullOrBlank()) {
                 InfoRow(
                     icon = Icons.AutoMirrored.Filled.Notes,
-                    label = "Notes / Station Info",
+                    label = stringResource(R.string.doc_station_notes),
                     value = record.inspectionNotes,
                 )
             }
@@ -635,7 +636,7 @@ private fun EmissionsCard(
                     }
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = "Emissions & Smog Testing",
+                        text = stringResource(R.string.doc_section_emissions),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                     )
@@ -651,7 +652,7 @@ private fun EmissionsCard(
             record.emissionsExpiration?.let { exp ->
                 InfoRow(
                     icon = Icons.Default.CalendarToday,
-                    label = "Emissions Due / Expiration",
+                    label = stringResource(R.string.doc_emissions_exp_label),
                     value = exp.toDisplayDate(),
                     isCopyable = false,
                 )
@@ -660,7 +661,7 @@ private fun EmissionsCard(
             record.emissionsDate?.let { date ->
                 InfoRow(
                     icon = Icons.Default.CalendarToday,
-                    label = "Last Smog Test Date",
+                    label = stringResource(R.string.doc_last_smog_label),
                     value = date.toDisplayDate(),
                     isCopyable = false,
                 )
@@ -669,7 +670,7 @@ private fun EmissionsCard(
             if (!record.emissionsResult.isNullOrBlank()) {
                 InfoRow(
                     icon = Icons.AutoMirrored.Filled.Assignment,
-                    label = "Test Result",
+                    label = stringResource(R.string.doc_emissions_result_label),
                     value = record.emissionsResult,
                 )
             }
@@ -677,7 +678,7 @@ private fun EmissionsCard(
             if (!record.emissionsNotes.isNullOrBlank()) {
                 InfoRow(
                     icon = Icons.AutoMirrored.Filled.Notes,
-                    label = "Notes / Station Info",
+                    label = stringResource(R.string.doc_station_notes),
                     value = record.emissionsNotes,
                 )
             }
@@ -754,7 +755,7 @@ private fun InspectionStickerCard(
                     }
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = "State & Local Inspection Stickers",
+                        text = stringResource(R.string.doc_section_stickers),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                     )
@@ -770,7 +771,7 @@ private fun InspectionStickerCard(
             record.inspectionStickerExpiration?.let { exp ->
                 InfoRow(
                     icon = Icons.Default.CalendarToday,
-                    label = "Sticker Renewal / Expiration",
+                    label = stringResource(R.string.doc_sticker_exp_label),
                     value = exp.toDisplayDate(),
                     isCopyable = false,
                 )
@@ -779,7 +780,7 @@ private fun InspectionStickerCard(
             if (!record.inspectionStickerNumber.isNullOrBlank()) {
                 InfoRow(
                     icon = Icons.Default.ConfirmationNumber,
-                    label = "Sticker / Decal #",
+                    label = stringResource(R.string.doc_sticker_number_label),
                     value = record.inspectionStickerNumber,
                 )
             }
@@ -787,7 +788,7 @@ private fun InspectionStickerCard(
             if (!record.inspectionStickerNotes.isNullOrBlank()) {
                 InfoRow(
                     icon = Icons.AutoMirrored.Filled.Notes,
-                    label = "Notes / Sticker Location",
+                    label = stringResource(R.string.doc_sticker_notes_label),
                     value = record.inspectionStickerNotes,
                 )
             }
@@ -849,7 +850,7 @@ private fun InsuranceCard(
                     }
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = "Insurance Policy",
+                        text = stringResource(R.string.doc_section_insurance),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                     )
@@ -864,11 +865,12 @@ private fun InsuranceCard(
 
             if (!record.insuranceProvider.isNullOrBlank()) {
                 val context = LocalContext.current
+                val providerLabel = stringResource(R.string.doc_insurance_provider)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(8.dp))
-                        .clickable { copyToClipboard(context, "Insurance Provider", record.insuranceProvider) }
+                        .clickable { copyToClipboard(context, providerLabel, record.insuranceProvider) }
                         .padding(vertical = 4.dp, horizontal = 4.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
@@ -881,7 +883,7 @@ private fun InsuranceCard(
                     )
                     Icon(
                         imageVector = Icons.Default.ContentCopy,
-                        contentDescription = "Copy Insurance Provider",
+                        contentDescription = stringResource(R.string.common_copy_label, providerLabel),
                         tint = MaterialTheme.colorScheme.outline.copy(alpha = 0.6f),
                         modifier = Modifier.size(16.dp),
                     )
@@ -892,7 +894,7 @@ private fun InsuranceCard(
             if (!record.policyNumber.isNullOrBlank()) {
                 InfoRow(
                     icon = Icons.AutoMirrored.Filled.Assignment,
-                    label = "Policy Number",
+                    label = stringResource(R.string.doc_policy_number),
                     value = record.policyNumber,
                 )
             }
@@ -900,7 +902,7 @@ private fun InsuranceCard(
             record.insuranceExpiration?.let { exp ->
                 InfoRow(
                     icon = Icons.Default.CalendarToday,
-                    label = "Policy Expiration",
+                    label = stringResource(R.string.doc_insur_exp_label),
                     value = exp.toDisplayDate(),
                     isCopyable = false,
                 )
@@ -909,7 +911,7 @@ private fun InsuranceCard(
             record.insurancePremium?.let { premium ->
                 InfoRow(
                     icon = Icons.Default.CreditCard,
-                    label = "Premium / Cost",
+                    label = stringResource(R.string.doc_premium),
                     value = "%s%.2f".format(currencySymbol, premium),
                     isCopyable = false,
                 )
@@ -918,7 +920,7 @@ private fun InsuranceCard(
             if (!record.insuranceAgentContact.isNullOrBlank()) {
                 InfoRow(
                     icon = Icons.Default.ContactPage,
-                    label = "Agent / Contact",
+                    label = stringResource(R.string.doc_agent_contact),
                     value = record.insuranceAgentContact,
                 )
             }
@@ -926,7 +928,7 @@ private fun InsuranceCard(
             if (!record.insuranceNotes.isNullOrBlank()) {
                 InfoRow(
                     icon = Icons.AutoMirrored.Filled.Notes,
-                    label = "Notes",
+                    label = stringResource(R.string.common_notes),
                     value = record.insuranceNotes,
                 )
             }
@@ -934,7 +936,7 @@ private fun InsuranceCard(
             if (insImageFile?.exists() == true) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "Insurance Card / Document",
+                    text = stringResource(R.string.doc_insur_document),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.outline,
                 )
@@ -950,7 +952,7 @@ private fun InsuranceCard(
                 ) {
                     AsyncImage(
                         model = insImageFile,
-                        contentDescription = "Insurance card photo",
+                        contentDescription = stringResource(R.string.doc_insur_card_photo),
                         contentScale = ContentScale.Fit,
                         modifier = Modifier.fillMaxSize(),
                     )
@@ -997,7 +999,7 @@ private fun PurchaseCard(
                 }
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
-                    text = "Purchase",
+                    text = stringResource(R.string.doc_tab_purchase),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                 )
@@ -1010,7 +1012,7 @@ private fun PurchaseCard(
             record.purchasePrice?.let { price ->
                 InfoRow(
                     icon = Icons.Default.Payments,
-                    label = "Purchase Price",
+                    label = stringResource(R.string.vehicle_purchase_price),
                     value = "%s%.2f".format(currencySymbol, price),
                     isCopyable = false,
                 )
@@ -1018,7 +1020,7 @@ private fun PurchaseCard(
             record.purchaseDate?.let { date ->
                 InfoRow(
                     icon = Icons.Default.CalendarToday,
-                    label = "Purchase Date",
+                    label = stringResource(R.string.vehicle_purchase_date),
                     value = date.toDisplayDate(),
                     isCopyable = false,
                 )
@@ -1026,14 +1028,14 @@ private fun PurchaseCard(
             if (!record.purchaseSeller.isNullOrBlank()) {
                 InfoRow(
                     icon = Icons.Default.Store,
-                    label = "Seller / Dealer",
+                    label = stringResource(R.string.doc_seller_label),
                     value = record.purchaseSeller,
                 )
             }
             if (!record.purchaseNotes.isNullOrBlank()) {
                 InfoRow(
                     icon = Icons.AutoMirrored.Filled.Notes,
-                    label = "Notes",
+                    label = stringResource(R.string.common_notes),
                     value = record.purchaseNotes,
                 )
             }
@@ -1049,7 +1051,7 @@ private fun PurchaseCard(
                 ) {
                     AsyncImage(
                         model = billOfSale,
-                        contentDescription = "Bill of sale",
+                        contentDescription = stringResource(R.string.doc_bill_of_sale),
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize(),
                     )
@@ -1103,7 +1105,7 @@ private fun TollParkingCard(
                     }
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = "Toll Pass & Parking Permits",
+                        text = stringResource(R.string.doc_section_toll),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                     )
@@ -1119,7 +1121,7 @@ private fun TollParkingCard(
             record.tollPassParkingExpiration?.let { exp ->
                 InfoRow(
                     icon = Icons.Default.CalendarToday,
-                    label = "Permit / Pass Expiration",
+                    label = stringResource(R.string.doc_toll_exp_label),
                     value = exp.toDisplayDate(),
                     isCopyable = false,
                 )
@@ -1128,7 +1130,7 @@ private fun TollParkingCard(
             if (!record.tollPassParkingAccount.isNullOrBlank()) {
                 InfoRow(
                     icon = Icons.Default.CreditCard,
-                    label = "Account / Tag / Permit #",
+                    label = stringResource(R.string.doc_toll_account_label),
                     value = record.tollPassParkingAccount,
                 )
             }
@@ -1136,7 +1138,7 @@ private fun TollParkingCard(
             if (!record.tollPassParkingNotes.isNullOrBlank()) {
                 InfoRow(
                     icon = Icons.AutoMirrored.Filled.Notes,
-                    label = "Notes / Provider Details",
+                    label = stringResource(R.string.doc_toll_notes_label),
                     value = record.tollPassParkingNotes,
                 )
             }
@@ -1184,7 +1186,7 @@ internal fun InfoRow(
         if (isCopyable) {
             Icon(
                 imageVector = Icons.Default.ContentCopy,
-                contentDescription = "Copy $label",
+                contentDescription = stringResource(R.string.common_copy_label, label),
                 tint = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
                 modifier = Modifier.size(16.dp),
             )
@@ -1200,9 +1202,9 @@ internal fun ExpirationStatusChip(expirationDate: Long?) {
     val daysLeft = TimeUnit.MILLISECONDS.toDays(expirationDate - now)
 
     val (label, color) = when {
-        daysLeft < 0 -> "Expired (%d d ago)".format(-daysLeft) to StatusOverdue
-        daysLeft <= 30 -> "Expires in %d d".format(daysLeft) to StatusUpcoming
-        else -> "Active (%d d left)".format(daysLeft) to StatusOk
+        daysLeft < 0 -> stringResource(R.string.doc_status_expired, -daysLeft) to StatusOverdue
+        daysLeft <= 30 -> stringResource(R.string.doc_status_expires_in, daysLeft) to StatusUpcoming
+        else -> stringResource(R.string.doc_status_active, daysLeft) to StatusOk
     }
 
     AssistChip(
@@ -1272,14 +1274,14 @@ internal fun ImagePickerBox(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     TextButton(onClick = onPickImage) {
-                        Text("Change Photo")
+                        Text(stringResource(R.string.vehicle_change_photo))
                     }
 
                     TextButton(
                         onClick = onRemoveImage,
                         colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
                     ) {
-                        Text("Remove Photo")
+                        Text(stringResource(R.string.vehicle_remove_photo))
                     }
                 }
             }
@@ -1306,7 +1308,7 @@ internal fun ImagePickerBox(
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "Add $title",
+                        text = stringResource(R.string.doc_add_item, title),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -1339,14 +1341,14 @@ internal fun ImagePreviewDialog(
             ) {
                 Icon(
                     imageVector = Icons.Default.Close,
-                    contentDescription = "Close preview",
+                    contentDescription = stringResource(R.string.doc_close_preview),
                     tint = MaterialTheme.colorScheme.onPrimary,
                 )
             }
 
             AsyncImage(
                 model = imageFile,
-                contentDescription = "Document Preview",
+                contentDescription = stringResource(R.string.doc_preview),
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .fillMaxSize()
@@ -1360,7 +1362,7 @@ private fun copyToClipboard(context: Context, label: String, text: String) {
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clip = ClipData.newPlainText(label, text)
     clipboard.setPrimaryClip(clip)
-    Toast.makeText(context, "$label copied to clipboard", Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, context.getString(R.string.common_copied_to_clipboard, label), Toast.LENGTH_SHORT).show()
 }
 
 @Preview(showBackground = true)

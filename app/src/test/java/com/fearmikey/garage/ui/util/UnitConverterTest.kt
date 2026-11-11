@@ -97,10 +97,6 @@ class UnitConverterTest {
 
         assertEquals("—", UnitConverter.formatFuelEconomy(null, UnitSystem.IMPERIAL))
         assertEquals("—", UnitConverter.formatFuelEconomy(0.0, UnitSystem.METRIC))
-
-        assertEquals("23.5 mpg since last full tank", UnitConverter.formatSegmentFuelEconomy(mpg, UnitSystem.IMPERIAL))
-        assertEquals("28.2 mpg since last full tank", UnitConverter.formatSegmentFuelEconomy(mpg, UnitSystem.UK_MIXED))
-        assertEquals("10.0 L/100km since last full tank", UnitConverter.formatSegmentFuelEconomy(mpg, UnitSystem.METRIC))
     }
 
     @Test

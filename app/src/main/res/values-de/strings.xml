@@ -17,9 +17,7 @@
     <string name="language_selection">Sprache</string>
 
     <!-- Startup / Onboarding -->
-    <string name="startup_get_started">Loslegen</string>
     <string name="startup_welcome_title">Willkommen bei Garage</string>
-    <string name="startup_welcome_subtitle">Richten Sie Ihre Einstellungen ein, um zu beginnen.</string>
     <string name="startup_measurement_system_title">Maßeinheitensystem</string>
     <string name="startup_measurement_system_subtitle">Wählen Sie, wie Entfernungen, Kraftstoffvolumen und Verbrauch angezeigt werden.</string>
     <string name="startup_metric_title">Metrisches System</string>
@@ -122,7 +120,6 @@
     <string name="settings_currency">Währung</string>
     <string name="settings_theme">Erscheinungsbild</string>
     <string name="settings_default_vehicle">Standardfahrzeug</string>
-    <string name="settings_reminders_expirations">Erinnerungen &amp; Fristen</string>
 
     <!-- Tabs -->
     <string name="tab_my_vehicles">Meine Fahrzeuge</string>
@@ -137,8 +134,10 @@
     <string name="tab_mods">Umbauten</string>
     <string name="tab_documents">Dokumente</string>
     <string name="tab_recalls">Rückrufe</string>
+    <string name="tab_knowledge">Wissen</string>
+    <string name="tab_trips">Fahrten</string>
     <string name="customize_tabs">Tabs anpassen</string>
-    <string name="customize_tabs_description">Wähle aus, welche Tabs für dieses Fahrzeug angezeigt werden.</string>
+    <string name="customize_tabs_description">Wählen Sie aus, welche Tabs für dieses Fahrzeug angezeigt werden.</string>
     <string name="customize_tabs_always_shown">Immer sichtbar</string>
     <string name="customize_tabs_save">Speichern</string>
     <string name="customize_tabs_cancel">Abbrechen</string>
@@ -337,7 +336,7 @@
     <string name="license_number_placeholder">z. B. B1234567</string>
     <string name="license_state_label">Ausstellungsland / Bundesland</string>
     <string name="license_state_placeholder">z. B. DE</string>
-    <string name="license_notes_placeholder">Klasse B, Anhänger, Schlüsselzahlen...</string>
+    <string name="license_notes_placeholder">Klasse B, Anhänger, Schlüsselzahlen…</string>
     <string name="license_front_photo">Vorderseite</string>
     <string name="license_back_photo">Rückseite</string>
     <string name="license_save">Führerschein speichern</string>
@@ -349,8 +348,6 @@
     <string name="cost_include_mods">Umbauten einbeziehen</string>
     <string name="cost_include_purchase">Kaufpreis einbeziehen</string>
     <string name="cost_purchase_not_counted_in_period">In diesem Zeitraum nicht berücksichtigt (Kaufdatum liegt außerhalb des Zeitraums oder nicht angegeben).</string>
-    <string name="cost_per_distance">Kosten / Distanz</string>
-    <string name="cost_per_day">Kosten / Tag</string>
     <string name="time_filter_all_time">Gesamt</string>
     <string name="time_filter_this_year">Dieses Jahr</string>
     <string name="time_filter_last_year">Letztes Jahr</string>
@@ -360,8 +357,8 @@
     <!-- Fuel & Charging -->
     <string name="fuel_tab_charging">Ladevorgang</string>
     <string name="fuel_tab_fuel">Kraftstoff</string>
-    <string name="fuel_est_range_100">Aktuell geschätzte 100% Reichweite</string>
-    <string name="fuel_initial_range_100">Ursprünglich geschätzte 100% Reichweite</string>
+    <string name="fuel_est_range_100" formatted="false">Aktuell geschätzte 100% Reichweite</string>
+    <string name="fuel_initial_range_100" formatted="false">Ursprünglich geschätzte 100% Reichweite</string>
     <string name="fuel_delete_charging_title">Ladevorgang löschen?</string>
     <string name="fuel_delete_charging_msg">Möchten Sie diesen Ladeeintrag wirklich löschen?</string>
     <string name="fuel_log_charging">Ladevorgang erfassen</string>
@@ -370,12 +367,12 @@
     <string name="fuel_charger_speed">Ladegeschwindigkeit</string>
     <string name="fuel_location_vendor">Standort / Anbieter</string>
     <string name="fuel_vendor_placeholder">Anbietername (optional, z. B. Ionity)</string>
-    <string name="fuel_battery_start">% Akku Start</string>
-    <string name="fuel_battery_end">% Akku Ende</string>
+    <string name="fuel_battery_start" formatted="false">% Akku Start</string>
+    <string name="fuel_battery_end" formatted="false">% Akku Ende</string>
     <string name="fuel_total_cost">Gesamtkosten</string>
     <string name="fuel_odometer_reading">Kilometerstand (%1$s)</string>
     <string name="fuel_battery_health_title">Akkuzustand (Optional)</string>
-    <string name="fuel_est_range_soc">Geschätzte Reichweite bei 100% (%1$s)</string>
+    <string name="fuel_est_range_soc">Geschätzte Reichweite bei 100%% (%1$s)</string>
     <string name="fuel_est_range_end">Geschätzte Reichweite bei Ladeende</string>
     <string name="fuel_auto_calculate">Automatisch berechnen</string>
     <string name="fuel_save_charging">Ladevorgang speichern</string>
@@ -421,7 +418,7 @@
     <string name="doc_toll_notes_label">Notizen / Zone</string>
     <string name="doc_delete_toll_btn">Park- / Mautinfos löschen</string>
     <string name="doc_save_docs_btn">Dokumente speichern</string>
-    <string name="doc_saving_btn">Speichern...</string>
+    <string name="doc_saving_btn">Speichern…</string>
     <!-- Fleet Summary -->
     <string name="fleet_overview_title">Flottenübersicht</string>
     <string name="fleet_vehicles">Fahrzeuge</string>
@@ -512,7 +509,6 @@
     <string name="mods_delete_confirm_msg">Möchten Sie \'%1$s\' wirklich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.</string>
 
     <!-- Recalls -->
-    <string name="recalls_empty_message">Keine Sicherheitsrückrufe für dieses Fahrzeug gefunden.\nRückrufdaten werden von der NHTSA bereitgestellt.</string>
     <string name="recalls_nhtsa_check">FIN auf NHTSA.gov prüfen</string>
     <string name="recalls_retry">Erneut versuchen</string>
     <string name="recalls_park_it">Nicht mehr fahren</string>

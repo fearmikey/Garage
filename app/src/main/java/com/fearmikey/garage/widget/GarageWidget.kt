@@ -9,6 +9,7 @@ import androidx.glance.Button
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
+import androidx.glance.LocalContext
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.appWidgetBackground
@@ -27,6 +28,7 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.fearmikey.garage.MainActivity
+import com.fearmikey.garage.R
 import com.fearmikey.garage.data.fuel.FuelEconomyCalculator
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.repository.CustomMaintenanceRuleRepository
@@ -170,13 +172,13 @@ private fun GarageWidgetContent(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = "Garage",
+                text = context.getString(R.string.app_name),
                 style = TextStyle(fontWeight = FontWeight.Bold, color = GlanceTheme.colors.onBackground),
                 modifier = GlanceModifier.defaultWeight(),
             )
             recentTankMpgText?.let { text ->
                 Text(
-                    text = "Recent Tank: $text",
+                    text = context.getString(R.string.widget_recent_tank, text),
                     style = TextStyle(
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
@@ -189,7 +191,7 @@ private fun GarageWidgetContent(
 
         if (rows.isEmpty()) {
             Text(
-                text = "All caught up!",
+                text = context.getString(R.string.widget_all_caught_up),
                 style = TextStyle(color = GlanceTheme.colors.onBackground),
             )
         } else {
@@ -203,7 +205,7 @@ private fun GarageWidgetContent(
 
         Row(modifier = GlanceModifier.fillMaxWidth()) {
             Button(
-                text = "Log Fuel",
+                text = context.getString(R.string.widget_log_fuel),
                 onClick = actionStartActivity(
                     logServiceIntent(context, MainActivity.ACTION_LOG_FUEL, targetVehicleId),
                 ),
@@ -211,7 +213,7 @@ private fun GarageWidgetContent(
             )
             Spacer(modifier = GlanceModifier.width(4.dp))
             Button(
-                text = "Odometer",
+                text = context.getString(R.string.widget_odometer),
                 onClick = actionStartActivity(
                     logServiceIntent(context, MainActivity.ACTION_UPDATE_ODOMETER, targetVehicleId),
                 ),
@@ -219,7 +221,7 @@ private fun GarageWidgetContent(
             )
             Spacer(modifier = GlanceModifier.width(4.dp))
             Button(
-                text = "Log Service",
+                text = context.getString(R.string.widget_log_service),
                 onClick = actionStartActivity(
                     logServiceIntent(context, MainActivity.ACTION_LOG_SERVICE, targetVehicleId),
                 ),
@@ -236,7 +238,10 @@ private fun WidgetReminderRowContent(row: WidgetReminderRow) {
             text = "${row.vehicleLabel} · ${row.taskName}",
             style = TextStyle(fontWeight = FontWeight.Medium, color = GlanceTheme.colors.onBackground),
         )
-        val statusPrefix = if (row.status == ReminderStatus.OVERDUE) "Overdue" else "Due"
+        val context = LocalContext.current
+        val statusPrefix = context.getString(
+            if (row.status == ReminderStatus.OVERDUE) R.string.status_overdue else R.string.widget_due,
+        )
         Text(
             text = "$statusPrefix · ${row.dueInfo}",
             style = TextStyle(color = GlanceTheme.colors.onSurfaceVariant),

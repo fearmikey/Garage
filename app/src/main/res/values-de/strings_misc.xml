@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="parts_edit_title">Teile &amp; Flüssigkeiten bearbeiten</string>
+    <string name="parts_autofill">Geschätzte Werte automatisch ausfüllen</string>
+    <string name="parts_autofill_msg">Automatisch ausgefüllte Füllmengen und Teileangaben werden anhand der dekodierten FIN und Motordaten geschätzt.\n\nBitte prüfen Sie alle Werte anhand Ihrer Betriebsanleitung, bevor Sie Flüssigkeiten kaufen oder Ihr Fahrzeug warten.</string>
+    <string name="parts_apply_understand">Verstanden &amp; übernehmen</string>
+    <string name="vehicle_cd_obd">OBD2-Scanner</string>
+    <string name="vehicle_cd_export">Wartungsprotokoll exportieren</string>
+    <string name="vehicle_unnamed">Unbenanntes Fahrzeug</string>
+    <string name="tabs_cd_reorder">Tab verschieben</string>
+    <string name="currency_select_title">Währung wählen</string>
+    <string name="currency_search">Währungen suchen…</string>
+    <string name="currency_none_found">Keine passenden Währungen gefunden.</string>
+    <string name="bmac_title">Garage unterstützen</string>
+    <string name="bmac_message">Gefällt Ihnen Garage? Wenn Ihnen die App hilft, unterstützen Sie gern ihre Open-Source-Entwicklung!</string>
+    <string name="bmac_dont_ask">Nicht mehr fragen</string>
+    <string name="bmac_later">Vielleicht später</string>
+    <string name="status_overdue">Überfällig</string>
+    <string name="status_upcoming">Bald fällig</string>
+    <string name="status_on_track">Im Plan</string>
+    <string name="status_done">Erledigt</string>
+    <string name="odo_vehicle">Fahrzeug</string>
+    <string name="odo_current">Aktuell: %1$s</string>
+    <string name="odo_new_reading">Neuer Kilometerstand (%1$s)</string>
+    <string name="odo_notes_optional">Notizen (optional)</string>
+    <string name="odo_notes_placeholder">z. B. Wöchentliche Erfassung</string>
+    <string name="trend_tap_to_edit">Zum Bearbeiten tippen</string>
+    <string name="trend_unusual_reading">Ungewöhnlicher Wert</string>
+    <string name="url_invalid">Ungültige URL</string>
+    <string name="url_open_failed">Link konnte nicht geöffnet werden</string>
+</resources>

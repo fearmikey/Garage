@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="export_title">Verkooprapport maken</string>
+    <string name="export_book_title">Onderhoudsboekje &amp; historie</string>
+    <string name="export_book_desc">Maak een volledig, verzorgd rapport dat de onderhoudsinvestering, het onderhoudslog, vervangen onderdelen en de veiligheidsstatus van je voertuig laat zien voor een betere verkoopwaarde.</string>
+    <string name="export_summary_preview">VOORBEELD SAMENVATTING</string>
+    <string name="export_vin">VIN: %1$s</string>
+    <string name="export_total_investment">Totale onderhoudsinvestering:</string>
+    <string name="export_service_records">Onderhoudsrecords:</string>
+    <string name="export_upgrades_colon">Upgrades &amp; modificaties:</string>
+    <string name="export_recall_status">Terugroepstatus:</string>
+    <string name="export_checking">Controleren…</string>
+    <string name="export_clear_serviced">Niets open (0 open / %1$d uitgevoerd)</string>
+    <string name="export_clear">Niets open</string>
+    <string name="export_open_total">%1$d open / %2$d totaal</string>
+    <string name="export_included_sections">OPGENOMEN ONDERDELEN</string>
+    <string name="export_upgrades">Upgrades &amp; modificaties</string>
+    <string name="export_upgrades_desc">Lijst met eigen onderdelen, upgrades en accessoires opnemen</string>
+    <string name="export_parts">Onderdelen &amp; vloeistoffen</string>
+    <string name="export_parts_desc">Olieviscositeit, bougies, bandenmaat &amp; ruitenwissers opnemen</string>
+    <string name="export_recalls">Terugroepstatus</string>
+    <string name="export_recalls_desc">Officiële NHTSA-terugroepcontrole opnemen</string>
+    <string name="export_select_open">Kies open acties (%1$d totaal):</string>
+    <string name="export_all_serviced">Alles uitgevoerd</string>
+    <string name="export_all_open">Alles open</string>
+    <string name="export_open_unaddressed">OPEN / NIET UITGEVOERD</string>
+    <string name="export_serviced_clear">UITGEVOERD</string>
+    <string name="export_component">Onderdeel: %1$s</string>
+    <string name="export_fuel">Tank- &amp; laadlogs</string>
+    <string name="export_fuel_desc">Tankbeurten en laadsessies opnemen</string>
+    <string name="export_generate">Onderhoudsboekje maken (PDF)</string>
+</resources>

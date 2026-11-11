@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="parts_edit_title">Editar piezas y fluidos</string>
+    <string name="parts_autofill">Rellenar con valores estimados</string>
+    <string name="parts_autofill_msg">Las capacidades de fluidos y las referencias rellenadas automáticamente se estiman a partir del VIN decodificado y los datos del motor.\n\nComprueba todos los valores en el manual del propietario antes de comprar fluidos o hacer el mantenimiento.</string>
+    <string name="parts_apply_understand">Entendido, aplicar</string>
+    <string name="vehicle_cd_obd">Escáner OBD2</string>
+    <string name="vehicle_cd_export">Exportar registro de mantenimiento</string>
+    <string name="vehicle_unnamed">Vehículo sin nombre</string>
+    <string name="tabs_cd_reorder">Reordenar pestaña</string>
+    <string name="currency_select_title">Elegir moneda</string>
+    <string name="currency_search">Buscar monedas…</string>
+    <string name="currency_none_found">No se encontraron monedas.</string>
+    <string name="bmac_title">Apoya Garage</string>
+    <string name="bmac_message">¿Te gusta Garage? Si la app te resulta útil, considera apoyar su desarrollo de código abierto.</string>
+    <string name="bmac_dont_ask">No volver a preguntar</string>
+    <string name="bmac_later">Quizá más tarde</string>
+    <string name="status_overdue">Vencido</string>
+    <string name="status_upcoming">Próximo</string>
+    <string name="status_on_track">Al día</string>
+    <string name="status_done">Hecho</string>
+    <string name="odo_vehicle">Vehículo</string>
+    <string name="odo_current">Actual: %1$s</string>
+    <string name="odo_new_reading">Nueva lectura del cuentakilómetros (%1$s)</string>
+    <string name="odo_notes_optional">Notas (opcional)</string>
+    <string name="odo_notes_placeholder">p. ej., registro semanal</string>
+    <string name="trend_tap_to_edit">Toca para editar</string>
+    <string name="trend_unusual_reading">Lectura inusual</string>
+    <string name="url_invalid">URL no válida</string>
+    <string name="url_open_failed">No se pudo abrir el enlace</string>
+</resources>

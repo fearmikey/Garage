@@ -96,7 +96,10 @@ import androidx.compose.material.icons.outlined.TwoWheeler
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import com.fearmikey.garage.ui.theme.GarageTheme
+import com.fearmikey.garage.ui.util.label
 import com.fearmikey.garage.ui.vehicle.scan.CustomScannerActivity
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
@@ -121,6 +124,7 @@ fun AddEditVehicleScreen(
     }
 
     var showUnsavedChangesDialog by remember { mutableStateOf(false) }
+    val scanPrompt = stringResource(R.string.scan_vin_prompt)
 
     val handleBack = {
         if (viewModel.hasUnsavedChanges()) {
@@ -135,8 +139,8 @@ fun AddEditVehicleScreen(
     if (showUnsavedChangesDialog) {
         AlertDialog(
             onDismissRequest = { showUnsavedChangesDialog = false },
-            title = { Text("Unsaved Changes") },
-            text = { Text("You have unsaved changes. Do you want to save or discard them?") },
+            title = { Text(stringResource(R.string.common_unsaved_title)) },
+            text = { Text(stringResource(R.string.common_unsaved_message)) },
             confirmButton = {
                 Row {
                     TextButton(
@@ -146,7 +150,7 @@ fun AddEditVehicleScreen(
                         },
                         colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
                     ) {
-                        Text("Discard")
+                        Text(stringResource(R.string.common_discard))
                     }
                     Button(
                         onClick = {
@@ -154,13 +158,13 @@ fun AddEditVehicleScreen(
                             viewModel.onSave()
                         },
                     ) {
-                        Text("Save")
+                        Text(stringResource(R.string.common_save))
                     }
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showUnsavedChangesDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         )
@@ -174,7 +178,7 @@ fun AddEditVehicleScreen(
         onScanVinClicked = {
             scanLauncher.launch(
                 ScanOptions().apply {
-                    setPrompt("Scan VIN Barcode")
+                    setPrompt(scanPrompt)
                     setBeepEnabled(false)
                     setOrientationLocked(false)
                     captureActivity = CustomScannerActivity::class.java
@@ -252,10 +256,10 @@ private fun AddEditVehicleContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(if (uiState.isEditing) "Edit Vehicle" else "Add Vehicle") },
+                title = { Text(stringResource(if (uiState.isEditing) R.string.vehicle_edit_title else R.string.vehicle_add_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))
                     }
                 },
                 actions = {
@@ -263,7 +267,7 @@ private fun AddEditVehicleContent(
                         IconButton(onClick = { showDeleteDialog = true }) {
                             Icon(
                                 Icons.Filled.Delete,
-                                contentDescription = "Delete vehicle",
+                                contentDescription = stringResource(R.string.vehicle_delete),
                                 tint = MaterialTheme.colorScheme.error,
                             )
                         }
@@ -318,7 +322,7 @@ private fun AddEditVehicleContent(
                             if (photoItem.file?.exists() == true) {
                                 AsyncImage(
                                     model = photoItem.file,
-                                    contentDescription = "Vehicle photo ${page + 1}",
+                                    contentDescription = stringResource(R.string.vehicle_photo_cd, page + 1),
                                     contentScale = ContentScale.Crop,
                                     alignment = BiasAlignment(0f, photoItem.offsetY),
                                     modifier = Modifier.fillMaxSize(),
@@ -363,9 +367,9 @@ private fun AddEditVehicleContent(
                         ) {
                             Text(
                                 if (uiState.photos.size > 1) {
-                                    "Photo ${currentPage + 1} of ${uiState.photos.size} - Drag up/down to adjust"
+                                    stringResource(R.string.vehicle_photo_position_multi, currentPage + 1, uiState.photos.size)
                                 } else {
-                                    "Drag photo up/down to adjust position"
+                                    stringResource(R.string.vehicle_photo_position_single)
                                 },
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -381,7 +385,7 @@ private fun AddEditVehicleContent(
                                     ) {
                                         Icon(
                                             Icons.Filled.AddAPhoto,
-                                            contentDescription = "Add photo",
+                                            contentDescription = stringResource(R.string.vehicle_add_photo),
                                             tint = MaterialTheme.colorScheme.primary,
                                         )
                                     }
@@ -396,7 +400,7 @@ private fun AddEditVehicleContent(
                                 ) {
                                     Icon(
                                         Icons.Filled.Edit,
-                                        contentDescription = "Change photo",
+                                        contentDescription = stringResource(R.string.vehicle_change_photo),
                                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
                                 }
@@ -405,7 +409,7 @@ private fun AddEditVehicleContent(
                                 ) {
                                     Icon(
                                         Icons.Filled.Delete,
-                                        contentDescription = "Remove photo",
+                                        contentDescription = stringResource(R.string.vehicle_remove_photo),
                                         tint = MaterialTheme.colorScheme.error,
                                     )
                                 }
@@ -437,7 +441,7 @@ private fun AddEditVehicleContent(
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(Icons.Filled.AddAPhoto, contentDescription = null, modifier = Modifier.size(32.dp))
-                        Text("Add photos (up to 3)", style = MaterialTheme.typography.bodyMedium)
+                        Text(stringResource(R.string.vehicle_add_photos), style = MaterialTheme.typography.bodyMedium)
                     }
                 }
             }
@@ -467,22 +471,22 @@ private fun AddEditVehicleContent(
                     Spacer(modifier = Modifier.width(12.dp))
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "Vehicle Theme Color",
+                            text = stringResource(R.string.vehicle_theme_color),
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.SemiBold,
                         )
                         Text(
                             text = if (uiState.themeColor != null) {
-                                if (uiState.photos.isNotEmpty()) "Extracted from photo" else "Custom color"
+                                stringResource(if (uiState.photos.isNotEmpty()) R.string.vehicle_color_extracted else R.string.vehicle_color_custom)
                             } else {
-                                "Default app theme"
+                                stringResource(R.string.vehicle_color_default)
                             },
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                     TextButton(onClick = { showColorPicker = true }) {
-                        Text("Customize")
+                        Text(stringResource(R.string.vehicle_color_customize))
                     }
                 }
             }
@@ -518,7 +522,7 @@ private fun AddEditVehicleContent(
                             }
                         },
                     ) {
-                        Text(type.displayName)
+                        Text(type.label())
                     }
                 }
             }
@@ -526,7 +530,7 @@ private fun AddEditVehicleContent(
             OutlinedTextField(
                 value = uiState.vin,
                 onValueChange = onVinChanged,
-                label = { Text("VIN") },
+                label = { Text(stringResource(R.string.obd_vin)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Characters,
@@ -534,7 +538,7 @@ private fun AddEditVehicleContent(
                 leadingIcon = {
                     if (FlavorConfig.isVinScannerSupported) {
                         IconButton(onClick = onScanVinClicked) {
-                            Icon(Icons.Filled.QrCodeScanner, contentDescription = "Scan VIN")
+                            Icon(Icons.Filled.QrCodeScanner, contentDescription = stringResource(R.string.cd_scan_vin))
                         }
                     }
                 },
@@ -543,7 +547,7 @@ private fun AddEditVehicleContent(
                         CircularProgressIndicator(modifier = Modifier.size(20.dp))
                     } else {
                         TextButton(onClick = onDecodeVinClicked, enabled = uiState.vin.isNotBlank()) {
-                            Text("Decode")
+                            Text(stringResource(R.string.vehicle_decode))
                         }
                     }
                 },
@@ -562,7 +566,7 @@ private fun AddEditVehicleContent(
             OutlinedTextField(
                 value = uiState.year,
                 onValueChange = onYearChanged,
-                label = { Text("Year") },
+                label = { Text(stringResource(R.string.vehicle_year)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth(),
@@ -570,7 +574,7 @@ private fun AddEditVehicleContent(
             OutlinedTextField(
                 value = uiState.make,
                 onValueChange = onMakeChanged,
-                label = { Text("Make") },
+                label = { Text(stringResource(R.string.vehicle_make)) },
                 singleLine = true,
                 trailingIcon = if (uiState.make.isNotBlank()) {
                     {
@@ -587,14 +591,14 @@ private fun AddEditVehicleContent(
             OutlinedTextField(
                 value = uiState.model,
                 onValueChange = onModelChanged,
-                label = { Text("Model") },
+                label = { Text(stringResource(R.string.vehicle_model)) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
             )
             OutlinedTextField(
                 value = uiState.trim,
                 onValueChange = onTrimChanged,
-                label = { Text("Trim") },
+                label = { Text(stringResource(R.string.vehicle_trim)) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -606,10 +610,10 @@ private fun AddEditVehicleContent(
                 onExpandedChange = { drivetrainMenuExpanded = it },
             ) {
                 OutlinedTextField(
-                    value = uiState.drivetrain.displayName,
+                    value = uiState.drivetrain.label(),
                     onValueChange = {},
                     readOnly = true,
-                    label = { Text("Drivetrain") },
+                    label = { Text(stringResource(R.string.vehicle_drivetrain)) },
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = drivetrainMenuExpanded) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -621,7 +625,7 @@ private fun AddEditVehicleContent(
                 ) {
                     Drivetrain.entries.forEach { entry ->
                         DropdownMenuItem(
-                            text = { Text(entry.displayName) },
+                            text = { Text(entry.label()) },
                             onClick = {
                                 onDrivetrainChanged(entry)
                                 drivetrainMenuExpanded = false
@@ -652,7 +656,7 @@ private fun AddEditVehicleContent(
                 OutlinedTextField(
                     value = uiState.fuelType,
                     onValueChange = onFuelTypeChanged,
-                    label = { Text("Fuel Type") },
+                    label = { Text(stringResource(R.string.specs_fuel_type)) },
                     singleLine = true,
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = fuelTypeMenuExpanded) },
                     modifier = Modifier
@@ -681,10 +685,10 @@ private fun AddEditVehicleContent(
                 onExpandedChange = { conditionMenuExpanded = it },
             ) {
                 OutlinedTextField(
-                    value = if (uiState.purchasedNew) "New" else "Used",
+                    value = stringResource(if (uiState.purchasedNew) R.string.vehicle_condition_new else R.string.vehicle_condition_used),
                     onValueChange = {},
                     readOnly = true,
-                    label = { Text("Purchased Condition") },
+                    label = { Text(stringResource(R.string.vehicle_purchased_condition)) },
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = conditionMenuExpanded) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -695,14 +699,14 @@ private fun AddEditVehicleContent(
                     onDismissRequest = { conditionMenuExpanded = false },
                 ) {
                     DropdownMenuItem(
-                        text = { Text("New") },
+                        text = { Text(stringResource(R.string.vehicle_condition_new)) },
                         onClick = {
                             onPurchasedNewChanged(true)
                             conditionMenuExpanded = false
                         },
                     )
                     DropdownMenuItem(
-                        text = { Text("Used") },
+                        text = { Text(stringResource(R.string.vehicle_condition_used)) },
                         onClick = {
                             onPurchasedNewChanged(false)
                             conditionMenuExpanded = false
@@ -714,7 +718,7 @@ private fun AddEditVehicleContent(
             OutlinedTextField(
                 value = uiState.purchasePrice,
                 onValueChange = onPurchasePriceChanged,
-                label = { Text("Purchase Price") },
+                label = { Text(stringResource(R.string.vehicle_purchase_price)) },
                 prefix = { Text(uiState.currencySymbol) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
@@ -727,11 +731,11 @@ private fun AddEditVehicleContent(
                 value = uiState.purchaseDate?.toDisplayDate().orEmpty(),
                 onValueChange = {},
                 readOnly = true,
-                label = { Text("Purchase Date") },
-                placeholder = { Text("Select Date") },
+                label = { Text(stringResource(R.string.vehicle_purchase_date)) },
+                placeholder = { Text(stringResource(R.string.doc_select_date)) },
                 trailingIcon = {
                     IconButton(onClick = { showPurchaseDatePicker = true }) {
-                        Icon(Icons.Default.CalendarToday, contentDescription = "Select Purchase Date")
+                        Icon(Icons.Default.CalendarToday, contentDescription = stringResource(R.string.vehicle_select_purchase_date))
                     }
                 },
                 modifier = Modifier
@@ -754,12 +758,12 @@ private fun AddEditVehicleContent(
                                 showPurchaseDatePicker = false
                             },
                         ) {
-                            Text("OK")
+                            Text(stringResource(R.string.common_ok))
                         }
                     },
                     dismissButton = {
                         TextButton(onClick = { showPurchaseDatePicker = false }) {
-                            Text("Cancel")
+                            Text(stringResource(R.string.common_cancel))
                         }
                     },
                 ) {
@@ -767,7 +771,9 @@ private fun AddEditVehicleContent(
                 }
             }
 
-            val initialLabel = if (uiState.unitSystem == com.fearmikey.garage.ui.util.UnitSystem.METRIC) "Initial Odometer (km)" else "Initial Mileage (mi)"
+            val initialLabel = stringResource(
+                if (uiState.unitSystem == com.fearmikey.garage.ui.util.UnitSystem.METRIC) R.string.vehicle_initial_odometer_km else R.string.vehicle_initial_mileage_mi,
+            )
             OutlinedTextField(
                 value = uiState.initialMileage,
                 onValueChange = onInitialMileageChanged,
@@ -783,7 +789,7 @@ private fun AddEditVehicleContent(
                 enabled = !uiState.isSaving && uiState.make.isNotBlank(),
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(if (uiState.isSaving) "Saving..." else "Save")
+                Text(stringResource(if (uiState.isSaving) R.string.common_saving else R.string.common_save))
             }
 
             if (uiState.isEditing) {
@@ -793,7 +799,7 @@ private fun AddEditVehicleContent(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Icon(Icons.Filled.Delete, contentDescription = null, modifier = Modifier.padding(end = 8.dp))
-                    Text("Delete vehicle")
+                    Text(stringResource(R.string.vehicle_delete))
                 }
             }
         }
@@ -801,11 +807,11 @@ private fun AddEditVehicleContent(
 
     if (showDeleteDialog) {
         val vehicleTitle = listOfNotNull(uiState.year.ifBlank { null }, uiState.make.ifBlank { null }, uiState.model.ifBlank { null })
-            .joinToString(" ").ifBlank { "this vehicle" }
+            .joinToString(" ").ifBlank { stringResource(R.string.vehicle_this_vehicle) }
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text("Delete Vehicle?") },
-            text = { Text("Are you sure you want to delete $vehicleTitle? This will remove this vehicle and all its maintenance records, fuel logs, and reminders from the app.") },
+            title = { Text(stringResource(R.string.vehicle_delete_title)) },
+            text = { Text(stringResource(R.string.vehicle_delete_message, vehicleTitle)) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -814,12 +820,12 @@ private fun AddEditVehicleContent(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                 ) {
-                    Text("Delete")
+                    Text(stringResource(R.string.common_delete))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         )
@@ -828,8 +834,8 @@ private fun AddEditVehicleContent(
     photoIndexToDelete?.let { index ->
         AlertDialog(
             onDismissRequest = { photoIndexToDelete = null },
-            title = { Text("Delete Photo?") },
-            text = { Text("Are you sure you want to delete this photo?") },
+            title = { Text(stringResource(R.string.photo_delete_title)) },
+            text = { Text(stringResource(R.string.photo_delete_message)) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -838,12 +844,12 @@ private fun AddEditVehicleContent(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                 ) {
-                    Text("Delete")
+                    Text(stringResource(R.string.common_delete))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { photoIndexToDelete = null }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         )
@@ -857,27 +863,27 @@ private fun VehicleColorPickerDialog(
     onDismissRequest: () -> Unit,
 ) {
     val presetColors = listOf(
-        "Racing Red" to 0xFFD32F2F.toInt(),
-        "Sunset Orange" to 0xFFE65100.toInt(),
-        "Speed Yellow" to 0xFFF9A825.toInt(),
-        "British Racing Green" to 0xFF2E7D32.toInt(),
-        "Electric Cyan" to 0xFF00838F.toInt(),
-        "Daytona Blue" to 0xFF1976D2.toInt(),
-        "Midnight Navy" to 0xFF0D47A1.toInt(),
-        "Midnight Purple" to 0xFF7B1FA2.toInt(),
-        "Silver / Slate" to 0xFF607D8B.toInt(),
-        "Charcoal Graphite" to 0xFF37474F.toInt(),
-        "Bronze / Brown" to 0xFF6D4C41.toInt(),
-        "Pure Black" to 0xFF212121.toInt(),
+        R.string.color_racing_red to 0xFFD32F2F.toInt(),
+        R.string.color_sunset_orange to 0xFFE65100.toInt(),
+        R.string.color_speed_yellow to 0xFFF9A825.toInt(),
+        R.string.color_british_racing_green to 0xFF2E7D32.toInt(),
+        R.string.color_electric_cyan to 0xFF00838F.toInt(),
+        R.string.color_daytona_blue to 0xFF1976D2.toInt(),
+        R.string.color_midnight_navy to 0xFF0D47A1.toInt(),
+        R.string.color_midnight_purple to 0xFF7B1FA2.toInt(),
+        R.string.color_silver_slate to 0xFF607D8B.toInt(),
+        R.string.color_charcoal_graphite to 0xFF37474F.toInt(),
+        R.string.color_bronze_brown to 0xFF6D4C41.toInt(),
+        R.string.color_pure_black to 0xFF212121.toInt(),
     )
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text("Choose Vehicle Theme Color") },
+        title = { Text(stringResource(R.string.vehicle_color_dialog_title)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
-                    text = "Vehicle details, tabs, and dashboard cards will be tinted with this signature color.",
+                    text = stringResource(R.string.vehicle_color_dialog_message),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -887,7 +893,7 @@ private fun VehicleColorPickerDialog(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly,
                     ) {
-                        row.forEach { (name, colorInt) ->
+                        row.forEach { (nameRes, colorInt) ->
                             val isSelected = currentColor == colorInt
                             Box(
                                 modifier = Modifier
@@ -905,7 +911,7 @@ private fun VehicleColorPickerDialog(
                                 if (isSelected) {
                                     Icon(
                                         Icons.Filled.Edit,
-                                        contentDescription = name,
+                                        contentDescription = stringResource(nameRes),
                                         tint = if ((0.299f * Color(colorInt).red + 0.587f * Color(colorInt).green + 0.114f * Color(colorInt).blue) > 0.5f) Color.Black else Color.White,
                                         modifier = Modifier.size(20.dp),
                                     )
@@ -920,12 +926,12 @@ private fun VehicleColorPickerDialog(
             TextButton(
                 onClick = { onColorSelected(null) },
             ) {
-                Text("Reset to Default")
+                Text(stringResource(R.string.vehicle_color_reset))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text("Cancel")
+                Text(stringResource(R.string.common_cancel))
             }
         },
     )

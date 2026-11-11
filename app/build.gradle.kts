@@ -32,10 +32,10 @@ android {
 
     defaultConfig {
         applicationId = "com.fearmikey.garage"
-        minSdk = 34
+        minSdk = 33
         targetSdk = 37
-        versionCode = 31
-        versionName = "1.3.8"
+        versionCode = 32
+        versionName = "1.3.9"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -66,8 +66,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     dependenciesInfo {
         includeInApk = false
@@ -85,9 +85,7 @@ ksp {
 }
 
 dependencies {
-    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.material)
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.espresso.core)

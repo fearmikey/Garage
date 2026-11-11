@@ -15,6 +15,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.fearmikey.garage.R
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.fearmikey.garage.data.local.entity.TorqueSpec
@@ -33,33 +35,33 @@ fun AddTorqueSpecDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(if (initialSpec == null) "Add Torque Spec" else "Edit Torque Spec") },
+        title = { Text(stringResource(if (initialSpec == null) R.string.kb_add_torque else R.string.kb_edit_torque)) },
         text = {
             Column(modifier = Modifier.fillMaxWidth()) {
                 OutlinedTextField(
                     value = component,
                     onValueChange = { component = it },
-                    label = { Text("Component (e.g. Lug Nuts)") },
+                    label = { Text(stringResource(R.string.kb_component)) },
                     modifier = Modifier.fillMaxWidth()
                 )
                 OutlinedTextField(
                     value = torqueNm,
                     onValueChange = { torqueNm = it },
-                    label = { Text("Torque (Nm)") },
+                    label = { Text(stringResource(R.string.kb_torque_unit, "Nm")) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
                 )
                 OutlinedTextField(
                     value = torqueFtLbs,
                     onValueChange = { torqueFtLbs = it },
-                    label = { Text("Torque (ft-lbs)") },
+                    label = { Text(stringResource(R.string.kb_torque_unit, "ft-lbs")) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
                 )
                 OutlinedTextField(
                     value = notes,
                     onValueChange = { notes = it },
-                    label = { Text("Notes (optional)") },
+                    label = { Text(stringResource(R.string.odo_notes_optional)) },
                     modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
                 )
             }
@@ -76,12 +78,12 @@ fun AddTorqueSpecDialog(
                 )
                 onSave(spec)
             }) {
-                Text("Save")
+                Text(stringResource(R.string.common_save))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(R.string.common_cancel))
             }
         }
     )
@@ -99,19 +101,19 @@ fun AddVehicleNoteDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(if (initialNote == null) "Add Repair Note" else "Edit Repair Note") },
+        title = { Text(stringResource(if (initialNote == null) R.string.kb_add_note else R.string.kb_edit_note)) },
         text = {
             Column(modifier = Modifier.fillMaxWidth()) {
                 OutlinedTextField(
                     value = title,
                     onValueChange = { title = it },
-                    label = { Text("Title") },
+                    label = { Text(stringResource(R.string.mods_title_short)) },
                     modifier = Modifier.fillMaxWidth()
                 )
                 OutlinedTextField(
                     value = content,
                     onValueChange = { content = it },
-                    label = { Text("Content (Markdown supported)") },
+                    label = { Text(stringResource(R.string.kb_content)) },
                     minLines = 3,
                     maxLines = 8,
                     modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
@@ -130,12 +132,12 @@ fun AddVehicleNoteDialog(
                 )
                 onSave(note)
             }) {
-                Text("Save")
+                Text(stringResource(R.string.common_save))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(R.string.common_cancel))
             }
         }
     )

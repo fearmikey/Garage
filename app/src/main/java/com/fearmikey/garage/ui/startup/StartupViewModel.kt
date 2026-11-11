@@ -44,7 +44,7 @@ val ESSENTIAL_VEHICLE_TABS: Set<VehicleTab> = setOf(
 
 data class StartupUiState(
     val currentStep: OnboardingStep = OnboardingStep.WELCOME,
-    val selectedUnits: String = "metric",
+    val selectedUnits: String = "imperial",
     val selectedCurrency: String = "USD",
     val selectedTheme: String = "system",
     val selectedDynamicColor: Boolean = true,

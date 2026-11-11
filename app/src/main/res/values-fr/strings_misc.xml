@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="parts_edit_title">Modifier pièces et fluides</string>
+    <string name="parts_autofill">Remplir avec les valeurs estimées</string>
+    <string name="parts_autofill_msg">Les capacités de fluides et les références remplies automatiquement sont estimées à partir du VIN décodé et des données moteur.\n\nVérifiez toutes les valeurs dans le manuel du propriétaire avant d\'acheter des fluides ou d\'entretenir votre véhicule.</string>
+    <string name="parts_apply_understand">J\'ai compris, appliquer</string>
+    <string name="vehicle_cd_obd">Scanner OBD2</string>
+    <string name="vehicle_cd_export">Exporter le carnet d\'entretien</string>
+    <string name="vehicle_unnamed">Véhicule sans nom</string>
+    <string name="tabs_cd_reorder">Réorganiser l\'onglet</string>
+    <string name="currency_select_title">Choisir la devise</string>
+    <string name="currency_search">Rechercher une devise…</string>
+    <string name="currency_none_found">Aucune devise correspondante.</string>
+    <string name="bmac_title">Soutenir Garage</string>
+    <string name="bmac_message">Vous aimez Garage ? Si l\'application vous est utile, pensez à soutenir son développement open source !</string>
+    <string name="bmac_dont_ask">Ne plus demander</string>
+    <string name="bmac_later">Plus tard</string>
+    <string name="status_overdue">En retard</string>
+    <string name="status_upcoming">À venir</string>
+    <string name="status_on_track">À jour</string>
+    <string name="status_done">Terminé</string>
+    <string name="odo_vehicle">Véhicule</string>
+    <string name="odo_current">Actuel : %1$s</string>
+    <string name="odo_new_reading">Nouveau relevé du compteur (%1$s)</string>
+    <string name="odo_notes_optional">Notes (facultatif)</string>
+    <string name="odo_notes_placeholder">ex. : relevé hebdomadaire</string>
+    <string name="trend_tap_to_edit">Touchez pour modifier</string>
+    <string name="trend_unusual_reading">Valeur inhabituelle</string>
+    <string name="url_invalid">URL non valide</string>
+    <string name="url_open_failed">Impossible d\'ouvrir le lien</string>
+</resources>

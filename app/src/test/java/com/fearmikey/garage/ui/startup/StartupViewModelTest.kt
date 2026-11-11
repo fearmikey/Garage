@@ -36,7 +36,7 @@ class StartupViewModelTest {
     }
 
     private class FakePreferencesRepository : PreferencesRepository {
-        val unitsTypeFlow = MutableStateFlow("metric")
+        val unitsTypeFlow = MutableStateFlow("imperial")
         val currencyCodeFlow = MutableStateFlow("USD")
         val themeTypeFlow = MutableStateFlow("system")
         val amoledDarkFlow = MutableStateFlow(false)
@@ -150,8 +150,9 @@ class StartupViewModelTest {
 
         testDispatcher.scheduler.advanceUntilIdle()
 
-        viewModel.selectUnits("imperial")
         assertEquals("imperial", viewModel.uiState.value.selectedUnits)
+        viewModel.selectUnits("metric")
+        assertEquals("metric", viewModel.uiState.value.selectedUnits)
     }
 
     @Test

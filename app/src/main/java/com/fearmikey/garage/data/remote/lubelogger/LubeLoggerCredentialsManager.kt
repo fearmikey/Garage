@@ -2,8 +2,7 @@ package com.fearmikey.garage.data.remote.lubelogger
 
 import android.content.Context
 import androidx.core.content.edit
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
+import com.fearmikey.garage.data.local.SecurePreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,27 +11,17 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Stores LubeLogger connection settings in EncryptedSharedPreferences.
+ * Stores LubeLogger connection settings in EncryptedSharedPreferences (via [SecurePreferences]).
  *
  * `open` with lazily-created preferences so JVM unit tests can subclass it without touching
  * the Android Keystore (mirrors CloudBackupPreferencesManager).
  */
-@Suppress("DEPRECATION")
 @Singleton
 open class LubeLoggerCredentialsManager @Inject constructor(
     @ApplicationContext private val context: Context,
 ) {
     private val sharedPreferences by lazy {
-        val masterKey = MasterKey.Builder(context)
-            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-            .build()
-        EncryptedSharedPreferences.create(
-            context,
-            "lubelogger_credentials",
-            masterKey,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
+        SecurePreferences.open(context, SecurePreferences.LUBELOGGER_CREDENTIALS)
     }
 
     /**

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Cleartext (http://) has to stay allowed by default: users point the app at self-hosted
+    LubeLogger and WebDAV servers on their LAN, .local names, Tailscale hostnames, etc., and
+    network security config can't scope by IP range. The settings UI already warns when a
+    server URL isn't https.
+
+    Hosts the app itself talks to are pinned to HTTPS so a redirect can never downgrade them.
+-->
+<network-security-config xmlns:tools="http://schemas.android.com/tools">
+    <base-config
+        cleartextTrafficPermitted="true"
+        tools:ignore="InsecureBaseConfiguration" />
+
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">nhtsa.gov</domain>
+        <domain includeSubdomains="true">nhtsa.dot.gov</domain>
+    </domain-config>
+</network-security-config>
