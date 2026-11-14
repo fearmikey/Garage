@@ -61,6 +61,7 @@
     <string name="trip_empty">Поездок пока нет.\nНажмите «Начать GPS-поездку» или +, чтобы добавить.</string>
     <string name="trip_deduction">Вычет: %1$s</string>
     <string name="trip_start_gps">Начать GPS-поездку</string>
+    <string name="trip_precise_location_required">Для записи GPS-поездок нужно точное местоположение. Включите «Точное местоположение» для Garage в настройках приложения.</string>
     <string name="trip_paused">Поездка приостановлена</string>
     <string name="trip_tracking">Запись поездки…</string>
     <string name="trip_resume">Продолжить</string>

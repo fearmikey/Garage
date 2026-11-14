@@ -22,6 +22,14 @@
     <string name="fuel_partial">Teilbetankung</string>
     <string name="fuel_since_full_tank">%1$s seit der letzten Volltankung</string>
     <string name="fuel_full_tank_hint">Ausschalten, wenn Sie nicht vollgetankt haben</string>
+    <string name="fuel_grade_title">Kraftstoffsorte</string>
+    <string name="fuel_grade_regular">Normal</string>
+    <string name="fuel_grade_midgrade">Super</string>
+    <string name="fuel_grade_premium">Super Plus</string>
+    <string name="fuel_grade_diesel">Diesel</string>
+    <string name="fuel_grade_e85">E85</string>
+    <string name="fuel_grade_other">Andere</string>
+    <string name="fuel_grade_custom_hint">Sorte oder Oktanzahl (z. B. 95, 98 ROZ, E10)</string>
 
     <string name="trend_fuel_title">Verbrauchstrends</string>
     <string name="trend_charging_title">Ladetrends</string>

@@ -1,0 +1,60 @@
+Garage est une application de gestion de véhicules pour Android, respectueuse de votre vie privée. Suivez l'entretien, les pleins et les recharges, les coûts, les modifications, les documents et les trajets de tous vos véhicules au même endroit. Sans publicité, sans traqueur, sans compte, et entièrement utilisable hors ligne.
+
+<b>Véhicules</b>
+<ul>
+<li>Gérez plusieurs véhicules : voitures, camions, motos, électriques et hybrides rechargeables</li>
+<li>Scannez le code-barres du VIN avec l'appareil photo et décodez automatiquement les caractéristiques (NHTSA vPIC)</li>
+<li>Fiche technique modifiable avec vos propres champs</li>
+<li>Immatriculation et assurance avec rappels d'expiration</li>
+<li>Pièces, notes et documents personnalisés avec photos jointes</li>
+</ul>
+
+<b>Entretien</b>
+<ul>
+<li>Historique complet sous forme de chronologie, filtrable par catégorie et par période</li>
+<li>Suggestions d'entretien intelligentes selon le kilométrage et le temps écoulé</li>
+<li>Modèles de programmes d'entretien intégrés et règles personnalisées</li>
+<li>Export de l'historique d'entretien en PDF, pratique lors de la revente</li>
+</ul>
+
+<b>Carburant et recharge</b>
+<ul>
+<li>Enregistrez vos pleins avec le type de carburant et calculez la consommation</li>
+<li>Enregistrez vos recharges avec la puissance de la borne et des statistiques d'efficacité</li>
+<li>Graphiques d'évolution de la consommation, des prix et des dépenses</li>
+</ul>
+
+<b>Coûts et statistiques</b>
+<ul>
+<li>Coût total de possession : carburant, entretien, modifications et assurance</li>
+<li>Coût au kilomètre ou au mile</li>
+<li>Tableau de bord avec résumé de la flotte, activité récente et entretiens à venir</li>
+</ul>
+
+<b>Autres outils</b>
+<ul>
+<li>Suivi des modifications et améliorations avec leur coût</li>
+<li>Base de connaissances : couples de serrage, capacités des fluides et notes</li>
+<li>Journal de trajets (manuel ou GPS) pour les déplacements professionnels et personnels</li>
+<li>Diagnostic OBD-II en Bluetooth ou Wi-Fi : données en temps réel, lecture et effacement des codes défaut</li>
+<li>Vérification des rappels de sécurité (NHTSA, véhicules américains)</li>
+<li>Widgets d'écran d'accueil et tuiles de réglages rapides pour noter un plein ou le kilométrage</li>
+</ul>
+
+<b>Vos données, votre contrôle</b>
+<ul>
+<li>Toutes les données sont stockées localement sur votre appareil</li>
+<li>Sauvegardes et restaurations manuelles et automatiques</li>
+<li>Synchronisation facultative avec votre propre serveur WebDAV (Nextcloud, ownCloud, etc.)</li>
+<li>Synchronisation bidirectionnelle facultative avec une instance LubeLogger auto-hébergée</li>
+<li>L'accès réseau sert uniquement au décodage du VIN, à la recherche de rappels et aux serveurs que vous configurez</li>
+</ul>
+
+<b>Personnalisation</b>
+<ul>
+<li>Design Material You avec palettes de couleurs, modes clair et sombre</li>
+<li>Unités métriques ou impériales et nombreuses devises</li>
+<li>Disponible en français, anglais, allemand, espagnol, italien, portugais, néerlandais, polonais, russe et turc</li>
+</ul>
+
+Garage est un logiciel 100 % libre et open source sous licence MIT. Si l'application vous est utile, vous pouvez soutenir son développement via Buy Me a Coffee.

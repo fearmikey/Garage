@@ -46,4 +46,28 @@ data class FuelRecord(
     val lubeLoggerId: Int? = null,
     @androidx.room.ColumnInfo(defaultValue = "NULL")
     val lubeLoggerSyncHash: String? = null,
+    /**
+     * Fuel grade/type pumped: a [FuelGrade] name (e.g. "PREMIUM") for the preset grades, or the
+     * user's own text (e.g. "98 RON", "E10") for anything else. Null when not recorded.
+     */
+    @androidx.room.ColumnInfo(defaultValue = "NULL")
+    val fuelGrade: String? = null,
 )
+
+/**
+ * Preset fuel grades offered when logging a fill-up. Stored in [FuelRecord.fuelGrade] by [name],
+ * which must stay stable; the UI shows a localized label (see `ui/util/EnumLabels.kt`).
+ */
+enum class FuelGrade(val displayName: String) {
+    REGULAR("Regular"),
+    MIDGRADE("Mid-grade"),
+    PREMIUM("Premium"),
+    DIESEL("Diesel"),
+    E85("E85"),
+    ;
+
+    companion object {
+        /** The preset for a stored [FuelRecord.fuelGrade] value, or null for custom text / no grade. */
+        fun fromStored(value: String?): FuelGrade? = entries.firstOrNull { it.name == value }
+    }
+}

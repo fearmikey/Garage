@@ -94,6 +94,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -519,62 +520,6 @@ private fun ModCard(
         shape = RoundedCornerShape(16.dp),
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
-            if (imageFiles.isNotEmpty()) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(16f / 9f)
-                        .background(MaterialTheme.colorScheme.surfaceVariant),
-                ) {
-                    if (imageFiles.size == 1) {
-                        AsyncImage(
-                            model = imageFiles.first(),
-                            contentDescription = mod.title,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize(),
-                        )
-                    } else {
-                        val pagerState = rememberPagerState(pageCount = { imageFiles.size })
-                        HorizontalPager(
-                            state = pagerState,
-                            modifier = Modifier.fillMaxSize(),
-                        ) { page ->
-                            AsyncImage(
-                                model = imageFiles[page],
-                                contentDescription = mod.title,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier.fillMaxSize(),
-                            )
-                        }
-                        Row(
-                            modifier = Modifier
-                                .align(Alignment.BottomCenter)
-                                .padding(bottom = 8.dp)
-                                .background(
-                                    color = MaterialTheme.colorScheme.scrim.copy(alpha = 0.4f),
-                                    shape = CircleShape,
-                                )
-                                .padding(horizontal = 8.dp, vertical = 4.dp),
-                            horizontalArrangement = Arrangement.spacedBy(6.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            repeat(imageFiles.size) { iteration ->
-                                val color = if (pagerState.currentPage == iteration) {
-                                    MaterialTheme.colorScheme.primary
-                                } else {
-                                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                                }
-                                Box(
-                                    modifier = Modifier
-                                        .size(6.dp)
-                                        .background(color, shape = CircleShape)
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -589,19 +534,50 @@ private fun ModCard(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.weight(1f),
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .size(36.dp)
-                                .clip(CircleShape)
-                                .background(MaterialTheme.colorScheme.secondaryContainer),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Icon(
-                                imageVector = mod.category.icon(),
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                                modifier = Modifier.size(20.dp),
-                            )
+                        if (imageFiles.isNotEmpty()) {
+                            Box(
+                                modifier = Modifier
+                                    .size(56.dp)
+                                    .clip(RoundedCornerShape(12.dp))
+                                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                            ) {
+                                AsyncImage(
+                                    model = imageFiles.first(),
+                                    contentDescription = mod.title,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier.fillMaxSize(),
+                                )
+                                if (imageFiles.size > 1) {
+                                    Text(
+                                        text = "+${imageFiles.size - 1}",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = Color.White,
+                                        modifier = Modifier
+                                            .align(Alignment.BottomEnd)
+                                            .padding(3.dp)
+                                            .background(
+                                                color = Color.Black.copy(alpha = 0.55f),
+                                                shape = RoundedCornerShape(6.dp),
+                                            )
+                                            .padding(horizontal = 4.dp),
+                                    )
+                                }
+                            }
+                        } else {
+                            Box(
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .clip(CircleShape)
+                                    .background(MaterialTheme.colorScheme.secondaryContainer),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Icon(
+                                    imageVector = mod.category.icon(),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    modifier = Modifier.size(20.dp),
+                                )
+                            }
                         }
 
                         Spacer(modifier = Modifier.width(12.dp))

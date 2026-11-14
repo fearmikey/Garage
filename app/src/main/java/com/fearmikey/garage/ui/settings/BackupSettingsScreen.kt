@@ -358,11 +358,12 @@ fun BackupSettingsScreen(
         )
     }
 
-    if (uiState.importSucceeded) {
+    val importFailedRestartMessage = uiState.importFailedRestartMessage
+    if (uiState.importSucceeded || (importFailedRestartMessage != null)) {
         AlertDialog(
             onDismissRequest = {},
             title = { Text(stringResource(R.string.backup_restart_title)) },
-            text = { Text(stringResource(R.string.backup_restart_message)) },
+            text = { Text(importFailedRestartMessage ?: stringResource(R.string.backup_restart_message)) },
             confirmButton = {
                 TextButton(onClick = { AppRestarter.restart(context) }) {
                     Text(stringResource(R.string.backup_restart_now))

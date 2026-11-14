@@ -46,7 +46,7 @@ open class WebDavBackupRepository @Inject constructor(
         val password = cloudBackupPreferencesManager.getWebdavPassword().orEmpty()
 
         if (!enabled || url.isBlank() || username.isBlank()) {
-            return@withContext BackupResult.Failure("Cloud sync is not configured.")
+            return@withContext BackupResult.Failure("Cloud sync is not configured.", retryable = false)
         }
 
         val tempFile = File(context.cacheDir, "cloud_backup_upload.zip")
@@ -74,7 +74,9 @@ open class WebDavBackupRepository @Inject constructor(
                 } else {
                     val message = "Upload failed: HTTP ${response.code} ${response.message}".trim()
                     cloudBackupPreferencesManager.setLastSyncError(message)
-                    BackupResult.Failure(message)
+                    // Rejected credentials won't fix themselves; server errors / timeouts might.
+                    val retryable = (response.code != 401) && (response.code != 403)
+                    BackupResult.Failure(message, retryable = retryable)
                 }
             }
         } catch (e: Exception) {

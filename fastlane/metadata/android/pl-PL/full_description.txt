@@ -1,0 +1,60 @@
+Garage to dbająca o prywatność aplikacja do zarządzania pojazdami na Androida. Zapisuj serwis, tankowania i ładowania, koszty, modyfikacje, dokumenty i trasy wszystkich swoich pojazdów w jednym miejscu. Bez reklam, bez śledzenia, bez konta i w pełni offline.
+
+<b>Pojazdy</b>
+<ul>
+<li>Zarządzaj wieloma pojazdami: samochody osobowe, dostawcze, motocykle, elektryki i hybrydy plug-in</li>
+<li>Zeskanuj kod kreskowy VIN aparatem i automatycznie odczytaj dane techniczne (NHTSA vPIC)</li>
+<li>Edytowalna karta danych technicznych z własnymi polami</li>
+<li>Dane rejestracyjne i ubezpieczeniowe z przypomnieniami o terminach</li>
+<li>Przechowuj informacje o częściach, notatki i własne dokumenty ze zdjęciami</li>
+</ul>
+
+<b>Serwis</b>
+<ul>
+<li>Pełna historia serwisowa na osi czasu z filtrowaniem według kategorii i zakresu dat</li>
+<li>Inteligentne sugestie serwisowe na podstawie przebiegu i czasu</li>
+<li>Wbudowane szablony harmonogramów i własne reguły</li>
+<li>Eksport historii serwisowej do PDF – przydatny przy sprzedaży pojazdu</li>
+</ul>
+
+<b>Paliwo i ładowanie</b>
+<ul>
+<li>Zapisuj tankowania z rodzajem paliwa i obliczaj spalanie</li>
+<li>Zapisuj sesje ładowania z mocą ładowarki i statystykami wydajności</li>
+<li>Wykresy trendów spalania, cen i wydatków</li>
+</ul>
+
+<b>Koszty i statystyki</b>
+<ul>
+<li>Całkowity koszt posiadania: paliwo, serwis, modyfikacje i ubezpieczenie</li>
+<li>Koszt na kilometr lub milę</li>
+<li>Pulpit z podsumowaniem floty, ostatnią aktywnością i nadchodzącym serwisem</li>
+</ul>
+
+<b>Więcej narzędzi</b>
+<ul>
+<li>Zapisuj modyfikacje i ulepszenia wraz z kosztami</li>
+<li>Baza wiedzy: momenty dokręcania, pojemności płynów i notatki</li>
+<li>Rejestr tras (ręczny lub przez GPS) dla przejazdów służbowych i prywatnych</li>
+<li>Diagnostyka OBD-II przez Bluetooth lub Wi-Fi: dane z czujników na żywo, odczyt i kasowanie kodów błędów</li>
+<li>Sprawdzanie akcji przywoławczych (NHTSA, pojazdy z USA)</li>
+<li>Widżety na ekran główny i kafelki szybkich ustawień do zapisywania tankowań i stanu licznika</li>
+</ul>
+
+<b>Twoje dane pod Twoją kontrolą</b>
+<ul>
+<li>Wszystkie dane są przechowywane lokalnie na urządzeniu</li>
+<li>Ręczne i automatyczne kopie zapasowe oraz przywracanie</li>
+<li>Opcjonalna synchronizacja z własnym serwerem WebDAV (Nextcloud, ownCloud i inne)</li>
+<li>Opcjonalna dwukierunkowa synchronizacja z własną instancją LubeLogger</li>
+<li>Dostęp do sieci służy wyłącznie do dekodowania VIN, sprawdzania akcji przywoławczych i łączenia z serwerami skonfigurowanymi przez Ciebie</li>
+</ul>
+
+<b>Personalizacja</b>
+<ul>
+<li>Wygląd Material You z paletami kolorów oraz trybem jasnym i ciemnym</li>
+<li>Jednostki metryczne lub imperialne i wiele walut</li>
+<li>Dostępna po polsku, angielsku, niemiecku, francusku, hiszpańsku, włosku, portugalsku, niderlandzku, rosyjsku i turecku</li>
+</ul>
+
+Garage to w 100% wolne i otwarte oprogramowanie na licencji MIT. Jeśli aplikacja Ci się przydaje, możesz wesprzeć jej rozwój przez Buy Me a Coffee.

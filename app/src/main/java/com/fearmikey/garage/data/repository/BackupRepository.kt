@@ -24,7 +24,17 @@ import javax.inject.Singleton
 
 sealed interface BackupResult {
     data object Success : BackupResult
-    data class Failure(val message: String) : BackupResult
+    /**
+     * @param restartRequired true when the live database was already closed (a restore failed
+     *   midway and was rolled back), so the app must restart before it can touch the database.
+     * @param retryable false when retrying can't help until the user changes something (sync not
+     *   configured, credentials rejected), so background workers shouldn't keep retrying.
+     */
+    data class Failure(
+        val message: String,
+        val restartRequired: Boolean = false,
+        val retryable: Boolean = true,
+    ) : BackupResult
 }
 
 /**
@@ -127,27 +137,26 @@ class BackupRepository @Inject constructor(
     }
 
     /**
-     * Checkpoints the Room WAL and zips the database + images into
-     * [outputStream]. Shared by [exportBackup] and [exportBackupToFile] so
-     * the zip layout never drifts between the two entry points.
+     * Snapshots the database and zips it + images into [outputStream]. Shared by
+     * [exportBackup], [exportBackupToFile] and [exportBackupToLocalFolder] so the zip layout
+     * never drifts between entry points.
      */
     private fun writeBackupZip(outputStream: OutputStream) {
-        // Room defaults to WAL journal mode, meaning recent writes may
-        // only exist in the "-wal" side file rather than the main ".db"
-        // file. Running a FULL checkpoint flushes all committed WAL
-        // content back into the main database file, so even if we didn't
-        // include the (now largely empty) -wal/-shm files, the exported
-        // .db file alone would still be a consistent, complete snapshot.
-        // We don't need to close the connection to do this.
-        database.openHelper.writableDatabase.query("PRAGMA wal_checkpoint(FULL);").close()
+        // Copying the live .db/-wal files while the app (auto backup, LubeLogger sync, the UI)
+        // keeps writing can capture them at different moments and produce a corrupt backup.
+        // VACUUM INTO writes a single, self-contained, transactionally consistent copy instead.
+        val snapshotDir = File(context.cacheDir, SNAPSHOT_DIR_NAME).apply { mkdirs() }
+        val snapshot = File.createTempFile("garage-snapshot", ".db", snapshotDir)
+        try {
+            snapshot.delete() // VACUUM INTO requires that the target doesn't exist.
+            database.openHelper.writableDatabase.execSQL("VACUUM INTO ?", arrayOf<Any?>(snapshot.path))
 
-        ZipOutputStream(outputStream.buffered()).use { zip ->
-            for (dbFile in databaseFiles()) {
-                if (dbFile.exists()) {
-                    addFileToZip(zip, dbFile, dbFile.name)
-                }
+            ZipOutputStream(outputStream.buffered()).use { zip ->
+                addFileToZip(zip, snapshot, GARAGE_DATABASE_NAME)
+                addDirectoryToZip(zip, imageStorageManager.imagesDir, IMAGES_ZIP_PREFIX)
             }
-            addDirectoryToZip(zip, imageStorageManager.imagesDir, IMAGES_ZIP_PREFIX)
+        } finally {
+            snapshot.delete()
         }
     }
 
@@ -161,6 +170,9 @@ class BackupRepository @Inject constructor(
      */
     suspend fun importBackup(sourceUri: Uri): BackupResult = withContext(Dispatchers.IO) {
         val stagingDir = File(context.cacheDir, STAGING_DIR_NAME)
+        val imagesDir = imageStorageManager.imagesDir
+        val newImagesDir = File(imagesDir.parentFile, imagesDir.name + ".restore")
+        var databaseClosed = false
         try {
             stagingDir.deleteRecursively()
             stagingDir.mkdirs()
@@ -212,35 +224,70 @@ class BackupRepository @Inject constructor(
                 )
             }
 
-            // Close the live connection before we start overwriting the files
-            // backing it. The app process will be restarted by the caller
-            // right after this, so we never attempt to reopen/reuse `database`.
-            database.close()
-
-            for (dbFile in databaseFiles()) {
-                val stagedFile = File(stagingDir, dbFile.name)
-                if (stagedFile.exists()) {
-                    stagedFile.copyTo(dbFile, overwrite = true)
-                } else {
-                    // No -wal/-shm in the backup (already checkpointed) --
-                    // remove any stale side files from the current install.
-                    dbFile.delete()
-                }
+            // Copy the images first: if that fails, the live database hasn't been touched yet.
+            val stagedImagesDir = File(stagingDir, IMAGES_ZIP_PREFIX)
+            newImagesDir.deleteRecursively()
+            newImagesDir.mkdirs()
+            if (stagedImagesDir.exists()) {
+                stagedImagesDir.copyRecursively(newImagesDir, overwrite = true)
             }
 
-            val stagedImagesDir = File(stagingDir, IMAGES_ZIP_PREFIX)
-            val imagesDir = imageStorageManager.imagesDir
+            // Close the live connection before overwriting the files backing it. From here on
+            // the app must restart (on success or failure) since `database` can't be reused.
+            database.close()
+            databaseClosed = true
+
+            val rollbackDir = File(context.cacheDir, ROLLBACK_DIR_NAME)
+            try {
+                // Keep the current database so a failed copy can be undone instead of leaving
+                // a mix of old and new files behind.
+                rollbackDir.deleteRecursively()
+                rollbackDir.mkdirs()
+                for (dbFile in databaseFiles()) {
+                    if (dbFile.exists()) dbFile.copyTo(File(rollbackDir, dbFile.name), overwrite = true)
+                }
+
+                for (dbFile in databaseFiles()) {
+                    val stagedFile = File(stagingDir, dbFile.name)
+                    if (stagedFile.exists()) {
+                        stagedFile.copyTo(dbFile, overwrite = true)
+                    } else {
+                        // No -wal/-shm in the backup (already checkpointed) --
+                        // remove any stale side files from the current install.
+                        dbFile.delete()
+                    }
+                }
+            } catch (e: Exception) {
+                for (dbFile in databaseFiles()) {
+                    val saved = File(rollbackDir, dbFile.name)
+                    if (saved.exists()) runCatching { saved.copyTo(dbFile, overwrite = true) } else dbFile.delete()
+                }
+                return@withContext BackupResult.Failure(
+                    e.message ?: "Unknown error while importing backup.",
+                    restartRequired = true,
+                )
+            } finally {
+                rollbackDir.deleteRecursively()
+            }
+
+            // Database restored; swap the image library in.
             imagesDir.deleteRecursively()
-            imagesDir.mkdirs()
-            if (stagedImagesDir.exists()) {
-                stagedImagesDir.copyRecursively(imagesDir, overwrite = true)
+            if (!newImagesDir.renameTo(imagesDir)) {
+                imagesDir.mkdirs()
+                newImagesDir.copyRecursively(imagesDir, overwrite = true)
+                newImagesDir.deleteRecursively()
             }
 
             BackupResult.Success
         } catch (e: Exception) {
-            BackupResult.Failure(e.message ?: "Unknown error while importing backup.")
+            BackupResult.Failure(
+                e.message ?: "Unknown error while importing backup.",
+                restartRequired = databaseClosed,
+            )
         } finally {
             stagingDir.deleteRecursively()
+            // Leftovers from a failed restore; after a successful swap this no longer exists.
+            newImagesDir.deleteRecursively()
         }
     }
 
@@ -252,9 +299,9 @@ class BackupRepository @Inject constructor(
     /**
      * Reads the SQLite `user_version` pragma (i.e. the Room schema version)
      * out of a staged, not-yet-restored database file, without touching the
-     * live [database] connection. `exportBackup` always checkpoints the WAL
-     * before zipping, so the main `.db` file's header alone is a reliable
-     * source for this -- we don't need the `-wal`/`-shm` side files here.
+     * live [database] connection. Exports are a single `VACUUM INTO` snapshot
+     * (older ones were checkpointed before zipping), so the main `.db` file's
+     * header alone is a reliable source for this.
      */
     private fun readSchemaVersion(dbFile: File): Int =
         SQLiteDatabase.openDatabase(dbFile.path, null, SQLiteDatabase.OPEN_READONLY).use { it.version }
@@ -311,5 +358,7 @@ class BackupRepository @Inject constructor(
     private companion object {
         const val IMAGES_ZIP_PREFIX = "images/"
         const val STAGING_DIR_NAME = "restore_staging"
+        const val ROLLBACK_DIR_NAME = "restore_rollback"
+        const val SNAPSHOT_DIR_NAME = "backup_snapshot"
     }
 }

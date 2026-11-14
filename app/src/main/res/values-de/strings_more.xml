@@ -55,6 +55,7 @@
     <string name="trip_empty">Noch keine Fahrten erfasst.\nTippen Sie auf „GPS-Fahrt starten“ oder +, um eine hinzuzufügen.</string>
     <string name="trip_deduction">Absetzbar: %1$s</string>
     <string name="trip_start_gps">GPS-Fahrt starten</string>
+    <string name="trip_precise_location_required">Die GPS-Fahrtaufzeichnung benötigt den genauen Standort. Bitte aktivieren Sie „Genauen Standort verwenden“ für Garage in den App-Einstellungen.</string>
     <string name="trip_paused">Fahrt pausiert</string>
     <string name="trip_tracking">Fahrt wird aufgezeichnet…</string>
     <string name="trip_resume">Fortsetzen</string>

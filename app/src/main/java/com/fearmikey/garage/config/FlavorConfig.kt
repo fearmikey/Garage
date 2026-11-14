@@ -1,8 +1,7 @@
 package com.fearmikey.garage.config
 
 import android.content.Context
-import android.content.Intent
-import androidx.core.net.toUri
+import com.fearmikey.garage.util.UrlLauncher
 
 /**
  * Configuration utilities for the Garage application.
@@ -14,7 +13,7 @@ object FlavorConfig {
     const val isVinScannerSupported = true
 
     fun launchOssLicenses(context: Context) {
-        val intent = Intent(Intent.ACTION_VIEW, "https://github.com/fearmikey/Garage/blob/master/LICENSE".toUri())
-        context.startActivity(intent)
+        // UrlLauncher shows a toast instead of crashing when no browser is installed.
+        UrlLauncher.openUrl(context, "https://github.com/fearmikey/Garage/blob/master/LICENSE")
     }
 }

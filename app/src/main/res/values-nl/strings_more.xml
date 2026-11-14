@@ -55,6 +55,7 @@
     <string name="trip_empty">Nog geen ritten vastgelegd.\nTik op ‘GPS-rit starten’ of + om er een toe te voegen.</string>
     <string name="trip_deduction">Aftrekbaar: %1$s</string>
     <string name="trip_start_gps">GPS-rit starten</string>
+    <string name="trip_precise_location_required">GPS-ritregistratie heeft je precieze locatie nodig. Zet "Precieze locatie gebruiken" aan voor Garage in de app-instellingen.</string>
     <string name="trip_paused">Rit gepauzeerd</string>
     <string name="trip_tracking">Rit wordt gevolgd…</string>
     <string name="trip_resume">Hervatten</string>

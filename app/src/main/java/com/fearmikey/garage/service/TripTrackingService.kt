@@ -164,34 +164,61 @@ class TripTrackingService : Service() {
                 vehicleId = intent.getLongExtra(EXTRA_VEHICLE_ID, -1L).takeIf { it != -1L }
                 startTracking()
             }
-            ACTION_PAUSE -> pauseTracking()
-            ACTION_RESUME -> resumeTracking()
+            // Pause/resume only make sense for a running trip (e.g. not for a stale notification
+            // action delivered to a freshly created service), otherwise they'd fake an active trip.
+            ACTION_PAUSE -> if (isTracking) pauseTracking() else stopIfIdle()
+            ACTION_RESUME -> if (isTracking) resumeTracking() else stopIfIdle()
             ACTION_STOP -> stopTracking()
+            else -> stopIfIdle()
         }
-        return START_STICKY
+        // Not sticky: a system restart would arrive with a null intent and no foreground
+        // notification. The saved distance survives in preferences and is restored on next start.
+        return START_NOT_STICKY
+    }
+
+    private fun stopIfIdle() {
+        if (!isTracking) stopSelf()
     }
 
     private fun startTracking() {
         Log.d("TripTrackingService", "startTracking called, isTracking=$isTracking")
-        if (isTracking) return
-        
-        isTracking = true
-        publishState()
-        
+        if (isTracking) {
+            // Every startForegroundService() must be answered with startForeground().
+            runCatching {
+                startForeground(NOTIFICATION_ID, buildNotification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION)
+            }
+            return
+        }
+
         try {
             val notification = buildNotification()
             startForeground(
-                NOTIFICATION_ID, 
-                notification, 
+                NOTIFICATION_ID,
+                notification,
                 ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION,
             )
-            requestLocationUpdates()
+            // GPS only: network fixes are accurate to tens/hundreds of meters, and mixing
+            // providers makes the position hop between sources, which reads as phantom distance.
+            // Throws SecurityException without precise location permission.
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                2000L,
+                5f,
+                locationListener,
+            )
             Log.d("TripTrackingService", "startTracking successfully completed startForeground")
+        } catch (e: SecurityException) {
+            Log.e("TripTrackingService", "Missing location permission for trip tracking", e)
+            abortStart()
+            return
         } catch (e: Exception) {
-            Log.e("TripTrackingService", "Error starting tracking foreground service synchronously", e)
-            stopTracking()
+            Log.e("TripTrackingService", "Error starting trip tracking", e)
+            abortStart()
             return
         }
+
+        isTracking = true
+        publishState()
 
         serviceScope.launch {
             try {
@@ -217,19 +244,16 @@ class TripTrackingService : Service() {
         }
     }
     
-    private fun requestLocationUpdates() {
-        try {
-            // GPS only: network fixes are accurate to tens/hundreds of meters, and mixing
-            // providers makes the position hop between sources, which reads as phantom distance.
-            locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
-                2000L,
-                5f,
-                locationListener,
-            )
-        } catch (_: SecurityException) {
-            stopSelf()
-        }
+    /**
+     * Tears down a start that never got going (foreground start or location request refused).
+     * Unlike [stopTracking] it saves nothing and leaves any crash-recovery state in preferences.
+     */
+    private fun abortStart() {
+        runCatching { locationManager.removeUpdates(locationListener) }
+        isTracking = false
+        _tripState.value = TripState.Stopped
+        runCatching { stopForeground(STOP_FOREGROUND_REMOVE) }
+        stopSelf()
     }
 
     private fun pauseTracking() {

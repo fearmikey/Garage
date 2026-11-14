@@ -55,6 +55,7 @@
     <string name="trip_empty">Henüz yolculuk kaydedilmedi.\nEklemek için “GPS yolculuğu başlat”a veya +’ya dokunun.</string>
     <string name="trip_deduction">İndirim: %1$s</string>
     <string name="trip_start_gps">GPS yolculuğu başlat</string>
+    <string name="trip_precise_location_required">GPS yolculuk kaydı için kesin konum gerekir. Lütfen uygulama ayarlarından Garage için "Kesin konumu kullan" seçeneğini açın.</string>
     <string name="trip_paused">Yolculuk duraklatıldı</string>
     <string name="trip_tracking">Yolculuk izleniyor…</string>
     <string name="trip_resume">Devam et</string>

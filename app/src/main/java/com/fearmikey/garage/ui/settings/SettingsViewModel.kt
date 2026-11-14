@@ -60,6 +60,8 @@ data class SettingsUiState(
     val vehicles: List<Vehicle> = emptyList(),
     /** True once an import has completed; the UI should prompt the user to restart the app. */
     val importSucceeded: Boolean = false,
+    /** Set when an import failed after the database was closed (and rolled back); the app must restart. */
+    val importFailedRestartMessage: String? = null,
     val cloudSyncEnabled: Boolean = false,
     val webdavUrl: String = "",
     val webdavUsername: String = "",
@@ -479,7 +481,13 @@ class SettingsViewModel @Inject constructor(
                     it.copy(isBusy = false, importSucceeded = true)
                 }
                 is BackupResult.Failure -> _uiState.update {
-                    it.copy(isBusy = false, message = context.getString(R.string.msg_import_failed, result.message))
+                    val message = context.getString(R.string.msg_import_failed, result.message)
+                    if (result.restartRequired) {
+                        // The database was closed for the restore, so the app can't continue without a restart.
+                        it.copy(isBusy = false, importFailedRestartMessage = message)
+                    } else {
+                        it.copy(isBusy = false, message = message)
+                    }
                 }
             }
         }

@@ -89,26 +89,26 @@ class ReminderCheckWorker @AssistedInject constructor(
             // Document & Renewal Expiry Reminders
             val regIns = vehicleRepository.getRegistrationInsurance(vehicle.id).firstOrNull()
             val customDocuments = customDocumentRepository.getDocumentsForVehicle(vehicle.id).firstOrNull().orEmpty()
-            if (docRemindersEnabled) {
-                val docReminders = DocumentExpirationEngine.checkAll(
-                    record = regIns,
-                    customDocuments = customDocuments,
-                    upcomingWindowDays = docDaysWindow,
-                )
-                for (docReminder in docReminders) {
-                    val notificationId = (vehicle.id.toString() + "_" + docReminder.idKey).hashCode()
-                    if ((docReminder.status == ReminderStatus.OVERDUE) || (docReminder.status == ReminderStatus.UPCOMING)) {
-                        notifier.notifyDue(
-                            notificationId = notificationId,
-                            taskName = docReminder.title,
-                            vehicleLabel = vehicleLabel,
-                            status = docReminder.status,
-                            vehicleId = vehicle.id,
-                            action = MainActivity.ACTION_OPEN_DOCUMENTS,
-                        )
-                    } else {
-                        notifier.cancel(notificationId.toLong())
-                    }
+            val docReminders = DocumentExpirationEngine.checkAll(
+                record = regIns,
+                customDocuments = customDocuments,
+                upcomingWindowDays = docDaysWindow,
+            )
+            for (docReminder in docReminders) {
+                val notificationId = (vehicle.id.toString() + "_" + docReminder.idKey).hashCode()
+                // When reminders are switched off, also clear any document notifications still showing.
+                val isDue = (docReminder.status == ReminderStatus.OVERDUE) || (docReminder.status == ReminderStatus.UPCOMING)
+                if (docRemindersEnabled && isDue) {
+                    notifier.notifyDue(
+                        notificationId = notificationId,
+                        taskName = docReminder.title,
+                        vehicleLabel = vehicleLabel,
+                        status = docReminder.status,
+                        vehicleId = vehicle.id,
+                        action = MainActivity.ACTION_OPEN_DOCUMENTS,
+                    )
+                } else {
+                    notifier.cancel(notificationId.toLong())
                 }
             }
         }

@@ -54,6 +54,8 @@ data class FuelUiState(
     val averageMpge: Double? = null,
     val totalChargingSpent: Double = 0.0,
     val batteryHealth: BatteryHealthSummary = BatteryHealthSummary(),
+    /** False only for the placeholder state shown before the database has emitted. */
+    val isLoaded: Boolean = false,
 )
 
 @HiltViewModel
@@ -111,6 +113,7 @@ class FuelViewModel @Inject constructor(
             averageMpge = ChargingCalculator.averageMpge(chargingEntries),
             totalChargingSpent = chargingRecords.sumOf { it.totalCost },
             batteryHealth = batteryHealth,
+            isLoaded = true,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), FuelUiState())
 
@@ -150,18 +153,24 @@ class FuelViewModel @Inject constructor(
         }
     }
 
-    private companion object {
-        fun isVehicleEvByDetails(vehicle: Vehicle?, specs: VehicleSpecs?): Boolean {
-            if (specs?.isEvOrPhev() == true) return true
-            val make = vehicle?.make?.lowercase().orEmpty()
-            val model = vehicle?.model?.lowercase().orEmpty()
-            val trim = vehicle?.trim?.lowercase().orEmpty()
-            val text = "$make $model $trim"
-            return text.contains("tesla") || text.contains("rivian") || text.contains("lucid") ||
-                text.contains("polestar") || text.contains("mach-e") || text.contains("lightning") ||
-                text.contains("ioniq") || text.contains("ev6") || text.contains("id.4") ||
-                text.contains("leaf") || text.contains("bolt") || text.contains("phev") ||
-                text.contains("plug-in") || text.contains("electric") || text.contains("ev")
-        }
-    }
+}
+
+/** Brand/model names that are distinctive enough to match anywhere in make/model/trim. */
+private val EV_SUBSTRINGS = listOf(
+    "tesla", "rivian", "lucid", "polestar", "mach-e", "ioniq", "id.4", "phev", "plug-in", "electric",
+)
+
+/**
+ * Short or common words that only mean "EV" as a whole word: matching them as substrings made
+ * e.g. every Chevrolet ("ch-ev-rolet") or Range Rover Evoque look like a plug-in hybrid.
+ */
+private val EV_WORDS = setOf("ev", "ev6", "leaf", "bolt", "lightning")
+
+/** Guesses whether a vehicle is an EV/PHEV from its specs, or failing that its make/model/trim. */
+internal fun isVehicleEvByDetails(vehicle: Vehicle?, specs: VehicleSpecs?): Boolean {
+    if (specs?.isEvOrPhev() == true) return true
+    val text = listOfNotNull(vehicle?.make, vehicle?.model, vehicle?.trim).joinToString(" ").lowercase()
+    if (EV_SUBSTRINGS.any { text.contains(it) }) return true
+    val words = text.split(Regex("[^a-z0-9]+")).toSet()
+    return words.any { it in EV_WORDS }
 }

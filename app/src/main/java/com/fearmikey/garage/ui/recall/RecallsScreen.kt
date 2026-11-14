@@ -3,7 +3,6 @@ package com.fearmikey.garage.ui.recall
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -51,7 +50,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
+import com.fearmikey.garage.util.UrlLauncher
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.res.stringResource
@@ -85,9 +84,7 @@ fun RecallsScreen(
                 Toast.LENGTH_LONG,
             ).show()
         }
-        val url = "https://www.nhtsa.gov/recalls?vin=$trimmedVin"
-        val intent = Intent(Intent.ACTION_VIEW, url.toUri())
-        context.startActivity(intent)
+        UrlLauncher.openUrl(context, "https://www.nhtsa.gov/recalls?vin=$trimmedVin")
     }
 }
 

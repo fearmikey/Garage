@@ -58,6 +58,7 @@
     <string name="trip_empty">Aún no hay viajes.\nToca «Iniciar viaje GPS» o + para añadir uno.</string>
     <string name="trip_deduction">Deducción: %1$s</string>
     <string name="trip_start_gps">Iniciar viaje GPS</string>
+    <string name="trip_precise_location_required">El registro de viajes GPS necesita la ubicación precisa. Activa "Usar ubicación precisa" para Garage en los ajustes de la app.</string>
     <string name="trip_paused">Viaje en pausa</string>
     <string name="trip_tracking">Registrando viaje…</string>
     <string name="trip_resume">Reanudar</string>

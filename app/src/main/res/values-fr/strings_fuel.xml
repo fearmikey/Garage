@@ -22,6 +22,14 @@
     <string name="fuel_partial">Partiel</string>
     <string name="fuel_since_full_tank">%1$s depuis le dernier plein</string>
     <string name="fuel_full_tank_hint">Désactivez si vous n\'avez pas fait le plein complet</string>
+    <string name="fuel_grade_title">Type de carburant</string>
+    <string name="fuel_grade_regular">Ordinaire</string>
+    <string name="fuel_grade_midgrade">Intermédiaire</string>
+    <string name="fuel_grade_premium">Premium</string>
+    <string name="fuel_grade_diesel">Gazole</string>
+    <string name="fuel_grade_e85">E85</string>
+    <string name="fuel_grade_other">Autre</string>
+    <string name="fuel_grade_custom_hint">Type ou indice d\'octane (ex. 95, 98, E10)</string>
 
     <string name="trend_fuel_title">Tendances carburant</string>
     <string name="trend_charging_title">Tendances recharge</string>

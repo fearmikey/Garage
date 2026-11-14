@@ -22,6 +22,14 @@
     <string name="fuel_partial">Parcial</string>
     <string name="fuel_since_full_tank">%1$s desde o último tanque cheio</string>
     <string name="fuel_full_tank_hint">Desative se você não completou o tanque</string>
+    <string name="fuel_grade_title">Tipo de combustível</string>
+    <string name="fuel_grade_regular">Comum</string>
+    <string name="fuel_grade_midgrade">Intermediária</string>
+    <string name="fuel_grade_premium">Premium</string>
+    <string name="fuel_grade_diesel">Diesel</string>
+    <string name="fuel_grade_e85">E85</string>
+    <string name="fuel_grade_other">Outro</string>
+    <string name="fuel_grade_custom_hint">Tipo ou octanagem (ex.: 95, 98, E10)</string>
 
     <string name="trend_fuel_title">Tendências de combustível</string>
     <string name="trend_charging_title">Tendências de recarga</string>

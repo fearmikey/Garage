@@ -23,6 +23,14 @@
     <string name="fuel_partial">Partial</string>
     <string name="fuel_since_full_tank">%1$s since last full tank</string>
     <string name="fuel_full_tank_hint">Turn off if you didn\'t top off the tank</string>
+    <string name="fuel_grade_title">Fuel grade</string>
+    <string name="fuel_grade_regular">Regular</string>
+    <string name="fuel_grade_midgrade">Mid-grade</string>
+    <string name="fuel_grade_premium">Premium</string>
+    <string name="fuel_grade_diesel">Diesel</string>
+    <string name="fuel_grade_e85">E85</string>
+    <string name="fuel_grade_other">Other</string>
+    <string name="fuel_grade_custom_hint">Grade or octane (e.g. 93, 98 RON, E10)</string>
 
     <!-- Trend charts -->
     <string name="trend_fuel_title">Fuel Trends</string>

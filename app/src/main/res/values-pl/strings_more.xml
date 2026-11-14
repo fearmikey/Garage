@@ -61,6 +61,7 @@
     <string name="trip_empty">Brak zapisanych przejazdów.\nDotknij „Rozpocznij przejazd GPS” lub +, aby dodać.</string>
     <string name="trip_deduction">Do odliczenia: %1$s</string>
     <string name="trip_start_gps">Rozpocznij przejazd GPS</string>
+    <string name="trip_precise_location_required">Rejestrowanie przejazdów GPS wymaga dokładnej lokalizacji. Włącz „Używaj dokładnej lokalizacji” dla Garage w ustawieniach aplikacji.</string>
     <string name="trip_paused">Przejazd wstrzymany</string>
     <string name="trip_tracking">Rejestrowanie przejazdu…</string>
     <string name="trip_resume">Wznów</string>

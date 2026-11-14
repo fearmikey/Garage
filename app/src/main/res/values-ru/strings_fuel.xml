@@ -22,6 +22,14 @@
     <string name="fuel_partial">Неполная</string>
     <string name="fuel_since_full_tank">%1$s с последней полной заправки</string>
     <string name="fuel_full_tank_hint">Выключите, если бак заправлен не полностью</string>
+    <string name="fuel_grade_title">Марка топлива</string>
+    <string name="fuel_grade_regular">Обычный</string>
+    <string name="fuel_grade_midgrade">Средний</string>
+    <string name="fuel_grade_premium">Премиум</string>
+    <string name="fuel_grade_diesel">Дизель</string>
+    <string name="fuel_grade_e85">E85</string>
+    <string name="fuel_grade_other">Другое</string>
+    <string name="fuel_grade_custom_hint">Марка или октановое число (напр. 95, 98, E10)</string>
 
     <string name="trend_fuel_title">Динамика расхода</string>
     <string name="trend_charging_title">Динамика зарядок</string>

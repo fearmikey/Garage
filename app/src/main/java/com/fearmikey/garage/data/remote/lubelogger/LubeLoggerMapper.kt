@@ -348,6 +348,8 @@ fun LubeLoggerGasRecordDto.toFuelRecord(localVehicleId: Long, lubeLoggerUnitSyst
         pricePerGallon = ppg,
         isFullTank = parsedIsFillToFull,
         lubeLoggerId = recordId,
+        // LubeLogger has no fuel grade field; keep the locally entered one when a pull updates the row.
+        fuelGrade = existing?.fuelGrade,
     )
 }
 

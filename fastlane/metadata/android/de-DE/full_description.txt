@@ -1,0 +1,60 @@
+Garage ist eine datenschutzfreundliche App zur Fahrzeugverwaltung für Android. Erfassen Sie Wartung, Tankvorgänge und E-Ladevorgänge, Kosten, Umbauten, Dokumente und Fahrten all Ihrer Fahrzeuge an einem Ort. Ohne Werbung, ohne Tracker, ohne Konto – und vollständig offline nutzbar.
+
+<b>Fahrzeuge</b>
+<ul>
+<li>Mehrere Fahrzeuge verwalten: Autos, Lkw, Motorräder, Elektroautos und Plug-in-Hybride</li>
+<li>VIN-Barcode mit der Kamera scannen und technische Daten automatisch abrufen (NHTSA vPIC)</li>
+<li>Bearbeitbares Datenblatt mit eigenen Feldern</li>
+<li>Zulassungs- und Versicherungsdaten mit Ablauferinnerungen</li>
+<li>Teileinformationen, Notizen und eigene Dokumente mit Fotoanhängen speichern</li>
+</ul>
+
+<b>Wartung</b>
+<ul>
+<li>Vollständige Wartungshistorie als Zeitleiste, filterbar nach Kategorie und Zeitraum</li>
+<li>Intelligente Wartungsvorschläge auf Basis von Kilometer- und Zeitintervallen</li>
+<li>Integrierte Wartungspläne und eigene Regeln</li>
+<li>Wartungshistorie als PDF exportieren – praktisch beim Fahrzeugverkauf</li>
+</ul>
+
+<b>Tanken und Laden</b>
+<ul>
+<li>Tankvorgänge mit Kraftstoffsorte erfassen und Verbrauch berechnen</li>
+<li>E-Ladevorgänge mit Ladegeschwindigkeit und Effizienzstatistiken erfassen</li>
+<li>Trenddiagramme für Verbrauch, Preise und Ausgaben</li>
+</ul>
+
+<b>Kosten und Auswertungen</b>
+<ul>
+<li>Gesamtbetriebskosten aus Kraftstoff, Wartung, Umbauten und Versicherung</li>
+<li>Kosten pro Kilometer oder Meile</li>
+<li>Dashboard mit Fuhrparkübersicht, letzten Aktivitäten und anstehenden Wartungen</li>
+</ul>
+
+<b>Weitere Werkzeuge</b>
+<ul>
+<li>Umbauten und Tuning samt Kosten dokumentieren</li>
+<li>Wissensdatenbank für Anzugsmomente, Füllmengen und Notizen</li>
+<li>Fahrtenbuch (manuell oder per GPS) für geschäftliche und private Fahrten</li>
+<li>OBD-II-Diagnose über Bluetooth oder WLAN: Live-Sensordaten, Fehlercodes lesen und löschen</li>
+<li>Rückrufprüfung (NHTSA, US-Fahrzeuge)</li>
+<li>Startbildschirm-Widgets und Schnelleinstellungs-Kacheln zum Erfassen von Tankvorgängen und Kilometerständen</li>
+</ul>
+
+<b>Ihre Daten, Ihre Kontrolle</b>
+<ul>
+<li>Alle Daten werden lokal auf Ihrem Gerät gespeichert</li>
+<li>Manuelle und automatische Sicherung und Wiederherstellung</li>
+<li>Optionale Synchronisierung mit Ihrem eigenen WebDAV-Server (Nextcloud, ownCloud u. a.)</li>
+<li>Optionale Zwei-Wege-Synchronisierung mit einer selbst gehosteten LubeLogger-Instanz</li>
+<li>Netzwerkzugriff nur für VIN-Dekodierung, Rückrufabfragen und von Ihnen konfigurierte Server</li>
+</ul>
+
+<b>Personalisierung</b>
+<ul>
+<li>Material-You-Design mit Farbpaletten sowie hellem und dunklem Modus</li>
+<li>Metrische oder imperiale Einheiten und viele Währungen</li>
+<li>Verfügbar auf Deutsch, Englisch, Französisch, Spanisch, Italienisch, Portugiesisch, Niederländisch, Polnisch, Russisch und Türkisch</li>
+</ul>
+
+Garage ist zu 100 % freie und quelloffene Software unter der MIT-Lizenz. Wenn Ihnen die App gefällt, können Sie die Entwicklung über Buy Me a Coffee unterstützen.

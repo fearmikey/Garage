@@ -22,6 +22,14 @@
     <string name="fuel_partial">Gedeeltelijk</string>
     <string name="fuel_since_full_tank">%1$s sinds de laatste volle tank</string>
     <string name="fuel_full_tank_hint">Uitzetten als je de tank niet helemaal hebt gevuld</string>
+    <string name="fuel_grade_title">Brandstofsoort</string>
+    <string name="fuel_grade_regular">Normaal</string>
+    <string name="fuel_grade_midgrade">Middel</string>
+    <string name="fuel_grade_premium">Premium</string>
+    <string name="fuel_grade_diesel">Diesel</string>
+    <string name="fuel_grade_e85">E85</string>
+    <string name="fuel_grade_other">Anders</string>
+    <string name="fuel_grade_custom_hint">Soort of octaangetal (bijv. 95, 98, E10)</string>
 
     <string name="trend_fuel_title">Brandstoftrends</string>
     <string name="trend_charging_title">Laadtrends</string>

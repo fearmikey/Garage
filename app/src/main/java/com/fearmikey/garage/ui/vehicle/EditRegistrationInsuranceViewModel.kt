@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -33,6 +34,8 @@ data class EditRegistrationInsuranceUiState(
     val currencySymbol: String = "$",
     val isSheetOpen: Boolean = false,
     val isSaving: Boolean = false,
+    /** True while the form waits for the stored record to load; saving is blocked meanwhile. */
+    val isLoading: Boolean = false,
 
     // Form field states
     val licensePlate: String = "",
@@ -129,6 +132,18 @@ class EditRegistrationInsuranceViewModel @Inject constructor(
 
     private val _sheetState = MutableStateFlow(EditRegistrationInsuranceUiState())
 
+    /** Wraps the stored row so "no record yet" (null record) is distinguishable from "not loaded yet". */
+    private class LoadedRecord(val record: VehicleRegistrationInsurance?)
+
+    /**
+     * The stored record, collected eagerly so the form can be pre-filled from it. Null until Room
+     * has emitted once. The form must never be populated from [uiState] directly: it's
+     * `WhileSubscribed`, so its value is still the empty default when the screen first opens.
+     */
+    private val storedRecord: StateFlow<LoadedRecord?> = vehicleRepository.getRegistrationInsurance(vehicleId)
+        .map { LoadedRecord(it) }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
+
     private val latestObdScan: Flow<MaintenanceRecord?> =
         maintenanceRepository?.getRecordsForVehicle(vehicleId)
             ?.map { records ->
@@ -155,10 +170,26 @@ class EditRegistrationInsuranceViewModel @Inject constructor(
     fun imageFileFor(filename: String): File = imageStorageManager.imageFile(filename)
 
     fun onAddOrEditClicked() {
-        val currentRecord = uiState.value.record
+        // Already editing (e.g. the screen's LaunchedEffect re-ran after a configuration change):
+        // keep the user's in-progress edits instead of resetting them from the database.
+        if (_sheetState.value.isSheetOpen) return
+
+        val loaded = storedRecord.value
+        if (loaded != null) {
+            populateForm(loaded.record)
+            return
+        }
+        _sheetState.update { it.copy(isSheetOpen = true, isLoading = true) }
+        viewModelScope.launch {
+            populateForm(storedRecord.filterNotNull().first().record)
+        }
+    }
+
+    private fun populateForm(currentRecord: VehicleRegistrationInsurance?) {
         _sheetState.update { state ->
             state.copy(
                 isSheetOpen = true,
+                isLoading = false,
                 licensePlate = currentRecord?.licensePlate.orEmpty(),
                 registrationState = currentRecord?.registrationState.orEmpty(),
                 registrationExpiration = currentRecord?.registrationExpiration,
@@ -485,6 +516,9 @@ class EditRegistrationInsuranceViewModel @Inject constructor(
 
     private suspend fun saveCurrentStateInternal() {
         val currentState = _sheetState.value
+        // Never write a form that hasn't been populated from the stored record yet: it would
+        // replace every existing field with blanks.
+        if (currentState.isLoading) return
 
         val finalRegFilename = resolveImageFilename(
             currentState.pickedRegistrationImageUri,

@@ -22,6 +22,14 @@
     <string name="fuel_partial">Kısmi</string>
     <string name="fuel_since_full_tank">Son tam depodan beri %1$s</string>
     <string name="fuel_full_tank_hint">Depoyu tamamen doldurmadıysanız kapatın</string>
+    <string name="fuel_grade_title">Yakıt türü</string>
+    <string name="fuel_grade_regular">Normal</string>
+    <string name="fuel_grade_midgrade">Orta</string>
+    <string name="fuel_grade_premium">Premium</string>
+    <string name="fuel_grade_diesel">Dizel</string>
+    <string name="fuel_grade_e85">E85</string>
+    <string name="fuel_grade_other">Diğer</string>
+    <string name="fuel_grade_custom_hint">Tür veya oktan (örn. 95, 98, E10)</string>
 
     <string name="trend_fuel_title">Yakıt eğilimleri</string>
     <string name="trend_charging_title">Şarj eğilimleri</string>

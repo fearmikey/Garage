@@ -1,9 +1,60 @@
-Garage is a modern, privacy-focused, comprehensive vehicle management application for Android. Garage enables vehicle owners to track maintenance schedules, monitor fuel efficiency, analyze cost of ownership, check safety recalls, and maintain detailed service records for all their vehicles in one centralized hub.
+Garage is a privacy-focused vehicle management app for Android. Track maintenance, fuel and EV charging, costs, modifications, documents, and trips for all your vehicles in one place. It has no ads, no trackers, and no account, and it works fully offline.
 
-Features:
-- Track service history
-- VIN scanning & decoding
-- Track fuel efficiency
-- Privacy focused and works offline
-- Cost of ownership calculation
-- Safety recall alerts
+<b>Vehicles</b>
+<ul>
+<li>Manage multiple vehicles: cars, trucks, motorcycles, EVs, and plug-in hybrids</li>
+<li>Scan the VIN barcode with your camera and decode specs automatically (NHTSA vPIC)</li>
+<li>Editable spec sheet with your own custom fields</li>
+<li>Registration and insurance details with expiration reminders</li>
+<li>Store parts info, notes, and custom documents with photo attachments</li>
+</ul>
+
+<b>Maintenance</b>
+<ul>
+<li>Full service history timeline with filtering by category and date range</li>
+<li>Smart maintenance suggestions based on mileage and time intervals</li>
+<li>Built-in schedule templates plus your own custom rules</li>
+<li>Export service history to PDF, useful when you sell the vehicle</li>
+</ul>
+
+<b>Fuel and charging</b>
+<ul>
+<li>Log fill-ups with fuel grade, and calculate fuel economy</li>
+<li>Log EV charging sessions with charger speed and efficiency stats</li>
+<li>Trend charts for economy, price, and spending</li>
+</ul>
+
+<b>Costs and analytics</b>
+<ul>
+<li>Total cost of ownership across fuel, maintenance, modifications, and insurance</li>
+<li>Cost per mile or kilometer</li>
+<li>Dashboard with fleet summary, recent activity, and upcoming service</li>
+</ul>
+
+<b>More tools</b>
+<ul>
+<li>Track aftermarket modifications and upgrades with their costs</li>
+<li>Knowledge base for torque specs, fluid capacities, and reference notes</li>
+<li>Trip logger (manual or GPS) for business and personal mileage</li>
+<li>OBD-II diagnostics over Bluetooth or Wi-Fi: live sensor data, and reading and clearing trouble codes</li>
+<li>Safety recall checks (NHTSA, US vehicles)</li>
+<li>Home screen widgets and Quick Settings tiles for logging fuel and updating the odometer</li>
+</ul>
+
+<b>Your data, your control</b>
+<ul>
+<li>All data is stored locally on your device</li>
+<li>Manual and automatic backups and restore</li>
+<li>Optional sync to your own WebDAV server (Nextcloud, ownCloud, and others)</li>
+<li>Optional two-way sync with a self-hosted LubeLogger instance</li>
+<li>Network access is used only for VIN decoding, recall lookups, and servers you configure yourself</li>
+</ul>
+
+<b>Personalize</b>
+<ul>
+<li>Material You design with theme palettes, plus light and dark modes</li>
+<li>Imperial or metric units, and many currencies</li>
+<li>Available in English, German, French, Spanish, Italian, Portuguese, Dutch, Polish, Russian, and Turkish</li>
+</ul>
+
+Garage is 100% free and open source software under the MIT license. If you find it useful, you can support development through Buy Me a Coffee.

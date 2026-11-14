@@ -95,7 +95,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalUriHandler
+import com.fearmikey.garage.ui.util.rememberSafeUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
@@ -1265,7 +1265,7 @@ private fun SupportSection(
     affiliateLinksEnabled: Boolean,
     onToggleAffiliateLinks: (Boolean) -> Unit,
 ) {
-    val uriHandler = LocalUriHandler.current
+    val uriHandler = rememberSafeUriHandler()
     Section(
         title = stringResource(R.string.startup_support_title),
         subtitle = stringResource(R.string.startup_support_subtitle),

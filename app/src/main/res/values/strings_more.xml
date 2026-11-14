@@ -60,6 +60,7 @@
     <string name="trip_empty">No trips logged yet.\nTap \'Start GPS Trip\' or the + button to add one.</string>
     <string name="trip_deduction">Deduction: %1$s</string>
     <string name="trip_start_gps">Start GPS Trip</string>
+    <string name="trip_precise_location_required">GPS trip logging needs precise location. Turn on "Use precise location" for Garage in app settings.</string>
     <string name="trip_paused">Trip Paused</string>
     <string name="trip_tracking">Tracking Trip…</string>
     <string name="trip_resume">Resume</string>

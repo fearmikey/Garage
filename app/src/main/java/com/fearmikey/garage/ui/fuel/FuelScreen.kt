@@ -6,6 +6,8 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -76,6 +78,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.fearmikey.garage.R
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -86,6 +89,7 @@ import com.fearmikey.garage.data.fuel.BatteryHealthSummary
 import com.fearmikey.garage.data.local.entity.ChargerSpeed
 import com.fearmikey.garage.data.local.entity.ChargerVendorType
 import com.fearmikey.garage.data.local.entity.ChargingRecord
+import com.fearmikey.garage.data.local.entity.FuelGrade
 import com.fearmikey.garage.data.local.entity.FuelRecord
 import com.fearmikey.garage.ui.components.EmptyState
 import com.fearmikey.garage.ui.components.TrendChart
@@ -112,6 +116,7 @@ import com.fearmikey.garage.ui.util.sanitizeMileageInput
 import com.fearmikey.garage.ui.util.toDisplayDate
 import com.fearmikey.garage.ui.util.toUtcDatePickerMillis
 import com.fearmikey.garage.ui.util.label
+import com.fearmikey.garage.ui.util.fuelGradeLabel
 import kotlin.math.abs
 import com.fearmikey.garage.ui.components.ScrollToTopOnInsert
 
@@ -127,8 +132,9 @@ fun FuelScreen(
     var editingFuelRecord by remember { mutableStateOf<FuelRecord?>(null) }
     var editingChargingRecord by remember { mutableStateOf<ChargingRecord?>(null) }
 
-    LaunchedEffect(autoOpenAddSheet) {
-        if (autoOpenAddSheet) {
+    // Wait for the real state: before it loads, isPureEv is always false and EVs would get the fuel sheet.
+    LaunchedEffect(autoOpenAddSheet, uiState.isLoaded) {
+        if (autoOpenAddSheet && uiState.isLoaded) {
             if (uiState.isPureEv) {
                 showAddChargingSheet = true
             } else {
@@ -180,6 +186,8 @@ fun FuelScreen(
 
     if (showAddFuelSheet) {
         AddEditFuelRecordSheet(
+            // Most people buy the same grade every time, so pre-select the last one used.
+            defaultFuelGrade = uiState.records.maxByOrNull { it.date }?.fuelGrade,
             unitSystem = uiState.unitSystem,
             currencySymbol = uiState.currencySymbol,
             onDismiss = { showAddFuelSheet = false },
@@ -1097,6 +1105,9 @@ private fun FuelRecordRow(
                         UnitConverter.formatVolume(record.gallons, unitSystem),
                         style = MaterialTheme.typography.titleMedium,
                     )
+                    fuelGradeLabel(record.fuelGrade)?.let { grade ->
+                        AssistChip(onClick = {}, enabled = false, label = { Text(grade) })
+                    }
                     if (!record.isFullTank) {
                         AssistChip(onClick = {}, enabled = false, label = { Text(stringResource(R.string.fuel_partial)) })
                     }
@@ -1148,7 +1159,7 @@ private fun FuelRecordRow(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 internal fun AddEditFuelRecordSheet(
     onDismiss: () -> Unit,
@@ -1156,6 +1167,8 @@ internal fun AddEditFuelRecordSheet(
     initial: FuelRecord? = null,
     unitSystem: UnitSystem = UnitSystem.IMPERIAL,
     currencySymbol: String = "$",
+    /** Grade pre-selected for a new fill-up (ignored when editing [initial]). */
+    defaultFuelGrade: String? = null,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var mileage by remember {
@@ -1170,6 +1183,10 @@ internal fun AddEditFuelRecordSheet(
     }
     var totalCost by remember { mutableStateOf(initial?.totalCost?.toString().orEmpty()) }
     var isFullTank by remember { mutableStateOf(initial?.isFullTank ?: true) }
+    val startGrade = if (initial != null) initial.fuelGrade else defaultFuelGrade
+    var selectedGrade by remember { mutableStateOf(FuelGrade.fromStored(startGrade)) }
+    var isCustomGrade by remember { mutableStateOf(!startGrade.isNullOrBlank() && (FuelGrade.fromStored(startGrade) == null)) }
+    var customGrade by remember { mutableStateOf(if (FuelGrade.fromStored(startGrade) == null) startGrade.orEmpty() else "") }
     var date by remember { mutableLongStateOf(initial?.date ?: System.currentTimeMillis()) }
     var showDatePicker by remember { mutableStateOf(false) }
 
@@ -1300,6 +1317,45 @@ internal fun AddEditFuelRecordSheet(
                 modifier = Modifier.fillMaxWidth(),
             )
 
+            Text(stringResource(R.string.fuel_grade_title), style = MaterialTheme.typography.labelMedium)
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                FuelGrade.entries.forEach { grade ->
+                    FilterChip(
+                        selected = selectedGrade == grade,
+                        // Tapping the selected chip again clears it: the grade is optional.
+                        onClick = {
+                            selectedGrade = if (selectedGrade == grade) null else grade
+                            isCustomGrade = false
+                        },
+                        label = { Text(grade.label()) },
+                    )
+                }
+                FilterChip(
+                    selected = isCustomGrade,
+                    onClick = {
+                        isCustomGrade = !isCustomGrade
+                        if (isCustomGrade) selectedGrade = null
+                    },
+                    label = { Text(stringResource(R.string.fuel_grade_other)) },
+                )
+            }
+            if (isCustomGrade) {
+                OutlinedTextField(
+                    value = customGrade,
+                    onValueChange = { customGrade = it.take(MAX_CUSTOM_GRADE_LENGTH) },
+                    label = { Text(stringResource(R.string.fuel_grade_custom_hint)) },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Characters,
+                        imeAction = ImeAction.Done,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { focusManager.clearFocus() },
+                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+
             HorizontalDivider()
 
             Row(
@@ -1339,6 +1395,10 @@ internal fun AddEditFuelRecordSheet(
                             isFullTank = isFullTank,
                             lubeLoggerId = initial?.lubeLoggerId,
                             lubeLoggerSyncHash = initial?.lubeLoggerSyncHash,
+                            fuelGrade = when {
+                                isCustomGrade -> customGrade.trim().takeIf { it.isNotEmpty() }
+                                else -> selectedGrade?.name
+                            },
                         )
                     )
                 },
@@ -1445,3 +1505,6 @@ private fun FuelScreenEmptyPreview() {
         )
     }
 }
+
+/** Enough for labels like "Super Plus 98 E5"; keeps the list chip from wrapping. */
+private const val MAX_CUSTOM_GRADE_LENGTH = 30

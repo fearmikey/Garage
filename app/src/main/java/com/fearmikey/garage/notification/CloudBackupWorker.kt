@@ -10,9 +10,10 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
 /**
- * Runs the daily WebDAV backup upload (see [CloudBackupScheduler]). Failures
- * are retried rather than treated as permanent, since they're almost always
- * transient network/server issues rather than something a retry can't fix.
+ * Runs the daily WebDAV backup upload (see [CloudBackupScheduler]). Transient
+ * failures (network/server issues) are retried; ones a retry can't fix (sync not
+ * configured, credentials rejected) fail this run and wait for the next period,
+ * instead of re-exporting the whole backup on every backoff.
  */
 @HiltWorker
 class CloudBackupWorker @AssistedInject constructor(
@@ -21,9 +22,9 @@ class CloudBackupWorker @AssistedInject constructor(
     private val webDavBackupRepository: WebDavBackupRepository,
 ) : CoroutineWorker(appContext, workerParams) {
 
-    override suspend fun doWork(): Result = when (webDavBackupRepository.syncNow()) {
+    override suspend fun doWork(): Result = when (val result = webDavBackupRepository.syncNow()) {
         BackupResult.Success -> Result.success()
-        is BackupResult.Failure -> Result.retry()
+        is BackupResult.Failure -> if (result.retryable) Result.retry() else Result.failure()
     }
 
     companion object {

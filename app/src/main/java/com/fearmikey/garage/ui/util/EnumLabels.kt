@@ -7,6 +7,7 @@ import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.entity.ChargerSpeed
 import com.fearmikey.garage.data.local.entity.ChargerVendorType
 import com.fearmikey.garage.data.local.entity.Drivetrain
+import com.fearmikey.garage.data.local.entity.FuelGrade
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.ModificationCategory
 import com.fearmikey.garage.data.local.entity.TripCategory
@@ -30,6 +31,26 @@ val VehicleType.labelRes: Int
 
 @Composable
 fun VehicleType.label(): String = stringResource(labelRes)
+
+@get:StringRes
+val FuelGrade.labelRes: Int
+    get() = when (this) {
+        FuelGrade.REGULAR -> R.string.fuel_grade_regular
+        FuelGrade.MIDGRADE -> R.string.fuel_grade_midgrade
+        FuelGrade.PREMIUM -> R.string.fuel_grade_premium
+        FuelGrade.DIESEL -> R.string.fuel_grade_diesel
+        FuelGrade.E85 -> R.string.fuel_grade_e85
+    }
+
+@Composable
+fun FuelGrade.label(): String = stringResource(labelRes)
+
+/** Display text for a stored [com.fearmikey.garage.data.local.entity.FuelRecord.fuelGrade] (preset label or the custom text). */
+@Composable
+fun fuelGradeLabel(stored: String?): String? {
+    if (stored.isNullOrBlank()) return null
+    return FuelGrade.fromStored(stored)?.label() ?: stored
+}
 
 /** FWD/RWD/AWD/4WD are the same abbreviations in every supported language; only "Unknown" is translated. */
 @Composable

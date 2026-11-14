@@ -1,3 +1,24 @@
+## [1.4.0] - 2026-11-14
+
+### Added
+* **Fuel Grade:** Fill-ups can record the fuel grade: Regular, Mid-grade, Premium, Diesel, E85, or your own text (e.g. "98 RON", "E10"). The last grade you used is pre-selected, and LubeLogger syncs keep the grade you entered locally (DB v34 → v35).
+* **Translated Store Listing:** The F-Droid title and descriptions are now available in all 10 supported languages, and the English description lists the app's full feature set.
+
+### Changed
+* **Compact Mod Cards:** Mod photos now show as a small thumbnail (with a "+N" badge for extra photos) instead of a large banner, so more mods fit on screen.
+* **Precise Location for GPS Trips:** If only approximate location is allowed, Garage now explains that GPS trips need precise location instead of starting a trip that can't track.
+
+### Fixed
+* **Registration & Insurance Data Loss:** Opening the Registration & Insurance editor before your saved details had loaded could show an empty form, and saving it erased the stored documents. The editor now waits for your data to load, and keeps your edits when you rotate the screen.
+* **Safer Backups:** Backups are taken from a consistent database snapshot, so they can no longer be corrupted when the app writes data during a backup. A failed restore is rolled back to your previous data and asks you to restart the app.
+* **WebDAV Auto-Backup Retries:** When sync isn't set up or the server rejects your credentials, the daily backup no longer retries over and over. Network and server errors are still retried.
+* **EV Detection:** Vehicles like Chevrolet models or the Range Rover Evoque are no longer mistaken for EVs or plug-in hybrids. Opening the fuel log from a widget or tile now opens the correct fuel or charging form.
+* **No-Browser Crashes:** Opening links (license, recalls, support, settings) no longer crashes when no web browser is installed.
+* **Widget Deep Links:** Rotating the screen or changing the theme no longer re-runs the widget or notification action that opened the app.
+* **Document Reminders:** Turning off document reminders now also clears expiry notifications that are already showing.
+* **GPS Trip Service:** A trip that fails to start no longer leaves a broken tracking notification, and stale pause/resume actions no longer fake an active trip.
+* **OBD-II Parsing:** A truncated multi-frame response from the adapter no longer fails the whole read.
+
 ## [1.3.9] - 2026-11-10
 
 ### Added

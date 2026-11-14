@@ -8,7 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalUriHandler
+import com.fearmikey.garage.ui.util.rememberSafeUriHandler
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.fearmikey.garage.ui.components.BuyMeACoffeeDialog
 import com.fearmikey.garage.ui.navigation.GarageNavHost
@@ -23,7 +23,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        handleDeepLinkIntent(intent)
+        // Only for a fresh launch: on recreation (rotation, theme change, restore after process
+        // death) the original widget/notification intent is still attached and was already handled.
+        if (savedInstanceState == null) {
+            handleDeepLinkIntent(intent)
+        }
         setContent {
             val themeType by mainViewModel.themeType.collectAsStateWithLifecycle()
             val amoledDark by mainViewModel.amoledDark.collectAsStateWithLifecycle()
@@ -32,7 +36,7 @@ class MainActivity : ComponentActivity() {
             val pendingDeepLink by mainViewModel.pendingDeepLink.collectAsStateWithLifecycle()
             val isOnboardingCompleted by mainViewModel.isOnboardingCompleted.collectAsStateWithLifecycle()
             val showBuyMeACoffeePrompt by mainViewModel.showBuyMeACoffeePrompt.collectAsStateWithLifecycle()
-            val uriHandler = LocalUriHandler.current
+            val uriHandler = rememberSafeUriHandler()
 
             val isDarkTheme = when (themeType) {
                 "light" -> false

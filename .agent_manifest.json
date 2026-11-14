@@ -54,13 +54,13 @@
     "localization": {
       "locales": "values (en), values-de, -fr, -es, -it, -pt, -nl, -pl, -ru, -tr. Every user-visible string must exist in all 10; check parity of <string>/<plurals> names across values*/strings*.xml.",
       "string_files": "strings.xml (original) plus per-area files: strings_common, strings_documents, strings_settings, strings_fuel, strings_mods, strings_misc, strings_maintenance, strings_more (suggestions/cost/trips), strings_screens (knowledge/dashboard/recalls/widgets), strings_export. Add new keys to the matching area file in every locale.",
-      "enum_labels": "app/src/main/java/com/fearmikey/garage/ui/util/EnumLabels.kt: labelRes/label() for VehicleType, Drivetrain, MaintenanceCategory, ModificationCategory, ChargerSpeed, ChargerVendorType, TimelineDateRange, TimeFilter, AppThemePalette, TripCategory. Enum displayName stays stable English (search/CSV/tests); UI must use label().",
+      "enum_labels": "app/src/main/java/com/fearmikey/garage/ui/util/EnumLabels.kt: labelRes/label() for VehicleType, FuelGrade (plus fuelGradeLabel(stored) for preset-or-custom text), Drivetrain, MaintenanceCategory, ModificationCategory, ChargerSpeed, ChargerVendorType, TimelineDateRange, TimeFilter, AppThemePalette, TripCategory. Enum displayName stays stable English (search/CSV/tests); UI must use label().",
       "rules": "Tone per locale: de formal 'Sie', fr 'vous', ru 'вы', tr 'siz'; es/it/pt/nl/pl informal. Keep segmented-button labels short (~9 chars; e.g. ru 'Цена/%1$s'). Dates: always use toDisplayDate() (locale-aware FormatStyle.MEDIUM), never hard-coded patterns. Composables: stringResource/pluralStringResource; capture strings in vals before non-composable lambdas. Toasts in composables: LocalResources.current.getString (lint flags LocalContext getString). ViewModels/widgets/non-UI: context.getString. Stored data stays English: fuel type values, maintenance task names, 'Odometer check-in' (LubeLoggerMapper marker), knowledge note 'General' category, schedule template catalog. Not yet translated: the PDF body drawn in MaintenanceExportScreen (fixed-width English canvas layout)."
     }
   },
   "feature_map": {
     "vehicle_management": {
-      "description": "Adding, editing, displaying vehicles, specs, registrations, insurance, notes, and custom documents. Specs (VehicleSpecs) are VIN-decoded and user-editable from the Specs tab (EditSpecsSheet in VehicleSpecsScreen.kt), including user-defined CustomSpec rows stored as JSON in vehicle_specs.customSpecs via Converters.",
+      "description": "Adding, editing, displaying vehicles, specs, registrations, insurance, notes, and custom documents. EditRegistrationInsuranceViewModel pre-fills its form from an eagerly collected storedRecord (never from the WhileSubscribed uiState, whose value is still the empty default when the screen opens); while that record is loading, isLoading shows a spinner and saving is blocked so blanks can't overwrite stored documents. Specs (VehicleSpecs) are VIN-decoded and user-editable from the Specs tab (EditSpecsSheet in VehicleSpecsScreen.kt), including user-defined CustomSpec rows stored as JSON in vehicle_specs.customSpecs via Converters.",
       "entities": [
         "app/src/main/java/com/fearmikey/garage/data/local/entity/Vehicle.kt",
         "app/src/main/java/com/fearmikey/garage/data/local/entity/VehicleSpecs.kt",
@@ -109,7 +109,7 @@
       ]
     },
     "fuel_and_charging": {
-      "description": "Logging gas fill-ups and EV charging sessions, calculating fuel economy / efficiency, and showing trend graphs.",
+      "description": "Logging gas fill-ups and EV charging sessions, calculating fuel economy / efficiency, and showing trend graphs. FuelRecord.fuelGrade (DB v35) stores a FuelGrade enum name (REGULAR/MIDGRADE/PREMIUM/DIESEL/E85) or custom text; the add sheet pre-selects the last-used grade, and LubeLogger pulls keep the local grade (LubeLogger has no grade field). EV/PHEV UI is chosen by VehicleSpecs.isEvOrPhev() or isVehicleEvByDetails() in FuelViewModel.kt (short words like 'ev'/'bolt' match whole words only). FuelUiState.isLoaded gates the widget/tile auto-open so it picks the fuel or charging sheet from real data.",
       "entities": [
         "app/src/main/java/com/fearmikey/garage/data/local/entity/FuelRecord.kt",
         "app/src/main/java/com/fearmikey/garage/data/local/entity/ChargingRecord.kt"
@@ -265,7 +265,7 @@
       ]
     },
     "trip_logging": {
-      "description": "Manual and GPS service-assisted trip logging for mileage categorization (business vs. personal). TripTrackingService filters GPS drift (GPS-only, accuracy/anchor-distance/speed gating) and on Stop & Save inserts the TripRecord itself, exposing it via TripTrackingService.lastSavedTrip so TripLoggerScreen opens it in the edit dialog.",
+      "description": "Manual and GPS service-assisted trip logging for mileage categorization (business vs. personal). TripTrackingService filters GPS drift (GPS-only, accuracy/anchor-distance/speed gating) and on Stop & Save inserts the TripRecord itself, exposing it via TripTrackingService.lastSavedTrip so TripLoggerScreen opens it in the edit dialog. Requires precise (fine) location: TripLoggerScreen shows a toast for approximate-only. A failed start (startForeground/location refused) goes through abortStart(), which saves nothing. The service is START_NOT_STICKY and ignores pause/resume/null intents when no trip is running.",
       "entities": [
         "app/src/main/java/com/fearmikey/garage/data/local/entity/TripRecord.kt"
       ],
@@ -313,7 +313,7 @@
       ]
     },
     "backup_and_cloud_sync": {
-      "description": "Local JSON/Database backup/restore, auto-backups, WebDAV remote cloud syncing, and image attachment storage.",
+      "description": "Local JSON/Database backup/restore, auto-backups, WebDAV remote cloud syncing, and image attachment storage. Backups zip a single VACUUM INTO snapshot (never the live .db/-wal files). Restore stages images first, closes Room, keeps a rollback copy of the DB files and restores it on failure; BackupResult.Failure.restartRequired then makes BackupSettingsScreen prompt a restart. Failure.retryable=false (sync not configured, HTTP 401/403) makes CloudBackupWorker fail the run instead of retrying.",
       "repositories": [
         "app/src/main/java/com/fearmikey/garage/data/repository/BackupRepository.kt",
         "app/src/main/java/com/fearmikey/garage/data/repository/WebDavBackupRepository.kt",
@@ -393,7 +393,7 @@
     "ui/startup": "Onboarding/startup flow screen and ViewModel.",
     "ui/theme": "Material 3 color schemes, vehicle theme color palettes, and typography.",
     "ui/trip": "Trip logger screen and dialogs.",
-    "ui/util": "EnumLabels.kt (localized enum labels, see core_entry_points.localization). AppCurrency.localizedName uses java.util.Currency display names. Unit conversions, date/number formatters, currency definitions. Distances are stored as fractional canonical miles (Double; DB v34 REAL columns) and converted via UnitConverter.canonicalMilesFromInput/displayDistanceValue so km input round-trips exactly; LubeLogger boundary uses toLubeLoggerOdometer/fromLubeLoggerOdometer (whole numbers in the server unit).",
+    "ui/util": "EnumLabels.kt (localized enum labels, see core_entry_points.localization). SafeUriHandler.kt: rememberSafeUriHandler() wraps util/UrlLauncher; use it instead of LocalUriHandler (which crashes when no browser is installed). AppCurrency.localizedName uses java.util.Currency display names. Unit conversions, date/number formatters, currency definitions. Distances are stored as fractional canonical miles (Double; DB v34 REAL columns) and converted via UnitConverter.canonicalMilesFromInput/displayDistanceValue so km input round-trips exactly; LubeLogger boundary uses toLubeLoggerOdometer/fromLubeLoggerOdometer (whole numbers in the server unit).",
     "ui/vehicle": "Vehicle management, details, registration/insurance, parts estimator.",
     "widget": "Android Glance home screen widgets and receivers."
   }

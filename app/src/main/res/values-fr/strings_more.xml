@@ -58,6 +58,7 @@
     <string name="trip_empty">Aucun trajet enregistré.\nTouchez « Démarrer un trajet GPS » ou + pour en ajouter un.</string>
     <string name="trip_deduction">Déduction : %1$s</string>
     <string name="trip_start_gps">Démarrer un trajet GPS</string>
+    <string name="trip_precise_location_required">L\'enregistrement des trajets GPS nécessite la position exacte. Activez « Utiliser la position exacte » pour Garage dans les paramètres de l\'application.</string>
     <string name="trip_paused">Trajet en pause</string>
     <string name="trip_tracking">Suivi du trajet…</string>
     <string name="trip_resume">Reprendre</string>

@@ -1,0 +1,60 @@
+Garage is een privacyvriendelijke app voor voertuigbeheer op Android. Houd onderhoud, tankbeurten en laadsessies, kosten, aanpassingen, documenten en ritten van al je voertuigen op één plek bij. Geen advertenties, geen trackers, geen account en volledig offline te gebruiken.
+
+<b>Voertuigen</b>
+<ul>
+<li>Beheer meerdere voertuigen: auto's, bestelwagens, motoren, elektrische auto's en plug-in hybrides</li>
+<li>Scan de VIN-barcode met je camera en haal specificaties automatisch op (NHTSA vPIC)</li>
+<li>Bewerkbaar specificatieblad met eigen velden</li>
+<li>Registratie- en verzekeringsgegevens met vervalherinneringen</li>
+<li>Bewaar onderdeleninformatie, notities en eigen documenten met fotobijlagen</li>
+</ul>
+
+<b>Onderhoud</b>
+<ul>
+<li>Volledige onderhoudsgeschiedenis als tijdlijn, te filteren op categorie en periode</li>
+<li>Slimme onderhoudssuggesties op basis van kilometerstand en tijd</li>
+<li>Ingebouwde onderhoudsschema's en eigen regels</li>
+<li>Exporteer de onderhoudsgeschiedenis als pdf, handig bij verkoop</li>
+</ul>
+
+<b>Tanken en laden</b>
+<ul>
+<li>Registreer tankbeurten met brandstofsoort en bereken het verbruik</li>
+<li>Registreer laadsessies met laadsnelheid en efficiëntiestatistieken</li>
+<li>Trendgrafieken voor verbruik, prijs en uitgaven</li>
+</ul>
+
+<b>Kosten en analyses</b>
+<ul>
+<li>Totale eigendomskosten voor brandstof, onderhoud, aanpassingen en verzekering</li>
+<li>Kosten per kilometer of mijl</li>
+<li>Dashboard met wagenparkoverzicht, recente activiteit en komend onderhoud</li>
+</ul>
+
+<b>Meer hulpmiddelen</b>
+<ul>
+<li>Houd aanpassingen en upgrades bij, inclusief kosten</li>
+<li>Kennisbank voor aanhaalmomenten, vloeistofinhouden en notities</li>
+<li>Rittenregistratie (handmatig of via gps) voor zakelijke en privékilometers</li>
+<li>OBD-II-diagnose via Bluetooth of wifi: live sensorgegevens, foutcodes uitlezen en wissen</li>
+<li>Terugroepacties controleren (NHTSA, Amerikaanse voertuigen)</li>
+<li>Widgets voor het startscherm en snelle-instellingentegels om tankbeurten en kilometerstanden vast te leggen</li>
+</ul>
+
+<b>Jouw gegevens, jouw controle</b>
+<ul>
+<li>Alle gegevens worden lokaal op je apparaat opgeslagen</li>
+<li>Handmatige en automatische back-ups en herstel</li>
+<li>Optionele synchronisatie met je eigen WebDAV-server (Nextcloud, ownCloud en andere)</li>
+<li>Optionele tweerichtingssynchronisatie met een zelfgehoste LubeLogger-instantie</li>
+<li>Netwerktoegang wordt alleen gebruikt voor VIN-decodering, terugroepacties en servers die je zelf instelt</li>
+</ul>
+
+<b>Personaliseren</b>
+<ul>
+<li>Material You-ontwerp met kleurenpaletten en lichte en donkere modus</li>
+<li>Metrische of imperiale eenheden en veel valuta</li>
+<li>Beschikbaar in het Nederlands, Engels, Duits, Frans, Spaans, Italiaans, Portugees, Pools, Russisch en Turks</li>
+</ul>
+
+Garage is 100% vrije en opensourcesoftware onder de MIT-licentie. Vind je de app nuttig? Steun de ontwikkeling dan via Buy Me a Coffee.

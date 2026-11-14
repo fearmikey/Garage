@@ -8,6 +8,9 @@ Before attempting any code modification, agents **MUST** consult `.agent_manifes
 ### CONTINUOUS MANIFEST MAINTENANCE
 At the end of each session, if any files, features, data flows, or package structures were added, renamed, deleted, or altered, agents **MUST** update `.agent_manifest.json` to keep the codebase map accurate and up-to-date for future sessions.
 
+### GIT COMMIT ATTRIBUTION
+* **NO AI Co-Author Trailers:** Agents **MUST NOT** add `Co-Authored-By:` trailers (e.g., `Co-Authored-By: Claude ... <noreply@anthropic.com>`) or any other AI attribution lines (such as "Generated with ...") to commit messages, tags, or pull request descriptions. All commits are authored solely by the repository owner.
+
 ## CRITICAL ARCHITECTURAL CONSTRAINTS
 
 ### 1. STRICT 100% FOSS POLICY (F-DROID COMPLIANCE)

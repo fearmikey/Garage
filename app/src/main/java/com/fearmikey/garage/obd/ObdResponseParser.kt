@@ -208,7 +208,9 @@ object ObdResponseParser {
                     messages += CanMessage(header, frame.drop(2).take(length * 2))
                 }
                 0x1 -> {
-                    val length = ((pci and 0x0F) shl 8) or (frame.substring(2, 4).toIntOrNull(16) ?: 0)
+                    // A truncated first frame (no length byte) is skipped rather than failing the whole read.
+                    val lengthLow = frame.drop(2).take(2).takeIf { it.length == 2 }?.toIntOrNull(16) ?: continue
+                    val length = ((pci and 0x0F) shl 8) or lengthLow
                     partial[header] = length to StringBuilder(frame.drop(4))
                 }
                 0x2 -> {

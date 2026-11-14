@@ -1,0 +1,60 @@
+Garage è un'app per la gestione dei veicoli su Android, attenta alla privacy. Tieni traccia di manutenzione, rifornimenti e ricariche, costi, modifiche, documenti e viaggi di tutti i tuoi veicoli in un unico posto. Niente pubblicità, niente tracker, nessun account e funziona completamente offline.
+
+<b>Veicoli</b>
+<ul>
+<li>Gestisci più veicoli: auto, furgoni, moto, elettriche e ibride plug-in</li>
+<li>Scansiona il codice a barre del VIN con la fotocamera e decodifica automaticamente le specifiche (NHTSA vPIC)</li>
+<li>Scheda tecnica modificabile con campi personalizzati</li>
+<li>Dati di immatricolazione e assicurazione con promemoria di scadenza</li>
+<li>Salva informazioni sui ricambi, note e documenti con foto allegate</li>
+</ul>
+
+<b>Manutenzione</b>
+<ul>
+<li>Cronologia completa degli interventi, filtrabile per categoria e intervallo di date</li>
+<li>Suggerimenti di manutenzione intelligenti basati su chilometraggio e tempo</li>
+<li>Modelli di programmi di manutenzione integrati e regole personalizzate</li>
+<li>Esporta la cronologia di manutenzione in PDF, utile quando vendi il veicolo</li>
+</ul>
+
+<b>Carburante e ricarica</b>
+<ul>
+<li>Registra i rifornimenti con il tipo di carburante e calcola i consumi</li>
+<li>Registra le ricariche con la potenza del caricatore e statistiche di efficienza</li>
+<li>Grafici di andamento di consumi, prezzi e spese</li>
+</ul>
+
+<b>Costi e statistiche</b>
+<ul>
+<li>Costo totale di possesso: carburante, manutenzione, modifiche e assicurazione</li>
+<li>Costo per chilometro o miglio</li>
+<li>Dashboard con riepilogo della flotta, attività recenti e prossime manutenzioni</li>
+</ul>
+
+<b>Altri strumenti</b>
+<ul>
+<li>Tieni traccia di modifiche e upgrade con i relativi costi</li>
+<li>Base di conoscenza per coppie di serraggio, capacità dei fluidi e note</li>
+<li>Registro viaggi (manuale o tramite GPS) per chilometri di lavoro e personali</li>
+<li>Diagnostica OBD-II via Bluetooth o Wi-Fi: dati dei sensori in tempo reale, lettura e cancellazione dei codici di errore</li>
+<li>Controllo dei richiami di sicurezza (NHTSA, veicoli USA)</li>
+<li>Widget per la schermata Home e riquadri delle impostazioni rapide per registrare rifornimenti e chilometraggio</li>
+</ul>
+
+<b>I tuoi dati, sotto il tuo controllo</b>
+<ul>
+<li>Tutti i dati sono salvati localmente sul tuo dispositivo</li>
+<li>Backup e ripristino manuali e automatici</li>
+<li>Sincronizzazione opzionale con il tuo server WebDAV (Nextcloud, ownCloud e altri)</li>
+<li>Sincronizzazione bidirezionale opzionale con un'istanza LubeLogger self-hosted</li>
+<li>L'accesso alla rete è usato solo per la decodifica del VIN, la ricerca dei richiami e i server che configuri tu</li>
+</ul>
+
+<b>Personalizzazione</b>
+<ul>
+<li>Design Material You con palette di colori e modalità chiara e scura</li>
+<li>Unità metriche o imperiali e molte valute</li>
+<li>Disponibile in italiano, inglese, tedesco, francese, spagnolo, portoghese, olandese, polacco, russo e turco</li>
+</ul>
+
+Garage è software 100% libero e open source con licenza MIT. Se ti è utile, puoi sostenerne lo sviluppo tramite Buy Me a Coffee.

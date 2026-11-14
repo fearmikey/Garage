@@ -231,6 +231,56 @@ class RegistrationInsuranceViewModelTest {
     }
 
     @Test
+    fun `opening the editor before the record loads still pre-fills it and keeps existing data on save`() = runTest(testDispatcher) {
+        val vehicleId = 1L
+        val savedStateHandle = SavedStateHandle(mapOf(Destinations.VEHICLE_ID_ARG to vehicleId))
+        val regDao = FakeVehicleRegistrationDao()
+        regDao.flow.value = VehicleRegistrationInsurance(
+            vehicleId = vehicleId,
+            licensePlate = "B-AB 1234",
+            insuranceProvider = "Allianz",
+            policyNumber = "POL-1",
+            insuranceExpiration = 1_700_000_000_000L,
+        )
+
+        val viewModel = EditRegistrationInsuranceViewModel(
+            savedStateHandle = savedStateHandle,
+            vehicleRepository = VehicleRepository(
+                vehicleDao = FakeVehicleDao(),
+                vehicleSpecsDao = FakeVehicleSpecsDao(),
+                vehiclePartsDao = FakeVehiclePartsDao(),
+                vehicleRegistrationDao = regDao,
+                vinDecoderApi = FakeVinDecoderApi(),
+            ),
+            imageStorageManager = ImageStorageManager(context = ContextWrapper(null)),
+            preferencesRepository = FakePreferencesRepository(),
+        )
+
+        // Mirrors the screen: the LaunchedEffect fires before the record has been loaded.
+        viewModel.onAddOrEditClicked()
+
+        val collectJob = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.uiState.collect {} }
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.isLoading)
+        assertEquals("B-AB 1234", viewModel.uiState.value.licensePlate)
+        assertEquals("Allianz", viewModel.uiState.value.insuranceProvider)
+
+        viewModel.onInsurancePremiumChanged("450")
+        viewModel.onSave()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val saved = regDao.flow.value
+        assertEquals(450.0, saved?.insurancePremium ?: 0.0, 0.001)
+        assertEquals("B-AB 1234", saved?.licensePlate)
+        assertEquals("Allianz", saved?.insuranceProvider)
+        assertEquals("POL-1", saved?.policyNumber)
+        assertEquals(1_700_000_000_000L, saved?.insuranceExpiration)
+
+        collectJob.cancel()
+    }
+
+    @Test
     fun `saving inspection details updates repository`() = runTest(testDispatcher) {
         val vehicleId = 1L
         val savedStateHandle = SavedStateHandle(mapOf(Destinations.VEHICLE_ID_ARG to vehicleId))

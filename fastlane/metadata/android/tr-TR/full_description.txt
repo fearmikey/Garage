@@ -1,0 +1,60 @@
+Garage, Android için gizlilik odaklı bir araç yönetim uygulamasıdır. Tüm araçlarınızın bakımını, yakıt alımlarını ve şarjlarını, masraflarını, modifikasyonlarını, belgelerini ve yolculuklarını tek bir yerden takip edin. Reklam yok, izleyici yok, hesap gerekmez ve tamamen çevrimdışı çalışır.
+
+<b>Araçlar</b>
+<ul>
+<li>Birden fazla aracı yönetin: otomobiller, kamyonetler, motosikletler, elektrikli ve şarj edilebilir hibrit araçlar</li>
+<li>VIN barkodunu kamerayla tarayın ve teknik özellikleri otomatik olarak alın (NHTSA vPIC)</li>
+<li>Kendi alanlarınızı ekleyebileceğiniz düzenlenebilir teknik özellik sayfası</li>
+<li>Bitiş tarihi hatırlatıcılarıyla ruhsat ve sigorta bilgileri</li>
+<li>Parça bilgileri, notlar ve fotoğraf ekli özel belgeler</li>
+</ul>
+
+<b>Bakım</b>
+<ul>
+<li>Kategoriye ve tarih aralığına göre filtrelenebilen eksiksiz bakım geçmişi zaman çizelgesi</li>
+<li>Kilometre ve zaman aralıklarına dayalı akıllı bakım önerileri</li>
+<li>Yerleşik bakım planı şablonları ve özel kurallar</li>
+<li>Bakım geçmişini PDF olarak dışa aktarın; aracı satarken işinize yarar</li>
+</ul>
+
+<b>Yakıt ve şarj</b>
+<ul>
+<li>Yakıt alımlarını yakıt türüyle kaydedin ve tüketimi hesaplayın</li>
+<li>Şarj oturumlarını şarj hızı ve verimlilik istatistikleriyle kaydedin</li>
+<li>Tüketim, fiyat ve harcama trend grafikleri</li>
+</ul>
+
+<b>Masraflar ve analizler</b>
+<ul>
+<li>Yakıt, bakım, modifikasyon ve sigortayı kapsayan toplam sahip olma maliyeti</li>
+<li>Kilometre veya mil başına maliyet</li>
+<li>Filo özeti, son etkinlikler ve yaklaşan bakımlarla gösterge paneli</li>
+</ul>
+
+<b>Diğer araçlar</b>
+<ul>
+<li>Modifikasyonları ve yükseltmeleri maliyetleriyle birlikte takip edin</li>
+<li>Sıkma torkları, sıvı kapasiteleri ve notlar için bilgi bankası</li>
+<li>İş ve kişisel kilometreler için yolculuk kaydı (manuel veya GPS ile)</li>
+<li>Bluetooth veya Wi-Fi üzerinden OBD-II teşhis: canlı sensör verileri, arıza kodlarını okuma ve silme</li>
+<li>Güvenlik geri çağırma kontrolü (NHTSA, ABD araçları)</li>
+<li>Yakıt alımı ve kilometre kaydı için ana ekran widget'ları ve Hızlı Ayarlar kutucukları</li>
+</ul>
+
+<b>Verileriniz sizin kontrolünüzde</b>
+<ul>
+<li>Tüm veriler cihazınızda yerel olarak saklanır</li>
+<li>Manuel ve otomatik yedekleme ve geri yükleme</li>
+<li>Kendi WebDAV sunucunuzla isteğe bağlı eşitleme (Nextcloud, ownCloud ve diğerleri)</li>
+<li>Kendi barındırdığınız LubeLogger ile isteğe bağlı çift yönlü eşitleme</li>
+<li>Ağ erişimi yalnızca VIN çözümleme, geri çağırma sorguları ve sizin yapılandırdığınız sunucular için kullanılır</li>
+</ul>
+
+<b>Kişiselleştirme</b>
+<ul>
+<li>Renk paletleri, açık ve koyu modlarla Material You tasarımı</li>
+<li>Metrik veya imparatorluk birimleri ve birçok para birimi</li>
+<li>Türkçe, İngilizce, Almanca, Fransızca, İspanyolca, İtalyanca, Portekizce, Felemenkçe, Lehçe ve Rusça dillerinde kullanılabilir</li>
+</ul>
+
+Garage, MIT lisansı altında %100 özgür ve açık kaynaklı bir yazılımdır. Uygulamayı faydalı bulduysanız, Buy Me a Coffee üzerinden geliştirmeye destek olabilirsiniz.

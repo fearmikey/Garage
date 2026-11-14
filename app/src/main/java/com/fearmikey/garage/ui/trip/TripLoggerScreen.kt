@@ -39,6 +39,8 @@ import com.fearmikey.garage.R
 import com.fearmikey.garage.ui.util.label
 import com.fearmikey.garage.ui.util.toDisplayDate
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
+import android.widget.Toast
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -247,20 +249,33 @@ private fun ActiveTripCard(
 ) {
     val tripState by viewModel.tripState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    
+    val resources = LocalResources.current
+
+    // The service tracks with the GPS provider only, which requires precise (fine) location.
+    // With "approximate" alone the location request is refused, so explain instead of starting.
+    fun startTripOrExplain(fineGranted: Boolean, coarseGranted: Boolean) {
+        if (fineGranted) {
+            val intent = Intent(context, TripTrackingService::class.java).apply {
+                action = TripTrackingService.ACTION_START
+                putExtra(TripTrackingService.EXTRA_VEHICLE_ID, viewModel.vehicleId)
+            }
+            context.startForegroundService(intent)
+        } else if (coarseGranted) {
+            Toast.makeText(
+                context,
+                resources.getString(R.string.trip_precise_location_required),
+                Toast.LENGTH_LONG,
+            ).show()
+        }
+    }
+
     val locationPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
         val fineGranted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] ?: false
         val coarseGranted = permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false
         Log.d("TripLoggerScreen", "Permission result: fine=$fineGranted, coarse=$coarseGranted")
-        if (fineGranted || coarseGranted) {
-            val intent = Intent(context, TripTrackingService::class.java).apply {
-                action = TripTrackingService.ACTION_START
-                putExtra(TripTrackingService.EXTRA_VEHICLE_ID, viewModel.vehicleId)
-            }
-            context.startForegroundService(intent)
-        }
+        startTripOrExplain(fineGranted, coarseGranted)
     }
     
     when (val state = tripState) {
@@ -281,13 +296,10 @@ private fun ActiveTripCard(
                         Manifest.permission.POST_NOTIFICATIONS,
                     )
 
-                    if (hasFine || hasCoarse) {
-                        val intent = Intent(context, TripTrackingService::class.java).apply {
-                            action = TripTrackingService.ACTION_START
-                            putExtra(TripTrackingService.EXTRA_VEHICLE_ID, viewModel.vehicleId)
-                        }
-                        context.startForegroundService(intent)
+                    if (hasFine) {
+                        startTripOrExplain(fineGranted = true, coarseGranted = hasCoarse)
                     } else {
+                        // Also covers approximate-only: the system dialog offers the upgrade to precise.
                         locationPermissionLauncher.launch(permissionsToRequest)
                     }
                 },
