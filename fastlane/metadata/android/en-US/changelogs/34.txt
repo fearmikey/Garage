@@ -1,0 +1,1 @@
+Vehicle spec weights now show in kg or lbs to match your unit setting. Motorcycle displacement shows and edits in cc. Spec values with comma decimals (e.g. 1,6) are recognized as numbers.

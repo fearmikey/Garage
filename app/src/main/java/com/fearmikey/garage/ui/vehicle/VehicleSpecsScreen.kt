@@ -61,19 +61,29 @@ import com.fearmikey.garage.data.local.entity.VehicleSpecs
 import com.fearmikey.garage.ui.components.EmptyState
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.SampleData
+import com.fearmikey.garage.ui.util.UnitSystem
 
 @Composable
 fun VehicleSpecsScreen(
     viewModel: VehicleSpecsViewModel = hiltViewModel(),
 ) {
     val specs by viewModel.specs.collectAsStateWithLifecycle()
+    val unitSystem by viewModel.unitSystem.collectAsStateWithLifecycle()
+    val isMotorcycle by viewModel.isMotorcycle.collectAsStateWithLifecycle()
     var showEditor by rememberSaveable { mutableStateOf(false) }
 
-    VehicleSpecsContent(specs = specs, onEditClicked = { showEditor = true })
+    VehicleSpecsContent(
+        specs = specs,
+        unitSystem = unitSystem,
+        isMotorcycle = isMotorcycle,
+        onEditClicked = { showEditor = true },
+    )
 
     if (showEditor) {
         EditSpecsSheet(
             initial = specs ?: VehicleSpecs(vehicleId = viewModel.vehicleId),
+            unitSystem = unitSystem,
+            isMotorcycle = isMotorcycle,
             onDismiss = { showEditor = false },
             onSave = {
                 viewModel.saveSpecs(it)
@@ -89,21 +99,11 @@ private data class SpecGroup(
     val rows: List<Pair<String, String>>,
 )
 
-private fun formatWeight(value: String): String {
-    val trimmed = value.trim()
-    if (trimmed.isEmpty()) return value
-    if (trimmed.contains("lb", ignoreCase = true) || trimmed.contains("kg", ignoreCase = true)) {
-        return trimmed
-    }
-    return if (trimmed.toDoubleOrNull() != null) "$trimmed lbs" else trimmed
-}
-
-/** Appends [unit] only when the user entered a bare number (so "1.8L" doesn't become "1.8L L"). */
-private fun withUnit(value: String, unit: String): String =
-    if (value.trim().toDoubleOrNull() != null) "${value.trim()} $unit" else value
-
 @Composable
-private fun VehicleSpecs.toGroups(): List<SpecGroup> {
+private fun VehicleSpecs.toGroups(unitSystem: UnitSystem, isMotorcycle: Boolean): List<SpecGroup> {
+    fun formatWeight(value: String) = SpecUnits.formatWeight(value, unitSystem)
+    fun withUnit(value: String, unit: String) = SpecUnits.withUnit(value, unit)
+
     val hasTowingOrWeightSpecs = listOf(trailerBrakedCapacity, trailerUnbrakedCapacity, gcwr, curbWeight)
         .any { !it.isNullOrBlank() }
 
@@ -112,7 +112,7 @@ private fun VehicleSpecs.toGroups(): List<SpecGroup> {
             title = stringResource(R.string.specs_group_engine),
             rows = listOfNotNull(
                 engineCylinders?.let { stringResource(R.string.specs_cylinders) to it },
-                displacementL?.let { stringResource(R.string.specs_displacement) to withUnit(it, "L") },
+                displacementL?.let { stringResource(R.string.specs_displacement) to SpecUnits.formatDisplacement(it, isMotorcycle) },
                 engineHp?.let { stringResource(R.string.specs_horsepower) to withUnit(it, "hp") },
                 fuelType?.let { stringResource(R.string.specs_fuel_type) to it },
                 transmissionStyle?.let { stringResource(R.string.specs_transmission) to it },
@@ -126,7 +126,7 @@ private fun VehicleSpecs.toGroups(): List<SpecGroup> {
                     trailerBrakedCapacity?.let { stringResource(R.string.specs_towing_braked) to formatWeight(it) },
                     trailerUnbrakedCapacity?.let { stringResource(R.string.specs_towing_unbraked) to formatWeight(it) },
                     gcwr?.let { stringResource(R.string.specs_gcwr) to formatWeight(it) },
-                    gvwr?.let { stringResource(R.string.specs_gvwr) to it },
+                    gvwr?.let { stringResource(R.string.specs_gvwr) to formatWeight(it) },
                     curbWeight?.let { stringResource(R.string.specs_curb_weight) to formatWeight(it) },
                 )
             } else {
@@ -140,7 +140,7 @@ private fun VehicleSpecs.toGroups(): List<SpecGroup> {
                 bodyClass?.let { stringResource(R.string.specs_body_class) to it },
                 doors?.let { stringResource(R.string.specs_doors) to it },
                 series?.let { stringResource(R.string.specs_series) to it },
-                if (!hasTowingOrWeightSpecs) gvwr?.let { stringResource(R.string.specs_gvwr) to it } else null,
+                if (!hasTowingOrWeightSpecs) gvwr?.let { stringResource(R.string.specs_gvwr) to formatWeight(it) } else null,
             ),
         ),
         SpecGroup(
@@ -161,8 +161,13 @@ private fun VehicleSpecs.toGroups(): List<SpecGroup> {
 }
 
 @Composable
-private fun VehicleSpecsContent(specs: VehicleSpecs?, onEditClicked: () -> Unit = {}) {
-    val groups = specs?.takeUnless { it.isEmpty() }?.toGroups().orEmpty()
+private fun VehicleSpecsContent(
+    specs: VehicleSpecs?,
+    unitSystem: UnitSystem = UnitSystem.IMPERIAL,
+    isMotorcycle: Boolean = false,
+    onEditClicked: () -> Unit = {},
+) {
+    val groups = specs?.takeUnless { it.isEmpty() }?.toGroups(unitSystem, isMotorcycle).orEmpty()
 
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -242,14 +247,16 @@ private data class EditableSpecField(
     val get: (VehicleSpecs) -> String?,
     val set: (VehicleSpecs, String) -> VehicleSpecs,
     val keyboardType: KeyboardType = KeyboardType.Text,
-    val suffix: String? = null,
+    val suffix: ((UnitSystem, Boolean) -> String)? = null,
 )
+
+private val weightSuffix: (UnitSystem, Boolean) -> String = { unitSystem, _ -> SpecUnits.weightUnit(unitSystem) }
 
 private val editableSpecGroups: List<Pair<Int, List<EditableSpecField>>> = listOf(
     R.string.specs_group_engine to listOf(
         EditableSpecField(R.string.specs_cylinders, { it.engineCylinders }, { s, v -> s.copy(engineCylinders = v) }, KeyboardType.Number),
-        EditableSpecField(R.string.specs_displacement, { it.displacementL }, { s, v -> s.copy(displacementL = v) }, KeyboardType.Decimal, "L"),
-        EditableSpecField(R.string.specs_horsepower, { it.engineHp }, { s, v -> s.copy(engineHp = v) }, KeyboardType.Decimal, "hp"),
+        EditableSpecField(R.string.specs_displacement, { it.displacementL }, { s, v -> s.copy(displacementL = v) }, KeyboardType.Decimal) { _, moto -> SpecUnits.displacementUnit(moto) },
+        EditableSpecField(R.string.specs_horsepower, { it.engineHp }, { s, v -> s.copy(engineHp = v) }, KeyboardType.Decimal) { _, _ -> "hp" },
         EditableSpecField(R.string.specs_fuel_type, { it.fuelType }, { s, v -> s.copy(fuelType = v) }),
         EditableSpecField(R.string.specs_transmission, { it.transmissionStyle }, { s, v -> s.copy(transmissionStyle = v) }),
         EditableSpecField(R.string.specs_transmission_speeds, { it.transmissionSpeeds }, { s, v -> s.copy(transmissionSpeeds = v) }, KeyboardType.Number),
@@ -261,11 +268,11 @@ private val editableSpecGroups: List<Pair<Int, List<EditableSpecField>>> = listO
         EditableSpecField(R.string.specs_series, { it.series }, { s, v -> s.copy(series = v) }),
     ),
     R.string.specs_group_weights to listOf(
-        EditableSpecField(R.string.specs_curb_weight, { it.curbWeight }, { s, v -> s.copy(curbWeight = v) }),
-        EditableSpecField(R.string.specs_gvwr, { it.gvwr }, { s, v -> s.copy(gvwr = v) }),
-        EditableSpecField(R.string.specs_gcwr, { it.gcwr }, { s, v -> s.copy(gcwr = v) }),
-        EditableSpecField(R.string.specs_towing_braked, { it.trailerBrakedCapacity }, { s, v -> s.copy(trailerBrakedCapacity = v) }),
-        EditableSpecField(R.string.specs_towing_unbraked, { it.trailerUnbrakedCapacity }, { s, v -> s.copy(trailerUnbrakedCapacity = v) }),
+        EditableSpecField(R.string.specs_curb_weight, { it.curbWeight }, { s, v -> s.copy(curbWeight = v) }, suffix = weightSuffix),
+        EditableSpecField(R.string.specs_gvwr, { it.gvwr }, { s, v -> s.copy(gvwr = v) }, suffix = weightSuffix),
+        EditableSpecField(R.string.specs_gcwr, { it.gcwr }, { s, v -> s.copy(gcwr = v) }, suffix = weightSuffix),
+        EditableSpecField(R.string.specs_towing_braked, { it.trailerBrakedCapacity }, { s, v -> s.copy(trailerBrakedCapacity = v) }, suffix = weightSuffix),
+        EditableSpecField(R.string.specs_towing_unbraked, { it.trailerUnbrakedCapacity }, { s, v -> s.copy(trailerUnbrakedCapacity = v) }, suffix = weightSuffix),
     ),
     R.string.specs_group_manufacturing to listOf(
         EditableSpecField(R.string.specs_manufacturer, { it.manufacturer }, { s, v -> s.copy(manufacturer = v) }),
@@ -279,10 +286,16 @@ private val editableSpecGroups: List<Pair<Int, List<EditableSpecField>>> = listO
 @Composable
 private fun EditSpecsSheet(
     initial: VehicleSpecs,
+    unitSystem: UnitSystem,
+    isMotorcycle: Boolean,
     onDismiss: () -> Unit,
     onSave: (VehicleSpecs) -> Unit,
 ) {
-    var draft by remember { mutableStateOf(initial) }
+    var draft by remember {
+        mutableStateOf(
+            initial.copy(displacementL = SpecUnits.displacementForInput(initial.displacementL, isMotorcycle).ifEmpty { null }),
+        )
+    }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     ModalBottomSheet(
@@ -320,11 +333,15 @@ private fun EditSpecsSheet(
                     modifier = Modifier.padding(top = 8.dp),
                 )
                 fields.forEach { field ->
+                    val text = field.get(draft).orEmpty()
+                    // Only label bare numbers; text that carries its own unit (e.g. "4480 lbs") stays as is.
+                    val suffixText = field.suffix?.takeIf { text.isBlank() || SpecUnits.isBareNumber(text) }
+                        ?.invoke(unitSystem, isMotorcycle)
                     OutlinedTextField(
-                        value = field.get(draft).orEmpty(),
+                        value = text,
                         onValueChange = { draft = field.set(draft, it) },
                         label = { Text(stringResource(field.labelRes)) },
-                        suffix = field.suffix?.let { { Text(it) } },
+                        suffix = suffixText?.let { { Text(it) } },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(keyboardType = field.keyboardType),
                         modifier = Modifier.fillMaxWidth(),
@@ -384,7 +401,9 @@ private fun EditSpecsSheet(
                 horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End),
             ) {
                 TextButton(onClick = onDismiss) { Text(stringResource(R.string.specs_cancel)) }
-                Button(onClick = { onSave(draft) }) { Text(stringResource(R.string.specs_save)) }
+                Button(onClick = {
+                    onSave(draft.copy(displacementL = draft.displacementL?.let { SpecUnits.displacementFromInput(it, isMotorcycle) }))
+                }) { Text(stringResource(R.string.specs_save)) }
             }
         }
     }

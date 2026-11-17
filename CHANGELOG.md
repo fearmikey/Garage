@@ -1,3 +1,10 @@
+## [1.4.1] - 2026-11-17
+
+### Fixed
+* **Spec Weights in Your Units:** Curb weight, GVWR, GCWR and towing capacities entered as plain numbers now show and edit in kg for metric/UK users and lbs for imperial users, instead of always "lbs". GVWR now gets a unit too. Values that already include a unit (e.g. NHTSA's "4480 lbs") are shown as stored.
+* **Motorcycle Displacement in cc:** Motorcycle specs show and edit engine displacement in cc (e.g. "452 cc" instead of "0.452 L"). It's still stored in litres, so parts estimates are unchanged.
+* **Comma Decimals in Specs:** Spec values typed with a comma decimal separator (e.g. "1,6") are now recognized as numbers and get their unit.
+
 ## [1.4.0] - 2026-11-14
 
 ### Added
