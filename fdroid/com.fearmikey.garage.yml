@@ -14,7 +14,7 @@ Repo: https://github.com/fearmikey/Garage.git
 Builds:
   - versionName: '1.4.2'
     versionCode: 35
-    commit: 0d2227a8c7dd3240aacc11539f1d07fcdd44eaa1
+    commit: 43413910ae63668fe01bfd627efd4ac93f54a5f9
     subdir: app
     gradle:
       - yes
