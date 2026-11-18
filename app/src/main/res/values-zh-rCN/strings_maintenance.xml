@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Maintenance timeline -->
+    <string name="maint_cd_add_odometer">添加里程表更新</string>
+    <string name="maint_cd_add_record">添加保养记录</string>
+    <string name="maint_cd_edit_record">编辑记录</string>
+    <string name="maint_cd_delete_record">删除记录</string>
+    <string name="maint_empty">尚未记录任何保养。\n点按 + 添加第一条记录。</string>
+    <string name="maint_no_matches">没有符合筛选条件的条目。</string>
+    <string name="maint_clear_filters">清除筛选</string>
+    <string name="maint_delete_title">删除记录</string>
+    <string name="maint_delete_message">确定要删除此条目吗？</string>
+    <string name="maint_receipt_invoice">收据 / 发票</string>
+    <string name="maint_receipt_image">收据图片</string>
+    <string name="maint_pdf_receipt">PDF 收据</string>
+    <string name="maint_open_with_app">用其他应用打开</string>
+    <string name="maint_add_title">添加保养记录</string>
+    <string name="maint_date">日期</string>
+    <string name="maint_task_other">其他 / 自定义</string>
+    <string name="maint_specific_task">具体项目</string>
+    <string name="maint_description">描述</string>
+    <string name="maint_mileage_unit">里程（%1$s）</string>
+    <string name="maint_cost_unit">费用（%1$s）</string>
+    <string name="maint_inspected_only">仅检查（暂缓更换）</string>
+    <string name="maint_remind_in_distance">提醒间隔（%1$s）*</string>
+    <string name="maint_remind_in_months">提醒间隔（月）*</string>
+    <string name="maint_attached_pdf">已附加 PDF 收据</string>
+    <string name="maint_pdf_document">PDF 文档</string>
+    <string name="maint_change_attachment">更换附件</string>
+    <string name="maint_remove_attachment">移除附件</string>
+    <string name="maint_attach_receipt">附加收据 / 发票（图片或 PDF）</string>
+    <string name="maint_open_receipt">打开收据</string>
+    <string name="maint_open_file_failed">无法打开文件</string>
+    <string name="maint_odometer_update">里程表更新</string>
+
+    <!-- Timeline filters -->
+    <string name="maint_search_placeholder">搜索描述或项目</string>
+    <string name="maint_close_search">关闭搜索</string>
+    <string name="maint_search">搜索</string>
+    <string name="maint_has_receipt">有收据</string>
+    <string name="maint_hide_auto">隐藏里程与扫描</string>
+    <string name="maint_showing_count">显示 %1$d / %2$d 条</string>
+    <plurals name="maint_categories_count">
+        <item quantity="other">%d 个类别</item>
+    </plurals>
+
+    <!-- Schedule templates -->
+    <string name="template_title">预设保养计划模板</string>
+    <string name="template_subtitle">选择一个预设，为此车辆添加定制的保养间隔。</string>
+    <string name="template_included_rules">包含的规则（%1$d）：</string>
+    <plurals name="template_months">
+        <item quantity="other">%d 个月</item>
+    </plurals>
+    <string name="template_interval_or">%1$s 或 %2$s</string>
+    <string name="template_every">每 %1$s</string>
+    <string name="template_apply">应用“%1$s”预设</string>
+</resources>

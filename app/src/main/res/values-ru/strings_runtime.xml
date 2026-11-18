@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Document renewal notifications -->
+    <string name="reminder_doc_registration">Продление регистрации автомобиля</string>
+    <string name="reminder_doc_inspection">Срок техосмотра</string>
+    <string name="reminder_doc_emissions">Срок проверки выбросов</string>
+    <string name="reminder_doc_sticker">Продление наклейки техосмотра</string>
+    <string name="reminder_doc_insurance">Продление страховки</string>
+    <string name="reminder_doc_toll">Продление транспондера / парковочного разрешения</string>
+    <string name="reminder_doc_drivers_license">Замена водительского удостоверения</string>
+    <string name="reminder_doc_custom">Продление: %1$s</string>
+    <string name="reminder_doc_custom_fallback">Документ</string>
+    <string name="reminder_personal_document">Личный документ водителя</string>
+
+    <!-- GPS trip tracking notification -->
+    <string name="trip_channel_name">Запись поездок</string>
+    <string name="trip_channel_description">Показывает текущее расстояние активных поездок</string>
+    <string name="trip_notification_distance">Расстояние: %1$s</string>
+
+    <!-- Seller report screen -->
+    <plurals name="export_records_logged">
+        <item quantity="one">%d запись</item>
+        <item quantity="few">%d записи</item>
+        <item quantity="many">%d записей</item>
+        <item quantity="other">%d записи</item>
+    </plurals>
+    <plurals name="export_mods_items">
+        <item quantity="one">%1$d позиция (%2$s)</item>
+        <item quantity="few">%1$d позиции (%2$s)</item>
+        <item quantity="many">%1$d позиций (%2$s)</item>
+        <item quantity="other">%1$d позиции (%2$s)</item>
+    </plurals>
+
+    <!-- LubeLogger duplicates -->
+    <plurals name="dup_deleted_message">
+        <item quantity="one">Удалена %d повторяющаяся запись.</item>
+        <item quantity="few">Удалены %d повторяющиеся записи.</item>
+        <item quantity="many">Удалено %d повторяющихся записей.</item>
+        <item quantity="other">Удалено %d повторяющейся записи.</item>
+    </plurals>
+
+    <!-- Add / edit vehicle: VIN -->
+    <string name="vin_error_scan_not_vin">Отсканированный код («%1$s») не содержит VIN. Отсканируйте штрихкод VIN или введите VIN вручную.</string>
+    <string name="vin_error_length">VIN должен содержать %1$d символов (сейчас %2$d).</string>
+    <string name="vehicle_error_save">При сохранении автомобиля произошла ошибка.</string>
+    <string name="vin_error_no_results">Для этого VIN не получено результатов расшифровки.</string>
+    <string name="vin_error_invalid_characters">Этот VIN содержит недопустимые символы.</string>
+    <string name="vin_error_incomplete">Похоже, VIN неполный. Проверьте, что в нём 17 символов и нет опечаток.</string>
+    <string name="vin_error_manufacturer_unknown">Этого производителя нет в базе NHTSA. База NHTSA в основном охватывает автомобили, продаваемые в США, поэтому автомобили с других рынков, возможно, придётся вводить вручную.</string>
+    <string name="vin_error_not_found">Данные автомобиля для этого VIN не найдены. База NHTSA в основном охватывает автомобили, продаваемые в США, поэтому автомобили с других рынков, возможно, придётся вводить вручную.</string>
+    <string name="vin_error_network">Не удалось расшифровать VIN. Проверьте подключение к интернету.</string>
+    <string name="vin_warning_model_missing">Модель для этого VIN не найдена; введите её вручную.</string>
+    <string name="vin_warning_year_unreliable">Не удалось определить модельный год по этому VIN; введите его вручную.</string>
+    <string name="vin_warning_partial">VIN расшифрован лишь частично; проверьте данные.</string>
+
+    <!-- Recalls -->
+    <string name="recall_error_http">Служба отзывов NHTSA (api.nhtsa.gov) вернула ошибку (HTTP %1$d). Повторите попытку позже.</string>
+    <string name="recall_error_network">Не удаётся связаться со службой отзывов NHTSA (api.nhtsa.gov). Проверьте подключение к интернету.</string>
+    <string name="recall_error_unexpected">Непредвиденная ошибка при проверке отзывных кампаний.</string>
+
+    <!-- Backup & restore -->
+    <string name="backup_error_open_destination">Не удалось открыть место назначения для записи.</string>
+    <string name="backup_error_export_unknown">Неизвестная ошибка при экспорте резервной копии.</string>
+    <string name="backup_error_no_folder">Локальная папка для резервных копий не настроена.</string>
+    <string name="backup_error_folder_access">Нет доступа к выбранной папке резервных копий.</string>
+    <string name="backup_error_folder_not_writable">Папка резервных копий не существует или недоступна для записи.</string>
+    <string name="backup_error_create_file">Не удалось создать %1$s в выбранной папке.</string>
+    <string name="backup_error_open_output">Не удалось открыть файл резервной копии для записи.</string>
+    <string name="backup_error_permission">Нет разрешения на доступ к папке. Выберите папку резервных копий заново.</string>
+    <string name="backup_error_local_unknown">Неизвестная ошибка при записи резервной копии в локальную папку.</string>
+    <string name="backup_error_open_file">Не удалось открыть выбранный файл резервной копии.</string>
+    <string name="backup_error_invalid_entry">Файл резервной копии содержит недопустимую запись: %1$s</string>
+    <string name="backup_error_missing_db">Этот файл не похож на резервную копию Garage (нет базы данных).</string>
+    <string name="backup_error_unreadable_db">Этот файл не похож на корректную резервную копию Garage (база данных не читается).</string>
+    <string name="backup_error_newer_version">Эта резервная копия создана более новой версией Garage и не может быть восстановлена здесь. Обновите приложение и повторите попытку.</string>
+    <string name="backup_error_import_unknown">Неизвестная ошибка при импорте резервной копии.</string>
+
+    <!-- WebDAV / LubeLogger -->
+    <string name="webdav_error_not_configured">Облачная синхронизация не настроена.</string>
+    <string name="webdav_error_upload_http">Не удалось загрузить: HTTP %1$s</string>
+    <string name="webdav_error_sync_unknown">Неизвестная ошибка при синхронизации с WebDAV.</string>
+    <string name="webdav_error_url_username_required">Укажите адрес сервера и имя пользователя.</string>
+    <string name="webdav_error_auth">Ошибка аутентификации. Проверьте имя пользователя и пароль.</string>
+    <string name="webdav_error_test_unknown">Неизвестная ошибка при проверке подключения.</string>
+    <string name="lubelogger_error_invalid_url">Неверный адрес сервера LubeLogger.</string>
+</resources>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Seller report (PDF export) screen. The PDF itself is still generated in English. -->
+    <string name="export_title">卖车报告生成器</string>
+    <string name="export_book_title">车辆保养与历史手册</string>
+    <string name="export_book_desc">生成一份内容全面、排版精美的报告，突出展示您在车辆养护上的投入、保养记录、更换的配件和安全状况，帮助您卖出更好的价格。</string>
+    <string name="export_summary_preview">报告摘要预览</string>
+    <string name="export_vin">VIN：%1$s</string>
+    <string name="export_total_investment">养护总投入：</string>
+    <string name="export_service_records">保养记录：</string>
+    <string name="export_upgrades_colon">升级与改装：</string>
+    <string name="export_recall_status">安全召回状态：</string>
+    <string name="export_checking">正在查询…</string>
+    <string name="export_clear_serviced">无问题（0 项未处理 / %1$d 项已处理）</string>
+    <string name="export_clear">无问题（0 项未处理）</string>
+    <string name="export_open_total">%1$d 项未处理 / 共 %2$d 项</string>
+    <string name="export_included_sections">包含的部分</string>
+    <string name="export_upgrades">升级与改装</string>
+    <string name="export_upgrades_desc">包含个性化配件、升级和附件列表</string>
+    <string name="export_parts">配件与油液规格</string>
+    <string name="export_parts_desc">包含机油粘度、火花塞、轮胎规格和雨刮速查表</string>
+    <string name="export_recalls">安全召回状态</string>
+    <string name="export_recalls_desc">包含 NHTSA 官方安全召回核实状态</string>
+    <string name="export_select_open">选择未处理 / 进行中的召回活动（共 %1$d 项）：</string>
+    <string name="export_all_serviced">全部已处理</string>
+    <string name="export_all_open">全部未处理</string>
+    <string name="export_open_unaddressed">未处理 / 未解决</string>
+    <string name="export_serviced_clear">已处理 / 无问题</string>
+    <string name="export_component">部件：%1$s</string>
+    <string name="export_fuel">加油与充电记录</string>
+    <string name="export_fuel_desc">包含加油和充电记录</string>
+    <string name="export_generate">生成车辆保养手册 (PDF)</string>
+</resources>

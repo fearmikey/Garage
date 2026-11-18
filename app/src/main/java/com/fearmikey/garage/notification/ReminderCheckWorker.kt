@@ -5,6 +5,8 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.fearmikey.garage.MainActivity
+import com.fearmikey.garage.R
+import com.fearmikey.garage.data.local.entity.CustomDocument
 import com.fearmikey.garage.data.repository.CustomDocumentRepository
 import com.fearmikey.garage.data.repository.CustomMaintenanceRuleRepository
 import com.fearmikey.garage.data.repository.MaintenanceRepository
@@ -12,8 +14,10 @@ import com.fearmikey.garage.data.repository.PreferencesRepository
 import com.fearmikey.garage.data.repository.ReminderStatus
 import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.data.schedule.DocumentExpirationEngine
+import com.fearmikey.garage.data.schedule.DocumentExpirationReminder
 import com.fearmikey.garage.data.schedule.MaintenanceScheduleEngine
 import com.fearmikey.garage.data.schedule.toMaintenanceRule
+import com.fearmikey.garage.ui.util.localizedTaskName
 import com.fearmikey.garage.widget.WidgetRefresher
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -76,7 +80,7 @@ class ReminderCheckWorker @AssistedInject constructor(
                 if ((suggestion.status == ReminderStatus.OVERDUE) || (suggestion.status == ReminderStatus.UPCOMING)) {
                     notifier.notifyDue(
                         notificationId = notificationId,
-                        taskName = suggestion.rule.taskName,
+                        taskName = applicationContext.localizedTaskName(suggestion.rule.taskName),
                         vehicleLabel = vehicleLabel,
                         status = suggestion.status,
                         vehicleId = vehicle.id,
@@ -101,7 +105,7 @@ class ReminderCheckWorker @AssistedInject constructor(
                 if (docRemindersEnabled && isDue) {
                     notifier.notifyDue(
                         notificationId = notificationId,
-                        taskName = docReminder.title,
+                        taskName = docReminder.localizedTitle(customDocuments),
                         vehicleLabel = vehicleLabel,
                         status = docReminder.status,
                         vehicleId = vehicle.id,
@@ -127,8 +131,8 @@ class ReminderCheckWorker @AssistedInject constructor(
             if ((dlStatus == ReminderStatus.OVERDUE) || (dlStatus == ReminderStatus.UPCOMING)) {
                 notifier.notifyDue(
                     notificationId = dlNotificationId,
-                    taskName = "Driver's License Renewal",
-                    vehicleLabel = "Personal Driver Document",
+                    taskName = applicationContext.getString(R.string.reminder_doc_drivers_license),
+                    vehicleLabel = applicationContext.getString(R.string.reminder_personal_document),
                     status = dlStatus,
                     action = MainActivity.ACTION_OPEN_DRIVERS_LICENSE,
                 )
@@ -141,6 +145,25 @@ class ReminderCheckWorker @AssistedInject constructor(
 
         WidgetRefresher.refresh(applicationContext)
         return Result.success()
+    }
+
+    /** The reminder's title in the app language ([DocumentExpirationReminder.title] is English). */
+    private fun DocumentExpirationReminder.localizedTitle(customDocuments: List<CustomDocument>): String {
+        val res = when (idKey) {
+            "registration" -> R.string.reminder_doc_registration
+            "inspection" -> R.string.reminder_doc_inspection
+            "emissions" -> R.string.reminder_doc_emissions
+            "inspection_sticker" -> R.string.reminder_doc_sticker
+            "insurance" -> R.string.reminder_doc_insurance
+            "toll_parking" -> R.string.reminder_doc_toll
+            "drivers_license" -> R.string.reminder_doc_drivers_license
+            else -> null
+        }
+        if (res != null) return applicationContext.getString(res)
+        val customId = idKey.removePrefix("custom_").toLongOrNull() ?: return title
+        val name = customDocuments.firstOrNull { it.id == customId }?.title?.takeIf { it.isNotBlank() }
+            ?: applicationContext.getString(R.string.reminder_doc_custom_fallback)
+        return applicationContext.getString(R.string.reminder_doc_custom, name)
     }
 
     companion object {

@@ -5,6 +5,8 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.annotation.StringRes
+import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.entity.Drivetrain
 import com.fearmikey.garage.data.local.entity.Vehicle
 import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
@@ -96,6 +98,10 @@ class AddEditVehicleViewModel @Inject constructor(
     // Per-vehicle tab visibility isn't edited on this screen, so it must be carried over on save.
     private var originalHiddenTabs: String = ""
 
+    /** Translated [res], or the English [fallback] when there's no context (unit tests). */
+    private fun text(@StringRes res: Int, fallback: String, vararg args: Any): String =
+        context?.getString(res, *args) ?: fallback
+
     init {
         viewModelScope.launch {
             combine(
@@ -178,8 +184,12 @@ class AddEditVehicleViewModel @Inject constructor(
             // Keep whatever the user already typed; just explain why nothing happened.
             _uiState.update {
                 it.copy(
-                    vinDecodeError = "The scanned code (\"${contents.take(20)}\") doesn't contain a VIN. " +
-                        "Try the VIN barcode, or type the VIN manually.",
+                    vinDecodeError = text(
+                        R.string.vin_error_scan_not_vin,
+                        "The scanned code (\"${contents.take(20)}\") doesn't contain a VIN. " +
+                            "Try the VIN barcode, or type the VIN manually.",
+                        contents.take(20),
+                    ),
                     vinDecodeWarning = null,
                 )
             }
@@ -193,7 +203,12 @@ class AddEditVehicleViewModel @Inject constructor(
         } else {
             _uiState.update {
                 it.copy(
-                    vinDecodeError = "A VIN must be ${VinValidator.VIN_LENGTH} characters (currently ${vin.length}).",
+                    vinDecodeError = text(
+                        R.string.vin_error_length,
+                        "A VIN must be ${VinValidator.VIN_LENGTH} characters (currently ${vin.length}).",
+                        VinValidator.VIN_LENGTH,
+                        vin.length,
+                    ),
                     vinDecodeWarning = null,
                 )
             }
@@ -219,11 +234,15 @@ class AddEditVehicleViewModel @Inject constructor(
                         },
                         fuelType = result.info.specs.fuelType?.ifBlank { it.fuelType } ?: it.fuelType,
                         pendingSpecs = result.info.specs,
-                        vinDecodeWarning = result.warning,
+                        vinDecodeWarning = result.warningRes?.let { res -> text(res, result.warning.orEmpty()) }
+                            ?: result.warning,
                     )
                 }
                 is VinLookupResult.Error -> _uiState.update {
-                    it.copy(isDecodingVin = false, vinDecodeError = result.message)
+                    it.copy(
+                        isDecodingVin = false,
+                        vinDecodeError = result.messageRes?.let { res -> text(res, result.message) } ?: result.message,
+                    )
                 }
             }
         }
@@ -405,9 +424,12 @@ class AddEditVehicleViewModel @Inject constructor(
 
                 context?.let { WorkScheduler.triggerImmediateReminderCheck(it) }
                 _uiState.update { it.copy(isSaving = false, saveComplete = true) }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 _uiState.update {
-                    it.copy(isSaving = false, vinDecodeError = e.message ?: "An error occurred while saving the vehicle.")
+                    it.copy(
+                        isSaving = false,
+                        vinDecodeError = text(R.string.vehicle_error_save, "An error occurred while saving the vehicle."),
+                    )
                 }
             }
         }

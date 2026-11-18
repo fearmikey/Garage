@@ -588,6 +588,7 @@ private fun RegionStep(
             "nl" to stringResource(R.string.language_dutch),
             "ru" to stringResource(R.string.language_russian),
             "tr" to stringResource(R.string.language_turkish),
+            "zh-CN" to stringResource(R.string.language_chinese_simplified),
         )
 
         var languageExpanded by remember { mutableStateOf(false) }
@@ -596,7 +597,7 @@ private fun RegionStep(
             expanded = languageExpanded,
             onExpandedChange = { languageExpanded = it },
         ) {
-            val currentLangName = languageOptions.find { it.first == currentLang }?.second
+            val currentLangName = languageOptions.find { it.first.substringBefore('-') == currentLang }?.second
                 ?: stringResource(R.string.language_system_default)
             OutlinedTextField(
                 value = currentLangName,

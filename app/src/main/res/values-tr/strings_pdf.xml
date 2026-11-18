@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pdf_footer">Garage — Araç bakım ve geçmiş kitapçığı</string>
+    <string name="pdf_page_of">Sayfa %1$d / %2$d</string>
+    <string name="pdf_header_continued_title">ARAÇ BAKIM VE GEÇMİŞ KİTAPÇIĞI — %1$s</string>
+    <string name="pdf_continued">Devamı</string>
+    <string name="pdf_banner_title">ARAÇ BAKIM VE GEÇMİŞ KİTAPÇIĞI</string>
+    <string name="pdf_banner_subtitle">Resmi satış ve sürekli bakım raporu</string>
+    <string name="pdf_generated">Oluşturulma: %1$s</string>
+
+    <string name="pdf_not_recorded">Kaydedilmedi</string>
+    <string name="pdf_not_specified">Belirtilmedi</string>
+    <string name="pdf_label_vin">VIN:</string>
+    <string name="pdf_label_current_odometer">GÜNCEL KM:</string>
+    <string name="pdf_label_current_mileage">GÜNCEL MİL:</string>
+    <string name="pdf_label_drivetrain">ÇEKİŞ:</string>
+    <string name="pdf_label_transmission">ŞANZIMAN:</string>
+    <string name="pdf_transmission_speeds">%1$s ileri</string>
+    <string name="pdf_standard">Standart</string>
+    <string name="pdf_engine_cylinders">%1$s sil.</string>
+    <string name="pdf_standard_engine">Standart motor</string>
+    <string name="pdf_label_engine">MOTOR:</string>
+    <string name="pdf_label_fuel_type">YAKIT:</string>
+    <string name="pdf_label_purchased">ALINDIĞINDA:</string>
+    <string name="pdf_label_initial_odometer">BAŞLANGIÇ KM:</string>
+    <string name="pdf_label_initial_mileage">BAŞLANGIÇ MİL:</string>
+    <string name="pdf_label_specs">ÖZELLİKLER:</string>
+
+    <string name="pdf_summary_title">TOPLAM BAKIM YATIRIMI ÖZETİ</string>
+    <string name="pdf_total_investment">TOPLAM YATIRIM</string>
+    <string name="pdf_maintenance_care">BAKIM</string>
+    <plurals name="pdf_records_logged">
+        <item quantity="one">%d kayıt</item>
+        <item quantity="other">%d kayıt</item>
+    </plurals>
+    <string name="pdf_upgrades_mods">MODİFİKASYONLAR</string>
+    <plurals name="pdf_installed_items">
+        <item quantity="one">%d parça takıldı</item>
+        <item quantity="other">%d parça takıldı</item>
+    </plurals>
+    <string name="pdf_logged_range">KAYITLI ARALIK</string>
+    <string name="pdf_range_to">%1$s\'e kadar</string>
+
+    <string name="pdf_recalls_clear">RESMİ GERİ ÇAĞIRMA DURUMU: TEMİZ (0 AÇIK GERİ ÇAĞIRMA)</string>
+    <plurals name="pdf_recalls_verified_count">
+        <item quantity="one">%1$s için NHTSA veritabanında doğrulandı (%2$d kampanya kontrol edildi — 0 açık).</item>
+        <item quantity="other">%1$s için NHTSA veritabanında doğrulandı (%2$d kampanya kontrol edildi — 0 açık).</item>
+    </plurals>
+    <string name="pdf_recalls_verified_none">%1$s için NHTSA veritabanında doğrulandı. Aktif güvenlik geri çağırma kampanyası yok.</string>
+    <plurals name="pdf_recalls_open">
+        <item quantity="one">GERİ ÇAĞIRMA DURUMU: %d AÇIK</item>
+        <item quantity="other">GERİ ÇAĞIRMA DURUMU: %d AÇIK</item>
+    </plurals>
+    <string name="pdf_recall_item">• Kampanya no. %1$s — Parça: %2$s</string>
+    <string name="pdf_no_summary">Özet bilgisi yok.</string>
+
+    <string name="pdf_parts_title">PARÇA VE SIVI ÖZELLİKLERİ</string>
+    <string name="pdf_mods_title">ARAÇ GELİŞTİRMELERİ VE MODİFİKASYONLAR</string>
+    <string name="pdf_fuel_title">YAKIT VE ŞARJ GEÇMİŞİ</string>
+    <string name="pdf_service_title">KESİNTİSİZ BAKIM GEÇMİŞİ</string>
+    <string name="pdf_col_date">TARİH</string>
+    <string name="pdf_col_item">GELİŞTİRME / ÖĞE</string>
+    <string name="pdf_col_category">KATEGORİ</string>
+    <string name="pdf_col_description">AÇIKLAMA / NOTLAR</string>
+    <string name="pdf_col_cost">TUTAR</string>
+    <string name="pdf_col_odometer">KM SAYACI (%1$s)</string>
+    <string name="pdf_col_mileage">MİL</string>
+    <string name="pdf_col_type">TÜR</string>
+    <string name="pdf_col_details">AYRINTILAR</string>
+    <string name="pdf_col_service">BAKIM VE AÇIKLAMA</string>
+    <string name="pdf_no_maintenance">Bu araç için kayıtlı bakım yok.</string>
+</resources>

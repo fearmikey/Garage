@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Document renewal notifications -->
+    <string name="reminder_doc_registration">行驶证续期</string>
+    <string name="reminder_doc_inspection">机动车年检</string>
+    <string name="reminder_doc_emissions">尾气 / 排放检测</string>
+    <string name="reminder_doc_sticker">年检标签续期</string>
+    <string name="reminder_doc_insurance">保险续保</string>
+    <string name="reminder_doc_toll">通行证 / 停车许可续期</string>
+    <string name="reminder_doc_drivers_license">驾驶证换证</string>
+    <string name="reminder_doc_custom">%1$s续期</string>
+    <string name="reminder_doc_custom_fallback">证件</string>
+    <string name="reminder_personal_document">个人驾驶证件</string>
+
+    <!-- GPS trip tracking notification -->
+    <string name="trip_channel_name">行程记录</string>
+    <string name="trip_channel_description">显示进行中行程的当前距离</string>
+    <string name="trip_notification_distance">距离：%1$s</string>
+
+    <!-- Seller report screen -->
+    <plurals name="export_records_logged">
+        <item quantity="other">已记录 %d 条</item>
+    </plurals>
+    <plurals name="export_mods_items">
+        <item quantity="other">%1$d 项（%2$s）</item>
+    </plurals>
+
+    <!-- LubeLogger duplicates -->
+    <plurals name="dup_deleted_message">
+        <item quantity="other">已删除 %d 条重复记录。</item>
+    </plurals>
+
+    <!-- Add / edit vehicle: VIN -->
+    <string name="vin_error_scan_not_vin">扫描到的代码（“%1$s”）不包含 VIN。请扫描 VIN 条形码，或手动输入 VIN。</string>
+    <string name="vin_error_length">VIN 必须为 %1$d 位（当前为 %2$d 位）。</string>
+    <string name="vehicle_error_save">保存车辆时出错。</string>
+    <string name="vin_error_no_results">此 VIN 没有返回解码结果。</string>
+    <string name="vin_error_invalid_characters">此 VIN 包含无效字符。</string>
+    <string name="vin_error_incomplete">此 VIN 似乎不完整。请检查是否为 17 位且没有输入错误。</string>
+    <string name="vin_error_manufacturer_unknown">NHTSA 数据库中没有此制造商。NHTSA 数据库主要收录在美国销售的车辆，其他市场的车辆可能需要手动输入。</string>
+    <string name="vin_error_not_found">未找到此 VIN 的车辆信息。NHTSA 数据库主要收录在美国销售的车辆，其他市场的车辆可能需要手动输入。</string>
+    <string name="vin_error_network">无法解码 VIN。请检查网络连接。</string>
+    <string name="vin_warning_model_missing">未找到此 VIN 对应的型号，请手动输入。</string>
+    <string name="vin_warning_year_unreliable">无法从此 VIN 确定车型年份，请手动输入。</string>
+    <string name="vin_warning_partial">VIN 仅部分解码，请核实车辆信息。</string>
+
+    <!-- Recalls -->
+    <string name="recall_error_http">NHTSA 召回服务 (api.nhtsa.gov) 返回错误（HTTP %1$d）。请稍后重试。</string>
+    <string name="recall_error_network">无法连接 NHTSA 召回服务 (api.nhtsa.gov)。请检查网络连接。</string>
+    <string name="recall_error_unexpected">查询召回信息时发生意外错误。</string>
+
+    <!-- Backup & restore -->
+    <string name="backup_error_open_destination">无法打开目标位置进行写入。</string>
+    <string name="backup_error_export_unknown">导出备份时发生未知错误。</string>
+    <string name="backup_error_no_folder">未配置本地备份文件夹。</string>
+    <string name="backup_error_folder_access">无法访问所选的备份文件夹。</string>
+    <string name="backup_error_folder_not_writable">备份文件夹不存在或不可写入。</string>
+    <string name="backup_error_create_file">无法在所选文件夹中创建 %1$s。</string>
+    <string name="backup_error_open_output">无法打开备份文件的输出流。</string>
+    <string name="backup_error_permission">没有访问该文件夹的权限。请重新选择备份文件夹。</string>
+    <string name="backup_error_local_unknown">写入本地备份时发生未知错误。</string>
+    <string name="backup_error_open_file">无法打开所选的备份文件。</string>
+    <string name="backup_error_invalid_entry">备份文件包含无效条目：%1$s</string>
+    <string name="backup_error_missing_db">此文件似乎不是 Garage 备份（缺少数据库）。</string>
+    <string name="backup_error_unreadable_db">此文件似乎不是有效的 Garage 备份（数据库无法读取）。</string>
+    <string name="backup_error_newer_version">此备份由更新版本的 Garage 创建，无法在此恢复。请先更新应用，然后再尝试恢复此备份。</string>
+    <string name="backup_error_import_unknown">导入备份时发生未知错误。</string>
+
+    <!-- WebDAV / LubeLogger -->
+    <string name="webdav_error_not_configured">尚未配置云同步。</string>
+    <string name="webdav_error_upload_http">上传失败：HTTP %1$s</string>
+    <string name="webdav_error_sync_unknown">同步到 WebDAV 时发生未知错误。</string>
+    <string name="webdav_error_url_username_required">必须填写服务器地址和用户名。</string>
+    <string name="webdav_error_auth">身份验证失败。请检查用户名和密码。</string>
+    <string name="webdav_error_test_unknown">测试连接时发生未知错误。</string>
+    <string name="lubelogger_error_invalid_url">LubeLogger 服务器地址无效。</string>
+</resources>

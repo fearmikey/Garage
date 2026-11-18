@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mods_cd_add">添加改装</string>
+    <plurals name="mods_count">
+        <item quantity="other">%d 项改装</item>
+    </plurals>
+    <string name="mods_total_spent">总花费：%1$s</string>
+    <string name="mods_cd_list_view">切换到列表视图</string>
+    <string name="mods_cd_grid_view">切换到网格视图</string>
+    <string name="mods_product_link">商品链接</string>
+    <string name="mods_add_title">添加改装</string>
+    <string name="mods_edit_title">编辑改装</string>
+    <string name="mods_photo_cd">改装照片 %1$d</string>
+    <string name="mods_photo_position">第 %1$d 张，共 %2$d 张</string>
+    <string name="mods_photo_single">照片</string>
+    <string name="mods_add_photos">添加照片（最多 6 张）</string>
+    <string name="mods_title_placeholder">例如：2 英寸升高套件、冷空气进气</string>
+    <string name="mods_desc_placeholder">详情、零件编号、安装备注…</string>
+    <string name="mods_url_placeholder">例如：https://example.com/parts/lift-kit</string>
+    <string name="mods_title_short">名称</string>
+    <string name="mods_installed">安装于：%1$s</string>
+</resources>

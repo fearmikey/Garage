@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Preset schedule templates (MaintenanceScheduleTemplates). The catalog itself stays English
+         because task names/notes are copied into custom rules; see ui/util/ScheduleTemplateText.kt. -->
+    <string name="tpl_motorcycle_street_title">Street Motorcycle</string>
+    <string name="tpl_motorcycle_street_desc">Typical intervals for street, sport, and touring motorcycles, including chain care and suspension service.</string>
+    <string name="tpl_heavy_duty_title">Heavy Duty &amp; Towing</string>
+    <string name="tpl_heavy_duty_desc">Shortened fluid change intervals and severe-duty checks for trucks, towing rigs, or off-road vehicles.</string>
+    <string name="tpl_daily_commuter_title">Daily Commuter</string>
+    <string name="tpl_daily_commuter_desc">Standard balanced maintenance intervals for daily drivers, highway commuters, and family vehicles.</string>
+    <string name="tpl_hybrid_ev_title">Hybrid &amp; Electric Vehicle (EV)</string>
+    <string name="tpl_hybrid_ev_desc">Optimized for hybrid and battery electric vehicles with emphasis on cabin filters, brake slides, and cooling systems.</string>
+    <string name="tpl_classic_title">High Mileage &amp; Classic Car</string>
+    <string name="tpl_classic_desc">Frequent inspections and short intervals for older vehicles, high-mileage engines, or vintage classics.</string>
+
+    <!-- Template task names -->
+    <string name="tpl_task_motorcycle_oil">Motorcycle oil &amp; filter</string>
+    <string name="tpl_task_chain_clean">Chain clean, lube &amp; slack check</string>
+    <string name="tpl_task_tire_pressure_tread">Tire pressure &amp; tread inspection</string>
+    <string name="tpl_task_brake_fluid_front_rear">Brake fluid flush (front &amp; rear)</string>
+    <string name="tpl_task_fork_seal">Fork oil &amp; seal service</string>
+    <string name="tpl_task_battery_tender">Battery tender &amp; terminal check</string>
+    <string name="tpl_task_severe_oil">Severe duty engine oil &amp; filter</string>
+    <string name="tpl_task_transfer_case_severe">Transfer case fluid (severe)</string>
+    <string name="tpl_task_diff_fluid">Front &amp; rear differential fluid</string>
+    <string name="tpl_task_chassis_grease">Chassis greasing &amp; ball joints</string>
+    <string name="tpl_task_hd_brake_suspension">Heavy duty brake &amp; suspension inspection</string>
+    <string name="tpl_task_synthetic_oil">Full synthetic oil &amp; filter</string>
+    <string name="tpl_task_rotation_pressure">Tire rotation &amp; pressure check</string>
+    <string name="tpl_task_air_filters">Cabin &amp; engine air filters</string>
+    <string name="tpl_task_multipoint">Multi-point inspection</string>
+    <string name="tpl_task_hv_duct">Cabin air filter &amp; HV battery duct check</string>
+    <string name="tpl_task_brake_slides">Brake slide lubrication &amp; fluid check</string>
+    <string name="tpl_task_rotation_alignment">Tire rotation &amp; alignment inspection</string>
+    <string name="tpl_task_inverter_coolant">Inverter &amp; battery coolant flush</string>
+    <string name="tpl_task_high_zinc_oil">High-zinc / high-mileage oil change</string>
+    <string name="tpl_task_cooling_hoses">Cooling system &amp; hose inspection</string>
+    <string name="tpl_task_ignition">Ignition, spark plugs &amp; distributor</string>
+    <string name="tpl_task_v_belts">V-belts &amp; tensioner check</string>
+    <string name="tpl_task_steering_grease">Chassis &amp; steering greasing</string>
+
+    <!-- Template notes -->
+    <string name="tpl_note_jaso_oil">Use JASO MA/MA2 rated oil for wet-clutch bikes.</string>
+    <string name="tpl_note_chain_rain">More often after riding in rain or dirt.</string>
+    <string name="tpl_note_moto_tire_check">Check cold pressures and inspect for cupping, cracking, and embedded objects.</string>
+    <string name="tpl_note_brake_fluid_moto">Brake fluid is hygroscopic; flush both master cylinders.</string>
+    <string name="tpl_note_fork_oil">Replace fork oil; inspect seals for weeping.</string>
+    <string name="tpl_note_battery_tender">Keep on a tender during winter storage; clean and tighten terminals.</string>
+    <string name="tpl_note_severe_oil">Severe duty interval for frequent towing or heavy loads.</string>
+    <string name="tpl_note_transfer_case">Recommended for frequent 4WD usage or water crossings.</string>
+    <string name="tpl_note_severe_diff">Severe duty interval for towing and heavy loads.</string>
+    <string name="tpl_note_chassis_grease">Lube grease fittings, drive shaft U-joints, and suspension joints.</string>
+    <string name="tpl_note_hd_brakes">Inspect brake pad thickness, rotors, trailer brake controller, and leaf springs.</string>
+    <string name="tpl_note_synthetic_oil">Standard full synthetic oil change interval.</string>
+    <string name="tpl_note_rotation_even">Ensure even tread wear and optimal fuel efficiency.</string>
+    <string name="tpl_note_air_filters">Replace both air filters annually for HVAC &amp; engine efficiency.</string>
+    <string name="tpl_note_wipers">Replace wiper blades for clear visibility.</string>
+    <string name="tpl_note_drive_belts">Replace drive belts to prevent accessory failures.</string>
+    <string name="tpl_note_multipoint">Check hoses, lights, and fluid levels.</string>
+    <string name="tpl_note_hv_duct">Clean/replace cabin air filter and check high-voltage battery cooling fan intake.</string>
+    <string name="tpl_note_brake_slides">Regenerative braking reduces pad wear, but slide pins need regular lubrication to prevent seizing.</string>
+    <string name="tpl_note_ev_tires">Instant EV motor torque causes faster tire wear.</string>
+    <string name="tpl_note_inverter_coolant">Inspect and flush high-voltage component cooling system.</string>
+    <string name="tpl_note_high_zinc">Protects flat-tappet camshafts or high-mileage engine seals.</string>
+    <string name="tpl_note_cooling_hoses">Inspect radiator hoses, thermostat, heater core, and coolant condition.</string>
+    <string name="tpl_note_ignition">Inspect spark plugs, ignition wires, distributor cap, and rotor/points.</string>
+    <string name="tpl_note_v_belts">Check drive belt tension and inspect for cracking or glazing.</string>
+    <string name="tpl_note_steering_grease">Grease tie rod ends, ball joints, pitman arm, and suspension bushings.</string>
+
+    <!-- Notes on built-in schedule rules (MaintenanceScheduleRules) -->
+    <string name="rule_note_4wd_interval">Generic 4WD/AWD interval; check your owner\'s manual for the exact figure.</string>
+    <string name="rule_note_chain_lube">Chain-drive bikes only; also check slack. Ignore this for belt or shaft drive.</string>
+    <string name="rule_note_chain_sprocket">Chain-drive bikes only. Replace chain and both sprockets together.</string>
+    <string name="rule_note_cables">Lube and adjust free play on cable-operated clutches and throttles.</string>
+    <string name="rule_note_moto_tires">Rear tires typically wear 1.5–2× faster than fronts; check tread and date codes.</string>
+</resources>

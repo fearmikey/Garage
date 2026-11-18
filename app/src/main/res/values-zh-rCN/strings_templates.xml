@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tpl_motorcycle_street_title">街车摩托车</string>
+    <string name="tpl_motorcycle_street_desc">适用于街车、跑车和旅行摩托车的常规保养间隔，包括链条养护和悬挂保养。</string>
+    <string name="tpl_heavy_duty_title">重载与牵引</string>
+    <string name="tpl_heavy_duty_desc">为卡车、牵引车或越野车缩短油液更换间隔，并增加严苛工况检查。</string>
+    <string name="tpl_daily_commuter_title">日常通勤</string>
+    <string name="tpl_daily_commuter_desc">适用于日常代步、高速通勤和家用车辆的标准均衡保养间隔。</string>
+    <string name="tpl_hybrid_ev_title">混合动力与电动车 (EV)</string>
+    <string name="tpl_hybrid_ev_desc">针对混合动力和纯电动车优化，重点关注空调滤芯、制动导向销和冷却系统。</string>
+    <string name="tpl_classic_title">高里程与经典车</string>
+    <string name="tpl_classic_desc">为老旧车辆、高里程发动机或经典老爷车提供更频繁的检查和更短的间隔。</string>
+
+    <string name="tpl_task_motorcycle_oil">摩托车机油与机滤</string>
+    <string name="tpl_task_chain_clean">链条清洁、润滑与松紧度检查</string>
+    <string name="tpl_task_tire_pressure_tread">胎压与胎纹检查</string>
+    <string name="tpl_task_brake_fluid_front_rear">更换刹车油（前后）</string>
+    <string name="tpl_task_fork_seal">前叉油与油封保养</string>
+    <string name="tpl_task_battery_tender">蓄电池维护充电与接线柱检查</string>
+    <string name="tpl_task_severe_oil">严苛工况机油与机滤</string>
+    <string name="tpl_task_transfer_case_severe">分动箱油（严苛工况）</string>
+    <string name="tpl_task_diff_fluid">前后差速器油</string>
+    <string name="tpl_task_chassis_grease">底盘注油与球头</string>
+    <string name="tpl_task_hd_brake_suspension">重载制动与悬挂检查</string>
+    <string name="tpl_task_synthetic_oil">全合成机油与机滤</string>
+    <string name="tpl_task_rotation_pressure">轮胎换位与胎压检查</string>
+    <string name="tpl_task_air_filters">空调滤芯与空气滤芯</string>
+    <string name="tpl_task_multipoint">多项综合检查</string>
+    <string name="tpl_task_hv_duct">空调滤芯与高压电池风道检查</string>
+    <string name="tpl_task_brake_slides">制动导向销润滑与刹车油检查</string>
+    <string name="tpl_task_rotation_alignment">轮胎换位与四轮定位检查</string>
+    <string name="tpl_task_inverter_coolant">逆变器与电池冷却液更换</string>
+    <string name="tpl_task_high_zinc_oil">高锌 / 高里程机油更换</string>
+    <string name="tpl_task_cooling_hoses">冷却系统与软管检查</string>
+    <string name="tpl_task_ignition">点火系统、火花塞与分电器</string>
+    <string name="tpl_task_v_belts">V 带与张紧器检查</string>
+    <string name="tpl_task_steering_grease">底盘与转向注油</string>
+
+    <string name="tpl_note_jaso_oil">湿式离合器摩托车请使用 JASO MA/MA2 认证机油。</string>
+    <string name="tpl_note_chain_rain">雨天或泥地骑行后需更频繁保养。</string>
+    <string name="tpl_note_moto_tire_check">冷态检查胎压，并检查是否有偏磨、龟裂和异物扎入。</string>
+    <string name="tpl_note_brake_fluid_moto">刹车油会吸湿；请同时更换前后两个总泵的刹车油。</string>
+    <string name="tpl_note_fork_oil">更换前叉油；检查油封是否渗油。</string>
+    <string name="tpl_note_battery_tender">冬季存放时接上维护充电器；清洁并紧固接线柱。</string>
+    <string name="tpl_note_severe_oil">适用于频繁牵引或重载的严苛工况间隔。</string>
+    <string name="tpl_note_transfer_case">建议频繁使用四驱或涉水时采用。</string>
+    <string name="tpl_note_severe_diff">适用于牵引和重载的严苛工况间隔。</string>
+    <string name="tpl_note_chassis_grease">为黄油嘴、传动轴万向节和悬挂球头注油。</string>
+    <string name="tpl_note_hd_brakes">检查刹车片厚度、刹车盘、挂车制动控制器和钢板弹簧。</string>
+    <string name="tpl_note_synthetic_oil">标准全合成机油更换间隔。</string>
+    <string name="tpl_note_rotation_even">确保胎纹均匀磨损，并保持最佳燃油经济性。</string>
+    <string name="tpl_note_air_filters">每年更换两个滤芯，以保证空调和发动机效率。</string>
+    <string name="tpl_note_wipers">更换雨刮片以保持视野清晰。</string>
+    <string name="tpl_note_drive_belts">更换传动皮带以防附件故障。</string>
+    <string name="tpl_note_multipoint">检查软管、灯光和油液液位。</string>
+    <string name="tpl_note_hv_duct">清洁/更换空调滤芯，并检查高压电池冷却风扇进风口。</string>
+    <string name="tpl_note_brake_slides">能量回收制动可减少刹车片磨损，但导向销需定期润滑以防卡滞。</string>
+    <string name="tpl_note_ev_tires">电机瞬时扭矩会加快轮胎磨损。</string>
+    <string name="tpl_note_inverter_coolant">检查并更换高压部件冷却系统的冷却液。</string>
+    <string name="tpl_note_high_zinc">保护平挺杆凸轮轴或高里程发动机的油封。</string>
+    <string name="tpl_note_cooling_hoses">检查散热器软管、节温器、暖风芯体和冷却液状况。</string>
+    <string name="tpl_note_ignition">检查火花塞、高压线、分电器盖和分火头/触点。</string>
+    <string name="tpl_note_v_belts">检查传动皮带张紧度，以及是否有龟裂或打滑发亮。</string>
+    <string name="tpl_note_steering_grease">为转向拉杆球头、球头、转向垂臂和悬挂衬套注油。</string>
+
+    <string name="rule_note_4wd_interval">通用四驱/全驱间隔；具体数值请查阅用户手册。</string>
+    <string name="rule_note_chain_lube">仅适用于链条传动的摩托车；同时检查松紧度。皮带或轴传动请忽略。</string>
+    <string name="rule_note_chain_sprocket">仅适用于链条传动的摩托车。链条和前后链轮应一起更换。</string>
+    <string name="rule_note_cables">润滑并调整拉线式离合器和油门的自由行程。</string>
+    <string name="rule_note_moto_tires">后轮胎的磨损速度通常是前轮胎的 1.5–2 倍；请检查胎纹和生产日期。</string>
+</resources>

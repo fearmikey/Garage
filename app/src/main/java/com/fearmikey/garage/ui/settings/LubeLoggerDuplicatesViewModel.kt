@@ -46,7 +46,8 @@ data class DuplicatesUiState(
     val isLoading: Boolean = true,
     val groups: List<DuplicateGroup> = emptyList(),
     val isDeleting: Boolean = false,
-    val userMessage: String? = null,
+    /** Records removed by the last delete, shown once as a snackbar (see [LubeLoggerDuplicatesViewModel.consumeUserMessage]). */
+    val deletedCount: Int? = null,
 )
 
 @HiltViewModel
@@ -230,7 +231,7 @@ class LubeLoggerDuplicatesViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     isDeleting = false,
-                    userMessage = "Deleted $deletedCount duplicate record(s).",
+                    deletedCount = deletedCount,
                 )
             }
             loadDuplicates()
@@ -238,6 +239,6 @@ class LubeLoggerDuplicatesViewModel @Inject constructor(
     }
 
     fun consumeUserMessage() {
-        _uiState.update { it.copy(userMessage = null) }
+        _uiState.update { it.copy(deletedCount = null) }
     }
 }

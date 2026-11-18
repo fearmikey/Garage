@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pdf_footer">Garage — Livro de manutenção e histórico</string>
+    <string name="pdf_page_of">Página %1$d de %2$d</string>
+    <string name="pdf_header_continued_title">LIVRO DE MANUTENÇÃO E HISTÓRICO — %1$s</string>
+    <string name="pdf_continued">Continuação</string>
+    <string name="pdf_banner_title">LIVRO DE MANUTENÇÃO E HISTÓRICO</string>
+    <string name="pdf_banner_subtitle">Relatório oficial de revenda e cuidado contínuo</string>
+    <string name="pdf_generated">Gerado em %1$s</string>
+
+    <string name="pdf_not_recorded">Não registrado</string>
+    <string name="pdf_not_specified">Não informado</string>
+    <string name="pdf_label_vin">VIN:</string>
+    <string name="pdf_label_current_odometer">HODÔMETRO ATUAL:</string>
+    <string name="pdf_label_current_mileage">MILHAGEM ATUAL:</string>
+    <string name="pdf_label_drivetrain">TRAÇÃO:</string>
+    <string name="pdf_label_transmission">CÂMBIO:</string>
+    <string name="pdf_transmission_speeds">%1$s marchas</string>
+    <string name="pdf_standard">Padrão</string>
+    <string name="pdf_engine_cylinders">%1$s cil.</string>
+    <string name="pdf_standard_engine">Motor padrão</string>
+    <string name="pdf_label_engine">MOTOR:</string>
+    <string name="pdf_label_fuel_type">COMBUSTÍVEL:</string>
+    <string name="pdf_label_purchased">COMPRADO:</string>
+    <string name="pdf_label_initial_odometer">HODÔMETRO INICIAL:</string>
+    <string name="pdf_label_initial_mileage">MILHAGEM INICIAL:</string>
+    <string name="pdf_label_specs">DADOS:</string>
+
+    <string name="pdf_summary_title">RESUMO DO INVESTIMENTO EM CUIDADOS</string>
+    <string name="pdf_total_investment">INVESTIMENTO TOTAL</string>
+    <string name="pdf_maintenance_care">MANUTENÇÃO</string>
+    <plurals name="pdf_records_logged">
+        <item quantity="one">%d registro</item>
+        <item quantity="many">%d registros</item>
+        <item quantity="other">%d registros</item>
+    </plurals>
+    <string name="pdf_upgrades_mods">MODIFICAÇÕES</string>
+    <plurals name="pdf_installed_items">
+        <item quantity="one">%d item instalado</item>
+        <item quantity="many">%d itens instalados</item>
+        <item quantity="other">%d itens instalados</item>
+    </plurals>
+    <string name="pdf_logged_range">FAIXA REGISTRADA</string>
+    <string name="pdf_range_to">até %1$s</string>
+
+    <string name="pdf_recalls_clear">STATUS OFICIAL DE RECALL: SEM PENDÊNCIAS (0 RECALLS ABERTOS)</string>
+    <plurals name="pdf_recalls_verified_count">
+        <item quantity="one">Verificado no banco de dados da NHTSA para %1$s (%2$d campanha verificada — 0 recalls abertos).</item>
+        <item quantity="many">Verificado no banco de dados da NHTSA para %1$s (%2$d campanhas verificadas — 0 recalls abertos).</item>
+        <item quantity="other">Verificado no banco de dados da NHTSA para %1$s (%2$d campanhas verificadas — 0 recalls abertos).</item>
+    </plurals>
+    <string name="pdf_recalls_verified_none">Verificado no banco de dados da NHTSA para %1$s. Nenhuma campanha de recall ativa.</string>
+    <plurals name="pdf_recalls_open">
+        <item quantity="one">STATUS DE RECALL: %d RECALL ABERTO</item>
+        <item quantity="many">STATUS DE RECALL: %d RECALLS ABERTOS</item>
+        <item quantity="other">STATUS DE RECALL: %d RECALLS ABERTOS</item>
+    </plurals>
+    <string name="pdf_recall_item">• Campanha nº %1$s — Componente: %2$s</string>
+    <string name="pdf_no_summary">Nenhum resumo disponível.</string>
+
+    <string name="pdf_parts_title">PEÇAS E FLUIDOS</string>
+    <string name="pdf_mods_title">MELHORIAS E MODIFICAÇÕES</string>
+    <string name="pdf_fuel_title">HISTÓRICO DE ABASTECIMENTOS E RECARGAS</string>
+    <string name="pdf_service_title">HISTÓRICO COMPLETO DE MANUTENÇÃO</string>
+    <string name="pdf_col_date">DATA</string>
+    <string name="pdf_col_item">MELHORIA / ITEM</string>
+    <string name="pdf_col_category">CATEGORIA</string>
+    <string name="pdf_col_description">DESCRIÇÃO / NOTAS</string>
+    <string name="pdf_col_cost">CUSTO</string>
+    <string name="pdf_col_odometer">HODÔMETRO (%1$s)</string>
+    <string name="pdf_col_mileage">MILHAS</string>
+    <string name="pdf_col_type">TIPO</string>
+    <string name="pdf_col_details">DETALHES</string>
+    <string name="pdf_col_service">SERVIÇO E DESCRIÇÃO</string>
+    <string name="pdf_no_maintenance">Nenhuma manutenção registrada para este veículo.</string>
+</resources>

@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Garage</string>
+
+    <!-- Language -->
+    <string name="language_system_default">跟随系统</string>
+    <string name="language_english">English</string>
+    <string name="language_french">Français</string>
+    <string name="language_german">Deutsch</string>
+    <string name="language_polish">Polski</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_italian">Italiano</string>
+    <string name="language_portuguese">Português</string>
+    <string name="language_dutch">Nederlands</string>
+    <string name="language_russian">Русский</string>
+    <string name="language_turkish">Türkçe</string>
+    <string name="language_chinese_simplified">简体中文</string>
+    <string name="language_selection">语言</string>
+
+    <!-- Settings -->
+    <string name="settings_title">设置</string>
+    <string name="settings_user_preferences">用户偏好</string>
+    <string name="settings_units">计量单位</string>
+    <string name="settings_currency">货币</string>
+    <string name="settings_theme">主题</string>
+    <string name="settings_default_vehicle">默认车辆</string>
+    <string name="settings_appearance_theme">外观与主题</string>
+    <string name="settings_reminders_notifications">提醒与通知</string>
+    <string name="settings_data_sync">数据、备份与同步</string>
+
+    <!-- Tabs -->
+    <string name="tab_my_vehicles">我的车辆</string>
+    <string name="tab_drivers_license">驾驶证</string>
+    <string name="tab_support_store">支持商店</string>
+    <string name="tab_timeline">时间线</string>
+    <string name="tab_schedule">保养计划</string>
+    <string name="tab_fuel">燃油</string>
+    <string name="tab_expenses">费用</string>
+    <string name="tab_specs">规格</string>
+    <string name="tab_parts">配件</string>
+    <string name="tab_mods">改装</string>
+    <string name="tab_documents">证件</string>
+    <string name="tab_recalls">召回</string>
+    <string name="tab_knowledge">知识库</string>
+    <string name="tab_trips">行程</string>
+    <string name="customize_tabs">自定义标签页</string>
+    <string name="customize_tabs_description">选择此车辆显示哪些标签页。</string>
+    <string name="customize_tabs_always_shown">始终显示</string>
+    <string name="customize_tabs_save">保存</string>
+    <string name="customize_tabs_cancel">取消</string>
+    <string name="tab_alert_overdue">%1$s，有逾期项目</string>
+    <string name="tab_alert_upcoming">%1$s，有即将到期项目</string>
+
+    <!-- Maintenance Tasks -->
+    <string name="task_engine_oil_change">更换机油</string>
+    <string name="task_power_steering_fluid">助力转向油</string>
+    <string name="task_tire_replacement">更换轮胎</string>
+    <string name="task_rotation_and_balance">轮胎换位与动平衡</string>
+    <string name="task_brake_fluid_flush">更换刹车油</string>
+    <string name="task_cabin_air_filter">更换空调滤芯</string>
+    <string name="task_engine_air_filter">更换空气滤芯</string>
+    <string name="task_transmission_fluid">自动变速箱油保养</string>
+    <string name="task_coolant_flush">更换冷却液</string>
+    <string name="task_spark_plug_replacement">更换火花塞</string>
+    <string name="task_battery_test">蓄电池负载测试 / 更换</string>
+    <string name="task_rust_prevention">防锈处理</string>
+    <string name="task_paint_protection">漆面保护</string>
+    <string name="task_serpentine_belt">更换发动机皮带</string>
+    <string name="task_wiper_blades">更换雨刮片</string>
+    <string name="task_brake_pads">更换刹车片</string>
+    <string name="task_transfer_case_fluid">更换分动箱油</string>
+    <string name="task_front_diff_fluid">更换前差速器油</string>
+    <string name="task_rear_diff_fluid">更换后差速器油</string>
+    <string name="task_chain_lube">链条清洁与润滑</string>
+    <string name="task_chain_sprocket">更换链条与链轮</string>
+    <string name="task_valve_clearance">检查气门间隙</string>
+    <string name="task_fork_oil">更换前叉油</string>
+    <string name="task_clutch_throttle_cable">调整离合器与油门拉线</string>
+
+    <!-- Startup / Onboarding -->
+    <string name="startup_welcome_title">欢迎使用 Garage</string>
+    <string name="startup_measurement_system_title">计量制</string>
+    <string name="startup_measurement_system_subtitle">选择应用中距离、燃油量和油耗的显示方式。</string>
+    <string name="startup_metric_title">公制</string>
+    <string name="startup_metric_subtitle">公里 (km) · 升 (L) · L/100km</string>
+    <string name="startup_imperial_title">英制 / 美制</string>
+    <string name="startup_imperial_subtitle">英里 (mi) · 美制加仑 (gal) · MPG</string>
+    <string name="startup_language_subtitle">选择您偏好的应用语言。</string>
+    <string name="startup_currency_title">首选货币</string>
+    <string name="startup_currency_subtitle">选择用于加油记录、保养记录和费用统计的货币。</string>
+    <string name="startup_change">更改</string>
+    <string name="startup_permissions_title">应用权限</string>
+    <string name="startup_permissions_subtitle">授予权限以启用保养提醒、VIN 扫描、GPS 行程记录和 OBD-II 诊断等功能。</string>
+    <string name="startup_reminders_title">保养提醒</string>
+    <string name="startup_reminders_subtitle">在车辆保养或维修计划到期时通知您。</string>
+    <string name="startup_vin_title">VIN 扫描</string>
+    <string name="startup_vin_subtitle">使用相机扫描车辆 VIN 条形码，快速导入车辆信息。</string>
+    <string name="startup_location_title">GPS 行程记录</string>
+    <string name="startup_location_subtitle">使用定位服务自动记录车辆里程和路线。</string>
+    <string name="startup_bluetooth_title">OBD-II 蓝牙</string>
+    <string name="startup_bluetooth_subtitle">连接无线 OBD-II 适配器，进行实时诊断和清除故障码。</string>
+    <string name="startup_permission_granted">已授予权限</string>
+    <string name="startup_grant_permission">授予权限</string>
+    <string name="startup_support_title">支持开发</string>
+    <string name="startup_support_subtitle">Garage 是完全免费的开源软件。如果它对您有帮助，欢迎支持开发！</string>
+    <string name="startup_buy_coffee_title">请我喝杯咖啡</string>
+    <string name="startup_buy_coffee_button">在 Buy Me a Coffee 上支持</string>
+    <string name="startup_affiliate_title">启用联盟链接</string>
+    <string name="startup_affiliate_subtitle">允许应用显示开发者推荐的工具和配件的可选亚马逊联盟链接。通过这些链接购买可以支持本项目，且不会让您额外花费。</string>
+
+    <!-- Guided onboarding -->
+    <string name="onboarding_step_progress">第 %1$d 步，共 %2$d 步</string>
+    <string name="onboarding_skip">跳过</string>
+    <string name="onboarding_back">上一步</string>
+    <string name="onboarding_next">下一步</string>
+    <string name="onboarding_lets_go">开始吧</string>
+    <string name="onboarding_step_welcome">欢迎</string>
+    <string name="onboarding_step_region">地区与单位</string>
+    <string name="onboarding_step_appearance">外观</string>
+    <string name="onboarding_step_screens">您的界面</string>
+    <string name="onboarding_step_permissions">权限</string>
+    <string name="onboarding_step_finish">完成</string>
+    <string name="onboarding_welcome_subtitle">为您名下每辆车打造的私密、离线优先的记录本。让我们来设置您的车库，只需一分钟。</string>
+    <string name="onboarding_feature_maintenance_title">记录保养</string>
+    <string name="onboarding_feature_maintenance_body">记录保养维修，并获取适合您车辆的保养计划建议。</string>
+    <string name="onboarding_feature_fuel_title">记录油耗与费用</string>
+    <string name="onboarding_feature_fuel_body">查看油耗趋势和真实的用车成本。</string>
+    <string name="onboarding_feature_reminders_title">不错过任何日期</string>
+    <string name="onboarding_feature_reminders_body">保养、行驶证年检和保险续保提醒。</string>
+    <string name="onboarding_feature_privacy_title">隐私至上</string>
+    <string name="onboarding_feature_privacy_body">免费且开源。除非您选择备份，否则您的数据只保存在本设备上。</string>
+    <string name="onboarding_region_title">地区与单位</string>
+    <string name="onboarding_region_subtitle">设置应用中数字、价格和语言的显示方式。</string>
+    <string name="onboarding_appearance_title">个性化</string>
+    <string name="onboarding_appearance_subtitle">用汽车灵感配色和深色模式打造专属车库。更改会立即预览。</string>
+    <string name="onboarding_theme_mode">主题</string>
+    <string name="onboarding_theme_system">跟随系统</string>
+    <string name="onboarding_theme_light">浅色</string>
+    <string name="onboarding_theme_dark">深色</string>
+    <string name="onboarding_dynamic_color_title">动态取色</string>
+    <string name="onboarding_dynamic_color_subtitle">根据系统壁纸匹配颜色（Android 12+）</string>
+    <string name="onboarding_palette_title">强调色调色板</string>
+    <string name="onboarding_amoled_title">纯黑（AMOLED）</string>
+    <string name="onboarding_amoled_subtitle">深色模式下使用纯黑背景</string>
+    <string name="onboarding_screens_title">设置您的界面</string>
+    <string name="onboarding_screens_subtitle">选择您想看到的内容。简洁或全面都可以，随时可以更改。</string>
+    <string name="onboarding_dashboard_section">仪表盘</string>
+    <string name="onboarding_fuel_trend_title">油耗趋势图</string>
+    <string name="onboarding_fuel_trend_subtitle">在每张车辆卡片上显示油耗迷你趋势图</string>
+    <string name="onboarding_fleet_overview_title">车队概览</string>
+    <string name="onboarding_fleet_overview_subtitle">显示汇总所有车辆平均值的概览卡片</string>
+    <string name="onboarding_vehicle_tabs_section">车辆标签页</string>
+    <string name="onboarding_vehicle_tabs_subtitle">打开新添加的车辆时显示的标签页。之后可在任意车辆的菜单 → 自定义标签页中调整。</string>
+    <string name="onboarding_tabs_show_all">全部显示</string>
+    <string name="onboarding_tabs_essentials">仅基本项</string>
+    <string name="onboarding_tabs_visible_count">已显示 %1$d / %2$d 个标签页</string>
+    <string name="onboarding_permissions_optional">所有权限均为可选，之后也可以在系统设置中授予。</string>
+    <string name="onboarding_finish_title">一切就绪！</string>
+    <string name="onboarding_finish_subtitle">添加您的第一辆车，开始记录保养、燃油和证件。</string>
+    <string name="onboarding_finish_subtitle_has_vehicles">您的偏好已保存。前往车库或再添加一辆车。</string>
+    <string name="onboarding_add_first_vehicle">添加我的第一辆车</string>
+    <string name="onboarding_add_another_vehicle">再添加一辆车</string>
+    <string name="onboarding_go_to_dashboard">前往我的车库</string>
+    <string name="onboarding_explore_first">我先随便看看</string>
+    <string name="onboarding_summary_title">您的设置</string>
+    <string name="onboarding_summary_units">单位</string>
+    <string name="onboarding_summary_currency">货币</string>
+    <string name="onboarding_summary_theme">主题</string>
+    <string name="onboarding_summary_tabs">车辆标签页</string>
+    <string name="onboarding_summary_edit">编辑</string>
+    <string name="onboarding_tips_title">小提示</string>
+    <string name="onboarding_tip_vin">添加车辆时输入 17 位 VIN，可自动填写年份、品牌、型号和规格。</string>
+    <string name="onboarding_tip_widgets">添加主屏幕小部件或快捷设置图块，一键记录加油和里程。</string>
+    <string name="onboarding_tip_backup">在 设置 → 备份 中设置自动备份（本地或 WebDAV）。</string>
+    <string name="onboarding_tip_rerun">您可以随时在设置中重新运行此向导。</string>
+
+    <!-- Notifications -->
+    <string name="reminder_notification_channel_name">保养提醒</string>
+    <string name="reminder_notification_channel_description">即将到期和已逾期的车辆保养提醒</string>
+    <string name="reminder_overdue_title">已逾期：%1$s</string>
+    <string name="reminder_upcoming_title">即将到期：%1$s</string>
+    <string name="pdf_export_notification_channel_name">PDF 导出</string>
+    <string name="pdf_export_notification_channel_description">保养报告 PDF 生成时的通知</string>
+    <string name="pdf_export_notification_title">保养报告已导出</string>
+    <string name="pdf_export_notification_text">点按以打开 %1$s</string>
+    <string name="test_notification_title">测试通知</string>
+    <string name="test_notification_text">如果您能看到这条消息，说明推送通知工作正常。</string>
+
+    <!-- App widget -->
+    <string name="garage_widget_description">显示即将到期/已逾期的保养提醒，并可快速记录保养或加油</string>
+
+    <!-- App Shortcuts & Quick Settings Tiles -->
+    <string name="shortcut_log_fuel_short">记录加油</string>
+    <string name="shortcut_log_fuel_long">记录加油</string>
+    <string name="shortcut_update_odometer_short">里程表</string>
+    <string name="shortcut_update_odometer_long">更新里程表</string>
+    <string name="tile_log_fuel_label">记录加油</string>
+    <string name="tile_update_odometer_label">更新里程表</string>
+    <string name="dialog_update_odometer_title">更新里程表</string>
+
+    <!-- Scanner -->
+    <string name="cd_go_back">返回</string>
+    <string name="cd_toggle_flashlight">切换手电筒</string>
+    <string name="scan_vin_instruction">将 VIN 条形码对准框内</string>
+    <string name="cd_scan_vin">扫描 VIN</string>
+    <string name="scan_vin_failed">未检测到条形码。请对准 VIN 条形码后重试。</string>
+
+    <!-- OBD2 scanner -->
+    <string name="obd_scanner_title">OBD2 扫描仪</string>
+    <string name="obd_cd_back">返回</string>
+    <string name="obd_rescan">重新扫描</string>
+    <string name="obd_reconnect">重新连接</string>
+    <string name="obd_change">更改</string>
+    <string name="obd_cancel">取消</string>
+    <string name="obd_clearing_codes">正在清除故障码…</string>
+    <string name="obd_clear_codes">清除故障码</string>
+    <string name="obd_clear_codes_confirm_title">清除故障码？</string>
+    <string name="obd_clear_codes_confirm_message">为获得最佳效果，请关闭发动机但保持点火开关打开。\n\n此操作会熄灭发动机故障灯并重置所有排放就绪监测项。如果根本问题未修复，故障码会再次出现，并且在车辆行驶足够里程使监测项完成之前，可能无法通过排放检测。</string>
+    <string name="obd_permission_title">需要蓝牙权限</string>
+    <string name="obd_permission_message">Garage 需要蓝牙权限才能与您的 OBD2 适配器通信。任何数据都不会离开您的设备。</string>
+    <string name="obd_permission_action">授予权限</string>
+    <string name="obd_no_adapter_title">未选择 OBD2 适配器</string>
+    <string name="obd_no_adapter_message">将蓝牙 OBD2 适配器插入车辆的诊断接口，并与手机配对。Garage 会记住它，并在您每次打开扫描仪时自动连接。\n\n读取和清除故障码、检查排放就绪状态、记录里程表读数并查看实时发动机数据。</string>
+    <string name="obd_no_adapter_action">配对 OBD2 适配器</string>
+    <string name="obd_status_connected">已连接</string>
+    <string name="obd_status_connecting">正在连接…</string>
+    <string name="obd_status_disconnected">已断开</string>
+    <string name="obd_status_not_connected">未连接</string>
+    <string name="obd_adapter_header">OBD2 适配器 · %1$s</string>
+    <string name="obd_unknown_device">未知设备</string>
+    <string name="obd_vin_mismatch_title">此适配器连接的是另一辆车</string>
+    <string name="obd_vin_save_title">将此 VIN 保存到车辆？</string>
+    <string name="obd_vin_mismatch_message">车辆报告的 VIN 为 %1$s，但此车辆的 VIN 为 %2$s。本次扫描未保存到时间线。</string>
+    <string name="obd_vin_save_message">车辆报告的 VIN 为 %1$s。此车辆尚未保存 VIN。</string>
+    <string name="obd_save_scan_anyway">仍然保存扫描</string>
+    <string name="obd_save_vin">保存 VIN</string>
+    <string name="obd_freeze_frame_title">冻结帧</string>
+    <string name="obd_freeze_frame_description">设置 %1$s 时记录的发动机状态。</string>
+    <string name="obd_freeze_frame_code_fallback">该故障码</string>
+    <string name="obd_freeze_frame_empty">车辆未报告任何冻结帧数据。</string>
+    <string name="obd_vehicle_health_title">车辆健康</string>
+    <string name="obd_mil_on">发动机故障灯已亮起</string>
+    <string name="obd_mil_off">发动机故障灯未亮</string>
+    <plurals name="obd_emissions_codes_reported">
+        <item quantity="other">报告了 %1$d 个排放相关故障码</item>
+    </plurals>
+    <string name="obd_readiness_summary">排放就绪：%1$d/%2$d 项监测已完成</string>
+    <string name="obd_readiness_mil_on">发动机故障灯亮起的车辆无法通过排放检测。</string>
+    <string name="obd_readiness_ok">可能已可进行排放/尾气检测。</string>
+    <string name="obd_readiness_not_ready">尚未就绪。请正常驾驶几天，让监测项完成。</string>
+    <string name="obd_cd_hide_monitors">隐藏监测项</string>
+    <string name="obd_cd_show_monitors">显示监测项</string>
+    <string name="obd_cd_monitor_complete">已完成</string>
+    <string name="obd_cd_monitor_incomplete">未完成</string>
+    <string name="obd_monitor_ready">就绪</string>
+    <string name="obd_monitor_not_ready">未就绪</string>
+    <string name="obd_no_codes_title">未发现故障码</string>
+    <string name="obd_no_codes_message">没有已存储、待定或永久性的诊断故障码。</string>
+    <string name="obd_dtc_title">诊断故障码</string>
+    <plurals name="obd_code_count">
+        <item quantity="other">%1$d 个故障码</item>
+    </plurals>
+    <string name="obd_dtc_stored_title">已存储</string>
+    <string name="obd_dtc_stored_explanation">已确认的故障，通常会点亮发动机故障灯。</string>
+    <string name="obd_dtc_pending_title">待定</string>
+    <string name="obd_dtc_pending_explanation">检测到一次但尚未确认，属于早期预警。</string>
+    <string name="obd_dtc_permanent_title">永久</string>
+    <string name="obd_dtc_permanent_explanation">无法通过扫描仪清除。车辆确认维修完成后会自动消除。</string>
+    <string name="obd_dtc_reported_by">报告者：%1$s</string>
+    <string name="obd_distance_title">距离</string>
+    <string name="obd_odometer">里程表</string>
+    <string name="obd_since_codes_cleared">自清除故障码以来</string>
+    <string name="obd_timeline_saved">扫描已保存到车辆时间线。</string>
+    <string name="obd_timeline_unchanged">自上次扫描以来没有变化，因此未重复记录。</string>
+    <string name="obd_timeline_vin_mismatch">由于 VIN 与此车辆不匹配，未保存到时间线。</string>
+    <string name="obd_live_data_title">实时数据</string>
+    <string name="obd_live">实时</string>
+    <string name="obd_waiting_for_data">正在等待数据…</string>
+    <string name="obd_stop_live_data">停止实时数据</string>
+    <string name="obd_start_live_data">开始实时数据</string>
+    <string name="obd_snapshot_title">传感器快照</string>
+    <string name="obd_battery_at_port">蓄电池（接口处）</string>
+    <string name="obd_vin">VIN</string>
+
+    <!-- OBD2 scanner: adapter picker -->
+    <string name="obd_picker_title">选择 OBD2 适配器</string>
+    <string name="obd_picker_tab_bluetooth">蓝牙</string>
+    <string name="obd_picker_tab_ble">BLE</string>
+    <string name="obd_picker_tab_wifi">Wi-Fi</string>
+    <string name="obd_picker_forget_adapter">忘记适配器</string>
+    <string name="obd_picker_classic_permission_hint">Garage 需要蓝牙权限才能列出已配对的适配器。</string>
+    <string name="obd_picker_allow_bluetooth">允许蓝牙访问</string>
+    <string name="obd_picker_classic_empty">未找到已配对的蓝牙设备。请插入 OBD2 适配器并打开点火开关，然后在手机的蓝牙设置中配对（PIN 通常为 1234 或 0000）。</string>
+    <string name="obd_picker_classic_hint">选择插在车辆上的适配器。疑似 OBD2 适配器的设备会排在前面。</string>
+    <string name="obd_picker_pair_new">配对新设备</string>
+    <string name="obd_picker_refresh_list">刷新列表</string>
+    <string name="obd_picker_ble_hint">低功耗蓝牙适配器（如 Vgate iCar Pro BLE、OBDLink CX、Veepeak BLE+）无需配对。插入适配器，打开点火开关，然后扫描即可。</string>
+    <string name="obd_picker_ble_empty">尚未找到低功耗蓝牙设备。</string>
+    <string name="obd_picker_scanning">正在扫描…</string>
+    <string name="obd_picker_scan_for_adapters">扫描适配器</string>
+    <string name="obd_picker_scan_again">再次扫描</string>
+    <string name="obd_picker_wifi_hint">请先将手机连接到适配器的 Wi-Fi 网络（通常名为 \"WiFi_OBDII\" 或 \"V-LINK\"）。大多数适配器使用 192.168.0.10 端口 35000。</string>
+    <string name="obd_picker_open_wifi_settings">打开 Wi-Fi 设置</string>
+    <string name="obd_picker_wifi_host_label">适配器 IP 地址</string>
+    <string name="obd_picker_wifi_port_label">端口</string>
+    <string name="obd_picker_use_wifi_adapter">使用 Wi-Fi 适配器</string>
+    <string name="obd_picker_cd_current_adapter">当前适配器</string>
+
+    <!-- OBD2 scanner: settings -->
+    <string name="settings_obd_adapter_title">OBD2 适配器</string>
+    <string name="settings_obd_adapter_summary">%1$s · %2$s（%3$s）</string>
+    <string name="settings_obd_adapter_not_set">未设置 — 点按以选择蓝牙、BLE 或 Wi-Fi 适配器</string>
+
+    <!-- OBD2 scanner: documents (emissions) -->
+    <string name="documents_obd_readiness_label">OBD2 就绪状态</string>
+    <string name="documents_obd_readiness_label_scanned">OBD2 就绪状态（扫描于 %1$s）</string>
+    <string name="documents_obd_readiness_value">%1$d/%2$d 项监测已完成 — %3$s</string>
+    <string name="documents_obd_readiness_not_ready_list">未就绪：%1$s</string>
+    <string name="documents_obd_readiness_mil_on">发动机故障灯亮起 — 很可能无法通过</string>
+    <string name="documents_obd_readiness_likely_ready">可能已可进行检测</string>
+    <string name="documents_obd_readiness_not_ready">尚未就绪 — 检测前请多行驶一段时间</string>
+    <!-- Documents & Driver's License -->
+    <string name="license_empty_message">尚未添加驾驶证信息。\n记录驾驶证有效期，并及时获得换证提醒。</string>
+    <string name="license_add_button">添加驾驶证</string>
+    <string name="license_title">驾驶证</string>
+    <string name="license_expiration_date">有效期至</string>
+    <string name="license_number">驾驶证号</string>
+    <string name="license_issuing_state">发证地区 / 机关</string>
+    <string name="license_notes">备注 / 准驾车型</string>
+    <string name="license_photos">驾驶证照片</string>
+    <string name="license_edit">编辑驾驶证</string>
+    <string name="license_delete">删除</string>
+    <string name="license_delete_confirm_title">删除驾驶证信息？</string>
+    <string name="license_delete_confirm_msg">确定要删除驾驶证记录吗？已保存的照片也会一并删除。</string>
+    <string name="license_details_title">驾驶证详情</string>
+    <string name="license_select_exp_date">选择有效期</string>
+    <string name="license_number_label">证号</string>
+    <string name="license_number_placeholder">例如：D1234567</string>
+    <string name="license_state_label">发证地区</string>
+    <string name="license_state_placeholder">例如：北京</string>
+    <string name="license_notes_placeholder">准驾车型 C1、摩托车增驾、其他备注…</string>
+    <string name="license_front_photo">驾驶证正面</string>
+    <string name="license_back_photo">驾驶证背面</string>
+    <string name="license_save">保存驾驶证</string>
+
+    <!-- Cost of Ownership -->
+    <string name="cost_empty_message">尚未记录任何费用。\n添加保养或加油记录以统计用车成本。</string>
+    <string name="cost_category_breakdown">分类明细</string>
+    <string name="cost_total_title">总用车成本</string>
+    <string name="cost_include_mods">包含改装</string>
+    <string name="cost_include_purchase">包含购车款</string>
+    <string name="cost_purchase_not_counted_in_period">未计入此期间（购车日期不在范围内或未设置）。</string>
+    <string name="time_filter_all_time">全部时间</string>
+    <string name="time_filter_this_year">今年</string>
+    <string name="time_filter_last_year">去年</string>
+    <string name="time_filter_12_months">12 个月</string>
+    <string name="time_filter_6_months">6 个月</string>
+
+    <!-- Fuel & Charging -->
+    <string name="fuel_tab_charging">充电</string>
+    <string name="fuel_tab_fuel">燃油</string>
+    <string name="fuel_est_range_100" formatted="false">当前预估 100% 续航</string>
+    <string name="fuel_initial_range_100" formatted="false">初始预估 100% 续航</string>
+    <string name="fuel_delete_charging_title">删除充电记录</string>
+    <string name="fuel_delete_charging_msg">确定要删除这条充电记录吗？</string>
+    <string name="fuel_log_charging">记录充电</string>
+    <string name="fuel_edit_charging">编辑充电记录</string>
+    <string name="fuel_kwh_added">充入电量 (kWh)</string>
+    <string name="fuel_charger_speed">充电速度</string>
+    <string name="fuel_location_vendor">地点 / 运营商</string>
+    <string name="fuel_vendor_placeholder">运营商名称（可选，例如：特来电）</string>
+    <string name="fuel_battery_start" formatted="false">起始电量 %</string>
+    <string name="fuel_battery_end" formatted="false">结束电量 %</string>
+    <string name="fuel_total_cost">总费用</string>
+    <string name="fuel_odometer_reading">里程表读数（%1$s）</string>
+    <string name="fuel_battery_health_title">电池健康（可选）</string>
+    <string name="fuel_est_range_soc">100%% SoC 时预估续航（%1$s）</string>
+    <string name="fuel_est_range_end">充电结束时预估续航</string>
+    <string name="fuel_auto_calculate">自动计算</string>
+    <string name="fuel_save_charging">保存充电记录</string>
+    <string name="fuel_delete_fillup_title">删除加油记录</string>
+    <string name="fuel_delete_fillup_msg">确定要删除这条加油记录吗？</string>
+    <string name="fuel_log_fillup">记录加油</string>
+    <string name="fuel_edit_fillup">编辑加油记录</string>
+    <string name="fuel_liters">升</string>
+    <string name="fuel_gallons">加仑</string>
+    <string name="fuel_filled_full">已加满</string>
+
+    <!-- Vehicle Documents -->
+    <string name="doc_plate_label">车牌号</string>
+    <string name="doc_plate_placeholder">例如：京A12345</string>
+    <string name="doc_state_label">省份 / 地区</string>
+    <string name="doc_state_placeholder">例如：北京</string>
+    <string name="doc_reg_exp_label">行驶证到期日</string>
+    <string name="doc_select_date">选择日期</string>
+    <string name="doc_renewal_fee_label">续期费用（可选）</string>
+    <string name="doc_reg_notes_label">行驶证备注</string>
+    <string name="doc_delete_reg_btn">删除车牌与行驶证信息</string>
+    <string name="doc_insp_exp_label">年检到期日</string>
+    <string name="doc_last_inspected_label">上次年检日期</string>
+    <string name="doc_insp_result_label">年检结果</string>
+    <string name="doc_insp_result_placeholder">例如：通过、未通过、待定</string>
+    <string name="doc_insp_notes_label">年检备注 / 检测站信息</string>
+    <string name="doc_delete_insp_btn">删除年检信息</string>
+    <string name="doc_emissions_exp_label">尾气检测到期日</string>
+    <string name="doc_last_smog_label">上次尾气检测日期</string>
+    <string name="doc_emissions_result_label">检测结果</string>
+    <string name="doc_emissions_result_placeholder">例如：通过、未通过、免检</string>
+    <string name="doc_emissions_notes_label">尾气检测备注 / 检测站详情</string>
+    <string name="doc_delete_emissions_btn">删除尾气检测信息</string>
+    <string name="doc_insur_provider_label">保险公司</string>
+    <string name="doc_insur_policy_num_label">保单号</string>
+    <string name="doc_insur_exp_label">保单到期日</string>
+    <string name="doc_insur_premium_label">保费（可选）</string>
+    <string name="doc_insur_contact_label">代理人 / 理赔联系方式</string>
+    <string name="doc_insur_notes_label">保单备注 / 险种</string>
+    <string name="doc_delete_insur_btn">删除保单信息</string>
+    <string name="doc_toll_exp_label">通行证 / 许可证到期日</string>
+    <string name="doc_toll_account_label">账户 / 标签 / 许可证号</string>
+    <string name="doc_toll_notes_label">备注 / 服务商详情</string>
+    <string name="doc_delete_toll_btn">删除通行费与停车信息</string>
+    <string name="doc_save_docs_btn">保存车辆证件</string>
+    <string name="doc_saving_btn">正在保存…</string>
+    <!-- Fleet Summary -->
+    <string name="fleet_overview_title">车队概览</string>
+    <string name="fleet_vehicles">车辆</string>
+    <string name="fleet_avg">车队平均</string>
+    <string name="fleet_overdue_count">%1$d 项逾期</string>
+    <string name="fleet_due_soon_count">%1$d 项即将到期</string>
+    <string name="fleet_all_clear">一切正常</string>
+    <string name="fleet_status">状态</string>
+
+    <!-- Vehicle Card -->
+    <string name="vehicle_card_no_mileage">无里程</string>
+
+    <!-- Vehicle Specs -->
+    <string name="specs_empty_message">暂无规格信息。\n点按编辑按钮添加，或在编辑页面中解码此车辆的 VIN。</string>
+    <string name="specs_edit">编辑规格</string>
+    <string name="specs_edit_title">编辑规格</string>
+    <string name="specs_group_custom">其他规格</string>
+    <string name="specs_add_custom">添加规格</string>
+    <string name="specs_custom_label">名称</string>
+    <string name="specs_custom_value">值</string>
+    <string name="specs_remove_custom">移除规格</string>
+    <string name="specs_plant_city">工厂所在城市</string>
+    <string name="specs_plant_state">工厂所在州/地区</string>
+    <string name="specs_plant_country">工厂所在国家</string>
+    <string name="specs_save">保存</string>
+    <string name="specs_cancel">取消</string>
+    <string name="specs_edit_hint">留空即可隐藏该字段。</string>
+    <string name="specs_group_engine">发动机与传动系统</string>
+    <string name="specs_group_weights">重量与牵引</string>
+    <string name="specs_group_body">车身</string>
+    <string name="specs_group_manufacturing">制造信息</string>
+    <string name="specs_cylinders">气缸数</string>
+    <string name="specs_displacement">排量</string>
+    <string name="specs_horsepower">马力</string>
+    <string name="specs_fuel_type">燃料类型</string>
+    <string name="specs_transmission">变速箱</string>
+    <string name="specs_transmission_speeds">挡位数</string>
+    <string name="specs_towing_braked">牵引能力（带制动）</string>
+    <string name="specs_towing_unbraked">牵引能力（无制动）</string>
+    <string name="specs_gcwr">最大组合总质量 (GCWR)</string>
+    <string name="specs_gvwr">最大总质量 (GVWR)</string>
+    <string name="specs_curb_weight">整备质量</string>
+    <string name="specs_vehicle_type">车辆类型</string>
+    <string name="specs_body_class">车身类型</string>
+    <string name="specs_doors">车门数</string>
+    <string name="specs_series">系列</string>
+    <string name="specs_manufacturer">制造商</string>
+    <string name="specs_plant">工厂</string>
+
+    <!-- Parts & Fluids -->
+    <string name="parts_empty_message">暂无配件与油液信息。\n点按编辑按钮添加您车辆的规格。</string>
+    <string name="parts_manual_verification_title">核对用户手册</string>
+    <string name="parts_manual_verification_desc">请对照车辆用户手册核对规格以确保准确。点按查看详情。</string>
+    <string name="parts_verify_title">请对照用户手册核实</string>
+    <string name="parts_verify_msg">此页面显示的油液容量（如机油容量和粘度）及配件规格，是根据解码的 VIN 和发动机规格估算的。\n\n出厂选装、发动机改款和地区差异都可能导致不同。在购买油液或进行保养之前，请务必对照车辆官方用户手册或厂家维修资料核对这些数值，以确保准确无误。</string>
+    <string name="parts_got_it">知道了</string>
+    <string name="parts_group_oil">机油</string>
+    <string name="parts_group_ignition">点火</string>
+    <string name="parts_group_filters">滤芯</string>
+    <string name="parts_group_tires">轮胎</string>
+    <string name="parts_group_wipers">雨刮</string>
+    <string name="parts_oil_viscosity">机油粘度</string>
+    <string name="parts_oil_capacity">机油容量</string>
+    <string name="parts_oil_filter_num">机油滤芯型号</string>
+    <string name="parts_spark_plug_num">火花塞型号</string>
+    <string name="parts_spark_plug_gap">火花塞间隙</string>
+    <string name="parts_engine_air_filter_num">空气滤芯型号</string>
+    <string name="parts_cabin_air_filter_num">空调滤芯型号</string>
+    <string name="parts_front_tire_size">前轮胎规格</string>
+    <string name="parts_rear_tire_size">后轮胎规格</string>
+    <string name="parts_front_tire_psi">前轮胎压</string>
+    <string name="parts_rear_tire_psi">后轮胎压</string>
+    <string name="parts_driver_wiper">主驾侧雨刮尺寸</string>
+    <string name="parts_passenger_wiper">副驾侧雨刮尺寸</string>
+    <string name="parts_rear_wiper">后雨刮尺寸</string>
+
+    <!-- Modifications -->
+    <string name="mods_empty_message">尚未记录任何改装。\n点按 + 添加车辆的个性化改装、升级或配件。</string>
+    <string name="mods_title_label">改装名称 *</string>
+    <string name="mods_category_label">类别</string>
+    <string name="mods_desc_label">描述 / 备注</string>
+    <string name="mods_date_label">安装日期</string>
+    <string name="mods_cost_label">费用（可选）</string>
+    <string name="mods_url_label">商品链接 / URL（可选）</string>
+    <string name="mods_save_btn">保存改装</string>
+    <string name="mods_delete_btn">删除改装</string>
+    <string name="mods_delete_confirm_title">删除改装？</string>
+    <string name="mods_delete_confirm_msg">确定要删除“%1$s”吗？此操作无法撤销。</string>
+
+    <!-- Recalls -->
+    <string name="recalls_nhtsa_check">在 NHTSA.gov 上查询 VIN</string>
+    <string name="recalls_retry">重试</string>
+    <string name="recalls_park_it">停驶</string>
+    <string name="recalls_park_outside">停放在室外</string>
+</resources>

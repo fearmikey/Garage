@@ -1,0 +1,1 @@
+New: Simplified Chinese translation and the Chinese Yuan (CNY) currency. The maintenance PDF report, built-in task names and schedule templates, the OBD-II scanner, notifications and error messages are now translated into your language.

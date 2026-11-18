@@ -1,3 +1,15 @@
+## [1.4.2] - 2026-11-18
+
+### Added
+* **Simplified Chinese:** Garage is now available in Simplified Chinese (简体中文), including the F-Droid store listing. Pick it in Settings, during onboarding, or from Android's per-app language settings.
+* **Chinese Yuan (CNY):** Added to the currency picker.
+
+### Changed
+* **Translated PDF Report:** The maintenance history PDF is now generated in your app language. Long labels no longer overlap: values follow the label, and table cells are shortened to fit their column.
+* **Translated Maintenance Names:** Built-in task names (e.g. oil change, tire rotation) and the preset schedule templates, with their titles, descriptions and notes, now show in your language in the timeline, suggestions, templates, notifications and the home-screen widget. They're still stored in English, so schedules and LubeLogger sync are unaffected.
+* **Translated OBD-II Scanner:** Connection progress and errors, sensor/PID names, readiness monitors and module names are now translated. Trouble-code descriptions are still English.
+* **Translated Messages:** Document renewal notifications, the trip-tracking notification, and VIN decoding, recall, backup, WebDAV and LubeLogger error messages now appear in your language, as does the LubeLogger duplicate-cleanup confirmation (with proper plural forms).
+
 ## [1.4.1] - 2026-11-17
 
 ### Fixed

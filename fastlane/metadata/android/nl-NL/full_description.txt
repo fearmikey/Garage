@@ -54,7 +54,7 @@ Garage is een privacyvriendelijke app voor voertuigbeheer op Android. Houd onder
 <ul>
 <li>Material You-ontwerp met kleurenpaletten en lichte en donkere modus</li>
 <li>Metrische of imperiale eenheden en veel valuta</li>
-<li>Beschikbaar in het Nederlands, Engels, Duits, Frans, Spaans, Italiaans, Portugees, Pools, Russisch en Turks</li>
+<li>Beschikbaar in het Nederlands, Engels, Duits, Frans, Spaans, Italiaans, Portugees, Pools, Russisch, Turks en vereenvoudigd Chinees</li>
 </ul>
 
 Garage is 100% vrije en opensourcesoftware onder de MIT-licentie. Vind je de app nuttig? Steun de ontwikkeling dan via Buy Me a Coffee.

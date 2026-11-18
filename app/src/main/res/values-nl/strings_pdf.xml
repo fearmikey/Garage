@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pdf_footer">Garage — Onderhouds- en historieboekje</string>
+    <string name="pdf_page_of">Pagina %1$d van %2$d</string>
+    <string name="pdf_header_continued_title">ONDERHOUDS- EN HISTORIEBOEKJE — %1$s</string>
+    <string name="pdf_continued">Vervolg</string>
+    <string name="pdf_banner_title">ONDERHOUDS- EN HISTORIEBOEKJE</string>
+    <string name="pdf_banner_subtitle">Officieel verkoop- en onderhoudsrapport</string>
+    <string name="pdf_generated">Gemaakt op %1$s</string>
+
+    <string name="pdf_not_recorded">Niet vastgelegd</string>
+    <string name="pdf_not_specified">Niet opgegeven</string>
+    <string name="pdf_label_vin">VIN:</string>
+    <string name="pdf_label_current_odometer">KM-STAND:</string>
+    <string name="pdf_label_current_mileage">MIJLSTAND:</string>
+    <string name="pdf_label_drivetrain">AANDRIJVING:</string>
+    <string name="pdf_label_transmission">VERSNELLINGSBAK:</string>
+    <string name="pdf_transmission_speeds">%1$s versn.</string>
+    <string name="pdf_standard">Standaard</string>
+    <string name="pdf_engine_cylinders">%1$s cil.</string>
+    <string name="pdf_standard_engine">Standaardmotor</string>
+    <string name="pdf_label_engine">MOTOR:</string>
+    <string name="pdf_label_fuel_type">BRANDSTOF:</string>
+    <string name="pdf_label_purchased">GEKOCHT:</string>
+    <string name="pdf_label_initial_odometer">BEGIN-KM-STAND:</string>
+    <string name="pdf_label_initial_mileage">BEGIN-MIJLSTAND:</string>
+    <string name="pdf_label_specs">GEGEVENS:</string>
+
+    <string name="pdf_summary_title">OVERZICHT ONDERHOUDSKOSTEN</string>
+    <string name="pdf_total_investment">TOTALE KOSTEN</string>
+    <string name="pdf_maintenance_care">ONDERHOUD</string>
+    <plurals name="pdf_records_logged">
+        <item quantity="one">%d invoer vastgelegd</item>
+        <item quantity="other">%d invoeren vastgelegd</item>
+    </plurals>
+    <string name="pdf_upgrades_mods">AANPASSINGEN</string>
+    <plurals name="pdf_installed_items">
+        <item quantity="one">%d onderdeel geplaatst</item>
+        <item quantity="other">%d onderdelen geplaatst</item>
+    </plurals>
+    <string name="pdf_logged_range">VASTGELEGD BEREIK</string>
+    <string name="pdf_range_to">tot %1$s</string>
+
+    <string name="pdf_recalls_clear">OFFICIËLE TERUGROEPSTATUS: GEEN (0 OPENSTAANDE TERUGROEPACTIES)</string>
+    <plurals name="pdf_recalls_verified_count">
+        <item quantity="one">Gecontroleerd in de NHTSA-database voor %1$s (%2$d actie gecontroleerd — 0 openstaand).</item>
+        <item quantity="other">Gecontroleerd in de NHTSA-database voor %1$s (%2$d acties gecontroleerd — 0 openstaand).</item>
+    </plurals>
+    <string name="pdf_recalls_verified_none">Gecontroleerd in de NHTSA-database voor %1$s. Geen lopende terugroepacties gevonden.</string>
+    <plurals name="pdf_recalls_open">
+        <item quantity="one">TERUGROEPSTATUS: %d OPENSTAANDE ACTIE</item>
+        <item quantity="other">TERUGROEPSTATUS: %d OPENSTAANDE ACTIES</item>
+    </plurals>
+    <string name="pdf_recall_item">• Actie nr. %1$s — Onderdeel: %2$s</string>
+    <string name="pdf_no_summary">Geen samenvatting beschikbaar.</string>
+
+    <string name="pdf_parts_title">ONDERDELEN EN VLOEISTOFFEN</string>
+    <string name="pdf_mods_title">VERBETERINGEN EN AANPASSINGEN</string>
+    <string name="pdf_fuel_title">TANK- EN LAADGESCHIEDENIS</string>
+    <string name="pdf_service_title">VOLLEDIGE ONDERHOUDSGESCHIEDENIS</string>
+    <string name="pdf_col_date">DATUM</string>
+    <string name="pdf_col_item">AANPASSING / ITEM</string>
+    <string name="pdf_col_category">CATEGORIE</string>
+    <string name="pdf_col_description">OMSCHRIJVING / NOTITIES</string>
+    <string name="pdf_col_cost">KOSTEN</string>
+    <string name="pdf_col_odometer">STAND (%1$s)</string>
+    <string name="pdf_col_mileage">MIJLEN</string>
+    <string name="pdf_col_type">TYPE</string>
+    <string name="pdf_col_details">DETAILS</string>
+    <string name="pdf_col_service">ONDERHOUD EN OMSCHRIJVING</string>
+    <string name="pdf_no_maintenance">Geen onderhoud vastgelegd voor dit voertuig.</string>
+</resources>

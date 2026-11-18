@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tpl_motorcycle_street_title">Moto de rua</string>
+    <string name="tpl_motorcycle_street_desc">Intervalos típicos para motos de rua, esportivas e de turismo, incluindo cuidados com a corrente e a suspensão.</string>
+    <string name="tpl_heavy_duty_title">Uso severo e reboque</string>
+    <string name="tpl_heavy_duty_desc">Trocas de fluidos mais frequentes e verificações de uso severo para picapes, veículos de reboque ou off-road.</string>
+    <string name="tpl_daily_commuter_title">Uso diário</string>
+    <string name="tpl_daily_commuter_desc">Intervalos de manutenção padrão e equilibrados para carros do dia a dia, viagens na estrada e veículos da família.</string>
+    <string name="tpl_hybrid_ev_title">Híbrido e elétrico (VE)</string>
+    <string name="tpl_hybrid_ev_desc">Otimizado para híbridos e elétricos, com foco no filtro de cabine, guias da pinça de freio e sistemas de arrefecimento.</string>
+    <string name="tpl_classic_title">Alta quilometragem e clássicos</string>
+    <string name="tpl_classic_desc">Inspeções frequentes e intervalos curtos para veículos antigos, motores rodados ou clássicos.</string>
+
+    <string name="tpl_task_motorcycle_oil">Óleo e filtro de moto</string>
+    <string name="tpl_task_chain_clean">Limpeza, lubrificação e folga da corrente</string>
+    <string name="tpl_task_tire_pressure_tread">Verificação de pressão e sulcos</string>
+    <string name="tpl_task_brake_fluid_front_rear">Troca do fluido de freio (dianteiro e traseiro)</string>
+    <string name="tpl_task_fork_seal">Óleo e retentores da bengala</string>
+    <string name="tpl_task_battery_tender">Mantenedor de bateria e terminais</string>
+    <string name="tpl_task_severe_oil">Óleo e filtro (uso severo)</string>
+    <string name="tpl_task_transfer_case_severe">Óleo da caixa de transferência (uso severo)</string>
+    <string name="tpl_task_diff_fluid">Óleo dos diferenciais dianteiro e traseiro</string>
+    <string name="tpl_task_chassis_grease">Lubrificação do chassi e pivôs</string>
+    <string name="tpl_task_hd_brake_suspension">Inspeção de freios e suspensão (uso severo)</string>
+    <string name="tpl_task_synthetic_oil">Óleo sintético e filtro</string>
+    <string name="tpl_task_rotation_pressure">Rodízio de pneus e pressão</string>
+    <string name="tpl_task_air_filters">Filtros de cabine e de ar</string>
+    <string name="tpl_task_multipoint">Inspeção geral</string>
+    <string name="tpl_task_hv_duct">Filtro de cabine e duto da bateria de alta tensão</string>
+    <string name="tpl_task_brake_slides">Lubrificação das guias da pinça e verificação do fluido</string>
+    <string name="tpl_task_rotation_alignment">Rodízio de pneus e alinhamento</string>
+    <string name="tpl_task_inverter_coolant">Troca do arrefecimento do inversor e da bateria</string>
+    <string name="tpl_task_high_zinc_oil">Troca de óleo com zinco / alta quilometragem</string>
+    <string name="tpl_task_cooling_hoses">Inspeção do arrefecimento e mangueiras</string>
+    <string name="tpl_task_ignition">Ignição, velas e distribuidor</string>
+    <string name="tpl_task_v_belts">Correias em V e tensor</string>
+    <string name="tpl_task_steering_grease">Lubrificação do chassi e da direção</string>
+
+    <string name="tpl_note_jaso_oil">Use óleo JASO MA/MA2 em motos com embreagem banhada a óleo.</string>
+    <string name="tpl_note_chain_rain">Com mais frequência após rodar na chuva ou na terra.</string>
+    <string name="tpl_note_moto_tire_check">Verifique a pressão a frio e procure desgaste irregular, rachaduras e objetos cravados.</string>
+    <string name="tpl_note_brake_fluid_moto">O fluido de freio é higroscópico; sangre os dois cilindros mestres.</string>
+    <string name="tpl_note_fork_oil">Troque o óleo da bengala; verifique se os retentores estão vazando.</string>
+    <string name="tpl_note_battery_tender">Mantenha em um mantenedor no inverno; limpe e aperte os terminais.</string>
+    <string name="tpl_note_severe_oil">Intervalo de uso severo para reboque frequente ou cargas pesadas.</string>
+    <string name="tpl_note_transfer_case">Recomendado para uso frequente de 4x4 ou travessias de água.</string>
+    <string name="tpl_note_severe_diff">Intervalo de uso severo para reboque e cargas pesadas.</string>
+    <string name="tpl_note_chassis_grease">Lubrifique as graxeiras, as cruzetas do cardã e as articulações da suspensão.</string>
+    <string name="tpl_note_hd_brakes">Verifique espessura das pastilhas, discos, controlador de freio do reboque e feixes de mola.</string>
+    <string name="tpl_note_synthetic_oil">Intervalo padrão para óleo totalmente sintético.</string>
+    <string name="tpl_note_rotation_even">Garante desgaste uniforme e consumo ideal.</string>
+    <string name="tpl_note_air_filters">Troque os dois filtros todo ano para a eficiência do ar-condicionado e do motor.</string>
+    <string name="tpl_note_wipers">Troque as palhetas para manter boa visibilidade.</string>
+    <string name="tpl_note_drive_belts">Troque as correias para evitar falhas dos acessórios.</string>
+    <string name="tpl_note_multipoint">Verifique mangueiras, luzes e níveis.</string>
+    <string name="tpl_note_hv_duct">Limpe/troque o filtro de cabine e verifique a entrada do ventilador da bateria de alta tensão.</string>
+    <string name="tpl_note_brake_slides">A frenagem regenerativa reduz o desgaste das pastilhas, mas as guias precisam de lubrificação regular para não travar.</string>
+    <string name="tpl_note_ev_tires">O torque instantâneo do motor elétrico desgasta os pneus mais rápido.</string>
+    <string name="tpl_note_inverter_coolant">Inspecione e troque o líquido de arrefecimento dos componentes de alta tensão.</string>
+    <string name="tpl_note_high_zinc">Protege comandos com tuchos planos ou retentores de motores rodados.</string>
+    <string name="tpl_note_cooling_hoses">Inspecione mangueiras do radiador, válvula termostática, radiador do aquecedor e estado do líquido.</string>
+    <string name="tpl_note_ignition">Inspecione velas, cabos, tampa do distribuidor e rotor/platinado.</string>
+    <string name="tpl_note_v_belts">Verifique a tensão das correias e se há rachaduras ou vitrificação.</string>
+    <string name="tpl_note_steering_grease">Lubrifique terminais de direção, pivôs, braço pitman e buchas da suspensão.</string>
+
+    <string name="rule_note_4wd_interval">Intervalo genérico 4x4/AWD; confira o manual do proprietário para o valor exato.</string>
+    <string name="rule_note_chain_lube">Só para motos com corrente; verifique também a folga. Ignore em transmissão por correia ou cardã.</string>
+    <string name="rule_note_chain_sprocket">Só para motos com corrente. Troque a corrente e as duas coroas juntas.</string>
+    <string name="rule_note_cables">Lubrifique e ajuste a folga dos cabos de embreagem e acelerador.</string>
+    <string name="rule_note_moto_tires">O pneu traseiro costuma gastar 1,5–2× mais rápido que o dianteiro; verifique os sulcos e a data DOT.</string>
+</resources>

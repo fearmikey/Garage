@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pdf_footer">Garage — Fahrzeug-Service- &amp; Historienbuch</string>
+    <string name="pdf_page_of">Seite %1$d von %2$d</string>
+    <string name="pdf_header_continued_title">SERVICE- &amp; HISTORIENBUCH — %1$s</string>
+    <string name="pdf_continued">Fortsetzung</string>
+    <string name="pdf_banner_title">FAHRZEUG-SERVICE- &amp; HISTORIENBUCH</string>
+    <string name="pdf_banner_subtitle">Offizieller Wiederverkaufs- &amp; Pflegebericht</string>
+    <string name="pdf_generated">Erstellt am %1$s</string>
+
+    <string name="pdf_not_recorded">Nicht erfasst</string>
+    <string name="pdf_not_specified">Nicht angegeben</string>
+    <string name="pdf_label_vin">FIN:</string>
+    <string name="pdf_label_current_odometer">KM-STAND:</string>
+    <string name="pdf_label_current_mileage">MEILENSTAND:</string>
+    <string name="pdf_label_drivetrain">ANTRIEB:</string>
+    <string name="pdf_label_transmission">GETRIEBE:</string>
+    <string name="pdf_transmission_speeds">%1$s-Gang</string>
+    <string name="pdf_standard">Standard</string>
+    <string name="pdf_engine_cylinders">%1$s-Zyl.</string>
+    <string name="pdf_standard_engine">Standardmotor</string>
+    <string name="pdf_label_engine">MOTOR:</string>
+    <string name="pdf_label_fuel_type">KRAFTSTOFF:</string>
+    <string name="pdf_label_purchased">GEKAUFT:</string>
+    <string name="pdf_label_initial_odometer">START-KM-STAND:</string>
+    <string name="pdf_label_initial_mileage">START-MEILENSTAND:</string>
+    <string name="pdf_label_specs">DATEN:</string>
+
+    <string name="pdf_summary_title">ÜBERSICHT DER PFLEGEKOSTEN</string>
+    <string name="pdf_total_investment">GESAMTKOSTEN</string>
+    <string name="pdf_maintenance_care">WARTUNG &amp; PFLEGE</string>
+    <plurals name="pdf_records_logged">
+        <item quantity="one">%d Eintrag erfasst</item>
+        <item quantity="other">%d Einträge erfasst</item>
+    </plurals>
+    <string name="pdf_upgrades_mods">UMBAUTEN &amp; TUNING</string>
+    <plurals name="pdf_installed_items">
+        <item quantity="one">%d Teil verbaut</item>
+        <item quantity="other">%d Teile verbaut</item>
+    </plurals>
+    <string name="pdf_logged_range">ERFASSTER BEREICH</string>
+    <string name="pdf_range_to">bis %1$s</string>
+
+    <string name="pdf_recalls_clear">OFFIZIELLER RÜCKRUFSTATUS: OHNE BEFUND (0 OFFENE RÜCKRUFE)</string>
+    <plurals name="pdf_recalls_verified_count">
+        <item quantity="one">Über die NHTSA-Datenbank geprüft für %1$s (%2$d Aktion geprüft — 0 offene Rückrufe).</item>
+        <item quantity="other">Über die NHTSA-Datenbank geprüft für %1$s (%2$d Aktionen geprüft — 0 offene Rückrufe).</item>
+    </plurals>
+    <string name="pdf_recalls_verified_none">Über die NHTSA-Datenbank geprüft für %1$s. Keine laufenden Sicherheitsrückrufe gefunden.</string>
+    <plurals name="pdf_recalls_open">
+        <item quantity="one">RÜCKRUFSTATUS: %d OFFENER RÜCKRUF</item>
+        <item quantity="other">RÜCKRUFSTATUS: %d OFFENE RÜCKRUFE</item>
+    </plurals>
+    <string name="pdf_recall_item">• Aktion Nr. %1$s — Bauteil: %2$s</string>
+    <string name="pdf_no_summary">Keine Zusammenfassung verfügbar.</string>
+
+    <string name="pdf_parts_title">TEILE- &amp; FLÜSSIGKEITSDATEN</string>
+    <string name="pdf_mods_title">FAHRZEUGUMBAUTEN &amp; TUNING</string>
+    <string name="pdf_fuel_title">TANK- &amp; LADEPROTOKOLL</string>
+    <string name="pdf_service_title">LÜCKENLOSES SERVICEPROTOKOLL</string>
+    <string name="pdf_col_date">DATUM</string>
+    <string name="pdf_col_item">UMBAU / TEIL</string>
+    <string name="pdf_col_category">KATEGORIE</string>
+    <string name="pdf_col_description">BESCHREIBUNG</string>
+    <string name="pdf_col_cost">KOSTEN</string>
+    <string name="pdf_col_odometer">STAND (%1$s)</string>
+    <string name="pdf_col_mileage">MEILEN</string>
+    <string name="pdf_col_type">ART</string>
+    <string name="pdf_col_details">DETAILS</string>
+    <string name="pdf_col_service">SERVICE &amp; BESCHREIBUNG</string>
+    <string name="pdf_no_maintenance">Für dieses Fahrzeug sind keine Wartungseinträge erfasst.</string>
+</resources>

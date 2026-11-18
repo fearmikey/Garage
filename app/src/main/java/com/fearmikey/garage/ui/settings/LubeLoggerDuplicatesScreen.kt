@@ -36,6 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import com.fearmikey.garage.R
@@ -54,9 +55,10 @@ fun LubeLoggerDuplicatesScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(uiState.userMessage) {
-        uiState.userMessage?.let {
-            snackbarHostState.showSnackbar(it)
+    val resources = LocalResources.current
+    LaunchedEffect(uiState.deletedCount) {
+        uiState.deletedCount?.let { count ->
+            snackbarHostState.showSnackbar(resources.getQuantityString(R.plurals.dup_deleted_message, count, count))
             viewModel.consumeUserMessage()
         }
     }

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tpl_motorcycle_street_title">Yol motosikleti</string>
+    <string name="tpl_motorcycle_street_desc">Zincir bakımı ve süspansiyon servisi dahil, yol, spor ve tur motosikletleri için tipik aralıklar.</string>
+    <string name="tpl_heavy_duty_title">Ağır hizmet ve çekme</string>
+    <string name="tpl_heavy_duty_desc">Kamyonet, çekici araç veya arazi araçları için kısaltılmış sıvı değişim aralıkları ve ağır koşul kontrolleri.</string>
+    <string name="tpl_daily_commuter_title">Günlük kullanım</string>
+    <string name="tpl_daily_commuter_desc">Günlük araçlar, otoyol yolculukları ve aile araçları için standart, dengeli bakım aralıkları.</string>
+    <string name="tpl_hybrid_ev_title">Hibrit ve elektrikli araç (EV)</string>
+    <string name="tpl_hybrid_ev_desc">Polen filtresi, kaliper kızakları ve soğutma sistemlerine öncelik veren, hibrit ve elektrikli araçlar için optimize edilmiş plan.</string>
+    <string name="tpl_classic_title">Yüksek kilometre ve klasik araç</string>
+    <string name="tpl_classic_desc">Eski araçlar, yüksek kilometreli motorlar veya klasikler için sık kontroller ve kısa aralıklar.</string>
+
+    <string name="tpl_task_motorcycle_oil">Motosiklet yağı ve filtresi</string>
+    <string name="tpl_task_chain_clean">Zincir temizliği, yağlama ve gerginlik kontrolü</string>
+    <string name="tpl_task_tire_pressure_tread">Lastik basıncı ve diş kontrolü</string>
+    <string name="tpl_task_brake_fluid_front_rear">Fren hidroliği değişimi (ön ve arka)</string>
+    <string name="tpl_task_fork_seal">Amortisör yağı ve keçe bakımı</string>
+    <string name="tpl_task_battery_tender">Akü koruma şarjı ve kutup başı kontrolü</string>
+    <string name="tpl_task_severe_oil">Motor yağı ve filtre (ağır koşullar)</string>
+    <string name="tpl_task_transfer_case_severe">Transfer kutusu yağı (ağır koşullar)</string>
+    <string name="tpl_task_diff_fluid">Ön ve arka diferansiyel yağı</string>
+    <string name="tpl_task_chassis_grease">Şasi gresleme ve rotiller</string>
+    <string name="tpl_task_hd_brake_suspension">Ağır hizmet fren ve süspansiyon kontrolü</string>
+    <string name="tpl_task_synthetic_oil">Tam sentetik yağ ve filtre</string>
+    <string name="tpl_task_rotation_pressure">Lastik rotasyonu ve basınç kontrolü</string>
+    <string name="tpl_task_air_filters">Polen ve hava filtreleri</string>
+    <string name="tpl_task_multipoint">Çok noktalı kontrol</string>
+    <string name="tpl_task_hv_duct">Polen filtresi ve YG batarya kanalı kontrolü</string>
+    <string name="tpl_task_brake_slides">Kaliper kızağı yağlama ve hidrolik kontrolü</string>
+    <string name="tpl_task_rotation_alignment">Lastik rotasyonu ve rot ayarı kontrolü</string>
+    <string name="tpl_task_inverter_coolant">İnvertör ve batarya soğutma sıvısı değişimi</string>
+    <string name="tpl_task_high_zinc_oil">Yüksek çinkolu / yüksek kilometre yağ değişimi</string>
+    <string name="tpl_task_cooling_hoses">Soğutma sistemi ve hortum kontrolü</string>
+    <string name="tpl_task_ignition">Ateşleme, bujiler ve distribütör</string>
+    <string name="tpl_task_v_belts">V kayışları ve gergi kontrolü</string>
+    <string name="tpl_task_steering_grease">Şasi ve direksiyon gresleme</string>
+
+    <string name="tpl_note_jaso_oil">Islak debriyajlı motosikletlerde JASO MA/MA2 onaylı yağ kullanın.</string>
+    <string name="tpl_note_chain_rain">Yağmurda veya çamurda sürüşten sonra daha sık.</string>
+    <string name="tpl_note_moto_tire_check">Basıncı soğukken kontrol edin; düzensiz aşınma, çatlak ve batan cisim olup olmadığına bakın.</string>
+    <string name="tpl_note_brake_fluid_moto">Fren hidroliği nem çeker; her iki ana merkezin hidroliğini değiştirin.</string>
+    <string name="tpl_note_fork_oil">Amortisör yağını değiştirin; keçelerde sızıntı olup olmadığını kontrol edin.</string>
+    <string name="tpl_note_battery_tender">Kış depolamasında akü koruma şarj cihazına bağlayın; kutup başlarını temizleyip sıkın.</string>
+    <string name="tpl_note_severe_oil">Sık çekme veya ağır yükler için ağır koşul aralığı.</string>
+    <string name="tpl_note_transfer_case">Sık 4x4 kullanımı veya sudan geçişler için önerilir.</string>
+    <string name="tpl_note_severe_diff">Çekme ve ağır yükler için ağır koşul aralığı.</string>
+    <string name="tpl_note_chassis_grease">Gresörlükleri, kardan mafsallarını ve süspansiyon mafsallarını gresleyin.</string>
+    <string name="tpl_note_hd_brakes">Balata kalınlığını, diskleri, römork fren kontrolcüsünü ve makas yaylarını kontrol edin.</string>
+    <string name="tpl_note_synthetic_oil">Tam sentetik yağ için standart değişim aralığı.</string>
+    <string name="tpl_note_rotation_even">Düzgün diş aşınması ve en iyi yakıt verimliliği sağlar.</string>
+    <string name="tpl_note_air_filters">Klima ve motor verimliliği için her iki filtreyi yılda bir değiştirin.</string>
+    <string name="tpl_note_wipers">Net görüş için silecek lastiklerini değiştirin.</string>
+    <string name="tpl_note_drive_belts">Yardımcı ünite arızalarını önlemek için tahrik kayışlarını değiştirin.</string>
+    <string name="tpl_note_multipoint">Hortumları, lambaları ve sıvı seviyelerini kontrol edin.</string>
+    <string name="tpl_note_hv_duct">Polen filtresini temizleyin/değiştirin ve yüksek gerilim bataryası soğutma fanı girişini kontrol edin.</string>
+    <string name="tpl_note_brake_slides">Rejeneratif frenleme balata aşınmasını azaltır, ancak kızak pimlerinin sıkışmaması için düzenli yağlanması gerekir.</string>
+    <string name="tpl_note_ev_tires">Elektrik motorunun anlık torku lastikleri daha hızlı aşındırır.</string>
+    <string name="tpl_note_inverter_coolant">Yüksek gerilim bileşenlerinin soğutma sistemini kontrol edip sıvısını değiştirin.</string>
+    <string name="tpl_note_high_zinc">Düz itecekli eksantrik millerini veya yüksek kilometreli motor keçelerini korur.</string>
+    <string name="tpl_note_cooling_hoses">Radyatör hortumlarını, termostatı, kalorifer peteğini ve soğutma sıvısının durumunu kontrol edin.</string>
+    <string name="tpl_note_ignition">Bujileri, buji kablolarını, distribütör kapağını ve tevzi makarasını/platini kontrol edin.</string>
+    <string name="tpl_note_v_belts">Kayış gerginliğini kontrol edin; çatlak veya parlama olup olmadığına bakın.</string>
+    <string name="tpl_note_steering_grease">Rot başlarını, rotilleri, pitman kolunu ve süspansiyon burçlarını gresleyin.</string>
+
+    <string name="rule_note_4wd_interval">Genel 4WD/AWD aralığı; kesin değer için kullanım kılavuzunuza bakın.</string>
+    <string name="rule_note_chain_lube">Yalnızca zincirli motosikletler; gerginliği de kontrol edin. Kayış veya kardan aktarmada dikkate almayın.</string>
+    <string name="rule_note_chain_sprocket">Yalnızca zincirli motosikletler. Zinciri ve iki dişliyi birlikte değiştirin.</string>
+    <string name="rule_note_cables">Telli debriyaj ve gaz kumandasını yağlayıp boşluğunu ayarlayın.</string>
+    <string name="rule_note_moto_tires">Arka lastik genellikle önden 1,5–2 kat hızlı aşınır; diş derinliğini ve DOT tarihini kontrol edin.</string>
+</resources>

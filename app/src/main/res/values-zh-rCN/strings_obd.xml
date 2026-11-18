@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- OBD2 scanner: progress while connecting / scanning -->
+    <string name="obd_progress_connecting">正在连接适配器…</string>
+    <string name="obd_progress_reconnecting">正在重新连接…</string>
+    <string name="obd_progress_protocol">正在检测车辆协议…</string>
+    <string name="obd_progress_battery">正在检查蓄电池电压…</string>
+    <string name="obd_progress_readiness">正在检查故障灯与就绪状态…</string>
+    <string name="obd_progress_stored_codes">正在读取已存储的故障码…</string>
+    <string name="obd_progress_pending_codes">正在读取待定故障码…</string>
+    <string name="obd_progress_permanent_codes">正在读取永久故障码…</string>
+    <string name="obd_progress_freeze_frame">正在读取冻结帧…</string>
+    <string name="obd_progress_odometer">正在读取里程表…</string>
+    <string name="obd_progress_distance_cleared">正在读取清码后行驶距离…</string>
+    <string name="obd_progress_vin">正在读取 VIN…</string>
+    <string name="obd_progress_pid">正在读取%1$s…</string>
+
+    <!-- OBD2 scanner: errors -->
+    <string name="obd_error_connect_wifi">无法连接到 %1$s 的 Wi-Fi 适配器。请确认手机已连接到适配器的 Wi-Fi 网络。</string>
+    <string name="obd_error_connect_ble">无法连接到低功耗蓝牙适配器。请确认适配器已插好、点火开关已打开，并且没有连接到其他手机。</string>
+    <string name="obd_error_connect_classic">无法连接到适配器。请确认蓝牙已开启、适配器已插好、点火开关已打开，并且在通信范围内。</string>
+    <string name="obd_error_timeout">适配器停止响应。请检查适配器是否通电，以及点火开关是否已打开。</string>
+    <string name="obd_error_lost_connection">与适配器的连接已断开。</string>
+    <string name="obd_error_generic">与 OBD 适配器通信时出错：%1$s</string>
+    <string name="obd_error_clear_not_confirmed">车辆未确认清除操作。请关闭发动机（保持点火开关打开）后重试。</string>
+    <string name="obd_error_clear_no_response">适配器未响应清除请求。</string>
+    <string name="obd_error_no_live_pids">此车辆不提供任何实时数据。</string>
+    <string name="obd_error_unable_to_connect">适配器无法与车辆通信。点火开关是否已打开？</string>
+    <string name="obd_error_can_bus">CAN 总线错误。请检查适配器是否完全插入 OBD2 接口。</string>
+    <string name="obd_error_vehicle_bus">车辆总线错误。请检查适配器是否完全插入 OBD2 接口。</string>
+    <string name="obd_error_bus_feedback">车辆总线反馈错误。请检查适配器连接。</string>
+    <string name="obd_error_low_voltage">适配器因电压过低而重置。请检查车辆蓄电池。</string>
+    <string name="obd_error_bus_init">适配器报告总线初始化错误。点火开关是否已打开？</string>
+    <string name="obd_error_internal">适配器报告内部错误 %1$s。</string>
+
+    <!-- OBD2 scanner: control modules that reported a code -->
+    <string name="obd_module_engine">发动机 (ECM)</string>
+    <string name="obd_module_transmission">变速箱 (TCM)</string>
+    <string name="obd_module_numbered">模块 %1$s</string>
+
+    <!-- OBD2 scanner: emissions readiness monitors -->
+    <string name="obd_monitor_misfire">失火</string>
+    <string name="obd_monitor_fuel_system">燃油系统</string>
+    <string name="obd_monitor_components">综合部件</string>
+    <string name="obd_monitor_nmhc_catalyst">NMHC 催化器</string>
+    <string name="obd_monitor_nox_scr">NOx/SCR 后处理</string>
+    <string name="obd_monitor_boost_pressure">增压压力</string>
+    <string name="obd_monitor_exhaust_gas_sensor">排气传感器</string>
+    <string name="obd_monitor_pm_filter">颗粒捕集器</string>
+    <string name="obd_monitor_egr_vvt">EGR/VVT 系统</string>
+    <string name="obd_monitor_catalyst">催化转化器</string>
+    <string name="obd_monitor_heated_catalyst">加热型催化器</string>
+    <string name="obd_monitor_evap">蒸发排放系统</string>
+    <string name="obd_monitor_secondary_air">二次空气</string>
+    <string name="obd_monitor_ac_refrigerant">空调制冷剂</string>
+    <string name="obd_monitor_o2_sensor">氧传感器</string>
+    <string name="obd_monitor_o2_heater">氧传感器加热器</string>
+
+    <!-- OBD2 scanner: sensor (PID) names -->
+    <string name="obd_pid_engine_load">发动机负荷</string>
+    <string name="obd_pid_coolant_temp">冷却液温度</string>
+    <string name="obd_pid_short_fuel_trim">短期燃油修正 (B1)</string>
+    <string name="obd_pid_long_fuel_trim">长期燃油修正 (B1)</string>
+    <string name="obd_pid_intake_pressure">进气歧管压力</string>
+    <string name="obd_pid_rpm">发动机转速</string>
+    <string name="obd_pid_speed">车速</string>
+    <string name="obd_pid_intake_air_temp">进气温度</string>
+    <string name="obd_pid_maf">空气流量</string>
+    <string name="obd_pid_throttle">节气门位置</string>
+    <string name="obd_pid_run_time">启动后运行时间</string>
+    <string name="obd_pid_fuel_rail_pressure">油轨压力</string>
+    <string name="obd_pid_fuel_level">燃油液位</string>
+    <string name="obd_pid_barometric_pressure">大气压力</string>
+    <string name="obd_pid_module_voltage">蓄电池 / 模块电压</string>
+    <string name="obd_pid_ambient_air_temp">环境温度</string>
+    <string name="obd_pid_hybrid_battery">混动电池电量</string>
+    <string name="obd_pid_oil_temp">机油温度</string>
+</resources>

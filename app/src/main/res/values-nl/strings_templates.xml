@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tpl_motorcycle_street_title">Straatmotor</string>
+    <string name="tpl_motorcycle_street_desc">Gangbare intervallen voor straat-, sport- en toermotoren, inclusief kettingonderhoud en veringservice.</string>
+    <string name="tpl_heavy_duty_title">Zwaar gebruik en trekken</string>
+    <string name="tpl_heavy_duty_desc">Kortere vloeistofintervallen en controles voor zwaar gebruik bij pick-ups, trekvoertuigen of terreinwagens.</string>
+    <string name="tpl_daily_commuter_title">Dagelijks woon-werkverkeer</string>
+    <string name="tpl_daily_commuter_desc">Standaard, evenwichtige onderhoudsintervallen voor dagelijkse auto\'s, snelwegforenzen en gezinsauto\'s.</string>
+    <string name="tpl_hybrid_ev_title">Hybride en elektrisch (EV)</string>
+    <string name="tpl_hybrid_ev_desc">Geoptimaliseerd voor hybride en elektrische auto\'s, met nadruk op interieurfilter, remgeleiders en koelsystemen.</string>
+    <string name="tpl_classic_title">Hoge kilometerstand en klassiekers</string>
+    <string name="tpl_classic_desc">Frequente controles en korte intervallen voor oudere voertuigen, motoren met veel kilometers of klassiekers.</string>
+
+    <string name="tpl_task_motorcycle_oil">Motorolie en filter (motor)</string>
+    <string name="tpl_task_chain_clean">Ketting reinigen, smeren en speling controleren</string>
+    <string name="tpl_task_tire_pressure_tread">Bandenspanning en profiel controleren</string>
+    <string name="tpl_task_brake_fluid_front_rear">Remvloeistof verversen (voor en achter)</string>
+    <string name="tpl_task_fork_seal">Voorvorkolie en keerringen</string>
+    <string name="tpl_task_battery_tender">Druppellader en accupolen controleren</string>
+    <string name="tpl_task_severe_oil">Motorolie en filter (zwaar gebruik)</string>
+    <string name="tpl_task_transfer_case_severe">Olie verdeelbak (zwaar gebruik)</string>
+    <string name="tpl_task_diff_fluid">Olie voor- en achterdifferentieel</string>
+    <string name="tpl_task_chassis_grease">Chassis smeren en kogelgewrichten</string>
+    <string name="tpl_task_hd_brake_suspension">Rem- en veringcontrole (zwaar gebruik)</string>
+    <string name="tpl_task_synthetic_oil">Volsynthetische olie en filter</string>
+    <string name="tpl_task_rotation_pressure">Banden wisselen en spanning controleren</string>
+    <string name="tpl_task_air_filters">Interieur- en luchtfilter</string>
+    <string name="tpl_task_multipoint">Meerpuntscontrole</string>
+    <string name="tpl_task_hv_duct">Interieurfilter en luchtkanaal HV-accu</string>
+    <string name="tpl_task_brake_slides">Remgeleiders smeren en remvloeistof controleren</string>
+    <string name="tpl_task_rotation_alignment">Banden wisselen en uitlijning controleren</string>
+    <string name="tpl_task_inverter_coolant">Koelvloeistof omvormer en accu verversen</string>
+    <string name="tpl_task_high_zinc_oil">Olie verversen met zinkrijke / high-mileage olie</string>
+    <string name="tpl_task_cooling_hoses">Koelsysteem en slangen controleren</string>
+    <string name="tpl_task_ignition">Ontsteking, bougies en verdeler</string>
+    <string name="tpl_task_v_belts">V-snaren en spanner controleren</string>
+    <string name="tpl_task_steering_grease">Chassis en stuurinrichting smeren</string>
+
+    <string name="tpl_note_jaso_oil">Gebruik olie volgens JASO MA/MA2 bij motoren met natte koppeling.</string>
+    <string name="tpl_note_chain_rain">Vaker na rijden in regen of vuil.</string>
+    <string name="tpl_note_moto_tire_check">Controleer de spanning koud en let op uitslijting, scheurtjes en vastzittende voorwerpen.</string>
+    <string name="tpl_note_brake_fluid_moto">Remvloeistof is hygroscopisch; ververs beide hoofdremcilinders.</string>
+    <string name="tpl_note_fork_oil">Ververs de voorvorkolie; controleer de keerringen op lekkage.</string>
+    <string name="tpl_note_battery_tender">Houd in de winterstalling aan een druppellader; maak de polen schoon en zet ze vast.</string>
+    <string name="tpl_note_severe_oil">Interval voor zwaar gebruik bij vaak trekken of zware lasten.</string>
+    <string name="tpl_note_transfer_case">Aanbevolen bij vaak 4WD-gebruik of doorwaden.</string>
+    <string name="tpl_note_severe_diff">Interval voor zwaar gebruik bij trekken en zware lasten.</string>
+    <string name="tpl_note_chassis_grease">Smeer de smeernippels, kruiskoppelingen van de cardanas en veringgewrichten.</string>
+    <string name="tpl_note_hd_brakes">Controleer remblokdikte, remschijven, aanhangerremregelaar en bladveren.</string>
+    <string name="tpl_note_synthetic_oil">Standaard verversinterval voor volsynthetische olie.</string>
+    <string name="tpl_note_rotation_even">Zorgt voor gelijkmatige profielslijtage en optimaal verbruik.</string>
+    <string name="tpl_note_air_filters">Vervang beide filters jaarlijks voor efficiënte airco en motor.</string>
+    <string name="tpl_note_wipers">Vervang de ruitenwisserbladen voor goed zicht.</string>
+    <string name="tpl_note_drive_belts">Vervang de aandrijfriemen om storingen aan hulpaggregaten te voorkomen.</string>
+    <string name="tpl_note_multipoint">Controleer slangen, verlichting en vloeistofniveaus.</string>
+    <string name="tpl_note_hv_duct">Reinig/vervang het interieurfilter en controleer de luchtinlaat van de koelventilator van de hoogspanningsaccu.</string>
+    <string name="tpl_note_brake_slides">Regeneratief remmen spaart de remblokken, maar de geleidepennen moeten regelmatig gesmeerd worden om vastlopen te voorkomen.</string>
+    <string name="tpl_note_ev_tires">Het directe koppel van de elektromotor slijt banden sneller.</string>
+    <string name="tpl_note_inverter_coolant">Controleer en ververs het koelsysteem van de hoogspanningscomponenten.</string>
+    <string name="tpl_note_high_zinc">Beschermt nokkenassen met vlakke klepstoters of keerringen van motoren met veel kilometers.</string>
+    <string name="tpl_note_cooling_hoses">Controleer radiateurslangen, thermostaat, kachelradiateur en staat van de koelvloeistof.</string>
+    <string name="tpl_note_ignition">Controleer bougies, bougiekabels, verdelerkap en rotor/contactpunten.</string>
+    <string name="tpl_note_v_belts">Controleer de riemspanning en let op scheurtjes of glazige plekken.</string>
+    <string name="tpl_note_steering_grease">Smeer stuurkogels, kogelgewrichten, pitmanarm en veringbussen.</string>
+
+    <string name="rule_note_4wd_interval">Algemeen 4WD/AWD-interval; zie je handleiding voor de exacte waarde.</string>
+    <string name="rule_note_chain_lube">Alleen motoren met kettingaandrijving; controleer ook de speling. Negeer bij riem- of cardanaandrijving.</string>
+    <string name="rule_note_chain_sprocket">Alleen motoren met kettingaandrijving. Vervang ketting en beide tandwielen samen.</string>
+    <string name="rule_note_cables">Smeer kabelbediende koppeling en gas en stel de vrije slag af.</string>
+    <string name="rule_note_moto_tires">Achterbanden slijten meestal 1,5–2× sneller dan voorbanden; controleer profiel en DOT-datum.</string>
+</resources>

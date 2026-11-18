@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Parts & fluids editor -->
+    <string name="parts_edit_title">编辑配件与油液</string>
+    <string name="parts_autofill">自动填写预估规格</string>
+    <string name="parts_autofill_msg">自动填写的油液容量和配件规格是根据解码的 VIN 和发动机数据估算的。\n\n在购买油液或保养车辆之前，请务必对照官方用户手册核对所有数值，以确保准确无误。</string>
+    <string name="parts_apply_understand">我已了解，应用</string>
+
+    <!-- Vehicle detail toolbar -->
+    <string name="vehicle_cd_obd">OBD2 扫描仪</string>
+    <string name="vehicle_cd_export">导出保养记录</string>
+    <string name="vehicle_unnamed">未命名车辆</string>
+    <string name="tabs_cd_reorder">调整标签页顺序</string>
+
+    <!-- Shared components -->
+    <string name="currency_select_title">选择货币</string>
+    <string name="currency_search">搜索货币…</string>
+    <string name="currency_none_found">未找到匹配的货币。</string>
+    <string name="bmac_title">支持 Garage</string>
+    <string name="bmac_message">喜欢 Garage 吗？如果这款应用对您有帮助，欢迎支持它的开源开发！</string>
+    <string name="bmac_dont_ask">不再询问</string>
+    <string name="bmac_later">以后再说</string>
+    <string name="status_overdue">已逾期</string>
+    <string name="status_upcoming">即将到期</string>
+    <string name="status_on_track">正常</string>
+    <string name="status_done">已完成</string>
+    <string name="odo_vehicle">车辆</string>
+    <string name="odo_current">当前：%1$s</string>
+    <string name="odo_new_reading">新的里程表读数（%1$s）</string>
+    <string name="odo_notes_optional">备注（可选）</string>
+    <string name="odo_notes_placeholder">例如：每周里程记录</string>
+    <string name="trend_tap_to_edit">点按以编辑</string>
+    <string name="trend_unusual_reading">异常读数</string>
+    <string name="url_invalid">无效的 URL</string>
+    <string name="url_open_failed">无法打开链接</string>
+</resources>

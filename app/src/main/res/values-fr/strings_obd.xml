@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- OBD2 scanner: progress while connecting / scanning -->
+    <string name="obd_progress_connecting">Connexion à l\'adaptateur…</string>
+    <string name="obd_progress_reconnecting">Reconnexion…</string>
+    <string name="obd_progress_protocol">Détection du protocole du véhicule…</string>
+    <string name="obd_progress_battery">Vérification de la tension de la batterie…</string>
+    <string name="obd_progress_readiness">Vérification du voyant moteur et de l\'état de préparation…</string>
+    <string name="obd_progress_stored_codes">Lecture des codes défaut enregistrés…</string>
+    <string name="obd_progress_pending_codes">Lecture des codes défaut en attente…</string>
+    <string name="obd_progress_permanent_codes">Lecture des codes défaut permanents…</string>
+    <string name="obd_progress_freeze_frame">Lecture des données figées…</string>
+    <string name="obd_progress_odometer">Lecture du compteur kilométrique…</string>
+    <string name="obd_progress_distance_cleared">Lecture de la distance depuis l\'effacement des codes…</string>
+    <string name="obd_progress_vin">Lecture du VIN…</string>
+    <string name="obd_progress_pid">Lecture : %1$s…</string>
+
+    <!-- OBD2 scanner: errors -->
+    <string name="obd_error_connect_wifi">Impossible de joindre l\'adaptateur Wi-Fi à l\'adresse %1$s. Vérifiez que votre téléphone est connecté au réseau Wi-Fi de l\'adaptateur.</string>
+    <string name="obd_error_connect_ble">Impossible de se connecter à l\'adaptateur Bluetooth LE. Vérifiez qu\'il est branché, que le contact est mis et qu\'il n\'est pas connecté à un autre téléphone.</string>
+    <string name="obd_error_connect_classic">Impossible de joindre l\'adaptateur. Vérifiez que le Bluetooth est activé, que l\'adaptateur est branché, que le contact est mis et qu\'il est à portée.</string>
+    <string name="obd_error_timeout">L\'adaptateur ne répond plus. Vérifiez qu\'il est alimenté et que le contact est mis.</string>
+    <string name="obd_error_lost_connection">Connexion à l\'adaptateur perdue.</string>
+    <string name="obd_error_generic">Erreur de communication avec l\'adaptateur OBD : %1$s</string>
+    <string name="obd_error_clear_not_confirmed">Le véhicule n\'a pas confirmé l\'effacement. Coupez le moteur (contact mis) et réessayez.</string>
+    <string name="obd_error_clear_no_response">L\'adaptateur n\'a pas répondu à la demande d\'effacement.</string>
+    <string name="obd_error_no_live_pids">Ce véhicule ne fournit aucune donnée en direct.</string>
+    <string name="obd_error_unable_to_connect">L\'adaptateur n\'a pas pu communiquer avec le véhicule. Le contact est-il mis ?</string>
+    <string name="obd_error_can_bus">Erreur du bus CAN. Vérifiez que l\'adaptateur est bien enfoncé dans la prise OBD2.</string>
+    <string name="obd_error_vehicle_bus">Erreur du bus véhicule. Vérifiez que l\'adaptateur est bien enfoncé dans la prise OBD2.</string>
+    <string name="obd_error_bus_feedback">Erreur de retour du bus véhicule. Vérifiez la connexion de l\'adaptateur.</string>
+    <string name="obd_error_low_voltage">L\'adaptateur a redémarré à cause d\'une tension trop basse. Vérifiez la batterie du véhicule.</string>
+    <string name="obd_error_bus_init">L\'adaptateur signale une erreur d\'initialisation du bus. Le contact est-il mis ?</string>
+    <string name="obd_error_internal">L\'adaptateur signale l\'erreur interne %1$s.</string>
+
+    <!-- OBD2 scanner: control modules that reported a code -->
+    <string name="obd_module_engine">Moteur (ECM)</string>
+    <string name="obd_module_transmission">Boîte de vitesses (TCM)</string>
+    <string name="obd_module_numbered">Module %1$s</string>
+
+    <!-- OBD2 scanner: emissions readiness monitors -->
+    <string name="obd_monitor_misfire">Ratés d\'allumage</string>
+    <string name="obd_monitor_fuel_system">Circuit de carburant</string>
+    <string name="obd_monitor_components">Composants</string>
+    <string name="obd_monitor_nmhc_catalyst">Catalyseur NMHC</string>
+    <string name="obd_monitor_nox_scr">Post-traitement NOx/SCR</string>
+    <string name="obd_monitor_boost_pressure">Pression de suralimentation</string>
+    <string name="obd_monitor_exhaust_gas_sensor">Capteur de gaz d\'échappement</string>
+    <string name="obd_monitor_pm_filter">Filtre à particules</string>
+    <string name="obd_monitor_egr_vvt">Système EGR/VVT</string>
+    <string name="obd_monitor_catalyst">Catalyseur</string>
+    <string name="obd_monitor_heated_catalyst">Catalyseur chauffé</string>
+    <string name="obd_monitor_evap">Système d\'évaporation</string>
+    <string name="obd_monitor_secondary_air">Air secondaire</string>
+    <string name="obd_monitor_ac_refrigerant">Réfrigérant de climatisation</string>
+    <string name="obd_monitor_o2_sensor">Sonde lambda</string>
+    <string name="obd_monitor_o2_heater">Chauffage de sonde lambda</string>
+
+    <!-- OBD2 scanner: sensor (PID) names -->
+    <string name="obd_pid_engine_load">Charge moteur</string>
+    <string name="obd_pid_coolant_temp">Temp. liquide de refroidissement</string>
+    <string name="obd_pid_short_fuel_trim">Correction carburant court terme (B1)</string>
+    <string name="obd_pid_long_fuel_trim">Correction carburant long terme (B1)</string>
+    <string name="obd_pid_intake_pressure">Pression collecteur d\'admission</string>
+    <string name="obd_pid_rpm">Régime moteur</string>
+    <string name="obd_pid_speed">Vitesse du véhicule</string>
+    <string name="obd_pid_intake_air_temp">Temp. air d\'admission</string>
+    <string name="obd_pid_maf">Débit d\'air massique</string>
+    <string name="obd_pid_throttle">Position du papillon</string>
+    <string name="obd_pid_run_time">Temps depuis le démarrage</string>
+    <string name="obd_pid_fuel_rail_pressure">Pression de rampe d\'injection</string>
+    <string name="obd_pid_fuel_level">Niveau de carburant</string>
+    <string name="obd_pid_barometric_pressure">Pression atmosphérique</string>
+    <string name="obd_pid_module_voltage">Tension batterie / module</string>
+    <string name="obd_pid_ambient_air_temp">Temp. extérieure</string>
+    <string name="obd_pid_hybrid_battery">Charge batterie hybride</string>
+    <string name="obd_pid_oil_temp">Temp. huile moteur</string>
+</resources>

@@ -119,6 +119,7 @@ fun UserPreferencesSettingsScreen(
                     "nl" -> stringResource(R.string.language_dutch)
                     "ru" -> stringResource(R.string.language_russian)
                     "tr" -> stringResource(R.string.language_turkish)
+                    "zh" -> stringResource(R.string.language_chinese_simplified)
                     else -> stringResource(R.string.language_system_default)
                 }
 

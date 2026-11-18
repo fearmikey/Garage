@@ -110,6 +110,7 @@ import coil3.compose.AsyncImage
 import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance
 import com.fearmikey.garage.ui.components.EmptyState
+import com.fearmikey.garage.ui.obd.monitorDisplayName
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.theme.StatusOk
 import com.fearmikey.garage.ui.theme.StatusOverdue
@@ -690,7 +691,12 @@ private fun EmissionsCard(
                     else -> stringResource(R.string.documents_obd_readiness_not_ready)
                 }
                 val notReady = obdReadiness.notReady.takeIf { it.isNotEmpty() }
-                    ?.let { "\n" + stringResource(R.string.documents_obd_readiness_not_ready_list, it.joinToString()) }
+                    ?.let { names ->
+                        "\n" + stringResource(
+                            R.string.documents_obd_readiness_not_ready_list,
+                            names.map { monitorDisplayName(it) }.joinToString(),
+                        )
+                    }
                     .orEmpty()
                 val readinessLabel = obdReadinessDate?.let {
                     stringResource(R.string.documents_obd_readiness_label_scanned, it.toDisplayDate())

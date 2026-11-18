@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- OBD2 scanner: progress while connecting / scanning -->
+    <string name="obd_progress_connecting">Connecting to adapter…</string>
+    <string name="obd_progress_reconnecting">Reconnecting…</string>
+    <string name="obd_progress_protocol">Detecting vehicle protocol…</string>
+    <string name="obd_progress_battery">Checking battery voltage…</string>
+    <string name="obd_progress_readiness">Checking engine light &amp; readiness…</string>
+    <string name="obd_progress_stored_codes">Reading stored trouble codes…</string>
+    <string name="obd_progress_pending_codes">Reading pending trouble codes…</string>
+    <string name="obd_progress_permanent_codes">Reading permanent trouble codes…</string>
+    <string name="obd_progress_freeze_frame">Reading freeze frame…</string>
+    <string name="obd_progress_odometer">Reading odometer…</string>
+    <string name="obd_progress_distance_cleared">Reading distance since codes cleared…</string>
+    <string name="obd_progress_vin">Reading VIN…</string>
+    <!-- %1$s: a sensor name such as "Engine RPM" -->
+    <string name="obd_progress_pid">Reading %1$s…</string>
+
+    <!-- OBD2 scanner: errors -->
+    <string name="obd_error_connect_wifi">Couldn\'t reach the Wi-Fi adapter at %1$s. Make sure your phone is connected to the adapter\'s Wi-Fi network.</string>
+    <string name="obd_error_connect_ble">Couldn\'t connect to the Bluetooth LE adapter. Make sure it\'s plugged in, the ignition is on, and it isn\'t connected to another phone.</string>
+    <string name="obd_error_connect_classic">Couldn\'t reach the adapter. Make sure Bluetooth is on, the adapter is plugged in, the ignition is on, and it\'s in range.</string>
+    <string name="obd_error_timeout">The adapter stopped responding. Check that it\'s powered and the ignition is on.</string>
+    <string name="obd_error_lost_connection">Lost connection to the adapter.</string>
+    <string name="obd_error_generic">Error communicating with the OBD adapter: %1$s</string>
+    <string name="obd_error_clear_not_confirmed">The vehicle didn\'t confirm the clear. Turn the engine off (ignition on) and try again.</string>
+    <string name="obd_error_clear_no_response">The adapter didn\'t respond to the clear request.</string>
+    <string name="obd_error_no_live_pids">This vehicle doesn\'t report any live data values.</string>
+    <string name="obd_error_unable_to_connect">The adapter couldn\'t communicate with the vehicle. Is the ignition on?</string>
+    <string name="obd_error_can_bus">CAN bus error. Check that the adapter is fully seated in the OBD2 port.</string>
+    <string name="obd_error_vehicle_bus">Vehicle bus error. Check that the adapter is fully seated in the OBD2 port.</string>
+    <string name="obd_error_bus_feedback">Vehicle bus feedback error. Check the adapter connection.</string>
+    <string name="obd_error_low_voltage">The adapter reset due to low voltage. Check the vehicle battery.</string>
+    <string name="obd_error_bus_init">The adapter reported a bus initialization error. Is the ignition on?</string>
+    <string name="obd_error_internal">The adapter reported internal error %1$s.</string>
+
+    <!-- OBD2 scanner: control modules that reported a code -->
+    <string name="obd_module_engine">Engine (ECM)</string>
+    <string name="obd_module_transmission">Transmission (TCM)</string>
+    <string name="obd_module_numbered">Module %1$s</string>
+
+    <!-- OBD2 scanner: emissions readiness monitors -->
+    <string name="obd_monitor_misfire">Misfire</string>
+    <string name="obd_monitor_fuel_system">Fuel System</string>
+    <string name="obd_monitor_components">Components</string>
+    <string name="obd_monitor_nmhc_catalyst">NMHC Catalyst</string>
+    <string name="obd_monitor_nox_scr">NOx/SCR Aftertreatment</string>
+    <string name="obd_monitor_boost_pressure">Boost Pressure</string>
+    <string name="obd_monitor_exhaust_gas_sensor">Exhaust Gas Sensor</string>
+    <string name="obd_monitor_pm_filter">PM Filter</string>
+    <string name="obd_monitor_egr_vvt">EGR/VVT System</string>
+    <string name="obd_monitor_catalyst">Catalyst</string>
+    <string name="obd_monitor_heated_catalyst">Heated Catalyst</string>
+    <string name="obd_monitor_evap">Evaporative System</string>
+    <string name="obd_monitor_secondary_air">Secondary Air</string>
+    <string name="obd_monitor_ac_refrigerant">A/C Refrigerant</string>
+    <string name="obd_monitor_o2_sensor">Oxygen Sensor</string>
+    <string name="obd_monitor_o2_heater">Oxygen Sensor Heater</string>
+
+    <!-- OBD2 scanner: sensor (PID) names -->
+    <string name="obd_pid_engine_load">Engine Load</string>
+    <string name="obd_pid_coolant_temp">Coolant Temp</string>
+    <string name="obd_pid_short_fuel_trim">Short Term Fuel Trim (B1)</string>
+    <string name="obd_pid_long_fuel_trim">Long Term Fuel Trim (B1)</string>
+    <string name="obd_pid_intake_pressure">Intake Manifold Pressure</string>
+    <string name="obd_pid_rpm">Engine RPM</string>
+    <string name="obd_pid_speed">Vehicle Speed</string>
+    <string name="obd_pid_intake_air_temp">Intake Air Temp</string>
+    <string name="obd_pid_maf">Mass Air Flow</string>
+    <string name="obd_pid_throttle">Throttle Position</string>
+    <string name="obd_pid_run_time">Run Time Since Start</string>
+    <string name="obd_pid_fuel_rail_pressure">Fuel Rail Pressure</string>
+    <string name="obd_pid_fuel_level">Fuel Level</string>
+    <string name="obd_pid_barometric_pressure">Barometric Pressure</string>
+    <string name="obd_pid_module_voltage">Battery / Module Voltage</string>
+    <string name="obd_pid_ambient_air_temp">Ambient Air Temp</string>
+    <string name="obd_pid_hybrid_battery">Hybrid Battery Charge</string>
+    <string name="obd_pid_oil_temp">Engine Oil Temp</string>
+</resources>

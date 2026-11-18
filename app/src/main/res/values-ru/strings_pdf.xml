@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pdf_footer">Garage — Сервисная книжка и история автомобиля</string>
+    <string name="pdf_page_of">Страница %1$d из %2$d</string>
+    <string name="pdf_header_continued_title">СЕРВИСНАЯ КНИЖКА И ИСТОРИЯ — %1$s</string>
+    <string name="pdf_continued">Продолжение</string>
+    <string name="pdf_banner_title">СЕРВИСНАЯ КНИЖКА И ИСТОРИЯ АВТОМОБИЛЯ</string>
+    <string name="pdf_banner_subtitle">Официальный отчёт для продажи и постоянного ухода</string>
+    <string name="pdf_generated">Создан %1$s</string>
+
+    <string name="pdf_not_recorded">Не указано</string>
+    <string name="pdf_not_specified">Не указан</string>
+    <string name="pdf_label_vin">VIN:</string>
+    <string name="pdf_label_current_odometer">ТЕКУЩИЙ ПРОБЕГ:</string>
+    <string name="pdf_label_current_mileage">ТЕКУЩИЙ ПРОБЕГ:</string>
+    <string name="pdf_label_drivetrain">ПРИВОД:</string>
+    <string name="pdf_label_transmission">КОРОБКА:</string>
+    <string name="pdf_transmission_speeds">%1$s-ступ.</string>
+    <string name="pdf_standard">Стандартная</string>
+    <string name="pdf_engine_cylinders">%1$s цил.</string>
+    <string name="pdf_standard_engine">Стандартный двигатель</string>
+    <string name="pdf_label_engine">ДВИГАТЕЛЬ:</string>
+    <string name="pdf_label_fuel_type">ТОПЛИВО:</string>
+    <string name="pdf_label_purchased">КУПЛЕН:</string>
+    <string name="pdf_label_initial_odometer">НАЧАЛЬНЫЙ ПРОБЕГ:</string>
+    <string name="pdf_label_initial_mileage">НАЧАЛЬНЫЙ ПРОБЕГ:</string>
+    <string name="pdf_label_specs">ДАННЫЕ:</string>
+
+    <string name="pdf_summary_title">ИТОГО ЗАТРАТ НА УХОД</string>
+    <string name="pdf_total_investment">ВСЕГО ЗАТРАТ</string>
+    <string name="pdf_maintenance_care">ОБСЛУЖИВАНИЕ</string>
+    <plurals name="pdf_records_logged">
+        <item quantity="one">%d запись</item>
+        <item quantity="few">%d записи</item>
+        <item quantity="many">%d записей</item>
+        <item quantity="other">%d записи</item>
+    </plurals>
+    <string name="pdf_upgrades_mods">ДОРАБОТКИ</string>
+    <plurals name="pdf_installed_items">
+        <item quantity="one">%d установленная деталь</item>
+        <item quantity="few">%d установленные детали</item>
+        <item quantity="many">%d установленных деталей</item>
+        <item quantity="other">%d установленной детали</item>
+    </plurals>
+    <string name="pdf_logged_range">ДИАПАЗОН ПРОБЕГА</string>
+    <string name="pdf_range_to">до %1$s</string>
+
+    <string name="pdf_recalls_clear">ОФИЦИАЛЬНЫЙ СТАТУС ОТЗЫВОВ: НЕТ (0 ОТКРЫТЫХ)</string>
+    <plurals name="pdf_recalls_verified_count">
+        <item quantity="one">Проверено по базе NHTSA для %1$s (проверена %2$d кампания — 0 открытых).</item>
+        <item quantity="few">Проверено по базе NHTSA для %1$s (проверены %2$d кампании — 0 открытых).</item>
+        <item quantity="many">Проверено по базе NHTSA для %1$s (проверено %2$d кампаний — 0 открытых).</item>
+        <item quantity="other">Проверено по базе NHTSA для %1$s (проверено %2$d кампании — 0 открытых).</item>
+    </plurals>
+    <string name="pdf_recalls_verified_none">Проверено по базе NHTSA для %1$s. Активных отзывных кампаний не найдено.</string>
+    <plurals name="pdf_recalls_open">
+        <item quantity="one">СТАТУС ОТЗЫВОВ: %d ОТКРЫТЫЙ</item>
+        <item quantity="few">СТАТУС ОТЗЫВОВ: %d ОТКРЫТЫХ</item>
+        <item quantity="many">СТАТУС ОТЗЫВОВ: %d ОТКРЫТЫХ</item>
+        <item quantity="other">СТАТУС ОТЗЫВОВ: %d ОТКРЫТЫХ</item>
+    </plurals>
+    <string name="pdf_recall_item">• Кампания № %1$s — Узел: %2$s</string>
+    <string name="pdf_no_summary">Описание отсутствует.</string>
+
+    <string name="pdf_parts_title">ЗАПЧАСТИ И ЖИДКОСТИ</string>
+    <string name="pdf_mods_title">ДОРАБОТКИ И ТЮНИНГ</string>
+    <string name="pdf_fuel_title">ИСТОРИЯ ЗАПРАВОК И ЗАРЯДОК</string>
+    <string name="pdf_service_title">ПОЛНАЯ ИСТОРИЯ ОБСЛУЖИВАНИЯ</string>
+    <string name="pdf_col_date">ДАТА</string>
+    <string name="pdf_col_item">ДОРАБОТКА</string>
+    <string name="pdf_col_category">КАТЕГОРИЯ</string>
+    <string name="pdf_col_description">ОПИСАНИЕ / ЗАМЕТКИ</string>
+    <string name="pdf_col_cost">СТОИМОСТЬ</string>
+    <string name="pdf_col_odometer">ПРОБЕГ (%1$s)</string>
+    <string name="pdf_col_mileage">МИЛИ</string>
+    <string name="pdf_col_type">ТИП</string>
+    <string name="pdf_col_details">ПОДРОБНОСТИ</string>
+    <string name="pdf_col_service">РАБОТЫ И ОПИСАНИЕ</string>
+    <string name="pdf_no_maintenance">Для этого автомобиля нет записей об обслуживании.</string>
+</resources>

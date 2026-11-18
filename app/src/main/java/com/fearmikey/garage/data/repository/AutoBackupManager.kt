@@ -2,6 +2,7 @@ package com.fearmikey.garage.data.repository
 
 import android.content.Context
 import androidx.room.InvalidationTracker
+import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.CloudBackupPreferencesManager
 import com.fearmikey.garage.data.local.GarageDatabase
 import com.fearmikey.garage.data.remote.lubelogger.LubeLoggerCredentialsManager
@@ -91,7 +92,7 @@ class AutoBackupManager @Inject constructor(
 
         val folderUri = cloudBackupPreferencesManager.localBackupFolderUri.first()
         if (folderUri.isBlank()) {
-            val failure = BackupResult.Failure("No local backup folder configured.")
+            val failure = BackupResult.Failure(context.getString(R.string.backup_error_no_folder))
             cloudBackupPreferencesManager.setLastLocalBackupError(failure.message)
             return failure
         }

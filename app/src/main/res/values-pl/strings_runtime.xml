@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Document renewal notifications -->
+    <string name="reminder_doc_registration">Odnowienie rejestracji pojazdu</string>
+    <string name="reminder_doc_inspection">Termin przeglądu technicznego</string>
+    <string name="reminder_doc_emissions">Termin badania emisji spalin</string>
+    <string name="reminder_doc_sticker">Odnowienie naklejki przeglądowej</string>
+    <string name="reminder_doc_insurance">Odnowienie ubezpieczenia</string>
+    <string name="reminder_doc_toll">Odnowienie e-winiety / karty parkingowej</string>
+    <string name="reminder_doc_drivers_license">Odnowienie prawa jazdy</string>
+    <string name="reminder_doc_custom">Odnowienie: %1$s</string>
+    <string name="reminder_doc_custom_fallback">Dokument</string>
+    <string name="reminder_personal_document">Osobisty dokument kierowcy</string>
+
+    <!-- GPS trip tracking notification -->
+    <string name="trip_channel_name">Rejestrowanie tras</string>
+    <string name="trip_channel_description">Pokazuje bieżący dystans trwających tras</string>
+    <string name="trip_notification_distance">Dystans: %1$s</string>
+
+    <!-- Seller report screen -->
+    <plurals name="export_records_logged">
+        <item quantity="one">%d zapisany</item>
+        <item quantity="few">%d zapisane</item>
+        <item quantity="many">%d zapisanych</item>
+        <item quantity="other">%d zapisanego</item>
+    </plurals>
+    <plurals name="export_mods_items">
+        <item quantity="one">%1$d pozycja (%2$s)</item>
+        <item quantity="few">%1$d pozycje (%2$s)</item>
+        <item quantity="many">%1$d pozycji (%2$s)</item>
+        <item quantity="other">%1$d pozycji (%2$s)</item>
+    </plurals>
+
+    <!-- LubeLogger duplicates -->
+    <plurals name="dup_deleted_message">
+        <item quantity="one">Usunięto %d zduplikowany wpis.</item>
+        <item quantity="few">Usunięto %d zduplikowane wpisy.</item>
+        <item quantity="many">Usunięto %d zduplikowanych wpisów.</item>
+        <item quantity="other">Usunięto %d zduplikowanego wpisu.</item>
+    </plurals>
+
+    <!-- Add / edit vehicle: VIN -->
+    <string name="vin_error_scan_not_vin">Zeskanowany kod („%1$s”) nie zawiera numeru VIN. Zeskanuj kod kreskowy VIN lub wpisz VIN ręcznie.</string>
+    <string name="vin_error_length">VIN musi mieć %1$d znaków (obecnie %2$d).</string>
+    <string name="vehicle_error_save">Wystąpił błąd podczas zapisywania pojazdu.</string>
+    <string name="vin_error_no_results">Brak wyników dekodowania dla tego numeru VIN.</string>
+    <string name="vin_error_invalid_characters">Ten VIN zawiera nieprawidłowe znaki.</string>
+    <string name="vin_error_incomplete">Ten VIN wygląda na niepełny. Sprawdź, czy ma 17 znaków i nie zawiera literówek.</string>
+    <string name="vin_error_manufacturer_unknown">Tego producenta nie ma w bazie NHTSA. Baza NHTSA obejmuje głównie pojazdy sprzedawane w USA, więc pojazdy z innych rynków mogą wymagać ręcznego wpisania.</string>
+    <string name="vin_error_not_found">Nie znaleziono danych pojazdu dla tego numeru VIN. Baza NHTSA obejmuje głównie pojazdy sprzedawane w USA, więc pojazdy z innych rynków mogą wymagać ręcznego wpisania.</string>
+    <string name="vin_error_network">Nie można zdekodować numeru VIN. Sprawdź połączenie z internetem.</string>
+    <string name="vin_warning_model_missing">Nie znaleziono modelu dla tego numeru VIN; wpisz go ręcznie.</string>
+    <string name="vin_warning_year_unreliable">Nie udało się ustalić roku modelowego z tego numeru VIN; wpisz go ręcznie.</string>
+    <string name="vin_warning_partial">VIN zdekodowany tylko częściowo; sprawdź dane.</string>
+
+    <!-- Recalls -->
+    <string name="recall_error_http">Usługa akcji serwisowych NHTSA (api.nhtsa.gov) zwróciła błąd (HTTP %1$d). Spróbuj ponownie później.</string>
+    <string name="recall_error_network">Nie można połączyć się z usługą akcji serwisowych NHTSA (api.nhtsa.gov). Sprawdź połączenie z internetem.</string>
+    <string name="recall_error_unexpected">Nieoczekiwany błąd podczas sprawdzania akcji serwisowych.</string>
+
+    <!-- Backup & restore -->
+    <string name="backup_error_open_destination">Nie można otworzyć miejsca docelowego do zapisu.</string>
+    <string name="backup_error_export_unknown">Nieznany błąd podczas eksportu kopii zapasowej.</string>
+    <string name="backup_error_no_folder">Nie skonfigurowano lokalnego folderu kopii zapasowych.</string>
+    <string name="backup_error_folder_access">Brak dostępu do wybranego folderu kopii zapasowych.</string>
+    <string name="backup_error_folder_not_writable">Folder kopii zapasowych nie istnieje lub nie można w nim zapisywać.</string>
+    <string name="backup_error_create_file">Nie można utworzyć %1$s w wybranym folderze.</string>
+    <string name="backup_error_open_output">Nie można otworzyć pliku kopii zapasowej do zapisu.</string>
+    <string name="backup_error_permission">Brak uprawnień do folderu. Wybierz ponownie folder kopii zapasowych.</string>
+    <string name="backup_error_local_unknown">Nieznany błąd podczas zapisu kopii do folderu lokalnego.</string>
+    <string name="backup_error_open_file">Nie można otworzyć wybranego pliku kopii zapasowej.</string>
+    <string name="backup_error_invalid_entry">Plik kopii zapasowej zawiera nieprawidłowy wpis: %1$s</string>
+    <string name="backup_error_missing_db">Ten plik nie wygląda na kopię zapasową Garage (brak bazy danych).</string>
+    <string name="backup_error_unreadable_db">Ten plik nie wygląda na prawidłową kopię zapasową Garage (nieczytelna baza danych).</string>
+    <string name="backup_error_newer_version">Ta kopia została utworzona w nowszej wersji Garage i nie można jej tu przywrócić. Zaktualizuj aplikację i spróbuj ponownie.</string>
+    <string name="backup_error_import_unknown">Nieznany błąd podczas importu kopii zapasowej.</string>
+
+    <!-- WebDAV / LubeLogger -->
+    <string name="webdav_error_not_configured">Synchronizacja w chmurze nie jest skonfigurowana.</string>
+    <string name="webdav_error_upload_http">Wysyłanie nie powiodło się: HTTP %1$s</string>
+    <string name="webdav_error_sync_unknown">Nieznany błąd podczas synchronizacji z WebDAV.</string>
+    <string name="webdav_error_url_username_required">Adres serwera i nazwa użytkownika są wymagane.</string>
+    <string name="webdav_error_auth">Uwierzytelnianie nie powiodło się. Sprawdź nazwę użytkownika i hasło.</string>
+    <string name="webdav_error_test_unknown">Nieznany błąd podczas testowania połączenia.</string>
+    <string name="lubelogger_error_invalid_url">Adres serwera LubeLogger jest nieprawidłowy.</string>
+</resources>

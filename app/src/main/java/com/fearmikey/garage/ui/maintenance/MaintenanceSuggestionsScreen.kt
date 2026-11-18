@@ -76,6 +76,7 @@ import com.fearmikey.garage.ui.util.ThousandsSeparatorVisualTransformation
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
 import com.fearmikey.garage.ui.util.formatTaskName
+import com.fearmikey.garage.ui.util.scheduleNote
 import com.fearmikey.garage.ui.util.sanitizeMileageInput
 import com.fearmikey.garage.ui.util.toDisplayDate
 import com.fearmikey.garage.ui.components.ScrollToTopOnInsert
@@ -126,7 +127,7 @@ fun MaintenanceSuggestionsScreen(
                 vehicleId = 0,
                 date = System.currentTimeMillis(),
                 mileage = latestMileage ?: 0.0,
-                description = suggestion.rule.taskName,
+                description = formatTaskName(suggestion.rule.taskName),
                 cost = 0.0,
                 category = suggestion.rule.category,
                 taskName = suggestion.rule.taskName,
@@ -292,7 +293,7 @@ private fun CustomMaintenanceRuleRow(
                 Text(stringResource(R.string.template_every, interval), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
                 rule.notes?.let {
-                    Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(scheduleNote(it), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
             Row {
@@ -343,7 +344,7 @@ private fun MaintenanceSuggestionRow(
             Text(details, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
             suggestion.rule.notes?.let {
-                Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(scheduleNote(it), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
 
             Row(
@@ -384,7 +385,7 @@ private fun IgnoredRuleRow(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(rule.taskName, style = MaterialTheme.typography.titleSmall)
+                Text(formatTaskName(rule.taskName), style = MaterialTheme.typography.titleSmall)
                 Text(
                     stringResource(R.string.sugg_ignored_for_vehicle),
                     style = MaterialTheme.typography.bodySmall,

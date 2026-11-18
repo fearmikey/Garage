@@ -1,5 +1,7 @@
 package com.fearmikey.garage.data.repository
 
+import androidx.annotation.StringRes
+import com.fearmikey.garage.R
 import com.fearmikey.garage.data.remote.RecallApi
 import com.fearmikey.garage.data.remote.dto.RecallDto
 import retrofit2.HttpException
@@ -28,7 +30,12 @@ data class VehicleRecall(
 
 sealed interface RecallLookupResult {
     data class Success(val recalls: List<VehicleRecall>) : RecallLookupResult
-    data class Error(val message: String) : RecallLookupResult
+    /** [message] is English (logs, tests); the UI shows [messageRes] (formatted with [messageArg]) when set. */
+    data class Error(
+        val message: String,
+        @StringRes val messageRes: Int? = null,
+        val messageArg: Any? = null,
+    ) : RecallLookupResult
 }
 
 /** Looks up open NHTSA safety recalls for a vehicle's year/make/model. */
@@ -49,12 +56,17 @@ class RecallRepository @Inject constructor(
             } else {
                 RecallLookupResult.Error(
                     "NHTSA's recall service (api.nhtsa.gov) returned an error (HTTP ${e.code()}). Please try again later.",
+                    R.string.recall_error_http,
+                    e.code(),
                 )
             }
         } catch (e: IOException) {
-            RecallLookupResult.Error("Couldn't reach NHTSA's recall service (api.nhtsa.gov). Check your internet connection.")
+            RecallLookupResult.Error(
+                "Couldn't reach NHTSA's recall service (api.nhtsa.gov). Check your internet connection.",
+                R.string.recall_error_network,
+            )
         } catch (e: Exception) {
-            RecallLookupResult.Error(e.message ?: "Unexpected error while checking for recalls.")
+            RecallLookupResult.Error(e.message ?: "Unexpected error while checking for recalls.", R.string.recall_error_unexpected)
         }
     }
 

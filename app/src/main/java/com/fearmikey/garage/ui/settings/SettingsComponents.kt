@@ -149,6 +149,7 @@ fun LanguageSelectionDialog(
         "nl" to stringResource(R.string.language_dutch),
         "ru" to stringResource(R.string.language_russian),
         "tr" to stringResource(R.string.language_turkish),
+        "zh-CN" to stringResource(R.string.language_chinese_simplified),
     )
 
     AlertDialog(
@@ -161,7 +162,8 @@ fun LanguageSelectionDialog(
                     .verticalScroll(rememberScrollState()),
             ) {
                 languageOptions.forEach { (code, name) ->
-                    val isSelected = code == selectedLangCode
+                    // selectedLangCode is a bare language ("zh"); options may carry a region ("zh-CN").
+                    val isSelected = code.substringBefore('-') == selectedLangCode
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()

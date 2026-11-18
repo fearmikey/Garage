@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pdf_footer">Garage — Libretto di manutenzione e storico</string>
+    <string name="pdf_page_of">Pagina %1$d di %2$d</string>
+    <string name="pdf_header_continued_title">LIBRETTO DI MANUTENZIONE E STORICO — %1$s</string>
+    <string name="pdf_continued">Segue</string>
+    <string name="pdf_banner_title">LIBRETTO DI MANUTENZIONE E STORICO</string>
+    <string name="pdf_banner_subtitle">Rapporto ufficiale per la rivendita e la cura continua</string>
+    <string name="pdf_generated">Generato il %1$s</string>
+
+    <string name="pdf_not_recorded">Non registrato</string>
+    <string name="pdf_not_specified">Non specificato</string>
+    <string name="pdf_label_vin">VIN:</string>
+    <string name="pdf_label_current_odometer">KM ATTUALI:</string>
+    <string name="pdf_label_current_mileage">MIGLIA ATTUALI:</string>
+    <string name="pdf_label_drivetrain">TRAZIONE:</string>
+    <string name="pdf_label_transmission">CAMBIO:</string>
+    <string name="pdf_transmission_speeds">%1$s marce</string>
+    <string name="pdf_standard">Standard</string>
+    <string name="pdf_engine_cylinders">%1$s cil.</string>
+    <string name="pdf_standard_engine">Motore standard</string>
+    <string name="pdf_label_engine">MOTORE:</string>
+    <string name="pdf_label_fuel_type">CARBURANTE:</string>
+    <string name="pdf_label_purchased">ACQUISTATO:</string>
+    <string name="pdf_label_initial_odometer">KM INIZIALI:</string>
+    <string name="pdf_label_initial_mileage">MIGLIA INIZIALI:</string>
+    <string name="pdf_label_specs">DATI:</string>
+
+    <string name="pdf_summary_title">RIEPILOGO DELL\'INVESTIMENTO IN MANUTENZIONE</string>
+    <string name="pdf_total_investment">INVESTIMENTO TOTALE</string>
+    <string name="pdf_maintenance_care">MANUTENZIONE</string>
+    <plurals name="pdf_records_logged">
+        <item quantity="one">%d intervento registrato</item>
+        <item quantity="many">%d interventi registrati</item>
+        <item quantity="other">%d interventi registrati</item>
+    </plurals>
+    <string name="pdf_upgrades_mods">MODIFICHE</string>
+    <plurals name="pdf_installed_items">
+        <item quantity="one">%d elemento installato</item>
+        <item quantity="many">%d elementi installati</item>
+        <item quantity="other">%d elementi installati</item>
+    </plurals>
+    <string name="pdf_logged_range">INTERVALLO REGISTRATO</string>
+    <string name="pdf_range_to">fino a %1$s</string>
+
+    <string name="pdf_recalls_clear">STATO UFFICIALE DEI RICHIAMI: NESSUNO (0 RICHIAMI APERTI)</string>
+    <plurals name="pdf_recalls_verified_count">
+        <item quantity="one">Verificato nel database NHTSA per %1$s (%2$d campagna controllata — 0 richiami aperti).</item>
+        <item quantity="many">Verificato nel database NHTSA per %1$s (%2$d campagne controllate — 0 richiami aperti).</item>
+        <item quantity="other">Verificato nel database NHTSA per %1$s (%2$d campagne controllate — 0 richiami aperti).</item>
+    </plurals>
+    <string name="pdf_recalls_verified_none">Verificato nel database NHTSA per %1$s. Nessuna campagna di richiamo attiva.</string>
+    <plurals name="pdf_recalls_open">
+        <item quantity="one">STATO RICHIAMI: %d RICHIAMO APERTO</item>
+        <item quantity="many">STATO RICHIAMI: %d RICHIAMI APERTI</item>
+        <item quantity="other">STATO RICHIAMI: %d RICHIAMI APERTI</item>
+    </plurals>
+    <string name="pdf_recall_item">• Campagna n. %1$s — Componente: %2$s</string>
+    <string name="pdf_no_summary">Nessun riepilogo disponibile.</string>
+
+    <string name="pdf_parts_title">RICAMBI E LIQUIDI</string>
+    <string name="pdf_mods_title">MIGLIORIE E MODIFICHE</string>
+    <string name="pdf_fuel_title">STORICO RIFORNIMENTI E RICARICHE</string>
+    <string name="pdf_service_title">STORICO COMPLETO DELLA MANUTENZIONE</string>
+    <string name="pdf_col_date">DATA</string>
+    <string name="pdf_col_item">MODIFICA / ELEMENTO</string>
+    <string name="pdf_col_category">CATEGORIA</string>
+    <string name="pdf_col_description">DESCRIZIONE / NOTE</string>
+    <string name="pdf_col_cost">COSTO</string>
+    <string name="pdf_col_odometer">CONTAKM (%1$s)</string>
+    <string name="pdf_col_mileage">MIGLIA</string>
+    <string name="pdf_col_type">TIPO</string>
+    <string name="pdf_col_details">DETTAGLI</string>
+    <string name="pdf_col_service">INTERVENTO E DESCRIZIONE</string>
+    <string name="pdf_no_maintenance">Nessuna manutenzione registrata per questo veicolo.</string>
+</resources>

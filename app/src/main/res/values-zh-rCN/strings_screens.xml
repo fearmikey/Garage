@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Knowledge (torque specs & repair notes) -->
+    <string name="kb_add_torque">添加扭矩规格</string>
+    <string name="kb_edit_torque">编辑扭矩规格</string>
+    <string name="kb_add_note">添加维修笔记</string>
+    <string name="kb_edit_note">编辑维修笔记</string>
+    <string name="kb_cd_add">添加</string>
+    <string name="kb_empty">未找到扭矩规格或笔记。\n点按 + 按钮添加。</string>
+    <string name="kb_torque_specs">扭矩规格</string>
+    <string name="kb_repair_notes">维修笔记</string>
+    <string name="kb_component">部件（例如：轮毂螺母）</string>
+    <string name="kb_torque_unit">扭矩（%1$s）</string>
+    <string name="kb_content">内容（支持 Markdown）</string>
+
+    <!-- Dashboard -->
+    <string name="dash_empty">还没有车辆。\n点按 + 添加第一辆车。</string>
+    <string name="dash_license_back">驾驶证背面</string>
+    <string name="dash_fuel_trend">油耗趋势</string>
+    <string name="dash_fuel_trend_cd">最近 %1$d 次加油的油耗趋势。最新值 %2$s。</string>
+
+    <!-- Recalls -->
+    <string name="recalls_vin_copied">VIN（%1$s）已复制到剪贴板，方便粘贴</string>
+    <string name="recalls_missing_info">请在编辑页面中添加此车辆的年份、品牌和型号以查询召回信息。</string>
+    <string name="recalls_ymm_title">年份 / 品牌 / 型号召回活动</string>
+    <string name="recalls_ymm_subtitle">适用于 %1$s 的一般安全召回：</string>
+    <string name="recalls_none_for_model">%1$s 车型暂无未完成的安全召回报告。</string>
+    <string name="recalls_none">未找到此车辆的未完成安全召回。</string>
+    <string name="recalls_vin_title">官方 VIN 召回查询</string>
+    <string name="recalls_vin_desc">直接在 NHTSA.gov 上核实 VIN %1$s 的具体未完成召回记录。（您的 VIN 已自动复制到剪贴板，方便您在 NHTSA 网站上粘贴。）</string>
+    <string name="recalls_no_vin">此车辆未保存 VIN。请在编辑页面中添加 VIN，以便直接在 NHTSA.gov 上核实确切的 VIN 召回状态。</string>
+    <string name="recalls_campaign">召回活动编号 %1$s</string>
+    <string name="recalls_state_open">未处理</string>
+    <string name="recalls_state_serviced">已处理</string>
+    <string name="recalls_state_not_affected">不受影响</string>
+    <string name="recalls_state_serviced_long">已处理 / 已完成</string>
+    <string name="recalls_state_not_affected_long">不影响此车辆</string>
+    <string name="recalls_reported">报告于 %1$s</string>
+    <string name="recalls_consequence">后果：%1$s</string>
+    <string name="recalls_remedy">补救措施：%1$s</string>
+
+    <!-- Home screen widgets -->
+    <string name="widget_recent_tank">最近一箱：%1$s</string>
+    <string name="widget_recent">最近：%1$s</string>
+    <string name="widget_all_caught_up">全部处理完毕！</string>
+    <string name="widget_log_fuel">记录加油</string>
+    <string name="widget_odometer">里程表</string>
+    <string name="widget_log_service">记录保养</string>
+    <string name="widget_due">到期</string>
+    <string name="widget_no_mileage">无里程</string>
+    <string name="widget_update">更新</string>
+</resources>

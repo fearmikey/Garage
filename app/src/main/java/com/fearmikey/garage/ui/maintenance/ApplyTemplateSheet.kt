@@ -47,6 +47,9 @@ import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
 import com.fearmikey.garage.ui.util.formatTaskName
+import com.fearmikey.garage.ui.util.scheduleNote
+import com.fearmikey.garage.ui.util.templateDescriptionRes
+import com.fearmikey.garage.ui.util.templateTitleRes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,6 +65,7 @@ fun ApplyTemplateSheet(
     }
     var selectedTemplateIndex by remember { mutableIntStateOf(0) }
     val selectedTemplate = templates.getOrElse(selectedTemplateIndex) { templates.first() }
+    val selectedTitle = templateTitleRes(selectedTemplate.id)?.let { stringResource(it) } ?: selectedTemplate.title
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -103,7 +107,10 @@ fun ApplyTemplateSheet(
                                     modifier = Modifier.size(18.dp),
                                 )
                                 Spacer(modifier = Modifier.width(6.dp))
-                                Text(template.title, style = MaterialTheme.typography.labelLarge)
+                                Text(
+                                    templateTitleRes(template.id)?.let { stringResource(it) } ?: template.title,
+                                    style = MaterialTheme.typography.labelLarge,
+                                )
                             }
                         },
                     )
@@ -121,7 +128,7 @@ fun ApplyTemplateSheet(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Text(
-                    text = selectedTemplate.description,
+                    text = templateDescriptionRes(selectedTemplate.id)?.let { stringResource(it) } ?: selectedTemplate.description,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(bottom = 4.dp),
@@ -169,7 +176,7 @@ fun ApplyTemplateSheet(
 
                             rule.notes?.let { notes ->
                                 Text(
-                                    text = notes,
+                                    text = scheduleNote(notes),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     modifier = Modifier.padding(top = 2.dp),
@@ -189,7 +196,7 @@ fun ApplyTemplateSheet(
                 },
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(stringResource(R.string.template_apply, selectedTemplate.title))
+                Text(stringResource(R.string.template_apply, selectedTitle))
             }
         }
     }

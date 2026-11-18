@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tpl_motorcycle_street_title">Moto routière</string>
+    <string name="tpl_motorcycle_street_desc">Intervalles typiques pour motos routières, sportives et de tourisme, y compris l\'entretien de la chaîne et des suspensions.</string>
+    <string name="tpl_heavy_duty_title">Usage intensif et remorquage</string>
+    <string name="tpl_heavy_duty_desc">Vidanges plus rapprochées et contrôles pour usage sévère : pick-up, véhicules tracteurs ou tout-terrain.</string>
+    <string name="tpl_daily_commuter_title">Trajets quotidiens</string>
+    <string name="tpl_daily_commuter_desc">Intervalles d\'entretien standard et équilibrés pour les voitures du quotidien, les trajets autoroutiers et les véhicules familiaux.</string>
+    <string name="tpl_hybrid_ev_title">Hybride et électrique (VE)</string>
+    <string name="tpl_hybrid_ev_desc">Optimisé pour les hybrides et les véhicules électriques, avec un accent sur le filtre d\'habitacle, les coulisseaux de frein et les circuits de refroidissement.</string>
+    <string name="tpl_classic_title">Fort kilométrage et ancienne</string>
+    <string name="tpl_classic_desc">Contrôles fréquents et intervalles courts pour véhicules anciens, moteurs à fort kilométrage ou voitures de collection.</string>
+
+    <string name="tpl_task_motorcycle_oil">Huile et filtre moto</string>
+    <string name="tpl_task_chain_clean">Nettoyage, graissage et tension de chaîne</string>
+    <string name="tpl_task_tire_pressure_tread">Contrôle pression et usure des pneus</string>
+    <string name="tpl_task_brake_fluid_front_rear">Purge du liquide de frein (avant et arrière)</string>
+    <string name="tpl_task_fork_seal">Entretien huile et joints de fourche</string>
+    <string name="tpl_task_battery_tender">Maintien de charge et contrôle des bornes</string>
+    <string name="tpl_task_severe_oil">Huile et filtre (usage sévère)</string>
+    <string name="tpl_task_transfer_case_severe">Huile de boîte de transfert (usage sévère)</string>
+    <string name="tpl_task_diff_fluid">Huile de différentiels avant et arrière</string>
+    <string name="tpl_task_chassis_grease">Graissage du châssis et rotules</string>
+    <string name="tpl_task_hd_brake_suspension">Contrôle freins et suspensions (usage intensif)</string>
+    <string name="tpl_task_synthetic_oil">Huile entièrement synthétique et filtre</string>
+    <string name="tpl_task_rotation_pressure">Permutation des pneus et pression</string>
+    <string name="tpl_task_air_filters">Filtres d\'habitacle et à air</string>
+    <string name="tpl_task_multipoint">Contrôle multipoints</string>
+    <string name="tpl_task_hv_duct">Filtre d\'habitacle et conduit batterie HT</string>
+    <string name="tpl_task_brake_slides">Graissage des coulisseaux et contrôle du liquide de frein</string>
+    <string name="tpl_task_rotation_alignment">Permutation des pneus et contrôle de géométrie</string>
+    <string name="tpl_task_inverter_coolant">Vidange liquide de refroidissement onduleur et batterie</string>
+    <string name="tpl_task_high_zinc_oil">Vidange huile riche en zinc / fort kilométrage</string>
+    <string name="tpl_task_cooling_hoses">Contrôle du circuit de refroidissement et des durites</string>
+    <string name="tpl_task_ignition">Allumage, bougies et allumeur</string>
+    <string name="tpl_task_v_belts">Contrôle courroies trapézoïdales et tendeur</string>
+    <string name="tpl_task_steering_grease">Graissage châssis et direction</string>
+
+    <string name="tpl_note_jaso_oil">Utilisez une huile JASO MA/MA2 pour les motos à embrayage à bain d\'huile.</string>
+    <string name="tpl_note_chain_rain">Plus souvent après avoir roulé sous la pluie ou sur terrain sale.</string>
+    <string name="tpl_note_moto_tire_check">Vérifiez la pression à froid et recherchez usure irrégulière, craquelures et corps étrangers.</string>
+    <string name="tpl_note_brake_fluid_moto">Le liquide de frein est hygroscopique ; purgez les deux maîtres-cylindres.</string>
+    <string name="tpl_note_fork_oil">Remplacez l\'huile de fourche ; vérifiez que les joints ne suintent pas.</string>
+    <string name="tpl_note_battery_tender">Gardez un mainteneur de charge pendant l\'hivernage ; nettoyez et serrez les bornes.</string>
+    <string name="tpl_note_severe_oil">Intervalle sévère pour remorquage fréquent ou charges lourdes.</string>
+    <string name="tpl_note_transfer_case">Recommandé en cas d\'usage fréquent du 4x4 ou de passages à gué.</string>
+    <string name="tpl_note_severe_diff">Intervalle sévère pour remorquage et charges lourdes.</string>
+    <string name="tpl_note_chassis_grease">Graissez les graisseurs, les cardans de transmission et les articulations de suspension.</string>
+    <string name="tpl_note_hd_brakes">Contrôlez l\'épaisseur des plaquettes, les disques, le contrôleur de freinage de remorque et les ressorts à lames.</string>
+    <string name="tpl_note_synthetic_oil">Intervalle de vidange standard pour huile entièrement synthétique.</string>
+    <string name="tpl_note_rotation_even">Assure une usure régulière et une consommation optimale.</string>
+    <string name="tpl_note_air_filters">Remplacez les deux filtres chaque année pour l\'efficacité de la clim et du moteur.</string>
+    <string name="tpl_note_wipers">Remplacez les balais d\'essuie-glace pour une bonne visibilité.</string>
+    <string name="tpl_note_drive_belts">Remplacez les courroies pour éviter les pannes d\'accessoires.</string>
+    <string name="tpl_note_multipoint">Contrôlez durites, éclairage et niveaux.</string>
+    <string name="tpl_note_hv_duct">Nettoyez/remplacez le filtre d\'habitacle et vérifiez l\'entrée d\'air du ventilateur de la batterie haute tension.</string>
+    <string name="tpl_note_brake_slides">Le freinage régénératif use moins les plaquettes, mais les coulisseaux doivent être graissés régulièrement pour ne pas gripper.</string>
+    <string name="tpl_note_ev_tires">Le couple instantané du moteur électrique use les pneus plus vite.</string>
+    <string name="tpl_note_inverter_coolant">Contrôlez et vidangez le circuit de refroidissement des composants haute tension.</string>
+    <string name="tpl_note_high_zinc">Protège les arbres à cames à poussoirs plats et les joints des moteurs à fort kilométrage.</string>
+    <string name="tpl_note_cooling_hoses">Contrôlez les durites de radiateur, le thermostat, le radiateur de chauffage et l\'état du liquide.</string>
+    <string name="tpl_note_ignition">Contrôlez bougies, fils d\'allumage, tête d\'allumeur et rotor/vis platinées.</string>
+    <string name="tpl_note_v_belts">Contrôlez la tension des courroies et recherchez craquelures ou glaçage.</string>
+    <string name="tpl_note_steering_grease">Graissez rotules de direction, rotules de suspension, bielle pendante et silentblocs.</string>
+
+    <string name="rule_note_4wd_interval">Intervalle générique 4x4/intégrale ; consultez votre manuel pour la valeur exacte.</string>
+    <string name="rule_note_chain_lube">Motos à chaîne uniquement ; vérifiez aussi la tension. À ignorer pour une transmission par courroie ou cardan.</string>
+    <string name="rule_note_chain_sprocket">Motos à chaîne uniquement. Remplacez la chaîne et les deux pignons ensemble.</string>
+    <string name="rule_note_cables">Graissez et réglez le jeu des câbles d\'embrayage et d\'accélérateur.</string>
+    <string name="rule_note_moto_tires">Le pneu arrière s\'use souvent 1,5 à 2 fois plus vite que l\'avant ; vérifiez l\'usure et la date DOT.</string>
+</resources>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tpl_motorcycle_street_title">Дорожный мотоцикл</string>
+    <string name="tpl_motorcycle_street_desc">Типичные интервалы для дорожных, спортивных и туристических мотоциклов, включая уход за цепью и обслуживание подвески.</string>
+    <string name="tpl_heavy_duty_title">Тяжёлые условия и буксировка</string>
+    <string name="tpl_heavy_duty_desc">Сокращённые интервалы замены жидкостей и проверки для тяжёлых условий: пикапы, тягачи, внедорожники.</string>
+    <string name="tpl_daily_commuter_title">Ежедневные поездки</string>
+    <string name="tpl_daily_commuter_desc">Стандартные сбалансированные интервалы для повседневных автомобилей, поездок по трассе и семейных машин.</string>
+    <string name="tpl_hybrid_ev_title">Гибрид и электромобиль (EV)</string>
+    <string name="tpl_hybrid_ev_desc">Оптимизировано для гибридов и электромобилей с упором на салонный фильтр, направляющие суппортов и системы охлаждения.</string>
+    <string name="tpl_classic_title">Большой пробег и классика</string>
+    <string name="tpl_classic_desc">Частые осмотры и короткие интервалы для старых автомобилей, двигателей с большим пробегом и классических машин.</string>
+
+    <string name="tpl_task_motorcycle_oil">Масло и фильтр мотоцикла</string>
+    <string name="tpl_task_chain_clean">Чистка, смазка и натяжение цепи</string>
+    <string name="tpl_task_tire_pressure_tread">Проверка давления и протектора</string>
+    <string name="tpl_task_brake_fluid_front_rear">Замена тормозной жидкости (перед и зад)</string>
+    <string name="tpl_task_fork_seal">Масло и сальники вилки</string>
+    <string name="tpl_task_battery_tender">Поддерживающая зарядка и клеммы АКБ</string>
+    <string name="tpl_task_severe_oil">Масло и фильтр (тяжёлые условия)</string>
+    <string name="tpl_task_transfer_case_severe">Масло раздаточной коробки (тяжёлые условия)</string>
+    <string name="tpl_task_diff_fluid">Масло переднего и заднего мостов</string>
+    <string name="tpl_task_chassis_grease">Смазка шасси и шаровых опор</string>
+    <string name="tpl_task_hd_brake_suspension">Проверка тормозов и подвески (тяжёлые условия)</string>
+    <string name="tpl_task_synthetic_oil">Синтетическое масло и фильтр</string>
+    <string name="tpl_task_rotation_pressure">Перестановка шин и давление</string>
+    <string name="tpl_task_air_filters">Салонный и воздушный фильтры</string>
+    <string name="tpl_task_multipoint">Комплексный осмотр</string>
+    <string name="tpl_task_hv_duct">Салонный фильтр и воздуховод ВВ-батареи</string>
+    <string name="tpl_task_brake_slides">Смазка направляющих суппортов и проверка жидкости</string>
+    <string name="tpl_task_rotation_alignment">Перестановка шин и проверка развала-схождения</string>
+    <string name="tpl_task_inverter_coolant">Замена охлаждающей жидкости инвертора и батареи</string>
+    <string name="tpl_task_high_zinc_oil">Замена масла с цинком / для большого пробега</string>
+    <string name="tpl_task_cooling_hoses">Проверка системы охлаждения и патрубков</string>
+    <string name="tpl_task_ignition">Зажигание, свечи и трамблёр</string>
+    <string name="tpl_task_v_belts">Клиновые ремни и натяжитель</string>
+    <string name="tpl_task_steering_grease">Смазка шасси и рулевого управления</string>
+
+    <string name="tpl_note_jaso_oil">Для мотоциклов с мокрым сцеплением используйте масло JASO MA/MA2.</string>
+    <string name="tpl_note_chain_rain">Чаще после поездок в дождь или по грязи.</string>
+    <string name="tpl_note_moto_tire_check">Проверяйте давление на холодную и ищите неравномерный износ, трещины и посторонние предметы.</string>
+    <string name="tpl_note_brake_fluid_moto">Тормозная жидкость гигроскопична; прокачайте оба главных цилиндра.</string>
+    <string name="tpl_note_fork_oil">Замените масло в вилке; проверьте сальники на течь.</string>
+    <string name="tpl_note_battery_tender">Зимой держите на поддерживающем зарядном; очистите и затяните клеммы.</string>
+    <string name="tpl_note_severe_oil">Интервал для частой буксировки или тяжёлых грузов.</string>
+    <string name="tpl_note_transfer_case">Рекомендуется при частом использовании полного привода или преодолении бродов.</string>
+    <string name="tpl_note_severe_diff">Интервал для буксировки и тяжёлых грузов.</string>
+    <string name="tpl_note_chassis_grease">Смажьте пресс-маслёнки, крестовины карданного вала и шарниры подвески.</string>
+    <string name="tpl_note_hd_brakes">Проверьте толщину колодок, диски, контроллер тормозов прицепа и рессоры.</string>
+    <string name="tpl_note_synthetic_oil">Стандартный интервал для полностью синтетического масла.</string>
+    <string name="tpl_note_rotation_even">Обеспечивает равномерный износ протектора и оптимальный расход.</string>
+    <string name="tpl_note_air_filters">Меняйте оба фильтра ежегодно для эффективности климата и двигателя.</string>
+    <string name="tpl_note_wipers">Замените щётки стеклоочистителя для хорошей видимости.</string>
+    <string name="tpl_note_drive_belts">Замените приводные ремни, чтобы избежать отказа навесного оборудования.</string>
+    <string name="tpl_note_multipoint">Проверьте патрубки, освещение и уровни жидкостей.</string>
+    <string name="tpl_note_hv_duct">Очистите/замените салонный фильтр и проверьте воздухозаборник вентилятора охлаждения высоковольтной батареи.</string>
+    <string name="tpl_note_brake_slides">Рекуперация снижает износ колодок, но направляющие нужно регулярно смазывать, чтобы они не закисали.</string>
+    <string name="tpl_note_ev_tires">Мгновенный крутящий момент электромотора ускоряет износ шин.</string>
+    <string name="tpl_note_inverter_coolant">Проверьте и замените жидкость в системе охлаждения высоковольтных компонентов.</string>
+    <string name="tpl_note_high_zinc">Защищает распредвалы с плоскими толкателями и сальники двигателей с большим пробегом.</string>
+    <string name="tpl_note_cooling_hoses">Проверьте патрубки радиатора, термостат, радиатор печки и состояние антифриза.</string>
+    <string name="tpl_note_ignition">Проверьте свечи, высоковольтные провода, крышку трамблёра и бегунок/контакты.</string>
+    <string name="tpl_note_v_belts">Проверьте натяжение ремней и нет ли трещин или глянца.</string>
+    <string name="tpl_note_steering_grease">Смажьте рулевые наконечники, шаровые опоры, сошку и сайлентблоки.</string>
+
+    <string name="rule_note_4wd_interval">Общий интервал для 4WD/AWD; точное значение см. в руководстве по эксплуатации.</string>
+    <string name="rule_note_chain_lube">Только для мотоциклов с цепным приводом; проверьте также натяжение. Для ремня или кардана не требуется.</string>
+    <string name="rule_note_chain_sprocket">Только для мотоциклов с цепью. Меняйте цепь и обе звёздочки вместе.</string>
+    <string name="rule_note_cables">Смажьте и отрегулируйте свободный ход тросов сцепления и газа.</string>
+    <string name="rule_note_moto_tires">Задняя шина обычно изнашивается в 1,5–2 раза быстрее передней; проверьте протектор и дату DOT.</string>
+</resources>

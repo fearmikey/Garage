@@ -16,10 +16,11 @@
     </issue>
 
     <!-- "%1$d of %2$d tabs visible" / "%1$d/%2$d monitors complete" agree with the total (never 1),
-         "%1$d Overdue" / "%1$d Due Soon" / "%1$d Open / %2$d Total" use the word as an adjective, and
-         trend charts only render with 2+ points / fill-ups. -->
+         "%1$d Overdue" / "%1$d Due Soon" / "%1$d Open / %2$d Total" use the word as an adjective,
+         trend charts only render with 2+ points / fill-ups, and "A VIN must be %1$d characters" is
+         always 17. -->
     <issue id="PluralsCandidate">
-        <ignore regexp="&quot;(tabs|monitors|Overdue|Due|Open|Serviced|total|points|fill)&quot;" />
+        <ignore regexp="&quot;(tabs|monitors|Overdue|Due|Open|Serviced|total|points|fill|characters)&quot;" />
     </issue>
 
     <!-- Document placeholders show example IDs ("STK-2025-9988", "POL-987654321"); those are hyphens,

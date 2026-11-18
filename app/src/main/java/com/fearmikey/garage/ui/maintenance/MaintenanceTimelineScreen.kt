@@ -105,6 +105,8 @@ import com.fearmikey.garage.ui.util.SampleData
 import com.fearmikey.garage.ui.util.ThousandsSeparatorVisualTransformation
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
+import com.fearmikey.garage.ui.util.formatTaskName
+import com.fearmikey.garage.ui.util.localizedTaskName
 import com.fearmikey.garage.ui.util.parseToDoubleOrNull
 import com.fearmikey.garage.ui.util.parseToIntOrNull
 import com.fearmikey.garage.ui.util.sanitizeMileageInput
@@ -361,7 +363,13 @@ private fun MaintenanceRecordRow(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(record.category.label(), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
-                Text(record.description, style = MaterialTheme.typography.titleMedium)
+                // Descriptions auto-filled with a built-in task name were stored in English; show them translated.
+                val title = if (record.description == ODOMETER_UPDATE_DESCRIPTION) {
+                    stringResource(R.string.maint_odometer_update)
+                } else {
+                    formatTaskName(record.description).ifEmpty { record.description }
+                }
+                Text(title, style = MaterialTheme.typography.titleMedium)
                 Text(
                     "${record.date.toDisplayDate()} · ${UnitConverter.formatDistance(record.mileage, unitSystem)} · %s%s".format(currencySymbol, "%.2f".format(record.cost)),
                     style = MaterialTheme.typography.bodyMedium,
@@ -488,6 +496,11 @@ internal fun AddEditMaintenanceRecordSheet(
             .sorted()
             .toList()
     }
+    // Display names for the options (task names are stored in English, see formatTaskName).
+    val localContext = LocalContext.current
+    val localizedTaskOptions = remember(taskOptions, localContext) {
+        taskOptions.associateWith { localContext.localizedTaskName(it) }
+    }
 
     if (showDatePicker) {
         val datePickerState = rememberDatePickerState(
@@ -599,7 +612,7 @@ internal fun AddEditMaintenanceRecordSheet(
                     onExpandedChange = { taskMenuExpanded = it },
                 ) {
                     OutlinedTextField(
-                        value = taskName ?: stringResource(R.string.maint_task_other),
+                        value = taskName?.let { formatTaskName(it) } ?: stringResource(R.string.maint_task_other),
                         onValueChange = {},
                         readOnly = true,
                         singleLine = true,
@@ -623,7 +636,7 @@ internal fun AddEditMaintenanceRecordSheet(
                         )
                         taskOptions.forEach { option ->
                             DropdownMenuItem(
-                                text = { Text(option) },
+                                text = { Text(formatTaskName(option)) },
                                 onClick = {
                                     taskName = option
                                     val isOptionDeferrable = MaintenanceScheduleRules.rules.any { it.category == category && it.taskName == option && it.isDeferrable }
@@ -634,13 +647,14 @@ internal fun AddEditMaintenanceRecordSheet(
                                     // Only auto-update the description if it's blank or currently matches another known task (or its deferred variant)
                                     val isKnownDescription = description.isBlank() || taskOptions.any { 
                                         it.equals(description, ignoreCase = true) || 
+                                        localizedTaskOptions[it].equals(description, ignoreCase = true) || 
                                         it.replace("replacement", "inspection", ignoreCase = true)
                                           .replace("replace", "inspect", ignoreCase = true)
                                           .equals(description, ignoreCase = true)
                                     }
                                     
                                     if (isKnownDescription) {
-                                        description = option
+                                        description = localizedTaskOptions[option] ?: option
                                         if (isDeferred && isOptionDeferrable) {
                                             description = description.replace("replacement", "inspection", ignoreCase = true)
                                                 .replace("replace", "inspect", ignoreCase = true)

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Shared -->
+    <string name="common_continue">继续</string>
+    <string name="common_username">用户名</string>
+    <string name="common_password">密码</string>
+    <string name="common_server_url">服务器地址</string>
+    <string name="common_just_now">刚刚</string>
+    <string name="common_open_link">打开链接</string>
+    <plurals name="common_days">
+        <item quantity="other">%d 天</item>
+    </plurals>
+
+    <!-- Settings: main screen -->
+    <string name="settings_user_prefs_summary">语言、单位、货币、默认车辆、OBD</string>
+    <string name="settings_header_appearance">外观与个性化</string>
+    <string name="settings_appearance_summary">应用主题、纯黑 AMOLED、动态取色、强调色和车辆着色</string>
+    <string name="settings_reminders_summary">证件到期、保养提醒时间窗口和通知权限</string>
+    <string name="settings_header_data">数据与同步</string>
+    <string name="settings_data_summary">导出/导入备份、本地自动备份、WebDAV 云同步、LubeLogger、清除数据</string>
+    <string name="settings_header_app_info">应用信息</string>
+    <string name="settings_about_title">关于 Garage</string>
+    <string name="settings_version">版本 %1$s</string>
+    <string name="settings_version_full">版本 %1$s（%2$d）</string>
+    <string name="settings_license">许可证</string>
+    <string name="settings_license_mit">MIT 许可证</string>
+    <string name="settings_report_bug">报告问题 / 反馈</string>
+    <string name="settings_report_bug_summary">在 GitHub 上报告问题或分享反馈。</string>
+    <string name="settings_header_support">支持与法律信息</string>
+    <string name="settings_bmac">请我喝杯咖啡</string>
+    <string name="settings_bmac_summary">支持开发：%1$s</string>
+    <string name="settings_affiliate_title">启用联盟链接</string>
+    <string name="settings_affiliate_summary">显示可选的工具/配件亚马逊联盟链接，以帮助支持本项目。</string>
+    <string name="settings_help">帮助 / 常见问题</string>
+    <string name="settings_help_summary">获取应用使用帮助和常见问题解答。</string>
+    <string name="settings_rerun_setup">重新运行设置向导</string>
+    <string name="settings_rerun_setup_summary">重新配置应用权限和计量单位</string>
+    <string name="settings_about_description">一款简洁而强大的车辆管理应用，可记录保养、维修历史、油耗和提醒。</string>
+    <string name="settings_about_license">基于 MIT 许可证发布</string>
+    <string name="settings_about_developer">由 fearmikey 开发</string>
+    <string name="settings_feedback_prompt">选择下方选项，在浏览器中打开 GitHub：</string>
+    <string name="settings_report_issue">报告问题</string>
+    <string name="settings_share_feedback">分享反馈</string>
+    <string name="settings_favorites_intro" formatted="false">开发者 (FearMikey) 推荐的工具和配件。通过这些亚马逊联盟链接购买可以支持本项目，且不会让您额外花费。通常 FearMikey 可从您的亚马逊订单中获得 2–5% 的佣金。谢谢！</string>
+
+    <!-- Settings: shared dialogs -->
+    <string name="settings_default_vehicle_first">第一辆添加的车辆（默认）</string>
+    <string name="units_metric">公制</string>
+    <string name="units_imperial">英制</string>
+    <string name="units_uk_mixed">英国（混合）</string>
+    <string name="settings_insecure_title">不安全连接警告</string>
+    <string name="settings_insecure_webdav_message">您正在使用未加密的 HTTP 连接。为保护云备份凭据和数据的安全，请确保通过安全的私有 VPN 连接（如 Tailscale 或 WireGuard）访问您的服务器。</string>
+    <string name="settings_insecure_lubelogger_message">您正在使用未加密的 HTTP 连接。为保护登录凭据和车辆数据的安全，请确保通过安全的私有 VPN 连接（如 Tailscale 或 WireGuard）访问您的服务器。</string>
+    <string name="settings_webdav_config_title">自动备份配置</string>
+    <string name="settings_password_unchanged">密码（未更改）</string>
+    <string name="settings_test_connection">测试连接</string>
+    <string name="settings_local_backup_title">本地文件夹自动备份</string>
+    <string name="settings_local_backup_description">每当 Garage 中有更改时，自动将备份压缩包 (garage-backup.zip) 保存到手机上的某个文件夹。您可以使用自定义或第三方云存储应用同步此文件夹。</string>
+    <string name="settings_backup_folder_label">备份文件夹：</string>
+    <string name="settings_select_folder">选择文件夹</string>
+    <string name="settings_change_folder">更改文件夹</string>
+    <string name="settings_status_error">状态：%1$s</string>
+    <string name="settings_last_saved">上次保存：%1$s</string>
+    <string name="settings_maint_mileage_title">保养里程提醒</string>
+    <string name="settings_notify_due_within">保养到期前的提醒范围：</string>
+    <string name="settings_maint_time_title">保养时间提醒</string>
+    <plurals name="settings_days_before">
+        <item quantity="other">提前 %d 天</item>
+    </plurals>
+    <string name="settings_doc_window_title">证件到期提醒时间窗口</string>
+    <string name="settings_select_accent">选择强调色</string>
+    <string name="palette_garage_blue">车库蓝</string>
+    <string name="palette_racing_red">赛车红</string>
+    <string name="palette_racing_green">赛车绿</string>
+    <string name="palette_tuner_amber">改装琥珀</string>
+    <string name="palette_stealth_slate">隐形石板灰</string>
+    <string name="palette_midnight_purple">午夜紫</string>
+
+    <!-- Settings: sync status rows -->
+    <string name="sync_not_configured">未配置</string>
+    <string name="sync_disabled_configured">已停用（已配置）</string>
+    <string name="sync_disabled_paired">已停用（已配对）</string>
+    <string name="sync_syncing">正在同步…</string>
+    <string name="sync_failed">同步失败</string>
+    <string name="sync_failed_at">同步失败 · %1$s</string>
+    <string name="sync_recently">最近</string>
+    <string name="sync_connected">已连接</string>
+    <string name="sync_connected_last">已连接 · 上次同步于 %1$s</string>
+    <string name="sync_connected_never">已连接 · 尚未同步</string>
+    <string name="sync_connection_failed">连接失败</string>
+    <string name="sync_connection_failed_at">连接失败 · %1$s</string>
+    <string name="sync_not_connected_yet">尚未连接 · 点按“立即同步”进行测试</string>
+    <string name="sync_last_success">上次成功同步于 %1$s</string>
+    <string name="webdav_title">WebDAV 云同步</string>
+    <string name="webdav_disabled_cd">WebDAV 已停用</string>
+    <string name="lubelogger_title">LubeLogger 同步</string>
+    <string name="lubelogger_disabled_cd">LubeLogger 已停用</string>
+    <string name="local_not_configured">未配置 — 未选择文件夹</string>
+    <string name="local_disabled_folder">已停用 — 文件夹：%1$s</string>
+    <string name="local_failed">自动备份失败</string>
+    <string name="local_active">已启用</string>
+    <string name="local_active_last">已启用 · 上次保存于 %1$s</string>
+    <string name="local_active_never">已启用 · 尚未保存</string>
+    <string name="local_folder">文件夹：%1$s</string>
+    <string name="local_disabled_cd">本地备份已停用</string>
+    <string name="local_backup_failed_cd">备份失败</string>
+    <string name="folder_none">未选择文件夹</string>
+    <string name="folder_selected">已选文件夹</string>
+
+    <!-- Settings: appearance -->
+    <string name="appearance_header_theme">主题与配色方案</string>
+    <string name="appearance_amoled">纯黑（AMOLED）</string>
+    <string name="appearance_amoled_summary">深色模式下为 OLED 屏幕使用纯黑背景</string>
+    <string name="appearance_dynamic">动态取色</string>
+    <string name="appearance_dynamic_summary">根据系统壁纸匹配颜色（Android 12+）</string>
+    <string name="appearance_accent">强调色</string>
+    <string name="appearance_header_display">显示与车辆卡片</string>
+    <string name="appearance_tint">车辆页面着色</string>
+    <string name="appearance_tint_summary">详情页使用各车辆自身的颜色</string>
+    <string name="appearance_fuel_graph">显示油耗趋势图</string>
+    <string name="appearance_fuel_graph_summary">在车辆卡片上显示油耗迷你趋势图</string>
+    <string name="appearance_fleet">显示车队概览</string>
+    <string name="appearance_fleet_summary">在仪表盘上显示车队平均值汇总卡片</string>
+
+    <!-- Settings: reminders -->
+    <string name="reminders_header_documents">证件到期</string>
+    <string name="reminders_doc_title">证件续期提醒</string>
+    <string name="reminders_doc_summary">在行驶证、尾气检测、年检、保险、许可证和驾驶证即将到期时通知。</string>
+    <string name="reminders_doc_window_summary">在证件到期前 %1$s 内通知</string>
+    <string name="reminders_header_service">保养提醒</string>
+    <string name="reminders_mileage_title">保养里程提醒窗口</string>
+    <string name="reminders_service_due_within">在保养到期前 %1$s 内通知</string>
+    <string name="reminders_time_title">保养时间提醒窗口</string>
+    <string name="reminders_header_push">推送通知</string>
+    <string name="reminders_permission_title">通知权限</string>
+    <string name="reminders_permission_granted">已授予 — 可以发送提醒和到期通知。</string>
+    <string name="reminders_permission_denied">未授予 — 点按以允许 Garage 发送通知。</string>
+    <string name="reminders_test_title">发送测试通知</string>
+    <string name="reminders_test_summary">发送一条示例通知，以验证推送通知是否正常工作。</string>
+
+    <!-- Settings: user preferences -->
+    <string name="prefs_mileage_rate_title">里程报销费率</string>
+    <string name="prefs_mileage_rate_summary">新行程默认值：%1$s</string>
+    <string name="prefs_default_vehicle_summary">用于小部件快捷方式（%1$s）</string>
+    <string name="prefs_rate_description">记录新行程时预填的默认费率，使用您所选的货币和距离单位。已有行程保留保存时的费率。</string>
+    <string name="prefs_rate_label">费率（%1$s/%2$s）</string>
+    <string name="prefs_rate_invalid">请输入有效的非负数</string>
+
+    <!-- Settings: data, backup & sync -->
+    <string name="backup_header_local">本地备份</string>
+    <string name="backup_export">导出备份</string>
+    <string name="backup_export_summary">将所有车辆、保养历史、提醒和照片保存为 zip 文件。</string>
+    <string name="backup_import">导入备份</string>
+    <string name="backup_import_summary">从备份 zip 恢复车辆、保养历史、提醒和照片。这将替换当前所有数据。</string>
+    <string name="backup_local_enable">启用本地自动备份</string>
+    <string name="backup_local_enable_summary">自动将备份保存到您选择的本地文件夹。</string>
+    <string name="backup_local_now">立即备份到文件夹</string>
+    <string name="backup_local_now_summary">手动将备份压缩包保存到本地文件夹。</string>
+    <string name="backup_header_cloud">云同步</string>
+    <string name="backup_webdav_enable">启用 WebDAV 云同步</string>
+    <string name="backup_webdav_enable_summary">自动将备份上传到您的 WebDAV 服务器。</string>
+    <string name="backup_webdav_now">立即同步 WebDAV</string>
+    <string name="backup_webdav_now_summary">手动将备份上传到您的 WebDAV 服务器。</string>
+    <string name="backup_header_integrations">集成</string>
+    <string name="backup_ll_enable">启用 LubeLogger 同步</string>
+    <string name="backup_ll_enable_summary">自动与您的 LubeLogger 服务器交换记录。</string>
+    <string name="backup_ll_syncing">正在与 LubeLogger 同步…</string>
+    <string name="backup_ll_now">立即同步 LubeLogger</string>
+    <string name="backup_ll_syncing_summary">正在与您的 LubeLogger 服务器交换记录。</string>
+    <string name="backup_ll_now_summary">手动触发与 LubeLogger 服务器的同步。</string>
+    <string name="backup_duplicates">查找重复记录</string>
+    <string name="backup_duplicates_summary">检查并删除完全相同的加油或保养记录。</string>
+    <string name="backup_header_danger">危险操作</string>
+    <string name="backup_clear">清除所有数据</string>
+    <string name="backup_clear_summary">永久删除所有车辆、记录、提醒和照片。</string>
+    <string name="backup_clear_title">清除所有数据？</string>
+    <string name="backup_clear_message">这将永久删除 Garage 中存储的所有车辆、保养记录、提醒和照片。此操作无法撤销。</string>
+    <string name="backup_clear_confirm">全部删除</string>
+    <string name="backup_restart_title">需要重启</string>
+    <string name="backup_restart_message">您的数据已恢复。Garage 需要重启才能加载数据。</string>
+    <string name="backup_restart_now">立即重启</string>
+
+    <!-- Settings: LubeLogger -->
+    <string name="ll_config_title">LubeLogger 连接</string>
+    <string name="ll_config_description">将 Garage 连接到您自托管的 LubeLogger 实例，自动同步记录。</string>
+    <string name="ll_server_units">LubeLogger 服务器单位</string>
+    <string name="ll_units_imperial">英制 (mi/gal)</string>
+    <string name="ll_units_metric">公制 (km/L)</string>
+    <string name="ll_auth_label">身份验证（提供用户名/密码或 API 密钥其中之一）</string>
+    <string name="ll_api_key_optional">API 密钥（可选）</string>
+    <string name="dup_title">检查重复项</string>
+    <plurals name="dup_delete_button">
+        <item quantity="other">删除 %d 条重复记录</item>
+    </plurals>
+    <string name="dup_none_title">未发现重复记录！</string>
+    <string name="dup_none_message">您的本地记录没有重复。</string>
+    <string name="dup_date">日期：%1$s</string>
+    <string name="dup_synced">已同步 (#%1$s)</string>
+    <string name="dup_original">原始</string>
+    <string name="dup_duplicate">重复</string>
+
+    <!-- Settings: snackbar messages -->
+    <string name="msg_ll_sync_done">LubeLogger 同步完成。</string>
+    <string name="msg_ll_sync_failed">LubeLogger 同步失败：%1$s</string>
+    <string name="msg_test_sent">测试通知已发送。</string>
+    <string name="msg_notifications_disabled">Garage 的通知已被关闭。请开启通知以接收测试通知和提醒。</string>
+    <string name="msg_ble_scan_failed">低功耗蓝牙扫描失败。请确认蓝牙已开启。</string>
+    <string name="msg_export_ok">备份导出成功。</string>
+    <string name="msg_export_failed">导出失败：%1$s</string>
+    <string name="msg_import_failed">导入失败：%1$s</string>
+    <string name="msg_cleared">所有数据已成功清除。</string>
+    <string name="msg_clear_failed">清除数据失败：%1$s</string>
+    <string name="msg_local_ok">本地备份保存成功。</string>
+    <string name="msg_local_failed">本地备份失败：%1$s</string>
+    <string name="msg_cloud_ok">云同步成功完成。</string>
+    <string name="msg_cloud_failed">云同步失败：%1$s</string>
+    <string name="msg_connection_ok">连接成功。</string>
+    <string name="msg_connection_failed">连接失败：%1$s</string>
+</resources>

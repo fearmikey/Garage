@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Fuel & charging screen -->
+    <string name="fuel_cd_add_charging">添加充电记录</string>
+    <string name="fuel_cd_add_fillup">添加加油记录</string>
+    <string name="fuel_cd_delete_charging">删除充电记录</string>
+    <string name="fuel_cd_delete_fillup">删除加油记录</string>
+    <string name="fuel_empty_charging">尚未记录任何充电。\n点按 + 记录第一次充电。</string>
+    <string name="fuel_empty_fuel">尚未记录任何加油。\n点按 + 记录第一次加油。</string>
+    <string name="fuel_charging_efficiency">充电效率</string>
+    <string name="fuel_total_charging_spent">充电总花费</string>
+    <string name="fuel_battery_health_card">电池健康与衰减</string>
+    <string name="fuel_health_percent">健康度 %1$.1f%%</string>
+    <string name="fuel_soc_trend" formatted="false">100% 电量续航趋势</string>
+    <string name="fuel_at_mileage">于 %1$s</string>
+    <string name="fuel_total_line">共 %1$s · %2$s</string>
+    <string name="fuel_est_range_chip">100%% SoC 预估续航：%1$s</string>
+    <string name="fuel_economy_title">油耗</string>
+    <string name="fuel_best">最佳</string>
+    <string name="fuel_average">平均</string>
+    <string name="fuel_worst">最差</string>
+    <string name="fuel_total_spent">总花费</string>
+    <string name="fuel_partial">未加满</string>
+    <string name="fuel_since_full_tank">距上次加满 %1$s</string>
+    <string name="fuel_full_tank_hint">如果没有加满油箱，请关闭此项</string>
+    <string name="fuel_grade_title">燃油标号</string>
+    <string name="fuel_grade_regular">普通</string>
+    <string name="fuel_grade_midgrade">中级</string>
+    <string name="fuel_grade_premium">高级</string>
+    <string name="fuel_grade_diesel">柴油</string>
+    <string name="fuel_grade_e85">E85</string>
+    <string name="fuel_grade_other">其他</string>
+    <string name="fuel_grade_custom_hint">标号或辛烷值（例如 92号、95号、98号、E10）</string>
+
+    <!-- Trend charts -->
+    <string name="trend_fuel_title">油耗趋势</string>
+    <string name="trend_charging_title">充电趋势</string>
+    <string name="trend_rolling_fuel">3 次加油均值</string>
+    <string name="trend_rolling_charging">3 次充电均值</string>
+    <string name="trend_metric_economy">油耗</string>
+    <string name="trend_metric_efficiency">能效</string>
+    <string name="trend_metric_cost_per">费用/%1$s</string>
+    <string name="trend_metric_price_per">单价/%1$s</string>
+    <string name="trend_range_last_10">最近 10 次</string>
+    <string name="trend_range_6_months">6 个月</string>
+    <string name="trend_range_1_year">1 年</string>
+    <string name="trend_range_all">全部</string>
+    <string name="trend_chart_cd">%1$s图表，%2$d 个数据点，最新值 %3$s。点按或拖动以查看数据点。</string>
+    <string name="trend_avg">平均 %1$s</string>
+    <string name="trend_legend_rolling">浅色线：%1$s</string>
+    <string name="trend_legend_average">虚线：平均值</string>
+    <string name="trend_legend_outliers">空心点：异常读数，点按以查看</string>
+    <string name="trend_legend_inspect">点按或拖动以查看</string>
+    <string name="trend_not_enough_data">此范围内数据不足。请尝试更大的范围。</string>
+</resources>

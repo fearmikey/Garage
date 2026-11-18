@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Common actions -->
+    <string name="common_cancel">取消</string>
+    <string name="common_save">保存</string>
+    <string name="common_delete">删除</string>
+    <string name="common_ok">确定</string>
+    <string name="common_back">返回</string>
+    <string name="common_discard">放弃</string>
+    <string name="common_edit">编辑</string>
+    <string name="common_close">关闭</string>
+    <string name="common_saving">正在保存…</string>
+    <string name="common_unsaved_title">未保存的更改</string>
+    <string name="common_unsaved_message">您有未保存的更改。要保存还是放弃？</string>
+    <string name="scan_vin_prompt">扫描 VIN 条形码</string>
+
+    <!-- Vehicle type / drivetrain -->
+    <string name="vehicle_type_car">轿车 / 卡车</string>
+    <string name="vehicle_type_motorcycle">摩托车</string>
+    <string name="drivetrain_unknown">未知</string>
+
+    <!-- Modification categories -->
+    <string name="mod_category_performance">性能</string>
+    <string name="mod_category_suspension">悬挂与转向</string>
+    <string name="mod_category_exterior">外观与车身</string>
+    <string name="mod_category_interior">内饰与舒适</string>
+    <string name="mod_category_lighting">灯光</string>
+    <string name="mod_category_wheels_tires">轮毂与轮胎</string>
+    <string name="mod_category_audio_electrical">音响与电气</string>
+    <string name="mod_category_exhaust">排气</string>
+    <string name="mod_category_other">其他</string>
+
+    <!-- Maintenance categories -->
+    <string name="maint_category_fluids">油液</string>
+    <string name="maint_category_filters">滤芯</string>
+    <string name="maint_category_tires">轮胎</string>
+    <string name="maint_category_brakes">制动</string>
+    <string name="maint_category_battery">蓄电池</string>
+    <string name="maint_category_engine">发动机与点火</string>
+    <string name="maint_category_drivetrain">传动系统与链条</string>
+    <string name="maint_category_suspension">悬挂与转向</string>
+    <string name="maint_category_electrical">电气与灯光</string>
+    <string name="maint_category_hvac">空调与暖风</string>
+    <string name="maint_category_body">车身、玻璃与雨刮</string>
+    <string name="maint_category_inspection">检查</string>
+    <string name="maint_category_repair">维修</string>
+    <string name="maint_category_other">其他</string>
+
+    <!-- Charging -->
+    <string name="charger_speed_level_1">1 级（120V）</string>
+    <string name="charger_speed_level_2">2 级（240V）</string>
+    <string name="charger_speed_dc_fast">直流快充</string>
+    <string name="charger_vendor_home">家用</string>
+    <string name="charger_vendor_public">公共</string>
+
+    <!-- Timeline date ranges -->
+    <string name="date_range_all">全部时间</string>
+    <string name="date_range_last_30_days">最近 30 天</string>
+    <string name="date_range_last_12_months">最近 12 个月</string>
+    <string name="date_range_this_year">今年</string>
+    <string name="date_range_last_year">去年</string>
+
+    <!-- Add / edit vehicle -->
+    <string name="vehicle_add_title">添加车辆</string>
+    <string name="vehicle_edit_title">编辑车辆</string>
+    <string name="vehicle_delete">删除车辆</string>
+    <string name="vehicle_photo_cd">车辆照片 %1$d</string>
+    <string name="vehicle_photo_position_multi">第 %1$d 张，共 %2$d 张 · 上下拖动以调整</string>
+    <string name="vehicle_photo_position_single">上下拖动照片以调整位置</string>
+    <string name="vehicle_add_photo">添加照片</string>
+    <string name="vehicle_change_photo">更换照片</string>
+    <string name="vehicle_remove_photo">移除照片</string>
+    <string name="vehicle_add_photos">添加照片（最多 3 张）</string>
+    <string name="vehicle_theme_color">车辆主题色</string>
+    <string name="vehicle_color_extracted">从照片提取</string>
+    <string name="vehicle_color_custom">自定义颜色</string>
+    <string name="vehicle_color_default">默认应用主题</string>
+    <string name="vehicle_color_customize">自定义</string>
+    <string name="vehicle_decode">解码</string>
+    <string name="vehicle_year">年份</string>
+    <string name="vehicle_make">品牌</string>
+    <string name="vehicle_model">型号</string>
+    <string name="vehicle_trim">配置</string>
+    <string name="vehicle_drivetrain">驱动方式</string>
+    <string name="vehicle_condition_new">新车</string>
+    <string name="vehicle_condition_used">二手车</string>
+    <string name="vehicle_purchased_condition">购买时车况</string>
+    <string name="vehicle_purchase_price">购买价格</string>
+    <string name="vehicle_purchase_date">购买日期</string>
+    <string name="vehicle_select_purchase_date">选择购买日期</string>
+    <string name="vehicle_initial_odometer_km">初始里程 (km)</string>
+    <string name="vehicle_initial_mileage_mi">初始里程 (mi)</string>
+    <string name="vehicle_this_vehicle">此车辆</string>
+    <string name="vehicle_delete_title">删除车辆？</string>
+    <string name="vehicle_delete_message">确定要删除 %1$s 吗？这将从应用中移除此车辆及其所有保养记录、加油记录和提醒。</string>
+    <string name="photo_delete_title">删除照片？</string>
+    <string name="photo_delete_message">确定要删除这张照片吗？</string>
+    <string name="vehicle_color_dialog_title">选择车辆主题色</string>
+    <string name="vehicle_color_dialog_message">车辆详情、标签页和仪表盘卡片将使用此标志色着色。</string>
+    <string name="vehicle_color_reset">恢复默认</string>
+
+    <!-- Vehicle color presets -->
+    <string name="color_racing_red">赛车红</string>
+    <string name="color_sunset_orange">日落橙</string>
+    <string name="color_speed_yellow">速度黄</string>
+    <string name="color_british_racing_green">英国赛车绿</string>
+    <string name="color_electric_cyan">电光青</string>
+    <string name="color_daytona_blue">代托纳蓝</string>
+    <string name="color_midnight_navy">午夜海军蓝</string>
+    <string name="color_midnight_purple">午夜紫</string>
+    <string name="color_silver_slate">银色 / 石板灰</string>
+    <string name="color_charcoal_graphite">炭黑石墨</string>
+    <string name="color_bronze_brown">古铜 / 棕色</string>
+    <string name="color_pure_black">纯黑</string>
+</resources>

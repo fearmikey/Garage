@@ -1,5 +1,7 @@
 package com.fearmikey.garage.data.repository
 
+import androidx.annotation.StringRes
+import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.dao.VehicleDao
 import com.fearmikey.garage.data.local.dao.VehiclePartsDao
 import com.fearmikey.garage.data.local.dao.VehicleRegistrationDao
@@ -30,10 +32,18 @@ data class VinInfo(
     val specs: VehicleSpecs,
 )
 
+/**
+ * [message]/[warning] are English (logs, tests); the matching `@StringRes` ids, when set, are the
+ * translated text the UI should show instead.
+ */
 sealed interface VinLookupResult {
     /** [warning] is set when NHTSA decoded the VIN but flagged parts of it as unreliable/missing. */
-    data class Success(val info: VinInfo, val warning: String? = null) : VinLookupResult
-    data class Error(val message: String) : VinLookupResult
+    data class Success(
+        val info: VinInfo,
+        val warning: String? = null,
+        @StringRes val warningRes: Int? = null,
+    ) : VinLookupResult
+    data class Error(val message: String, @StringRes val messageRes: Int? = null) : VinLookupResult
 }
 
 @Singleton
@@ -79,7 +89,7 @@ class VehicleRepository @Inject constructor(
     suspend fun decodeVin(vin: String): VinLookupResult {
         return try {
             val result = vinDecoderApi.decodeVin(vin).results.firstOrNull()
-                ?: return VinLookupResult.Error("No decode results returned for this VIN.")
+                ?: return VinLookupResult.Error("No decode results returned for this VIN.", R.string.vin_error_no_results)
 
             // NHTSA's ErrorCode is a comma-separated list (e.g. "0,14" = decoded clean, plus a
             // minor note). Most codes are warnings that still come with usable data, which is
@@ -87,12 +97,13 @@ class VehicleRepository @Inject constructor(
             val codes = parseErrorCodes(result.errorCode)
             val hasData = !result.make.isNullOrBlank() || !result.model.isNullOrBlank()
             if (!hasData) {
-                return VinLookupResult.Error(errorMessageFor(codes))
+                return VinLookupResult.Error(errorMessageFor(codes), errorMessageResFor(codes))
             }
             // Code 11: position 10 isn't a valid model-year code (EU VINs aren't required to
             // encode it there), so the decoded year can't be trusted.
             val yearUnreliable = CODE_INVALID_MODEL_YEAR in codes
 
+            val modelMissing = result.model.isNullOrBlank()
             VinLookupResult.Success(
                 info = VinInfo(
                     year = if (yearUnreliable) null else result.modelYear?.toIntOrNull(),
@@ -104,10 +115,13 @@ class VehicleRepository @Inject constructor(
                     specs = result.toVehicleSpecs(),
                 ),
                 warning = warningFor(codes)
-                    ?: if (result.model.isNullOrBlank()) "Model not found for this VIN; please enter it manually." else null,
+                    ?: if (modelMissing) "Model not found for this VIN; please enter it manually." else null,
+                warningRes = warningResFor(codes)
+                    ?: if (modelMissing) R.string.vin_warning_model_missing else null,
             )
         } catch (e: Exception) {
-            VinLookupResult.Error(e.message ?: "Network error while decoding VIN.")
+            // Show the network error translated; the exception text is only a fallback for logs.
+            VinLookupResult.Error(e.message ?: "Network error while decoding VIN.", R.string.vin_error_network)
         }
     }
 
@@ -183,6 +197,21 @@ class VehicleRepository @Inject constructor(
             CODE_MANUFACTURER_NOT_REGISTERED in codes ->
                 "This manufacturer isn't in the NHTSA database. $NON_US_HINT"
             else -> "No vehicle details found for this VIN. $NON_US_HINT"
+        }
+
+        @StringRes
+        internal fun errorMessageResFor(codes: Set<Int>): Int = when {
+            CODE_INVALID_CHARACTERS in codes -> R.string.vin_error_invalid_characters
+            CODE_INCOMPLETE_VIN in codes -> R.string.vin_error_incomplete
+            CODE_MANUFACTURER_NOT_REGISTERED in codes -> R.string.vin_error_manufacturer_unknown
+            else -> R.string.vin_error_not_found
+        }
+
+        @StringRes
+        internal fun warningResFor(codes: Set<Int>): Int? = when {
+            CODE_INVALID_MODEL_YEAR in codes -> R.string.vin_warning_year_unreliable
+            (codes - INFORMATIONAL_CODES).isNotEmpty() -> R.string.vin_warning_partial
+            else -> null
         }
 
         internal fun warningFor(codes: Set<Int>): String? = when {

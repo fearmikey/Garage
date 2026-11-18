@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Document renewal notifications -->
+    <string name="reminder_doc_registration">Araç tescil yenileme</string>
+    <string name="reminder_doc_inspection">Araç muayenesi zamanı</string>
+    <string name="reminder_doc_emissions">Egzoz emisyon ölçümü zamanı</string>
+    <string name="reminder_doc_sticker">Muayene etiketi yenileme</string>
+    <string name="reminder_doc_insurance">Sigorta yenileme</string>
+    <string name="reminder_doc_toll">HGS/OGS / otopark izni yenileme</string>
+    <string name="reminder_doc_drivers_license">Ehliyet yenileme</string>
+    <string name="reminder_doc_custom">Yenileme: %1$s</string>
+    <string name="reminder_doc_custom_fallback">Belge</string>
+    <string name="reminder_personal_document">Kişisel sürücü belgesi</string>
+
+    <!-- GPS trip tracking notification -->
+    <string name="trip_channel_name">Yolculuk kaydı</string>
+    <string name="trip_channel_description">Devam eden yolculukların güncel mesafesini gösterir</string>
+    <string name="trip_notification_distance">Mesafe: %1$s</string>
+
+    <!-- Seller report screen -->
+    <plurals name="export_records_logged">
+        <item quantity="one">%d kayıt</item>
+        <item quantity="other">%d kayıt</item>
+    </plurals>
+    <plurals name="export_mods_items">
+        <item quantity="one">%1$d öğe (%2$s)</item>
+        <item quantity="other">%1$d öğe (%2$s)</item>
+    </plurals>
+
+    <!-- LubeLogger duplicates -->
+    <plurals name="dup_deleted_message">
+        <item quantity="one">%d yinelenen kayıt silindi.</item>
+        <item quantity="other">%d yinelenen kayıt silindi.</item>
+    </plurals>
+
+    <!-- Add / edit vehicle: VIN -->
+    <string name="vin_error_scan_not_vin">Taranan kod (\"%1$s\") bir VIN içermiyor. VIN barkodunu deneyin veya VIN\'i elle girin.</string>
+    <string name="vin_error_length">VIN %1$d karakter olmalıdır (şu an %2$d).</string>
+    <string name="vehicle_error_save">Araç kaydedilirken bir hata oluştu.</string>
+    <string name="vin_error_no_results">Bu VIN için çözümleme sonucu döndürülmedi.</string>
+    <string name="vin_error_invalid_characters">Bu VIN geçersiz karakterler içeriyor.</string>
+    <string name="vin_error_incomplete">Bu VIN eksik görünüyor. 17 karakter olduğunu ve yazım hatası olmadığını kontrol edin.</string>
+    <string name="vin_error_manufacturer_unknown">Bu üretici NHTSA veritabanında yok. NHTSA veritabanı çoğunlukla ABD\'de satılan araçları kapsar; diğer pazarlardaki araçların elle girilmesi gerekebilir.</string>
+    <string name="vin_error_not_found">Bu VIN için araç bilgisi bulunamadı. NHTSA veritabanı çoğunlukla ABD\'de satılan araçları kapsar; diğer pazarlardaki araçların elle girilmesi gerekebilir.</string>
+    <string name="vin_error_network">VIN çözümlenemedi. İnternet bağlantınızı kontrol edin.</string>
+    <string name="vin_warning_model_missing">Bu VIN için model bulunamadı; lütfen elle girin.</string>
+    <string name="vin_warning_year_unreliable">Bu VIN\'den model yılı belirlenemedi; lütfen elle girin.</string>
+    <string name="vin_warning_partial">VIN yalnızca kısmen çözümlendi; lütfen bilgileri doğrulayın.</string>
+
+    <!-- Recalls -->
+    <string name="recall_error_http">NHTSA geri çağırma hizmeti (api.nhtsa.gov) bir hata döndürdü (HTTP %1$d). Lütfen daha sonra tekrar deneyin.</string>
+    <string name="recall_error_network">NHTSA geri çağırma hizmetine (api.nhtsa.gov) ulaşılamadı. İnternet bağlantınızı kontrol edin.</string>
+    <string name="recall_error_unexpected">Geri çağırmalar kontrol edilirken beklenmeyen bir hata oluştu.</string>
+
+    <!-- Backup & restore -->
+    <string name="backup_error_open_destination">Hedef yazmak için açılamadı.</string>
+    <string name="backup_error_export_unknown">Yedek dışa aktarılırken bilinmeyen bir hata oluştu.</string>
+    <string name="backup_error_no_folder">Yerel yedek klasörü yapılandırılmamış.</string>
+    <string name="backup_error_folder_access">Seçilen yedek klasörüne erişilemedi.</string>
+    <string name="backup_error_folder_not_writable">Yedek klasörü mevcut değil veya yazılabilir değil.</string>
+    <string name="backup_error_create_file">Seçilen klasörde %1$s oluşturulamadı.</string>
+    <string name="backup_error_open_output">Yedek dosyası yazmak için açılamadı.</string>
+    <string name="backup_error_permission">Klasöre erişim izni reddedildi. Lütfen yedek klasörünü yeniden seçin.</string>
+    <string name="backup_error_local_unknown">Yedek yerel klasöre yazılırken bilinmeyen bir hata oluştu.</string>
+    <string name="backup_error_open_file">Seçilen yedek dosyası açılamadı.</string>
+    <string name="backup_error_invalid_entry">Yedek dosyası geçersiz bir girdi içeriyor: %1$s</string>
+    <string name="backup_error_missing_db">Bu dosya bir Garage yedeği gibi görünmüyor (veritabanı eksik).</string>
+    <string name="backup_error_unreadable_db">Bu dosya geçerli bir Garage yedeği gibi görünmüyor (veritabanı okunamıyor).</string>
+    <string name="backup_error_newer_version">Bu yedek Garage\'ın daha yeni bir sürümüyle oluşturulmuş ve burada geri yüklenemez. Uygulamayı güncelleyin ve tekrar deneyin.</string>
+    <string name="backup_error_import_unknown">Yedek içe aktarılırken bilinmeyen bir hata oluştu.</string>
+
+    <!-- WebDAV / LubeLogger -->
+    <string name="webdav_error_not_configured">Bulut eşitleme yapılandırılmamış.</string>
+    <string name="webdav_error_upload_http">Yükleme başarısız: HTTP %1$s</string>
+    <string name="webdav_error_sync_unknown">WebDAV ile eşitlenirken bilinmeyen bir hata oluştu.</string>
+    <string name="webdav_error_url_username_required">Sunucu adresi ve kullanıcı adı gereklidir.</string>
+    <string name="webdav_error_auth">Kimlik doğrulama başarısız. Kullanıcı adınızı ve şifrenizi kontrol edin.</string>
+    <string name="webdav_error_test_unknown">Bağlantı test edilirken bilinmeyen bir hata oluştu.</string>
+    <string name="lubelogger_error_invalid_url">LubeLogger sunucu adresi geçersiz.</string>
+</resources>

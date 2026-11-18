@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pdf_footer">Garage — Książka serwisowa i historia pojazdu</string>
+    <string name="pdf_page_of">Strona %1$d z %2$d</string>
+    <string name="pdf_header_continued_title">KSIĄŻKA SERWISOWA I HISTORIA POJAZDU — %1$s</string>
+    <string name="pdf_continued">Ciąg dalszy</string>
+    <string name="pdf_banner_title">KSIĄŻKA SERWISOWA I HISTORIA POJAZDU</string>
+    <string name="pdf_banner_subtitle">Oficjalny raport do sprzedaży i stałej opieki</string>
+    <string name="pdf_generated">Wygenerowano %1$s</string>
+
+    <string name="pdf_not_recorded">Brak danych</string>
+    <string name="pdf_not_specified">Nie podano</string>
+    <string name="pdf_label_vin">VIN:</string>
+    <string name="pdf_label_current_odometer">AKTUALNY PRZEBIEG:</string>
+    <string name="pdf_label_current_mileage">AKTUALNY PRZEBIEG:</string>
+    <string name="pdf_label_drivetrain">NAPĘD:</string>
+    <string name="pdf_label_transmission">SKRZYNIA:</string>
+    <string name="pdf_transmission_speeds">%1$s-biegowa</string>
+    <string name="pdf_standard">Standard</string>
+    <string name="pdf_engine_cylinders">%1$s cyl.</string>
+    <string name="pdf_standard_engine">Silnik standardowy</string>
+    <string name="pdf_label_engine">SILNIK:</string>
+    <string name="pdf_label_fuel_type">PALIWO:</string>
+    <string name="pdf_label_purchased">KUPIONY:</string>
+    <string name="pdf_label_initial_odometer">PRZEBIEG POCZĄTKOWY:</string>
+    <string name="pdf_label_initial_mileage">PRZEBIEG POCZĄTKOWY:</string>
+    <string name="pdf_label_specs">DANE:</string>
+
+    <string name="pdf_summary_title">PODSUMOWANIE WYDATKÓW NA OPIEKĘ</string>
+    <string name="pdf_total_investment">ŁĄCZNIE</string>
+    <string name="pdf_maintenance_care">SERWIS</string>
+    <plurals name="pdf_records_logged">
+        <item quantity="one">%d wpis</item>
+        <item quantity="few">%d wpisy</item>
+        <item quantity="many">%d wpisów</item>
+        <item quantity="other">%d wpisu</item>
+    </plurals>
+    <string name="pdf_upgrades_mods">MODYFIKACJE</string>
+    <plurals name="pdf_installed_items">
+        <item quantity="one">%d zamontowany element</item>
+        <item quantity="few">%d zamontowane elementy</item>
+        <item quantity="many">%d zamontowanych elementów</item>
+        <item quantity="other">%d zamontowanego elementu</item>
+    </plurals>
+    <string name="pdf_logged_range">ZAKRES PRZEBIEGU</string>
+    <string name="pdf_range_to">do %1$s</string>
+
+    <string name="pdf_recalls_clear">OFICJALNY STATUS AKCJI SERWISOWYCH: BRAK (0 OTWARTYCH)</string>
+    <plurals name="pdf_recalls_verified_count">
+        <item quantity="one">Sprawdzono w bazie NHTSA dla %1$s (%2$d akcja sprawdzona — 0 otwartych).</item>
+        <item quantity="few">Sprawdzono w bazie NHTSA dla %1$s (%2$d akcje sprawdzone — 0 otwartych).</item>
+        <item quantity="many">Sprawdzono w bazie NHTSA dla %1$s (%2$d akcji sprawdzonych — 0 otwartych).</item>
+        <item quantity="other">Sprawdzono w bazie NHTSA dla %1$s (%2$d akcji sprawdzonej — 0 otwartych).</item>
+    </plurals>
+    <string name="pdf_recalls_verified_none">Sprawdzono w bazie NHTSA dla %1$s. Brak aktywnych akcji serwisowych.</string>
+    <plurals name="pdf_recalls_open">
+        <item quantity="one">AKCJE SERWISOWE: %d OTWARTA</item>
+        <item quantity="few">AKCJE SERWISOWE: %d OTWARTE</item>
+        <item quantity="many">AKCJE SERWISOWE: %d OTWARTYCH</item>
+        <item quantity="other">AKCJE SERWISOWE: %d OTWARTEJ</item>
+    </plurals>
+    <string name="pdf_recall_item">• Akcja nr %1$s — Podzespół: %2$s</string>
+    <string name="pdf_no_summary">Brak opisu.</string>
+
+    <string name="pdf_parts_title">CZĘŚCI I PŁYNY</string>
+    <string name="pdf_mods_title">ULEPSZENIA I MODYFIKACJE</string>
+    <string name="pdf_fuel_title">HISTORIA TANKOWAŃ I ŁADOWAŃ</string>
+    <string name="pdf_service_title">PEŁNA HISTORIA SERWISOWA</string>
+    <string name="pdf_col_date">DATA</string>
+    <string name="pdf_col_item">MODYFIKACJA</string>
+    <string name="pdf_col_category">KATEGORIA</string>
+    <string name="pdf_col_description">OPIS / UWAGI</string>
+    <string name="pdf_col_cost">KOSZT</string>
+    <string name="pdf_col_odometer">PRZEBIEG (%1$s)</string>
+    <string name="pdf_col_mileage">MILE</string>
+    <string name="pdf_col_type">RODZAJ</string>
+    <string name="pdf_col_details">SZCZEGÓŁY</string>
+    <string name="pdf_col_service">USŁUGA I OPIS</string>
+    <string name="pdf_no_maintenance">Brak wpisów serwisowych dla tego pojazdu.</string>
+</resources>

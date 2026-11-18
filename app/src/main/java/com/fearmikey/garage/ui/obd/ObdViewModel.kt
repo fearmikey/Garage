@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import android.content.Context
+import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.entity.MaintenanceCategory
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.repository.MaintenanceRepository
@@ -21,6 +22,7 @@ import com.fearmikey.garage.obd.ObdReading
 import com.fearmikey.garage.obd.ObdScanResult
 import com.fearmikey.garage.obd.ObdScanSummary
 import com.fearmikey.garage.obd.ObdTimeoutException
+import com.fearmikey.garage.ui.util.UiText
 import com.fearmikey.garage.ui.util.UnitConverter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -62,13 +64,13 @@ class ObdViewModel @Inject constructor(
 
     data class UiState(
         val connectionStatus: ConnectionStatus = ConnectionStatus.IDLE,
-        val error: String? = null,
+        val error: UiText? = null,
         val devices: List<ObdDevice> = emptyList(),
         val bleDevices: List<ObdDevice> = emptyList(),
         val isBleScanning: Boolean = false,
         val scanResult: ObdScanResult? = null,
         /** Human readable step shown while connecting/scanning, e.g. "Reading trouble codes…". */
-        val progressMessage: String? = null,
+        val progressMessage: UiText? = null,
         val timelineLogResult: TimelineLogResult? = null,
         val vinCheck: VinCheck? = null,
         /** The VIN currently saved on the vehicle, for display when it doesn't match. */
@@ -174,7 +176,7 @@ class ObdViewModel @Inject constructor(
             } catch (e: CancellationException) {
                 throw e
             } catch (_: Exception) {
-                _uiState.update { it.copy(error = "Bluetooth LE scan failed. Make sure Bluetooth is on.") }
+                _uiState.update { it.copy(error = UiText.res(R.string.msg_ble_scan_failed)) }
             } finally {
                 _uiState.update { it.copy(isBleScanning = false) }
             }
@@ -228,7 +230,7 @@ class ObdViewModel @Inject constructor(
                     timelineLogResult = null,
                     vinCheck = null,
                     liveReadings = emptyList(),
-                    progressMessage = "Connecting to adapter…",
+                    progressMessage = UiText.res(R.string.obd_progress_connecting),
                 )
             }
             val newSession = openSession(config) { _uiState.update { s -> s.copy(progressMessage = it) } }
@@ -241,14 +243,14 @@ class ObdViewModel @Inject constructor(
      * Connects the transport and initializes the ELM327. On failure, reports the error and
      * returns null.
      */
-    private suspend fun openSession(config: ObdAdapterConfig, onProgress: (String) -> Unit): ObdParser? {
+    private suspend fun openSession(config: ObdAdapterConfig, onProgress: (UiText) -> Unit): ObdParser? {
         closeConnection()
         val newSession = if (obdConnectionManager.connect(config)) obdConnectionManager.createSession() else null
         if (newSession == null) {
             failConnection(connectFailureMessage(config))
             return null
         }
-        onProgress("Detecting vehicle protocol…")
+        onProgress(UiText.res(R.string.obd_progress_protocol))
         try {
             newSession.init()
         } catch (e: CancellationException) {
@@ -267,7 +269,7 @@ class ObdViewModel @Inject constructor(
         var result = ObdScanResult(protocolName = parser.protocolName)
 
         /** Runs one request; a timeout or bad reply only skips that item. */
-        suspend fun <T> step(label: String, block: suspend () -> T): T? {
+        suspend fun <T> step(label: UiText, block: suspend () -> T): T? {
             _uiState.update { it.copy(progressMessage = label) }
             return try {
                 block()
@@ -289,38 +291,38 @@ class ObdViewModel @Inject constructor(
         try {
             _uiState.update { it.copy(error = null, timelineLogResult = null, vinCheck = null) }
             unloggedScan = null
-            step("Checking battery voltage…") { parser.readAdapterVoltage() }
+            step(UiText.res(R.string.obd_progress_battery)) { parser.readAdapterVoltage() }
                 ?.let { result = result.copy(adapterVoltage = it) }
-            step("Checking engine light & readiness…") { parser.readMonitorStatus() }
+            step(UiText.res(R.string.obd_progress_readiness)) { parser.readMonitorStatus() }
                 ?.let { result = result.copy(monitorStatus = it) }
 
             val sources = mutableMapOf<String, List<String>>()
-            step("Reading stored trouble codes…") { parser.readStoredDtcs() }
+            step(UiText.res(R.string.obd_progress_stored_codes)) { parser.readStoredDtcs() }
                 ?.let { result = result.copy(storedDtcs = it.codes); sources.mergeFrom(it.sources) }
-            step("Reading pending trouble codes…") { parser.readPendingDtcs() }
+            step(UiText.res(R.string.obd_progress_pending_codes)) { parser.readPendingDtcs() }
                 ?.let { result = result.copy(pendingDtcs = it.codes); sources.mergeFrom(it.sources) }
-            step("Reading permanent trouble codes…") { parser.readPermanentDtcs() }
+            step(UiText.res(R.string.obd_progress_permanent_codes)) { parser.readPermanentDtcs() }
                 ?.let { result = result.copy(permanentDtcs = it.codes); sources.mergeFrom(it.sources) }
             result = result.copy(dtcSources = sources)
             // Publish codes as soon as we have them; the rest fills in progressively.
             _uiState.update { it.copy(scanResult = result) }
 
             if (result.storedDtcs.isNotEmpty()) {
-                step("Reading freeze frame…") { parser.readFreezeFrame() }
+                step(UiText.res(R.string.obd_progress_freeze_frame)) { parser.readFreezeFrame() }
                     ?.let { result = result.copy(freezeFrame = it) }
             }
-            step("Reading odometer…") { parser.readOdometerKm() }
+            step(UiText.res(R.string.obd_progress_odometer)) { parser.readOdometerKm() }
                 ?.let { result = result.copy(odometerKm = it) }
-            step("Reading distance since codes cleared…") { parser.readDistanceSinceClearedKm() }
+            step(UiText.res(R.string.obd_progress_distance_cleared)) { parser.readDistanceSinceClearedKm() }
                 ?.let { result = result.copy(distanceSinceClearedKm = it) }
-            step("Reading VIN…") { parser.readVin() }
+            step(UiText.res(R.string.obd_progress_vin)) { parser.readVin() }
                 ?.let { result = result.copy(vin = it) }
             _uiState.update { it.copy(scanResult = result) }
 
             val readings = mutableListOf<ObdReading>()
             for (pid in ObdPid.SNAPSHOT) {
                 if (!parser.isSupported(pid)) continue
-                step("Reading ${pid.label.lowercase()}…") { parser.readPid(pid) }?.let(readings::add)
+                step(UiText.res(R.string.obd_progress_pid, UiText.res(pid.labelRes))) { parser.readPid(pid) }?.let(readings::add)
             }
             result = result.copy(readings = readings, failedRequests = failures)
             _uiState.update { it.copy(scanResult = result, progressMessage = null) }
@@ -434,7 +436,7 @@ class ObdViewModel @Inject constructor(
                 _uiState.update { it.copy(isClearingCodes = false) }
                 if (!acknowledged) {
                     _uiState.update {
-                        it.copy(error = "The vehicle didn't confirm the clear. Turn the engine off (ignition on) and try again.")
+                        it.copy(error = UiText.res(R.string.obd_error_clear_not_confirmed))
                     }
                     return@launch
                 }
@@ -447,7 +449,7 @@ class ObdViewModel @Inject constructor(
             } catch (e: CancellationException) {
                 throw e
             } catch (_: ObdTimeoutException) {
-                _uiState.update { it.copy(isClearingCodes = false, error = "The adapter didn't respond to the clear request.") }
+                _uiState.update { it.copy(isClearingCodes = false, error = UiText.res(R.string.obd_error_clear_no_response)) }
             } catch (e: Exception) {
                 _uiState.update { it.copy(isClearingCodes = false) }
                 failConnection(connectionErrorMessage(e))
@@ -463,7 +465,7 @@ class ObdViewModel @Inject constructor(
         val initialParser = session ?: return
         if (liveJob?.isActive == true || _uiState.value.isBusy) return
         if (ObdPid.LIVE.none(initialParser::isSupported)) {
-            _uiState.update { it.copy(error = "This vehicle doesn't report any live data PIDs.") }
+            _uiState.update { it.copy(error = UiText.res(R.string.obd_error_no_live_pids)) }
             return
         }
         _uiState.update { it.copy(isLiveDataActive = true, error = null) }
@@ -485,7 +487,9 @@ class ObdViewModel @Inject constructor(
                         return@launch
                     }
                     reconnectAttempted = true
-                    _uiState.update { it.copy(connectionStatus = ConnectionStatus.CONNECTING, progressMessage = "Reconnecting…") }
+                    _uiState.update {
+                        it.copy(connectionStatus = ConnectionStatus.CONNECTING, progressMessage = UiText.res(R.string.obd_progress_reconnecting))
+                    }
                     val reopened = openSession(adapter) { message -> _uiState.update { it.copy(progressMessage = message) } }
                     if (reopened == null) {
                         _uiState.update { it.copy(isLiveDataActive = false) }
@@ -540,7 +544,7 @@ class ObdViewModel @Inject constructor(
         }
     }
 
-    private fun failConnection(message: String) {
+    private fun failConnection(message: UiText) {
         stopLiveData()
         closeConnection()
         _uiState.update {
@@ -558,20 +562,17 @@ class ObdViewModel @Inject constructor(
         obdConnectionManager.disconnect()
     }
 
-    private fun connectFailureMessage(config: ObdAdapterConfig): String = when (config.type) {
-        ObdAdapterType.WIFI ->
-            "Couldn't reach the Wi-Fi adapter at ${config.address}. Make sure your phone is connected to the adapter's Wi-Fi network."
-        ObdAdapterType.BLE ->
-            "Couldn't connect to the Bluetooth LE adapter. Make sure it's plugged in, the ignition is on, and it isn't connected to another phone."
-        ObdAdapterType.CLASSIC ->
-            "Couldn't reach the adapter. Make sure Bluetooth is on, the adapter is plugged in, the ignition is on, and it's in range."
+    private fun connectFailureMessage(config: ObdAdapterConfig): UiText = when (config.type) {
+        ObdAdapterType.WIFI -> UiText.res(R.string.obd_error_connect_wifi, config.address)
+        ObdAdapterType.BLE -> UiText.res(R.string.obd_error_connect_ble)
+        ObdAdapterType.CLASSIC -> UiText.res(R.string.obd_error_connect_classic)
     }
 
-    private fun connectionErrorMessage(e: Exception): String = when (e) {
-        is ObdAdapterException -> e.message ?: "The adapter couldn't talk to the vehicle."
-        is ObdTimeoutException -> "The adapter stopped responding. Check that it's powered and the ignition is on."
-        is IOException -> "Lost connection to the adapter."
-        else -> "Error communicating with the OBD adapter: ${e.message}"
+    private fun connectionErrorMessage(e: Exception): UiText = when (e) {
+        is ObdAdapterException -> UiText.Res(e.reason.messageRes, listOfNotNull(e.detail))
+        is ObdTimeoutException -> UiText.res(R.string.obd_error_timeout)
+        is IOException -> UiText.res(R.string.obd_error_lost_connection)
+        else -> UiText.res(R.string.obd_error_generic, e.message.orEmpty())
     }
 
     override fun onCleared() {

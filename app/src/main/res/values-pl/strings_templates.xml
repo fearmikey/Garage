@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tpl_motorcycle_street_title">Motocykl drogowy</string>
+    <string name="tpl_motorcycle_street_desc">Typowe interwały dla motocykli drogowych, sportowych i turystycznych, w tym pielęgnacja łańcucha i serwis zawieszenia.</string>
+    <string name="tpl_heavy_duty_title">Ciężka praca i holowanie</string>
+    <string name="tpl_heavy_duty_desc">Skrócone interwały wymiany płynów i kontrole w ciężkich warunkach dla pick-upów, pojazdów holujących i terenowych.</string>
+    <string name="tpl_daily_commuter_title">Codzienne dojazdy</string>
+    <string name="tpl_daily_commuter_desc">Standardowe, zrównoważone interwały dla aut na co dzień, dojazdów autostradą i samochodów rodzinnych.</string>
+    <string name="tpl_hybrid_ev_title">Hybryda i elektryk (EV)</string>
+    <string name="tpl_hybrid_ev_desc">Zoptymalizowane dla hybryd i aut elektrycznych, z naciskiem na filtr kabinowy, prowadnice zacisków i układy chłodzenia.</string>
+    <string name="tpl_classic_title">Duży przebieg i klasyki</string>
+    <string name="tpl_classic_desc">Częste przeglądy i krótkie interwały dla starszych aut, silników z dużym przebiegiem i klasyków.</string>
+
+    <string name="tpl_task_motorcycle_oil">Olej i filtr motocyklowy</string>
+    <string name="tpl_task_chain_clean">Czyszczenie, smarowanie i luz łańcucha</string>
+    <string name="tpl_task_tire_pressure_tread">Kontrola ciśnienia i bieżnika</string>
+    <string name="tpl_task_brake_fluid_front_rear">Wymiana płynu hamulcowego (przód i tył)</string>
+    <string name="tpl_task_fork_seal">Olej i uszczelniacze lag</string>
+    <string name="tpl_task_battery_tender">Ładowarka podtrzymująca i klemy</string>
+    <string name="tpl_task_severe_oil">Olej i filtr (ciężkie warunki)</string>
+    <string name="tpl_task_transfer_case_severe">Olej reduktora (ciężkie warunki)</string>
+    <string name="tpl_task_diff_fluid">Olej mostów przedniego i tylnego</string>
+    <string name="tpl_task_chassis_grease">Smarowanie podwozia i sworzni</string>
+    <string name="tpl_task_hd_brake_suspension">Kontrola hamulców i zawieszenia (ciężka praca)</string>
+    <string name="tpl_task_synthetic_oil">Olej syntetyczny i filtr</string>
+    <string name="tpl_task_rotation_pressure">Rotacja opon i ciśnienie</string>
+    <string name="tpl_task_air_filters">Filtry kabinowy i powietrza</string>
+    <string name="tpl_task_multipoint">Przegląd wielopunktowy</string>
+    <string name="tpl_task_hv_duct">Filtr kabinowy i kanał baterii WN</string>
+    <string name="tpl_task_brake_slides">Smarowanie prowadnic zacisków i kontrola płynu</string>
+    <string name="tpl_task_rotation_alignment">Rotacja opon i kontrola geometrii</string>
+    <string name="tpl_task_inverter_coolant">Wymiana płynu chłodzącego falownika i baterii</string>
+    <string name="tpl_task_high_zinc_oil">Wymiana oleju z cynkiem / do dużych przebiegów</string>
+    <string name="tpl_task_cooling_hoses">Kontrola układu chłodzenia i węży</string>
+    <string name="tpl_task_ignition">Zapłon, świece i rozdzielacz</string>
+    <string name="tpl_task_v_belts">Paski klinowe i napinacz</string>
+    <string name="tpl_task_steering_grease">Smarowanie podwozia i układu kierowniczego</string>
+
+    <string name="tpl_note_jaso_oil">W motocyklach z mokrym sprzęgłem używaj oleju JASO MA/MA2.</string>
+    <string name="tpl_note_chain_rain">Częściej po jeździe w deszczu lub błocie.</string>
+    <string name="tpl_note_moto_tire_check">Sprawdzaj ciśnienie na zimno i szukaj nierównego zużycia, pęknięć i wbitych przedmiotów.</string>
+    <string name="tpl_note_brake_fluid_moto">Płyn hamulcowy jest higroskopijny; odpowietrz obie pompy.</string>
+    <string name="tpl_note_fork_oil">Wymień olej w lagach; sprawdź, czy uszczelniacze nie przeciekają.</string>
+    <string name="tpl_note_battery_tender">Zimą trzymaj na ładowarce podtrzymującej; wyczyść i dokręć klemy.</string>
+    <string name="tpl_note_severe_oil">Interwał dla częstego holowania lub dużych obciążeń.</string>
+    <string name="tpl_note_transfer_case">Zalecane przy częstym używaniu 4x4 lub przejazdach przez wodę.</string>
+    <string name="tpl_note_severe_diff">Interwał dla holowania i dużych obciążeń.</string>
+    <string name="tpl_note_chassis_grease">Nasmaruj kalamitki, krzyżaki wału napędowego i przeguby zawieszenia.</string>
+    <string name="tpl_note_hd_brakes">Sprawdź grubość klocków, tarcze, sterownik hamulców przyczepy i resory.</string>
+    <string name="tpl_note_synthetic_oil">Standardowy interwał dla oleju w pełni syntetycznego.</string>
+    <string name="tpl_note_rotation_even">Zapewnia równomierne zużycie bieżnika i niskie spalanie.</string>
+    <string name="tpl_note_air_filters">Wymieniaj oba filtry co roku dla wydajności klimatyzacji i silnika.</string>
+    <string name="tpl_note_wipers">Wymień pióra wycieraczek dla dobrej widoczności.</string>
+    <string name="tpl_note_drive_belts">Wymień paski napędowe, aby uniknąć awarii osprzętu.</string>
+    <string name="tpl_note_multipoint">Sprawdź węże, oświetlenie i poziomy płynów.</string>
+    <string name="tpl_note_hv_duct">Wyczyść/wymień filtr kabinowy i sprawdź wlot wentylatora chłodzącego baterię wysokiego napięcia.</string>
+    <string name="tpl_note_brake_slides">Rekuperacja zmniejsza zużycie klocków, ale prowadnice wymagają regularnego smarowania, by się nie zapiekły.</string>
+    <string name="tpl_note_ev_tires">Natychmiastowy moment obrotowy silnika elektrycznego szybciej zużywa opony.</string>
+    <string name="tpl_note_inverter_coolant">Sprawdź i wymień płyn w układzie chłodzenia podzespołów wysokiego napięcia.</string>
+    <string name="tpl_note_high_zinc">Chroni wałki rozrządu z płaskimi popychaczami i uszczelnienia silników z dużym przebiegiem.</string>
+    <string name="tpl_note_cooling_hoses">Sprawdź węże chłodnicy, termostat, nagrzewnicę i stan płynu chłodzącego.</string>
+    <string name="tpl_note_ignition">Sprawdź świece, przewody zapłonowe, kopułkę rozdzielacza i palec/styki.</string>
+    <string name="tpl_note_v_belts">Sprawdź naciąg pasków i czy nie ma pęknięć lub zeszklenia.</string>
+    <string name="tpl_note_steering_grease">Nasmaruj końcówki drążków, sworznie, ramię pitman i tuleje zawieszenia.</string>
+
+    <string name="rule_note_4wd_interval">Ogólny interwał 4WD/AWD; dokładną wartość znajdziesz w instrukcji obsługi.</string>
+    <string name="rule_note_chain_lube">Tylko motocykle z napędem łańcuchowym; sprawdź też luz. Pomiń przy napędzie paskiem lub wałem.</string>
+    <string name="rule_note_chain_sprocket">Tylko motocykle z łańcuchem. Wymieniaj łańcuch i obie zębatki razem.</string>
+    <string name="rule_note_cables">Nasmaruj i wyreguluj luz linek sprzęgła i gazu.</string>
+    <string name="rule_note_moto_tires">Tylna opona zwykle zużywa się 1,5–2× szybciej niż przednia; sprawdź bieżnik i datę DOT.</string>
+</resources>

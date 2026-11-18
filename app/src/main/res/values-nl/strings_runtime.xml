@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Document renewal notifications -->
+    <string name="reminder_doc_registration">Verlenging kentekenregistratie</string>
+    <string name="reminder_doc_inspection">APK verloopt</string>
+    <string name="reminder_doc_emissions">Emissietest verloopt</string>
+    <string name="reminder_doc_sticker">Verlenging keuringssticker</string>
+    <string name="reminder_doc_insurance">Verlenging verzekering</string>
+    <string name="reminder_doc_toll">Verlenging tolbadge / parkeervergunning</string>
+    <string name="reminder_doc_drivers_license">Verlenging rijbewijs</string>
+    <string name="reminder_doc_custom">Verlenging: %1$s</string>
+    <string name="reminder_doc_custom_fallback">Document</string>
+    <string name="reminder_personal_document">Persoonlijk bestuurdersdocument</string>
+
+    <!-- GPS trip tracking notification -->
+    <string name="trip_channel_name">Ritregistratie</string>
+    <string name="trip_channel_description">Toont de huidige afstand van lopende ritten</string>
+    <string name="trip_notification_distance">Afstand: %1$s</string>
+
+    <!-- Seller report screen -->
+    <plurals name="export_records_logged">
+        <item quantity="one">%d vastgelegd</item>
+        <item quantity="other">%d vastgelegd</item>
+    </plurals>
+    <plurals name="export_mods_items">
+        <item quantity="one">%1$d item (%2$s)</item>
+        <item quantity="other">%1$d items (%2$s)</item>
+    </plurals>
+
+    <!-- LubeLogger duplicates -->
+    <plurals name="dup_deleted_message">
+        <item quantity="one">%d dubbele invoer verwijderd.</item>
+        <item quantity="other">%d dubbele invoeren verwijderd.</item>
+    </plurals>
+
+    <!-- Add / edit vehicle: VIN -->
+    <string name="vin_error_scan_not_vin">De gescande code (\"%1$s\") bevat geen VIN. Probeer de VIN-barcode of typ het VIN handmatig.</string>
+    <string name="vin_error_length">Een VIN moet %1$d tekens hebben (nu %2$d).</string>
+    <string name="vehicle_error_save">Er is een fout opgetreden bij het opslaan van het voertuig.</string>
+    <string name="vin_error_no_results">Geen decodeerresultaten voor dit VIN.</string>
+    <string name="vin_error_invalid_characters">Dit VIN bevat ongeldige tekens.</string>
+    <string name="vin_error_incomplete">Dit VIN lijkt onvolledig. Controleer of het 17 tekens heeft zonder typfouten.</string>
+    <string name="vin_error_manufacturer_unknown">Deze fabrikant staat niet in de NHTSA-database. Die database bevat vooral in de VS verkochte voertuigen, dus voertuigen uit andere markten moet je mogelijk handmatig invoeren.</string>
+    <string name="vin_error_not_found">Geen voertuiggegevens gevonden voor dit VIN. De NHTSA-database bevat vooral in de VS verkochte voertuigen, dus voertuigen uit andere markten moet je mogelijk handmatig invoeren.</string>
+    <string name="vin_error_network">Kan het VIN niet decoderen. Controleer je internetverbinding.</string>
+    <string name="vin_warning_model_missing">Geen model gevonden voor dit VIN; voer het handmatig in.</string>
+    <string name="vin_warning_year_unreliable">Het modeljaar kon niet uit dit VIN worden bepaald; voer het handmatig in.</string>
+    <string name="vin_warning_partial">VIN slechts gedeeltelijk gedecodeerd; controleer de gegevens.</string>
+
+    <!-- Recalls -->
+    <string name="recall_error_http">De terugroepdienst van de NHTSA (api.nhtsa.gov) gaf een fout (HTTP %1$d). Probeer het later opnieuw.</string>
+    <string name="recall_error_network">Kan de terugroepdienst van de NHTSA (api.nhtsa.gov) niet bereiken. Controleer je internetverbinding.</string>
+    <string name="recall_error_unexpected">Onverwachte fout bij het controleren op terugroepacties.</string>
+
+    <!-- Backup & restore -->
+    <string name="backup_error_open_destination">Kan de bestemming niet openen om te schrijven.</string>
+    <string name="backup_error_export_unknown">Onbekende fout bij het exporteren van de back-up.</string>
+    <string name="backup_error_no_folder">Geen lokale back-upmap ingesteld.</string>
+    <string name="backup_error_folder_access">Kan de gekozen back-upmap niet openen.</string>
+    <string name="backup_error_folder_not_writable">De back-upmap bestaat niet of is niet beschrijfbaar.</string>
+    <string name="backup_error_create_file">Kan %1$s niet aanmaken in de gekozen map.</string>
+    <string name="backup_error_open_output">Kan het back-upbestand niet openen om te schrijven.</string>
+    <string name="backup_error_permission">Geen toegang tot de map. Kies de back-upmap opnieuw.</string>
+    <string name="backup_error_local_unknown">Onbekende fout bij het schrijven van de back-up naar de lokale map.</string>
+    <string name="backup_error_open_file">Kan het gekozen back-upbestand niet openen.</string>
+    <string name="backup_error_invalid_entry">Het back-upbestand bevat een ongeldig item: %1$s</string>
+    <string name="backup_error_missing_db">Dit bestand lijkt geen Garage-back-up (database ontbreekt).</string>
+    <string name="backup_error_unreadable_db">Dit bestand lijkt geen geldige Garage-back-up (database onleesbaar).</string>
+    <string name="backup_error_newer_version">Deze back-up is gemaakt met een nieuwere versie van Garage en kan hier niet worden hersteld. Werk de app bij en probeer het opnieuw.</string>
+    <string name="backup_error_import_unknown">Onbekende fout bij het importeren van de back-up.</string>
+
+    <!-- WebDAV / LubeLogger -->
+    <string name="webdav_error_not_configured">Cloudsynchronisatie is niet ingesteld.</string>
+    <string name="webdav_error_upload_http">Uploaden mislukt: HTTP %1$s</string>
+    <string name="webdav_error_sync_unknown">Onbekende fout bij synchroniseren met WebDAV.</string>
+    <string name="webdav_error_url_username_required">Server-URL en gebruikersnaam zijn verplicht.</string>
+    <string name="webdav_error_auth">Aanmelden mislukt. Controleer je gebruikersnaam en wachtwoord.</string>
+    <string name="webdav_error_test_unknown">Onbekende fout bij het testen van de verbinding.</string>
+    <string name="lubelogger_error_invalid_url">De LubeLogger-server-URL is ongeldig.</string>
+</resources>

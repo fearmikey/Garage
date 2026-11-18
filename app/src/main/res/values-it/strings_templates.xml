@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tpl_motorcycle_street_title">Moto stradale</string>
+    <string name="tpl_motorcycle_street_desc">Intervalli tipici per moto stradali, sportive e da turismo, inclusa la cura della catena e delle sospensioni.</string>
+    <string name="tpl_heavy_duty_title">Uso gravoso e traino</string>
+    <string name="tpl_heavy_duty_desc">Cambi dei liquidi più ravvicinati e controlli per uso gravoso su pick-up, veicoli da traino o fuoristrada.</string>
+    <string name="tpl_daily_commuter_title">Uso quotidiano</string>
+    <string name="tpl_daily_commuter_desc">Intervalli standard ed equilibrati per auto di tutti i giorni, pendolari in autostrada e veicoli per la famiglia.</string>
+    <string name="tpl_hybrid_ev_title">Ibrido ed elettrico (EV)</string>
+    <string name="tpl_hybrid_ev_desc">Ottimizzato per ibride ed elettriche, con attenzione a filtro abitacolo, guide delle pinze freno e impianti di raffreddamento.</string>
+    <string name="tpl_classic_title">Alto chilometraggio e d\'epoca</string>
+    <string name="tpl_classic_desc">Controlli frequenti e intervalli brevi per veicoli datati, motori con molti chilometri o auto d\'epoca.</string>
+
+    <string name="tpl_task_motorcycle_oil">Olio e filtro moto</string>
+    <string name="tpl_task_chain_clean">Pulizia, lubrificazione e tensione catena</string>
+    <string name="tpl_task_tire_pressure_tread">Controllo pressione e battistrada</string>
+    <string name="tpl_task_brake_fluid_front_rear">Sostituzione liquido freni (anteriore e posteriore)</string>
+    <string name="tpl_task_fork_seal">Olio e paraoli forcella</string>
+    <string name="tpl_task_battery_tender">Mantenitore batteria e morsetti</string>
+    <string name="tpl_task_severe_oil">Olio e filtro (uso gravoso)</string>
+    <string name="tpl_task_transfer_case_severe">Olio riduttore (uso gravoso)</string>
+    <string name="tpl_task_diff_fluid">Olio differenziali anteriore e posteriore</string>
+    <string name="tpl_task_chassis_grease">Ingrassaggio telaio e giunti sferici</string>
+    <string name="tpl_task_hd_brake_suspension">Controllo freni e sospensioni (uso gravoso)</string>
+    <string name="tpl_task_synthetic_oil">Olio sintetico e filtro</string>
+    <string name="tpl_task_rotation_pressure">Rotazione pneumatici e pressione</string>
+    <string name="tpl_task_air_filters">Filtri abitacolo e aria</string>
+    <string name="tpl_task_multipoint">Controllo multipunto</string>
+    <string name="tpl_task_hv_duct">Filtro abitacolo e condotto batteria HV</string>
+    <string name="tpl_task_brake_slides">Lubrificazione guide pinze e controllo liquido</string>
+    <string name="tpl_task_rotation_alignment">Rotazione pneumatici e convergenza</string>
+    <string name="tpl_task_inverter_coolant">Sostituzione refrigerante inverter e batteria</string>
+    <string name="tpl_task_high_zinc_oil">Cambio olio ad alto zinco / alto chilometraggio</string>
+    <string name="tpl_task_cooling_hoses">Controllo impianto di raffreddamento e manicotti</string>
+    <string name="tpl_task_ignition">Accensione, candele e spinterogeno</string>
+    <string name="tpl_task_v_belts">Cinghie trapezoidali e tenditore</string>
+    <string name="tpl_task_steering_grease">Ingrassaggio telaio e sterzo</string>
+
+    <string name="tpl_note_jaso_oil">Usa olio JASO MA/MA2 per moto con frizione a bagno d\'olio.</string>
+    <string name="tpl_note_chain_rain">Più spesso dopo aver guidato sotto la pioggia o nello sporco.</string>
+    <string name="tpl_note_moto_tire_check">Controlla la pressione a freddo e verifica usura irregolare, crepe e corpi estranei.</string>
+    <string name="tpl_note_brake_fluid_moto">Il liquido freni è igroscopico; spurga entrambe le pompe.</string>
+    <string name="tpl_note_fork_oil">Sostituisci l\'olio forcella; controlla che i paraoli non trasudino.</string>
+    <string name="tpl_note_battery_tender">Tienila sotto mantenitore durante l\'inverno; pulisci e stringi i morsetti.</string>
+    <string name="tpl_note_severe_oil">Intervallo per uso gravoso con traino frequente o carichi pesanti.</string>
+    <string name="tpl_note_transfer_case">Consigliato per uso frequente della 4x4 o guadi.</string>
+    <string name="tpl_note_severe_diff">Intervallo per uso gravoso con traino e carichi pesanti.</string>
+    <string name="tpl_note_chassis_grease">Ingrassa ingrassatori, crociere dell\'albero di trasmissione e snodi delle sospensioni.</string>
+    <string name="tpl_note_hd_brakes">Controlla spessore pastiglie, dischi, centralina freni rimorchio e balestre.</string>
+    <string name="tpl_note_synthetic_oil">Intervallo standard per olio completamente sintetico.</string>
+    <string name="tpl_note_rotation_even">Garantisce usura uniforme e consumi ottimali.</string>
+    <string name="tpl_note_air_filters">Sostituisci entrambi i filtri ogni anno per l\'efficienza di clima e motore.</string>
+    <string name="tpl_note_wipers">Sostituisci le spazzole per una buona visibilità.</string>
+    <string name="tpl_note_drive_belts">Sostituisci le cinghie per evitare guasti agli accessori.</string>
+    <string name="tpl_note_multipoint">Controlla manicotti, luci e livelli.</string>
+    <string name="tpl_note_hv_duct">Pulisci/sostituisci il filtro abitacolo e controlla la presa d\'aria della ventola della batteria ad alta tensione.</string>
+    <string name="tpl_note_brake_slides">La frenata rigenerativa consuma meno le pastiglie, ma le guide vanno lubrificate regolarmente per non bloccarsi.</string>
+    <string name="tpl_note_ev_tires">La coppia immediata del motore elettrico consuma prima gli pneumatici.</string>
+    <string name="tpl_note_inverter_coolant">Controlla e sostituisci il refrigerante dei componenti ad alta tensione.</string>
+    <string name="tpl_note_high_zinc">Protegge alberi a camme con punterie piatte o paraoli di motori con molti chilometri.</string>
+    <string name="tpl_note_cooling_hoses">Controlla manicotti del radiatore, termostato, radiatore del riscaldamento e stato del refrigerante.</string>
+    <string name="tpl_note_ignition">Controlla candele, cavi, calotta dello spinterogeno e spazzola/puntine.</string>
+    <string name="tpl_note_v_belts">Controlla la tensione delle cinghie e verifica crepe o vetrificazione.</string>
+    <string name="tpl_note_steering_grease">Ingrassa testine dello sterzo, giunti sferici, braccio pitman e boccole.</string>
+
+    <string name="rule_note_4wd_interval">Intervallo generico 4WD/AWD; controlla il libretto per il valore esatto.</string>
+    <string name="rule_note_chain_lube">Solo moto a catena; controlla anche la tensione. Ignora per trasmissione a cinghia o cardano.</string>
+    <string name="rule_note_chain_sprocket">Solo moto a catena. Sostituisci catena e pignoni insieme.</string>
+    <string name="rule_note_cables">Lubrifica e regola il gioco dei cavi di frizione e acceleratore.</string>
+    <string name="rule_note_moto_tires">La gomma posteriore si consuma di solito 1,5–2 volte più in fretta dell\'anteriore; controlla battistrada e data DOT.</string>
+</resources>

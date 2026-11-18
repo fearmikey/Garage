@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Seller report PDF body (drawn in MaintenanceExportScreen.generatePdf). Long text is ellipsized
+         to fit fixed-width columns, so keep table headers and labels short. -->
+    <string name="pdf_footer">Garage — Vehicle Service &amp; History Book</string>
+    <string name="pdf_page_of">Page %1$d of %2$d</string>
+    <!-- %1$s: vehicle, e.g. "2023 Toyota Tacoma SR5" -->
+    <string name="pdf_header_continued_title">VEHICLE SERVICE &amp; HISTORY BOOK — %1$s</string>
+    <string name="pdf_continued">Continued</string>
+    <string name="pdf_banner_title">VEHICLE SERVICE &amp; HISTORY BOOK</string>
+    <string name="pdf_banner_subtitle">Official Resale &amp; Continuous Care Report</string>
+    <string name="pdf_generated">Generated %1$s</string>
+
+    <!-- Vehicle overview -->
+    <string name="pdf_not_recorded">Not recorded</string>
+    <string name="pdf_not_specified">Not specified</string>
+    <string name="pdf_label_vin">VIN:</string>
+    <string name="pdf_label_current_odometer">CURRENT ODOMETER:</string>
+    <string name="pdf_label_current_mileage">CURRENT MILEAGE:</string>
+    <string name="pdf_label_drivetrain">DRIVETRAIN:</string>
+    <string name="pdf_label_transmission">TRANSMISSION:</string>
+    <!-- %1$s: number of gears -->
+    <string name="pdf_transmission_speeds">%1$s-Spd</string>
+    <string name="pdf_standard">Standard</string>
+    <!-- %1$s: number of cylinders -->
+    <string name="pdf_engine_cylinders">%1$s-Cyl</string>
+    <string name="pdf_standard_engine">Standard Engine</string>
+    <string name="pdf_label_engine">ENGINE:</string>
+    <string name="pdf_label_fuel_type">FUEL TYPE:</string>
+    <string name="pdf_label_purchased">PURCHASED:</string>
+    <string name="pdf_label_initial_odometer">INITIAL ODOMETER:</string>
+    <string name="pdf_label_initial_mileage">INITIAL MILEAGE:</string>
+    <string name="pdf_label_specs">SPECS:</string>
+
+    <!-- Care investment summary -->
+    <string name="pdf_summary_title">TOTAL CARE INVESTMENT SUMMARY</string>
+    <string name="pdf_total_investment">TOTAL INVESTMENT</string>
+    <string name="pdf_maintenance_care">MAINTENANCE &amp; CARE</string>
+    <plurals name="pdf_records_logged">
+        <item quantity="one">%d record logged</item>
+        <item quantity="other">%d records logged</item>
+    </plurals>
+    <string name="pdf_upgrades_mods">UPGRADES &amp; MODS</string>
+    <plurals name="pdf_installed_items">
+        <item quantity="one">%d installed item</item>
+        <item quantity="other">%d installed items</item>
+    </plurals>
+    <string name="pdf_logged_range">LOGGED RANGE</string>
+    <!-- %1$s: highest recorded mileage -->
+    <string name="pdf_range_to">to %1$s</string>
+
+    <!-- Safety recalls -->
+    <string name="pdf_recalls_clear">OFFICIAL SAFETY RECALL STATUS: CLEAR (0 OPEN RECALLS)</string>
+    <!-- %1$s: year make model; %2$d: campaigns checked -->
+    <plurals name="pdf_recalls_verified_count">
+        <item quantity="one">Verified via NHTSA database for %1$s (%2$d campaign checked — 0 active open recalls).</item>
+        <item quantity="other">Verified via NHTSA database for %1$s (%2$d campaigns checked — 0 active open recalls).</item>
+    </plurals>
+    <string name="pdf_recalls_verified_none">Verified via NHTSA database for %1$s. No active safety recall campaigns found.</string>
+    <plurals name="pdf_recalls_open">
+        <item quantity="one">SAFETY RECALL STATUS: %d OPEN RECALL</item>
+        <item quantity="other">SAFETY RECALL STATUS: %d OPEN RECALLS</item>
+    </plurals>
+    <!-- %1$s: campaign number; %2$s: affected component -->
+    <string name="pdf_recall_item">• Campaign #%1$s — Component: %2$s</string>
+    <string name="pdf_no_summary">No summary details provided.</string>
+
+    <!-- Sections and table headers -->
+    <string name="pdf_parts_title">PARTS &amp; FLUID SPECIFICATIONS</string>
+    <string name="pdf_mods_title">VEHICLE UPGRADES &amp; MODIFICATIONS</string>
+    <string name="pdf_fuel_title">FUEL &amp; CHARGING HISTORY LOG</string>
+    <string name="pdf_service_title">CONTINUOUS SERVICE HISTORY LOG</string>
+    <string name="pdf_col_date">DATE</string>
+    <string name="pdf_col_item">UPGRADE / ITEM</string>
+    <string name="pdf_col_category">CATEGORY</string>
+    <string name="pdf_col_description">DESCRIPTION / NOTES</string>
+    <string name="pdf_col_cost">COST</string>
+    <!-- %1$s: distance unit, e.g. "KM" -->
+    <string name="pdf_col_odometer">ODOMETER (%1$s)</string>
+    <string name="pdf_col_mileage">MILEAGE</string>
+    <string name="pdf_col_type">TYPE</string>
+    <string name="pdf_col_details">DETAILS</string>
+    <string name="pdf_col_service">SERVICE &amp; TASK DESCRIPTION</string>
+    <string name="pdf_no_maintenance">No maintenance records logged for this vehicle.</string>
+</resources>

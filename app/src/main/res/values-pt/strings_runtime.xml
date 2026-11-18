@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Document renewal notifications -->
+    <string name="reminder_doc_registration">Renovação do licenciamento</string>
+    <string name="reminder_doc_inspection">Renovação da inspeção veicular</string>
+    <string name="reminder_doc_emissions">Renovação da inspeção de emissões</string>
+    <string name="reminder_doc_sticker">Renovação do selo de inspeção</string>
+    <string name="reminder_doc_insurance">Renovação do seguro</string>
+    <string name="reminder_doc_toll">Renovação da tag de pedágio / permissão de estacionamento</string>
+    <string name="reminder_doc_drivers_license">Renovação da CNH</string>
+    <string name="reminder_doc_custom">Renovação: %1$s</string>
+    <string name="reminder_doc_custom_fallback">Documento</string>
+    <string name="reminder_personal_document">Documento pessoal do motorista</string>
+
+    <!-- GPS trip tracking notification -->
+    <string name="trip_channel_name">Registro de viagens</string>
+    <string name="trip_channel_description">Mostra a distância atual das viagens em andamento</string>
+    <string name="trip_notification_distance">Distância: %1$s</string>
+
+    <!-- Seller report screen -->
+    <plurals name="export_records_logged">
+        <item quantity="one">%d registrado</item>
+        <item quantity="many">%d registrados</item>
+        <item quantity="other">%d registrados</item>
+    </plurals>
+    <plurals name="export_mods_items">
+        <item quantity="one">%1$d item (%2$s)</item>
+        <item quantity="many">%1$d itens (%2$s)</item>
+        <item quantity="other">%1$d itens (%2$s)</item>
+    </plurals>
+
+    <!-- LubeLogger duplicates -->
+    <plurals name="dup_deleted_message">
+        <item quantity="one">%d registro duplicado excluído.</item>
+        <item quantity="many">%d registros duplicados excluídos.</item>
+        <item quantity="other">%d registros duplicados excluídos.</item>
+    </plurals>
+
+    <!-- Add / edit vehicle: VIN -->
+    <string name="vin_error_scan_not_vin">O código escaneado (\"%1$s\") não contém um VIN. Tente o código de barras do VIN ou digite o VIN manualmente.</string>
+    <string name="vin_error_length">Um VIN deve ter %1$d caracteres (atualmente %2$d).</string>
+    <string name="vehicle_error_save">Ocorreu um erro ao salvar o veículo.</string>
+    <string name="vin_error_no_results">Nenhum resultado de decodificação para este VIN.</string>
+    <string name="vin_error_invalid_characters">Este VIN contém caracteres inválidos.</string>
+    <string name="vin_error_incomplete">Este VIN parece estar incompleto. Verifique se tem 17 caracteres sem erros de digitação.</string>
+    <string name="vin_error_manufacturer_unknown">Este fabricante não está no banco de dados da NHTSA. Esse banco cobre principalmente veículos vendidos nos EUA, então veículos de outros mercados podem precisar ser cadastrados manualmente.</string>
+    <string name="vin_error_not_found">Nenhum dado de veículo encontrado para este VIN. O banco de dados da NHTSA cobre principalmente veículos vendidos nos EUA, então veículos de outros mercados podem precisar ser cadastrados manualmente.</string>
+    <string name="vin_error_network">Não foi possível decodificar o VIN. Verifique sua conexão com a internet.</string>
+    <string name="vin_warning_model_missing">Modelo não encontrado para este VIN; digite-o manualmente.</string>
+    <string name="vin_warning_year_unreliable">Não foi possível determinar o ano-modelo a partir deste VIN; digite-o manualmente.</string>
+    <string name="vin_warning_partial">VIN decodificado apenas em parte; confira os dados.</string>
+
+    <!-- Recalls -->
+    <string name="recall_error_http">O serviço de recalls da NHTSA (api.nhtsa.gov) retornou um erro (HTTP %1$d). Tente novamente mais tarde.</string>
+    <string name="recall_error_network">Não foi possível acessar o serviço de recalls da NHTSA (api.nhtsa.gov). Verifique sua conexão com a internet.</string>
+    <string name="recall_error_unexpected">Erro inesperado ao verificar recalls.</string>
+
+    <!-- Backup & restore -->
+    <string name="backup_error_open_destination">Não foi possível abrir o destino para gravação.</string>
+    <string name="backup_error_export_unknown">Erro desconhecido ao exportar o backup.</string>
+    <string name="backup_error_no_folder">Nenhuma pasta de backup local configurada.</string>
+    <string name="backup_error_folder_access">Não foi possível acessar a pasta de backup selecionada.</string>
+    <string name="backup_error_folder_not_writable">A pasta de backup não existe ou não permite gravação.</string>
+    <string name="backup_error_create_file">Não foi possível criar %1$s na pasta selecionada.</string>
+    <string name="backup_error_open_output">Não foi possível abrir o arquivo de backup para gravação.</string>
+    <string name="backup_error_permission">Permissão negada para acessar a pasta. Selecione a pasta de backup novamente.</string>
+    <string name="backup_error_local_unknown">Erro desconhecido ao gravar o backup na pasta local.</string>
+    <string name="backup_error_open_file">Não foi possível abrir o arquivo de backup selecionado.</string>
+    <string name="backup_error_invalid_entry">O arquivo de backup contém uma entrada inválida: %1$s</string>
+    <string name="backup_error_missing_db">Este arquivo não parece ser um backup do Garage (banco de dados ausente).</string>
+    <string name="backup_error_unreadable_db">Este arquivo não parece ser um backup válido do Garage (banco de dados ilegível).</string>
+    <string name="backup_error_newer_version">Este backup foi criado por uma versão mais recente do Garage e não pode ser restaurado aqui. Atualize o app e tente novamente.</string>
+    <string name="backup_error_import_unknown">Erro desconhecido ao importar o backup.</string>
+
+    <!-- WebDAV / LubeLogger -->
+    <string name="webdav_error_not_configured">A sincronização na nuvem não está configurada.</string>
+    <string name="webdav_error_upload_http">Falha no envio: HTTP %1$s</string>
+    <string name="webdav_error_sync_unknown">Erro desconhecido ao sincronizar com o WebDAV.</string>
+    <string name="webdav_error_url_username_required">URL do servidor e nome de usuário são obrigatórios.</string>
+    <string name="webdav_error_auth">Falha na autenticação. Verifique seu nome de usuário e senha.</string>
+    <string name="webdav_error_test_unknown">Erro desconhecido ao testar a conexão.</string>
+    <string name="lubelogger_error_invalid_url">A URL do servidor LubeLogger é inválida.</string>
+</resources>

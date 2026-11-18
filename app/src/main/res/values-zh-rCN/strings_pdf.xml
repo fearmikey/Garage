@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pdf_footer">Garage — 车辆保养与历史手册</string>
+    <string name="pdf_page_of">第 %1$d 页，共 %2$d 页</string>
+    <string name="pdf_header_continued_title">车辆保养与历史手册 — %1$s</string>
+    <string name="pdf_continued">续</string>
+    <string name="pdf_banner_title">车辆保养与历史手册</string>
+    <string name="pdf_banner_subtitle">官方转售与持续养护报告</string>
+    <string name="pdf_generated">生成于 %1$s</string>
+
+    <string name="pdf_not_recorded">未记录</string>
+    <string name="pdf_not_specified">未指定</string>
+    <string name="pdf_label_vin">VIN：</string>
+    <string name="pdf_label_current_odometer">当前里程：</string>
+    <string name="pdf_label_current_mileage">当前里程：</string>
+    <string name="pdf_label_drivetrain">驱动方式：</string>
+    <string name="pdf_label_transmission">变速箱：</string>
+    <string name="pdf_transmission_speeds">%1$s 速</string>
+    <string name="pdf_standard">标准</string>
+    <string name="pdf_engine_cylinders">%1$s 缸</string>
+    <string name="pdf_standard_engine">标准发动机</string>
+    <string name="pdf_label_engine">发动机：</string>
+    <string name="pdf_label_fuel_type">燃料类型：</string>
+    <string name="pdf_label_purchased">购买时：</string>
+    <string name="pdf_label_initial_odometer">初始里程：</string>
+    <string name="pdf_label_initial_mileage">初始里程：</string>
+    <string name="pdf_label_specs">规格：</string>
+
+    <string name="pdf_summary_title">养护总投入汇总</string>
+    <string name="pdf_total_investment">总投入</string>
+    <string name="pdf_maintenance_care">保养与养护</string>
+    <plurals name="pdf_records_logged">
+        <item quantity="other">已记录 %d 条</item>
+    </plurals>
+    <string name="pdf_upgrades_mods">升级与改装</string>
+    <plurals name="pdf_installed_items">
+        <item quantity="other">已安装 %d 项</item>
+    </plurals>
+    <string name="pdf_logged_range">记录范围</string>
+    <string name="pdf_range_to">至 %1$s</string>
+
+    <string name="pdf_recalls_clear">官方安全召回状态：无问题（0 项未处理召回）</string>
+    <plurals name="pdf_recalls_verified_count">
+        <item quantity="other">已通过 NHTSA 数据库核实 %1$s（共查询 %2$d 项召回活动 — 0 项未处理）。</item>
+    </plurals>
+    <string name="pdf_recalls_verified_none">已通过 NHTSA 数据库核实 %1$s。未发现进行中的安全召回活动。</string>
+    <plurals name="pdf_recalls_open">
+        <item quantity="other">安全召回状态：%d 项未处理召回</item>
+    </plurals>
+    <string name="pdf_recall_item">• 召回活动编号 %1$s — 部件：%2$s</string>
+    <string name="pdf_no_summary">未提供摘要详情。</string>
+
+    <string name="pdf_parts_title">配件与油液规格</string>
+    <string name="pdf_mods_title">车辆升级与改装</string>
+    <string name="pdf_fuel_title">加油与充电记录</string>
+    <string name="pdf_service_title">完整保养历史记录</string>
+    <string name="pdf_col_date">日期</string>
+    <string name="pdf_col_item">升级 / 项目</string>
+    <string name="pdf_col_category">类别</string>
+    <string name="pdf_col_description">描述 / 备注</string>
+    <string name="pdf_col_cost">费用</string>
+    <string name="pdf_col_odometer">里程（%1$s）</string>
+    <string name="pdf_col_mileage">里程</string>
+    <string name="pdf_col_type">类型</string>
+    <string name="pdf_col_details">详情</string>
+    <string name="pdf_col_service">保养与项目描述</string>
+    <string name="pdf_no_maintenance">此车辆尚未记录任何保养。</string>
+</resources>

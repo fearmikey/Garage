@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- OBD2 scanner: progress while connecting / scanning -->
+    <string name="obd_progress_connecting">Adaptöre bağlanılıyor…</string>
+    <string name="obd_progress_reconnecting">Yeniden bağlanılıyor…</string>
+    <string name="obd_progress_protocol">Araç protokolü algılanıyor…</string>
+    <string name="obd_progress_battery">Akü voltajı kontrol ediliyor…</string>
+    <string name="obd_progress_readiness">Motor arıza lambası ve hazırlık kontrol ediliyor…</string>
+    <string name="obd_progress_stored_codes">Kayıtlı arıza kodları okunuyor…</string>
+    <string name="obd_progress_pending_codes">Bekleyen arıza kodları okunuyor…</string>
+    <string name="obd_progress_permanent_codes">Kalıcı arıza kodları okunuyor…</string>
+    <string name="obd_progress_freeze_frame">Dondurulmuş kare okunuyor…</string>
+    <string name="obd_progress_odometer">Kilometre sayacı okunuyor…</string>
+    <string name="obd_progress_distance_cleared">Kodlar silindikten sonraki mesafe okunuyor…</string>
+    <string name="obd_progress_vin">VIN okunuyor…</string>
+    <string name="obd_progress_pid">Okunuyor: %1$s…</string>
+
+    <!-- OBD2 scanner: errors -->
+    <string name="obd_error_connect_wifi">%1$s adresindeki Wi-Fi adaptörüne ulaşılamadı. Telefonunuzun adaptörün Wi-Fi ağına bağlı olduğundan emin olun.</string>
+    <string name="obd_error_connect_ble">Bluetooth LE adaptörüne bağlanılamadı. Takılı olduğundan, kontağın açık olduğundan ve başka bir telefona bağlı olmadığından emin olun.</string>
+    <string name="obd_error_connect_classic">Adaptöre ulaşılamadı. Bluetooth\'un açık, adaptörün takılı, kontağın açık ve adaptörün menzil içinde olduğundan emin olun.</string>
+    <string name="obd_error_timeout">Adaptör yanıt vermeyi bıraktı. Güç aldığını ve kontağın açık olduğunu kontrol edin.</string>
+    <string name="obd_error_lost_connection">Adaptörle bağlantı kesildi.</string>
+    <string name="obd_error_generic">OBD adaptörüyle iletişim hatası: %1$s</string>
+    <string name="obd_error_clear_not_confirmed">Araç silme işlemini onaylamadı. Motoru kapatın (kontak açık) ve tekrar deneyin.</string>
+    <string name="obd_error_clear_no_response">Adaptör silme isteğine yanıt vermedi.</string>
+    <string name="obd_error_no_live_pids">Bu araç canlı veri sağlamıyor.</string>
+    <string name="obd_error_unable_to_connect">Adaptör araçla iletişim kuramadı. Kontak açık mı?</string>
+    <string name="obd_error_can_bus">CAN veri yolu hatası. Adaptörün OBD2 soketine tam oturduğunu kontrol edin.</string>
+    <string name="obd_error_vehicle_bus">Araç veri yolu hatası. Adaptörün OBD2 soketine tam oturduğunu kontrol edin.</string>
+    <string name="obd_error_bus_feedback">Araç veri yolu geri bildirim hatası. Adaptör bağlantısını kontrol edin.</string>
+    <string name="obd_error_low_voltage">Adaptör düşük voltaj nedeniyle sıfırlandı. Araç aküsünü kontrol edin.</string>
+    <string name="obd_error_bus_init">Adaptör bir veri yolu başlatma hatası bildirdi. Kontak açık mı?</string>
+    <string name="obd_error_internal">Adaptör %1$s dahili hatasını bildirdi.</string>
+
+    <!-- OBD2 scanner: control modules that reported a code -->
+    <string name="obd_module_engine">Motor (ECM)</string>
+    <string name="obd_module_transmission">Şanzıman (TCM)</string>
+    <string name="obd_module_numbered">Modül %1$s</string>
+
+    <!-- OBD2 scanner: emissions readiness monitors -->
+    <string name="obd_monitor_misfire">Tekleme</string>
+    <string name="obd_monitor_fuel_system">Yakıt sistemi</string>
+    <string name="obd_monitor_components">Bileşenler</string>
+    <string name="obd_monitor_nmhc_catalyst">NMHC katalizörü</string>
+    <string name="obd_monitor_nox_scr">NOx/SCR arıtma</string>
+    <string name="obd_monitor_boost_pressure">Turbo basıncı</string>
+    <string name="obd_monitor_exhaust_gas_sensor">Egzoz gazı sensörü</string>
+    <string name="obd_monitor_pm_filter">Partikül filtresi</string>
+    <string name="obd_monitor_egr_vvt">EGR/VVT sistemi</string>
+    <string name="obd_monitor_catalyst">Katalizör</string>
+    <string name="obd_monitor_heated_catalyst">Isıtmalı katalizör</string>
+    <string name="obd_monitor_evap">Buharlaşma sistemi</string>
+    <string name="obd_monitor_secondary_air">İkincil hava</string>
+    <string name="obd_monitor_ac_refrigerant">Klima soğutucu gazı</string>
+    <string name="obd_monitor_o2_sensor">Oksijen sensörü</string>
+    <string name="obd_monitor_o2_heater">Oksijen sensörü ısıtıcısı</string>
+
+    <!-- OBD2 scanner: sensor (PID) names -->
+    <string name="obd_pid_engine_load">Motor yükü</string>
+    <string name="obd_pid_coolant_temp">Soğutma suyu sıcaklığı</string>
+    <string name="obd_pid_short_fuel_trim">Kısa süreli yakıt düzeltmesi (B1)</string>
+    <string name="obd_pid_long_fuel_trim">Uzun süreli yakıt düzeltmesi (B1)</string>
+    <string name="obd_pid_intake_pressure">Emme manifoldu basıncı</string>
+    <string name="obd_pid_rpm">Motor devri</string>
+    <string name="obd_pid_speed">Araç hızı</string>
+    <string name="obd_pid_intake_air_temp">Emme havası sıcaklığı</string>
+    <string name="obd_pid_maf">Hava kütle akışı</string>
+    <string name="obd_pid_throttle">Gaz kelebeği konumu</string>
+    <string name="obd_pid_run_time">Çalıştırmadan beri geçen süre</string>
+    <string name="obd_pid_fuel_rail_pressure">Yakıt rampası basıncı</string>
+    <string name="obd_pid_fuel_level">Yakıt seviyesi</string>
+    <string name="obd_pid_barometric_pressure">Atmosfer basıncı</string>
+    <string name="obd_pid_module_voltage">Akü / modül voltajı</string>
+    <string name="obd_pid_ambient_air_temp">Dış hava sıcaklığı</string>
+    <string name="obd_pid_hybrid_battery">Hibrit batarya şarjı</string>
+    <string name="obd_pid_oil_temp">Motor yağı sıcaklığı</string>
+</resources>

@@ -54,7 +54,7 @@ Garage is a privacy-focused vehicle management app for Android. Track maintenanc
 <ul>
 <li>Material You design with theme palettes, plus light and dark modes</li>
 <li>Imperial or metric units, and many currencies</li>
-<li>Available in English, German, French, Spanish, Italian, Portuguese, Dutch, Polish, Russian, and Turkish</li>
+<li>Available in English, German, French, Spanish, Italian, Portuguese, Dutch, Polish, Russian, Turkish, and Simplified Chinese</li>
 </ul>
 
 Garage is 100% free and open source software under the MIT license. If you find it useful, you can support development through Buy Me a Coffee.

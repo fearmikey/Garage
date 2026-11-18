@@ -54,7 +54,7 @@ Garage, Android için gizlilik odaklı bir araç yönetim uygulamasıdır. Tüm 
 <ul>
 <li>Renk paletleri, açık ve koyu modlarla Material You tasarımı</li>
 <li>Metrik veya imparatorluk birimleri ve birçok para birimi</li>
-<li>Türkçe, İngilizce, Almanca, Fransızca, İspanyolca, İtalyanca, Portekizce, Felemenkçe, Lehçe ve Rusça dillerinde kullanılabilir</li>
+<li>Türkçe, İngilizce, Almanca, Fransızca, İspanyolca, İtalyanca, Portekizce, Felemenkçe, Lehçe, Rusça ve Basitleştirilmiş Çince dillerinde kullanılabilir</li>
 </ul>
 
 Garage, MIT lisansı altında %100 özgür ve açık kaynaklı bir yazılımdır. Uygulamayı faydalı bulduysanız, Buy Me a Coffee üzerinden geliştirmeye destek olabilirsiniz.

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Document renewal notifications -->
+    <string name="reminder_doc_registration">Vehicle Registration Renewal</string>
+    <string name="reminder_doc_inspection">State Vehicle Inspection Renewal</string>
+    <string name="reminder_doc_emissions">Emissions / Smog Test Renewal</string>
+    <string name="reminder_doc_sticker">Inspection Sticker Renewal</string>
+    <string name="reminder_doc_insurance">Insurance Policy Renewal</string>
+    <string name="reminder_doc_toll">Toll Pass / Parking Permit Renewal</string>
+    <string name="reminder_doc_drivers_license">Driver\'s License Renewal</string>
+    <!-- %1$s: the user's name for a custom document, e.g. "Extended Warranty" -->
+    <string name="reminder_doc_custom">%1$s Renewal</string>
+    <string name="reminder_doc_custom_fallback">Document</string>
+    <string name="reminder_personal_document">Personal driver document</string>
+
+    <!-- GPS trip tracking notification -->
+    <string name="trip_channel_name">Trip Tracking</string>
+    <string name="trip_channel_description">Shows the current distance for active trips</string>
+    <string name="trip_notification_distance">Distance: %1$s</string>
+
+    <!-- Seller report screen -->
+    <plurals name="export_records_logged">
+        <item quantity="one">%d logged</item>
+        <item quantity="other">%d logged</item>
+    </plurals>
+    <!-- %2$s: total cost, e.g. "$1,250.00" -->
+    <plurals name="export_mods_items">
+        <item quantity="one">%1$d item (%2$s)</item>
+        <item quantity="other">%1$d items (%2$s)</item>
+    </plurals>
+
+    <!-- LubeLogger duplicates -->
+    <plurals name="dup_deleted_message">
+        <item quantity="one">Deleted %d duplicate record.</item>
+        <item quantity="other">Deleted %d duplicate records.</item>
+    </plurals>
+
+    <!-- Add / edit vehicle: VIN -->
+    <string name="vin_error_scan_not_vin">The scanned code (\"%1$s\") doesn\'t contain a VIN. Try the VIN barcode, or type the VIN manually.</string>
+    <string name="vin_error_length">A VIN must be %1$d characters (currently %2$d).</string>
+    <string name="vehicle_error_save">An error occurred while saving the vehicle.</string>
+    <string name="vin_error_no_results">No decode results returned for this VIN.</string>
+    <string name="vin_error_invalid_characters">This VIN contains invalid characters.</string>
+    <string name="vin_error_incomplete">This VIN appears to be incomplete. Check it\'s 17 characters with no typos.</string>
+    <string name="vin_error_manufacturer_unknown">This manufacturer isn\'t in the NHTSA database. The NHTSA database mainly covers vehicles sold in the US, so vehicles from other markets may need to be entered manually.</string>
+    <string name="vin_error_not_found">No vehicle details found for this VIN. The NHTSA database mainly covers vehicles sold in the US, so vehicles from other markets may need to be entered manually.</string>
+    <string name="vin_error_network">Couldn\'t decode the VIN. Check your internet connection.</string>
+    <string name="vin_warning_model_missing">Model not found for this VIN; please enter it manually.</string>
+    <string name="vin_warning_year_unreliable">Model year couldn\'t be determined from this VIN; please enter it manually.</string>
+    <string name="vin_warning_partial">VIN only partially decoded; please verify the details.</string>
+
+    <!-- Recalls -->
+    <string name="recall_error_http">NHTSA\'s recall service (api.nhtsa.gov) returned an error (HTTP %1$d). Please try again later.</string>
+    <string name="recall_error_network">Couldn\'t reach NHTSA\'s recall service (api.nhtsa.gov). Check your internet connection.</string>
+    <string name="recall_error_unexpected">Unexpected error while checking for recalls.</string>
+
+    <!-- Backup & restore -->
+    <string name="backup_error_open_destination">Could not open destination for writing.</string>
+    <string name="backup_error_export_unknown">Unknown error while exporting backup.</string>
+    <string name="backup_error_no_folder">No local backup folder configured.</string>
+    <string name="backup_error_folder_access">Could not access the selected backup folder.</string>
+    <string name="backup_error_folder_not_writable">Backup folder does not exist or is not writable.</string>
+    <string name="backup_error_create_file">Could not create %1$s in selected folder.</string>
+    <string name="backup_error_open_output">Could not open output stream for backup file.</string>
+    <string name="backup_error_permission">Permission denied to access folder. Please re-select the backup folder.</string>
+    <string name="backup_error_local_unknown">Unknown error writing backup to local folder.</string>
+    <string name="backup_error_open_file">Could not open the selected backup file.</string>
+    <string name="backup_error_invalid_entry">Backup file contains an invalid entry: %1$s</string>
+    <string name="backup_error_missing_db">This file doesn\'t look like a Garage backup (missing database).</string>
+    <string name="backup_error_unreadable_db">This file doesn\'t look like a valid Garage backup (unreadable database).</string>
+    <string name="backup_error_newer_version">This backup was created by a newer version of Garage and can\'t be restored here. Update the app, then try restoring this backup again.</string>
+    <string name="backup_error_import_unknown">Unknown error while importing backup.</string>
+
+    <!-- WebDAV / LubeLogger -->
+    <string name="webdav_error_not_configured">Cloud sync is not configured.</string>
+    <!-- %1$s: HTTP status, e.g. "404 Not Found" -->
+    <string name="webdav_error_upload_http">Upload failed: HTTP %1$s</string>
+    <string name="webdav_error_sync_unknown">Unknown error while syncing to WebDAV.</string>
+    <string name="webdav_error_url_username_required">Server URL and username are required.</string>
+    <string name="webdav_error_auth">Authentication failed. Check your username and password.</string>
+    <string name="webdav_error_test_unknown">Unknown error while testing connection.</string>
+    <string name="lubelogger_error_invalid_url">The LubeLogger server URL is invalid.</string>
+</resources>

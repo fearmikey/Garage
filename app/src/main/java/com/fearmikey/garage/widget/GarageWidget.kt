@@ -40,6 +40,7 @@ import com.fearmikey.garage.data.repository.VehicleRepository
 import com.fearmikey.garage.data.schedule.MaintenanceScheduleEngine
 import com.fearmikey.garage.data.schedule.toMaintenanceRule
 import com.fearmikey.garage.ui.util.UnitConverter
+import com.fearmikey.garage.ui.util.localizedTaskName
 import com.fearmikey.garage.ui.util.toDisplayDate
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
@@ -233,12 +234,12 @@ private fun GarageWidgetContent(
 
 @Composable
 private fun WidgetReminderRowContent(row: WidgetReminderRow) {
+    val context = LocalContext.current
     Column(modifier = GlanceModifier.fillMaxWidth()) {
         Text(
-            text = "${row.vehicleLabel} · ${row.taskName}",
+            text = "${row.vehicleLabel} · ${context.localizedTaskName(row.taskName)}",
             style = TextStyle(fontWeight = FontWeight.Medium, color = GlanceTheme.colors.onBackground),
         )
-        val context = LocalContext.current
         val statusPrefix = context.getString(
             if (row.status == ReminderStatus.OVERDUE) R.string.status_overdue else R.string.widget_due,
         )

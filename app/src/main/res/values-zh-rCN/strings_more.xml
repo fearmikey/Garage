@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Maintenance schedule / suggestions -->
+    <string name="sugg_cd_add_rule">添加自定义规则</string>
+    <string name="sugg_empty">暂无建议。\n记录一些保养和里程后即可查看到期项目。</string>
+    <string name="sugg_custom_rules">您的自定义规则</string>
+    <string name="sugg_ignored_tasks">已忽略的项目（%1$d）</string>
+    <string name="sugg_months_short">%1$d 个月</string>
+    <string name="sugg_cd_edit_rule">编辑规则</string>
+    <string name="sugg_cd_delete_rule">删除自定义规则</string>
+    <string name="sugg_last_done_at">上次于 %1$s 完成</string>
+    <string name="sugg_due_at">%1$s 时到期</string>
+    <string name="sugg_due_by">%1$s 前到期</string>
+    <string name="sugg_ignore">忽略</string>
+    <string name="sugg_log_now">立即记录</string>
+    <string name="sugg_ignored_for_vehicle">已对此车辆忽略</string>
+    <string name="sugg_restore">恢复</string>
+    <string name="sugg_edit_title">编辑保养间隔</string>
+    <string name="sugg_add_title">添加自定义规则</string>
+    <string name="sugg_presets">保养计划预设</string>
+    <string name="sugg_presets_desc">应用预置的保养模板（牵引、电动车、通勤、经典车）。</string>
+    <string name="sugg_task_name">项目名称</string>
+    <string name="sugg_interval_distance">间隔（%1$s）</string>
+    <string name="sugg_interval_months">间隔（月）</string>
+
+    <!-- Cost of ownership -->
+    <string name="cost_fuel_fillup">加油</string>
+    <string name="cost_fuel">燃油</string>
+    <string name="cost_charging_session">充电（%1$s）</string>
+    <string name="cost_ev_charging">电动车充电</string>
+    <string name="cost_modifications">改装</string>
+    <string name="cost_vehicle_purchase">购车</string>
+    <string name="cost_maintenance">保养</string>
+    <string name="cost_maintenance_repairs">保养与维修</string>
+    <string name="cost_fuel_spent">燃油花费</string>
+    <string name="cost_collapse">收起</string>
+    <string name="cost_expand">展开</string>
+    <plurals name="cost_records">
+        <item quantity="other">%d 条记录</item>
+    </plurals>
+    <plurals name="cost_fillups">
+        <item quantity="other">%d 次加油</item>
+    </plurals>
+    <plurals name="cost_entries_share">
+        <item quantity="other">%1$d 条 · 占总额 %2$s%%</item>
+    </plurals>
+
+    <!-- Trips -->
+    <string name="trip_cat_business">商务</string>
+    <string name="trip_cat_personal">个人</string>
+    <string name="trip_cat_commute">通勤</string>
+    <string name="trip_cat_medical">就医</string>
+    <string name="trip_cat_charity">公益</string>
+    <string name="trip_cat_other">其他</string>
+    <string name="trip_cd_add">添加行程</string>
+    <string name="trip_cd_more">更多选项</string>
+    <string name="trip_empty">尚未记录任何行程。\n点按“开始 GPS 行程”或 + 按钮添加。</string>
+    <string name="trip_deduction">可抵扣：%1$s</string>
+    <string name="trip_start_gps">开始 GPS 行程</string>
+    <string name="trip_precise_location_required">GPS 行程记录需要精确位置。请在应用设置中为 Garage 开启“使用精确位置”。</string>
+    <string name="trip_paused">行程已暂停</string>
+    <string name="trip_tracking">正在记录行程…</string>
+    <string name="trip_resume">继续</string>
+    <string name="trip_pause">暂停</string>
+    <string name="trip_stop_save">停止并保存</string>
+    <string name="trip_log_title">记录行程</string>
+    <string name="trip_edit_title">编辑行程</string>
+    <string name="trip_distance">距离（%1$s）</string>
+    <string name="trip_rate">报销费率（%1$s/%2$s）</string>
+    <string name="trip_notes">备注（目的地、事由）</string>
+</resources>

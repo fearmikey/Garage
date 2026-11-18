@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- OBD2 scanner: progress while connecting / scanning -->
+    <string name="obd_progress_connecting">Verbindung zum Adapter wird hergestellt…</string>
+    <string name="obd_progress_reconnecting">Verbindung wird wiederhergestellt…</string>
+    <string name="obd_progress_protocol">Fahrzeugprotokoll wird erkannt…</string>
+    <string name="obd_progress_battery">Batteriespannung wird geprüft…</string>
+    <string name="obd_progress_readiness">Motorkontrollleuchte &amp; Bereitschaft werden geprüft…</string>
+    <string name="obd_progress_stored_codes">Gespeicherte Fehlercodes werden gelesen…</string>
+    <string name="obd_progress_pending_codes">Ausstehende Fehlercodes werden gelesen…</string>
+    <string name="obd_progress_permanent_codes">Permanente Fehlercodes werden gelesen…</string>
+    <string name="obd_progress_freeze_frame">Freeze Frame wird gelesen…</string>
+    <string name="obd_progress_odometer">Kilometerstand wird gelesen…</string>
+    <string name="obd_progress_distance_cleared">Strecke seit Codelöschung wird gelesen…</string>
+    <string name="obd_progress_vin">FIN wird gelesen…</string>
+    <string name="obd_progress_pid">%1$s wird gelesen…</string>
+
+    <!-- OBD2 scanner: errors -->
+    <string name="obd_error_connect_wifi">Der WLAN-Adapter unter %1$s ist nicht erreichbar. Stellen Sie sicher, dass Ihr Telefon mit dem WLAN des Adapters verbunden ist.</string>
+    <string name="obd_error_connect_ble">Verbindung zum Bluetooth-LE-Adapter fehlgeschlagen. Stellen Sie sicher, dass er eingesteckt ist, die Zündung an ist und er nicht mit einem anderen Telefon verbunden ist.</string>
+    <string name="obd_error_connect_classic">Der Adapter ist nicht erreichbar. Stellen Sie sicher, dass Bluetooth an ist, der Adapter eingesteckt ist, die Zündung an ist und er in Reichweite ist.</string>
+    <string name="obd_error_timeout">Der Adapter antwortet nicht mehr. Prüfen Sie, ob er Strom hat und die Zündung an ist.</string>
+    <string name="obd_error_lost_connection">Verbindung zum Adapter verloren.</string>
+    <string name="obd_error_generic">Fehler bei der Kommunikation mit dem OBD-Adapter: %1$s</string>
+    <string name="obd_error_clear_not_confirmed">Das Fahrzeug hat das Löschen nicht bestätigt. Schalten Sie den Motor aus (Zündung an) und versuchen Sie es erneut.</string>
+    <string name="obd_error_clear_no_response">Der Adapter hat auf die Löschanfrage nicht reagiert.</string>
+    <string name="obd_error_no_live_pids">Dieses Fahrzeug liefert keine Live-Daten.</string>
+    <string name="obd_error_unable_to_connect">Der Adapter konnte nicht mit dem Fahrzeug kommunizieren. Ist die Zündung an?</string>
+    <string name="obd_error_can_bus">CAN-Bus-Fehler. Prüfen Sie, ob der Adapter fest in der OBD2-Buchse sitzt.</string>
+    <string name="obd_error_vehicle_bus">Fahrzeugbus-Fehler. Prüfen Sie, ob der Adapter fest in der OBD2-Buchse sitzt.</string>
+    <string name="obd_error_bus_feedback">Rückmeldefehler des Fahrzeugbusses. Prüfen Sie die Adapterverbindung.</string>
+    <string name="obd_error_low_voltage">Der Adapter wurde wegen Unterspannung zurückgesetzt. Prüfen Sie die Fahrzeugbatterie.</string>
+    <string name="obd_error_bus_init">Der Adapter meldet einen Fehler bei der Businitialisierung. Ist die Zündung an?</string>
+    <string name="obd_error_internal">Der Adapter meldet den internen Fehler %1$s.</string>
+
+    <!-- OBD2 scanner: control modules that reported a code -->
+    <string name="obd_module_engine">Motor (ECM)</string>
+    <string name="obd_module_transmission">Getriebe (TCM)</string>
+    <string name="obd_module_numbered">Steuergerät %1$s</string>
+
+    <!-- OBD2 scanner: emissions readiness monitors -->
+    <string name="obd_monitor_misfire">Zündaussetzer</string>
+    <string name="obd_monitor_fuel_system">Kraftstoffsystem</string>
+    <string name="obd_monitor_components">Komponenten</string>
+    <string name="obd_monitor_nmhc_catalyst">NMHC-Katalysator</string>
+    <string name="obd_monitor_nox_scr">NOx/SCR-Abgasnachbehandlung</string>
+    <string name="obd_monitor_boost_pressure">Ladedruck</string>
+    <string name="obd_monitor_exhaust_gas_sensor">Abgassensor</string>
+    <string name="obd_monitor_pm_filter">Partikelfilter</string>
+    <string name="obd_monitor_egr_vvt">AGR/VVT-System</string>
+    <string name="obd_monitor_catalyst">Katalysator</string>
+    <string name="obd_monitor_heated_catalyst">Beheizter Katalysator</string>
+    <string name="obd_monitor_evap">Tankentlüftungssystem</string>
+    <string name="obd_monitor_secondary_air">Sekundärluft</string>
+    <string name="obd_monitor_ac_refrigerant">Klimakältemittel</string>
+    <string name="obd_monitor_o2_sensor">Lambdasonde</string>
+    <string name="obd_monitor_o2_heater">Lambdasondenheizung</string>
+
+    <!-- OBD2 scanner: sensor (PID) names -->
+    <string name="obd_pid_engine_load">Motorlast</string>
+    <string name="obd_pid_coolant_temp">Kühlmitteltemperatur</string>
+    <string name="obd_pid_short_fuel_trim">Kurzzeit-Gemischanpassung (B1)</string>
+    <string name="obd_pid_long_fuel_trim">Langzeit-Gemischanpassung (B1)</string>
+    <string name="obd_pid_intake_pressure">Saugrohrdruck</string>
+    <string name="obd_pid_rpm">Motordrehzahl</string>
+    <string name="obd_pid_speed">Fahrzeuggeschwindigkeit</string>
+    <string name="obd_pid_intake_air_temp">Ansauglufttemperatur</string>
+    <string name="obd_pid_maf">Luftmassenstrom</string>
+    <string name="obd_pid_throttle">Drosselklappenstellung</string>
+    <string name="obd_pid_run_time">Laufzeit seit Start</string>
+    <string name="obd_pid_fuel_rail_pressure">Raildruck</string>
+    <string name="obd_pid_fuel_level">Tankfüllstand</string>
+    <string name="obd_pid_barometric_pressure">Luftdruck</string>
+    <string name="obd_pid_module_voltage">Batterie-/Steuergerätespannung</string>
+    <string name="obd_pid_ambient_air_temp">Außentemperatur</string>
+    <string name="obd_pid_hybrid_battery">Ladestand Hybridbatterie</string>
+    <string name="obd_pid_oil_temp">Motoröltemperatur</string>
+</resources>

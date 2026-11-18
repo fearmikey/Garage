@@ -97,6 +97,7 @@ import com.fearmikey.garage.obd.ObdUnit
 import com.fearmikey.garage.obd.ReadinessMonitor
 import com.fearmikey.garage.ui.theme.GarageTheme
 import com.fearmikey.garage.ui.util.UnitConverter
+import com.fearmikey.garage.ui.util.asString
 import com.fearmikey.garage.ui.util.UnitSystem
 
 @SuppressLint("MissingPermission")
@@ -206,6 +207,8 @@ internal fun ObdScannerContent(
     var showClearCodesConfirm by rememberSaveable { mutableStateOf(false) }
     val result = uiState.scanResult
     val clearingCodesMessage = stringResource(R.string.obd_clearing_codes)
+    val errorMessage = uiState.error?.asString()
+    val progressMessage = uiState.progressMessage?.asString()
 
     Scaffold(
         topBar = {
@@ -255,11 +258,11 @@ internal fun ObdScannerContent(
                     )
                 }
 
-                uiState.error?.let { message -> item { ErrorBanner(message) } }
+                errorMessage?.let { message -> item { ErrorBanner(message) } }
 
                 val progress = when {
                     uiState.isClearingCodes -> clearingCodesMessage
-                    else -> uiState.progressMessage
+                    else -> progressMessage
                 }
                 if (progress != null) {
                     item { ScanningIndicator(progress) }
@@ -711,7 +714,7 @@ private fun MonitorRow(monitor: ReadinessMonitor) {
             modifier = Modifier.size(18.dp),
         )
         Spacer(Modifier.width(8.dp))
-        Text(monitor.name, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
+        Text(monitorDisplayName(monitor.name), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
         Text(
             stringResource(if (monitor.complete) R.string.obd_monitor_ready else R.string.obd_monitor_not_ready),
             style = MaterialTheme.typography.labelMedium,
@@ -822,7 +825,7 @@ private fun DtcSection(
                 )
                 sources[code]?.takeIf { it.isNotEmpty() }?.let { modules ->
                     Text(
-                        stringResource(R.string.obd_dtc_reported_by, modules.joinToString()),
+                        stringResource(R.string.obd_dtc_reported_by, modules.map { moduleDisplayName(it) }.joinToString()),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.outline,
                     )
@@ -921,11 +924,12 @@ private fun SnapshotCard(result: ObdScanResult, unitSystem: UnitSystem) {
         SectionTitle(stringResource(R.string.obd_snapshot_title))
         val batteryLabel = stringResource(R.string.obd_battery_at_port)
         val vinLabel = stringResource(R.string.obd_vin)
+        val readingLabels = result.readings.map { stringResource(it.pid.labelRes) }
         val tiles = buildList {
             result.adapterVoltage?.let {
                 add(batteryLabel to ObdFormatter.format(ObdUnit.VOLTAGE, it, unitSystem))
             }
-            result.readings.forEach { add(it.pid.label to ObdFormatter.format(it, unitSystem)) }
+            result.readings.forEachIndexed { i, reading -> add(readingLabels[i] to ObdFormatter.format(reading, unitSystem)) }
         }
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             tiles.chunked(2).forEach { row ->
@@ -944,7 +948,7 @@ private fun ReadingGrid(readings: List<ObdReading>, unitSystem: UnitSystem) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         readings.chunked(2).forEach { row ->
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                row.forEach { StatTile(it.pid.label, ObdFormatter.format(it, unitSystem), Modifier.weight(1f)) }
+                row.forEach { StatTile(stringResource(it.pid.labelRes), ObdFormatter.format(it, unitSystem), Modifier.weight(1f)) }
                 if (row.size == 1) Spacer(Modifier.weight(1f))
             }
         }

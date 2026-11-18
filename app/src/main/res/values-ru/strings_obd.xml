@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- OBD2 scanner: progress while connecting / scanning -->
+    <string name="obd_progress_connecting">Подключение к адаптеру…</string>
+    <string name="obd_progress_reconnecting">Повторное подключение…</string>
+    <string name="obd_progress_protocol">Определение протокола автомобиля…</string>
+    <string name="obd_progress_battery">Проверка напряжения аккумулятора…</string>
+    <string name="obd_progress_readiness">Проверка лампы Check Engine и готовности…</string>
+    <string name="obd_progress_stored_codes">Чтение сохранённых кодов ошибок…</string>
+    <string name="obd_progress_pending_codes">Чтение ожидающих кодов ошибок…</string>
+    <string name="obd_progress_permanent_codes">Чтение постоянных кодов ошибок…</string>
+    <string name="obd_progress_freeze_frame">Чтение стоп-кадра…</string>
+    <string name="obd_progress_odometer">Чтение одометра…</string>
+    <string name="obd_progress_distance_cleared">Чтение пробега после сброса кодов…</string>
+    <string name="obd_progress_vin">Чтение VIN…</string>
+    <string name="obd_progress_pid">Чтение: %1$s…</string>
+
+    <!-- OBD2 scanner: errors -->
+    <string name="obd_error_connect_wifi">Не удаётся связаться с Wi-Fi-адаптером по адресу %1$s. Убедитесь, что телефон подключён к Wi-Fi-сети адаптера.</string>
+    <string name="obd_error_connect_ble">Не удаётся подключиться к адаптеру Bluetooth LE. Убедитесь, что он вставлен, зажигание включено и он не подключён к другому телефону.</string>
+    <string name="obd_error_connect_classic">Не удаётся связаться с адаптером. Убедитесь, что Bluetooth включён, адаптер вставлен, зажигание включено и адаптер находится в зоне действия.</string>
+    <string name="obd_error_timeout">Адаптер перестал отвечать. Проверьте, что на него подаётся питание и зажигание включено.</string>
+    <string name="obd_error_lost_connection">Соединение с адаптером потеряно.</string>
+    <string name="obd_error_generic">Ошибка связи с OBD-адаптером: %1$s</string>
+    <string name="obd_error_clear_not_confirmed">Автомобиль не подтвердил сброс. Заглушите двигатель (зажигание включено) и повторите попытку.</string>
+    <string name="obd_error_clear_no_response">Адаптер не ответил на запрос сброса.</string>
+    <string name="obd_error_no_live_pids">Этот автомобиль не передаёт данные в реальном времени.</string>
+    <string name="obd_error_unable_to_connect">Адаптеру не удалось связаться с автомобилем. Зажигание включено?</string>
+    <string name="obd_error_can_bus">Ошибка шины CAN. Проверьте, что адаптер плотно вставлен в разъём OBD2.</string>
+    <string name="obd_error_vehicle_bus">Ошибка шины автомобиля. Проверьте, что адаптер плотно вставлен в разъём OBD2.</string>
+    <string name="obd_error_bus_feedback">Ошибка обратной связи шины автомобиля. Проверьте подключение адаптера.</string>
+    <string name="obd_error_low_voltage">Адаптер перезапустился из-за низкого напряжения. Проверьте аккумулятор автомобиля.</string>
+    <string name="obd_error_bus_init">Адаптер сообщил об ошибке инициализации шины. Зажигание включено?</string>
+    <string name="obd_error_internal">Адаптер сообщил о внутренней ошибке %1$s.</string>
+
+    <!-- OBD2 scanner: control modules that reported a code -->
+    <string name="obd_module_engine">Двигатель (ECM)</string>
+    <string name="obd_module_transmission">Коробка передач (TCM)</string>
+    <string name="obd_module_numbered">Модуль %1$s</string>
+
+    <!-- OBD2 scanner: emissions readiness monitors -->
+    <string name="obd_monitor_misfire">Пропуски зажигания</string>
+    <string name="obd_monitor_fuel_system">Топливная система</string>
+    <string name="obd_monitor_components">Компоненты</string>
+    <string name="obd_monitor_nmhc_catalyst">Катализатор NMHC</string>
+    <string name="obd_monitor_nox_scr">Нейтрализация NOx/SCR</string>
+    <string name="obd_monitor_boost_pressure">Давление наддува</string>
+    <string name="obd_monitor_exhaust_gas_sensor">Датчик выхлопных газов</string>
+    <string name="obd_monitor_pm_filter">Сажевый фильтр</string>
+    <string name="obd_monitor_egr_vvt">Система EGR/VVT</string>
+    <string name="obd_monitor_catalyst">Катализатор</string>
+    <string name="obd_monitor_heated_catalyst">Подогреваемый катализатор</string>
+    <string name="obd_monitor_evap">Система улавливания паров топлива</string>
+    <string name="obd_monitor_secondary_air">Вторичный воздух</string>
+    <string name="obd_monitor_ac_refrigerant">Хладагент кондиционера</string>
+    <string name="obd_monitor_o2_sensor">Лямбда-зонд</string>
+    <string name="obd_monitor_o2_heater">Подогрев лямбда-зонда</string>
+
+    <!-- OBD2 scanner: sensor (PID) names -->
+    <string name="obd_pid_engine_load">Нагрузка двигателя</string>
+    <string name="obd_pid_coolant_temp">Темп. охлаждающей жидкости</string>
+    <string name="obd_pid_short_fuel_trim">Краткосрочная коррекция топлива (B1)</string>
+    <string name="obd_pid_long_fuel_trim">Долгосрочная коррекция топлива (B1)</string>
+    <string name="obd_pid_intake_pressure">Давление во впускном коллекторе</string>
+    <string name="obd_pid_rpm">Обороты двигателя</string>
+    <string name="obd_pid_speed">Скорость автомобиля</string>
+    <string name="obd_pid_intake_air_temp">Темп. впускного воздуха</string>
+    <string name="obd_pid_maf">Массовый расход воздуха</string>
+    <string name="obd_pid_throttle">Положение дроссельной заслонки</string>
+    <string name="obd_pid_run_time">Время с момента пуска</string>
+    <string name="obd_pid_fuel_rail_pressure">Давление в топливной рампе</string>
+    <string name="obd_pid_fuel_level">Уровень топлива</string>
+    <string name="obd_pid_barometric_pressure">Атмосферное давление</string>
+    <string name="obd_pid_module_voltage">Напряжение АКБ / модуля</string>
+    <string name="obd_pid_ambient_air_temp">Темп. наружного воздуха</string>
+    <string name="obd_pid_hybrid_battery">Заряд гибридной батареи</string>
+    <string name="obd_pid_oil_temp">Темп. моторного масла</string>
+</resources>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tpl_motorcycle_street_title">Straßenmotorrad</string>
+    <string name="tpl_motorcycle_street_desc">Typische Intervalle für Straßen-, Sport- und Tourenmotorräder, inklusive Kettenpflege und Fahrwerksservice.</string>
+    <string name="tpl_heavy_duty_title">Schwerlast &amp; Anhängerbetrieb</string>
+    <string name="tpl_heavy_duty_desc">Verkürzte Flüssigkeitswechsel und Prüfungen für erschwerte Bedingungen bei Pick-ups, Zugfahrzeugen oder Geländewagen.</string>
+    <string name="tpl_daily_commuter_title">Alltagspendler</string>
+    <string name="tpl_daily_commuter_desc">Ausgewogene Standardintervalle für Alltagsfahrzeuge, Autobahnpendler und Familienautos.</string>
+    <string name="tpl_hybrid_ev_title">Hybrid- &amp; Elektrofahrzeug (EV)</string>
+    <string name="tpl_hybrid_ev_desc">Optimiert für Hybrid- und Elektrofahrzeuge mit Schwerpunkt auf Innenraumfilter, Bremsführungen und Kühlsystemen.</string>
+    <string name="tpl_classic_title">Hohe Laufleistung &amp; Oldtimer</string>
+    <string name="tpl_classic_desc">Häufige Prüfungen und kurze Intervalle für ältere Fahrzeuge, Motoren mit hoher Laufleistung oder Oldtimer.</string>
+
+    <string name="tpl_task_motorcycle_oil">Motorrad-Öl &amp; Filter</string>
+    <string name="tpl_task_chain_clean">Kette reinigen, schmieren &amp; Durchhang prüfen</string>
+    <string name="tpl_task_tire_pressure_tread">Reifendruck &amp; Profil prüfen</string>
+    <string name="tpl_task_brake_fluid_front_rear">Bremsflüssigkeitswechsel (vorne &amp; hinten)</string>
+    <string name="tpl_task_fork_seal">Gabelöl- &amp; Dichtungsservice</string>
+    <string name="tpl_task_battery_tender">Erhaltungsladung &amp; Polprüfung</string>
+    <string name="tpl_task_severe_oil">Motoröl &amp; Filter (erschwerte Bedingungen)</string>
+    <string name="tpl_task_transfer_case_severe">Verteilergetriebeöl (erschwert)</string>
+    <string name="tpl_task_diff_fluid">Differentialöl vorne &amp; hinten</string>
+    <string name="tpl_task_chassis_grease">Fahrwerk abschmieren &amp; Traggelenke</string>
+    <string name="tpl_task_hd_brake_suspension">Brems- &amp; Fahrwerksprüfung (Schwerlast)</string>
+    <string name="tpl_task_synthetic_oil">Vollsynthetisches Öl &amp; Filter</string>
+    <string name="tpl_task_rotation_pressure">Reifen tauschen &amp; Druck prüfen</string>
+    <string name="tpl_task_air_filters">Innenraum- &amp; Luftfilter</string>
+    <string name="tpl_task_multipoint">Mehrpunkt-Inspektion</string>
+    <string name="tpl_task_hv_duct">Innenraumfilter &amp; HV-Batterielüftung prüfen</string>
+    <string name="tpl_task_brake_slides">Bremsführungen schmieren &amp; Bremsflüssigkeit prüfen</string>
+    <string name="tpl_task_rotation_alignment">Reifen tauschen &amp; Spur prüfen</string>
+    <string name="tpl_task_inverter_coolant">Kühlmittelwechsel Wechselrichter &amp; Batterie</string>
+    <string name="tpl_task_high_zinc_oil">Ölwechsel mit Zink-/Hochlaufleistungsöl</string>
+    <string name="tpl_task_cooling_hoses">Kühlsystem &amp; Schläuche prüfen</string>
+    <string name="tpl_task_ignition">Zündung, Zündkerzen &amp; Verteiler</string>
+    <string name="tpl_task_v_belts">Keilriemen &amp; Spanner prüfen</string>
+    <string name="tpl_task_steering_grease">Fahrwerk &amp; Lenkung abschmieren</string>
+
+    <string name="tpl_note_jaso_oil">Für Motorräder mit Ölbadkupplung Öl nach JASO MA/MA2 verwenden.</string>
+    <string name="tpl_note_chain_rain">Nach Fahrten bei Regen oder auf Schmutz öfter.</string>
+    <string name="tpl_note_moto_tire_check">Druck kalt prüfen und auf Auswaschungen, Risse und Fremdkörper achten.</string>
+    <string name="tpl_note_brake_fluid_moto">Bremsflüssigkeit ist hygroskopisch; beide Hauptbremszylinder spülen.</string>
+    <string name="tpl_note_fork_oil">Gabelöl wechseln; Dichtungen auf Ölaustritt prüfen.</string>
+    <string name="tpl_note_battery_tender">Im Winter an ein Erhaltungsladegerät anschließen; Pole reinigen und festziehen.</string>
+    <string name="tpl_note_severe_oil">Intervall für häufigen Anhängerbetrieb oder schwere Lasten.</string>
+    <string name="tpl_note_transfer_case">Empfohlen bei häufiger Allradnutzung oder Wasserdurchfahrten.</string>
+    <string name="tpl_note_severe_diff">Intervall für Anhängerbetrieb und schwere Lasten.</string>
+    <string name="tpl_note_chassis_grease">Schmiernippel, Kardangelenke und Fahrwerksgelenke abschmieren.</string>
+    <string name="tpl_note_hd_brakes">Bremsbelagstärke, Bremsscheiben, Anhängerbremsregler und Blattfedern prüfen.</string>
+    <string name="tpl_note_synthetic_oil">Standardintervall für vollsynthetisches Öl.</string>
+    <string name="tpl_note_rotation_even">Sorgt für gleichmäßigen Profilverschleiß und optimalen Verbrauch.</string>
+    <string name="tpl_note_air_filters">Beide Filter jährlich tauschen für Klima- &amp; Motoreffizienz.</string>
+    <string name="tpl_note_wipers">Wischerblätter für klare Sicht tauschen.</string>
+    <string name="tpl_note_drive_belts">Antriebsriemen tauschen, um Ausfälle der Nebenaggregate zu vermeiden.</string>
+    <string name="tpl_note_multipoint">Schläuche, Beleuchtung und Flüssigkeitsstände prüfen.</string>
+    <string name="tpl_note_hv_duct">Innenraumfilter reinigen/tauschen und Ansaugung des HV-Batterielüfters prüfen.</string>
+    <string name="tpl_note_brake_slides">Rekuperation schont die Beläge, aber die Führungsbolzen müssen regelmäßig geschmiert werden, damit sie nicht festgehen.</string>
+    <string name="tpl_note_ev_tires">Das sofort anliegende Drehmoment des E-Motors verschleißt Reifen schneller.</string>
+    <string name="tpl_note_inverter_coolant">Kühlsystem der Hochvoltkomponenten prüfen und spülen.</string>
+    <string name="tpl_note_high_zinc">Schützt Flachstößel-Nockenwellen und Dichtungen von Motoren mit hoher Laufleistung.</string>
+    <string name="tpl_note_cooling_hoses">Kühlerschläuche, Thermostat, Heizungswärmetauscher und Kühlmittelzustand prüfen.</string>
+    <string name="tpl_note_ignition">Zündkerzen, Zündkabel, Verteilerkappe und Verteilerfinger/Unterbrecher prüfen.</string>
+    <string name="tpl_note_v_belts">Riemenspannung prüfen und auf Risse oder Verglasung achten.</string>
+    <string name="tpl_note_steering_grease">Spurstangenköpfe, Traggelenke, Lenkstockhebel und Fahrwerksbuchsen abschmieren.</string>
+
+    <string name="rule_note_4wd_interval">Allgemeines 4WD/AWD-Intervall; den genauen Wert finden Sie in der Betriebsanleitung.</string>
+    <string name="rule_note_chain_lube">Nur für Motorräder mit Kettenantrieb; auch den Durchhang prüfen. Bei Riemen- oder Kardanantrieb ignorieren.</string>
+    <string name="rule_note_chain_sprocket">Nur für Motorräder mit Kettenantrieb. Kette und beide Ritzel gemeinsam tauschen.</string>
+    <string name="rule_note_cables">Seilzugbetätigte Kupplung und Gas schmieren und Spiel einstellen.</string>
+    <string name="rule_note_moto_tires">Hinterreifen verschleißen meist 1,5–2× schneller als Vorderreifen; Profil und DOT-Datum prüfen.</string>
+</resources>

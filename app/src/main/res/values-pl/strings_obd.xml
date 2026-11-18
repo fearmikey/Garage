@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- OBD2 scanner: progress while connecting / scanning -->
+    <string name="obd_progress_connecting">Łączenie z adapterem…</string>
+    <string name="obd_progress_reconnecting">Ponowne łączenie…</string>
+    <string name="obd_progress_protocol">Wykrywanie protokołu pojazdu…</string>
+    <string name="obd_progress_battery">Sprawdzanie napięcia akumulatora…</string>
+    <string name="obd_progress_readiness">Sprawdzanie kontrolki silnika i gotowości…</string>
+    <string name="obd_progress_stored_codes">Odczyt zapisanych kodów błędów…</string>
+    <string name="obd_progress_pending_codes">Odczyt oczekujących kodów błędów…</string>
+    <string name="obd_progress_permanent_codes">Odczyt stałych kodów błędów…</string>
+    <string name="obd_progress_freeze_frame">Odczyt zamrożonej ramki…</string>
+    <string name="obd_progress_odometer">Odczyt licznika przebiegu…</string>
+    <string name="obd_progress_distance_cleared">Odczyt dystansu od skasowania kodów…</string>
+    <string name="obd_progress_vin">Odczyt VIN…</string>
+    <string name="obd_progress_pid">Odczyt: %1$s…</string>
+
+    <!-- OBD2 scanner: errors -->
+    <string name="obd_error_connect_wifi">Nie można połączyć się z adapterem Wi-Fi pod adresem %1$s. Upewnij się, że telefon jest połączony z siecią Wi-Fi adaptera.</string>
+    <string name="obd_error_connect_ble">Nie można połączyć się z adapterem Bluetooth LE. Upewnij się, że jest podłączony, zapłon jest włączony i nie jest połączony z innym telefonem.</string>
+    <string name="obd_error_connect_classic">Nie można połączyć się z adapterem. Upewnij się, że Bluetooth jest włączony, adapter jest podłączony, zapłon jest włączony i adapter jest w zasięgu.</string>
+    <string name="obd_error_timeout">Adapter przestał odpowiadać. Sprawdź, czy ma zasilanie i czy zapłon jest włączony.</string>
+    <string name="obd_error_lost_connection">Utracono połączenie z adapterem.</string>
+    <string name="obd_error_generic">Błąd komunikacji z adapterem OBD: %1$s</string>
+    <string name="obd_error_clear_not_confirmed">Pojazd nie potwierdził kasowania. Wyłącz silnik (z włączonym zapłonem) i spróbuj ponownie.</string>
+    <string name="obd_error_clear_no_response">Adapter nie odpowiedział na żądanie kasowania.</string>
+    <string name="obd_error_no_live_pids">Ten pojazd nie udostępnia danych na żywo.</string>
+    <string name="obd_error_unable_to_connect">Adapter nie mógł połączyć się z pojazdem. Czy zapłon jest włączony?</string>
+    <string name="obd_error_can_bus">Błąd magistrali CAN. Sprawdź, czy adapter jest dobrze osadzony w gnieździe OBD2.</string>
+    <string name="obd_error_vehicle_bus">Błąd magistrali pojazdu. Sprawdź, czy adapter jest dobrze osadzony w gnieździe OBD2.</string>
+    <string name="obd_error_bus_feedback">Błąd sprzężenia zwrotnego magistrali pojazdu. Sprawdź połączenie adaptera.</string>
+    <string name="obd_error_low_voltage">Adapter zresetował się z powodu niskiego napięcia. Sprawdź akumulator pojazdu.</string>
+    <string name="obd_error_bus_init">Adapter zgłosił błąd inicjalizacji magistrali. Czy zapłon jest włączony?</string>
+    <string name="obd_error_internal">Adapter zgłosił błąd wewnętrzny %1$s.</string>
+
+    <!-- OBD2 scanner: control modules that reported a code -->
+    <string name="obd_module_engine">Silnik (ECM)</string>
+    <string name="obd_module_transmission">Skrzynia biegów (TCM)</string>
+    <string name="obd_module_numbered">Moduł %1$s</string>
+
+    <!-- OBD2 scanner: emissions readiness monitors -->
+    <string name="obd_monitor_misfire">Wypadanie zapłonów</string>
+    <string name="obd_monitor_fuel_system">Układ paliwowy</string>
+    <string name="obd_monitor_components">Podzespoły</string>
+    <string name="obd_monitor_nmhc_catalyst">Katalizator NMHC</string>
+    <string name="obd_monitor_nox_scr">Oczyszczanie NOx/SCR</string>
+    <string name="obd_monitor_boost_pressure">Ciśnienie doładowania</string>
+    <string name="obd_monitor_exhaust_gas_sensor">Czujnik spalin</string>
+    <string name="obd_monitor_pm_filter">Filtr cząstek stałych</string>
+    <string name="obd_monitor_egr_vvt">Układ EGR/VVT</string>
+    <string name="obd_monitor_catalyst">Katalizator</string>
+    <string name="obd_monitor_heated_catalyst">Katalizator podgrzewany</string>
+    <string name="obd_monitor_evap">Układ odparowania</string>
+    <string name="obd_monitor_secondary_air">Powietrze wtórne</string>
+    <string name="obd_monitor_ac_refrigerant">Czynnik klimatyzacji</string>
+    <string name="obd_monitor_o2_sensor">Sonda lambda</string>
+    <string name="obd_monitor_o2_heater">Grzałka sondy lambda</string>
+
+    <!-- OBD2 scanner: sensor (PID) names -->
+    <string name="obd_pid_engine_load">Obciążenie silnika</string>
+    <string name="obd_pid_coolant_temp">Temp. płynu chłodzącego</string>
+    <string name="obd_pid_short_fuel_trim">Krótkoterminowa korekta paliwa (B1)</string>
+    <string name="obd_pid_long_fuel_trim">Długoterminowa korekta paliwa (B1)</string>
+    <string name="obd_pid_intake_pressure">Ciśnienie w kolektorze dolotowym</string>
+    <string name="obd_pid_rpm">Obroty silnika</string>
+    <string name="obd_pid_speed">Prędkość pojazdu</string>
+    <string name="obd_pid_intake_air_temp">Temp. powietrza dolotowego</string>
+    <string name="obd_pid_maf">Masowy przepływ powietrza</string>
+    <string name="obd_pid_throttle">Położenie przepustnicy</string>
+    <string name="obd_pid_run_time">Czas od uruchomienia</string>
+    <string name="obd_pid_fuel_rail_pressure">Ciśnienie w listwie paliwowej</string>
+    <string name="obd_pid_fuel_level">Poziom paliwa</string>
+    <string name="obd_pid_barometric_pressure">Ciśnienie atmosferyczne</string>
+    <string name="obd_pid_module_voltage">Napięcie akumulatora / modułu</string>
+    <string name="obd_pid_ambient_air_temp">Temp. otoczenia</string>
+    <string name="obd_pid_hybrid_battery">Naładowanie baterii hybrydowej</string>
+    <string name="obd_pid_oil_temp">Temp. oleju silnikowego</string>
+</resources>

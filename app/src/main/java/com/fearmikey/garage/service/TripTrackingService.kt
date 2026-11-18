@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.NonCancellable
+import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.max
 import kotlin.math.roundToLong
@@ -347,8 +348,11 @@ class TripTrackingService : Service() {
 
     private fun buildNotification(): Notification {
         val perUnit = if (unitSystem == UnitSystem.METRIC) METERS_PER_KM else METERS_PER_MILE
-        val title = if (isPaused) "Trip Paused" else "Logging Trip..."
-        val content = "Distance: %.2f %s".format(distanceMeters / perUnit, unitSystem.distanceUnit)
+        val title = getString(if (isPaused) R.string.trip_paused else R.string.trip_tracking)
+        val content = getString(
+            R.string.trip_notification_distance,
+            String.format(Locale.getDefault(), "%.2f %s", distanceMeters / perUnit, unitSystem.distanceUnit),
+        )
 
         val mainIntent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -360,16 +364,16 @@ class TripTrackingService : Service() {
         val pauseResumeAction = if (isPaused) {
             val resumeIntent = Intent(this, TripTrackingService::class.java).apply { action = ACTION_RESUME }
             val pendingResume = PendingIntent.getService(this, 1, resumeIntent, PendingIntent.FLAG_IMMUTABLE)
-            NotificationCompat.Action(0, "Resume", pendingResume)
+            NotificationCompat.Action(0, getString(R.string.trip_resume), pendingResume)
         } else {
             val pauseIntent = Intent(this, TripTrackingService::class.java).apply { action = ACTION_PAUSE }
             val pendingPause = PendingIntent.getService(this, 2, pauseIntent, PendingIntent.FLAG_IMMUTABLE)
-            NotificationCompat.Action(0, "Pause", pendingPause)
+            NotificationCompat.Action(0, getString(R.string.trip_pause), pendingPause)
         }
 
         val stopIntent = Intent(this, TripTrackingService::class.java).apply { action = ACTION_STOP }
         val pendingStop = PendingIntent.getService(this, 3, stopIntent, PendingIntent.FLAG_IMMUTABLE)
-        val stopAction = NotificationCompat.Action(0, "Stop & Save", pendingStop)
+        val stopAction = NotificationCompat.Action(0, getString(R.string.trip_stop_save), pendingStop)
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(title)
@@ -391,10 +395,10 @@ class TripTrackingService : Service() {
     private fun createNotificationChannel() {
         val channel = NotificationChannel(
             CHANNEL_ID,
-            "Trip Tracking",
+            getString(R.string.trip_channel_name),
             NotificationManager.IMPORTANCE_LOW, // Low importance so it doesn't beep every update
         ).apply {
-            description = "Shows the current distance for active trips"
+            description = getString(R.string.trip_channel_description)
         }
         val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         manager.createNotificationChannel(channel)

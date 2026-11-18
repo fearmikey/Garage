@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- OBD2 scanner: progress while connecting / scanning -->
+    <string name="obd_progress_connecting">Verbinden met adapter…</string>
+    <string name="obd_progress_reconnecting">Opnieuw verbinden…</string>
+    <string name="obd_progress_protocol">Voertuigprotocol detecteren…</string>
+    <string name="obd_progress_battery">Accuspanning controleren…</string>
+    <string name="obd_progress_readiness">Motorstoringslampje en gereedheid controleren…</string>
+    <string name="obd_progress_stored_codes">Opgeslagen foutcodes lezen…</string>
+    <string name="obd_progress_pending_codes">Wachtende foutcodes lezen…</string>
+    <string name="obd_progress_permanent_codes">Permanente foutcodes lezen…</string>
+    <string name="obd_progress_freeze_frame">Freeze frame lezen…</string>
+    <string name="obd_progress_odometer">Kilometerstand lezen…</string>
+    <string name="obd_progress_distance_cleared">Afstand sinds wissen van codes lezen…</string>
+    <string name="obd_progress_vin">VIN lezen…</string>
+    <string name="obd_progress_pid">%1$s lezen…</string>
+
+    <!-- OBD2 scanner: errors -->
+    <string name="obd_error_connect_wifi">Kan de wifi-adapter op %1$s niet bereiken. Zorg dat je telefoon verbonden is met het wifi-netwerk van de adapter.</string>
+    <string name="obd_error_connect_ble">Kan geen verbinding maken met de Bluetooth LE-adapter. Zorg dat hij is ingestoken, het contact aan staat en hij niet met een andere telefoon verbonden is.</string>
+    <string name="obd_error_connect_classic">Kan de adapter niet bereiken. Zorg dat Bluetooth aan staat, de adapter is ingestoken, het contact aan staat en hij binnen bereik is.</string>
+    <string name="obd_error_timeout">De adapter reageert niet meer. Controleer of hij stroom heeft en het contact aan staat.</string>
+    <string name="obd_error_lost_connection">Verbinding met de adapter verbroken.</string>
+    <string name="obd_error_generic">Fout bij communicatie met de OBD-adapter: %1$s</string>
+    <string name="obd_error_clear_not_confirmed">Het voertuig heeft het wissen niet bevestigd. Zet de motor uit (contact aan) en probeer het opnieuw.</string>
+    <string name="obd_error_clear_no_response">De adapter reageerde niet op het wisverzoek.</string>
+    <string name="obd_error_no_live_pids">Dit voertuig levert geen live gegevens.</string>
+    <string name="obd_error_unable_to_connect">De adapter kon niet communiceren met het voertuig. Staat het contact aan?</string>
+    <string name="obd_error_can_bus">CAN-busfout. Controleer of de adapter goed in de OBD2-aansluiting zit.</string>
+    <string name="obd_error_vehicle_bus">Voertuigbusfout. Controleer of de adapter goed in de OBD2-aansluiting zit.</string>
+    <string name="obd_error_bus_feedback">Terugkoppelfout van de voertuigbus. Controleer de verbinding van de adapter.</string>
+    <string name="obd_error_low_voltage">De adapter is herstart door te lage spanning. Controleer de accu van het voertuig.</string>
+    <string name="obd_error_bus_init">De adapter meldt een fout bij het initialiseren van de bus. Staat het contact aan?</string>
+    <string name="obd_error_internal">De adapter meldt interne fout %1$s.</string>
+
+    <!-- OBD2 scanner: control modules that reported a code -->
+    <string name="obd_module_engine">Motor (ECM)</string>
+    <string name="obd_module_transmission">Transmissie (TCM)</string>
+    <string name="obd_module_numbered">Module %1$s</string>
+
+    <!-- OBD2 scanner: emissions readiness monitors -->
+    <string name="obd_monitor_misfire">Ontstekingsfouten</string>
+    <string name="obd_monitor_fuel_system">Brandstofsysteem</string>
+    <string name="obd_monitor_components">Componenten</string>
+    <string name="obd_monitor_nmhc_catalyst">NMHC-katalysator</string>
+    <string name="obd_monitor_nox_scr">NOx/SCR-nabehandeling</string>
+    <string name="obd_monitor_boost_pressure">Turbodruk</string>
+    <string name="obd_monitor_exhaust_gas_sensor">Uitlaatgassensor</string>
+    <string name="obd_monitor_pm_filter">Roetfilter</string>
+    <string name="obd_monitor_egr_vvt">EGR/VVT-systeem</string>
+    <string name="obd_monitor_catalyst">Katalysator</string>
+    <string name="obd_monitor_heated_catalyst">Verwarmde katalysator</string>
+    <string name="obd_monitor_evap">Verdampingssysteem</string>
+    <string name="obd_monitor_secondary_air">Secundaire lucht</string>
+    <string name="obd_monitor_ac_refrigerant">Koudemiddel airco</string>
+    <string name="obd_monitor_o2_sensor">Lambdasonde</string>
+    <string name="obd_monitor_o2_heater">Lambdasondeverwarming</string>
+
+    <!-- OBD2 scanner: sensor (PID) names -->
+    <string name="obd_pid_engine_load">Motorbelasting</string>
+    <string name="obd_pid_coolant_temp">Koelvloeistoftemp.</string>
+    <string name="obd_pid_short_fuel_trim">Korte termijn brandstofcorrectie (B1)</string>
+    <string name="obd_pid_long_fuel_trim">Lange termijn brandstofcorrectie (B1)</string>
+    <string name="obd_pid_intake_pressure">Inlaatspruitstukdruk</string>
+    <string name="obd_pid_rpm">Motortoerental</string>
+    <string name="obd_pid_speed">Voertuigsnelheid</string>
+    <string name="obd_pid_intake_air_temp">Inlaatluchttemp.</string>
+    <string name="obd_pid_maf">Luchtmassastroom</string>
+    <string name="obd_pid_throttle">Gasklepstand</string>
+    <string name="obd_pid_run_time">Looptijd sinds start</string>
+    <string name="obd_pid_fuel_rail_pressure">Raildruk</string>
+    <string name="obd_pid_fuel_level">Brandstofniveau</string>
+    <string name="obd_pid_barometric_pressure">Luchtdruk</string>
+    <string name="obd_pid_module_voltage">Accu-/modulespanning</string>
+    <string name="obd_pid_ambient_air_temp">Buitentemp.</string>
+    <string name="obd_pid_hybrid_battery">Lading hybride accu</string>
+    <string name="obd_pid_oil_temp">Motorolietemp.</string>
+</resources>

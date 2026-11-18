@@ -134,7 +134,7 @@ class LubeLoggerDuplicatesViewModelTest {
         viewModel.deleteSelectedDuplicates()
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals("Deleted 1 duplicate record(s).", viewModel.uiState.value.userMessage)
+        assertEquals(1, viewModel.uiState.value.deletedCount)
         // Only original remains
         assertEquals(1, maintDao.recordsFlow.value.size)
         assertEquals(101L, maintDao.recordsFlow.value.single().id)

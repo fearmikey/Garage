@@ -1,6 +1,7 @@
 package com.fearmikey.garage.data.repository
 
 import android.content.Context
+import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.CloudBackupPreferencesManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -46,7 +47,7 @@ open class WebDavBackupRepository @Inject constructor(
         val password = cloudBackupPreferencesManager.getWebdavPassword().orEmpty()
 
         if (!enabled || url.isBlank() || username.isBlank()) {
-            return@withContext BackupResult.Failure("Cloud sync is not configured.", retryable = false)
+            return@withContext BackupResult.Failure(context.getString(R.string.webdav_error_not_configured), retryable = false)
         }
 
         val tempFile = File(context.cacheDir, "cloud_backup_upload.zip")
@@ -72,7 +73,10 @@ open class WebDavBackupRepository @Inject constructor(
                     cloudBackupPreferencesManager.setLastSyncError(null)
                     BackupResult.Success
                 } else {
-                    val message = "Upload failed: HTTP ${response.code} ${response.message}".trim()
+                    val message = context.getString(
+                        R.string.webdav_error_upload_http,
+                        "${response.code} ${response.message}".trim(),
+                    )
                     cloudBackupPreferencesManager.setLastSyncError(message)
                     // Rejected credentials won't fix themselves; server errors / timeouts might.
                     val retryable = (response.code != 401) && (response.code != 403)
@@ -80,7 +84,7 @@ open class WebDavBackupRepository @Inject constructor(
                 }
             }
         } catch (e: Exception) {
-            val message = e.message ?: "Unknown error while syncing to WebDAV."
+            val message = e.message ?: context.getString(R.string.webdav_error_sync_unknown)
             cloudBackupPreferencesManager.setLastSyncError(message)
             BackupResult.Failure(message)
         } finally {
@@ -96,7 +100,7 @@ open class WebDavBackupRepository @Inject constructor(
     suspend fun testConnection(url: String, username: String, password: String): BackupResult =
         withContext(Dispatchers.IO) {
             if (url.isBlank() || username.isBlank()) {
-                return@withContext BackupResult.Failure("Server URL and username are required.")
+                return@withContext BackupResult.Failure(context.getString(R.string.webdav_error_url_username_required))
             }
             try {
                 val request = Request.Builder()
@@ -113,13 +117,14 @@ open class WebDavBackupRepository @Inject constructor(
                     if (response.isSuccessful || response.code == 207) {
                         BackupResult.Success
                     } else if (response.code == 401 || response.code == 403) {
-                        BackupResult.Failure("Authentication failed. Check your username and password.")
+                        BackupResult.Failure(context.getString(R.string.webdav_error_auth))
                     } else {
-                        BackupResult.Failure("Connection failed: HTTP ${response.code} ${response.message}".trim())
+                        // The caller already prefixes this with "Connection failed:" (msg_connection_failed).
+                        BackupResult.Failure("HTTP ${response.code} ${response.message}".trim())
                     }
                 }
             } catch (e: Exception) {
-                BackupResult.Failure(e.message ?: "Unknown error while testing connection.")
+                BackupResult.Failure(e.message ?: context.getString(R.string.webdav_error_test_unknown))
             }
         }
 

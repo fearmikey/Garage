@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Seller report (PDF export) screen. The PDF itself is still generated in English. -->
+    <!-- Seller report (PDF export) screen. The PDF body text lives in strings_pdf.xml. -->
     <string name="export_title">Seller Report Generator</string>
     <string name="export_book_title">Vehicle Service &amp; History Book</string>
     <string name="export_book_desc">Generate a comprehensive, beautifully formatted report designed to highlight your vehicle\'s care investment, maintenance log, parts replaced, and safety status to maximize resale value.</string>

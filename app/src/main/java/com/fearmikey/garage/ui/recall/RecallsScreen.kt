@@ -109,7 +109,9 @@ private fun RecallsContent(
                     message = stringResource(R.string.recalls_missing_info),
                 )
                 uiState.errorMessage != null -> RecallsErrorState(
-                    message = uiState.errorMessage,
+                    message = uiState.errorMessageRes?.let { res ->
+                        uiState.errorMessageArg?.let { stringResource(res, it) } ?: stringResource(res)
+                    } ?: uiState.errorMessage,
                     isRetrying = uiState.isLoading,
                     onRetry = onRefresh,
                 )

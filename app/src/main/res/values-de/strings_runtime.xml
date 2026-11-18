@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Document renewal notifications -->
+    <string name="reminder_doc_registration">Verlängerung der Fahrzeugzulassung</string>
+    <string name="reminder_doc_inspection">Fällige Hauptuntersuchung</string>
+    <string name="reminder_doc_emissions">Fällige Abgasuntersuchung</string>
+    <string name="reminder_doc_sticker">Erneuerung der Prüfplakette</string>
+    <string name="reminder_doc_insurance">Verlängerung der Versicherung</string>
+    <string name="reminder_doc_toll">Verlängerung Maut-/Parkausweis</string>
+    <string name="reminder_doc_drivers_license">Verlängerung des Führerscheins</string>
+    <string name="reminder_doc_custom">Verlängerung: %1$s</string>
+    <string name="reminder_doc_custom_fallback">Dokument</string>
+    <string name="reminder_personal_document">Persönliches Fahrerdokument</string>
+
+    <!-- GPS trip tracking notification -->
+    <string name="trip_channel_name">Fahrtenaufzeichnung</string>
+    <string name="trip_channel_description">Zeigt die aktuelle Strecke laufender Fahrten an</string>
+    <string name="trip_notification_distance">Strecke: %1$s</string>
+
+    <!-- Seller report screen -->
+    <plurals name="export_records_logged">
+        <item quantity="one">%d erfasst</item>
+        <item quantity="other">%d erfasst</item>
+    </plurals>
+    <plurals name="export_mods_items">
+        <item quantity="one">%1$d Eintrag (%2$s)</item>
+        <item quantity="other">%1$d Einträge (%2$s)</item>
+    </plurals>
+
+    <!-- LubeLogger duplicates -->
+    <plurals name="dup_deleted_message">
+        <item quantity="one">%d doppelter Eintrag gelöscht.</item>
+        <item quantity="other">%d doppelte Einträge gelöscht.</item>
+    </plurals>
+
+    <!-- Add / edit vehicle: VIN -->
+    <string name="vin_error_scan_not_vin">Der gescannte Code (\"%1$s\") enthält keine FIN. Scannen Sie den FIN-Barcode oder geben Sie die FIN manuell ein.</string>
+    <string name="vin_error_length">Eine FIN muss %1$d Zeichen haben (aktuell %2$d).</string>
+    <string name="vehicle_error_save">Beim Speichern des Fahrzeugs ist ein Fehler aufgetreten.</string>
+    <string name="vin_error_no_results">Für diese FIN wurden keine Ergebnisse geliefert.</string>
+    <string name="vin_error_invalid_characters">Diese FIN enthält ungültige Zeichen.</string>
+    <string name="vin_error_incomplete">Diese FIN scheint unvollständig zu sein. Prüfen Sie, ob sie 17 Zeichen ohne Tippfehler hat.</string>
+    <string name="vin_error_manufacturer_unknown">Dieser Hersteller ist nicht in der NHTSA-Datenbank. Die NHTSA-Datenbank umfasst hauptsächlich in den USA verkaufte Fahrzeuge; Fahrzeuge aus anderen Märkten müssen eventuell manuell eingegeben werden.</string>
+    <string name="vin_error_not_found">Für diese FIN wurden keine Fahrzeugdaten gefunden. Die NHTSA-Datenbank umfasst hauptsächlich in den USA verkaufte Fahrzeuge; Fahrzeuge aus anderen Märkten müssen eventuell manuell eingegeben werden.</string>
+    <string name="vin_error_network">Die FIN konnte nicht dekodiert werden. Prüfen Sie Ihre Internetverbindung.</string>
+    <string name="vin_warning_model_missing">Kein Modell zu dieser FIN gefunden; bitte manuell eingeben.</string>
+    <string name="vin_warning_year_unreliable">Das Modelljahr konnte aus dieser FIN nicht ermittelt werden; bitte manuell eingeben.</string>
+    <string name="vin_warning_partial">FIN nur teilweise dekodiert; bitte prüfen Sie die Angaben.</string>
+
+    <!-- Recalls -->
+    <string name="recall_error_http">Der Rückrufdienst der NHTSA (api.nhtsa.gov) hat einen Fehler gemeldet (HTTP %1$d). Bitte versuchen Sie es später erneut.</string>
+    <string name="recall_error_network">Der Rückrufdienst der NHTSA (api.nhtsa.gov) ist nicht erreichbar. Prüfen Sie Ihre Internetverbindung.</string>
+    <string name="recall_error_unexpected">Unerwarteter Fehler bei der Rückrufprüfung.</string>
+
+    <!-- Backup & restore -->
+    <string name="backup_error_open_destination">Das Ziel konnte nicht zum Schreiben geöffnet werden.</string>
+    <string name="backup_error_export_unknown">Unbekannter Fehler beim Exportieren der Sicherung.</string>
+    <string name="backup_error_no_folder">Kein lokaler Sicherungsordner eingerichtet.</string>
+    <string name="backup_error_folder_access">Auf den gewählten Sicherungsordner kann nicht zugegriffen werden.</string>
+    <string name="backup_error_folder_not_writable">Der Sicherungsordner existiert nicht oder ist nicht beschreibbar.</string>
+    <string name="backup_error_create_file">%1$s konnte im gewählten Ordner nicht erstellt werden.</string>
+    <string name="backup_error_open_output">Die Sicherungsdatei konnte nicht zum Schreiben geöffnet werden.</string>
+    <string name="backup_error_permission">Kein Zugriff auf den Ordner. Bitte wählen Sie den Sicherungsordner erneut aus.</string>
+    <string name="backup_error_local_unknown">Unbekannter Fehler beim Schreiben der Sicherung in den lokalen Ordner.</string>
+    <string name="backup_error_open_file">Die gewählte Sicherungsdatei konnte nicht geöffnet werden.</string>
+    <string name="backup_error_invalid_entry">Die Sicherungsdatei enthält einen ungültigen Eintrag: %1$s</string>
+    <string name="backup_error_missing_db">Diese Datei scheint keine Garage-Sicherung zu sein (Datenbank fehlt).</string>
+    <string name="backup_error_unreadable_db">Diese Datei scheint keine gültige Garage-Sicherung zu sein (Datenbank nicht lesbar).</string>
+    <string name="backup_error_newer_version">Diese Sicherung wurde mit einer neueren Garage-Version erstellt und kann hier nicht wiederhergestellt werden. Aktualisieren Sie die App und versuchen Sie es dann erneut.</string>
+    <string name="backup_error_import_unknown">Unbekannter Fehler beim Importieren der Sicherung.</string>
+
+    <!-- WebDAV / LubeLogger -->
+    <string name="webdav_error_not_configured">Die Cloud-Synchronisierung ist nicht eingerichtet.</string>
+    <string name="webdav_error_upload_http">Hochladen fehlgeschlagen: HTTP %1$s</string>
+    <string name="webdav_error_sync_unknown">Unbekannter Fehler bei der WebDAV-Synchronisierung.</string>
+    <string name="webdav_error_url_username_required">Server-URL und Benutzername sind erforderlich.</string>
+    <string name="webdav_error_auth">Anmeldung fehlgeschlagen. Prüfen Sie Benutzername und Passwort.</string>
+    <string name="webdav_error_test_unknown">Unbekannter Fehler beim Testen der Verbindung.</string>
+    <string name="lubelogger_error_invalid_url">Die LubeLogger-Server-URL ist ungültig.</string>
+</resources>

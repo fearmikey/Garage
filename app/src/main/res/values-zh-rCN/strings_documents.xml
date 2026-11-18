@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Shared -->
+    <string name="common_notes">备注</string>
+    <string name="common_cost">费用</string>
+    <string name="common_cost_optional">费用（可选）</string>
+    <string name="common_remove">移除</string>
+    <string name="common_edit_item">编辑%1$s</string>
+    <string name="common_copy_label">复制%1$s</string>
+    <string name="common_copied_to_clipboard">已将%1$s复制到剪贴板</string>
+
+    <!-- Vehicle documents: edit screen -->
+    <string name="doc_edit_title">编辑证件</string>
+    <string name="doc_tab_registration">车牌与行驶证</string>
+    <string name="doc_tab_insurance">保险</string>
+    <string name="doc_tab_inspection">年检</string>
+    <string name="doc_tab_emissions">尾气 / 排放</string>
+    <string name="doc_tab_stickers">标签</string>
+    <string name="doc_tab_toll">通行费 / 停车</string>
+    <string name="doc_tab_purchase">购车</string>
+    <string name="doc_select_expiration_date">选择到期日</string>
+    <string name="doc_select_due_date">选择截止日期</string>
+    <string name="doc_select_date_tested">选择检测日期</string>
+    <string name="doc_reg_notes_placeholder">登记证书上的 VIN、车管所备注…</string>
+    <string name="doc_reg_card_front">行驶证 – 正面 / 第 1 页</string>
+    <string name="doc_reg_card_back">行驶证 – 背面 / 第 2 页</string>
+    <string name="doc_insp_notes_placeholder">检测站名称、合格证编号…</string>
+    <string name="doc_emissions_notes_placeholder">检测站地点、合格证编号、备注…</string>
+    <string name="doc_sticker_exp_label">标签续期 / 到期日</string>
+    <string name="doc_sticker_number_label">标签 / 贴纸编号</string>
+    <string name="doc_sticker_number_placeholder">例如：STK-2025-9988</string>
+    <string name="doc_sticker_notes_label">标签备注 / 粘贴位置</string>
+    <string name="doc_sticker_notes_placeholder">例如：前挡风玻璃左下角、当地年检标…</string>
+    <string name="doc_delete_sticker_btn">删除年检标签信息</string>
+    <string name="doc_insur_provider_placeholder">例如：中国人保、平安、太平洋</string>
+    <string name="doc_insur_policy_placeholder">例如：POL-987654321</string>
+    <string name="doc_insur_contact_placeholder">例如：张先生 138-0000-0000 或 95518</string>
+    <string name="doc_insur_notes_placeholder">免赔额、道路救援、险种…</string>
+    <string name="doc_insur_card_photo">保单照片</string>
+    <string name="doc_toll_account_placeholder">例如：ETC 卡号 1234567、居民停车证 88 号</string>
+    <string name="doc_toll_notes_placeholder">OBU 序列号、车位号、区域备注…</string>
+    <string name="doc_seller_label">卖家 / 经销商</string>
+    <string name="doc_seller_placeholder">例如：某某丰田 4S 店、私人转让</string>
+    <string name="doc_purchase_notes_label">购车备注</string>
+    <string name="doc_purchase_notes_placeholder">置换、贷款、税费…</string>
+    <string name="doc_bill_of_sale">购车发票</string>
+    <string name="doc_delete_purchase_btn">删除购车信息</string>
+    <string name="doc_delete_reg_title">删除车牌与行驶证信息？</string>
+    <string name="doc_delete_reg_message">确定要删除此车辆的车牌和行驶证信息吗？</string>
+    <string name="doc_delete_insp_title">删除年检信息？</string>
+    <string name="doc_delete_insp_message">确定要删除此车辆的年检信息吗？</string>
+    <string name="doc_delete_emissions_title">删除尾气检测信息？</string>
+    <string name="doc_delete_emissions_message">确定要删除此车辆的尾气 / 排放检测信息吗？</string>
+    <string name="doc_delete_sticker_title">删除年检标签信息？</string>
+    <string name="doc_delete_sticker_message">确定要删除此车辆的年检标签信息吗？</string>
+    <string name="doc_delete_insur_title">删除保单信息？</string>
+    <string name="doc_delete_insur_message">确定要删除此车辆的保单信息吗？</string>
+    <string name="doc_delete_purchase_title">删除购车信息？</string>
+    <string name="doc_delete_purchase_message">确定要删除此车辆的购车信息吗？</string>
+    <string name="doc_delete_toll_title">删除通行费与停车信息？</string>
+    <string name="doc_delete_toll_message">确定要删除此车辆的通行证和停车许可信息吗？</string>
+
+    <!-- Vehicle documents: view screen -->
+    <string name="doc_add_other">添加其他证件</string>
+    <string name="doc_edit_details">编辑详情</string>
+    <string name="doc_add_documents">添加车辆证件</string>
+    <string name="doc_empty_message">尚未添加任何车辆证件。\n点按 + 记录行驶证、年检、尾气检测、标签、保险、通行证或购车信息。\n使用小按钮添加其他任何证件（质保、登记证书、道路救援…）。</string>
+    <string name="doc_other_documents">其他证件</string>
+    <string name="doc_section_registration">车辆与车牌登记</string>
+    <string name="doc_license_plate">车牌</string>
+    <string name="doc_no_plate">无车牌</string>
+    <string name="doc_renewal_fee">续期费用</string>
+    <string name="doc_reg_document">行驶证 / 登记证书</string>
+    <string name="doc_reg_photo_cd">行驶证照片 %1$d</string>
+    <string name="doc_section_inspection">机动车年检</string>
+    <string name="doc_station_notes">备注 / 检测站信息</string>
+    <string name="doc_section_emissions">尾气与排放检测</string>
+    <string name="doc_section_stickers">年检标签</string>
+    <string name="doc_section_insurance">保单</string>
+    <string name="doc_insurance_provider">保险公司</string>
+    <string name="doc_policy_number">保单号</string>
+    <string name="doc_premium">保费</string>
+    <string name="doc_agent_contact">代理人 / 联系方式</string>
+    <string name="doc_insur_document">保单 / 保险凭证</string>
+    <string name="doc_section_toll">通行证与停车许可</string>
+    <string name="doc_status_expired">已过期（%1$d 天前）</string>
+    <string name="doc_status_expires_in">%1$d 天后到期</string>
+    <string name="doc_status_active">有效（剩余 %1$d 天）</string>
+    <string name="doc_add_item">添加%1$s</string>
+    <string name="doc_close_preview">关闭预览</string>
+    <string name="doc_preview">证件预览</string>
+
+    <!-- Custom ("other") documents -->
+    <string name="custom_doc_expiration">到期日</string>
+    <string name="custom_doc_reference_short">编号 / 保单号</string>
+    <string name="custom_doc_view_pdf">查看 PDF</string>
+    <string name="custom_doc_view_photo">查看照片</string>
+    <string name="custom_doc_add_title">添加证件</string>
+    <string name="custom_doc_edit_title">编辑证件</string>
+    <string name="custom_doc_name_label">证件名称 *</string>
+    <string name="custom_doc_name_placeholder">例如：延保、道路救援、登记证书</string>
+    <string name="custom_doc_reference_label">编号 / 保单号 / 合同号</string>
+    <string name="custom_doc_expiration_optional">到期日（可选）</string>
+    <string name="custom_doc_clear_expiration">清除到期日</string>
+    <string name="custom_doc_notes_placeholder">服务商、保障范围、电话号码…</string>
+    <string name="custom_doc_replace_attachment">替换照片 / PDF</string>
+    <string name="custom_doc_attach">附加照片 / PDF</string>
+    <string name="custom_doc_save">保存证件</string>
+    <string name="custom_doc_delete">删除证件</string>
+    <string name="custom_doc_delete_title">删除%1$s？</string>
+    <string name="custom_doc_delete_message">此证件及其附件将被永久删除。</string>
+</resources>

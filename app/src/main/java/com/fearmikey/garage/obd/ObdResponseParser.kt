@@ -4,7 +4,18 @@ package com.fearmikey.garage.obd
  * Thrown when the adapter reports a condition that means it cannot talk to the vehicle
  * (e.g. `UNABLE TO CONNECT`, `CAN ERROR`, `BUS INIT: ...ERROR`).
  */
-class ObdAdapterException(message: String) : Exception(message)
+/** Why the adapter refused to talk to the vehicle; lets the UI show a translated message. */
+enum class ObdAdapterError { UNABLE_TO_CONNECT, CAN_BUS, VEHICLE_BUS, BUS_FEEDBACK, LOW_VOLTAGE, BUS_INIT, INTERNAL }
+
+/**
+ * @param message English description (logs, tests).
+ * @param detail extra value for the message, e.g. the adapter's internal error code.
+ */
+class ObdAdapterException(
+    message: String,
+    val reason: ObdAdapterError,
+    val detail: String? = null,
+) : Exception(message)
 
 /** Thrown when the adapter doesn't finish a reply (`>` prompt) within the allotted time. */
 class ObdTimeoutException(command: String) : java.io.IOException("Adapter did not respond to '$command'")
@@ -48,12 +59,12 @@ object ObdResponseParser {
     private val BUS_INIT = Regex("BUSINIT:?\\.*(OK)?")
 
     private val FATAL_MARKERS = listOf(
-        "UNABLETOCONNECT" to "The adapter couldn't communicate with the vehicle. Is the ignition on?",
-        "CANERROR" to "CAN bus error. Check that the adapter is fully seated in the OBD2 port.",
-        "BUSERROR" to "Vehicle bus error. Check that the adapter is fully seated in the OBD2 port.",
-        "FBERROR" to "Vehicle bus feedback error. Check the adapter connection.",
-        "LVRESET" to "The adapter reset due to low voltage. Check the vehicle battery.",
-        "ERROR" to "The adapter reported a bus initialization error. Is the ignition on?",
+        "UNABLETOCONNECT" to (ObdAdapterError.UNABLE_TO_CONNECT to "The adapter couldn't communicate with the vehicle. Is the ignition on?"),
+        "CANERROR" to (ObdAdapterError.CAN_BUS to "CAN bus error. Check that the adapter is fully seated in the OBD2 port."),
+        "BUSERROR" to (ObdAdapterError.VEHICLE_BUS to "Vehicle bus error. Check that the adapter is fully seated in the OBD2 port."),
+        "FBERROR" to (ObdAdapterError.BUS_FEEDBACK to "Vehicle bus feedback error. Check the adapter connection."),
+        "LVRESET" to (ObdAdapterError.LOW_VOLTAGE to "The adapter reset due to low voltage. Check the vehicle battery."),
+        "ERROR" to (ObdAdapterError.BUS_INIT to "The adapter reported a bus initialization error. Is the ignition on?"),
     )
 
     /** Replies that just mean "no answer for this request" and are not a connection problem. */
@@ -75,10 +86,10 @@ object ObdResponseParser {
 
         for (line in lines) {
             if (line.startsWith("ERR") && line.drop(3).all { it.isDigit() } && line.length > 3) {
-                throw ObdAdapterException("The adapter reported internal error $line.")
+                throw ObdAdapterException("The adapter reported internal error $line.", ObdAdapterError.INTERNAL, line)
             }
             FATAL_MARKERS.firstOrNull { (marker, _) -> line.contains(marker) && !line.contains("DATAERROR") }
-                ?.let { (_, message) -> throw ObdAdapterException(message) }
+                ?.let { (_, error) -> throw ObdAdapterException(error.second, error.first) }
         }
         return lines.filterNot { line -> NO_DATA_MARKERS.any { line.contains(it) } }
     }

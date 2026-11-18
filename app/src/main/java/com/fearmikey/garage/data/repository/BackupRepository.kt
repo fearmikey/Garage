@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteException
 import android.net.Uri
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
+import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.CloudBackupPreferencesManager
 import com.fearmikey.garage.data.local.GARAGE_DATABASE_NAME
 import com.fearmikey.garage.data.local.GARAGE_DATABASE_VERSION
@@ -56,12 +57,12 @@ class BackupRepository @Inject constructor(
     suspend fun exportBackup(destinationUri: Uri): BackupResult = withContext(Dispatchers.IO) {
         try {
             val outputStream = context.contentResolver.openOutputStream(destinationUri)
-                ?: return@withContext BackupResult.Failure("Could not open destination for writing.")
+                ?: return@withContext BackupResult.Failure(context.getString(R.string.backup_error_open_destination))
 
             writeBackupZip(outputStream)
             BackupResult.Success
         } catch (e: Exception) {
-            BackupResult.Failure(e.message ?: "Unknown error while exporting backup.")
+            BackupResult.Failure(e.message ?: context.getString(R.string.backup_error_export_unknown))
         }
     }
 
@@ -71,14 +72,14 @@ class BackupRepository @Inject constructor(
             FileOutputStream(destination).use { writeBackupZip(it) }
             BackupResult.Success
         } catch (e: Exception) {
-            BackupResult.Failure(e.message ?: "Unknown error while exporting backup.")
+            BackupResult.Failure(e.message ?: context.getString(R.string.backup_error_export_unknown))
         }
     }
 
     /** Exports the current database + images into a zip file inside the selected local folder SAF tree URI. */
     suspend fun exportBackupToLocalFolder(folderUriString: String): BackupResult = withContext(Dispatchers.IO) {
         if (folderUriString.isBlank()) {
-            val failure = BackupResult.Failure("No local backup folder configured.")
+            val failure = BackupResult.Failure(context.getString(R.string.backup_error_no_folder))
             cloudBackupPreferencesManager.setLastLocalBackupError(failure.message)
             return@withContext failure
         }
@@ -86,13 +87,13 @@ class BackupRepository @Inject constructor(
             val folderUri = folderUriString.toUri()
             val directory = DocumentFile.fromTreeUri(context, folderUri)
                 ?: run {
-                    val failure = BackupResult.Failure("Could not access the selected backup folder.")
+                    val failure = BackupResult.Failure(context.getString(R.string.backup_error_folder_access))
                     cloudBackupPreferencesManager.setLastLocalBackupError(failure.message)
                     return@withContext failure
                 }
 
             if (!directory.exists() || !directory.canWrite()) {
-                val failure = BackupResult.Failure("Backup folder does not exist or is not writable.")
+                val failure = BackupResult.Failure(context.getString(R.string.backup_error_folder_not_writable))
                 cloudBackupPreferencesManager.setLastLocalBackupError(failure.message)
                 return@withContext failure
             }
@@ -104,7 +105,7 @@ class BackupRepository @Inject constructor(
             }
 
             if (targetFile == null) {
-                val failure = BackupResult.Failure("Could not create $backupFileName in selected folder.")
+                val failure = BackupResult.Failure(context.getString(R.string.backup_error_create_file, backupFileName))
                 cloudBackupPreferencesManager.setLastLocalBackupError(failure.message)
                 return@withContext failure
             }
@@ -114,7 +115,7 @@ class BackupRepository @Inject constructor(
             } catch (_: Exception) {
                 context.contentResolver.openOutputStream(targetFile.uri, "w")
             } ?: run {
-                val failure = BackupResult.Failure("Could not open output stream for backup file.")
+                val failure = BackupResult.Failure(context.getString(R.string.backup_error_open_output))
                 cloudBackupPreferencesManager.setLastLocalBackupError(failure.message)
                 return@withContext failure
             }
@@ -126,11 +127,11 @@ class BackupRepository @Inject constructor(
 
             BackupResult.Success
         } catch (_: SecurityException) {
-            val msg = "Permission denied to access folder. Please re-select the backup folder."
+            val msg = context.getString(R.string.backup_error_permission)
             cloudBackupPreferencesManager.setLastLocalBackupError(msg)
             BackupResult.Failure(msg)
         } catch (e: Exception) {
-            val msg = e.message ?: "Unknown error writing backup to local folder."
+            val msg = e.message ?: context.getString(R.string.backup_error_local_unknown)
             cloudBackupPreferencesManager.setLastLocalBackupError(msg)
             BackupResult.Failure(msg)
         }
@@ -178,14 +179,14 @@ class BackupRepository @Inject constructor(
             stagingDir.mkdirs()
 
             val inputStream = context.contentResolver.openInputStream(sourceUri)
-                ?: return@withContext BackupResult.Failure("Could not open the selected backup file.")
+                ?: return@withContext BackupResult.Failure(context.getString(R.string.backup_error_open_file))
 
             ZipInputStream(inputStream.buffered()).use { zip ->
                 var entry: ZipEntry? = zip.nextEntry
                 while (entry != null) {
                     val outFile = resolveZipEntryFile(stagingDir, entry.name)
                         ?: return@withContext BackupResult.Failure(
-                            "Backup file contains an invalid entry: ${entry.name}"
+                            context.getString(R.string.backup_error_invalid_entry, entry.name)
                         )
                     if (entry.isDirectory) {
                         outFile.mkdirs()
@@ -200,7 +201,7 @@ class BackupRepository @Inject constructor(
 
             val stagedDb = File(stagingDir, GARAGE_DATABASE_NAME)
             if (!stagedDb.exists()) {
-                return@withContext BackupResult.Failure("This file doesn't look like a Garage backup (missing database).")
+                return@withContext BackupResult.Failure(context.getString(R.string.backup_error_missing_db))
             }
 
             // Guard against restoring a backup that was taken with a newer
@@ -213,15 +214,10 @@ class BackupRepository @Inject constructor(
             val backupVersion = try {
                 readSchemaVersion(stagedDb)
             } catch (_: SQLiteException) {
-                return@withContext BackupResult.Failure(
-                    "This file doesn't look like a valid Garage backup (unreadable database)."
-                )
+                return@withContext BackupResult.Failure(context.getString(R.string.backup_error_unreadable_db))
             }
             if (backupVersion > GARAGE_DATABASE_VERSION) {
-                return@withContext BackupResult.Failure(
-                    "This backup was created by a newer version of Garage and can't be restored " +
-                        "here. Update the app, then try restoring this backup again."
-                )
+                return@withContext BackupResult.Failure(context.getString(R.string.backup_error_newer_version))
             }
 
             // Copy the images first: if that fails, the live database hasn't been touched yet.
@@ -263,7 +259,7 @@ class BackupRepository @Inject constructor(
                     if (saved.exists()) runCatching { saved.copyTo(dbFile, overwrite = true) } else dbFile.delete()
                 }
                 return@withContext BackupResult.Failure(
-                    e.message ?: "Unknown error while importing backup.",
+                    e.message ?: context.getString(R.string.backup_error_import_unknown),
                     restartRequired = true,
                 )
             } finally {
@@ -281,7 +277,7 @@ class BackupRepository @Inject constructor(
             BackupResult.Success
         } catch (e: Exception) {
             BackupResult.Failure(
-                e.message ?: "Unknown error while importing backup.",
+                e.message ?: context.getString(R.string.backup_error_import_unknown),
                 restartRequired = databaseClosed,
             )
         } finally {

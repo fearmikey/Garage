@@ -24,6 +24,7 @@ data class AppCurrency(
         val CAD = AppCurrency("CAD", "CA$", "Canadian Dollar")
         val AUD = AppCurrency("AUD", "A$", "Australian Dollar")
         val JPY = AppCurrency("JPY", "¥", "Japanese Yen")
+        val CNY = AppCurrency("CNY", "¥", "Chinese Yuan")
         val INR = AppCurrency("INR", "₹", "Indian Rupee")
         val CHF = AppCurrency("CHF", "CHF", "Swiss Franc")
         val BRL = AppCurrency("BRL", "R$", "Brazilian Real")
@@ -47,7 +48,7 @@ data class AppCurrency(
         val SAR = AppCurrency("SAR", "SAR", "Saudi Riyal")
 
         val SUPPORTED_CURRENCIES = listOf(
-            USD, EUR, GBP, CAD, AUD, JPY, INR, CHF, BRL, MXN,
+            USD, EUR, GBP, CAD, AUD, JPY, CNY, INR, CHF, BRL, MXN,
             SEK, NOK, DKK, PLN, NZD, SGD, HKD, ZAR, KRW, TRY,
             PHP, CZK, HUF, ILS, THB, AED, SAR
         )

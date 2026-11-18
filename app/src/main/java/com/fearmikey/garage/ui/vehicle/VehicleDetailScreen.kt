@@ -293,7 +293,7 @@ fun VehicleDetailScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(vehicle?.let { "${it.year ?: ""} ${it.make} ${it.model}".trim() } ?: "Vehicle")
+                    Text(vehicle?.let { "${it.year ?: ""} ${it.make} ${it.model}".trim() } ?: stringResource(R.string.odo_vehicle))
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {

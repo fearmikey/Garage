@@ -29,6 +29,9 @@ data class RecallsUiState(
     val rawRecalls: List<VehicleRecall> = emptyList(),
     val recalls: List<RecallItemUiState> = emptyList(),
     val errorMessage: String? = null,
+    /** Translated form of [errorMessage], resolved by the screen; see [RecallLookupResult.Error]. */
+    val errorMessageRes: Int? = null,
+    val errorMessageArg: Any? = null,
     val missingVehicleInfo: Boolean = false,
     val vin: String = "",
     val year: Int? = null,
@@ -109,6 +112,8 @@ class RecallsViewModel @Inject constructor(
                     _internalUiState.value = _internalUiState.value.copy(
                         isLoading = false,
                         errorMessage = result.message,
+                        errorMessageRes = result.messageRes,
+                        errorMessageArg = result.messageArg,
                         missingVehicleInfo = false,
                         vin = vin,
                         year = year,

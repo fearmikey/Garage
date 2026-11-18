@@ -1,6 +1,7 @@
 package com.fearmikey.garage.ui.obd
 
 import android.content.ContextWrapper
+import com.fearmikey.garage.R
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
 import com.fearmikey.garage.data.local.dao.VehicleDao
 import com.fearmikey.garage.data.local.dao.VehiclePartsDao
@@ -25,6 +26,7 @@ import com.fearmikey.garage.obd.ObdParser
 import com.fearmikey.garage.obd.ObdPid
 import com.fearmikey.garage.obd.ObdScanSummary
 import com.fearmikey.garage.ui.util.AppCurrency
+import com.fearmikey.garage.ui.util.UiText
 import com.fearmikey.garage.ui.util.UnitSystem
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -342,7 +344,7 @@ class ObdViewModelTest {
 
         val state = h.viewModel.uiState.value
         assertEquals(ObdViewModel.ConnectionStatus.DISCONNECTED, state.connectionStatus)
-        assertTrue(state.error!!.contains("ignition", ignoreCase = true))
+        assertEquals(UiText.res(R.string.obd_error_unable_to_connect), state.error)
         assertTrue(h.dao.records.value.isEmpty())
     }
 
@@ -355,7 +357,7 @@ class ObdViewModelTest {
 
         val state = h.viewModel.uiState.value
         assertEquals(ObdViewModel.ConnectionStatus.DISCONNECTED, state.connectionStatus)
-        assertTrue(state.error!!.contains("Wi-Fi"))
+        assertEquals(UiText.res(R.string.obd_error_connect_wifi, WIFI_ADAPTER.address), state.error)
         assertEquals(WIFI_ADAPTER, h.manager.connectAttempts.single())
     }
 

@@ -13,6 +13,9 @@ import android.net.Uri
 import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
+import android.text.TextUtils
+import androidx.annotation.PluralsRes
+import androidx.annotation.StringRes
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -60,6 +63,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import com.fearmikey.garage.R
 import androidx.compose.ui.text.font.FontWeight
@@ -78,6 +82,9 @@ import com.fearmikey.garage.data.local.entity.VehicleSpecs
 import com.fearmikey.garage.data.repository.VehicleRecall
 import com.fearmikey.garage.ui.util.UnitConverter
 import com.fearmikey.garage.ui.util.UnitSystem
+import com.fearmikey.garage.ui.util.labelRes
+import com.fearmikey.garage.ui.util.localizedTaskName
+import com.fearmikey.garage.ui.util.taskNameRes
 import com.fearmikey.garage.ui.util.toDisplayDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -228,7 +235,11 @@ fun MaintenanceExportScreen(
                         ) {
                             Text(stringResource(R.string.export_service_records), style = MaterialTheme.typography.bodyMedium)
                             Text(
-                                text = "${uiState.maintenanceRecords.size} logged",
+                                text = pluralStringResource(
+                                    R.plurals.export_records_logged,
+                                    uiState.maintenanceRecords.size,
+                                    uiState.maintenanceRecords.size,
+                                ),
                                 style = MaterialTheme.typography.bodyMedium,
                                 fontWeight = FontWeight.Medium,
                             )
@@ -241,7 +252,12 @@ fun MaintenanceExportScreen(
                             ) {
                                 Text(stringResource(R.string.export_upgrades_colon), style = MaterialTheme.typography.bodyMedium)
                                 Text(
-                                    text = "${uiState.modificationRecords.size} items (%s%.2f)".format(uiState.currencySymbol, uiState.totalModificationCost),
+                                    text = pluralStringResource(
+                                        R.plurals.export_mods_items,
+                                        uiState.modificationRecords.size,
+                                        uiState.modificationRecords.size,
+                                        "%s%.2f".format(uiState.currencySymbol, uiState.totalModificationCost),
+                                    ),
                                     style = MaterialTheme.typography.bodyMedium,
                                     fontWeight = FontWeight.Medium,
                                 )
@@ -619,6 +635,33 @@ suspend fun generatePdf(
         isAntiAlias = true
     }
 
+    // The report is drawn in the app language; labels vary in length, so values are placed after the
+    // measured label and fixed-width table cells are ellipsized instead of overlapping the next column.
+    fun str(@StringRes id: Int, vararg args: Any): String = context.getString(id, *args)
+    fun plural(@PluralsRes id: Int, count: Int, vararg args: Any): String =
+        context.resources.getQuantityString(id, count, *args)
+    fun fit(text: String, paint: TextPaint, width: Float): String =
+        TextUtils.ellipsize(text, paint, width, TextUtils.TruncateAt.END).toString()
+    fun drawLabeled(c: Canvas, label: String, value: String, x: Float, y: Float, valuePaint: TextPaint, maxWidth: Float) {
+        c.drawText(fit(label, labelPaint, maxWidth * 0.6f), x, y, labelPaint)
+        val valueX = x + minOf(labelPaint.measureText(label), maxWidth * 0.6f) + 5f
+        c.drawText(fit(value, valuePaint, maxWidth - (valueX - x)), valueX, y, valuePaint)
+    }
+    /** Built-in task names (and descriptions auto-filled with one) are stored in English. */
+    fun displayTask(text: String): String = if (taskNameRes(text) != null) context.localizedTaskName(text) else text
+    fun recordText(record: MaintenanceRecord): String = when {
+        (!record.taskName.isNullOrBlank()) && record.description.isNotBlank() && (record.taskName != record.description) ->
+            "${displayTask(record.taskName)}: ${record.description}"
+        record.description.isNotBlank() -> displayTask(record.description)
+        else -> displayTask(record.taskName.orEmpty())
+    }
+    val noSummary = str(R.string.pdf_no_summary)
+    fun odometerHeader(): String = if (unitSystem == UnitSystem.METRIC) {
+        str(R.string.pdf_col_odometer, unitSystem.distanceUnit.uppercase())
+    } else {
+        str(R.string.pdf_col_mileage)
+    }
+
     // --- PASS 1: Calculate total pages ---
     var totalPages = 1
     var calcY = marginTop
@@ -647,7 +690,7 @@ suspend fun generatePdf(
                 textSize = 8.5f
             }
             for (recall in openRecalls) {
-                val summaryText = recall.summary.ifBlank { "No summary details provided." }
+                val summaryText = recall.summary.ifBlank { noSummary }
                 val staticLayout = StaticLayout.Builder.obtain(summaryText, 0, summaryText.length, warnTextPaintCalc, 510)
                     .setAlignment(Layout.Alignment.ALIGN_NORMAL)
                     .setLineSpacing(0f, 1.1f)
@@ -723,12 +766,7 @@ suspend fun generatePdf(
             textSize = 8.5f
         }
         for (record in maintenanceRecords) {
-            val taskText = when {
-                (!record.taskName.isNullOrBlank()) && record.description.isNotBlank() && (record.taskName != record.description) ->
-                    "${record.taskName}: ${record.description}"
-                record.description.isNotBlank() -> record.description
-                else -> record.taskName.orEmpty()
-            }
+            val taskText = recordText(record)
 
             val staticLayout = StaticLayout.Builder.obtain(taskText, 0, taskText.length, bodyTextPaintCalc, 260)
                 .setAlignment(Layout.Alignment.ALIGN_NORMAL)
@@ -760,7 +798,7 @@ suspend fun generatePdf(
             color = colorSlate500
             isAntiAlias = true
         }
-        c.drawText("Garage — Vehicle Service & History Book", marginLeft, 772f, fText)
+        c.drawText(str(R.string.pdf_footer), marginLeft, 772f, fText)
 
         val pText = TextPaint().apply {
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
@@ -769,7 +807,7 @@ suspend fun generatePdf(
             isAntiAlias = true
             textAlign = Paint.Align.RIGHT
         }
-        c.drawText("Page $pNum of $totalPages", marginRight, 772f, pText)
+        c.drawText(str(R.string.pdf_page_of, pNum, totalPages), marginRight, 772f, pText)
     }
 
     fun drawSubpageHeader(c: Canvas) {
@@ -782,7 +820,7 @@ suspend fun generatePdf(
             color = Color.WHITE
             isAntiAlias = true
         }
-        c.drawText("VEHICLE SERVICE & HISTORY BOOK — $vehicleTitle", marginLeft + 8f, marginTop + 16f, hText)
+        c.drawText(fit(str(R.string.pdf_header_continued_title, vehicleTitle), hText, printWidth - 90f), marginLeft + 8f, marginTop + 16f, hText)
 
         val cText = TextPaint().apply {
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
@@ -791,7 +829,7 @@ suspend fun generatePdf(
             isAntiAlias = true
             textAlign = Paint.Align.RIGHT
         }
-        c.drawText("Continued", marginRight - 8f, marginTop + 16f, cText)
+        c.drawText(str(R.string.pdf_continued), marginRight - 8f, marginTop + 16f, cText)
 
         val lineP = Paint().apply { color = colorBlue600; strokeWidth = 2f }
         c.drawLine(marginLeft, marginTop + 25f, marginRight, marginTop + 25f, lineP)
@@ -820,10 +858,10 @@ suspend fun generatePdf(
     val bannerRect = RectF(marginLeft, yPos, marginRight, yPos + 54f)
     canvas.drawRoundRect(bannerRect, 6f, 6f, fillPaint)
 
-    canvas.drawText("VEHICLE SERVICE & HISTORY BOOK", marginLeft + 12f, yPos + 24f, bannerTitlePaint)
-    canvas.drawText("Official Resale & Continuous Care Report", marginLeft + 12f, yPos + 40f, bannerSubtitlePaint)
+    canvas.drawText(fit(str(R.string.pdf_banner_title), bannerTitlePaint, printWidth - 170f), marginLeft + 12f, yPos + 24f, bannerTitlePaint)
+    canvas.drawText(fit(str(R.string.pdf_banner_subtitle), bannerSubtitlePaint, printWidth - 24f), marginLeft + 12f, yPos + 40f, bannerSubtitlePaint)
     val formattedToday = System.currentTimeMillis().toDisplayDate()
-    canvas.drawText("Generated $formattedToday", marginRight - 12f, yPos + 24f, bannerDatePaint)
+    canvas.drawText(str(R.string.pdf_generated, formattedToday), marginRight - 12f, yPos + 24f, bannerDatePaint)
 
     yPos += 56f
     val accentLinePaint = Paint().apply { color = colorBlue600; strokeWidth = 2.5f }
@@ -872,49 +910,50 @@ suspend fun generatePdf(
     val minMileage = allMileages.minOrNull()
 
     val distUnit = unitSystem.distanceUnit
-    val formattedMileage = maxMileage?.let { UnitConverter.formatDistance(it, unitSystem) } ?: "Not recorded"
+    val notRecorded = str(R.string.pdf_not_recorded)
+    val formattedMileage = maxMileage?.let { UnitConverter.formatDistance(it, unitSystem) } ?: notRecorded
 
     val col1X = contentX
     val col2X = contentX + (marginRight - contentX) / 2f + 10f
+    val col1Width = col2X - col1X - 8f
+    val col2Width = marginRight - 12f - col2X
+    val isMetric = unitSystem == UnitSystem.METRIC
 
-    canvas.drawText("VIN:", col1X, cardTop + 44f, labelPaint)
-    val vinDisplay = vehicle.vin.ifBlank { "Not specified" }
-    canvas.drawText(vinDisplay, col1X + 28f, cardTop + 44f, valueBoldPaint)
+    drawLabeled(canvas, str(R.string.pdf_label_vin), vehicle.vin.ifBlank { str(R.string.pdf_not_specified) }, col1X, cardTop + 44f, valueBoldPaint, col1Width)
 
-    val currentLabel = if (unitSystem == UnitSystem.METRIC) "CURRENT ODOMETER:" else "CURRENT MILEAGE:"
-    canvas.drawText(currentLabel, col2X, cardTop + 44f, labelPaint)
-    canvas.drawText(formattedMileage, col2X + 88f, cardTop + 44f, valueBoldPaint)
+    val currentLabel = str(if (isMetric) R.string.pdf_label_current_odometer else R.string.pdf_label_current_mileage)
+    drawLabeled(canvas, currentLabel, formattedMileage, col2X, cardTop + 44f, valueBoldPaint, col2Width)
 
-    canvas.drawText("DRIVETRAIN:", col1X, cardTop + 62f, labelPaint)
-    canvas.drawText(vehicle.drivetrain.displayName, col1X + 58f, cardTop + 62f, valueNormalPaint)
+    // FWD/RWD/AWD/4WD read the same in every language; only "Unknown" is translated (see EnumLabels).
+    val drivetrainDisplay = if (vehicle.drivetrain == com.fearmikey.garage.data.local.entity.Drivetrain.UNKNOWN) {
+        str(R.string.drivetrain_unknown)
+    } else {
+        vehicle.drivetrain.displayName
+    }
+    drawLabeled(canvas, str(R.string.pdf_label_drivetrain), drivetrainDisplay, col1X, cardTop + 62f, valueNormalPaint, col1Width)
 
-    canvas.drawText("TRANSMISSION:", col2X, cardTop + 62f, labelPaint)
-    val transDisplay = listOfNotNull(specs?.transmissionStyle, specs?.transmissionSpeeds?.let { "$it-Spd" }).joinToString(" ")
-        .ifBlank { "Standard" }
-    canvas.drawText(transDisplay, col2X + 78f, cardTop + 62f, valueNormalPaint)
+    val transDisplay = listOfNotNull(specs?.transmissionStyle, specs?.transmissionSpeeds?.let { str(R.string.pdf_transmission_speeds, it) }).joinToString(" ")
+        .ifBlank { str(R.string.pdf_standard) }
+    drawLabeled(canvas, str(R.string.pdf_label_transmission), transDisplay, col2X, cardTop + 62f, valueNormalPaint, col2Width)
 
-    val engineDisplay = listOfNotNull(specs?.displacementL?.let { "${it}L" }, specs?.engineCylinders?.let { "$it-Cyl" }, specs?.engineHp?.let { "($it hp)" }).joinToString(" ")
-        .ifBlank { "Standard Engine" }
-    canvas.drawText("ENGINE:", col1X, cardTop + 80f, labelPaint)
-    canvas.drawText(engineDisplay, col1X + 42f, cardTop + 80f, valueNormalPaint)
+    val engineDisplay = listOfNotNull(specs?.displacementL?.let { "${it}L" }, specs?.engineCylinders?.let { str(R.string.pdf_engine_cylinders, it) }, specs?.engineHp?.let { "($it hp)" }).joinToString(" ")
+        .ifBlank { str(R.string.pdf_standard_engine) }
+    drawLabeled(canvas, str(R.string.pdf_label_engine), engineDisplay, col1X, cardTop + 80f, valueNormalPaint, col1Width)
 
-    canvas.drawText("FUEL TYPE:", col2X, cardTop + 80f, labelPaint)
-    val fuelDisplay = specs?.fuelType ?: "Gasoline"
-    canvas.drawText(fuelDisplay, col2X + 54f, cardTop + 80f, valueNormalPaint)
+    // The fuel type comes from the NHTSA decode (English) or the user; it's shown as stored.
+    val fuelDisplay = specs?.fuelType ?: str(R.string.pdf_not_specified)
+    drawLabeled(canvas, str(R.string.pdf_label_fuel_type), fuelDisplay, col2X, cardTop + 80f, valueNormalPaint, col2Width)
 
-    val purchasedDisplay = if (vehicle.purchasedNew) "New" else "Used"
-    canvas.drawText("PURCHASED:", col1X, cardTop + 98f, labelPaint)
-    canvas.drawText(purchasedDisplay, col1X + 58f, cardTop + 98f, valueNormalPaint)
+    val purchasedDisplay = str(if (vehicle.purchasedNew) R.string.vehicle_condition_new else R.string.vehicle_condition_used)
+    drawLabeled(canvas, str(R.string.pdf_label_purchased), purchasedDisplay, col1X, cardTop + 98f, valueNormalPaint, col1Width)
 
-    val initialLabel = if (unitSystem == UnitSystem.METRIC) "INITIAL ODOMETER:" else "INITIAL MILEAGE:"
-    canvas.drawText(initialLabel, col2X, cardTop + 98f, labelPaint)
-    val initialDisplay = vehicle.initialMileage?.let { UnitConverter.formatDistance(it, unitSystem) } ?: "Not recorded"
-    canvas.drawText(initialDisplay, col2X + 82f, cardTop + 98f, valueNormalPaint)
+    val initialLabel = str(if (isMetric) R.string.pdf_label_initial_odometer else R.string.pdf_label_initial_mileage)
+    val initialDisplay = vehicle.initialMileage?.let { UnitConverter.formatDistance(it, unitSystem) } ?: notRecorded
+    drawLabeled(canvas, initialLabel, initialDisplay, col2X, cardTop + 98f, valueNormalPaint, col2Width)
 
     if (specs != null && (specs.bodyClass != null || specs.manufacturer != null)) {
         val extraDisplay = listOfNotNull(specs.bodyClass, specs.manufacturer).joinToString(" • ")
-        canvas.drawText("SPECS:", col1X, cardTop + 116f, labelPaint)
-        canvas.drawText(extraDisplay, col1X + 36f, cardTop + 116f, valueNormalPaint)
+        drawLabeled(canvas, str(R.string.pdf_label_specs), extraDisplay, col1X, cardTop + 116f, valueNormalPaint, marginRight - 12f - col1X)
     }
 
     yPos = cardTop + cardHeight + 12f
@@ -940,12 +979,14 @@ suspend fun generatePdf(
         color = colorBlue600
         isAntiAlias = true
     }
-    canvas.drawText("TOTAL CARE INVESTMENT SUMMARY", marginLeft + 12f, yPos + 18f, summaryTitlePaint)
+    canvas.drawText(str(R.string.pdf_summary_title), marginLeft + 12f, yPos + 18f, summaryTitlePaint)
 
     val metricWidth = (printWidth - 24f) / 4f
+    val metricTextWidth = metricWidth - 6f
+    val metricSubPaint = TextPaint(bannerSubtitlePaint).apply { color = colorSlate500 }
 
     var mX = marginLeft + 12f
-    canvas.drawText("TOTAL INVESTMENT", mX, yPos + 32f, labelPaint)
+    canvas.drawText(fit(str(R.string.pdf_total_investment), labelPaint, metricTextWidth), mX, yPos + 32f, labelPaint)
     val totalValPaint = TextPaint().apply {
         typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
         textSize = 12.5f
@@ -955,20 +996,22 @@ suspend fun generatePdf(
     canvas.drawText("%s%.2f".format(currencySymbol, totalCareInvestment), mX, yPos + 48f, totalValPaint)
 
     mX += metricWidth
-    canvas.drawText("MAINTENANCE & CARE", mX, yPos + 32f, labelPaint)
+    canvas.drawText(fit(str(R.string.pdf_maintenance_care), labelPaint, metricTextWidth), mX, yPos + 32f, labelPaint)
     canvas.drawText("%s%.2f".format(currencySymbol, totalMaintCost), mX, yPos + 47f, valueBoldPaint)
-    canvas.drawText("%d records logged".format(maintenanceRecords.size), mX, yPos + 58f, bannerSubtitlePaint.apply { color = colorSlate500 })
+    val recordsLogged = plural(R.plurals.pdf_records_logged, maintenanceRecords.size, maintenanceRecords.size)
+    canvas.drawText(fit(recordsLogged, metricSubPaint, metricTextWidth), mX, yPos + 58f, metricSubPaint)
 
     mX += metricWidth
-    canvas.drawText("UPGRADES & MODS", mX, yPos + 32f, labelPaint)
+    canvas.drawText(fit(str(R.string.pdf_upgrades_mods), labelPaint, metricTextWidth), mX, yPos + 32f, labelPaint)
     canvas.drawText("%s%.2f".format(currencySymbol, totalModCost), mX, yPos + 47f, valueBoldPaint)
-    canvas.drawText("%d installed items".format(modificationRecords.size), mX, yPos + 58f, bannerSubtitlePaint.apply { color = colorSlate500 })
+    val itemsInstalled = plural(R.plurals.pdf_installed_items, modificationRecords.size, modificationRecords.size)
+    canvas.drawText(fit(itemsInstalled, metricSubPaint, metricTextWidth), mX, yPos + 58f, metricSubPaint)
 
     mX += metricWidth
-    canvas.drawText("LOGGED RANGE", mX, yPos + 32f, labelPaint)
+    canvas.drawText(fit(str(R.string.pdf_logged_range), labelPaint, metricTextWidth), mX, yPos + 32f, labelPaint)
     val startStr = minMileage?.let { UnitConverter.formatDistance(it, unitSystem) } ?: "0 $distUnit"
     canvas.drawText(startStr, mX, yPos + 47f, valueBoldPaint)
-    canvas.drawText("to $formattedMileage", mX, yPos + 58f, bannerSubtitlePaint.apply { color = colorSlate500 })
+    canvas.drawText(fit(str(R.string.pdf_range_to, formattedMileage), metricSubPaint, metricTextWidth), mX, yPos + 58f, metricSubPaint)
 
     yPos += summaryHeight + 12f
 
@@ -993,7 +1036,7 @@ suspend fun generatePdf(
                 color = Color.rgb(4, 120, 87)
                 isAntiAlias = true
             }
-            canvas.drawText("OFFICIAL SAFETY RECALL STATUS: CLEAR (0 OPEN RECALLS)", marginLeft + 12f, yPos + 16f, clearTextPaint)
+            canvas.drawText(fit(str(R.string.pdf_recalls_clear), clearTextPaint, printWidth - 24f), marginLeft + 12f, yPos + 16f, clearTextPaint)
 
             val subClearPaint = TextPaint().apply {
                 typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
@@ -1001,18 +1044,20 @@ suspend fun generatePdf(
                 color = Color.rgb(6, 95, 70)
                 isAntiAlias = true
             }
+            val ymm = "${vehicle.year ?: ""} ${vehicle.make} ${vehicle.model}".trim()
             val detailMsg = if (recalls.isNotEmpty()) {
-                "Verified via NHTSA database for ${vehicle.year ?: ""} ${vehicle.make} ${vehicle.model} (${recalls.size} total campaign(s) checked — 0 active open recalls)."
+                plural(R.plurals.pdf_recalls_verified_count, recalls.size, ymm, recalls.size)
             } else {
-                "Verified via NHTSA database for ${vehicle.year ?: ""} ${vehicle.make} ${vehicle.model}. No active safety recall campaigns found."
+                str(R.string.pdf_recalls_verified_none, ymm)
             }
-            canvas.drawText(detailMsg, marginLeft + 12f, yPos + 28f, subClearPaint)
+            canvas.drawText(fit(detailMsg, subClearPaint, printWidth - 24f), marginLeft + 12f, yPos + 28f, subClearPaint)
 
             yPos += recallHeight + 12f
         } else {
             checkPageOverflow(60f)
 
-            canvas.drawText("SAFETY RECALL STATUS: ${openRecalls.size} OPEN RECALL(S)", marginLeft, yPos, sectionTitlePaint.apply { color = Color.rgb(185, 28, 28) })
+            val openRecallsTitlePaint = TextPaint(sectionTitlePaint).apply { color = Color.rgb(185, 28, 28) }
+            canvas.drawText(plural(R.plurals.pdf_recalls_open, openRecalls.size, openRecalls.size), marginLeft, yPos, openRecallsTitlePaint)
             yPos += 4f
             val lineP = Paint().apply { color = Color.rgb(185, 28, 28); strokeWidth = 1f }
             canvas.drawLine(marginLeft, yPos, marginRight, yPos, lineP)
@@ -1036,8 +1081,8 @@ suspend fun generatePdf(
             }
 
             for (recall in openRecalls) {
-                val titleStr = "• Campaign #${recall.campaignNumber} — Component: ${recall.component}"
-                val summaryText = recall.summary.ifBlank { "No summary details provided." }
+                val titleStr = fit(str(R.string.pdf_recall_item, recall.campaignNumber, recall.component), warnTitlePaint, printWidth - 20f)
+                val summaryText = recall.summary.ifBlank { noSummary }
 
                 val staticLayout = StaticLayout.Builder.obtain(summaryText, 0, summaryText.length, warnTextPaint, 510)
                     .setAlignment(Layout.Alignment.ALIGN_NORMAL)
@@ -1069,25 +1114,25 @@ suspend fun generatePdf(
     if (includePartsSpecs && parts != null && !parts.isEmpty()) {
         checkPageOverflow(80f)
 
-        canvas.drawText("PARTS & FLUID SPECIFICATIONS", marginLeft, yPos, sectionTitlePaint)
+        canvas.drawText(str(R.string.pdf_parts_title), marginLeft, yPos, sectionTitlePaint)
         yPos += 4f
         val lineP = Paint().apply { color = colorSlate200; strokeWidth = 1f }
         canvas.drawLine(marginLeft, yPos, marginRight, yPos, lineP)
         yPos += 12f
 
         val partsItems = buildList {
-            parts.oilViscosity?.takeIf { it.isNotBlank() }?.let { add("Oil Viscosity" to it) }
-            parts.oilCapacity?.takeIf { it.isNotBlank() }?.let { UnitConverter.formatOilCapacity(it, unitSystem)?.let { formatted -> add("Oil Capacity" to formatted) } }
-            parts.oilFilterPartNumber?.takeIf { it.isNotBlank() }?.let { add("Oil Filter Part #" to it) }
-            parts.sparkPlugPartNumber?.takeIf { it.isNotBlank() }?.let { add("Spark Plug Part #" to it) }
-            parts.sparkPlugGap?.takeIf { it.isNotBlank() }?.let { UnitConverter.formatSparkPlugGap(it, unitSystem)?.let { formatted -> add("Spark Plug Gap" to formatted) } }
-            parts.tireSizeFront?.takeIf { it.isNotBlank() }?.let { add("Front Tire Size" to it) }
-            parts.tireSizeRear?.takeIf { it.isNotBlank() }?.let { add("Rear Tire Size" to it) }
-            parts.tirePsiFront?.takeIf { it.isNotBlank() }?.let { UnitConverter.formatTirePressure(it, unitSystem)?.let { formatted -> add("Front Tire Pressure" to formatted) } }
-            parts.tirePsiRear?.takeIf { it.isNotBlank() }?.let { UnitConverter.formatTirePressure(it, unitSystem)?.let { formatted -> add("Rear Tire Pressure" to formatted) } }
-            parts.wiperBladeSizeDriver?.takeIf { it.isNotBlank() }?.let { UnitConverter.formatWiperSize(it, unitSystem)?.let { formatted -> add("Driver Wiper Size" to formatted) } }
-            parts.wiperBladeSizePassenger?.takeIf { it.isNotBlank() }?.let { UnitConverter.formatWiperSize(it, unitSystem)?.let { formatted -> add("Passenger Wiper Size" to formatted) } }
-            parts.wiperBladeSizeRear?.takeIf { it.isNotBlank() }?.let { UnitConverter.formatWiperSize(it, unitSystem)?.let { formatted -> add("Rear Wiper Size" to formatted) } }
+            parts.oilViscosity?.takeIf { it.isNotBlank() }?.let { add(str(R.string.parts_oil_viscosity) to it) }
+            parts.oilCapacity?.takeIf { it.isNotBlank() }?.let { UnitConverter.formatOilCapacity(it, unitSystem)?.let { formatted -> add(str(R.string.parts_oil_capacity) to formatted) } }
+            parts.oilFilterPartNumber?.takeIf { it.isNotBlank() }?.let { add(str(R.string.parts_oil_filter_num) to it) }
+            parts.sparkPlugPartNumber?.takeIf { it.isNotBlank() }?.let { add(str(R.string.parts_spark_plug_num) to it) }
+            parts.sparkPlugGap?.takeIf { it.isNotBlank() }?.let { UnitConverter.formatSparkPlugGap(it, unitSystem)?.let { formatted -> add(str(R.string.parts_spark_plug_gap) to formatted) } }
+            parts.tireSizeFront?.takeIf { it.isNotBlank() }?.let { add(str(R.string.parts_front_tire_size) to it) }
+            parts.tireSizeRear?.takeIf { it.isNotBlank() }?.let { add(str(R.string.parts_rear_tire_size) to it) }
+            parts.tirePsiFront?.takeIf { it.isNotBlank() }?.let { UnitConverter.formatTirePressure(it, unitSystem)?.let { formatted -> add(str(R.string.parts_front_tire_psi) to formatted) } }
+            parts.tirePsiRear?.takeIf { it.isNotBlank() }?.let { UnitConverter.formatTirePressure(it, unitSystem)?.let { formatted -> add(str(R.string.parts_rear_tire_psi) to formatted) } }
+            parts.wiperBladeSizeDriver?.takeIf { it.isNotBlank() }?.let { UnitConverter.formatWiperSize(it, unitSystem)?.let { formatted -> add(str(R.string.parts_driver_wiper) to formatted) } }
+            parts.wiperBladeSizePassenger?.takeIf { it.isNotBlank() }?.let { UnitConverter.formatWiperSize(it, unitSystem)?.let { formatted -> add(str(R.string.parts_passenger_wiper) to formatted) } }
+            parts.wiperBladeSizeRear?.takeIf { it.isNotBlank() }?.let { UnitConverter.formatWiperSize(it, unitSystem)?.let { formatted -> add(str(R.string.parts_rear_wiper) to formatted) } }
         }
 
         if (partsItems.isNotEmpty()) {
@@ -1099,8 +1144,8 @@ suspend fun generatePdf(
                 val cX = marginLeft + (itemIdx % gridCols) * colW
                 val (lbl, valStr) = partsItems[itemIdx]
 
-                canvas.drawText(lbl.uppercase(), cX, yPos, labelPaint)
-                canvas.drawText(valStr, cX, yPos + 12f, valueBoldPaint)
+                canvas.drawText(fit(lbl.uppercase(), labelPaint, colW - 8f), cX, yPos, labelPaint)
+                canvas.drawText(fit(valStr, valueBoldPaint, colW - 8f), cX, yPos + 12f, valueBoldPaint)
 
                 if ((itemIdx % gridCols == gridCols - 1) || (itemIdx == partsItems.size - 1)) {
                     yPos += 24f
@@ -1115,7 +1160,7 @@ suspend fun generatePdf(
     if (includeMods && modificationRecords.isNotEmpty()) {
         checkPageOverflow(80f)
 
-        canvas.drawText("VEHICLE UPGRADES & MODIFICATIONS", marginLeft, yPos, sectionTitlePaint)
+        canvas.drawText(str(R.string.pdf_mods_title), marginLeft, yPos, sectionTitlePaint)
         yPos += 4f
         val lineP = Paint().apply { color = colorSlate200; strokeWidth = 1f }
         canvas.drawLine(marginLeft, yPos, marginRight, yPos, lineP)
@@ -1131,11 +1176,11 @@ suspend fun generatePdf(
             color = Color.WHITE
             isAntiAlias = true
         }
-        canvas.drawText("DATE", marginLeft + 8f, yPos + 12f, tblHeaderPaint)
-        canvas.drawText("UPGRADE / ITEM", marginLeft + 70f, yPos + 12f, tblHeaderPaint)
-        canvas.drawText("CATEGORY", marginLeft + 230f, yPos + 12f, tblHeaderPaint)
-        canvas.drawText("DESCRIPTION / NOTES", marginLeft + 320f, yPos + 12f, tblHeaderPaint)
-        canvas.drawText("COST", marginRight - 48f, yPos + 12f, tblHeaderPaint)
+        canvas.drawText(fit(str(R.string.pdf_col_date), tblHeaderPaint, 58f), marginLeft + 8f, yPos + 12f, tblHeaderPaint)
+        canvas.drawText(fit(str(R.string.pdf_col_item), tblHeaderPaint, 154f), marginLeft + 70f, yPos + 12f, tblHeaderPaint)
+        canvas.drawText(fit(str(R.string.pdf_col_category), tblHeaderPaint, 86f), marginLeft + 230f, yPos + 12f, tblHeaderPaint)
+        canvas.drawText(fit(str(R.string.pdf_col_description), tblHeaderPaint, 164f), marginLeft + 320f, yPos + 12f, tblHeaderPaint)
+        canvas.drawText(fit(str(R.string.pdf_col_cost), tblHeaderPaint, 46f), marginRight - 48f, yPos + 12f, tblHeaderPaint)
 
         yPos += 20f
 
@@ -1148,11 +1193,9 @@ suspend fun generatePdf(
             }
 
             canvas.drawText(mod.date.toDisplayDate(), marginLeft + 8f, yPos + 10f, valueNormalPaint)
-            val titleTrunc = mod.title.take(28)
-            canvas.drawText(titleTrunc, marginLeft + 70f, yPos + 10f, valueBoldPaint)
-            canvas.drawText(mod.category.displayName, marginLeft + 230f, yPos + 10f, valueNormalPaint)
-            val descTrunc = mod.description.take(35)
-            canvas.drawText(descTrunc, marginLeft + 320f, yPos + 10f, valueNormalPaint)
+            canvas.drawText(fit(mod.title, valueBoldPaint, 154f), marginLeft + 70f, yPos + 10f, valueBoldPaint)
+            canvas.drawText(fit(str(mod.category.labelRes), valueNormalPaint, 86f), marginLeft + 230f, yPos + 10f, valueNormalPaint)
+            canvas.drawText(fit(mod.description, valueNormalPaint, 164f), marginLeft + 320f, yPos + 10f, valueNormalPaint)
             val costStr = "%s%.2f".format(currencySymbol, mod.cost)
             canvas.drawText(costStr, marginRight - 48f, yPos + 10f, valueBoldPaint)
 
@@ -1165,7 +1208,7 @@ suspend fun generatePdf(
     if (includeFuel && (fuelRecords.isNotEmpty() || chargingRecords.isNotEmpty())) {
         checkPageOverflow(80f)
 
-        canvas.drawText("FUEL & CHARGING HISTORY LOG", marginLeft, yPos, sectionTitlePaint)
+        canvas.drawText(str(R.string.pdf_fuel_title), marginLeft, yPos, sectionTitlePaint)
         yPos += 4f
         val lineP = Paint().apply { color = colorSlate200; strokeWidth = 1f }
         canvas.drawLine(marginLeft, yPos, marginRight, yPos, lineP)
@@ -1181,11 +1224,11 @@ suspend fun generatePdf(
             color = Color.WHITE
             isAntiAlias = true
         }
-        val odoHeader = if (unitSystem == UnitSystem.METRIC) "ODOMETER (${unitSystem.distanceUnit.uppercase()})" else "MILEAGE"
-        canvas.drawText("DATE", marginLeft + 8f, yPos + 12f, tblHeaderPaint)
-        canvas.drawText(odoHeader, marginLeft + 72f, yPos + 12f, tblHeaderPaint)
-        canvas.drawText("TYPE", marginLeft + 138f, yPos + 12f, tblHeaderPaint)
-        canvas.drawText("DETAILS", marginLeft + 225f, yPos + 12f, tblHeaderPaint)
+        val odoHeader = odometerHeader()
+        canvas.drawText(fit(str(R.string.pdf_col_date), tblHeaderPaint, 60f), marginLeft + 8f, yPos + 12f, tblHeaderPaint)
+        canvas.drawText(fit(odoHeader, tblHeaderPaint, 62f), marginLeft + 72f, yPos + 12f, tblHeaderPaint)
+        canvas.drawText(fit(str(R.string.pdf_col_type), tblHeaderPaint, 83f), marginLeft + 138f, yPos + 12f, tblHeaderPaint)
+        canvas.drawText(fit(str(R.string.pdf_col_details), tblHeaderPaint, 240f), marginLeft + 225f, yPos + 12f, tblHeaderPaint)
 
         val rightHeaderPaint = TextPaint().apply {
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
@@ -1194,12 +1237,14 @@ suspend fun generatePdf(
             isAntiAlias = true
             textAlign = Paint.Align.RIGHT
         }
-        canvas.drawText("COST", marginRight - 8f, yPos + 12f, rightHeaderPaint)
+        canvas.drawText(str(R.string.pdf_col_cost), marginRight - 8f, yPos + 12f, rightHeaderPaint)
         yPos += 20f
 
+        val fuelType = str(R.string.cost_fuel_fillup)
+        val chargingType = str(R.string.cost_ev_charging)
         val combinedFuelEntries = buildList {
-            fuelRecords.forEach { add(FuelEntryItem(it.date, it.mileage, "Fuel Fill-Up", UnitConverter.formatVolume(it.gallons, unitSystem), it.totalCost)) }
-            chargingRecords.forEach { add(FuelEntryItem(it.date, it.mileage, "EV Charging", "%.1f kWh".format(it.kwhAdded), it.totalCost)) }
+            fuelRecords.forEach { add(FuelEntryItem(it.date, it.mileage, fuelType, UnitConverter.formatVolume(it.gallons, unitSystem), it.totalCost)) }
+            chargingRecords.forEach { add(FuelEntryItem(it.date, it.mileage, chargingType, "%.1f kWh".format(it.kwhAdded), it.totalCost)) }
         }.sortedByDescending { it.date }
 
         val rightCostPaint = TextPaint().apply {
@@ -1218,8 +1263,8 @@ suspend fun generatePdf(
             }
             canvas.drawText(entry.date.toDisplayDate(), marginLeft + 8f, yPos + 10f, valueNormalPaint)
             canvas.drawText(UnitConverter.formatDistance(entry.mileage, unitSystem), marginLeft + 72f, yPos + 10f, valueNormalPaint)
-            canvas.drawText(entry.type, marginLeft + 138f, yPos + 10f, valueNormalPaint)
-            canvas.drawText(entry.details, marginLeft + 225f, yPos + 10f, valueNormalPaint)
+            canvas.drawText(fit(entry.type, valueNormalPaint, 83f), marginLeft + 138f, yPos + 10f, valueNormalPaint)
+            canvas.drawText(fit(entry.details, valueNormalPaint, 240f), marginLeft + 225f, yPos + 10f, valueNormalPaint)
             val costStr = "%s%.2f".format(currencySymbol, entry.cost)
             canvas.drawText(costStr, marginRight - 8f, yPos + 10f, rightCostPaint)
             yPos += 18f
@@ -1230,7 +1275,7 @@ suspend fun generatePdf(
     // --- 7. CONTINUOUS SERVICE HISTORY LOG ---
     checkPageOverflow(80f)
 
-    canvas.drawText("CONTINUOUS SERVICE HISTORY LOG", marginLeft, yPos, sectionTitlePaint)
+    canvas.drawText(str(R.string.pdf_service_title), marginLeft, yPos, sectionTitlePaint)
     yPos += 4f
     val lineP = Paint().apply { color = colorSlate200; strokeWidth = 1f }
     canvas.drawLine(marginLeft, yPos, marginRight, yPos, lineP)
@@ -1246,11 +1291,11 @@ suspend fun generatePdf(
             color = Color.WHITE
             isAntiAlias = true
         }
-        val odoHeader = if (unitSystem == UnitSystem.METRIC) "ODOMETER (${unitSystem.distanceUnit.uppercase()})" else "MILEAGE"
-        canvas.drawText("DATE", marginLeft + 8f, yPos + 12f, tblHeaderPaint)
-        canvas.drawText(odoHeader, marginLeft + 72f, yPos + 12f, tblHeaderPaint)
-        canvas.drawText("CATEGORY", marginLeft + 138f, yPos + 12f, tblHeaderPaint)
-        canvas.drawText("SERVICE & TASK DESCRIPTION", marginLeft + 225f, yPos + 12f, tblHeaderPaint)
+        val odoHeader = odometerHeader()
+        canvas.drawText(fit(str(R.string.pdf_col_date), tblHeaderPaint, 60f), marginLeft + 8f, yPos + 12f, tblHeaderPaint)
+        canvas.drawText(fit(odoHeader, tblHeaderPaint, 62f), marginLeft + 72f, yPos + 12f, tblHeaderPaint)
+        canvas.drawText(fit(str(R.string.pdf_col_category), tblHeaderPaint, 83f), marginLeft + 138f, yPos + 12f, tblHeaderPaint)
+        canvas.drawText(fit(str(R.string.pdf_col_service), tblHeaderPaint, 240f), marginLeft + 225f, yPos + 12f, tblHeaderPaint)
 
         val rightHeaderPaint = TextPaint().apply {
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
@@ -1259,14 +1304,14 @@ suspend fun generatePdf(
             isAntiAlias = true
             textAlign = Paint.Align.RIGHT
         }
-        canvas.drawText("COST", marginRight - 8f, yPos + 12f, rightHeaderPaint)
+        canvas.drawText(str(R.string.pdf_col_cost), marginRight - 8f, yPos + 12f, rightHeaderPaint)
         yPos += 20f
     }
 
     drawMaintenanceTableHeader()
 
     if (maintenanceRecords.isEmpty()) {
-        canvas.drawText("No maintenance records logged for this vehicle.", marginLeft + 8f, yPos + 12f, valueNormalPaint)
+        canvas.drawText(str(R.string.pdf_no_maintenance), marginLeft + 8f, yPos + 12f, valueNormalPaint)
         yPos += 24f
     } else {
         val bodyTextPaint = TextPaint().apply {
@@ -1287,12 +1332,7 @@ suspend fun generatePdf(
         val descWidth = 260
 
         for ((idx, record) in maintenanceRecords.sortedByDescending { it.date }.withIndex()) {
-            val taskText = when {
-                (!record.taskName.isNullOrBlank()) && record.description.isNotBlank() && (record.taskName != record.description) ->
-                    "${record.taskName}: ${record.description}"
-                record.description.isNotBlank() -> record.description
-                else -> record.taskName.orEmpty()
-            }
+            val taskText = recordText(record)
 
             val staticLayout = StaticLayout.Builder.obtain(taskText, 0, taskText.length, bodyTextPaint, descWidth)
                 .setAlignment(Layout.Alignment.ALIGN_NORMAL)
@@ -1325,7 +1365,7 @@ suspend fun generatePdf(
             canvas.drawText(record.date.toDisplayDate(), marginLeft + 8f, yPos + 11f, valueNormalPaint)
             val miStr = UnitConverter.formatDistance(record.mileage, unitSystem)
             canvas.drawText(miStr, marginLeft + 72f, yPos + 11f, valueNormalPaint)
-            canvas.drawText(record.category.displayName, marginLeft + 138f, yPos + 11f, valueNormalPaint)
+            canvas.drawText(fit(str(record.category.labelRes), valueNormalPaint, 83f), marginLeft + 138f, yPos + 11f, valueNormalPaint)
 
             canvas.withTranslation(marginLeft + 225f, yPos + 3f) {
                 staticLayout.draw(this)
