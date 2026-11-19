@@ -15,6 +15,7 @@ import com.fearmikey.garage.data.local.dao.LubeLoggerPendingDeleteDao
 import com.fearmikey.garage.data.local.dao.MaintenanceDao
 import com.fearmikey.garage.data.local.dao.ModificationDao
 import com.fearmikey.garage.data.local.dao.RecallCampaignStateDao
+import com.fearmikey.garage.data.local.dao.SupplyDao
 import com.fearmikey.garage.data.local.dao.TripDao
 import com.fearmikey.garage.data.local.dao.KnowledgeDao
 import com.fearmikey.garage.data.local.dao.VehicleDao
@@ -30,6 +31,7 @@ import com.fearmikey.garage.data.local.entity.LubeLoggerPendingDelete
 import com.fearmikey.garage.data.local.entity.MaintenanceRecord
 import com.fearmikey.garage.data.local.entity.ModificationRecord
 import com.fearmikey.garage.data.local.entity.RecallCampaignState
+import com.fearmikey.garage.data.local.entity.SupplyRecord
 import com.fearmikey.garage.data.local.entity.TorqueSpec
 import com.fearmikey.garage.data.local.entity.TripRecord
 import com.fearmikey.garage.data.local.entity.Vehicle
@@ -45,7 +47,7 @@ const val GARAGE_DATABASE_NAME = "garage.db"
  * The current Room schema version, kept as a standalone constant so it can be
  * compared against a backup's on-disk schema version before restoring it.
  */
-const val GARAGE_DATABASE_VERSION = 35
+const val GARAGE_DATABASE_VERSION = 37
 
 @DeleteTable.Entries(value = [DeleteTable(tableName = "reminders")])
 class DeleteRemindersTableSpec : AutoMigrationSpec
@@ -56,6 +58,7 @@ class DeleteRemindersTableSpec : AutoMigrationSpec
         VehiclePartsInfo::class, CustomMaintenanceRule::class, ModificationRecord::class, VehicleRegistrationInsurance::class,
         ChargingRecord::class, IgnoredMaintenanceRule::class, RecallCampaignState::class, LubeLoggerPendingDelete::class,
         TorqueSpec::class, VehicleNote::class, TripRecord::class, CustomDocument::class,
+        SupplyRecord::class,
     ],
     version = GARAGE_DATABASE_VERSION,
     exportSchema = true,
@@ -120,6 +123,10 @@ class DeleteRemindersTableSpec : AutoMigrationSpec
         AutoMigration(from = 33, to = 34),
         // Additive: fuelGrade (preset grade name or custom text) added to fuel_records table.
         AutoMigration(from = 34, to = 35),
+        // Additive: supply_records table (Parts & Supplies tab, synced with LubeLogger Supplies).
+        AutoMigration(from = 35, to = 36),
+        // Additive: lubeLoggerId and lubeLoggerSyncHash added to vehicle_notes (LubeLogger Notes sync).
+        AutoMigration(from = 36, to = 37),
     ],
 )
 @TypeConverters(Converters::class)
@@ -139,4 +146,5 @@ abstract class GarageDatabase : RoomDatabase() {
     abstract fun knowledgeDao(): KnowledgeDao
     abstract fun tripDao(): TripDao
     abstract fun customDocumentDao(): CustomDocumentDao
+    abstract fun supplyDao(): SupplyDao
 }

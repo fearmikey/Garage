@@ -28,4 +28,27 @@
     <string name="trend_unusual_reading">Nietypowy odczyt</string>
     <string name="url_invalid">Nieprawidłowy adres URL</string>
     <string name="url_open_failed">Nie można otworzyć linku</string>
+
+    <!-- Parts & Supplies tab -->
+    <string name="parts_reference_title">Szybka ściąga</string>
+    <string name="supplies_title">Zapasy</string>
+    <string name="supplies_empty">Brak zapasów. Dotknij +, aby zapisać kupione lub trzymane w zapasie części i płyny.</string>
+    <string name="supplies_cd_add">Dodaj zapas</string>
+    <string name="supplies_add_title">Dodaj zapas</string>
+    <string name="supplies_edit_title">Edytuj zapas</string>
+    <string name="supplies_description_label">Opis *</string>
+    <string name="supplies_description_placeholder">np. filtr oleju, olej 5W-30</string>
+    <string name="supplies_part_number_label">Nr części</string>
+    <string name="supplies_supplier_label">Dostawca</string>
+    <string name="supplies_quantity_label">Ilość</string>
+    <string name="supplies_cost_label">Koszt łączny</string>
+    <string name="supplies_date_label">Data zakupu</string>
+    <string name="supplies_qty_value">Ilość: %1$s</string>
+    <string name="supplies_delete_title">Usunąć zapas?</string>
+    <string name="supplies_delete_message">„%1$s” zostanie usunięty. Jeśli jest zsynchronizowany, zostanie też usunięty z LubeLoggera.</string>
+    <string name="supplies_add_as_supply">Dodaj jako zapas</string>
+    <string name="supply_desc_oil_filter">Filtr oleju</string>
+    <string name="supply_desc_spark_plug">Świece zapłonowe</string>
+    <string name="supply_desc_engine_air_filter">Filtr powietrza silnika</string>
+    <string name="supply_desc_cabin_air_filter">Filtr kabinowy</string>
 </resources>

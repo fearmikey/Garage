@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Common actions -->
+    <string name="common_cancel">منسوخ کریں</string>
+    <string name="common_save">محفوظ کریں</string>
+    <string name="common_delete">حذف کریں</string>
+    <string name="common_ok">ٹھیک ہے</string>
+    <string name="common_back">واپس</string>
+    <string name="common_discard">رد کریں</string>
+    <string name="common_edit">ترمیم</string>
+    <string name="common_close">بند کریں</string>
+    <string name="common_saving">محفوظ ہو رہا ہے…</string>
+    <string name="common_unsaved_title">غیر محفوظ تبدیلیاں</string>
+    <string name="common_unsaved_message">آپ کی کچھ تبدیلیاں محفوظ نہیں ہیں۔ کیا آپ انہیں محفوظ کرنا یا رد کرنا چاہتے ہیں؟</string>
+    <string name="scan_vin_prompt">VIN بارکوڈ اسکین کریں</string>
+
+    <!-- Vehicle type / drivetrain -->
+    <string name="vehicle_type_car">کار / ٹرک</string>
+    <string name="vehicle_type_motorcycle">موٹر سائیکل</string>
+    <string name="drivetrain_unknown">نامعلوم</string>
+
+    <!-- Modification categories -->
+    <string name="mod_category_performance">کارکردگی</string>
+    <string name="mod_category_suspension">سسپنشن اور اسٹیئرنگ</string>
+    <string name="mod_category_exterior">بیرونی حصہ اور باڈی</string>
+    <string name="mod_category_interior">اندرونی حصہ اور آرام</string>
+    <string name="mod_category_lighting">لائٹس</string>
+    <string name="mod_category_wheels_tires">پہیے اور ٹائر</string>
+    <string name="mod_category_audio_electrical">آڈیو اور الیکٹریکل</string>
+    <string name="mod_category_exhaust">ایگزاسٹ</string>
+    <string name="mod_category_other">دیگر</string>
+
+    <!-- Maintenance categories -->
+    <string name="maint_category_fluids">فلوئڈز</string>
+    <string name="maint_category_filters">فلٹرز</string>
+    <string name="maint_category_tires">ٹائر</string>
+    <string name="maint_category_brakes">بریکس</string>
+    <string name="maint_category_battery">بیٹری</string>
+    <string name="maint_category_engine">انجن اور اگنیشن</string>
+    <string name="maint_category_drivetrain">ڈرائیو ٹرین اور چین</string>
+    <string name="maint_category_suspension">سسپنشن اور اسٹیئرنگ</string>
+    <string name="maint_category_electrical">الیکٹریکل اور لائٹس</string>
+    <string name="maint_category_hvac">A/C اور ہیٹنگ</string>
+    <string name="maint_category_body">باڈی، شیشے اور وائپرز</string>
+    <string name="maint_category_inspection">معائنہ</string>
+    <string name="maint_category_repair">مرمت</string>
+    <string name="maint_category_other">دیگر</string>
+
+    <!-- Charging -->
+    <string name="charger_speed_level_1">لیول 1 (120V)</string>
+    <string name="charger_speed_level_2">لیول 2 (240V)</string>
+    <string name="charger_speed_dc_fast">DC فاسٹ چارجنگ</string>
+    <string name="charger_vendor_home">گھر</string>
+    <string name="charger_vendor_public">عوامی</string>
+
+    <!-- Timeline date ranges -->
+    <string name="date_range_all">تمام عرصہ</string>
+    <string name="date_range_last_30_days">پچھلے 30 دن</string>
+    <string name="date_range_last_12_months">پچھلے 12 ماہ</string>
+    <string name="date_range_this_year">اس سال</string>
+    <string name="date_range_last_year">پچھلا سال</string>
+
+    <!-- Add / edit vehicle -->
+    <string name="vehicle_add_title">گاڑی شامل کریں</string>
+    <string name="vehicle_edit_title">گاڑی میں ترمیم کریں</string>
+    <string name="vehicle_delete">گاڑی حذف کریں</string>
+    <string name="vehicle_photo_cd">گاڑی کی تصویر %1$d</string>
+    <string name="vehicle_photo_position_multi">تصویر %1$d از %2$d · ایڈجسٹ کرنے کے لیے اوپر/نیچے گھسیٹیں</string>
+    <string name="vehicle_photo_position_single">پوزیشن ایڈجسٹ کرنے کے لیے تصویر کو اوپر/نیچے گھسیٹیں</string>
+    <string name="vehicle_add_photo">تصویر شامل کریں</string>
+    <string name="vehicle_change_photo">تصویر تبدیل کریں</string>
+    <string name="vehicle_remove_photo">تصویر ہٹائیں</string>
+    <string name="vehicle_add_photos">تصاویر شامل کریں (زیادہ سے زیادہ 3)</string>
+    <string name="vehicle_theme_color">گاڑی کا تھیم رنگ</string>
+    <string name="vehicle_color_extracted">تصویر سے حاصل کردہ</string>
+    <string name="vehicle_color_custom">حسب منشا رنگ</string>
+    <string name="vehicle_color_default">ایپ کا ڈیفالٹ تھیم</string>
+    <string name="vehicle_color_customize">حسب منشا بنائیں</string>
+    <string name="vehicle_decode">ڈی کوڈ کریں</string>
+    <string name="vehicle_year">سال</string>
+    <string name="vehicle_make">میک</string>
+    <string name="vehicle_model">ماڈل</string>
+    <string name="vehicle_trim">ٹرم</string>
+    <string name="vehicle_drivetrain">ڈرائیو ٹرین</string>
+    <string name="vehicle_condition_new">نئی</string>
+    <string name="vehicle_condition_used">استعمال شدہ</string>
+    <string name="vehicle_purchased_condition">خریداری کے وقت حالت</string>
+    <string name="vehicle_purchase_price">قیمت خرید</string>
+    <string name="vehicle_purchase_date">تاریخ خرید</string>
+    <string name="vehicle_select_purchase_date">تاریخ خرید منتخب کریں</string>
+    <string name="vehicle_initial_odometer_km">ابتدائی اوڈومیٹر (km)</string>
+    <string name="vehicle_initial_mileage_mi">ابتدائی مائلیج (mi)</string>
+    <string name="vehicle_this_vehicle">یہ گاڑی</string>
+    <string name="vehicle_delete_title">گاڑی حذف کریں؟</string>
+    <string name="vehicle_delete_message">کیا آپ واقعی %1$s حذف کرنا چاہتے ہیں؟ اس سے یہ گاڑی اور اس کے تمام دیکھ بھال کے ریکارڈ، ایندھن کے اندراجات اور یاد دہانیاں ایپ سے ہٹ جائیں گی۔</string>
+    <string name="photo_delete_title">تصویر حذف کریں؟</string>
+    <string name="photo_delete_message">کیا آپ واقعی یہ تصویر حذف کرنا چاہتے ہیں؟</string>
+    <string name="vehicle_color_dialog_title">گاڑی کا تھیم رنگ منتخب کریں</string>
+    <string name="vehicle_color_dialog_message">گاڑی کی تفصیلات، ٹیبز اور ڈیش بورڈ کارڈز اس مخصوص رنگ میں رنگے جائیں گے۔</string>
+    <string name="vehicle_color_reset">ڈیفالٹ پر واپس جائیں</string>
+
+    <!-- Vehicle color presets -->
+    <string name="color_racing_red">ریسنگ سرخ</string>
+    <string name="color_sunset_orange">غروب آفتاب نارنجی</string>
+    <string name="color_speed_yellow">اسپیڈ پیلا</string>
+    <string name="color_british_racing_green">برٹش ریسنگ سبز</string>
+    <string name="color_electric_cyan">الیکٹرک سیان</string>
+    <string name="color_daytona_blue">ڈیٹونا نیلا</string>
+    <string name="color_midnight_navy">مڈنائٹ نیوی</string>
+    <string name="color_midnight_purple">مڈنائٹ جامنی</string>
+    <string name="color_silver_slate">سلور / سلیٹ</string>
+    <string name="color_charcoal_graphite">چارکول گریفائٹ</string>
+    <string name="color_bronze_brown">کانسی / بھورا</string>
+    <string name="color_pure_black">خالص سیاہ</string>
+</resources>

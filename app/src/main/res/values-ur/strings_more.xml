@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Maintenance schedule / suggestions -->
+    <string name="sugg_cd_add_rule">حسب منشا اصول شامل کریں</string>
+    <string name="sugg_empty">ابھی کوئی تجاویز نہیں۔\nکیا واجب ہے دیکھنے کے لیے کچھ دیکھ بھال اور مائلیج درج کریں۔</string>
+    <string name="sugg_custom_rules">آپ کے حسب منشا اصول</string>
+    <string name="sugg_ignored_tasks">نظر انداز شدہ کام (%1$d)</string>
+    <string name="sugg_months_short">%1$d ماہ</string>
+    <string name="sugg_cd_edit_rule">اصول میں ترمیم کریں</string>
+    <string name="sugg_cd_delete_rule">حسب منشا اصول حذف کریں</string>
+    <string name="sugg_last_done_at">آخری بار %1$s پر کیا گیا</string>
+    <string name="sugg_due_at">%1$s پر واجب</string>
+    <string name="sugg_due_by">%1$s تک واجب</string>
+    <string name="sugg_ignore">نظر انداز کریں</string>
+    <string name="sugg_log_now">ابھی درج کریں</string>
+    <string name="sugg_ignored_for_vehicle">اس گاڑی کے لیے نظر انداز شدہ</string>
+    <string name="sugg_restore">بحال کریں</string>
+    <string name="sugg_edit_title">سروس وقفے میں ترمیم</string>
+    <string name="sugg_add_title">حسب منشا اصول شامل کریں</string>
+    <string name="sugg_presets">شیڈول پری سیٹس</string>
+    <string name="sugg_presets_desc">پہلے سے تیار دیکھ بھال کے سانچے لاگو کریں (ٹوئنگ، EV، روزانہ سفر، کلاسک)۔</string>
+    <string name="sugg_task_name">کام کا نام</string>
+    <string name="sugg_interval_distance">وقفہ (%1$s)</string>
+    <string name="sugg_interval_months">وقفہ (ماہ)</string>
+
+    <!-- Cost of ownership -->
+    <string name="cost_fuel_fillup">ایندھن بھروانا</string>
+    <string name="cost_fuel">ایندھن</string>
+    <string name="cost_charging_session">چارجنگ سیشن (%1$s)</string>
+    <string name="cost_ev_charging">EV چارجنگ</string>
+    <string name="cost_modifications">ترامیم</string>
+    <string name="cost_vehicle_purchase">گاڑی کی خریداری</string>
+    <string name="cost_maintenance">دیکھ بھال</string>
+    <string name="cost_maintenance_repairs">دیکھ بھال اور مرمت</string>
+    <string name="cost_fuel_spent">ایندھن پر خرچ</string>
+    <string name="cost_collapse">سمیٹیں</string>
+    <string name="cost_expand">پھیلائیں</string>
+    <plurals name="cost_records">
+        <item quantity="one">%d ریکارڈ</item>
+        <item quantity="other">%d ریکارڈز</item>
+    </plurals>
+    <plurals name="cost_fillups">
+        <item quantity="one">%d اندراج</item>
+        <item quantity="other">%d اندراجات</item>
+    </plurals>
+    <plurals name="cost_entries_share">
+        <item quantity="one">%1$d اندراج · کل کا %2$s%%</item>
+        <item quantity="other">%1$d اندراجات · کل کا %2$s%%</item>
+    </plurals>
+
+    <!-- Trips -->
+    <string name="trip_cat_business">کاروباری</string>
+    <string name="trip_cat_personal">ذاتی</string>
+    <string name="trip_cat_commute">آمد و رفت</string>
+    <string name="trip_cat_medical">طبی</string>
+    <string name="trip_cat_charity">خیراتی</string>
+    <string name="trip_cat_other">دیگر</string>
+    <string name="trip_cd_add">سفر شامل کریں</string>
+    <string name="trip_cd_more">مزید اختیارات</string>
+    <string name="trip_empty">ابھی تک کوئی سفر درج نہیں۔\nسفر شامل کرنے کے لیے \'GPS سفر شروع کریں\' یا + بٹن ٹیپ کریں۔</string>
+    <string name="trip_deduction">کٹوتی: %1$s</string>
+    <string name="trip_start_gps">GPS سفر شروع کریں</string>
+    <string name="trip_precise_location_required">GPS سفر ریکارڈنگ کے لیے درست مقام درکار ہے۔ ایپ کی ترتیبات میں Garage کے لیے \"درست مقام استعمال کریں\" آن کریں۔</string>
+    <string name="trip_paused">سفر موقوف</string>
+    <string name="trip_tracking">سفر ٹریک ہو رہا ہے…</string>
+    <string name="trip_resume">دوبارہ شروع کریں</string>
+    <string name="trip_pause">موقوف کریں</string>
+    <string name="trip_stop_save">روکیں اور محفوظ کریں</string>
+    <string name="trip_log_title">سفر درج کریں</string>
+    <string name="trip_edit_title">سفر میں ترمیم</string>
+    <string name="trip_distance">فاصلہ (%1$s)</string>
+    <string name="trip_rate">معاوضے کی شرح (%1$s/%2$s)</string>
+    <string name="trip_notes">نوٹس (منزل، مقصد)</string>
+</resources>

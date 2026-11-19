@@ -14,6 +14,7 @@
     <string name="language_russian">Русский</string>
     <string name="language_turkish">Türkçe</string>
     <string name="language_chinese_simplified">简体中文</string>
+    <string name="language_urdu">اردو</string>
     <string name="language_selection">Language</string>
 
     <!-- Settings -->
@@ -36,7 +37,7 @@
     <string name="tab_fuel">Fuel</string>
     <string name="tab_expenses">Expenses</string>
     <string name="tab_specs">Specs</string>
-    <string name="tab_parts">Parts</string>
+    <string name="tab_parts">Parts &amp; Supplies</string>
     <string name="tab_mods">Mods</string>
     <string name="tab_documents">Documents</string>
     <string name="tab_recalls">Recalls</string>

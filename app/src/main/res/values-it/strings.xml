@@ -15,6 +15,7 @@
     <string name="language_russian">Русский</string>
     <string name="language_turkish">Türkçe</string>
     <string name="language_chinese_simplified">简体中文</string>
+    <string name="language_urdu">اردو</string>
     <string name="language_selection">Lingua</string>
 
     <!-- Startup / Onboarding -->
@@ -131,7 +132,7 @@
     <string name="tab_fuel">Carburante</string>
     <string name="tab_expenses">Spese</string>
     <string name="tab_specs">Specifiche</string>
-    <string name="tab_parts">Ricambi</string>
+    <string name="tab_parts">Ricambi e scorte</string>
     <string name="tab_mods">Modifiche</string>
     <string name="tab_documents">Documenti</string>
     <string name="tab_recalls">Richiami</string>

@@ -28,4 +28,27 @@
     <string name="trend_unusual_reading">Leitura incomum</string>
     <string name="url_invalid">URL inválido</string>
     <string name="url_open_failed">Não foi possível abrir o link</string>
+
+    <!-- Parts & Supplies tab -->
+    <string name="parts_reference_title">Referência rápida</string>
+    <string name="supplies_title">Suprimentos</string>
+    <string name="supplies_empty">Ainda não há suprimentos. Toque em + para registrar peças e fluidos comprados ou em estoque.</string>
+    <string name="supplies_cd_add">Adicionar suprimento</string>
+    <string name="supplies_add_title">Adicionar suprimento</string>
+    <string name="supplies_edit_title">Editar suprimento</string>
+    <string name="supplies_description_label">Descrição *</string>
+    <string name="supplies_description_placeholder">ex.: filtro de óleo, óleo 5W-30</string>
+    <string name="supplies_part_number_label">Nº da peça</string>
+    <string name="supplies_supplier_label">Fornecedor</string>
+    <string name="supplies_quantity_label">Quantidade</string>
+    <string name="supplies_cost_label">Custo total</string>
+    <string name="supplies_date_label">Data da compra</string>
+    <string name="supplies_qty_value">Qtd. %1$s</string>
+    <string name="supplies_delete_title">Excluir suprimento?</string>
+    <string name="supplies_delete_message">“%1$s” será excluído. Se estiver sincronizado, também será removido do LubeLogger.</string>
+    <string name="supplies_add_as_supply">Adicionar como suprimento</string>
+    <string name="supply_desc_oil_filter">Filtro de óleo</string>
+    <string name="supply_desc_spark_plug">Velas de ignição</string>
+    <string name="supply_desc_engine_air_filter">Filtro de ar do motor</string>
+    <string name="supply_desc_cabin_air_filter">Filtro de cabine</string>
 </resources>

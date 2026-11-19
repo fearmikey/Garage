@@ -34,8 +34,8 @@ android {
         applicationId = "com.fearmikey.garage"
         minSdk = 33
         targetSdk = 37
-        versionCode = 35
-        versionName = "1.4.2"
+        versionCode = 36
+        versionName = "1.4.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

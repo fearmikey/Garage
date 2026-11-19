@@ -15,6 +15,7 @@
     <string name="language_russian">Русский</string>
     <string name="language_turkish">Türkçe</string>
     <string name="language_chinese_simplified">简体中文</string>
+    <string name="language_urdu">اردو</string>
     <string name="language_selection">语言</string>
 
     <!-- Settings -->
@@ -37,7 +38,7 @@
     <string name="tab_fuel">燃油</string>
     <string name="tab_expenses">费用</string>
     <string name="tab_specs">规格</string>
-    <string name="tab_parts">配件</string>
+    <string name="tab_parts">配件与耗材</string>
     <string name="tab_mods">改装</string>
     <string name="tab_documents">证件</string>
     <string name="tab_recalls">召回</string>

@@ -52,31 +52,34 @@
       "network_security_config": "app/src/main/res/xml/network_security_config.xml (cleartext allowed by default for self-hosted LubeLogger/WebDAV; NHTSA hosts pinned to HTTPS)"
     },
     "localization": {
-      "locales": "values (en), values-de, -fr, -es, -it, -pt, -nl, -pl, -ru, -tr, -zh-rCN (Simplified Chinese). Every user-visible string must exist in all 11; check parity of <string>/<plurals> names across values*/strings*.xml. New locales must also be added to res/xml/locales_config.xml and the three language pickers (SettingsComponents.LanguageSelectionDialog, StartupScreen language dropdown, UserPreferencesSettingsScreen current-language label). Picker codes may carry a region ('zh-CN'); the current app locale is compared by bare language (substringBefore('-')).",
+      "locales": "values (en), values-de, -fr, -es, -it, -pt, -nl, -pl, -ru, -tr, -zh-rCN (Simplified Chinese), -ur (Urdu, RTL; manifest has supportsRtl=true). Every user-visible string must exist in all 12; check parity of <string>/<plurals> names across values*/strings*.xml. New locales must also be added to res/xml/locales_config.xml and the three language pickers (SettingsComponents.LanguageSelectionDialog, StartupScreen language dropdown, UserPreferencesSettingsScreen current-language label). Picker codes may carry a region ('zh-CN'); the current app locale is compared by bare language (substringBefore('-')).",
       "string_files": "strings.xml (original) plus per-area files: strings_common, strings_documents, strings_settings, strings_fuel, strings_mods, strings_misc, strings_maintenance, strings_more (suggestions/cost/trips), strings_screens (knowledge/dashboard/recalls/widgets), strings_export, strings_obd (OBD progress/errors, readiness monitor, module and sensor/PID names), strings_runtime (messages built in code: document-renewal notifications, trip notification, VIN/recall/backup/WebDAV/LubeLogger errors). Add new keys to the matching area file in every locale.",
       "runtime_text": "Never build user-visible text from English literals in Kotlin. Composables: stringResource. Context available (workers, services, widgets, Backup/WebDav repos, AutoBackupManager): context.getString. ViewModels without a usable context in unit tests: hold ui/util/UiText (UiText.res(id, args), resolved with asString()) as ObdViewModel does, or carry an @StringRes id next to the English message as VinLookupResult/RecallLookupResult do (English stays for logs/tests). ObdAdapterException carries an ObdAdapterError reason mapped in ui/obd/ObdLabels.kt, which also maps ObdPid -> labelRes, monitor names -> monitorDisplayName(), module names -> moduleDisplayName(). Built-in task names are stored in English; display them via ui/util/TaskNameFormatter.kt: formatTaskName() (Compose) / Context.localizedTaskName() (notifications, widget) / taskNameRes().",
       "enum_labels": "app/src/main/java/com/fearmikey/garage/ui/util/EnumLabels.kt: labelRes/label() for VehicleType, FuelGrade (plus fuelGradeLabel(stored) for preset-or-custom text), Drivetrain, MaintenanceCategory, ModificationCategory, ChargerSpeed, ChargerVendorType, TimelineDateRange, TimeFilter, AppThemePalette, TripCategory. Enum displayName stays stable English (search/CSV/tests); UI must use label().",
-      "rules": "Tone per locale: de formal 'Sie', fr 'vous', ru 'вы', tr 'siz', zh-CN '您'; es/it/pt/nl/pl informal. zh-CN: plurals use only quantity='other'; use full-width punctuation (，。：（）“”). Keep segmented-button labels short (~9 chars; e.g. ru 'Цена/%1$s'). Dates: always use toDisplayDate() (locale-aware FormatStyle.MEDIUM), never hard-coded patterns. Composables: stringResource/pluralStringResource; capture strings in vals before non-composable lambdas. Toasts in composables: LocalResources.current.getString (lint flags LocalContext getString). ViewModels/widgets/non-UI: context.getString. Stored data stays English: fuel type values, maintenance task names, 'Odometer check-in' (LubeLoggerMapper marker), knowledge note 'General' category, schedule template catalog. PDF report body: strings_pdf.xml, drawn by generatePdf() in the app language; values are placed after the measured label width (drawLabeled) and table cells are ellipsized to their column (fit), so translations may be any length. Preset schedule catalog stays English in code (its task names/notes are copied into custom rules); display goes through ui/util/ScheduleTemplateText.kt (templateTitleRes/templateDescriptionRes by template id, scheduleNoteRes/scheduleNote by English note text) and taskNameRes for template task names; strings in strings_templates.xml. Editing an English note or task name in the catalog requires updating these lookups. Not yet translated: DTC descriptions (obd/DtcDescriptions.kt, resources/obd/dtc_generic.tsv) and the Developer Favorites product list."
+      "rules": "Tone per locale: de formal 'Sie', fr 'vous', ru 'вы', tr 'siz', zh-CN '您', ur 'آپ'; es/it/pt/nl/pl informal. ur: plurals use 'one'/'other', Urdu full stop '۔' and comma '،'; brand/technical tokens (VIN, OBD2, LubeLogger, WebDAV, units) stay Latin. zh-CN: plurals use only quantity='other'; use full-width punctuation (，。：（）“”). Keep segmented-button labels short (~9 chars; e.g. ru 'Цена/%1$s'). Dates: always use toDisplayDate() (locale-aware FormatStyle.MEDIUM), never hard-coded patterns. Composables: stringResource/pluralStringResource; capture strings in vals before non-composable lambdas. Toasts in composables: LocalResources.current.getString (lint flags LocalContext getString). ViewModels/widgets/non-UI: context.getString. Stored data stays English: fuel type values, maintenance task names, 'Odometer check-in' (LubeLoggerMapper marker), knowledge note 'General' category, schedule template catalog. PDF report body: strings_pdf.xml, drawn by generatePdf() in the app language; values are placed after the measured label width (drawLabeled) and table cells are ellipsized to their column (fit), so translations may be any length. Preset schedule catalog stays English in code (its task names/notes are copied into custom rules); display goes through ui/util/ScheduleTemplateText.kt (templateTitleRes/templateDescriptionRes by template id, scheduleNoteRes/scheduleNote by English note text) and taskNameRes for template task names; strings in strings_templates.xml. Editing an English note or task name in the catalog requires updating these lookups. Not yet translated: DTC descriptions (obd/DtcDescriptions.kt, resources/obd/dtc_generic.tsv) and the Developer Favorites product list."
     }
   },
   "feature_map": {
     "vehicle_management": {
-      "description": "Adding, editing, displaying vehicles, specs, registrations, insurance, notes, and custom documents. EditRegistrationInsuranceViewModel pre-fills its form from an eagerly collected storedRecord (never from the WhileSubscribed uiState, whose value is still the empty default when the screen opens); while that record is loading, isLoading shows a spinner and saving is blocked so blanks can't overwrite stored documents. Specs (VehicleSpecs) are VIN-decoded and user-editable from the Specs tab (EditSpecsSheet in VehicleSpecsScreen.kt), including user-defined CustomSpec rows stored as JSON in vehicle_specs.customSpecs via Converters. Spec units live in ui/vehicle/SpecUnits.kt: bare weight numbers display/edit in kg (metric/UK) or lbs (imperial) per the unit system, displacement is stored in litres but shown/edited as cc for motorcycles, and comma decimals (1,6) are accepted.",
+      "description": "Adding, editing, displaying vehicles, specs, registrations, insurance, notes, and custom documents. EditRegistrationInsuranceViewModel pre-fills its form from an eagerly collected storedRecord (never from the WhileSubscribed uiState, whose value is still the empty default when the screen opens); while that record is loading, isLoading shows a spinner and saving is blocked so blanks can't overwrite stored documents. Specs (VehicleSpecs) are VIN-decoded and user-editable from the Specs tab (EditSpecsSheet in VehicleSpecsScreen.kt), including user-defined CustomSpec rows stored as JSON in vehicle_specs.customSpecs via Converters. Spec units live in ui/vehicle/SpecUnits.kt: bare weight numbers display/edit in kg (metric/UK) or lbs (imperial) per the unit system, displacement is stored in litres but shown/edited as cc for motorcycles, and comma decimals (1,6) are accepted. The Parts tab is titled 'Parts & Supplies' (VehicleTab.PARTS, R.string.tab_parts): PartsScreen shows the VehiclePartsInfo quick reference (local only, estimated by PartsEstimator when empty, used by the PDF export) on top, and the per-vehicle SupplyRecord list below (DB v36 supply_records, SupplyRepository, add/edit via SupplyEditDialog in SuppliesUi.kt; FAB adds a supply, the reference header's edit button opens EditPartsScreen). Part-number rows (oil filter, spark plug, engine/cabin air filter) offer 'Add as supply', pre-filling a supply; reference fields are never pushed to LubeLogger. Supplies are excluded from cost of ownership (they'd double-count with repairs).",
       "entities": [
         "app/src/main/java/com/fearmikey/garage/data/local/entity/Vehicle.kt",
         "app/src/main/java/com/fearmikey/garage/data/local/entity/VehicleSpecs.kt",
         "app/src/main/java/com/fearmikey/garage/data/local/entity/VehicleRegistrationInsurance.kt",
         "app/src/main/java/com/fearmikey/garage/data/local/entity/VehiclePartsInfo.kt",
-        "app/src/main/java/com/fearmikey/garage/data/local/entity/VehicleNote.kt"
+        "app/src/main/java/com/fearmikey/garage/data/local/entity/VehicleNote.kt",
+        "app/src/main/java/com/fearmikey/garage/data/local/entity/SupplyRecord.kt"
       ],
       "daos": [
         "app/src/main/java/com/fearmikey/garage/data/local/dao/VehicleDao.kt",
         "app/src/main/java/com/fearmikey/garage/data/local/dao/VehicleSpecsDao.kt",
         "app/src/main/java/com/fearmikey/garage/data/local/dao/VehicleRegistrationDao.kt",
-        "app/src/main/java/com/fearmikey/garage/data/local/dao/VehiclePartsDao.kt"
+        "app/src/main/java/com/fearmikey/garage/data/local/dao/VehiclePartsDao.kt",
+        "app/src/main/java/com/fearmikey/garage/data/local/dao/SupplyDao.kt"
       ],
       "repositories": [
-        "app/src/main/java/com/fearmikey/garage/data/repository/VehicleRepository.kt"
+        "app/src/main/java/com/fearmikey/garage/data/repository/VehicleRepository.kt",
+        "app/src/main/java/com/fearmikey/garage/data/repository/SupplyRepository.kt"
       ],
       "view_models": [
         "app/src/main/java/com/fearmikey/garage/ui/vehicle/AddEditVehicleViewModel.kt",
@@ -93,6 +96,7 @@
         "app/src/main/java/com/fearmikey/garage/ui/vehicle/EditRegistrationInsuranceScreen.kt",
         "app/src/main/java/com/fearmikey/garage/ui/vehicle/PartsScreen.kt",
         "app/src/main/java/com/fearmikey/garage/ui/vehicle/EditPartsScreen.kt",
+        "app/src/main/java/com/fearmikey/garage/ui/vehicle/SuppliesUi.kt",
         "app/src/main/java/com/fearmikey/garage/ui/vehicle/VehicleSpecsScreen.kt",
         "app/src/main/java/com/fearmikey/garage/ui/vehicle/CustomDocumentsUi.kt",
         "app/src/main/java/com/fearmikey/garage/ui/vehicle/PartsEstimator.kt"
@@ -244,7 +248,7 @@
       ]
     },
     "knowledge_base": {
-      "description": "Vehicle knowledge storage including torque specs, custom documents, fluid capacities, and reference guides.",
+      "description": "Vehicle knowledge storage including torque specs, custom documents, fluid capacities, and reference guides. VehicleNote (DB v37 lubeLoggerId/lubeLoggerSyncHash) syncs with LubeLogger Notes; edit notes via copy() so the link survives, and delete through KnowledgeRepository.deleteVehicleNote (queues the server delete).",
       "entities": [
         "app/src/main/java/com/fearmikey/garage/data/local/entity/TorqueSpec.kt",
         "app/src/main/java/com/fearmikey/garage/data/local/entity/CustomDocument.kt"
@@ -288,7 +292,7 @@
       ]
     },
     "lubelogger_integration": {
-      "description": "Two-way REST API sync with self-hosted LubeLogger instance (vehicles, fuel, service, repairs, upgrades).",
+      "description": "Two-way REST API sync with self-hosted LubeLogger instance (vehicles, purchase date/price, fuel, EV charging, service, repairs, upgrades, odometer, supplies, notes). Engine: LubeLoggerRecordSync.syncLubeLoggerRecords (three-way merge on sync fingerprints); its toDto(local, remote?) receives the current server record on updates because LubeLogger's update endpoints CLEAR every field not sent (notes, tags, extraFields, files, missedFuelUp, equipmentRecordId) -- mappers in LubeLoggerMapper.kt copy those from `remote`, and DTOs round-trip files as List<JsonObject>. Garage-only data travels in record extra fields named 'Garage ...' (Category, Task, Deferred, Defer Distance, Defer Months on service/repair; Fuel Grade on fuel; Charger, Charging Location, Range at 100% on charging; Category, Product URL on upgrades); mergeExtraFields keeps the user's own fields. Upgrades push title -> description, description -> notes (records without the Garage Category field and with 'A - B' and no notes are the legacy format and are split). Fingerprint fields added later are appended only when non-default so old stored hashes stay valid. Unlinked service/repair records only link to a server record with the same reading AND same description/task (describesSameWorkAs). Supplies: api/vehicle/supplyrecords (vehicleId 0 shop supplies ignored, 404 skips). Notes: knowledge-base VehicleNote <-> api/vehicle/notes (title<->description, content<->noteText; blank notes stay local; link by title; pending delete type NOTE). Purchase date/price (VehicleRegistrationInsurance) <-> vehicle purchaseDate/purchasePrice: pulled from api/vehicles, pushed only via web-UI Vehicle/SaveVehicle (Basic auth), merged by mergePurchaseInfo with a snapshot in LubeLoggerCredentialsManager. New LubeLogger vehicles get fuelType Electric/Diesel from specs. vehiclesMatch never links on year/make/model when both sides have differing VINs or plates. AutoBackupManager triggers a debounced sync on SYNCED_TABLES and never cancels a running sync (LubeLoggerSyncWorker.isRunning/followUpQueued -> one APPEND_OR_REPLACE follow-up).",
       "entities_and_daos": [
         "app/src/main/java/com/fearmikey/garage/data/local/entity/LubeLoggerPendingDelete.kt",
         "app/src/main/java/com/fearmikey/garage/data/local/dao/LubeLoggerPendingDeleteDao.kt"
@@ -299,7 +303,9 @@
         "app/src/main/java/com/fearmikey/garage/data/remote/lubelogger/LubeLoggerCredentialsManager.kt",
         "app/src/main/java/com/fearmikey/garage/data/remote/lubelogger/LubeLoggerMapper.kt",
         "app/src/main/java/com/fearmikey/garage/data/remote/lubelogger/LubeLoggerRecordSync.kt",
-        "app/src/main/java/com/fearmikey/garage/data/remote/lubelogger/LubeLoggerVehicleDetailsSync.kt"
+        "app/src/main/java/com/fearmikey/garage/data/remote/lubelogger/LubeLoggerVehicleDetailsSync.kt",
+        "app/src/main/java/com/fearmikey/garage/data/remote/lubelogger/LubeLoggerSupplyRecordDto.kt",
+        "app/src/main/java/com/fearmikey/garage/data/remote/lubelogger/LubeLoggerNoteRecordDto.kt"
       ],
       "workers": [
         "app/src/main/java/com/fearmikey/garage/notification/lubelogger/LubeLoggerSyncWorker.kt"
@@ -370,8 +376,8 @@
   "package_index": {
     "data/fuel": "Calculators and helper classes for gas economy and EV charging stats.",
     "data/local": "Room Database class, converters, and preference managers. SecurePreferences opens EncryptedSharedPreferences files (LubeLogger credentials, WebDAV password) and resets them if their Keystore key is gone.",
-    "data/local/dao": "Room Data Access Objects (15 DAOs).",
-    "data/local/entity": "Room Database Entities (18 Entities).",
+    "data/local/dao": "Room Data Access Objects (16 DAOs).",
+    "data/local/entity": "Room Database Entities (19 Entities).",
     "data/remote": "Retrofit API interfaces (NHTSA VIN Decoder, NHTSA Recalls).",
     "data/remote/lubelogger": "LubeLogger REST API client, DTOs, mappers, and sync engine.",
     "data/repository": "Data repositories bridging DAOs, remote APIs, and UI ViewModels.",
@@ -394,8 +400,8 @@
     "ui/startup": "Onboarding/startup flow screen and ViewModel.",
     "ui/theme": "Material 3 color schemes, vehicle theme color palettes, and typography.",
     "ui/trip": "Trip logger screen and dialogs.",
-    "ui/util": "EnumLabels.kt (localized enum labels, see core_entry_points.localization). SafeUriHandler.kt: rememberSafeUriHandler() wraps util/UrlLauncher; use it instead of LocalUriHandler (which crashes when no browser is installed). AppCurrency.localizedName uses java.util.Currency display names; SUPPORTED_CURRENCIES is the curated picker list (includes CNY), other ISO codes resolve via fromCode(). Unit conversions, date/number formatters, currency definitions. Distances are stored as fractional canonical miles (Double; DB v34 REAL columns) and converted via UnitConverter.canonicalMilesFromInput/displayDistanceValue so km input round-trips exactly; LubeLogger boundary uses toLubeLoggerOdometer/fromLubeLoggerOdometer (whole numbers in the server unit).",
-    "ui/vehicle": "Vehicle management, details, registration/insurance, parts estimator.",
+    "ui/util": "EnumLabels.kt (localized enum labels, see core_entry_points.localization). SafeUriHandler.kt: rememberSafeUriHandler() wraps util/UrlLauncher; use it instead of LocalUriHandler (which crashes when no browser is installed). AppCurrency.localizedName uses java.util.Currency display names; SUPPORTED_CURRENCIES is the curated picker list (includes CNY, PKR), other ISO codes resolve via fromCode(). Unit conversions, date/number formatters, currency definitions. Distances are stored as fractional canonical miles (Double; DB v34 REAL columns) and converted via UnitConverter.canonicalMilesFromInput/displayDistanceValue so km input round-trips exactly; LubeLogger boundary uses toLubeLoggerOdometer/fromLubeLoggerOdometer (whole numbers in the server unit).",
+    "ui/vehicle": "Vehicle management, details, registration/insurance, Parts & Supplies tab (PartsScreen, SuppliesUi), parts estimator.",
     "widget": "Android Glance home screen widgets and receivers."
   }
 }

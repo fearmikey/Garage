@@ -163,6 +163,50 @@ interface LubeLoggerApiService {
         @Query("id") id: Int
     ): Response<LubeLoggerOperationResponse>
 
+    /** Supplies for one vehicle. Servers without the Supplies API answer 404, which skips the sync. */
+    @GET("api/vehicle/supplyrecords")
+    suspend fun getSupplyRecords(
+        @Query("vehicleId") vehicleId: Int
+    ): Response<List<LubeLoggerSupplyRecordDto>>
+
+    @POST("api/vehicle/supplyrecords/add")
+    suspend fun addSupplyRecord(
+        @Query("vehicleId") vehicleId: Int,
+        @Body supplyRecord: LubeLoggerSupplyRecordDto
+    ): Response<LubeLoggerOperationResponse>
+
+    @PUT("api/vehicle/supplyrecords/update")
+    suspend fun updateSupplyRecord(
+        @Body supplyRecord: LubeLoggerSupplyRecordDto
+    ): Response<LubeLoggerOperationResponse>
+
+    @DELETE("api/vehicle/supplyrecords/delete")
+    suspend fun deleteSupplyRecord(
+        @Query("id") id: Int
+    ): Response<LubeLoggerOperationResponse>
+
+    /** Vehicle notes. Servers without the Notes API answer 404, which skips the sync. */
+    @GET("api/vehicle/notes")
+    suspend fun getNotes(
+        @Query("vehicleId") vehicleId: Int
+    ): Response<List<LubeLoggerNoteRecordDto>>
+
+    @POST("api/vehicle/notes/add")
+    suspend fun addNote(
+        @Query("vehicleId") vehicleId: Int,
+        @Body note: LubeLoggerNoteRecordDto
+    ): Response<LubeLoggerOperationResponse>
+
+    @PUT("api/vehicle/notes/update")
+    suspend fun updateNote(
+        @Body note: LubeLoggerNoteRecordDto
+    ): Response<LubeLoggerOperationResponse>
+
+    @DELETE("api/vehicle/notes/delete")
+    suspend fun deleteNote(
+        @Query("id") id: Int
+    ): Response<LubeLoggerOperationResponse>
+
     @Multipart
     @POST("api/documents/upload")
     suspend fun uploadDocument(

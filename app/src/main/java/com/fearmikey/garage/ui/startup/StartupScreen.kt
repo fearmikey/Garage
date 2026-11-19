@@ -589,6 +589,7 @@ private fun RegionStep(
             "ru" to stringResource(R.string.language_russian),
             "tr" to stringResource(R.string.language_turkish),
             "zh-CN" to stringResource(R.string.language_chinese_simplified),
+            "ur" to stringResource(R.string.language_urdu),
         )
 
         var languageExpanded by remember { mutableStateOf(false) }

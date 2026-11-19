@@ -122,13 +122,18 @@ fun AddVehicleNoteDialog(
         },
         confirmButton = {
             Button(onClick = {
-                val note = VehicleNote(
-                    id = initialNote?.id ?: 0,
-                    vehicleId = initialNote?.vehicleId ?: 0,
+                // Edit via copy() so the LubeLogger link (lubeLoggerId / sync hash) is kept.
+                val note = initialNote?.copy(
                     title = title,
                     content = content,
                     category = category,
-                    lastUpdated = System.currentTimeMillis()
+                    lastUpdated = System.currentTimeMillis(),
+                ) ?: VehicleNote(
+                    vehicleId = 0,
+                    title = title,
+                    content = content,
+                    category = category,
+                    lastUpdated = System.currentTimeMillis(),
                 )
                 onSave(note)
             }) {

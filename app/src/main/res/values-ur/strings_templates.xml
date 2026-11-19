@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Preset schedule templates (MaintenanceScheduleTemplates). -->
+    <string name="tpl_motorcycle_street_title">اسٹریٹ موٹر سائیکل</string>
+    <string name="tpl_motorcycle_street_desc">اسٹریٹ، اسپورٹ اور ٹورنگ موٹر سائیکلوں کے عام وقفے، بشمول چین کی دیکھ بھال اور سسپنشن سروس۔</string>
+    <string name="tpl_heavy_duty_title">ہیوی ڈیوٹی اور ٹوئنگ</string>
+    <string name="tpl_heavy_duty_desc">ٹرکوں، ٹوئنگ گاڑیوں یا آف روڈ گاڑیوں کے لیے فلوئڈ کی تبدیلی کے مختصر وقفے اور سخت استعمال کی جانچ۔</string>
+    <string name="tpl_daily_commuter_title">روزانہ سفر</string>
+    <string name="tpl_daily_commuter_desc">روزمرہ گاڑیوں، ہائی وے پر سفر اور فیملی گاڑیوں کے لیے متوازن معیاری دیکھ بھال کے وقفے۔</string>
+    <string name="tpl_hybrid_ev_title">ہائبرڈ اور الیکٹرک گاڑی (EV)</string>
+    <string name="tpl_hybrid_ev_desc">ہائبرڈ اور بیٹری الیکٹرک گاڑیوں کے لیے موزوں، کیبن فلٹرز، بریک سلائیڈز اور کولنگ سسٹمز پر زور کے ساتھ۔</string>
+    <string name="tpl_classic_title">زیادہ مائلیج اور کلاسک کار</string>
+    <string name="tpl_classic_desc">پرانی گاڑیوں، زیادہ مائلیج والے انجنوں یا ونٹیج کلاسک گاڑیوں کے لیے بار بار معائنے اور مختصر وقفے۔</string>
+
+    <!-- Template task names -->
+    <string name="tpl_task_motorcycle_oil">موٹر سائیکل آئل اور فلٹر</string>
+    <string name="tpl_task_chain_clean">چین کی صفائی، چکنائی اور ڈھیل کی جانچ</string>
+    <string name="tpl_task_tire_pressure_tread">ٹائر پریشر اور ٹریڈ کا معائنہ</string>
+    <string name="tpl_task_brake_fluid_front_rear">بریک فلوئڈ فلش (آگے اور پیچھے)</string>
+    <string name="tpl_task_fork_seal">فورک آئل اور سیل سروس</string>
+    <string name="tpl_task_battery_tender">بیٹری ٹینڈر اور ٹرمینل کی جانچ</string>
+    <string name="tpl_task_severe_oil">سخت استعمال انجن آئل اور فلٹر</string>
+    <string name="tpl_task_transfer_case_severe">ٹرانسفر کیس فلوئڈ (سخت استعمال)</string>
+    <string name="tpl_task_diff_fluid">اگلا اور پچھلا ڈیفرینشل فلوئڈ</string>
+    <string name="tpl_task_chassis_grease">چیسس گریسنگ اور بال جوائنٹس</string>
+    <string name="tpl_task_hd_brake_suspension">ہیوی ڈیوٹی بریک اور سسپنشن معائنہ</string>
+    <string name="tpl_task_synthetic_oil">فل سنتھیٹک آئل اور فلٹر</string>
+    <string name="tpl_task_rotation_pressure">ٹائر روٹیشن اور پریشر کی جانچ</string>
+    <string name="tpl_task_air_filters">کیبن اور انجن ایئر فلٹرز</string>
+    <string name="tpl_task_multipoint">کثیر نکاتی معائنہ</string>
+    <string name="tpl_task_hv_duct">کیبن ایئر فلٹر اور HV بیٹری ڈکٹ کی جانچ</string>
+    <string name="tpl_task_brake_slides">بریک سلائیڈ کی چکنائی اور فلوئڈ کی جانچ</string>
+    <string name="tpl_task_rotation_alignment">ٹائر روٹیشن اور الائنمنٹ معائنہ</string>
+    <string name="tpl_task_inverter_coolant">انورٹر اور بیٹری کولنٹ فلش</string>
+    <string name="tpl_task_high_zinc_oil">ہائی زنک / زیادہ مائلیج آئل کی تبدیلی</string>
+    <string name="tpl_task_cooling_hoses">کولنگ سسٹم اور ہوز کا معائنہ</string>
+    <string name="tpl_task_ignition">اگنیشن، اسپارک پلگز اور ڈسٹری بیوٹر</string>
+    <string name="tpl_task_v_belts">V-بیلٹس اور ٹینشنر کی جانچ</string>
+    <string name="tpl_task_steering_grease">چیسس اور اسٹیئرنگ گریسنگ</string>
+
+    <!-- Template notes -->
+    <string name="tpl_note_jaso_oil">ویٹ کلچ بائیکس کے لیے JASO MA/MA2 درجہ بند آئل استعمال کریں۔</string>
+    <string name="tpl_note_chain_rain">بارش یا مٹی میں چلانے کے بعد زیادہ کثرت سے۔</string>
+    <string name="tpl_note_moto_tire_check">ٹھنڈے ٹائر کا دباؤ چیک کریں اور کپنگ، دراڑوں اور پھنسی ہوئی چیزوں کا معائنہ کریں۔</string>
+    <string name="tpl_note_brake_fluid_moto">بریک فلوئڈ نمی جذب کرتا ہے؛ دونوں ماسٹر سلنڈرز فلش کریں۔</string>
+    <string name="tpl_note_fork_oil">فورک آئل تبدیل کریں؛ سیلز سے رساؤ کا معائنہ کریں۔</string>
+    <string name="tpl_note_battery_tender">سردیوں میں کھڑی رکھنے کے دوران ٹینڈر پر رکھیں؛ ٹرمینلز صاف کریں اور کسیں۔</string>
+    <string name="tpl_note_severe_oil">بار بار ٹوئنگ یا بھاری بوجھ کے لیے سخت استعمال کا وقفہ۔</string>
+    <string name="tpl_note_transfer_case">4WD کے بار بار استعمال یا پانی سے گزرنے کی صورت میں تجویز کردہ۔</string>
+    <string name="tpl_note_severe_diff">ٹوئنگ اور بھاری بوجھ کے لیے سخت استعمال کا وقفہ۔</string>
+    <string name="tpl_note_chassis_grease">گریس فٹنگز، ڈرائیو شافٹ U-جوائنٹس اور سسپنشن جوائنٹس کو چکنائی دیں۔</string>
+    <string name="tpl_note_hd_brakes">بریک پیڈ کی موٹائی، روٹرز، ٹریلر بریک کنٹرولر اور لیف اسپرنگز کا معائنہ کریں۔</string>
+    <string name="tpl_note_synthetic_oil">فل سنتھیٹک آئل کی تبدیلی کا معیاری وقفہ۔</string>
+    <string name="tpl_note_rotation_even">ٹریڈ کی یکساں گھسائی اور ایندھن کی بہترین کارکردگی یقینی بنائیں۔</string>
+    <string name="tpl_note_air_filters">HVAC اور انجن کی کارکردگی کے لیے دونوں ایئر فلٹرز سالانہ تبدیل کریں۔</string>
+    <string name="tpl_note_wipers">صاف نظر کے لیے وائپر بلیڈ تبدیل کریں۔</string>
+    <string name="tpl_note_drive_belts">لوازمات کی خرابی سے بچنے کے لیے ڈرائیو بیلٹس تبدیل کریں۔</string>
+    <string name="tpl_note_multipoint">ہوزز، لائٹس اور فلوئڈ کی سطح چیک کریں۔</string>
+    <string name="tpl_note_hv_duct">کیبن ایئر فلٹر صاف/تبدیل کریں اور ہائی وولٹیج بیٹری کولنگ فین کا انٹیک چیک کریں۔</string>
+    <string name="tpl_note_brake_slides">ری جنریٹو بریکنگ پیڈ کی گھسائی کم کرتی ہے، لیکن سلائیڈ پنز کو جام ہونے سے بچانے کے لیے باقاعدہ چکنائی درکار ہے۔</string>
+    <string name="tpl_note_ev_tires">EV موٹر کا فوری ٹارک ٹائروں کو جلد گھساتا ہے۔</string>
+    <string name="tpl_note_inverter_coolant">ہائی وولٹیج پرزوں کے کولنگ سسٹم کا معائنہ اور فلش کریں۔</string>
+    <string name="tpl_note_high_zinc">فلیٹ ٹیپٹ کیم شافٹس یا زیادہ مائلیج والے انجن سیلز کی حفاظت کرتا ہے۔</string>
+    <string name="tpl_note_cooling_hoses">ریڈی ایٹر ہوزز، تھرموسٹیٹ، ہیٹر کور اور کولنٹ کی حالت کا معائنہ کریں۔</string>
+    <string name="tpl_note_ignition">اسپارک پلگز، اگنیشن تاروں، ڈسٹری بیوٹر کیپ اور روٹر/پوائنٹس کا معائنہ کریں۔</string>
+    <string name="tpl_note_v_belts">ڈرائیو بیلٹ کا تناؤ چیک کریں اور دراڑوں یا چمک کا معائنہ کریں۔</string>
+    <string name="tpl_note_steering_grease">ٹائی راڈ اینڈز، بال جوائنٹس، پٹمین آرم اور سسپنشن بشنگز کو گریس کریں۔</string>
+
+    <!-- Notes on built-in schedule rules (MaintenanceScheduleRules) -->
+    <string name="rule_note_4wd_interval">عمومی 4WD/AWD وقفہ؛ درست عدد کے لیے اپنے مالک کا کتابچہ دیکھیں۔</string>
+    <string name="rule_note_chain_lube">صرف چین ڈرائیو بائیکس؛ ڈھیل بھی چیک کریں۔ بیلٹ یا شافٹ ڈرائیو کے لیے اسے نظر انداز کریں۔</string>
+    <string name="rule_note_chain_sprocket">صرف چین ڈرائیو بائیکس۔ چین اور دونوں اسپراکٹس ایک ساتھ تبدیل کریں۔</string>
+    <string name="rule_note_cables">کیبل سے چلنے والے کلچ اور تھروٹل کو چکنائی دیں اور فری پلے ایڈجسٹ کریں۔</string>
+    <string name="rule_note_moto_tires">پچھلے ٹائر عموماً اگلے ٹائروں سے 1.5–2 گنا تیزی سے گھستے ہیں؛ ٹریڈ اور تاریخ کے کوڈز چیک کریں۔</string>
+</resources>

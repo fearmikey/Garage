@@ -1,7 +1,12 @@
 package com.fearmikey.garage.data.remote.lubelogger
 
+import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 
+/**
+ * Updates overwrite every field, so [missedFuelUp], [tags], [extraFields] and [files] are sent
+ * back unchanged (and [notes] for fuel fill-ups, which have no notes in Garage).
+ */
 data class LubeLoggerGasRecordDto(
     @SerializedName("id") val id: Int? = null,
     @SerializedName("vehicleId") val vehicleId: Int? = null,
@@ -19,6 +24,8 @@ data class LubeLoggerGasRecordDto(
     @SerializedName("missedFuelUp") val missedFuelUp: String? = null,
     @SerializedName("startingSoc") val startingSoc: String? = "20",
     @SerializedName("endingSoc") val endingSoc: String? = "80",
-    @SerializedName("notes") val notes: String = "",
-    @SerializedName("tags") val tags: String? = null
+    @SerializedName("notes") val notes: String? = "",
+    @SerializedName("tags") val tags: String? = null,
+    @SerializedName("extraFields") val extraFields: List<LubeLoggerExtraFieldDto>? = null,
+    @SerializedName("files") val files: List<JsonObject>? = null,
 )

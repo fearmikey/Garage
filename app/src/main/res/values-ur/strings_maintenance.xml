@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Maintenance timeline -->
+    <string name="maint_cd_add_odometer">اوڈومیٹر اپ ڈیٹ شامل کریں</string>
+    <string name="maint_cd_add_record">دیکھ بھال کا ریکارڈ شامل کریں</string>
+    <string name="maint_cd_edit_record">ریکارڈ میں ترمیم کریں</string>
+    <string name="maint_cd_delete_record">ریکارڈ حذف کریں</string>
+    <string name="maint_empty">ابھی تک کوئی دیکھ بھال درج نہیں۔\nاپنا پہلا ریکارڈ شامل کرنے کے لیے + ٹیپ کریں۔</string>
+    <string name="maint_no_matches">آپ کے فلٹرز سے کوئی اندراج میل نہیں کھاتا۔</string>
+    <string name="maint_clear_filters">فلٹرز صاف کریں</string>
+    <string name="maint_delete_title">ریکارڈ حذف کریں</string>
+    <string name="maint_delete_message">کیا آپ واقعی یہ اندراج حذف کرنا چاہتے ہیں؟</string>
+    <string name="maint_receipt_invoice">رسید / انوائس</string>
+    <string name="maint_receipt_image">رسید کی تصویر</string>
+    <string name="maint_pdf_receipt">PDF رسید</string>
+    <string name="maint_open_with_app">ایپ کے ساتھ کھولیں</string>
+    <string name="maint_add_title">دیکھ بھال کا ریکارڈ شامل کریں</string>
+    <string name="maint_date">تاریخ</string>
+    <string name="maint_task_other">دیگر / حسب منشا</string>
+    <string name="maint_specific_task">مخصوص کام</string>
+    <string name="maint_description">تفصیل</string>
+    <string name="maint_mileage_unit">مائلیج (%1$s)</string>
+    <string name="maint_cost_unit">لاگت (%1$s)</string>
+    <string name="maint_inspected_only">صرف معائنہ (تبدیلی مؤخر)</string>
+    <string name="maint_remind_in_distance">یاد دہانی بعد از (%1$s) *</string>
+    <string name="maint_remind_in_months">یاد دہانی بعد از (ماہ) *</string>
+    <string name="maint_attached_pdf">منسلک PDF رسید</string>
+    <string name="maint_pdf_document">PDF دستاویز</string>
+    <string name="maint_change_attachment">منسلکہ تبدیل کریں</string>
+    <string name="maint_remove_attachment">منسلکہ ہٹائیں</string>
+    <string name="maint_attach_receipt">رسید / انوائس منسلک کریں (تصویر یا PDF)</string>
+    <string name="maint_open_receipt">رسید کھولیں</string>
+    <string name="maint_open_file_failed">فائل نہیں کھل سکی</string>
+    <string name="maint_odometer_update">اوڈومیٹر اپ ڈیٹ</string>
+
+    <!-- Timeline filters -->
+    <string name="maint_search_placeholder">تفصیل یا کام تلاش کریں</string>
+    <string name="maint_close_search">تلاش بند کریں</string>
+    <string name="maint_search">تلاش</string>
+    <string name="maint_has_receipt">رسید موجود ہے</string>
+    <string name="maint_hide_auto">اوڈومیٹر اور اسکینز چھپائیں</string>
+    <string name="maint_showing_count">%2$d میں سے %1$d دکھائے جا رہے ہیں</string>
+    <plurals name="maint_categories_count">
+        <item quantity="one">%d زمرہ</item>
+        <item quantity="other">%d زمرے</item>
+    </plurals>
+
+    <!-- Schedule templates -->
+    <string name="template_title">پہلے سے تیار شیڈول سانچے</string>
+    <string name="template_subtitle">اس گاڑی میں موزوں دیکھ بھال کے وقفے شامل کرنے کے لیے ایک پری سیٹ منتخب کریں۔</string>
+    <string name="template_included_rules">شامل اصول (%1$d):</string>
+    <plurals name="template_months">
+        <item quantity="one">%d ماہ</item>
+        <item quantity="other">%d ماہ</item>
+    </plurals>
+    <string name="template_interval_or">%1$s یا %2$s</string>
+    <string name="template_every">ہر %1$s</string>
+    <string name="template_apply">%1$s پری سیٹ لاگو کریں</string>
+</resources>

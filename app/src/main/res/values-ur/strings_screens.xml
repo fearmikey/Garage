@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Knowledge (torque specs & repair notes) -->
+    <string name="kb_add_torque">ٹارک اسپیک شامل کریں</string>
+    <string name="kb_edit_torque">ٹارک اسپیک میں ترمیم</string>
+    <string name="kb_add_note">مرمت کا نوٹ شامل کریں</string>
+    <string name="kb_edit_note">مرمت کے نوٹ میں ترمیم</string>
+    <string name="kb_cd_add">شامل کریں</string>
+    <string name="kb_empty">کوئی ٹارک اسپیک یا نوٹ نہیں ملا۔\nشامل کرنے کے لیے + بٹن ٹیپ کریں۔</string>
+    <string name="kb_torque_specs">ٹارک اسپیکس</string>
+    <string name="kb_repair_notes">مرمت کے نوٹس</string>
+    <string name="kb_component">پرزہ (مثلاً پہیے کے نٹ)</string>
+    <string name="kb_torque_unit">ٹارک (%1$s)</string>
+    <string name="kb_content">مواد (Markdown کی سہولت موجود ہے)</string>
+
+    <!-- Dashboard -->
+    <string name="dash_empty">ابھی کوئی گاڑی نہیں۔\nاپنی پہلی گاڑی شامل کرنے کے لیے + ٹیپ کریں۔</string>
+    <string name="dash_license_back">لائسنس کا پچھلا رخ</string>
+    <string name="dash_fuel_trend">ایندھن کا رجحان</string>
+    <string name="dash_fuel_trend_cd">آخری %1$d اندراجات میں ایندھن کا رجحان۔ تازہ ترین %2$s۔</string>
+
+    <!-- Recalls -->
+    <string name="recalls_vin_copied">آسانی سے پیسٹ کرنے کے لیے VIN (%1$s) کلپ بورڈ پر کاپی ہو گیا</string>
+    <string name="recalls_missing_info">ریکالز چیک کرنے کے لیے ترمیم اسکرین پر اس گاڑی کا سال، میک اور ماڈل شامل کریں۔</string>
+    <string name="recalls_ymm_title">سال / میک / ماڈل مہمات</string>
+    <string name="recalls_ymm_subtitle">%1$s پر لاگو عمومی حفاظتی ریکالز:</string>
+    <string name="recalls_none_for_model">عمومی %1$s کے لیے کوئی کھلا حفاظتی ریکال رپورٹ نہیں ہوا۔</string>
+    <string name="recalls_none">اس گاڑی کے لیے کوئی کھلا حفاظتی ریکال نہیں ملا۔</string>
+    <string name="recalls_vin_title">سرکاری VIN ریکال چیک</string>
+    <string name="recalls_vin_desc">VIN %1$s کے نامکمل ریکال ریکارڈز کی براہ راست NHTSA.gov پر تصدیق کریں۔ (آپ کا VIN خود بخود کلپ بورڈ پر کاپی ہو جاتا ہے تاکہ آپ اسے آسانی سے NHTSA کی ویب سائٹ پر پیسٹ کر سکیں)۔</string>
+    <string name="recalls_no_vin">اس گاڑی کا کوئی VIN محفوظ نہیں۔ NHTSA.gov پر براہ راست VIN ریکال کی حالت کی تصدیق کے لیے ترمیم اسکرین پر VIN شامل کریں۔</string>
+    <string name="recalls_campaign">مہم #%1$s</string>
+    <string name="recalls_state_open">کھلا</string>
+    <string name="recalls_state_serviced">سروس شدہ</string>
+    <string name="recalls_state_not_affected">متاثر نہیں</string>
+    <string name="recalls_state_serviced_long">سروس شدہ / مکمل</string>
+    <string name="recalls_state_not_affected_long">گاڑی متاثر نہیں</string>
+    <string name="recalls_reported">رپورٹ شدہ %1$s</string>
+    <string name="recalls_consequence">نتیجہ: %1$s</string>
+    <string name="recalls_remedy">حل: %1$s</string>
+
+    <!-- Home screen widgets -->
+    <string name="widget_recent_tank">حالیہ ٹینک: %1$s</string>
+    <string name="widget_recent">حالیہ: %1$s</string>
+    <string name="widget_all_caught_up">سب کچھ مکمل!</string>
+    <string name="widget_log_fuel">ایندھن درج کریں</string>
+    <string name="widget_odometer">اوڈومیٹر</string>
+    <string name="widget_log_service">سروس درج کریں</string>
+    <string name="widget_due">واجب</string>
+    <string name="widget_no_mileage">کوئی مائلیج نہیں</string>
+    <string name="widget_update">اپ ڈیٹ</string>
+</resources>

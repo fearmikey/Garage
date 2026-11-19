@@ -10,7 +10,9 @@ enum class LubeLoggerRecordType {
     REPAIR,
     ODOMETER,
     FUEL,
-    UPGRADE
+    UPGRADE,
+    SUPPLY,
+    NOTE,
 }
 
 @Entity(

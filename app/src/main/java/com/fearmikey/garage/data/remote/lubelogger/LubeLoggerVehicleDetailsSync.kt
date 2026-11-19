@@ -203,6 +203,60 @@ fun LubeLoggerVehicleDto.toUpdateDto(details: VehicleSyncDetails, lubeLoggerUnit
     )
 }
 
+// ---------------------------------------------------------------------------------------------
+// Purchase date / price
+// ---------------------------------------------------------------------------------------------
+
+/**
+ * Purchase info normalized for comparison: [date] as `yyyy-MM-dd` and [price] with two decimals,
+ * each "" when unset (LubeLogger stores an unset price as 0).
+ */
+data class VehiclePurchaseInfo(val date: String, val price: String)
+
+private fun normalizePurchasePrice(price: Double?): String =
+    price?.takeIf { it > 0.0 }?.let { "%.2f".format(java.util.Locale.US, it) }.orEmpty()
+
+fun com.fearmikey.garage.data.local.entity.VehicleRegistrationInsurance?.purchaseInfo() = VehiclePurchaseInfo(
+    date = this?.purchaseDate?.let(::formatDate).orEmpty(),
+    price = normalizePurchasePrice(this?.purchasePrice),
+)
+
+fun LubeLoggerVehicleDto.purchaseInfo() = VehiclePurchaseInfo(
+    date = parseDateToEpochMillisOrNull(purchaseDate)?.let(::formatDate).orEmpty(),
+    price = normalizePurchasePrice(purchasePrice),
+)
+
+/**
+ * Three-way merge of purchase info, like [mergeVehicleSyncDetails]: the side that changed since
+ * [base] wins, and Garage wins when both did. When Garage can't push ([garageCanPush] false:
+ * API-key auth), a server change always wins, since Garage's value could never reach the server.
+ * On the first sync (no [base]) the server only fills values Garage doesn't have.
+ */
+fun mergePurchaseInfo(
+    local: VehiclePurchaseInfo,
+    remote: VehiclePurchaseInfo,
+    base: VehiclePurchaseInfo?,
+    garageCanPush: Boolean,
+) = VehiclePurchaseInfo(
+    date = mergePurchaseField(local.date, remote.date, base?.date, garageCanPush),
+    price = mergePurchaseField(local.price, remote.price, base?.price, garageCanPush),
+)
+
+private fun mergePurchaseField(local: String, remote: String, base: String?, garageCanPush: Boolean): String = when {
+    base == null -> local.ifEmpty { remote }
+    remote != base && (local == base || !garageCanPush) -> remote
+    else -> local
+}
+
+/**
+ * A normalized price as a SaveVehicle form value: whole amounts without decimals (safe whatever
+ * the server's number culture), otherwise invariant `1234.56`; "0" clears the price.
+ */
+fun purchasePriceFormValue(price: String): String {
+    val value = price.toDoubleOrNull()?.takeIf { it > 0.0 } ?: return "0"
+    return if (value % 1.0 == 0.0) value.toLong().toString() else "%.2f".format(java.util.Locale.US, value)
+}
+
 /**
  * Sets [value] on the first extra field matching any of [names] (keeping the user's own field
  * name), or appends a new field named `names[0]`. Blank values are never added as new fields,

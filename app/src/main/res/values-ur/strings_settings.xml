@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Shared -->
+    <string name="common_continue">جاری رکھیں</string>
+    <string name="common_username">صارف نام</string>
+    <string name="common_password">پاس ورڈ</string>
+    <string name="common_server_url">سرور URL</string>
+    <string name="common_just_now">ابھی ابھی</string>
+    <string name="common_open_link">لنک کھولیں</string>
+    <plurals name="common_days">
+        <item quantity="one">%d دن</item>
+        <item quantity="other">%d دن</item>
+    </plurals>
+
+    <!-- Settings: main screen -->
+    <string name="settings_user_prefs_summary">زبان، اکائیاں، کرنسی، ڈیفالٹ گاڑی، OBD</string>
+    <string name="settings_header_appearance">ظاہری شکل اور حسب منشا ترتیب</string>
+    <string name="settings_appearance_summary">ایپ تھیم، خالص سیاہ AMOLED، ڈائنامک رنگ، نمایاں رنگ، اور گاڑی کے رنگ</string>
+    <string name="settings_reminders_summary">دستاویزات کی میعاد، دیکھ بھال کی اطلاع کا وقفہ، اور اطلاعات کی اجازت</string>
+    <string name="settings_header_data">ڈیٹا اور سنک</string>
+    <string name="settings_data_summary">بیک اپ برآمد/درآمد، مقامی خودکار بیک اپ، WebDAV کلاؤڈ سنک، LubeLogger، ڈیٹا صاف کریں</string>
+    <string name="settings_header_app_info">ایپ کی معلومات</string>
+    <string name="settings_about_title">Garage کے بارے میں</string>
+    <string name="settings_version">ورژن %1$s</string>
+    <string name="settings_version_full">ورژن %1$s (%2$d)</string>
+    <string name="settings_license">لائسنس</string>
+    <string name="settings_license_mit">MIT لائسنس</string>
+    <string name="settings_report_bug">خرابی کی رپورٹ / رائے</string>
+    <string name="settings_report_bug_summary">GitHub پر مسائل رپورٹ کریں یا اپنی رائے دیں۔</string>
+    <string name="settings_header_support">مدد اور قانونی</string>
+    <string name="settings_bmac">Buy Me a Coffee</string>
+    <string name="settings_bmac_summary">ترقی میں مدد کریں: %1$s</string>
+    <string name="settings_affiliate_title">ایفیلیئٹ لنکس فعال کریں</string>
+    <string name="settings_affiliate_summary">منصوبے کی مدد کے لیے اوزاروں/پرزوں کے اختیاری Amazon ایفیلیئٹ لنکس دکھائیں۔</string>
+    <string name="settings_help">مدد / عمومی سوالات</string>
+    <string name="settings_help_summary">ایپ کے استعمال اور عام سوالات کے بارے میں مدد حاصل کریں۔</string>
+    <string name="settings_rerun_setup">ترتیب دوبارہ چلائیں</string>
+    <string name="settings_rerun_setup_summary">ایپ کی اجازتیں اور پیمائش کی اکائیاں دوبارہ ترتیب دیں</string>
+    <string name="settings_about_description">دیکھ بھال، سروس کی تاریخ، ایندھن کی کارکردگی اور یاد دہانیاں ٹریک کرنے کے لیے ایک سادہ اور طاقتور گاڑی مینجمنٹ ایپ۔</string>
+    <string name="settings_about_license">MIT لائسنس کے تحت لائسنس یافتہ</string>
+    <string name="settings_about_developer">تیار کردہ: fearmikey</string>
+    <string name="settings_feedback_prompt">اپنے براؤزر میں GitHub کھولنے کے لیے نیچے سے ایک آپشن منتخب کریں:</string>
+    <string name="settings_report_issue">مسئلہ رپورٹ کریں</string>
+    <string name="settings_share_feedback">رائے دیں</string>
+    <string name="settings_favorites_intro" formatted="false">ڈویلپر (FearMikey) کے تجویز کردہ اوزار اور پرزے۔ ان Amazon ایفیلیئٹ لنکس کے ذریعے خریداری آپ پر کسی اضافی لاگت کے بغیر منصوبے کی مدد کرتی ہے۔ عموماً ان لنکس سے FearMikey کو آپ کی Amazon خریداری کا 2–5% ملتا ہے۔ شکریہ!</string>
+
+    <!-- Settings: shared dialogs -->
+    <string name="settings_default_vehicle_first">پہلی شامل کردہ گاڑی (ڈیفالٹ)</string>
+    <string name="units_metric">میٹرک</string>
+    <string name="units_imperial">امپیریل</string>
+    <string name="units_uk_mixed">UK (مخلوط)</string>
+    <string name="settings_insecure_title">غیر محفوظ کنکشن کا انتباہ</string>
+    <string name="settings_insecure_webdav_message">آپ غیر خفیہ HTTP کنکشن پر جڑ رہے ہیں۔ اپنے کلاؤڈ بیک اپ کی اسناد اور ڈیٹا محفوظ رکھنے کے لیے یقینی بنائیں کہ آپ اپنے سرور تک محفوظ نجی VPN کنکشن (جیسے Tailscale یا WireGuard) استعمال کر رہے ہیں۔</string>
+    <string name="settings_insecure_lubelogger_message">آپ غیر خفیہ HTTP کنکشن پر جڑ رہے ہیں۔ اپنی لاگ ان اسناد اور گاڑی کا ڈیٹا محفوظ رکھنے کے لیے یقینی بنائیں کہ آپ اپنے سرور تک محفوظ نجی VPN کنکشن (جیسے Tailscale یا WireGuard) استعمال کر رہے ہیں۔</string>
+    <string name="settings_webdav_config_title">خودکار بیک اپ کی ترتیب</string>
+    <string name="settings_password_unchanged">پاس ورڈ (غیر تبدیل شدہ)</string>
+    <string name="settings_test_connection">کنکشن آزمائیں</string>
+    <string name="settings_local_backup_title">مقامی فولڈر خودکار بیک اپ</string>
+    <string name="settings_local_backup_description">جب بھی Garage میں تبدیلیاں ہوں، آپ کے فون کے ایک فولڈر میں بیک اپ zip (garage-backup.zip) خود بخود محفوظ ہو جاتا ہے۔ آپ اس فولڈر کو اپنی پسند کی کلاؤڈ اسٹوریج ایپس سے سنک کر سکتے ہیں۔</string>
+    <string name="settings_backup_folder_label">بیک اپ فولڈر:</string>
+    <string name="settings_select_folder">فولڈر منتخب کریں</string>
+    <string name="settings_change_folder">فولڈر تبدیل کریں</string>
+    <string name="settings_status_error">حالت: %1$s</string>
+    <string name="settings_last_saved">آخری بار محفوظ: %1$s</string>
+    <string name="settings_maint_mileage_title">دیکھ بھال کی مائلیج اطلاع</string>
+    <string name="settings_notify_due_within">جب دیکھ بھال اس حد کے اندر واجب ہو تو اطلاع دیں:</string>
+    <string name="settings_maint_time_title">دیکھ بھال کی وقت اطلاع</string>
+    <plurals name="settings_days_before">
+        <item quantity="one">%d دن پہلے</item>
+        <item quantity="other">%d دن پہلے</item>
+    </plurals>
+    <string name="settings_doc_window_title">دستاویزات کی میعاد کی اطلاع کا وقفہ</string>
+    <string name="settings_select_accent">نمایاں رنگ منتخب کریں</string>
+    <string name="palette_garage_blue">گیراج نیلا</string>
+    <string name="palette_racing_red">ریسنگ سرخ</string>
+    <string name="palette_racing_green">ریسنگ سبز</string>
+    <string name="palette_tuner_amber">ٹیونر امبر</string>
+    <string name="palette_stealth_slate">اسٹیلتھ سلیٹ</string>
+    <string name="palette_midnight_purple">مڈنائٹ جامنی</string>
+
+    <!-- Settings: sync status rows -->
+    <string name="sync_not_configured">ترتیب نہیں دیا گیا</string>
+    <string name="sync_disabled_configured">غیر فعال (ترتیب شدہ)</string>
+    <string name="sync_disabled_paired">غیر فعال (جوڑا گیا)</string>
+    <string name="sync_syncing">سنک ہو رہا ہے…</string>
+    <string name="sync_failed">سنک ناکام</string>
+    <string name="sync_failed_at">سنک ناکام · %1$s</string>
+    <string name="sync_recently">حال ہی میں</string>
+    <string name="sync_connected">منسلک</string>
+    <string name="sync_connected_last">منسلک · آخری سنک %1$s</string>
+    <string name="sync_connected_never">منسلک · ابھی سنک نہیں ہوا</string>
+    <string name="sync_connection_failed">کنکشن ناکام</string>
+    <string name="sync_connection_failed_at">کنکشن ناکام · %1$s</string>
+    <string name="sync_not_connected_yet">ابھی منسلک نہیں · آزمانے کے لیے ابھی سنک کریں پر ٹیپ کریں</string>
+    <string name="sync_last_success">آخری کامیاب سنک %1$s</string>
+    <string name="webdav_title">WebDAV کلاؤڈ سنک</string>
+    <string name="webdav_disabled_cd">WebDAV غیر فعال</string>
+    <string name="lubelogger_title">LubeLogger سنک</string>
+    <string name="lubelogger_disabled_cd">LubeLogger غیر فعال</string>
+    <string name="local_not_configured">ترتیب نہیں دیا گیا — کوئی فولڈر منتخب نہیں</string>
+    <string name="local_disabled_folder">غیر فعال — فولڈر: %1$s</string>
+    <string name="local_failed">خودکار بیک اپ ناکام</string>
+    <string name="local_active">فعال</string>
+    <string name="local_active_last">فعال · آخری بار محفوظ %1$s</string>
+    <string name="local_active_never">فعال · ابھی محفوظ نہیں ہوا</string>
+    <string name="local_folder">فولڈر: %1$s</string>
+    <string name="local_disabled_cd">مقامی بیک اپ غیر فعال</string>
+    <string name="local_backup_failed_cd">بیک اپ ناکام</string>
+    <string name="folder_none">کوئی فولڈر منتخب نہیں</string>
+    <string name="folder_selected">منتخب فولڈر</string>
+
+    <!-- Settings: appearance -->
+    <string name="appearance_header_theme">تھیم اور رنگ سکیم</string>
+    <string name="appearance_amoled">خالص سیاہ (AMOLED)</string>
+    <string name="appearance_amoled_summary">ڈارک موڈ میں OLED اسکرینز کے لیے مکمل سیاہ پس منظر</string>
+    <string name="appearance_dynamic">ڈائنامک رنگ</string>
+    <string name="appearance_dynamic_summary">رنگوں کو سسٹم وال پیپر سے ملائیں (Android 12+)</string>
+    <string name="appearance_accent">نمایاں رنگ</string>
+    <string name="appearance_header_display">ڈسپلے اور گاڑی کے کارڈز</string>
+    <string name="appearance_tint">گاڑی کی اسکرینز رنگیں</string>
+    <string name="appearance_tint_summary">تفصیلی صفحات کے لیے ہر گاڑی کا اپنا رنگ استعمال کریں</string>
+    <string name="appearance_fuel_graph">ایندھن کے رجحان کا گراف دکھائیں</string>
+    <string name="appearance_fuel_graph_summary">گاڑی کے کارڈز پر ایندھن کے رجحان کا چھوٹا گراف دکھائیں</string>
+    <string name="appearance_fleet">فلیٹ کا جائزہ دکھائیں</string>
+    <string name="appearance_fleet_summary">ڈیش بورڈ پر فلیٹ اوسط کے ساتھ خلاصہ کارڈ دکھائیں</string>
+
+    <!-- Settings: reminders -->
+    <string name="reminders_header_documents">دستاویزات کی میعاد</string>
+    <string name="reminders_doc_title">دستاویزات کی تجدید کی یاد دہانیاں</string>
+    <string name="reminders_doc_summary">گاڑی کی رجسٹریشن، اسموگ ٹیسٹ، معائنے، انشورنس، پرمٹس اور ڈرائیونگ لائسنس کی میعاد ختم ہونے پر اطلاع دیں۔</string>
+    <string name="reminders_doc_window_summary">جب دستاویز کی میعاد %1$s کے اندر ہو تو اطلاع دیں</string>
+    <string name="reminders_header_service">سروس یاد دہانیاں</string>
+    <string name="reminders_mileage_title">دیکھ بھال کی مائلیج اطلاع کا وقفہ</string>
+    <string name="reminders_service_due_within">جب سروس %1$s کے اندر واجب ہو تو اطلاع دیں</string>
+    <string name="reminders_time_title">دیکھ بھال کی وقت اطلاع کا وقفہ</string>
+    <string name="reminders_header_push">پش اطلاعات</string>
+    <string name="reminders_permission_title">اطلاعات کی اجازت</string>
+    <string name="reminders_permission_granted">اجازت ہے — یاد دہانیاں اور میعاد کے انتباہات بھیجے جا سکتے ہیں۔</string>
+    <string name="reminders_permission_denied">اجازت نہیں — Garage کو اطلاعات بھیجنے کی اجازت دینے کے لیے ٹیپ کریں۔</string>
+    <string name="reminders_test_title">آزمائشی اطلاع بھیجیں</string>
+    <string name="reminders_test_summary">پش اطلاعات کے درست کام کرنے کی تصدیق کے لیے ایک نمونہ اطلاع بھیجیں۔</string>
+
+    <!-- Settings: user preferences -->
+    <string name="prefs_mileage_rate_title">مائلیج معاوضے کی شرح</string>
+    <string name="prefs_mileage_rate_summary">نئے سفر کے لیے ڈیفالٹ: %1$s</string>
+    <string name="prefs_default_vehicle_summary">ویجٹ شارٹ کٹس کے لیے استعمال ہوتی ہے (%1$s)</string>
+    <string name="prefs_rate_description">نیا سفر درج کرتے وقت پہلے سے بھری ڈیفالٹ شرح، آپ کی منتخب کرنسی اور فاصلے کی اکائی میں۔ موجودہ سفر اپنی محفوظ شدہ شرح برقرار رکھتے ہیں۔</string>
+    <string name="prefs_rate_label">شرح (%1$s/%2$s)</string>
+    <string name="prefs_rate_invalid">ایک درست غیر منفی عدد درج کریں</string>
+
+    <!-- Settings: data, backup & sync -->
+    <string name="backup_header_local">مقامی بیک اپ</string>
+    <string name="backup_export">بیک اپ برآمد کریں</string>
+    <string name="backup_export_summary">تمام گاڑیاں، دیکھ بھال کی تاریخ، یاد دہانیاں اور تصاویر ایک zip فائل میں محفوظ کریں۔</string>
+    <string name="backup_import">بیک اپ درآمد کریں</string>
+    <string name="backup_import_summary">بیک اپ zip سے گاڑیاں، دیکھ بھال کی تاریخ، یاد دہانیاں اور تصاویر بحال کریں۔ یہ تمام موجودہ ڈیٹا کی جگہ لے لے گا۔</string>
+    <string name="backup_local_enable">مقامی خودکار بیک اپ فعال کریں</string>
+    <string name="backup_local_enable_summary">بیک اپ خود بخود آپ کے منتخب مقامی فولڈر میں محفوظ کریں۔</string>
+    <string name="backup_local_now">ابھی فولڈر میں بیک اپ لیں</string>
+    <string name="backup_local_now_summary">دستی طور پر اپنے مقامی فولڈر میں بیک اپ zip محفوظ کریں۔</string>
+    <string name="backup_header_cloud">کلاؤڈ سنک</string>
+    <string name="backup_webdav_enable">WebDAV کلاؤڈ سنک فعال کریں</string>
+    <string name="backup_webdav_enable_summary">بیک اپ خود بخود اپنے WebDAV سرور پر اپ لوڈ کریں۔</string>
+    <string name="backup_webdav_now">ابھی WebDAV سنک کریں</string>
+    <string name="backup_webdav_now_summary">دستی طور پر اپنے WebDAV سرور پر بیک اپ اپ لوڈ کریں۔</string>
+    <string name="backup_header_integrations">انضمام</string>
+    <string name="backup_ll_enable">LubeLogger سنک فعال کریں</string>
+    <string name="backup_ll_enable_summary">اپنے LubeLogger سرور کے ساتھ ریکارڈز خود بخود تبادلہ کریں۔</string>
+    <string name="backup_ll_syncing">LubeLogger کے ساتھ سنک ہو رہا ہے…</string>
+    <string name="backup_ll_now">ابھی LubeLogger سنک کریں</string>
+    <string name="backup_ll_syncing_summary">آپ کے LubeLogger سرور کے ساتھ ریکارڈز کا تبادلہ ہو رہا ہے۔</string>
+    <string name="backup_ll_now_summary">دستی طور پر اپنے LubeLogger سرور کے ساتھ سنک شروع کریں۔</string>
+    <string name="backup_duplicates">ڈپلیکیٹ ریکارڈز تلاش کریں</string>
+    <string name="backup_duplicates_summary">ایک جیسے ایندھن یا دیکھ بھال کے ریکارڈز کا جائزہ لیں اور ہٹائیں۔</string>
+    <string name="backup_header_danger">خطرناک زون</string>
+    <string name="backup_clear">تمام ڈیٹا صاف کریں</string>
+    <string name="backup_clear_summary">تمام گاڑیاں، ریکارڈز، یاد دہانیاں اور تصاویر مستقل طور پر حذف کریں۔</string>
+    <string name="backup_clear_title">تمام ڈیٹا صاف کریں؟</string>
+    <string name="backup_clear_message">اس سے Garage میں محفوظ تمام گاڑیاں، دیکھ بھال کے ریکارڈز، یاد دہانیاں اور تصاویر مستقل طور پر حذف ہو جائیں گی۔ یہ عمل واپس نہیں ہو سکتا۔</string>
+    <string name="backup_clear_confirm">سب کچھ حذف کریں</string>
+    <string name="backup_restart_title">ری اسٹارٹ ضروری ہے</string>
+    <string name="backup_restart_message">آپ کا ڈیٹا بحال ہو گیا ہے۔ اسے لوڈ کرنے کے لیے Garage کو دوبارہ شروع کرنا ہوگا۔</string>
+    <string name="backup_restart_now">ابھی ری اسٹارٹ کریں</string>
+
+    <!-- Settings: LubeLogger -->
+    <string name="ll_config_title">LubeLogger کنکشن</string>
+    <string name="ll_config_description">ریکارڈز خود بخود سنک کرنے کے لیے Garage کو اپنی سیلف ہوسٹڈ LubeLogger انسٹینس سے جوڑیں۔</string>
+    <string name="ll_server_units">LubeLogger سرور کی اکائیاں</string>
+    <string name="ll_units_imperial">امپیریل (mi/gal)</string>
+    <string name="ll_units_metric">میٹرک (km/L)</string>
+    <string name="ll_auth_label">تصدیق (یا تو صارف نام/پاس ورڈ یا API کلید فراہم کریں)</string>
+    <string name="ll_api_key_optional">API کلید (اختیاری)</string>
+    <string name="dup_title">ڈپلیکیٹس کا جائزہ</string>
+    <plurals name="dup_delete_button">
+        <item quantity="one">%d ڈپلیکیٹ ریکارڈ حذف کریں</item>
+        <item quantity="other">%d ڈپلیکیٹ ریکارڈز حذف کریں</item>
+    </plurals>
+    <string name="dup_none_title">کوئی ڈپلیکیٹ ریکارڈ نہیں ملا!</string>
+    <string name="dup_none_message">آپ کے مقامی ریکارڈز بالکل درست ہیں۔</string>
+    <string name="dup_date">تاریخ: %1$s</string>
+    <string name="dup_synced">سنک شدہ (#%1$s)</string>
+    <string name="dup_original">اصل</string>
+    <string name="dup_duplicate">ڈپلیکیٹ</string>
+
+    <!-- Settings: snackbar messages -->
+    <string name="msg_ll_sync_done">LubeLogger سنک مکمل ہو گیا۔</string>
+    <string name="msg_ll_sync_failed">LubeLogger سنک ناکام: %1$s</string>
+    <string name="msg_test_sent">آزمائشی اطلاع بھیج دی گئی۔</string>
+    <string name="msg_notifications_disabled">Garage کے لیے اطلاعات غیر فعال ہیں۔ آزمائشی اطلاعات اور یاد دہانیاں حاصل کرنے کے لیے انہیں فعال کریں۔</string>
+    <string name="msg_ble_scan_failed">بلوٹوتھ LE اسکین ناکام۔ یقینی بنائیں کہ بلوٹوتھ آن ہے۔</string>
+    <string name="msg_export_ok">بیک اپ کامیابی سے برآمد ہو گیا۔</string>
+    <string name="msg_export_failed">برآمد ناکام: %1$s</string>
+    <string name="msg_import_failed">درآمد ناکام: %1$s</string>
+    <string name="msg_cleared">تمام ڈیٹا کامیابی سے صاف ہو گیا۔</string>
+    <string name="msg_clear_failed">ڈیٹا صاف کرنے میں ناکامی: %1$s</string>
+    <string name="msg_local_ok">مقامی بیک اپ کامیابی سے محفوظ ہو گیا۔</string>
+    <string name="msg_local_failed">مقامی بیک اپ ناکام: %1$s</string>
+    <string name="msg_cloud_ok">کلاؤڈ سنک کامیابی سے مکمل ہو گیا۔</string>
+    <string name="msg_cloud_failed">کلاؤڈ سنک ناکام: %1$s</string>
+    <string name="msg_connection_ok">کنکشن کامیاب۔</string>
+    <string name="msg_connection_failed">کنکشن ناکام: %1$s</string>
+</resources>

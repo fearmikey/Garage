@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mods_cd_add">ترمیم شامل کریں</string>
+    <plurals name="mods_count">
+        <item quantity="one">%d ترمیم</item>
+        <item quantity="other">%d ترامیم</item>
+    </plurals>
+    <string name="mods_total_spent">کل خرچ: %1$s</string>
+    <string name="mods_cd_list_view">فہرست کے منظر پر جائیں</string>
+    <string name="mods_cd_grid_view">گرڈ کے منظر پر جائیں</string>
+    <string name="mods_product_link">پروڈکٹ لنک</string>
+    <string name="mods_add_title">ترمیم شامل کریں</string>
+    <string name="mods_edit_title">ترمیم میں تبدیلی کریں</string>
+    <string name="mods_photo_cd">ترمیم کی تصویر %1$d</string>
+    <string name="mods_photo_position">تصویر %1$d از %2$d</string>
+    <string name="mods_photo_single">تصویر</string>
+    <string name="mods_add_photos">تصاویر شامل کریں (زیادہ سے زیادہ 6)</string>
+    <string name="mods_title_placeholder">مثلاً 2 انچ لفٹ کٹ، کولڈ ایئر انٹیک</string>
+    <string name="mods_desc_placeholder">تفصیلات، پارٹ نمبرز، تنصیب کے نوٹس…</string>
+    <string name="mods_url_placeholder">مثلاً https://example.com/parts/lift-kit</string>
+    <string name="mods_title_short">عنوان</string>
+    <string name="mods_installed">نصب: %1$s</string>
+</resources>

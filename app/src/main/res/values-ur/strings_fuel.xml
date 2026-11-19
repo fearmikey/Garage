@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Fuel & charging screen -->
+    <string name="fuel_cd_add_charging">چارجنگ سیشن شامل کریں</string>
+    <string name="fuel_cd_add_fillup">ایندھن کا اندراج شامل کریں</string>
+    <string name="fuel_cd_delete_charging">چارجنگ سیشن حذف کریں</string>
+    <string name="fuel_cd_delete_fillup">ایندھن کا اندراج حذف کریں</string>
+    <string name="fuel_empty_charging">ابھی تک کوئی چارجنگ سیشن درج نہیں۔\nاپنا پہلا سیشن درج کرنے کے لیے + ٹیپ کریں۔</string>
+    <string name="fuel_empty_fuel">ابھی تک ایندھن کا کوئی اندراج نہیں۔\nپہلا اندراج کرنے کے لیے + ٹیپ کریں۔</string>
+    <string name="fuel_charging_efficiency">چارجنگ کی کارکردگی</string>
+    <string name="fuel_total_charging_spent">چارجنگ پر کل خرچ</string>
+    <string name="fuel_battery_health_card">بیٹری کی صحت اور کمی</string>
+    <string name="fuel_health_percent">%1$.1f%% صحت</string>
+    <string name="fuel_soc_trend" formatted="false">100% چارج پر رینج کا رجحان</string>
+    <string name="fuel_at_mileage">%1$s پر</string>
+    <string name="fuel_total_line">%1$s کل · %2$s</string>
+    <string name="fuel_est_range_chip">100%% SoC پر تخمینی رینج: %1$s</string>
+    <string name="fuel_economy_title">ایندھن کی کارکردگی</string>
+    <string name="fuel_best">بہترین</string>
+    <string name="fuel_average">اوسط</string>
+    <string name="fuel_worst">بدترین</string>
+    <string name="fuel_total_spent">کل خرچ</string>
+    <string name="fuel_partial">جزوی</string>
+    <string name="fuel_since_full_tank">آخری مکمل ٹینک کے بعد سے %1$s</string>
+    <string name="fuel_full_tank_hint">اگر آپ نے ٹینک مکمل نہیں بھروایا تو بند کر دیں</string>
+    <string name="fuel_grade_title">ایندھن کا گریڈ</string>
+    <string name="fuel_grade_regular">ریگولر</string>
+    <string name="fuel_grade_midgrade">مڈ گریڈ</string>
+    <string name="fuel_grade_premium">پریمیم</string>
+    <string name="fuel_grade_diesel">ڈیزل</string>
+    <string name="fuel_grade_e85">E85</string>
+    <string name="fuel_grade_other">دیگر</string>
+    <string name="fuel_grade_custom_hint">گریڈ یا آکٹین (مثلاً 92، 97 RON، Hi-Octane)</string>
+
+    <!-- Trend charts -->
+    <string name="trend_fuel_title">ایندھن کے رجحانات</string>
+    <string name="trend_charging_title">چارجنگ کے رجحانات</string>
+    <string name="trend_rolling_fuel">3 اندراج اوسط</string>
+    <string name="trend_rolling_charging">3 سیشن اوسط</string>
+    <string name="trend_metric_economy">کارکردگی</string>
+    <string name="trend_metric_efficiency">استعداد</string>
+    <string name="trend_metric_cost_per">لاگت/%1$s</string>
+    <string name="trend_metric_price_per">قیمت/%1$s</string>
+    <string name="trend_range_last_10">آخری 10</string>
+    <string name="trend_range_6_months">6 ماہ</string>
+    <string name="trend_range_1_year">1 سال</string>
+    <string name="trend_range_all">سب</string>
+    <string name="trend_chart_cd">%1$s چارٹ، %2$d پوائنٹس، تازہ ترین %3$s۔ پوائنٹس دیکھنے کے لیے ٹیپ کریں یا گھسیٹیں۔</string>
+    <string name="trend_avg">اوسط %1$s</string>
+    <string name="trend_legend_rolling">ہلکی لکیر: %1$s</string>
+    <string name="trend_legend_average">ڈیش لکیر: اوسط</string>
+    <string name="trend_legend_outliers">خالی نقطے: غیر معمولی ریڈنگز، جائزے کے لیے ٹیپ کریں</string>
+    <string name="trend_legend_inspect">دیکھنے کے لیے ٹیپ کریں یا گھسیٹیں</string>
+    <string name="trend_not_enough_data">اس رینج میں ابھی کافی ڈیٹا نہیں۔ وسیع رینج آزمائیں۔</string>
+</resources>

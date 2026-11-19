@@ -14,7 +14,8 @@ import org.junit.Test
 class LubeLoggerRecordSyncTest {
 
     private data class Local(val localId: Long, val value: String, val llId: Int? = null, val hash: String? = null, val mileage: Int = 0)
-    private data class Remote(val id: Int, val value: String, val mileage: Int = 0)
+    /** [serverOnly] stands for data Garage doesn't manage (notes, tags, attachments...). */
+    private data class Remote(val id: Int, val value: String, val mileage: Int = 0, val serverOnly: String = "")
 
     /** An in-memory "Garage" and "LubeLogger" that the engine edits. */
     private class World(local: List<Local>, remote: List<Remote>) {
@@ -33,7 +34,7 @@ class LubeLoggerRecordSyncTest {
             getStoredHash = { it.hash },
             getLocalFingerprint = { it.value },
             getRemoteFingerprint = { it.value },
-            toDto = { Remote(it.llId ?: 0, it.value, it.mileage) },
+            toDto = { l, server -> Remote(l.llId ?: 0, l.value, l.mileage, serverOnly = server?.serverOnly.orEmpty()) },
             toLocal = { dto, existing -> Local(existing?.localId ?: 0, dto.value, dto.id, mileage = dto.mileage) },
             isSameReadingAs = { l, r -> l.mileage == r.mileage && l.mileage != 0 },
             addLocal = { local += it.copy(localId = nextLocalId++) },
@@ -55,6 +56,17 @@ class LubeLoggerRecordSyncTest {
         world.sync()
         assertEquals("new", world.remote.single().value)
         assertEquals("new", world.local.single().hash)
+    }
+
+    @Test
+    fun `pushing an edit builds on the server copy so server-only data survives`() = runTest {
+        val world = World(
+            listOf(synced(1, 10, "old").copy(value = "new")),
+            listOf(Remote(10, "old", serverOnly = "attachment.pdf")),
+        )
+        world.sync()
+        assertEquals("new", world.remote.single().value)
+        assertEquals("attachment.pdf", world.remote.single().serverOnly)
     }
 
     @Test

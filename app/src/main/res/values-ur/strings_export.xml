@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Seller report (PDF export) screen. The PDF body text lives in strings_pdf.xml. -->
+    <string name="export_title">فروخت کنندہ رپورٹ جنریٹر</string>
+    <string name="export_book_title">گاڑی کی سروس اور تاریخ کی کتاب</string>
+    <string name="export_book_desc">ایک جامع اور خوبصورتی سے ترتیب دی گئی رپورٹ بنائیں جو دوبارہ فروخت کی قیمت بڑھانے کے لیے آپ کی گاڑی کی دیکھ بھال پر سرمایہ کاری، دیکھ بھال کا ریکارڈ، تبدیل شدہ پرزے اور حفاظتی حالت نمایاں کرے۔</string>
+    <string name="export_summary_preview">رپورٹ کے خلاصے کا پیش نظارہ</string>
+    <string name="export_vin">VIN: %1$s</string>
+    <string name="export_total_investment">دیکھ بھال پر کل سرمایہ کاری:</string>
+    <string name="export_service_records">سروس ریکارڈز:</string>
+    <string name="export_upgrades_colon">اپ گریڈز اور ترامیم:</string>
+    <string name="export_recall_status">حفاظتی ریکال کی حالت:</string>
+    <string name="export_checking">چیک ہو رہا ہے…</string>
+    <string name="export_clear_serviced">صاف (0 کھلے / %1$d سروس شدہ)</string>
+    <string name="export_clear">صاف (0 کھلے)</string>
+    <string name="export_open_total">%1$d کھلے / %2$d کل</string>
+    <string name="export_included_sections">شامل حصے</string>
+    <string name="export_upgrades">اپ گریڈز اور ترامیم</string>
+    <string name="export_upgrades_desc">حسب منشا پرزوں، اپ گریڈز اور لوازمات کی فہرست شامل کریں</string>
+    <string name="export_parts">پرزوں اور فلوئڈز کی خصوصیات</string>
+    <string name="export_parts_desc">آئل وسکوسٹی، اسپارک پلگ، ٹائر سائز اور وائپر کی معلوماتی شیٹ شامل کریں</string>
+    <string name="export_recalls">حفاظتی ریکالز کی حالت</string>
+    <string name="export_recalls_desc">NHTSA کی سرکاری حفاظتی ریکال تصدیق کی حالت شامل کریں</string>
+    <string name="export_select_open">کھلی / فعال مہمات منتخب کریں (%1$d کل):</string>
+    <string name="export_all_serviced">سب سروس شدہ</string>
+    <string name="export_all_open">سب کھلے</string>
+    <string name="export_open_unaddressed">کھلا / غیر حل شدہ</string>
+    <string name="export_serviced_clear">سروس شدہ / صاف</string>
+    <string name="export_component">پرزہ: %1$s</string>
+    <string name="export_fuel">ایندھن اور چارجنگ کے ریکارڈز</string>
+    <string name="export_fuel_desc">ایندھن کے اندراجات اور چارجنگ سیشن کے ریکارڈز شامل کریں</string>
+    <string name="export_generate">گاڑی کی سروس کتاب بنائیں (PDF)</string>
+</resources>

@@ -33,4 +33,29 @@
     <string name="trend_unusual_reading">Unusual reading</string>
     <string name="url_invalid">Invalid URL</string>
     <string name="url_open_failed">Could not open link</string>
+
+    <!-- Parts & Supplies tab: supplies list (synced with LubeLogger Supplies) -->
+    <string name="parts_reference_title">Quick reference</string>
+    <string name="supplies_title">Supplies</string>
+    <string name="supplies_empty">No supplies yet. Tap + to log parts and fluids you\'ve bought or keep in stock.</string>
+    <string name="supplies_cd_add">Add supply</string>
+    <string name="supplies_add_title">Add Supply</string>
+    <string name="supplies_edit_title">Edit Supply</string>
+    <string name="supplies_description_label">Description *</string>
+    <string name="supplies_description_placeholder">e.g., Oil filter, 5W-30 oil</string>
+    <string name="supplies_part_number_label">Part #</string>
+    <string name="supplies_supplier_label">Supplier</string>
+    <string name="supplies_quantity_label">Quantity</string>
+    <string name="supplies_cost_label">Total cost</string>
+    <string name="supplies_date_label">Purchase date</string>
+    <!-- %1$s: quantity, e.g. "2" or "1.5" -->
+    <string name="supplies_qty_value">Qty %1$s</string>
+    <string name="supplies_delete_title">Delete supply?</string>
+    <string name="supplies_delete_message">\'%1$s\' will be deleted. If it\'s synced, it\'s also removed from LubeLogger.</string>
+    <string name="supplies_add_as_supply">Add as supply</string>
+    <!-- Pre-filled description when a quick-reference part number is added as a supply -->
+    <string name="supply_desc_oil_filter">Oil filter</string>
+    <string name="supply_desc_spark_plug">Spark plugs</string>
+    <string name="supply_desc_engine_air_filter">Engine air filter</string>
+    <string name="supply_desc_cabin_air_filter">Cabin air filter</string>
 </resources>

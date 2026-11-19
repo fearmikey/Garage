@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pdf_footer">Garage — گاڑی کی سروس اور تاریخ کی کتاب</string>
+    <string name="pdf_page_of">صفحہ %1$d از %2$d</string>
+    <string name="pdf_header_continued_title">گاڑی کی سروس اور تاریخ کی کتاب — %1$s</string>
+    <string name="pdf_continued">جاری</string>
+    <string name="pdf_banner_title">گاڑی کی سروس اور تاریخ کی کتاب</string>
+    <string name="pdf_banner_subtitle">دوبارہ فروخت اور مسلسل دیکھ بھال کی رپورٹ</string>
+    <string name="pdf_generated">تیار کردہ %1$s</string>
+
+    <!-- Vehicle overview -->
+    <string name="pdf_not_recorded">درج نہیں</string>
+    <string name="pdf_not_specified">واضح نہیں</string>
+    <string name="pdf_label_vin">VIN:</string>
+    <string name="pdf_label_current_odometer">موجودہ اوڈومیٹر:</string>
+    <string name="pdf_label_current_mileage">موجودہ مائلیج:</string>
+    <string name="pdf_label_drivetrain">ڈرائیو ٹرین:</string>
+    <string name="pdf_label_transmission">ٹرانسمیشن:</string>
+    <string name="pdf_transmission_speeds">%1$s گیئر</string>
+    <string name="pdf_standard">معیاری</string>
+    <string name="pdf_engine_cylinders">%1$s سلنڈر</string>
+    <string name="pdf_standard_engine">معیاری انجن</string>
+    <string name="pdf_label_engine">انجن:</string>
+    <string name="pdf_label_fuel_type">ایندھن کی قسم:</string>
+    <string name="pdf_label_purchased">خریداری:</string>
+    <string name="pdf_label_initial_odometer">ابتدائی اوڈومیٹر:</string>
+    <string name="pdf_label_initial_mileage">ابتدائی مائلیج:</string>
+    <string name="pdf_label_specs">خصوصیات:</string>
+
+    <!-- Care investment summary -->
+    <string name="pdf_summary_title">دیکھ بھال پر کل سرمایہ کاری کا خلاصہ</string>
+    <string name="pdf_total_investment">کل سرمایہ کاری</string>
+    <string name="pdf_maintenance_care">دیکھ بھال</string>
+    <plurals name="pdf_records_logged">
+        <item quantity="one">%d ریکارڈ درج</item>
+        <item quantity="other">%d ریکارڈز درج</item>
+    </plurals>
+    <string name="pdf_upgrades_mods">اپ گریڈز اور موڈز</string>
+    <plurals name="pdf_installed_items">
+        <item quantity="one">%d نصب شدہ آئٹم</item>
+        <item quantity="other">%d نصب شدہ آئٹمز</item>
+    </plurals>
+    <string name="pdf_logged_range">درج شدہ رینج</string>
+    <string name="pdf_range_to">تا %1$s</string>
+
+    <!-- Safety recalls -->
+    <string name="pdf_recalls_clear">سرکاری حفاظتی ریکال کی حالت: صاف (0 کھلے ریکالز)</string>
+    <plurals name="pdf_recalls_verified_count">
+        <item quantity="one">%1$s کے لیے NHTSA ڈیٹا بیس سے تصدیق شدہ (%2$d مہم چیک کی گئی — 0 فعال کھلے ریکالز)۔</item>
+        <item quantity="other">%1$s کے لیے NHTSA ڈیٹا بیس سے تصدیق شدہ (%2$d مہمات چیک کی گئیں — 0 فعال کھلے ریکالز)۔</item>
+    </plurals>
+    <string name="pdf_recalls_verified_none">%1$s کے لیے NHTSA ڈیٹا بیس سے تصدیق شدہ۔ کوئی فعال حفاظتی ریکال مہم نہیں ملی۔</string>
+    <plurals name="pdf_recalls_open">
+        <item quantity="one">حفاظتی ریکال کی حالت: %d کھلا ریکال</item>
+        <item quantity="other">حفاظتی ریکال کی حالت: %d کھلے ریکالز</item>
+    </plurals>
+    <string name="pdf_recall_item">• مہم #%1$s — پرزہ: %2$s</string>
+    <string name="pdf_no_summary">کوئی خلاصہ فراہم نہیں کیا گیا۔</string>
+
+    <!-- Sections and table headers -->
+    <string name="pdf_parts_title">پرزوں اور فلوئڈز کی خصوصیات</string>
+    <string name="pdf_mods_title">گاڑی کے اپ گریڈز اور ترامیم</string>
+    <string name="pdf_fuel_title">ایندھن اور چارجنگ کی تاریخ</string>
+    <string name="pdf_service_title">مسلسل سروس کی تاریخ</string>
+    <string name="pdf_col_date">تاریخ</string>
+    <string name="pdf_col_item">اپ گریڈ / آئٹم</string>
+    <string name="pdf_col_category">زمرہ</string>
+    <string name="pdf_col_description">تفصیل / نوٹس</string>
+    <string name="pdf_col_cost">لاگت</string>
+    <string name="pdf_col_odometer">اوڈومیٹر (%1$s)</string>
+    <string name="pdf_col_mileage">مائلیج</string>
+    <string name="pdf_col_type">قسم</string>
+    <string name="pdf_col_details">تفصیلات</string>
+    <string name="pdf_col_service">سروس اور کام کی تفصیل</string>
+    <string name="pdf_no_maintenance">اس گاڑی کے لیے دیکھ بھال کا کوئی ریکارڈ درج نہیں۔</string>
+</resources>

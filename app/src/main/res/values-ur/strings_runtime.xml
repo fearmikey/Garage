@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Document renewal notifications -->
+    <string name="reminder_doc_registration">گاڑی کی رجسٹریشن کی تجدید</string>
+    <string name="reminder_doc_inspection">سرکاری گاڑی معائنے کی تجدید</string>
+    <string name="reminder_doc_emissions">اخراج / اسموگ ٹیسٹ کی تجدید</string>
+    <string name="reminder_doc_sticker">معائنہ اسٹیکر کی تجدید</string>
+    <string name="reminder_doc_insurance">انشورنس پالیسی کی تجدید</string>
+    <string name="reminder_doc_toll">ٹول پاس / پارکنگ پرمٹ کی تجدید</string>
+    <string name="reminder_doc_drivers_license">ڈرائیونگ لائسنس کی تجدید</string>
+    <!-- %1$s: the user's name for a custom document, e.g. "Extended Warranty" -->
+    <string name="reminder_doc_custom">%1$s کی تجدید</string>
+    <string name="reminder_doc_custom_fallback">دستاویز</string>
+    <string name="reminder_personal_document">ذاتی ڈرائیور دستاویز</string>
+
+    <!-- GPS trip tracking notification -->
+    <string name="trip_channel_name">سفر ٹریکنگ</string>
+    <string name="trip_channel_description">فعال سفر کا موجودہ فاصلہ دکھاتا ہے</string>
+    <string name="trip_notification_distance">فاصلہ: %1$s</string>
+
+    <!-- Seller report screen -->
+    <plurals name="export_records_logged">
+        <item quantity="one">%d درج</item>
+        <item quantity="other">%d درج</item>
+    </plurals>
+    <plurals name="export_mods_items">
+        <item quantity="one">%1$d آئٹم (%2$s)</item>
+        <item quantity="other">%1$d آئٹمز (%2$s)</item>
+    </plurals>
+
+    <!-- LubeLogger duplicates -->
+    <plurals name="dup_deleted_message">
+        <item quantity="one">%d ڈپلیکیٹ ریکارڈ حذف کر دیا گیا۔</item>
+        <item quantity="other">%d ڈپلیکیٹ ریکارڈز حذف کر دیے گئے۔</item>
+    </plurals>
+
+    <!-- Add / edit vehicle: VIN -->
+    <string name="vin_error_scan_not_vin">اسکین شدہ کوڈ (\"%1$s\") میں VIN نہیں ہے۔ VIN بارکوڈ آزمائیں، یا VIN خود ٹائپ کریں۔</string>
+    <string name="vin_error_length">VIN کو %1$d حروف کا ہونا چاہیے (فی الحال %2$d)۔</string>
+    <string name="vehicle_error_save">گاڑی محفوظ کرتے وقت ایک خرابی پیش آئی۔</string>
+    <string name="vin_error_no_results">اس VIN کے لیے کوئی ڈی کوڈ نتائج نہیں ملے۔</string>
+    <string name="vin_error_invalid_characters">اس VIN میں غلط حروف ہیں۔</string>
+    <string name="vin_error_incomplete">یہ VIN نامکمل لگتا ہے۔ چیک کریں کہ یہ بغیر غلطی کے 17 حروف کا ہے۔</string>
+    <string name="vin_error_manufacturer_unknown">یہ صنعت کار NHTSA ڈیٹا بیس میں نہیں ہے۔ NHTSA ڈیٹا بیس بنیادی طور پر امریکہ میں فروخت ہونے والی گاڑیوں کا احاطہ کرتا ہے، اس لیے دوسری منڈیوں کی گاڑیاں دستی طور پر درج کرنی پڑ سکتی ہیں۔</string>
+    <string name="vin_error_not_found">اس VIN کے لیے گاڑی کی کوئی تفصیلات نہیں ملیں۔ NHTSA ڈیٹا بیس بنیادی طور پر امریکہ میں فروخت ہونے والی گاڑیوں کا احاطہ کرتا ہے، اس لیے دوسری منڈیوں کی گاڑیاں دستی طور پر درج کرنی پڑ سکتی ہیں۔</string>
+    <string name="vin_error_network">VIN ڈی کوڈ نہیں ہو سکا۔ اپنا انٹرنیٹ کنکشن چیک کریں۔</string>
+    <string name="vin_warning_model_missing">اس VIN کے لیے ماڈل نہیں ملا؛ براہ کرم اسے دستی طور پر درج کریں۔</string>
+    <string name="vin_warning_year_unreliable">اس VIN سے ماڈل سال معلوم نہیں ہو سکا؛ براہ کرم اسے دستی طور پر درج کریں۔</string>
+    <string name="vin_warning_partial">VIN صرف جزوی طور پر ڈی کوڈ ہوا؛ براہ کرم تفصیلات کی تصدیق کریں۔</string>
+
+    <!-- Recalls -->
+    <string name="recall_error_http">NHTSA کی ریکال سروس (api.nhtsa.gov) نے خرابی واپس کی (HTTP %1$d)۔ براہ کرم بعد میں دوبارہ کوشش کریں۔</string>
+    <string name="recall_error_network">NHTSA کی ریکال سروس (api.nhtsa.gov) تک رسائی نہیں ہو سکی۔ اپنا انٹرنیٹ کنکشن چیک کریں۔</string>
+    <string name="recall_error_unexpected">ریکالز چیک کرتے وقت غیر متوقع خرابی۔</string>
+
+    <!-- Backup & restore -->
+    <string name="backup_error_open_destination">منزل کو لکھنے کے لیے نہیں کھولا جا سکا۔</string>
+    <string name="backup_error_export_unknown">بیک اپ برآمد کرتے وقت نامعلوم خرابی۔</string>
+    <string name="backup_error_no_folder">کوئی مقامی بیک اپ فولڈر ترتیب نہیں دیا گیا۔</string>
+    <string name="backup_error_folder_access">منتخب بیک اپ فولڈر تک رسائی نہیں ہو سکی۔</string>
+    <string name="backup_error_folder_not_writable">بیک اپ فولڈر موجود نہیں یا اس میں لکھا نہیں جا سکتا۔</string>
+    <string name="backup_error_create_file">منتخب فولڈر میں %1$s نہیں بنائی جا سکی۔</string>
+    <string name="backup_error_open_output">بیک اپ فائل کے لیے آؤٹ پٹ اسٹریم نہیں کھل سکی۔</string>
+    <string name="backup_error_permission">فولڈر تک رسائی کی اجازت نہیں۔ براہ کرم بیک اپ فولڈر دوبارہ منتخب کریں۔</string>
+    <string name="backup_error_local_unknown">مقامی فولڈر میں بیک اپ لکھتے وقت نامعلوم خرابی۔</string>
+    <string name="backup_error_open_file">منتخب بیک اپ فائل نہیں کھل سکی۔</string>
+    <string name="backup_error_invalid_entry">بیک اپ فائل میں ایک غلط اندراج ہے: %1$s</string>
+    <string name="backup_error_missing_db">یہ فائل Garage بیک اپ نہیں لگتی (ڈیٹا بیس موجود نہیں)۔</string>
+    <string name="backup_error_unreadable_db">یہ فائل درست Garage بیک اپ نہیں لگتی (ڈیٹا بیس پڑھا نہیں جا سکتا)۔</string>
+    <string name="backup_error_newer_version">یہ بیک اپ Garage کے نئے ورژن سے بنایا گیا تھا اور یہاں بحال نہیں ہو سکتا۔ ایپ اپ ڈیٹ کریں، پھر یہ بیک اپ دوبارہ بحال کرنے کی کوشش کریں۔</string>
+    <string name="backup_error_import_unknown">بیک اپ درآمد کرتے وقت نامعلوم خرابی۔</string>
+
+    <!-- WebDAV / LubeLogger -->
+    <string name="webdav_error_not_configured">کلاؤڈ سنک ترتیب نہیں دیا گیا۔</string>
+    <!-- %1$s: HTTP status, e.g. "404 Not Found" -->
+    <string name="webdav_error_upload_http">اپ لوڈ ناکام: HTTP %1$s</string>
+    <string name="webdav_error_sync_unknown">WebDAV پر سنک کرتے وقت نامعلوم خرابی۔</string>
+    <string name="webdav_error_url_username_required">سرور URL اور صارف نام درکار ہیں۔</string>
+    <string name="webdav_error_auth">تصدیق ناکام۔ اپنا صارف نام اور پاس ورڈ چیک کریں۔</string>
+    <string name="webdav_error_test_unknown">کنکشن آزماتے وقت نامعلوم خرابی۔</string>
+    <string name="lubelogger_error_invalid_url">LubeLogger سرور URL غلط ہے۔</string>
+</resources>

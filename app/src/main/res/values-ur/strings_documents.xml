@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Shared -->
+    <string name="common_notes">نوٹس</string>
+    <string name="common_cost">لاگت</string>
+    <string name="common_cost_optional">لاگت (اختیاری)</string>
+    <string name="common_remove">ہٹائیں</string>
+    <string name="common_edit_item">%1$s میں ترمیم کریں</string>
+    <string name="common_copy_label">%1$s کاپی کریں</string>
+    <string name="common_copied_to_clipboard">%1$s کلپ بورڈ پر کاپی ہو گیا</string>
+
+    <!-- Vehicle documents: edit screen -->
+    <string name="doc_edit_title">دستاویزات میں ترمیم</string>
+    <string name="doc_tab_registration">پلیٹ اور رجسٹریشن</string>
+    <string name="doc_tab_insurance">انشورنس</string>
+    <string name="doc_tab_inspection">معائنہ</string>
+    <string name="doc_tab_emissions">اسموگ / اخراج</string>
+    <string name="doc_tab_stickers">اسٹیکرز</string>
+    <string name="doc_tab_toll">ٹول / پارکنگ</string>
+    <string name="doc_tab_purchase">خریداری</string>
+    <string name="doc_select_expiration_date">میعاد ختم ہونے کی تاریخ منتخب کریں</string>
+    <string name="doc_select_due_date">مقررہ تاریخ منتخب کریں</string>
+    <string name="doc_select_date_tested">ٹیسٹ کی تاریخ منتخب کریں</string>
+    <string name="doc_reg_notes_placeholder">ٹائٹل پر VIN، رجسٹریشن دفتر کے نوٹس…</string>
+    <string name="doc_reg_card_front">رجسٹریشن کارڈ – سامنے / صفحہ 1</string>
+    <string name="doc_reg_card_back">رجسٹریشن کارڈ – پیچھے / صفحہ 2</string>
+    <string name="doc_insp_notes_placeholder">اسٹیشن کا نام، سرٹیفکیٹ نمبر…</string>
+    <string name="doc_emissions_notes_placeholder">اسٹیشن کا مقام، سرٹیفکیٹ نمبر، نوٹس…</string>
+    <string name="doc_sticker_exp_label">اسٹیکر کی تجدید / میعاد کی تاریخ</string>
+    <string name="doc_sticker_number_label">اسٹیکر / ڈیکل نمبر</string>
+    <string name="doc_sticker_number_placeholder">مثلاً STK-2025-9988</string>
+    <string name="doc_sticker_notes_label">اسٹیکر نوٹس / مقام</string>
+    <string name="doc_sticker_notes_placeholder">مثلاً ونڈ اسکرین کے نیچے بائیں جانب، مقامی ڈیکل…</string>
+    <string name="doc_delete_sticker_btn">معائنہ اسٹیکر کی معلومات حذف کریں</string>
+    <string name="doc_insur_provider_placeholder">مثلاً EFU، Adamjee، Jubilee</string>
+    <string name="doc_insur_policy_placeholder">مثلاً POL-987654321</string>
+    <string name="doc_insur_contact_placeholder">مثلاً احمد خان 0300-1234567</string>
+    <string name="doc_insur_notes_placeholder">کٹوتیاں، سڑک پر مدد، کوریج…</string>
+    <string name="doc_insur_card_photo">انشورنس کارڈ کی تصویر</string>
+    <string name="doc_toll_account_placeholder">مثلاً M-Tag #1234567، رہائشی پرمٹ #88</string>
+    <string name="doc_toll_notes_placeholder">ٹرانسپونڈر سیریل، پارکنگ نمبر، زون نوٹس…</string>
+    <string name="doc_seller_label">فروخت کنندہ / ڈیلر</string>
+    <string name="doc_seller_placeholder">مثلاً مین روڈ موٹرز، نجی فروخت</string>
+    <string name="doc_purchase_notes_label">خریداری کے نوٹس</string>
+    <string name="doc_purchase_notes_placeholder">ٹریڈ اِن، فنانسنگ، ٹیکس اور فیس…</string>
+    <string name="doc_bill_of_sale">بل آف سیل</string>
+    <string name="doc_delete_purchase_btn">خریداری کی معلومات حذف کریں</string>
+    <string name="doc_delete_reg_title">نمبر پلیٹ اور رجسٹریشن کی معلومات حذف کریں؟</string>
+    <string name="doc_delete_reg_message">کیا آپ واقعی اس گاڑی کی نمبر پلیٹ اور رجسٹریشن کی تفصیلات حذف کرنا چاہتے ہیں؟</string>
+    <string name="doc_delete_insp_title">سرکاری معائنے کی معلومات حذف کریں؟</string>
+    <string name="doc_delete_insp_message">کیا آپ واقعی اس گاڑی کے سرکاری معائنے کی تفصیلات حذف کرنا چاہتے ہیں؟</string>
+    <string name="doc_delete_emissions_title">اخراج اور اسموگ کی معلومات حذف کریں؟</string>
+    <string name="doc_delete_emissions_message">کیا آپ واقعی اس گاڑی کے اخراج / اسموگ ٹیسٹ کی تفصیلات حذف کرنا چاہتے ہیں؟</string>
+    <string name="doc_delete_sticker_title">معائنہ اسٹیکر کی معلومات حذف کریں؟</string>
+    <string name="doc_delete_sticker_message">کیا آپ واقعی اس گاڑی کے معائنہ اسٹیکر کی تفصیلات حذف کرنا چاہتے ہیں؟</string>
+    <string name="doc_delete_insur_title">انشورنس پالیسی کی معلومات حذف کریں؟</string>
+    <string name="doc_delete_insur_message">کیا آپ واقعی اس گاڑی کی انشورنس پالیسی کی تفصیلات حذف کرنا چاہتے ہیں؟</string>
+    <string name="doc_delete_purchase_title">خریداری کی معلومات حذف کریں؟</string>
+    <string name="doc_delete_purchase_message">کیا آپ واقعی اس گاڑی کی خریداری کی تفصیلات حذف کرنا چاہتے ہیں؟</string>
+    <string name="doc_delete_toll_title">ٹول پاس اور پارکنگ کی معلومات حذف کریں؟</string>
+    <string name="doc_delete_toll_message">کیا آپ واقعی اس گاڑی کے ٹول پاس اور پارکنگ پرمٹ کی تفصیلات حذف کرنا چاہتے ہیں؟</string>
+
+    <!-- Vehicle documents: view screen -->
+    <string name="doc_add_other">دیگر دستاویز شامل کریں</string>
+    <string name="doc_edit_details">تفصیلات میں ترمیم کریں</string>
+    <string name="doc_add_documents">گاڑی کی دستاویزات شامل کریں</string>
+    <string name="doc_empty_message">ابھی تک گاڑی کی کوئی دستاویز شامل نہیں کی گئی۔\nرجسٹریشن، معائنہ، اخراج، اسٹیکرز، انشورنس، ٹول پاس یا خریداری کی تفصیلات ٹریک کرنے کے لیے + ٹیپ کریں۔\nکوئی بھی دیگر دستاویز (وارنٹی، ٹائٹل، سڑک پر مدد…) شامل کرنے کے لیے چھوٹا بٹن استعمال کریں۔</string>
+    <string name="doc_other_documents">دیگر دستاویزات</string>
+    <string name="doc_section_registration">گاڑی اور نمبر پلیٹ کی رجسٹریشن</string>
+    <string name="doc_license_plate">نمبر پلیٹ</string>
+    <string name="doc_no_plate">کوئی پلیٹ نہیں</string>
+    <string name="doc_renewal_fee">تجدید فیس</string>
+    <string name="doc_reg_document">رجسٹریشن دستاویز / کارڈ</string>
+    <string name="doc_reg_photo_cd">رجسٹریشن دستاویز کی تصویر %1$d</string>
+    <string name="doc_section_inspection">سرکاری گاڑی معائنہ</string>
+    <string name="doc_station_notes">نوٹس / اسٹیشن کی معلومات</string>
+    <string name="doc_section_emissions">اخراج اور اسموگ ٹیسٹنگ</string>
+    <string name="doc_section_stickers">سرکاری اور مقامی معائنہ اسٹیکرز</string>
+    <string name="doc_section_insurance">انشورنس پالیسی</string>
+    <string name="doc_insurance_provider">انشورنس فراہم کنندہ</string>
+    <string name="doc_policy_number">پالیسی نمبر</string>
+    <string name="doc_premium">پریمیم / لاگت</string>
+    <string name="doc_agent_contact">ایجنٹ / رابطہ</string>
+    <string name="doc_insur_document">انشورنس کارڈ / دستاویز</string>
+    <string name="doc_section_toll">ٹول پاس اور پارکنگ پرمٹس</string>
+    <string name="doc_status_expired">میعاد ختم (%1$d دن پہلے)</string>
+    <string name="doc_status_expires_in">%1$d دن میں میعاد ختم</string>
+    <string name="doc_status_active">فعال (%1$d دن باقی)</string>
+    <string name="doc_add_item">%1$s شامل کریں</string>
+    <string name="doc_close_preview">پیش نظارہ بند کریں</string>
+    <string name="doc_preview">دستاویز کا پیش نظارہ</string>
+
+    <!-- Custom ("other") documents -->
+    <string name="custom_doc_expiration">میعاد</string>
+    <string name="custom_doc_reference_short">حوالہ / پالیسی نمبر</string>
+    <string name="custom_doc_view_pdf">PDF دیکھیں</string>
+    <string name="custom_doc_view_photo">تصویر دیکھیں</string>
+    <string name="custom_doc_add_title">دستاویز شامل کریں</string>
+    <string name="custom_doc_edit_title">دستاویز میں ترمیم</string>
+    <string name="custom_doc_name_label">دستاویز کا نام *</string>
+    <string name="custom_doc_name_placeholder">مثلاً توسیعی وارنٹی، سڑک پر مدد، ٹائٹل</string>
+    <string name="custom_doc_reference_label">حوالہ / پالیسی / معاہدہ نمبر</string>
+    <string name="custom_doc_expiration_optional">میعاد (اختیاری)</string>
+    <string name="custom_doc_clear_expiration">میعاد صاف کریں</string>
+    <string name="custom_doc_notes_placeholder">فراہم کنندہ، کوریج، فون نمبر…</string>
+    <string name="custom_doc_replace_attachment">تصویر / PDF تبدیل کریں</string>
+    <string name="custom_doc_attach">تصویر / PDF منسلک کریں</string>
+    <string name="custom_doc_save">دستاویز محفوظ کریں</string>
+    <string name="custom_doc_delete">دستاویز حذف کریں</string>
+    <string name="custom_doc_delete_title">%1$s حذف کریں؟</string>
+    <string name="custom_doc_delete_message">یہ دستاویز اور اس کا منسلکہ مستقل طور پر ہٹا دیا جائے گا۔</string>
+</resources>

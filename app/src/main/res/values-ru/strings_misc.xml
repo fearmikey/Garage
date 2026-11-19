@@ -28,4 +28,27 @@
     <string name="trend_unusual_reading">Необычное значение</string>
     <string name="url_invalid">Недопустимый URL</string>
     <string name="url_open_failed">Не удалось открыть ссылку</string>
+
+    <!-- Parts & Supplies tab -->
+    <string name="parts_reference_title">Краткая справка</string>
+    <string name="supplies_title">Запасы</string>
+    <string name="supplies_empty">Запасов пока нет. Нажмите +, чтобы добавить купленные или имеющиеся в наличии запчасти и жидкости.</string>
+    <string name="supplies_cd_add">Добавить запас</string>
+    <string name="supplies_add_title">Добавить запас</string>
+    <string name="supplies_edit_title">Изменить запас</string>
+    <string name="supplies_description_label">Описание *</string>
+    <string name="supplies_description_placeholder">напр., масляный фильтр, масло 5W-30</string>
+    <string name="supplies_part_number_label">Номер детали</string>
+    <string name="supplies_supplier_label">Поставщик</string>
+    <string name="supplies_quantity_label">Количество</string>
+    <string name="supplies_cost_label">Общая стоимость</string>
+    <string name="supplies_date_label">Дата покупки</string>
+    <string name="supplies_qty_value">Кол-во: %1$s</string>
+    <string name="supplies_delete_title">Удалить запас?</string>
+    <string name="supplies_delete_message">«%1$s» будет удалён. Если он синхронизирован, он также будет удалён из LubeLogger.</string>
+    <string name="supplies_add_as_supply">Добавить в запасы</string>
+    <string name="supply_desc_oil_filter">Масляный фильтр</string>
+    <string name="supply_desc_spark_plug">Свечи зажигания</string>
+    <string name="supply_desc_engine_air_filter">Воздушный фильтр двигателя</string>
+    <string name="supply_desc_cabin_air_filter">Салонный фильтр</string>
 </resources>

@@ -28,4 +28,27 @@
     <string name="trend_unusual_reading">Valore insolito</string>
     <string name="url_invalid">URL non valido</string>
     <string name="url_open_failed">Impossibile aprire il link</string>
+
+    <!-- Parts & Supplies tab -->
+    <string name="parts_reference_title">Promemoria rapido</string>
+    <string name="supplies_title">Scorte</string>
+    <string name="supplies_empty">Nessuna scorta ancora. Tocca + per registrare ricambi e fluidi acquistati o in magazzino.</string>
+    <string name="supplies_cd_add">Aggiungi scorta</string>
+    <string name="supplies_add_title">Aggiungi scorta</string>
+    <string name="supplies_edit_title">Modifica scorta</string>
+    <string name="supplies_description_label">Descrizione *</string>
+    <string name="supplies_description_placeholder">es. filtro olio, olio 5W-30</string>
+    <string name="supplies_part_number_label">Codice ricambio</string>
+    <string name="supplies_supplier_label">Fornitore</string>
+    <string name="supplies_quantity_label">Quantità</string>
+    <string name="supplies_cost_label">Costo totale</string>
+    <string name="supplies_date_label">Data di acquisto</string>
+    <string name="supplies_qty_value">Qtà %1$s</string>
+    <string name="supplies_delete_title">Eliminare la scorta?</string>
+    <string name="supplies_delete_message">«%1$s» verrà eliminata. Se è sincronizzata, verrà rimossa anche da LubeLogger.</string>
+    <string name="supplies_add_as_supply">Aggiungi come scorta</string>
+    <string name="supply_desc_oil_filter">Filtro olio</string>
+    <string name="supply_desc_spark_plug">Candele</string>
+    <string name="supply_desc_engine_air_filter">Filtro aria motore</string>
+    <string name="supply_desc_cabin_air_filter">Filtro abitacolo</string>
 </resources>

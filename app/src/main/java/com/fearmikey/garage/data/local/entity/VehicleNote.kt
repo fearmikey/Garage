@@ -1,10 +1,15 @@
 package com.fearmikey.garage.data.local.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
+/**
+ * A knowledge-base note. Synced with LubeLogger's vehicle notes (title <-> description,
+ * content <-> note text) by LubeLoggerSyncWorker.
+ */
 @Entity(
     tableName = "vehicle_notes",
     foreignKeys = [
@@ -24,5 +29,9 @@ data class VehicleNote(
     val title: String,
     val content: String,
     val category: String,
-    val lastUpdated: Long
+    val lastUpdated: Long,
+    @ColumnInfo(defaultValue = "NULL")
+    val lubeLoggerId: Int? = null,
+    @ColumnInfo(defaultValue = "NULL")
+    val lubeLoggerSyncHash: String? = null,
 )

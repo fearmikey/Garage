@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Parts & fluids editor -->
+    <string name="parts_edit_title">پرزوں اور فلوئڈز میں ترمیم</string>
+    <string name="parts_autofill">تخمینی خصوصیات خود بخود بھریں</string>
+    <string name="parts_autofill_msg">خود بخود بھری گئی فلوئڈ کی گنجائش اور پرزوں کی خصوصیات ڈی کوڈ شدہ VIN اور انجن کے ڈیٹا کی بنیاد پر تخمینی ہیں۔\n\nفلوئڈز خریدنے یا گاڑی کی سروس کرنے سے پہلے درستگی کے لیے براہ کرم تمام قدروں کی اپنے سرکاری مالک کے کتابچے سے دوبارہ تصدیق کریں۔</string>
+    <string name="parts_apply_understand">سمجھ گیا، لاگو کریں</string>
+
+    <!-- Vehicle detail toolbar -->
+    <string name="vehicle_cd_obd">OBD2 اسکینر</string>
+    <string name="vehicle_cd_export">دیکھ بھال کا ریکارڈ برآمد کریں</string>
+    <string name="vehicle_unnamed">بے نام گاڑی</string>
+    <string name="tabs_cd_reorder">ٹیب کی ترتیب بدلیں</string>
+
+    <!-- Shared components -->
+    <string name="currency_select_title">کرنسی منتخب کریں</string>
+    <string name="currency_search">کرنسیاں تلاش کریں…</string>
+    <string name="currency_none_found">کوئی مماثل کرنسی نہیں ملی۔</string>
+    <string name="bmac_title">Garage کی مدد کریں</string>
+    <string name="bmac_message">Garage پسند آ رہا ہے؟ اگر ایپ آپ کے لیے مفید ہے تو اس کی اوپن سورس ترقی میں مدد کرنے پر غور کریں!</string>
+    <string name="bmac_dont_ask">دوبارہ نہ پوچھیں</string>
+    <string name="bmac_later">شاید بعد میں</string>
+    <string name="status_overdue">تاخیر شدہ</string>
+    <string name="status_upcoming">آنے والا</string>
+    <string name="status_on_track">درست راستے پر</string>
+    <string name="status_done">مکمل</string>
+    <string name="odo_vehicle">گاڑی</string>
+    <string name="odo_current">موجودہ: %1$s</string>
+    <string name="odo_new_reading">نئی اوڈومیٹر ریڈنگ (%1$s)</string>
+    <string name="odo_notes_optional">نوٹس (اختیاری)</string>
+    <string name="odo_notes_placeholder">مثلاً ہفتہ وار اوڈومیٹر اندراج</string>
+    <string name="trend_tap_to_edit">ترمیم کے لیے ٹیپ کریں</string>
+    <string name="trend_unusual_reading">غیر معمولی ریڈنگ</string>
+    <string name="url_invalid">غلط URL</string>
+    <string name="url_open_failed">لنک نہیں کھل سکا</string>
+
+    <!-- Parts & Supplies tab -->
+    <string name="parts_reference_title">فوری حوالہ</string>
+    <string name="supplies_title">سامان</string>
+    <string name="supplies_empty">ابھی کوئی سامان نہیں۔ خریدے گئے یا ذخیرے میں موجود پرزے اور فلوئڈز درج کرنے کے لیے + ٹیپ کریں۔</string>
+    <string name="supplies_cd_add">سامان شامل کریں</string>
+    <string name="supplies_add_title">سامان شامل کریں</string>
+    <string name="supplies_edit_title">سامان میں ترمیم</string>
+    <string name="supplies_description_label">تفصیل *</string>
+    <string name="supplies_description_placeholder">مثلاً آئل فلٹر، 5W-30 آئل</string>
+    <string name="supplies_part_number_label">پارٹ نمبر</string>
+    <string name="supplies_supplier_label">فراہم کنندہ</string>
+    <string name="supplies_quantity_label">مقدار</string>
+    <string name="supplies_cost_label">کل لاگت</string>
+    <string name="supplies_date_label">تاریخ خرید</string>
+    <string name="supplies_qty_value">مقدار %1$s</string>
+    <string name="supplies_delete_title">سامان حذف کریں؟</string>
+    <string name="supplies_delete_message">“%1$s” حذف کر دیا جائے گا۔ اگر یہ سنک ہے تو LubeLogger سے بھی ہٹا دیا جائے گا۔</string>
+    <string name="supplies_add_as_supply">سامان کے طور پر شامل کریں</string>
+    <string name="supply_desc_oil_filter">آئل فلٹر</string>
+    <string name="supply_desc_spark_plug">اسپارک پلگز</string>
+    <string name="supply_desc_engine_air_filter">انجن ایئر فلٹر</string>
+    <string name="supply_desc_cabin_air_filter">کیبن ایئر فلٹر</string>
+</resources>

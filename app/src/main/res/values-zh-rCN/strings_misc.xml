@@ -33,4 +33,27 @@
     <string name="trend_unusual_reading">异常读数</string>
     <string name="url_invalid">无效的 URL</string>
     <string name="url_open_failed">无法打开链接</string>
+
+    <!-- Parts & Supplies tab -->
+    <string name="parts_reference_title">快速参考</string>
+    <string name="supplies_title">耗材</string>
+    <string name="supplies_empty">暂无耗材。点按 + 记录您购买或库存的配件和油液。</string>
+    <string name="supplies_cd_add">添加耗材</string>
+    <string name="supplies_add_title">添加耗材</string>
+    <string name="supplies_edit_title">编辑耗材</string>
+    <string name="supplies_description_label">描述 *</string>
+    <string name="supplies_description_placeholder">例如：机油滤清器、5W-30 机油</string>
+    <string name="supplies_part_number_label">零件号</string>
+    <string name="supplies_supplier_label">供应商</string>
+    <string name="supplies_quantity_label">数量</string>
+    <string name="supplies_cost_label">总费用</string>
+    <string name="supplies_date_label">购买日期</string>
+    <string name="supplies_qty_value">数量 %1$s</string>
+    <string name="supplies_delete_title">删除耗材？</string>
+    <string name="supplies_delete_message">将删除“%1$s”。如果已同步，也会从 LubeLogger 中移除。</string>
+    <string name="supplies_add_as_supply">添加为耗材</string>
+    <string name="supply_desc_oil_filter">机油滤清器</string>
+    <string name="supply_desc_spark_plug">火花塞</string>
+    <string name="supply_desc_engine_air_filter">发动机空气滤清器</string>
+    <string name="supply_desc_cabin_air_filter">空调滤清器</string>
 </resources>

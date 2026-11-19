@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Garage</string>
+
+    <!-- Language -->
+    <string name="language_system_default">سسٹم ڈیفالٹ</string>
+    <string name="language_english">English</string>
+    <string name="language_french">Français</string>
+    <string name="language_german">Deutsch</string>
+    <string name="language_polish">Polski</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_italian">Italiano</string>
+    <string name="language_portuguese">Português</string>
+    <string name="language_dutch">Nederlands</string>
+    <string name="language_russian">Русский</string>
+    <string name="language_turkish">Türkçe</string>
+    <string name="language_chinese_simplified">简体中文</string>
+    <string name="language_urdu">اردو</string>
+    <string name="language_selection">زبان</string>
+
+    <!-- Settings -->
+    <string name="settings_title">ترتیبات</string>
+    <string name="settings_user_preferences">صارف کی ترجیحات</string>
+    <string name="settings_units">پیمائش کی اکائیاں</string>
+    <string name="settings_currency">کرنسی</string>
+    <string name="settings_theme">تھیم</string>
+    <string name="settings_default_vehicle">ڈیفالٹ گاڑی</string>
+    <string name="settings_appearance_theme">ظاہری شکل اور تھیم</string>
+    <string name="settings_reminders_notifications">یاد دہانیاں اور اطلاعات</string>
+    <string name="settings_data_sync">ڈیٹا، بیک اپ اور سنک</string>
+
+    <!-- Tabs -->
+    <string name="tab_my_vehicles">میری گاڑیاں</string>
+    <string name="tab_drivers_license">ڈرائیونگ لائسنس</string>
+    <string name="tab_support_store">سپورٹ اسٹور</string>
+    <string name="tab_timeline">ٹائم لائن</string>
+    <string name="tab_schedule">شیڈول</string>
+    <string name="tab_fuel">ایندھن</string>
+    <string name="tab_expenses">اخراجات</string>
+    <string name="tab_specs">خصوصیات</string>
+    <string name="tab_parts">پرزے اور سامان</string>
+    <string name="tab_mods">موڈز</string>
+    <string name="tab_documents">دستاویزات</string>
+    <string name="tab_recalls">ریکالز</string>
+    <string name="tab_knowledge">معلومات</string>
+    <string name="tab_trips">سفر</string>
+    <string name="customize_tabs">ٹیبز حسب منشا بنائیں</string>
+    <string name="customize_tabs_description">منتخب کریں کہ اس گاڑی کے لیے کون سے ٹیبز دکھائے جائیں۔</string>
+    <string name="customize_tabs_always_shown">ہمیشہ دکھایا جاتا ہے</string>
+    <string name="customize_tabs_save">محفوظ کریں</string>
+    <string name="customize_tabs_cancel">منسوخ کریں</string>
+    <string name="tab_alert_overdue">%1$s، تاخیر شدہ آئٹمز</string>
+    <string name="tab_alert_upcoming">%1$s، جلد واجب الادا آئٹمز</string>
+
+    <!-- Maintenance Tasks -->
+    <string name="task_engine_oil_change">انجن آئل کی تبدیلی</string>
+    <string name="task_power_steering_fluid">پاور اسٹیئرنگ فلوئڈ</string>
+    <string name="task_tire_replacement">ٹائر کی تبدیلی</string>
+    <string name="task_rotation_and_balance">روٹیشن اور بیلنس</string>
+    <string name="task_brake_fluid_flush">بریک فلوئڈ فلش</string>
+    <string name="task_cabin_air_filter">کیبن ایئر فلٹر کی تبدیلی</string>
+    <string name="task_engine_air_filter">انجن ایئر فلٹر کی تبدیلی</string>
+    <string name="task_transmission_fluid">آٹومیٹک ٹرانسمیشن فلوئڈ سروس</string>
+    <string name="task_coolant_flush">کولنٹ فلش</string>
+    <string name="task_spark_plug_replacement">اسپارک پلگ کی تبدیلی</string>
+    <string name="task_battery_test">بیٹری لوڈ ٹیسٹ / تبدیلی</string>
+    <string name="task_rust_prevention">زنگ سے بچاؤ</string>
+    <string name="task_paint_protection">پینٹ کا تحفظ</string>
+    <string name="task_serpentine_belt">سرپینٹائن بیلٹ کی تبدیلی</string>
+    <string name="task_wiper_blades">وائپر بلیڈ کی تبدیلی</string>
+    <string name="task_brake_pads">بریک پیڈ کی تبدیلی</string>
+    <string name="task_transfer_case_fluid">ٹرانسفر کیس فلوئڈ کی تبدیلی</string>
+    <string name="task_front_diff_fluid">فرنٹ ڈیفرینشل فلوئڈ کی تبدیلی</string>
+    <string name="task_rear_diff_fluid">ریئر ڈیفرینشل فلوئڈ کی تبدیلی</string>
+    <string name="task_chain_lube">ڈرائیو چین کی صفائی اور چکنائی</string>
+    <string name="task_chain_sprocket">چین اور اسپراکٹ کی تبدیلی</string>
+    <string name="task_valve_clearance">والو کلیئرنس کی جانچ</string>
+    <string name="task_fork_oil">فورک آئل کی تبدیلی</string>
+    <string name="task_clutch_throttle_cable">کلچ اور تھروٹل کیبل کی ایڈجسٹمنٹ</string>
+
+    <!-- Startup / Onboarding -->
+    <string name="startup_welcome_title">Garage میں خوش آمدید</string>
+    <string name="startup_measurement_system_title">پیمائش کا نظام</string>
+    <string name="startup_measurement_system_subtitle">منتخب کریں کہ پوری ایپ میں فاصلہ، ایندھن کا حجم اور ایندھن کی کارکردگی کیسے دکھائی جائے۔</string>
+    <string name="startup_metric_title">میٹرک نظام</string>
+    <string name="startup_metric_subtitle">کلومیٹر (km) · لیٹر (L) · L/100km</string>
+    <string name="startup_imperial_title">امپیریل / اسٹینڈرڈ</string>
+    <string name="startup_imperial_subtitle">میل (mi) · امریکی گیلن (gal) · MPG</string>
+    <string name="startup_language_subtitle">ایپ کے لیے اپنی پسندیدہ زبان منتخب کریں۔</string>
+    <string name="startup_currency_title">پسندیدہ کرنسی</string>
+    <string name="startup_currency_subtitle">ایندھن کے ریکارڈ، دیکھ بھال کے ریکارڈ اور اخراجات کی ٹریکنگ کے لیے اپنی کرنسی منتخب کریں۔</string>
+    <string name="startup_change">تبدیل کریں</string>
+    <string name="startup_permissions_title">ایپ کی اجازتیں</string>
+    <string name="startup_permissions_subtitle">سروس یاد دہانیاں، VIN اسکیننگ، GPS سفر ٹریکنگ اور OBD-II تشخیص جیسی خصوصیات کے لیے اجازتیں دیں۔</string>
+    <string name="startup_reminders_title">سروس یاد دہانیاں</string>
+    <string name="startup_reminders_subtitle">جب گاڑی کی دیکھ بھال یا سروس کا وقت ہو تو اطلاع حاصل کریں۔</string>
+    <string name="startup_vin_title">VIN اسکینر</string>
+    <string name="startup_vin_subtitle">گاڑی کی تفصیلات جلدی درآمد کرنے کے لیے کیمرے سے VIN بارکوڈ اسکین کریں۔</string>
+    <string name="startup_location_title">GPS سفر ٹریکنگ</string>
+    <string name="startup_location_subtitle">لوکیشن سروسز کے ذریعے گاڑی کا مائلیج اور راستے خودکار طور پر ٹریک کریں۔</string>
+    <string name="startup_bluetooth_title">OBD-II بلوٹوتھ</string>
+    <string name="startup_bluetooth_subtitle">فوری تشخیص اور DTC کوڈز صاف کرنے کے لیے وائرلیس OBD-II اڈاپٹرز سے جڑیں۔</string>
+    <string name="startup_permission_granted">اجازت دے دی گئی</string>
+    <string name="startup_grant_permission">اجازت دیں</string>
+    <string name="startup_support_title">ترقی میں مدد کریں</string>
+    <string name="startup_support_subtitle">Garage مکمل طور پر مفت اور اوپن سورس سافٹ ویئر ہے۔ اگر یہ آپ کے لیے مفید ہے تو ترقی میں مدد کرنے پر غور کریں!</string>
+    <string name="startup_buy_coffee_title">Buy Me a Coffee</string>
+    <string name="startup_buy_coffee_button">Buy Me a Coffee پر مدد کریں</string>
+    <string name="startup_affiliate_title">ایفیلیئٹ لنکس فعال کریں</string>
+    <string name="startup_affiliate_subtitle">ڈویلپر کے تجویز کردہ اوزاروں اور پرزوں کے لیے اختیاری Amazon ایفیلیئٹ لنکس دکھانے کی اجازت دیں۔ ان لنکس کے ذریعے خریداری آپ پر کسی اضافی لاگت کے بغیر منصوبے کی مدد کرتی ہے۔</string>
+
+    <!-- Guided onboarding -->
+    <string name="onboarding_step_progress">مرحلہ %1$d از %2$d</string>
+    <string name="onboarding_skip">چھوڑیں</string>
+    <string name="onboarding_back">واپس</string>
+    <string name="onboarding_next">اگلا</string>
+    <string name="onboarding_lets_go">چلیں</string>
+    <string name="onboarding_step_welcome">خوش آمدید</string>
+    <string name="onboarding_step_region">علاقہ اور اکائیاں</string>
+    <string name="onboarding_step_appearance">ظاہری شکل</string>
+    <string name="onboarding_step_screens">آپ کی اسکرینز</string>
+    <string name="onboarding_step_permissions">اجازتیں</string>
+    <string name="onboarding_step_finish">سب تیار ہے</string>
+    <string name="onboarding_welcome_subtitle">آپ کی ہر گاڑی کے لیے ایک نجی، آف لائن لاگ بک۔ آئیے آپ کا گیراج ترتیب دیں۔ اس میں صرف ایک منٹ لگے گا۔</string>
+    <string name="onboarding_feature_maintenance_title">دیکھ بھال ٹریک کریں</string>
+    <string name="onboarding_feature_maintenance_body">سروسز درج کریں اور اپنی گاڑی کے لیے تجویز کردہ شیڈول حاصل کریں۔</string>
+    <string name="onboarding_feature_fuel_title">ایندھن اور اخراجات درج کریں</string>
+    <string name="onboarding_feature_fuel_body">ایندھن کی کارکردگی کے رجحانات اور ملکیت کی اصل لاگت دیکھیں۔</string>
+    <string name="onboarding_feature_reminders_title">کوئی تاریخ نہ بھولیں</string>
+    <string name="onboarding_feature_reminders_body">سروس، رجسٹریشن اور انشورنس کی تجدید کے لیے یاد دہانیاں۔</string>
+    <string name="onboarding_feature_privacy_title">ڈیزائن سے ہی نجی</string>
+    <string name="onboarding_feature_privacy_body">مفت اور اوپن سورس۔ آپ کا ڈیٹا آپ کے آلے پر ہی رہتا ہے جب تک آپ خود بیک اپ نہ لیں۔</string>
+    <string name="onboarding_region_title">علاقہ اور اکائیاں</string>
+    <string name="onboarding_region_subtitle">طے کریں کہ پوری ایپ میں نمبر، قیمتیں اور زبان کیسے نظر آئیں۔</string>
+    <string name="onboarding_appearance_title">اسے اپنا بنائیں</string>
+    <string name="onboarding_appearance_subtitle">گاڑیوں سے متاثر رنگوں اور ڈارک موڈ سے اپنا گیراج ذاتی بنائیں۔ تبدیلیاں فوراً نظر آتی ہیں۔</string>
+    <string name="onboarding_theme_mode">تھیم</string>
+    <string name="onboarding_theme_system">سسٹم</string>
+    <string name="onboarding_theme_light">روشن</string>
+    <string name="onboarding_theme_dark">تاریک</string>
+    <string name="onboarding_dynamic_color_title">ڈائنامک رنگ</string>
+    <string name="onboarding_dynamic_color_subtitle">رنگوں کو سسٹم وال پیپر سے ملائیں (Android 12+)</string>
+    <string name="onboarding_palette_title">نمایاں رنگوں کا پیلیٹ</string>
+    <string name="onboarding_amoled_title">خالص سیاہ (AMOLED)</string>
+    <string name="onboarding_amoled_subtitle">ڈارک موڈ میں مکمل سیاہ پس منظر</string>
+    <string name="onboarding_screens_title">اپنی اسکرینز ترتیب دیں</string>
+    <string name="onboarding_screens_subtitle">منتخب کریں کہ آپ کیا دیکھنا چاہتے ہیں۔ سادہ رکھیں یا سب کچھ دکھائیں۔ آپ اسے کسی بھی وقت بدل سکتے ہیں۔</string>
+    <string name="onboarding_dashboard_section">ڈیش بورڈ</string>
+    <string name="onboarding_fuel_trend_title">ایندھن کے رجحان کا گراف</string>
+    <string name="onboarding_fuel_trend_subtitle">ہر گاڑی کے کارڈ پر ایندھن کی کارکردگی کا چھوٹا گراف دکھائیں</string>
+    <string name="onboarding_fleet_overview_title">فلیٹ کا جائزہ</string>
+    <string name="onboarding_fleet_overview_subtitle">آپ کی تمام گاڑیوں کی اوسط کے ساتھ خلاصہ کارڈ دکھائیں</string>
+    <string name="onboarding_vehicle_tabs_section">گاڑی کے ٹیبز</string>
+    <string name="onboarding_vehicle_tabs_subtitle">نئی شامل کی گئی گاڑی کھولنے پر دکھائے جانے والے ٹیبز۔ بعد میں کسی بھی گاڑی کو اس کے مینو → ٹیبز حسب منشا بنائیں سے بدلیں۔</string>
+    <string name="onboarding_tabs_show_all">سب دکھائیں</string>
+    <string name="onboarding_tabs_essentials">صرف ضروری</string>
+    <string name="onboarding_tabs_visible_count">%2$d میں سے %1$d ٹیبز نظر آ رہے ہیں</string>
+    <string name="onboarding_permissions_optional">تمام اجازتیں اختیاری ہیں۔ آپ انہیں بعد میں سسٹم ترتیبات سے دے سکتے ہیں۔</string>
+    <string name="onboarding_finish_title">سب تیار ہے!</string>
+    <string name="onboarding_finish_subtitle">دیکھ بھال، ایندھن اور دستاویزات ٹریک کرنے کے لیے اپنی پہلی گاڑی شامل کریں۔</string>
+    <string name="onboarding_finish_subtitle_has_vehicles">آپ کی ترجیحات محفوظ ہو گئیں۔ اپنے گیراج پر جائیں یا ایک اور گاڑی شامل کریں۔</string>
+    <string name="onboarding_add_first_vehicle">میری پہلی گاڑی شامل کریں</string>
+    <string name="onboarding_add_another_vehicle">ایک اور گاڑی شامل کریں</string>
+    <string name="onboarding_go_to_dashboard">میرے گیراج پر جائیں</string>
+    <string name="onboarding_explore_first">پہلے میں دیکھ لوں</string>
+    <string name="onboarding_summary_title">آپ کی ترتیب</string>
+    <string name="onboarding_summary_units">اکائیاں</string>
+    <string name="onboarding_summary_currency">کرنسی</string>
+    <string name="onboarding_summary_theme">تھیم</string>
+    <string name="onboarding_summary_tabs">گاڑی کے ٹیبز</string>
+    <string name="onboarding_summary_edit">ترمیم</string>
+    <string name="onboarding_tips_title">فوری مشورے</string>
+    <string name="onboarding_tip_vin">گاڑی شامل کرتے وقت 17 حروف کا VIN درج کریں تاکہ سال، میک، ماڈل اور خصوصیات خود بخود بھر جائیں۔</string>
+    <string name="onboarding_tip_widgets">ایک ٹیپ میں ایندھن اور مائلیج درج کرنے کے لیے ہوم اسکرین ویجٹس یا فوری ترتیبات ٹائلز شامل کریں۔</string>
+    <string name="onboarding_tip_backup">ترتیبات → بیک اپ میں خودکار بیک اپ (مقامی یا WebDAV) ترتیب دیں۔</string>
+    <string name="onboarding_tip_rerun">آپ یہ ترتیب کسی بھی وقت ترتیبات سے دوبارہ چلا سکتے ہیں۔</string>
+
+    <!-- Notifications -->
+    <string name="reminder_notification_channel_name">دیکھ بھال کی یاد دہانیاں</string>
+    <string name="reminder_notification_channel_description">گاڑی کی آنے والی اور تاخیر شدہ دیکھ بھال کے انتباہات</string>
+    <string name="reminder_overdue_title">تاخیر شدہ: %1$s</string>
+    <string name="reminder_upcoming_title">آنے والا: %1$s</string>
+    <string name="pdf_export_notification_channel_name">PDF برآمدات</string>
+    <string name="pdf_export_notification_channel_description">دیکھ بھال کی رپورٹ کی PDF بننے پر اطلاعات</string>
+    <string name="pdf_export_notification_title">دیکھ بھال کی رپورٹ برآمد ہو گئی</string>
+    <string name="pdf_export_notification_text">%1$s کھولنے کے لیے ٹیپ کریں</string>
+    <string name="test_notification_title">آزمائشی اطلاع</string>
+    <string name="test_notification_text">اگر آپ یہ دیکھ سکتے ہیں تو پش اطلاعات درست کام کر رہی ہیں۔</string>
+
+    <!-- App widget -->
+    <string name="garage_widget_description">آنے والی/تاخیر شدہ دیکھ بھال کی یاد دہانیاں دکھاتا ہے اور سروس یا ایندھن فوری درج کرتا ہے</string>
+
+    <!-- App Shortcuts & Quick Settings Tiles -->
+    <string name="shortcut_log_fuel_short">ایندھن درج کریں</string>
+    <string name="shortcut_log_fuel_long">ایندھن بھروانا درج کریں</string>
+    <string name="shortcut_update_odometer_short">اوڈومیٹر</string>
+    <string name="shortcut_update_odometer_long">اوڈومیٹر اپ ڈیٹ کریں</string>
+    <string name="tile_log_fuel_label">ایندھن درج کریں</string>
+    <string name="tile_update_odometer_label">اوڈومیٹر اپ ڈیٹ کریں</string>
+    <string name="dialog_update_odometer_title">اوڈومیٹر اپ ڈیٹ کریں</string>
+
+    <!-- Scanner -->
+    <string name="cd_go_back">واپس جائیں</string>
+    <string name="cd_toggle_flashlight">فلیش لائٹ آن/آف کریں</string>
+    <string name="scan_vin_instruction">VIN بارکوڈ کو فریم کے اندر رکھیں</string>
+    <string name="cd_scan_vin">VIN اسکین کریں</string>
+    <string name="scan_vin_failed">کوئی بارکوڈ نہیں ملا۔ VIN بارکوڈ سیدھا کریں اور دوبارہ کوشش کریں۔</string>
+
+    <!-- OBD2 scanner -->
+    <string name="obd_scanner_title">OBD2 اسکینر</string>
+    <string name="obd_cd_back">واپس</string>
+    <string name="obd_rescan">دوبارہ اسکین کریں</string>
+    <string name="obd_reconnect">دوبارہ جڑیں</string>
+    <string name="obd_change">تبدیل کریں</string>
+    <string name="obd_cancel">منسوخ کریں</string>
+    <string name="obd_clearing_codes">خرابی کے کوڈز صاف ہو رہے ہیں…</string>
+    <string name="obd_clear_codes">کوڈز صاف کریں</string>
+    <string name="obd_clear_codes_confirm_title">خرابی کے کوڈز صاف کریں؟</string>
+    <string name="obd_clear_codes_confirm_message">بہترین نتائج کے لیے انجن بند کریں لیکن اگنیشن آن رکھیں۔\n\nاس سے چیک انجن لائٹ بند ہو جاتی ہے اور تمام اخراج ریڈینس مانیٹرز ری سیٹ ہو جاتے ہیں۔ اگر بنیادی مسئلہ حل نہیں ہوا تو کوڈز واپس آ جائیں گے، اور گاڑی اخراج کے ٹیسٹ میں ناکام ہو سکتی ہے جب تک مانیٹرز مکمل ہونے کے لیے کافی ڈرائیو نہ ہو جائے۔</string>
+    <string name="obd_permission_title">بلوٹوتھ کی اجازت درکار ہے</string>
+    <string name="obd_permission_message">آپ کے OBD2 اڈاپٹر سے بات کرنے کے لیے Garage کو بلوٹوتھ کی اجازت درکار ہے۔ کچھ بھی آپ کے آلے سے باہر نہیں جاتا۔</string>
+    <string name="obd_permission_action">اجازت دیں</string>
+    <string name="obd_no_adapter_title">کوئی OBD2 اڈاپٹر منتخب نہیں</string>
+    <string name="obd_no_adapter_message">بلوٹوتھ OBD2 اڈاپٹر کو اپنی گاڑی کے تشخیصی پورٹ میں لگائیں اور اسے اپنے فون سے جوڑیں۔ Garage اسے یاد رکھے گا اور ہر بار اسکینر کھولنے پر خود بخود جڑ جائے گا۔\n\nخرابی کے کوڈز پڑھیں اور صاف کریں، اخراج کی تیاری چیک کریں، اپنا اوڈومیٹر درج کریں، اور انجن کا براہ راست ڈیٹا دیکھیں۔</string>
+    <string name="obd_no_adapter_action">OBD2 اڈاپٹر جوڑیں</string>
+    <string name="obd_status_connected">منسلک</string>
+    <string name="obd_status_connecting">جڑ رہا ہے…</string>
+    <string name="obd_status_disconnected">منقطع</string>
+    <string name="obd_status_not_connected">منسلک نہیں</string>
+    <string name="obd_adapter_header">OBD2 اڈاپٹر · %1$s</string>
+    <string name="obd_unknown_device">نامعلوم آلہ</string>
+    <string name="obd_vin_mismatch_title">یہ اڈاپٹر کسی دوسری گاڑی سے منسلک ہے</string>
+    <string name="obd_vin_save_title">یہ VIN گاڑی میں محفوظ کریں؟</string>
+    <string name="obd_vin_mismatch_message">گاڑی VIN %1$s بتا رہی ہے، لیکن اس گاڑی کا VIN %2$s ہے۔ یہ اسکین ٹائم لائن میں محفوظ نہیں ہوا۔</string>
+    <string name="obd_vin_save_message">گاڑی VIN %1$s بتا رہی ہے۔ اس گاڑی کا ابھی کوئی VIN محفوظ نہیں ہے۔</string>
+    <string name="obd_save_scan_anyway">پھر بھی اسکین محفوظ کریں</string>
+    <string name="obd_save_vin">VIN محفوظ کریں</string>
+    <string name="obd_freeze_frame_title">فریز فریم</string>
+    <string name="obd_freeze_frame_description">%1$s سیٹ ہونے کے وقت ریکارڈ کی گئی انجن کی حالت۔</string>
+    <string name="obd_freeze_frame_code_fallback">کوڈ</string>
+    <string name="obd_freeze_frame_empty">گاڑی نے کوئی فریز فریم قدریں نہیں بتائیں۔</string>
+    <string name="obd_vehicle_health_title">گاڑی کی صحت</string>
+    <string name="obd_mil_on">چیک انجن لائٹ آن ہے</string>
+    <string name="obd_mil_off">چیک انجن لائٹ بند ہے</string>
+    <plurals name="obd_emissions_codes_reported">
+        <item quantity="one">اخراج سے متعلق %1$d کوڈ رپورٹ ہوا</item>
+        <item quantity="other">اخراج سے متعلق %1$d کوڈز رپورٹ ہوئے</item>
+    </plurals>
+    <string name="obd_readiness_summary">اخراج کی تیاری: %2$d میں سے %1$d مانیٹرز مکمل</string>
+    <string name="obd_readiness_mil_on">چیک انجن لائٹ آن والی گاڑیاں اخراج کے ٹیسٹ میں ناکام ہو جاتی ہیں۔</string>
+    <string name="obd_readiness_ok">غالباً اخراج/اسموگ ٹیسٹ کے لیے تیار ہے۔</string>
+    <string name="obd_readiness_not_ready">ابھی تیار نہیں۔ چند دن معمول کے مطابق ڈرائیو کریں تاکہ مانیٹرز مکمل ہو سکیں۔</string>
+    <string name="obd_cd_hide_monitors">مانیٹرز چھپائیں</string>
+    <string name="obd_cd_show_monitors">مانیٹرز دکھائیں</string>
+    <string name="obd_cd_monitor_complete">مکمل</string>
+    <string name="obd_cd_monitor_incomplete">نامکمل</string>
+    <string name="obd_monitor_ready">تیار</string>
+    <string name="obd_monitor_not_ready">تیار نہیں</string>
+    <string name="obd_no_codes_title">کوئی خرابی کا کوڈ نہیں ملا</string>
+    <string name="obd_no_codes_message">کوئی محفوظ، زیر التوا یا مستقل تشخیصی خرابی کا کوڈ نہیں۔</string>
+    <string name="obd_dtc_title">تشخیصی خرابی کے کوڈز</string>
+    <plurals name="obd_code_count">
+        <item quantity="one">%1$d کوڈ</item>
+        <item quantity="other">%1$d کوڈز</item>
+    </plurals>
+    <string name="obd_dtc_stored_title">محفوظ شدہ</string>
+    <string name="obd_dtc_stored_explanation">تصدیق شدہ خرابیاں۔ یہ عموماً چیک انجن لائٹ آن کرتی ہیں۔</string>
+    <string name="obd_dtc_pending_title">زیر التوا</string>
+    <string name="obd_dtc_pending_explanation">ایک بار پتہ چلا لیکن ابھی تصدیق نہیں ہوئی۔ ابتدائی انتباہ۔</string>
+    <string name="obd_dtc_permanent_title">مستقل</string>
+    <string name="obd_dtc_permanent_explanation">اسکینر سے صاف نہیں ہو سکتے۔ گاڑی کی جانب سے مرمت کی تصدیق کے بعد یہ خود ختم ہو جاتے ہیں۔</string>
+    <string name="obd_dtc_reported_by">رپورٹ کنندہ: %1$s</string>
+    <string name="obd_distance_title">فاصلہ</string>
+    <string name="obd_odometer">اوڈومیٹر</string>
+    <string name="obd_since_codes_cleared">کوڈز صاف ہونے کے بعد سے</string>
+    <string name="obd_timeline_saved">اسکین گاڑی کی ٹائم لائن میں محفوظ ہو گیا۔</string>
+    <string name="obd_timeline_unchanged">پچھلے اسکین کے بعد سے کچھ نہیں بدلا، اس لیے دوبارہ درج نہیں کیا گیا۔</string>
+    <string name="obd_timeline_vin_mismatch">ٹائم لائن میں محفوظ نہیں ہوا کیونکہ VIN اس گاڑی سے میل نہیں کھاتا۔</string>
+    <string name="obd_live_data_title">براہ راست ڈیٹا</string>
+    <string name="obd_live">براہ راست</string>
+    <string name="obd_waiting_for_data">ڈیٹا کا انتظار ہے…</string>
+    <string name="obd_stop_live_data">براہ راست ڈیٹا روکیں</string>
+    <string name="obd_start_live_data">براہ راست ڈیٹا شروع کریں</string>
+    <string name="obd_snapshot_title">سینسر اسنیپ شاٹ</string>
+    <string name="obd_battery_at_port">بیٹری (پورٹ پر)</string>
+    <string name="obd_vin">VIN</string>
+
+    <!-- OBD2 scanner: adapter picker -->
+    <string name="obd_picker_title">OBD2 اڈاپٹر منتخب کریں</string>
+    <string name="obd_picker_tab_bluetooth">بلوٹوتھ</string>
+    <string name="obd_picker_tab_ble">BLE</string>
+    <string name="obd_picker_tab_wifi">Wi-Fi</string>
+    <string name="obd_picker_forget_adapter">اڈاپٹر بھول جائیں</string>
+    <string name="obd_picker_classic_permission_hint">آپ کے جوڑے گئے اڈاپٹرز کی فہرست دکھانے کے لیے Garage کو بلوٹوتھ کی اجازت درکار ہے۔</string>
+    <string name="obd_picker_allow_bluetooth">بلوٹوتھ تک رسائی دیں</string>
+    <string name="obd_picker_classic_empty">کوئی جوڑا گیا بلوٹوتھ آلہ نہیں ملا۔ اپنا OBD2 اڈاپٹر لگائیں، اگنیشن آن کریں، پھر اسے فون کی بلوٹوتھ ترتیبات میں جوڑیں (PIN عموماً 1234 یا 0000 ہوتا ہے)۔</string>
+    <string name="obd_picker_classic_hint">اپنی گاڑی میں لگا اڈاپٹر منتخب کریں۔ ممکنہ OBD2 اڈاپٹرز پہلے دکھائے گئے ہیں۔</string>
+    <string name="obd_picker_pair_new">نیا آلہ جوڑیں</string>
+    <string name="obd_picker_refresh_list">فہرست تازہ کریں</string>
+    <string name="obd_picker_ble_hint">بلوٹوتھ LE اڈاپٹرز (مثلاً Vgate iCar Pro BLE، OBDLink CX، Veepeak BLE+) کو جوڑنے کی ضرورت نہیں۔ اڈاپٹر لگائیں، اگنیشن آن کریں اور اسکین کریں۔</string>
+    <string name="obd_picker_ble_empty">ابھی تک کوئی بلوٹوتھ LE آلہ نہیں ملا۔</string>
+    <string name="obd_picker_scanning">اسکین ہو رہا ہے…</string>
+    <string name="obd_picker_scan_for_adapters">اڈاپٹرز تلاش کریں</string>
+    <string name="obd_picker_scan_again">دوبارہ اسکین کریں</string>
+    <string name="obd_picker_wifi_hint">پہلے اپنے فون کو اڈاپٹر کے Wi-Fi نیٹ ورک سے جوڑیں (اکثر \"WiFi_OBDII\" یا \"V-LINK\" نام ہوتا ہے)۔ زیادہ تر اڈاپٹرز 192.168.0.10 پورٹ 35000 استعمال کرتے ہیں۔</string>
+    <string name="obd_picker_open_wifi_settings">Wi-Fi ترتیبات کھولیں</string>
+    <string name="obd_picker_wifi_host_label">اڈاپٹر کا IP ایڈریس</string>
+    <string name="obd_picker_wifi_port_label">پورٹ</string>
+    <string name="obd_picker_use_wifi_adapter">Wi-Fi اڈاپٹر استعمال کریں</string>
+    <string name="obd_picker_cd_current_adapter">موجودہ اڈاپٹر</string>
+
+    <!-- OBD2 scanner: settings -->
+    <string name="settings_obd_adapter_title">OBD2 اڈاپٹر</string>
+    <string name="settings_obd_adapter_summary">%1$s · %2$s (%3$s)</string>
+    <string name="settings_obd_adapter_not_set">سیٹ نہیں — بلوٹوتھ، BLE یا Wi-Fi اڈاپٹر منتخب کرنے کے لیے ٹیپ کریں</string>
+
+    <!-- OBD2 scanner: documents (emissions) -->
+    <string name="documents_obd_readiness_label">OBD2 تیاری</string>
+    <string name="documents_obd_readiness_label_scanned">OBD2 تیاری (اسکین %1$s)</string>
+    <string name="documents_obd_readiness_value">%2$d میں سے %1$d مانیٹرز مکمل — %3$s</string>
+    <string name="documents_obd_readiness_not_ready_list">تیار نہیں: %1$s</string>
+    <string name="documents_obd_readiness_mil_on">چیک انجن لائٹ آن — ناکامی کا امکان</string>
+    <string name="documents_obd_readiness_likely_ready">غالباً ٹیسٹ کے لیے تیار</string>
+    <string name="documents_obd_readiness_not_ready">ابھی تیار نہیں — ٹیسٹ سے پہلے مزید ڈرائیو کریں</string>
+    <!-- Documents & Driver's License -->
+    <string name="license_empty_message">ابھی تک ڈرائیونگ لائسنس کی کوئی تفصیل شامل نہیں کی گئی۔\nاپنے ڈرائیونگ لائسنس کی میعاد ٹریک کریں اور بروقت تجدید کی یاد دہانیاں حاصل کریں۔</string>
+    <string name="license_add_button">ڈرائیونگ لائسنس شامل کریں</string>
+    <string name="license_title">ڈرائیونگ لائسنس</string>
+    <string name="license_expiration_date">میعاد ختم ہونے کی تاریخ</string>
+    <string name="license_number">ڈرائیونگ لائسنس نمبر</string>
+    <string name="license_issuing_state">جاری کرنے والا صوبہ / علاقہ</string>
+    <string name="license_notes">نوٹس / توثیقات</string>
+    <string name="license_photos">لائسنس کی تصاویر</string>
+    <string name="license_edit">لائسنس میں ترمیم کریں</string>
+    <string name="license_delete">حذف کریں</string>
+    <string name="license_delete_confirm_title">ڈرائیونگ لائسنس کی معلومات حذف کریں؟</string>
+    <string name="license_delete_confirm_msg">کیا آپ واقعی اپنے ڈرائیونگ لائسنس کا ریکارڈ حذف کرنا چاہتے ہیں؟ اس میں محفوظ تصاویر بھی شامل ہیں۔</string>
+    <string name="license_details_title">ڈرائیونگ لائسنس کی تفصیلات</string>
+    <string name="license_select_exp_date">میعاد ختم ہونے کی تاریخ منتخب کریں</string>
+    <string name="license_number_label">لائسنس نمبر</string>
+    <string name="license_number_placeholder">مثلاً D1234567</string>
+    <string name="license_state_label">جاری کرنے والا صوبہ</string>
+    <string name="license_state_placeholder">مثلاً پنجاب</string>
+    <string name="license_notes_placeholder">کلاس، موٹر سائیکل کی توثیق، دیگر نوٹس…</string>
+    <string name="license_front_photo">لائسنس کا سامنے والا رخ</string>
+    <string name="license_back_photo">لائسنس کا پچھلا رخ</string>
+    <string name="license_save">ڈرائیونگ لائسنس محفوظ کریں</string>
+
+    <!-- Cost of Ownership -->
+    <string name="cost_empty_message">ابھی تک اخراجات کا کوئی ریکارڈ درج نہیں۔\nملکیت کی لاگت ٹریک کرنے کے لیے دیکھ بھال یا ایندھن کے اندراجات شامل کریں۔</string>
+    <string name="cost_category_breakdown">زمرہ وار تفصیل</string>
+    <string name="cost_total_title">ملکیت کی کل لاگت</string>
+    <string name="cost_include_mods">موڈز شامل کریں</string>
+    <string name="cost_include_purchase">خریداری شامل کریں</string>
+    <string name="cost_purchase_not_counted_in_period">اس مدت میں شمار نہیں (خریداری کی تاریخ حد سے باہر ہے یا سیٹ نہیں)۔</string>
+    <string name="time_filter_all_time">تمام عرصہ</string>
+    <string name="time_filter_this_year">اس سال</string>
+    <string name="time_filter_last_year">پچھلا سال</string>
+    <string name="time_filter_12_months">12 ماہ</string>
+    <string name="time_filter_6_months">6 ماہ</string>
+
+    <!-- Fuel & Charging -->
+    <string name="fuel_tab_charging">چارجنگ</string>
+    <string name="fuel_tab_fuel">ایندھن</string>
+    <string name="fuel_est_range_100" formatted="false">موجودہ تخمینی 100% رینج</string>
+    <string name="fuel_initial_range_100" formatted="false">ابتدائی تخمینی 100% رینج</string>
+    <string name="fuel_delete_charging_title">چارجنگ سیشن حذف کریں</string>
+    <string name="fuel_delete_charging_msg">کیا آپ واقعی یہ چارجنگ ریکارڈ حذف کرنا چاہتے ہیں؟</string>
+    <string name="fuel_log_charging">چارجنگ سیشن درج کریں</string>
+    <string name="fuel_edit_charging">چارجنگ سیشن میں ترمیم کریں</string>
+    <string name="fuel_kwh_added">شامل شدہ kWh</string>
+    <string name="fuel_charger_speed">چارجر کی رفتار</string>
+    <string name="fuel_location_vendor">مقام / فراہم کنندہ</string>
+    <string name="fuel_vendor_placeholder">فراہم کنندہ کا نام (اختیاری)</string>
+    <string name="fuel_battery_start" formatted="false">بیٹری % آغاز</string>
+    <string name="fuel_battery_end" formatted="false">بیٹری % اختتام</string>
+    <string name="fuel_total_cost">کل لاگت</string>
+    <string name="fuel_odometer_reading">اوڈومیٹر ریڈنگ (%1$s)</string>
+    <string name="fuel_battery_health_title">بیٹری کی صحت (اختیاری)</string>
+    <string name="fuel_est_range_soc">100%% SoC پر تخمینی رینج (%1$s)</string>
+    <string name="fuel_est_range_end">چارج کے اختتام پر تخمینی رینج</string>
+    <string name="fuel_auto_calculate">خودکار حساب</string>
+    <string name="fuel_save_charging">چارجنگ سیشن محفوظ کریں</string>
+    <string name="fuel_delete_fillup_title">ایندھن کا اندراج حذف کریں</string>
+    <string name="fuel_delete_fillup_msg">کیا آپ واقعی یہ ایندھن ریکارڈ حذف کرنا چاہتے ہیں؟</string>
+    <string name="fuel_log_fillup">ایندھن بھروانا درج کریں</string>
+    <string name="fuel_edit_fillup">ایندھن کے اندراج میں ترمیم کریں</string>
+    <string name="fuel_liters">لیٹر</string>
+    <string name="fuel_gallons">گیلن</string>
+    <string name="fuel_filled_full">ٹینک مکمل بھروایا</string>
+
+    <!-- Vehicle Documents -->
+    <string name="doc_plate_label">نمبر پلیٹ</string>
+    <string name="doc_plate_placeholder">مثلاً LEA-1234</string>
+    <string name="doc_state_label">صوبہ / علاقہ</string>
+    <string name="doc_state_placeholder">مثلاً پنجاب</string>
+    <string name="doc_reg_exp_label">رجسٹریشن کی میعاد</string>
+    <string name="doc_select_date">تاریخ منتخب کریں</string>
+    <string name="doc_renewal_fee_label">تجدید فیس (اختیاری)</string>
+    <string name="doc_reg_notes_label">رجسٹریشن نوٹس</string>
+    <string name="doc_delete_reg_btn">نمبر پلیٹ اور رجسٹریشن کی معلومات حذف کریں</string>
+    <string name="doc_insp_exp_label">معائنے کی میعاد / مقررہ تاریخ</string>
+    <string name="doc_last_inspected_label">آخری معائنے کی تاریخ</string>
+    <string name="doc_insp_result_label">معائنے کا نتیجہ</string>
+    <string name="doc_insp_result_placeholder">مثلاً پاس، فیل، زیر التوا</string>
+    <string name="doc_insp_notes_label">معائنے کے نوٹس / اسٹیشن کی معلومات</string>
+    <string name="doc_delete_insp_btn">سرکاری معائنے کی معلومات حذف کریں</string>
+    <string name="doc_emissions_exp_label">اخراج ٹیسٹ کی میعاد / مقررہ تاریخ</string>
+    <string name="doc_last_smog_label">آخری اسموگ ٹیسٹ کی تاریخ</string>
+    <string name="doc_emissions_result_label">ٹیسٹ کا نتیجہ</string>
+    <string name="doc_emissions_result_placeholder">مثلاً پاس، فیل، مستثنیٰ</string>
+    <string name="doc_emissions_notes_label">اخراج کے نوٹس / اسٹیشن کی تفصیلات</string>
+    <string name="doc_delete_emissions_btn">اخراج اور اسموگ کی معلومات حذف کریں</string>
+    <string name="doc_insur_provider_label">انشورنس کمپنی / فراہم کنندہ</string>
+    <string name="doc_insur_policy_num_label">انشورنس پالیسی نمبر</string>
+    <string name="doc_insur_exp_label">پالیسی کی میعاد</string>
+    <string name="doc_insur_premium_label">پریمیم / لاگت (اختیاری)</string>
+    <string name="doc_insur_contact_label">ایجنٹ / کلیم رابطہ معلومات</string>
+    <string name="doc_insur_notes_label">پالیسی نوٹس / کوریج</string>
+    <string name="doc_delete_insur_btn">انشورنس پالیسی کی معلومات حذف کریں</string>
+    <string name="doc_toll_exp_label">پاس / پرمٹ کی میعاد</string>
+    <string name="doc_toll_account_label">اکاؤنٹ / ٹیگ / پرمٹ نمبر</string>
+    <string name="doc_toll_notes_label">نوٹس / فراہم کنندہ کی تفصیلات</string>
+    <string name="doc_delete_toll_btn">ٹول پاس اور پارکنگ کی معلومات حذف کریں</string>
+    <string name="doc_save_docs_btn">گاڑی کی دستاویزات محفوظ کریں</string>
+    <string name="doc_saving_btn">محفوظ ہو رہا ہے…</string>
+    <!-- Fleet Summary -->
+    <string name="fleet_overview_title">فلیٹ کا جائزہ</string>
+    <string name="fleet_vehicles">گاڑیاں</string>
+    <string name="fleet_avg">فلیٹ اوسط</string>
+    <string name="fleet_overdue_count">%1$d تاخیر شدہ</string>
+    <string name="fleet_due_soon_count">%1$d جلد واجب</string>
+    <string name="fleet_all_clear">سب ٹھیک ہے</string>
+    <string name="fleet_status">حالت</string>
+
+    <!-- Vehicle Card -->
+    <string name="vehicle_card_no_mileage">کوئی مائلیج نہیں</string>
+
+    <!-- Vehicle Specs -->
+    <string name="specs_empty_message">ابھی کوئی خصوصیات نہیں۔\nانہیں شامل کرنے کے لیے ترمیم کا بٹن ٹیپ کریں، یا ترمیم اسکرین پر اس گاڑی کا VIN ڈی کوڈ کریں۔</string>
+    <string name="specs_edit">خصوصیات میں ترمیم کریں</string>
+    <string name="specs_edit_title">خصوصیات میں ترمیم</string>
+    <string name="specs_group_custom">دیگر خصوصیات</string>
+    <string name="specs_add_custom">خصوصیت شامل کریں</string>
+    <string name="specs_custom_label">نام</string>
+    <string name="specs_custom_value">قدر</string>
+    <string name="specs_remove_custom">خصوصیت ہٹائیں</string>
+    <string name="specs_plant_city">پلانٹ کا شہر</string>
+    <string name="specs_plant_state">پلانٹ کا صوبہ/علاقہ</string>
+    <string name="specs_plant_country">پلانٹ کا ملک</string>
+    <string name="specs_save">محفوظ کریں</string>
+    <string name="specs_cancel">منسوخ کریں</string>
+    <string name="specs_edit_hint">کسی خانے کو چھپانے کے لیے اسے خالی چھوڑ دیں۔</string>
+    <string name="specs_group_engine">انجن اور ڈرائیو ٹرین</string>
+    <string name="specs_group_weights">وزن اور ٹوئنگ</string>
+    <string name="specs_group_body">باڈی</string>
+    <string name="specs_group_manufacturing">تیاری</string>
+    <string name="specs_cylinders">سلنڈرز</string>
+    <string name="specs_displacement">انجن کی گنجائش</string>
+    <string name="specs_horsepower">ہارس پاور</string>
+    <string name="specs_fuel_type">ایندھن کی قسم</string>
+    <string name="specs_transmission">ٹرانسمیشن</string>
+    <string name="specs_transmission_speeds">ٹرانسمیشن گیئرز</string>
+    <string name="specs_towing_braked">ٹوئنگ گنجائش (بریک کے ساتھ)</string>
+    <string name="specs_towing_unbraked">ٹوئنگ گنجائش (بغیر بریک)</string>
+    <string name="specs_gcwr">GCWR</string>
+    <string name="specs_gvwr">GVWR</string>
+    <string name="specs_curb_weight">خالی وزن</string>
+    <string name="specs_vehicle_type">گاڑی کی قسم</string>
+    <string name="specs_body_class">باڈی کی قسم</string>
+    <string name="specs_doors">دروازے</string>
+    <string name="specs_series">سیریز</string>
+    <string name="specs_manufacturer">صنعت کار</string>
+    <string name="specs_plant">پلانٹ</string>
+
+    <!-- Parts & Fluids -->
+    <string name="parts_empty_message">ابھی پرزوں اور فلوئڈز کی کوئی معلومات نہیں۔\nاپنی گاڑی کی خصوصیات شامل کرنے کے لیے ترمیم کا بٹن ٹیپ کریں۔</string>
+    <string name="parts_manual_verification_title">مالک کے کتابچے سے تصدیق</string>
+    <string name="parts_manual_verification_desc">درستگی یقینی بنانے کے لیے اپنی گاڑی کے کتابچے سے خصوصیات دوبارہ چیک کریں۔ تفصیلات کے لیے ٹیپ کریں۔</string>
+    <string name="parts_verify_title">مالک کے کتابچے سے تصدیق کریں</string>
+    <string name="parts_verify_msg">اس اسکرین پر دکھائی گئی فلوئڈ کی گنجائش (مثلاً آئل کی گنجائش اور وسکوسٹی) اور پرزوں کی خصوصیات ڈی کوڈ شدہ VIN اور انجن کی خصوصیات کی بنیاد پر تخمینی ہیں۔\n\nفیکٹری آپشنز، انجن کے ورژن اور علاقائی فرق مختلف ہو سکتے ہیں۔ فلوئڈز خریدنے یا سروس کرنے سے پہلے ہمیشہ ان قدروں کی اپنی گاڑی کے سرکاری مالک کے کتابچے یا فیکٹری سروس دستاویزات سے تصدیق کریں۔</string>
+    <string name="parts_got_it">سمجھ گیا</string>
+    <string name="parts_group_oil">آئل</string>
+    <string name="parts_group_ignition">اگنیشن</string>
+    <string name="parts_group_filters">فلٹرز</string>
+    <string name="parts_group_tires">ٹائر</string>
+    <string name="parts_group_wipers">وائپرز</string>
+    <string name="parts_oil_viscosity">آئل وسکوسٹی</string>
+    <string name="parts_oil_capacity">آئل کی گنجائش</string>
+    <string name="parts_oil_filter_num">آئل فلٹر پارٹ نمبر</string>
+    <string name="parts_spark_plug_num">اسپارک پلگ پارٹ نمبر</string>
+    <string name="parts_spark_plug_gap">اسپارک پلگ گیپ</string>
+    <string name="parts_engine_air_filter_num">انجن ایئر فلٹر پارٹ نمبر</string>
+    <string name="parts_cabin_air_filter_num">کیبن ایئر فلٹر پارٹ نمبر</string>
+    <string name="parts_front_tire_size">اگلے ٹائر کا سائز</string>
+    <string name="parts_rear_tire_size">پچھلے ٹائر کا سائز</string>
+    <string name="parts_front_tire_psi">اگلے ٹائر کا دباؤ</string>
+    <string name="parts_rear_tire_psi">پچھلے ٹائر کا دباؤ</string>
+    <string name="parts_driver_wiper">ڈرائیور وائپر کا سائز</string>
+    <string name="parts_passenger_wiper">مسافر وائپر کا سائز</string>
+    <string name="parts_rear_wiper">پچھلے وائپر کا سائز</string>
+
+    <!-- Modifications -->
+    <string name="mods_empty_message">ابھی تک کوئی ترمیم درج نہیں۔\nاپنی گاڑی کی ترامیم، اپ گریڈز یا لوازمات شامل کرنے کے لیے + ٹیپ کریں۔</string>
+    <string name="mods_title_label">ترمیم کا عنوان *</string>
+    <string name="mods_category_label">زمرہ</string>
+    <string name="mods_desc_label">تفصیل / نوٹس</string>
+    <string name="mods_date_label">تنصیب کی تاریخ</string>
+    <string name="mods_cost_label">لاگت (اختیاری)</string>
+    <string name="mods_url_label">پروڈکٹ لنک / URL (اختیاری)</string>
+    <string name="mods_save_btn">ترمیم محفوظ کریں</string>
+    <string name="mods_delete_btn">ترمیم حذف کریں</string>
+    <string name="mods_delete_confirm_title">ترمیم حذف کریں؟</string>
+    <string name="mods_delete_confirm_msg">کیا آپ واقعی \'%1$s\' حذف کرنا چاہتے ہیں؟ یہ عمل واپس نہیں ہو سکتا۔</string>
+
+    <!-- Recalls -->
+    <string name="recalls_nhtsa_check">NHTSA.gov پر VIN چیک کریں</string>
+    <string name="recalls_retry">دوبارہ کوشش کریں</string>
+    <string name="recalls_park_it">پارک کریں</string>
+    <string name="recalls_park_outside">باہر پارک کریں</string>
+</resources>

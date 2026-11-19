@@ -194,6 +194,7 @@ class DashboardViewModelTest {
                 override fun knowledgeDao(): com.fearmikey.garage.data.local.dao.KnowledgeDao = throw NotImplementedError()
                 override fun tripDao(): com.fearmikey.garage.data.local.dao.TripDao = throw NotImplementedError()
             override fun customDocumentDao(): com.fearmikey.garage.data.local.dao.CustomDocumentDao = throw NotImplementedError()
+            override fun supplyDao(): com.fearmikey.garage.data.local.dao.SupplyDao = throw NotImplementedError()
                 override fun clearAllTables() {}
                 override fun createInvalidationTracker(): androidx.room.InvalidationTracker =
                     androidx.room.InvalidationTracker(this, emptyMap(), emptyMap(), "vehicles")

@@ -86,6 +86,10 @@ object DatabaseModule {
         database.customDocumentDao()
 
     @Provides
+    fun provideSupplyDao(database: GarageDatabase): com.fearmikey.garage.data.local.dao.SupplyDao =
+        database.supplyDao()
+
+    @Provides
     fun provideLubeLoggerPendingDeleteDao(database: GarageDatabase): com.fearmikey.garage.data.local.dao.LubeLoggerPendingDeleteDao =
         database.lubeLoggerPendingDeleteDao()
 }

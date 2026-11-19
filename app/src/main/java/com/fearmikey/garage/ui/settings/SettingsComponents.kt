@@ -150,6 +150,7 @@ fun LanguageSelectionDialog(
         "ru" to stringResource(R.string.language_russian),
         "tr" to stringResource(R.string.language_turkish),
         "zh-CN" to stringResource(R.string.language_chinese_simplified),
+        "ur" to stringResource(R.string.language_urdu),
     )
 
     AlertDialog(

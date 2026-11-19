@@ -1,3 +1,20 @@
+## [1.4.3] - 2026-11-19
+
+### Added
+* **Parts & Supplies:** The Parts tab is now "Parts & Supplies". Below the parts quick reference, keep a list of parts and fluids you've bought or have in stock (description, part number, supplier, quantity, cost, purchase date). Oil filter, spark plug and air filter part numbers have an "Add as supply" shortcut. Supplies don't count toward cost of ownership, so repairs aren't counted twice (DB v35 → v36).
+* **LubeLogger Supplies & Notes Sync:** Supplies sync with LubeLogger's Supplies, and Knowledge notes sync with LubeLogger's vehicle Notes (DB v36 → v37). Servers without these features are skipped.
+* **LubeLogger Purchase Info Sync:** The purchase date and price sync both ways with the LubeLogger vehicle. Garage can only send changes when you sign in with a username and password. With an API key, the server's values are pulled but Garage edits stay local.
+* **More Synced Details:** Maintenance category, task and deferral settings, fuel grade, EV charger details, and mod categories and product links now sync to LubeLogger as "Garage ..." extra fields. Your own extra fields are kept.
+* **Urdu:** Garage is now available in Urdu (اردو), with right-to-left layout.
+* **Pakistani Rupee (PKR):** Added to the currency picker.
+
+### Fixed
+* **LubeLogger Data Loss on Edit:** Editing a synced record in Garage no longer wipes its notes, tags, attachments, your own extra fields, the missed fill-up flag or equipment links on the LubeLogger server. LubeLogger clears every field an update leaves out, so Garage now sends them back unchanged.
+* **Sync Restarting Mid-Run:** A LubeLogger sync no longer restarts every time it saves a record, which could also leave server records unlinked. Edits made during a sync are sent in one follow-up sync.
+* **Wrong Record Links:** Two jobs logged at the same date and mileage (e.g. an oil change and a tire rotation) are no longer linked to each other's server record. Two vehicles of the same year, make and model with different VINs or plates are no longer merged.
+* **Mods in LubeLogger:** A mod's title and description are now sent as LubeLogger's description and notes, instead of being joined as "Title - Description". Records sent by older versions are split back automatically, as are maintenance records saved by older versions as "Description (Task)".
+* **EV Fuel Type:** New LubeLogger vehicles are created with fuel type Electric or Diesel based on the specs, so charging sessions are read as kWh.
+
 ## [1.4.2] - 2026-11-18
 
 ### Added

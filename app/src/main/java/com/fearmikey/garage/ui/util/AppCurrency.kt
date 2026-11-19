@@ -26,6 +26,7 @@ data class AppCurrency(
         val JPY = AppCurrency("JPY", "¥", "Japanese Yen")
         val CNY = AppCurrency("CNY", "¥", "Chinese Yuan")
         val INR = AppCurrency("INR", "₹", "Indian Rupee")
+        val PKR = AppCurrency("PKR", "Rs", "Pakistani Rupee")
         val CHF = AppCurrency("CHF", "CHF", "Swiss Franc")
         val BRL = AppCurrency("BRL", "R$", "Brazilian Real")
         val MXN = AppCurrency("MXN", "MX$", "Mexican Peso")
@@ -48,7 +49,7 @@ data class AppCurrency(
         val SAR = AppCurrency("SAR", "SAR", "Saudi Riyal")
 
         val SUPPORTED_CURRENCIES = listOf(
-            USD, EUR, GBP, CAD, AUD, JPY, CNY, INR, CHF, BRL, MXN,
+            USD, EUR, GBP, CAD, AUD, JPY, CNY, INR, PKR, CHF, BRL, MXN,
             SEK, NOK, DKK, PLN, NZD, SGD, HKD, ZAR, KRW, TRY,
             PHP, CZK, HUF, ILS, THB, AED, SAR
         )

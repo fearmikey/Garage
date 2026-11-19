@@ -28,4 +28,27 @@
     <string name="trend_unusual_reading">Ungewöhnlicher Wert</string>
     <string name="url_invalid">Ungültige URL</string>
     <string name="url_open_failed">Link konnte nicht geöffnet werden</string>
+
+    <!-- Parts & Supplies tab -->
+    <string name="parts_reference_title">Kurzübersicht</string>
+    <string name="supplies_title">Verbrauchsmaterial</string>
+    <string name="supplies_empty">Noch kein Verbrauchsmaterial. Tippen Sie auf +, um gekaufte oder vorrätige Teile und Flüssigkeiten zu erfassen.</string>
+    <string name="supplies_cd_add">Material hinzufügen</string>
+    <string name="supplies_add_title">Material hinzufügen</string>
+    <string name="supplies_edit_title">Material bearbeiten</string>
+    <string name="supplies_description_label">Beschreibung *</string>
+    <string name="supplies_description_placeholder">z. B. Ölfilter, 5W-30-Öl</string>
+    <string name="supplies_part_number_label">Teilenummer</string>
+    <string name="supplies_supplier_label">Lieferant</string>
+    <string name="supplies_quantity_label">Menge</string>
+    <string name="supplies_cost_label">Gesamtkosten</string>
+    <string name="supplies_date_label">Kaufdatum</string>
+    <string name="supplies_qty_value">Menge %1$s</string>
+    <string name="supplies_delete_title">Material löschen?</string>
+    <string name="supplies_delete_message">„%1$s“ wird gelöscht. Falls synchronisiert, wird es auch aus LubeLogger entfernt.</string>
+    <string name="supplies_add_as_supply">Als Material hinzufügen</string>
+    <string name="supply_desc_oil_filter">Ölfilter</string>
+    <string name="supply_desc_spark_plug">Zündkerzen</string>
+    <string name="supply_desc_engine_air_filter">Motorluftfilter</string>
+    <string name="supply_desc_cabin_air_filter">Innenraumfilter</string>
 </resources>

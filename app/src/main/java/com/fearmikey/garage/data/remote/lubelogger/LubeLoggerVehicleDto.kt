@@ -22,6 +22,11 @@ data class LubeLoggerVehicleDto(
     @SerializedName("useHours") val useHours: Boolean? = null,
     @SerializedName("odometerOptional") val odometerOptional: Boolean? = null,
     @SerializedName("tags") val tags: List<String>? = null,
+    // Purchase info (LubeLogger "Purchase/Sold Information"). The public API can read but not
+    // write these; Garage pushes them through Vehicle/SaveVehicle (see LubeLoggerSyncWorker).
+    // A blank date / zero price means "not set".
+    @SerializedName("purchaseDate") val purchaseDate: String? = null,
+    @SerializedName("purchasePrice") val purchasePrice: Double? = null,
 ) {
     /**
      * LubeLogger has no dedicated VIN field. Garage stores it in a custom "VIN" extra field;

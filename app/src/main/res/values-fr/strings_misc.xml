@@ -28,4 +28,27 @@
     <string name="trend_unusual_reading">Valeur inhabituelle</string>
     <string name="url_invalid">URL non valide</string>
     <string name="url_open_failed">Impossible d\'ouvrir le lien</string>
+
+    <!-- Parts & Supplies tab -->
+    <string name="parts_reference_title">Aide-mémoire</string>
+    <string name="supplies_title">Fournitures</string>
+    <string name="supplies_empty">Aucune fourniture pour l\'instant. Appuyez sur + pour enregistrer les pièces et fluides achetés ou en stock.</string>
+    <string name="supplies_cd_add">Ajouter une fourniture</string>
+    <string name="supplies_add_title">Ajouter une fourniture</string>
+    <string name="supplies_edit_title">Modifier la fourniture</string>
+    <string name="supplies_description_label">Description *</string>
+    <string name="supplies_description_placeholder">ex. : filtre à huile, huile 5W-30</string>
+    <string name="supplies_part_number_label">N° de pièce</string>
+    <string name="supplies_supplier_label">Fournisseur</string>
+    <string name="supplies_quantity_label">Quantité</string>
+    <string name="supplies_cost_label">Coût total</string>
+    <string name="supplies_date_label">Date d\'achat</string>
+    <string name="supplies_qty_value">Qté %1$s</string>
+    <string name="supplies_delete_title">Supprimer la fourniture ?</string>
+    <string name="supplies_delete_message">« %1$s » sera supprimée. Si elle est synchronisée, elle sera aussi retirée de LubeLogger.</string>
+    <string name="supplies_add_as_supply">Ajouter comme fourniture</string>
+    <string name="supply_desc_oil_filter">Filtre à huile</string>
+    <string name="supply_desc_spark_plug">Bougies d\'allumage</string>
+    <string name="supply_desc_engine_air_filter">Filtre à air moteur</string>
+    <string name="supply_desc_cabin_air_filter">Filtre d\'habitacle</string>
 </resources>

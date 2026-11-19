@@ -28,4 +28,27 @@
     <string name="trend_unusual_reading">Olağan dışı değer</string>
     <string name="url_invalid">Geçersiz URL</string>
     <string name="url_open_failed">Bağlantı açılamadı</string>
+
+    <!-- Parts & Supplies tab -->
+    <string name="parts_reference_title">Hızlı başvuru</string>
+    <string name="supplies_title">Malzemeler</string>
+    <string name="supplies_empty">Henüz malzeme yok. Satın aldığınız veya stokta tuttuğunuz parça ve sıvıları kaydetmek için + simgesine dokunun.</string>
+    <string name="supplies_cd_add">Malzeme ekle</string>
+    <string name="supplies_add_title">Malzeme Ekle</string>
+    <string name="supplies_edit_title">Malzemeyi Düzenle</string>
+    <string name="supplies_description_label">Açıklama *</string>
+    <string name="supplies_description_placeholder">ör. yağ filtresi, 5W-30 yağ</string>
+    <string name="supplies_part_number_label">Parça no</string>
+    <string name="supplies_supplier_label">Tedarikçi</string>
+    <string name="supplies_quantity_label">Miktar</string>
+    <string name="supplies_cost_label">Toplam maliyet</string>
+    <string name="supplies_date_label">Satın alma tarihi</string>
+    <string name="supplies_qty_value">Adet %1$s</string>
+    <string name="supplies_delete_title">Malzeme silinsin mi?</string>
+    <string name="supplies_delete_message">“%1$s” silinecek. Senkronize edildiyse LubeLogger\'dan da kaldırılır.</string>
+    <string name="supplies_add_as_supply">Malzeme olarak ekle</string>
+    <string name="supply_desc_oil_filter">Yağ filtresi</string>
+    <string name="supply_desc_spark_plug">Bujiler</string>
+    <string name="supply_desc_engine_air_filter">Motor hava filtresi</string>
+    <string name="supply_desc_cabin_air_filter">Polen filtresi</string>
 </resources>

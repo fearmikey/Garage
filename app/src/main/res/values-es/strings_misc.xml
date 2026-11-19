@@ -28,4 +28,27 @@
     <string name="trend_unusual_reading">Lectura inusual</string>
     <string name="url_invalid">URL no válida</string>
     <string name="url_open_failed">No se pudo abrir el enlace</string>
+
+    <!-- Parts & Supplies tab -->
+    <string name="parts_reference_title">Referencia rápida</string>
+    <string name="supplies_title">Suministros</string>
+    <string name="supplies_empty">Aún no hay suministros. Toca + para registrar piezas y fluidos que hayas comprado o tengas en stock.</string>
+    <string name="supplies_cd_add">Añadir suministro</string>
+    <string name="supplies_add_title">Añadir suministro</string>
+    <string name="supplies_edit_title">Editar suministro</string>
+    <string name="supplies_description_label">Descripción *</string>
+    <string name="supplies_description_placeholder">p. ej., filtro de aceite, aceite 5W-30</string>
+    <string name="supplies_part_number_label">N.º de pieza</string>
+    <string name="supplies_supplier_label">Proveedor</string>
+    <string name="supplies_quantity_label">Cantidad</string>
+    <string name="supplies_cost_label">Coste total</string>
+    <string name="supplies_date_label">Fecha de compra</string>
+    <string name="supplies_qty_value">Cant. %1$s</string>
+    <string name="supplies_delete_title">¿Eliminar suministro?</string>
+    <string name="supplies_delete_message">Se eliminará «%1$s». Si está sincronizado, también se quitará de LubeLogger.</string>
+    <string name="supplies_add_as_supply">Añadir como suministro</string>
+    <string name="supply_desc_oil_filter">Filtro de aceite</string>
+    <string name="supply_desc_spark_plug">Bujías</string>
+    <string name="supply_desc_engine_air_filter">Filtro de aire del motor</string>
+    <string name="supply_desc_cabin_air_filter">Filtro de habitáculo</string>
 </resources>

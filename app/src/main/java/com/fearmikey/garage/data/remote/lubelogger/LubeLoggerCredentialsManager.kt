@@ -222,6 +222,24 @@ open class LubeLoggerCredentialsManager @Inject constructor(
         }
     }
 
+    /** Purchase date/price the server held after the last sync (merge base), or null. */
+    open fun getVehiclePurchaseSnapshot(localVehicleId: Long): VehiclePurchaseInfo? {
+        val prefix = "ll_vehicle_purchase_$localVehicleId"
+        if (!sharedPreferences.contains("${prefix}_date")) return null
+        return VehiclePurchaseInfo(
+            date = sharedPreferences.getString("${prefix}_date", "").orEmpty(),
+            price = sharedPreferences.getString("${prefix}_price", "").orEmpty(),
+        )
+    }
+
+    open fun saveVehiclePurchaseSnapshot(localVehicleId: Long, info: VehiclePurchaseInfo) {
+        val prefix = "ll_vehicle_purchase_$localVehicleId"
+        sharedPreferences.edit {
+            putString("${prefix}_date", info.date)
+            putString("${prefix}_price", info.price)
+        }
+    }
+
     /** Primary photo filename and server image path agreed at the last sync, or null. */
     open fun getVehiclePhotoSnapshot(localVehicleId: Long): Pair<String?, String?>? {
         val prefix = "ll_vehicle_photo_$localVehicleId"

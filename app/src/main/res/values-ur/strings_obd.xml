@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- OBD2 scanner: progress while connecting / scanning -->
+    <string name="obd_progress_connecting">اڈاپٹر سے جڑ رہا ہے…</string>
+    <string name="obd_progress_reconnecting">دوبارہ جڑ رہا ہے…</string>
+    <string name="obd_progress_protocol">گاڑی کا پروٹوکول معلوم کیا جا رہا ہے…</string>
+    <string name="obd_progress_battery">بیٹری وولٹیج چیک ہو رہا ہے…</string>
+    <string name="obd_progress_readiness">انجن لائٹ اور تیاری چیک ہو رہی ہے…</string>
+    <string name="obd_progress_stored_codes">محفوظ خرابی کے کوڈز پڑھے جا رہے ہیں…</string>
+    <string name="obd_progress_pending_codes">زیر التوا خرابی کے کوڈز پڑھے جا رہے ہیں…</string>
+    <string name="obd_progress_permanent_codes">مستقل خرابی کے کوڈز پڑھے جا رہے ہیں…</string>
+    <string name="obd_progress_freeze_frame">فریز فریم پڑھا جا رہا ہے…</string>
+    <string name="obd_progress_odometer">اوڈومیٹر پڑھا جا رہا ہے…</string>
+    <string name="obd_progress_distance_cleared">کوڈز صاف ہونے کے بعد کا فاصلہ پڑھا جا رہا ہے…</string>
+    <string name="obd_progress_vin">VIN پڑھا جا رہا ہے…</string>
+    <!-- %1$s: a sensor name such as "Engine RPM" -->
+    <string name="obd_progress_pid">%1$s پڑھا جا رہا ہے…</string>
+
+    <!-- OBD2 scanner: errors -->
+    <string name="obd_error_connect_wifi">%1$s پر Wi-Fi اڈاپٹر تک رسائی نہیں ہو سکی۔ یقینی بنائیں کہ آپ کا فون اڈاپٹر کے Wi-Fi نیٹ ورک سے منسلک ہے۔</string>
+    <string name="obd_error_connect_ble">بلوٹوتھ LE اڈاپٹر سے جڑ نہیں سکا۔ یقینی بنائیں کہ یہ لگا ہوا ہے، اگنیشن آن ہے، اور یہ کسی دوسرے فون سے منسلک نہیں ہے۔</string>
+    <string name="obd_error_connect_classic">اڈاپٹر تک رسائی نہیں ہو سکی۔ یقینی بنائیں کہ بلوٹوتھ آن ہے، اڈاپٹر لگا ہوا ہے، اگنیشن آن ہے، اور یہ رینج میں ہے۔</string>
+    <string name="obd_error_timeout">اڈاپٹر نے جواب دینا بند کر دیا۔ چیک کریں کہ اسے بجلی مل رہی ہے اور اگنیشن آن ہے۔</string>
+    <string name="obd_error_lost_connection">اڈاپٹر سے کنکشن ٹوٹ گیا۔</string>
+    <string name="obd_error_generic">OBD اڈاپٹر سے رابطے میں خرابی: %1$s</string>
+    <string name="obd_error_clear_not_confirmed">گاڑی نے کوڈز صاف ہونے کی تصدیق نہیں کی۔ انجن بند کریں (اگنیشن آن) اور دوبارہ کوشش کریں۔</string>
+    <string name="obd_error_clear_no_response">اڈاپٹر نے کوڈز صاف کرنے کی درخواست کا جواب نہیں دیا۔</string>
+    <string name="obd_error_no_live_pids">یہ گاڑی کوئی براہ راست ڈیٹا قدریں نہیں بتاتی۔</string>
+    <string name="obd_error_unable_to_connect">اڈاپٹر گاڑی سے رابطہ نہیں کر سکا۔ کیا اگنیشن آن ہے؟</string>
+    <string name="obd_error_can_bus">CAN bus خرابی۔ چیک کریں کہ اڈاپٹر OBD2 پورٹ میں پوری طرح لگا ہوا ہے۔</string>
+    <string name="obd_error_vehicle_bus">گاڑی کی bus خرابی۔ چیک کریں کہ اڈاپٹر OBD2 پورٹ میں پوری طرح لگا ہوا ہے۔</string>
+    <string name="obd_error_bus_feedback">گاڑی کی bus فیڈبیک خرابی۔ اڈاپٹر کا کنکشن چیک کریں۔</string>
+    <string name="obd_error_low_voltage">کم وولٹیج کی وجہ سے اڈاپٹر ری سیٹ ہو گیا۔ گاڑی کی بیٹری چیک کریں۔</string>
+    <string name="obd_error_bus_init">اڈاپٹر نے bus شروع کرنے میں خرابی بتائی۔ کیا اگنیشن آن ہے؟</string>
+    <string name="obd_error_internal">اڈاپٹر نے اندرونی خرابی %1$s بتائی۔</string>
+
+    <!-- OBD2 scanner: control modules that reported a code -->
+    <string name="obd_module_engine">انجن (ECM)</string>
+    <string name="obd_module_transmission">ٹرانسمیشن (TCM)</string>
+    <string name="obd_module_numbered">ماڈیول %1$s</string>
+
+    <!-- OBD2 scanner: emissions readiness monitors -->
+    <string name="obd_monitor_misfire">مس فائر</string>
+    <string name="obd_monitor_fuel_system">فیول سسٹم</string>
+    <string name="obd_monitor_components">پرزے</string>
+    <string name="obd_monitor_nmhc_catalyst">NMHC کیٹالسٹ</string>
+    <string name="obd_monitor_nox_scr">NOx/SCR آفٹر ٹریٹمنٹ</string>
+    <string name="obd_monitor_boost_pressure">بوسٹ پریشر</string>
+    <string name="obd_monitor_exhaust_gas_sensor">ایگزاسٹ گیس سینسر</string>
+    <string name="obd_monitor_pm_filter">PM فلٹر</string>
+    <string name="obd_monitor_egr_vvt">EGR/VVT سسٹم</string>
+    <string name="obd_monitor_catalyst">کیٹالسٹ</string>
+    <string name="obd_monitor_heated_catalyst">گرم کیٹالسٹ</string>
+    <string name="obd_monitor_evap">ایواپوریٹو سسٹم</string>
+    <string name="obd_monitor_secondary_air">سیکنڈری ایئر</string>
+    <string name="obd_monitor_ac_refrigerant">A/C ریفریجرنٹ</string>
+    <string name="obd_monitor_o2_sensor">آکسیجن سینسر</string>
+    <string name="obd_monitor_o2_heater">آکسیجن سینسر ہیٹر</string>
+
+    <!-- OBD2 scanner: sensor (PID) names -->
+    <string name="obd_pid_engine_load">انجن لوڈ</string>
+    <string name="obd_pid_coolant_temp">کولنٹ درجہ حرارت</string>
+    <string name="obd_pid_short_fuel_trim">شارٹ ٹرم فیول ٹرم (B1)</string>
+    <string name="obd_pid_long_fuel_trim">لانگ ٹرم فیول ٹرم (B1)</string>
+    <string name="obd_pid_intake_pressure">انٹیک مینی فولڈ پریشر</string>
+    <string name="obd_pid_rpm">انجن RPM</string>
+    <string name="obd_pid_speed">گاڑی کی رفتار</string>
+    <string name="obd_pid_intake_air_temp">انٹیک ہوا کا درجہ حرارت</string>
+    <string name="obd_pid_maf">ماس ایئر فلو</string>
+    <string name="obd_pid_throttle">تھروٹل پوزیشن</string>
+    <string name="obd_pid_run_time">اسٹارٹ کے بعد سے وقت</string>
+    <string name="obd_pid_fuel_rail_pressure">فیول ریل پریشر</string>
+    <string name="obd_pid_fuel_level">ایندھن کی سطح</string>
+    <string name="obd_pid_barometric_pressure">بیرومیٹرک پریشر</string>
+    <string name="obd_pid_module_voltage">بیٹری / ماڈیول وولٹیج</string>
+    <string name="obd_pid_ambient_air_temp">بیرونی ہوا کا درجہ حرارت</string>
+    <string name="obd_pid_hybrid_battery">ہائبرڈ بیٹری چارج</string>
+    <string name="obd_pid_oil_temp">انجن آئل درجہ حرارت</string>
+</resources>

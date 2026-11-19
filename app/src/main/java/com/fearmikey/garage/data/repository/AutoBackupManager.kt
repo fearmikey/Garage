@@ -32,6 +32,7 @@ class AutoBackupManager @Inject constructor(
 ) {
     private val scope = CoroutineScope(Dispatchers.IO)
     private var debounceJob: Job? = null
+    private var syncDebounceJob: Job? = null
     private val backupMutex = Mutex()
 
     init {
@@ -40,18 +41,10 @@ class AutoBackupManager @Inject constructor(
 
     private fun setupRoomInvalidationObserver() {
         try {
-            val tables = arrayOf(
-                "vehicles",
-                "maintenance_records",
-                "vehicle_specs",
-                "fuel_records",
-                "vehicle_parts_info",
-                "custom_maintenance_rules",
-            )
-            val observer = object : InvalidationTracker.Observer(tables) {
+            val observer = object : InvalidationTracker.Observer(BACKUP_TABLES + SYNCED_TABLES) {
                 override fun onInvalidated(tables: Set<String>) {
                     triggerAutoBackup()
-                    triggerLubeLoggerSync()
+                    if (tables.any { it in SYNCED_TABLES }) triggerLubeLoggerSync()
                 }
             }
             database.invalidationTracker.addObserver(observer)
@@ -60,15 +53,33 @@ class AutoBackupManager @Inject constructor(
         }
     }
 
+    /**
+     * Debounced, and never cancels a sync in progress: the sync's own writes invalidate these
+     * tables too, and the old REPLACE policy restarted the sync halfway through every time it
+     * saved a record (a cancelled push could also leave a server record Garage never linked).
+     * While a sync runs, at most one follow-up sync is queued behind it so edits made meanwhile
+     * still go out.
+     */
     private fun triggerLubeLoggerSync() {
         if (!lubeLoggerCredentialsManager.isConfigured() || !lubeLoggerCredentialsManager.isSyncEnabled()) return
+        syncDebounceJob?.cancel()
+        syncDebounceJob = scope.launch {
+            delay(2000)
+            enqueueLubeLoggerSync()
+        }
+    }
+
+    private fun enqueueLubeLoggerSync() {
+        val worker = com.fearmikey.garage.notification.lubelogger.LubeLoggerSyncWorker
+        val policy = if (worker.isRunning) {
+            if (!worker.followUpQueued.compareAndSet(false, true)) return
+            androidx.work.ExistingWorkPolicy.APPEND_OR_REPLACE
+        } else {
+            androidx.work.ExistingWorkPolicy.REPLACE
+        }
         try {
             val request = androidx.work.OneTimeWorkRequestBuilder<com.fearmikey.garage.notification.lubelogger.LubeLoggerSyncWorker>().build()
-            androidx.work.WorkManager.getInstance(context).enqueueUniqueWork(
-                "LubeLoggerSync",
-                androidx.work.ExistingWorkPolicy.REPLACE,
-                request
-            )
+            androidx.work.WorkManager.getInstance(context).enqueueUniqueWork("LubeLoggerSync", policy, request)
         } catch (_: Exception) {
             // Ignored if WorkManager is not initialized (e.g. unit tests)
         }
@@ -98,5 +109,31 @@ class AutoBackupManager @Inject constructor(
         }
 
         return backupRepository.exportBackupToLocalFolder(folderUri)
+    }
+
+    private companion object {
+        /** User data that isn't synced with LubeLogger but still belongs in the backup. */
+        val BACKUP_TABLES = arrayOf(
+            "vehicle_specs",
+            "vehicle_parts_info",
+            "custom_maintenance_rules",
+            "ignored_maintenance_rules",
+            "recall_campaign_states",
+            "torque_specs",
+            "trip_records",
+            "custom_documents",
+        )
+
+        /** Tables whose changes LubeLoggerSyncWorker pushes (also backed up). */
+        val SYNCED_TABLES = arrayOf(
+            "vehicles",
+            "vehicle_registration_insurance",
+            "maintenance_records",
+            "fuel_records",
+            "charging_records",
+            "modification_records",
+            "supply_records",
+            "vehicle_notes",
+        )
     }
 }

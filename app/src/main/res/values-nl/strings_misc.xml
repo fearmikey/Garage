@@ -28,4 +28,27 @@
     <string name="trend_unusual_reading">Ongebruikelijke waarde</string>
     <string name="url_invalid">Ongeldige URL</string>
     <string name="url_open_failed">Kan link niet openen</string>
+
+    <!-- Parts & Supplies tab -->
+    <string name="parts_reference_title">Snelle referentie</string>
+    <string name="supplies_title">Voorraad</string>
+    <string name="supplies_empty">Nog geen voorraad. Tik op + om gekochte of op voorraad liggende onderdelen en vloeistoffen vast te leggen.</string>
+    <string name="supplies_cd_add">Voorraaditem toevoegen</string>
+    <string name="supplies_add_title">Voorraaditem toevoegen</string>
+    <string name="supplies_edit_title">Voorraaditem bewerken</string>
+    <string name="supplies_description_label">Omschrijving *</string>
+    <string name="supplies_description_placeholder">bijv. oliefilter, 5W-30-olie</string>
+    <string name="supplies_part_number_label">Onderdeelnummer</string>
+    <string name="supplies_supplier_label">Leverancier</string>
+    <string name="supplies_quantity_label">Aantal</string>
+    <string name="supplies_cost_label">Totale kosten</string>
+    <string name="supplies_date_label">Aankoopdatum</string>
+    <string name="supplies_qty_value">Aantal %1$s</string>
+    <string name="supplies_delete_title">Voorraaditem verwijderen?</string>
+    <string name="supplies_delete_message">‘%1$s’ wordt verwijderd. Als het gesynchroniseerd is, wordt het ook uit LubeLogger verwijderd.</string>
+    <string name="supplies_add_as_supply">Toevoegen aan voorraad</string>
+    <string name="supply_desc_oil_filter">Oliefilter</string>
+    <string name="supply_desc_spark_plug">Bougies</string>
+    <string name="supply_desc_engine_air_filter">Luchtfilter motor</string>
+    <string name="supply_desc_cabin_air_filter">Interieurfilter</string>
 </resources>

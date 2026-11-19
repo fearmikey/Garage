@@ -14,7 +14,13 @@ suspend fun <LocalT, RemoteT> syncLubeLoggerRecords(
     getStoredHash: (LocalT) -> String?,
     getLocalFingerprint: (LocalT) -> String,
     getRemoteFingerprint: (RemoteT) -> String,
-    toDto: (LocalT) -> RemoteT,
+    /**
+     * Builds the server copy of a Garage record. For updates the current server record is passed
+     * in: LubeLogger's update endpoints clear every field they aren't sent (notes, tags, extra
+     * fields, attachments...), so anything Garage doesn't manage must be copied from it. Null
+     * for new records.
+     */
+    toDto: (LocalT, RemoteT?) -> RemoteT,
     toLocal: (RemoteT, LocalT?) -> LocalT?,
     isSameReadingAs: (LocalT, RemoteT) -> Boolean,
     addLocal: suspend (LocalT) -> Unit,
@@ -79,7 +85,7 @@ suspend fun <LocalT, RemoteT> syncLubeLoggerRecords(
 
             if (localChanged && !remoteChanged) {
                 // Garage changed -> Push
-                if (updateRemote(toDto(localRecord))) {
+                if (updateRemote(toDto(localRecord, remoteRecord))) {
                     updateLocal(withSyncState(localRecord, remoteId, localFingerprint))
                 }
             } else if (remoteChanged && !localChanged) {
@@ -90,13 +96,13 @@ suspend fun <LocalT, RemoteT> syncLubeLoggerRecords(
                 }
             } else if (localChanged && localFingerprint != remoteFingerprint) {
                 // Both changed -> Garage wins
-                if (updateRemote(toDto(localRecord))) {
+                if (updateRemote(toDto(localRecord, remoteRecord))) {
                     updateLocal(withSyncState(localRecord, remoteId, localFingerprint))
                 }
             } else if (storedHash == null && localFingerprint != remoteFingerprint) {
                 // Linked before fingerprints existed and the two sides differ: no history to tell
                 // which side changed, so Garage wins (also rewrites legacy-format server records).
-                if (updateRemote(toDto(localRecord))) {
+                if (updateRemote(toDto(localRecord, remoteRecord))) {
                     updateLocal(withSyncState(localRecord, remoteId, localFingerprint))
                 }
             } else if (storedHash != localFingerprint || storedHash != remoteFingerprint) {
@@ -128,7 +134,7 @@ suspend fun <LocalT, RemoteT> syncLubeLoggerRecords(
     val newRecords = localRecords.filter { getLubeLoggerId(it) == null && it !in updatedUnlinkedLocals }
     for (record in newRecords) {
         val localFingerprint = getLocalFingerprint(record)
-        val newRemoteId = addRemote(toDto(record))
+        val newRemoteId = addRemote(toDto(record, null))
         if (newRemoteId != null) {
             onRemoteAdded(record, newRemoteId)
             updateLocal(withSyncState(record, newRemoteId, localFingerprint))

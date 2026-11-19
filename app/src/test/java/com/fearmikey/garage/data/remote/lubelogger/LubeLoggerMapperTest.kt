@@ -520,7 +520,9 @@ class LubeLoggerMapperTest {
         assertEquals("2025-03-01", dtoImperial.date)
         assertEquals("45000", dtoImperial.odometer)
         assertEquals(45000, dtoImperial.mileage)
-        assertEquals("Lift Kit - 2 inch lift", dtoImperial.description)
+        assertEquals("Lift Kit", dtoImperial.description)
+        assertEquals("2 inch lift", dtoImperial.notes)
+        assertEquals("SUSPENSION", dtoImperial.extraFields!!.single { it.name == "Garage Category" }.value)
         assertEquals("1200.00", dtoImperial.cost)
 
         // Metric unit system with latest mileage = 45000 (45000 mi -> 72420 km)
