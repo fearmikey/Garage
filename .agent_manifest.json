@@ -403,5 +403,17 @@
     "ui/util": "EnumLabels.kt (localized enum labels, see core_entry_points.localization). SafeUriHandler.kt: rememberSafeUriHandler() wraps util/UrlLauncher; use it instead of LocalUriHandler (which crashes when no browser is installed). AppCurrency.localizedName uses java.util.Currency display names; SUPPORTED_CURRENCIES is the curated picker list (includes CNY, PKR), other ISO codes resolve via fromCode(). Unit conversions, date/number formatters, currency definitions. Distances are stored as fractional canonical miles (Double; DB v34 REAL columns) and converted via UnitConverter.canonicalMilesFromInput/displayDistanceValue so km input round-trips exactly; LubeLogger boundary uses toLubeLoggerOdometer/fromLubeLoggerOdometer (whole numbers in the server unit).",
     "ui/vehicle": "Vehicle management, details, registration/insurance, Parts & Supplies tab (PartsScreen, SuppliesUi), parts estimator.",
     "widget": "Android Glance home screen widgets and receivers."
+  },
+  "release_tooling": {
+    "description": "Release pipeline: GitHub Releases plus F-Droid reproducible builds (F-Droid state D: the merged fdroiddata recipe verifies its own build against our signed GitHub APK and ships it with our key). The full step-by-step workflow and rules are in AGENTS.md under 'RELEASE WORKFLOW'.",
+    "files": {
+      "scripts/build-release.sh": "build-release.sh <vX.Y.Z>: clones the pushed tag from GitHub into a temp dir, runs git clean -dffx, ./gradlew --no-daemon assembleRelease (JBR at ~/android-studio/jbr), signs v2-only with apksigner --alignment-preserved true, writes dist/<tag>/app-release.apk, and fails if the cert SHA-256 isn't AllowedAPKSigningKeys. Secrets come from ~/.config/garage-release/release.env (never read it). Overrides: REPO_URL, DIST_DIR, RELEASE_ENV, EXPECTED_CERT, KEEP_WORK.",
+      "dist/": "Git-ignored build output of build-release.sh.",
+      "CHANGELOG.md": "One '## [X.Y.Z] - YYYY-MM-DD' section per release, newest first.",
+      "fastlane/metadata/android/en-US/changelogs/<versionCode>.txt": "Short F-Droid store changelog per versionCode.",
+      "app/build.gradle.kts": "versionCode (+1 per release) and versionName. release buildType keeps vcsInfo.include=false and dependenciesInfo.includeInApk=false for reproducibility."
+    },
+    "fdroid_recipe": "Lives only in fdroiddata (metadata/com.fearmikey.garage.yml): Binaries .../releases/download/v%v/app-release.apk, AllowedAPKSigningKeys 4171af965565fe07585f8fd7d2f936f5724d8d9fabe70f1d9a6c7cee8a8a327b, AutoUpdateMode Version, UpdateCheckMode Tags. There is no copy in this repo (the old fdroid/ folder was removed).",
+    "tag_format": "Annotated tag vX.Y.Z on the single 'Release X.Y.Z: ...' commit."
   }
 }
